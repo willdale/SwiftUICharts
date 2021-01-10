@@ -38,7 +38,7 @@ public class ChartData: ObservableObject {
     public init(dataPoints      : [ChartDataPoint],
                 metadata        : ChartMetadata? = nil,
                 xAxisLabelArray : [String]?      = nil,
-                chartStyle      : ChartStyle,
+                chartStyle      : ChartStyle     = ChartStyle(),
                 pointStyle      : PointStyle     = PointStyle(),
                 useAverage      : Bool           = false
     ) {

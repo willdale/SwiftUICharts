@@ -44,7 +44,7 @@ internal struct TouchOverlayBox: View {
             GeometryReader { geo in
                 ZStack {
                     RoundedRectangle(cornerRadius: 15.0, style: .continuous)
-                        .shadow(color: Color(.systemGray3), radius: 6, x: 0, y: 0)
+                        .shadow(color: Color(.systemGray), radius: 6, x: 0, y: 0)
                     RoundedRectangle(cornerRadius: 15.0, style: .continuous)
                         .fill(Color(.black))
                 }.overlay(
