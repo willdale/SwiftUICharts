@@ -21,6 +21,7 @@ internal struct YAxisGrid: ViewModifier {
                         HorizontalGridView(chartData: chartData)
                         
                         Spacer()
+                            .frame(minHeight: 0, maxHeight: 500)
                     }
                 }
                 HorizontalGridView(chartData: chartData)

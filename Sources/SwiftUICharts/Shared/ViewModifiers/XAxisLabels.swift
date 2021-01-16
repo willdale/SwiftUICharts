@@ -19,17 +19,18 @@ internal struct XAxisLabels: ViewModifier {
             // ChartData -> DataPoints -> xAxisLabel
             switch chartData.viewData.chartType {
             case .line:
-                HStack {
+                HStack(spacing: 0) {
                     ForEach(chartData.dataPoints, id: \.self) { data in
+                        Text(data.xAxisLabel ?? "")
+                            .font(.caption)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
                         if data != chartData.dataPoints[chartData.dataPoints.count - 1] {
-                            Text(data.xAxisLabel ?? "")
-                                .lineLimit(1)
                             Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
                         }
                     }
-                    Text(chartData.dataPoints[chartData.dataPoints.count - 1].xAxisLabel ?? "")
                 }
-                .font(.caption)
                 .padding(.horizontal, -4)
                 .onAppear {
                     chartData.viewData.hasXAxisLabels = true
@@ -38,19 +39,16 @@ internal struct XAxisLabels: ViewModifier {
             case .bar:
                 HStack(spacing: 0) {
                     ForEach(chartData.dataPoints, id: \.self) { data in
-                        if data != chartData.dataPoints[chartData.dataPoints.count - 1] {
                             Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
                             Text(data.xAxisLabel ?? "")
+                                .font(.caption)
                                 .lineLimit(1)
+                                .minimumScaleFactor(0.5)
                             Spacer()
-                        }
+                                .frame(minWidth: 0, maxWidth: 500)
                     }
-                    Spacer()
-                    Text(chartData.dataPoints[chartData.dataPoints.count - 1].xAxisLabel ?? "")
-                        .lineLimit(1)
-                    Spacer()
                 }
-                .font(.caption)
                 .onAppear {
                     chartData.viewData.hasXAxisLabels = true
                 }
@@ -59,22 +57,46 @@ internal struct XAxisLabels: ViewModifier {
 
             
         case .chartData:
-            // ChartData -> xAxisLabels
-            if let labelArray = chartData.xAxisLabels {
-                HStack {
-                    ForEach(labelArray, id: \.self) { data in
-                        Text(data)
-                            .lineLimit(1)
-                        if data != labelArray[labelArray.count - 1] {
-                            Spacer()
+            switch chartData.viewData.chartType {
+            case .line:
+                // ChartData -> xAxisLabels
+                if let labelArray = chartData.xAxisLabels {
+                    HStack(spacing: 0) {
+                        ForEach(labelArray, id: \.self) { data in
+                            Text(data)
+                                .font(.caption)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                            if data != labelArray[labelArray.count - 1] {
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
+                            }
                         }
                     }
+                    .padding(.horizontal, -4)
+                    .onAppear {
+                        chartData.viewData.hasXAxisLabels = true
+                    }
                 }
-                .font(.caption)
+            case .bar:
+                if let labelArray = chartData.xAxisLabels {
+                HStack(spacing: 0) {
+                    ForEach(labelArray, id: \.self) { data in
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                            Text(data)
+                                .font(.caption)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                    }
+                }
                 .onAppear {
                     chartData.viewData.hasXAxisLabels = true
                 }
-            } else { EmptyView() }
+            }
+            }
         }
     }
     

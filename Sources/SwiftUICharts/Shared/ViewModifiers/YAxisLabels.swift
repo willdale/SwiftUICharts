@@ -27,18 +27,26 @@ internal struct YAxisLabels: ViewModifier {
             if labelsAndTop {
                 Text("")
                     .font(.caption)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
                 Spacer()
+                    .frame(minHeight: 0, maxHeight: 500)
             }
             ForEach((0...numberOfLabels).reversed(), id: \.self) { i in
                 Text("\(labelsArray[i], specifier: specifier)")
                     .font(.caption)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
                 if i != 0 {
                     Spacer()
+                        .frame(minHeight: 0, maxHeight: 500)
                 }
             }
             if labelsAndBottom {
                 Text("")
                     .font(.caption)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
             }
         }
         .if(labelsAndBottom) { $0.padding(.top, -8) }

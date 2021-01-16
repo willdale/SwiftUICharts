@@ -62,6 +62,7 @@ internal struct HeaderBox: ViewModifier {
     @ViewBuilder
     internal func body(content: Content) -> some View {
         
+        #if !os(tvOS)
         if chartData.chartStyle.infoBoxPlacement == .floating {
             
             VStack(alignment: .leading) {
@@ -75,11 +76,14 @@ internal struct HeaderBox: ViewModifier {
                     HStack(spacing: 0) {
                         titleBox
                         Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
                     }
                     .frame(minWidth: 0, maxWidth: .infinity)
                     Spacer()
+                        .frame(minWidth: 0, maxWidth: 500)
                     HStack(spacing: 0) {
                         Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
                         touchOverlay
                     }
                     .frame(minWidth: 0, maxWidth: .infinity)
@@ -87,7 +91,13 @@ internal struct HeaderBox: ViewModifier {
                 content
             }
         }
-    }
+        #elseif os(tvOS)
+        VStack(alignment: .leading) {
+            titleBox
+            content
+        }
+        #endif
+        }
 }
 
 extension View {

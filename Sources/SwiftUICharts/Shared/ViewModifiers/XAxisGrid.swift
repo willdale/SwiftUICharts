@@ -18,6 +18,7 @@ internal struct XAxisGrid: ViewModifier {
                     if index != 0 {
                         VerticalGridView(chartData: chartData)
                         Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
                     }
                 }
                 VerticalGridView(chartData: chartData)
