@@ -5,9 +5,118 @@ A charts / plotting library for SwiftUI. Works on macOS, iOS. Support for tvOS, 
 [Demo Project](https://github.com/willdale/SwiftUICharts-Demo)
 
 ![Example of Line Chart](Resources/LineOne.png)
+```swift
+LineChart()
+    .touchOverlay()
+    .pointMarkers()
+    .averageLine(strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
+    .yAxisPOI(markerName: "50", markerValue: 50, lineColour: Color(red: 0.25, green: 0.25, blue: 1.0), strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
+    .xAxisGrid()
+    .yAxisGrid()
+    .xAxisLabels()
+    .yAxisLabels()
+    .headerBox()
+    .legends()
+    .environmentObject(data)
+```
+Data Model
+```swift
+static func weekOfData() -> ChartData {
+    
+    let data : [ChartDataPoint] = [
+        ChartDataPoint(value: 20,  xAxisLabel: "M", pointLabel: "Monday"),
+        ChartDataPoint(value: 90,  xAxisLabel: "T", pointLabel: "Tuesday"),
+        ChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday"),
+        ChartDataPoint(value: 75,  xAxisLabel: "T", pointLabel: "Thursday"),
+        ChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"),
+        ChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday"),
+        ChartDataPoint(value: 90,  xAxisLabel: "S", pointLabel: "Sunday")
+    ]
+    
+    let metadata   : ChartMetadata  = ChartMetadata(title       : "Test Data",
+                                                    subtitle    : "A weeks worth",
+                                                    lineLegend  : "Data")
+    
+    let labels      : [String]      = ["Mon", "Thu", "Sun"]
 
+    let gridStyle   : GridStyle     = GridStyle(lineColour  : Color(.lightGray).opacity(0.25),
+                                                lineWidth   : 1,
+                                                dash: [CGFloat]())
+    
+    let chartStyle  : ChartStyle    = ChartStyle(infoBoxPlacement: .header,
+                                                 xAxisGridStyle  : gridStyle,
+                                                 yAxisGridStyle  : gridStyle,
+                                                 xAxisLabels     : XAxisLabelSetup(labelPosition : .bottom,
+                                                                                   labelsFrom    : .xAxisLabel),
+                                                 yAxisLabels     : YAxisLabelSetup(labelPosition : .leading,
+                                                                              numberOfLabels: 7))
+    
+    let lineStyle   : LineStyle     = LineStyle(colours     : [Color(red: 1.0, green: 0.15, blue: 0.15), Color(red: 1.0, green: 0.35, blue: 0.35)],
+                                                startPoint  : .leading,
+                                                endPoint    : .trailing,
+                                                lineType    : .curvedLine,
+                                                strokeStyle : StrokeStyle(lineWidth: 3,
+                                                                          lineCap: .round,
+                                                                          lineJoin: .round))
+    
+    let pointStyle : PointStyle     = PointStyle(pointSize: 9, borderColour: Color.primary, lineWidth: 2, pointType: .outline, pointShape: .circle)
+    
+    return ChartData(dataPoints     : data,
+                     metadata       : metadata,
+                     xAxisLabels    : labels,
+                     chartStyle     : chartStyle,
+                     lineStyle      : lineStyle,
+                     pointStyle     : pointStyle
+    )
+}
+```
 ![Example of Line Chart](Resources/LineTwo.png)
-
+```swift
+LineChart()
+    .touchOverlay(specifier: "%.2f")
+    .yAxisGrid()
+    .xAxisLabels()
+    .yAxisLabels()
+    .headerBox()
+    .legends()
+    .environmentObject(data)
+```
+```swift
+static func yearOfDataMonthlyAverage() -> ChartData {
+    
+    var data : [ChartDataPoint] = []
+    let calendar = Calendar.current
+    let date = Date()
+    
+    for index in 1...365 {
+        let value: Double = Double(Int.random(in: -100...100))
+        let date = calendar.date(byAdding: .day, value: index, to: date)
+        data.append(ChartDataPoint(value: value, date: date))
+    }
+    
+    let metadata   : ChartMetadata  = ChartMetadata(title       : "Test Data",
+                                                    subtitle    : "A years worth - Monthly Average",
+                                                    lineLegend  : "Data")
+    
+    let labels      : [String]      = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    
+    let chartStyle  : ChartStyle    = ChartStyle(infoBoxPlacement: .header,
+                                                 yAxisGridStyle: GridStyle(lineColour: Color.primary.opacity(0.5)))
+    
+    let lineStyle   : LineStyle     = LineStyle(colour: Color(red: 0.15, green: 0.15, blue: 1.0),
+                                                lineType: .curvedLine,
+                                                strokeStyle: StrokeStyle(lineWidth: 3,
+                                                                         lineCap: .round,
+                                                                         lineJoin: .round))
+    
+    return ChartData(dataPoints     : data,
+                     metadata       : metadata,
+                     xAxisLabels    : labels,
+                     chartStyle     : chartStyle,
+                     lineStyle      : lineStyle,
+                     calculations   : .averageMonth)
+}
+```
 ## Documentation
 
 [View Modifiers](#View-Modifiers) 
