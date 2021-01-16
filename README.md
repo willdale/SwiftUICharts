@@ -1,6 +1,6 @@
 # SwiftUICharts
 
-A charts / plotting library for SwiftUI. Works on macOS and iOS. Support for tvOS, and watchOS hopfully soon.
+A charts / plotting library for SwiftUI. Works on macOS, iOS,  watchOS, and tvOS.
 
 [Demo Project](https://github.com/willdale/SwiftUICharts-Demo)
 
