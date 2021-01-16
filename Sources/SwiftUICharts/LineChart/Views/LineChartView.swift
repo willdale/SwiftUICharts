@@ -121,28 +121,31 @@ internal struct LineChartView: View {
             if style.colourType == .colour,
                let colour = style.colour
             {
-                self.chartData.legends.append(LegendData(legend: lineLegend,
-                                                         colour: colour,
+                self.chartData.legends.append(LegendData(legend     : lineLegend,
+                                                         colour     : colour,
                                                          strokeStyle: Stroke.strokeStyleToStroke(strokeStyle: style.strokeStyle),
-                                                         prioity: 1))
+                                                         prioity    : 1,
+                                                         chartType  : .line))
             } else if style.colourType == .gradientColour,
                       let colours = style.colours
             {
-                self.chartData.legends.append(LegendData(legend: lineLegend,
-                                                         colours: colours,
-                                                         startPoint: .leading,
-                                                         endPoint: .trailing,
+                self.chartData.legends.append(LegendData(legend     : lineLegend,
+                                                         colours    : colours,
+                                                         startPoint : .leading,
+                                                         endPoint   : .trailing,
                                                          strokeStyle: Stroke.strokeStyleToStroke(strokeStyle: style.strokeStyle),
-                                                         prioity: 1))
+                                                         prioity    : 1,
+                                                         chartType  : .line))
             } else if style.colourType == .gradientStops,
                       let stops = style.stops
             {
-                self.chartData.legends.append(LegendData(legend: lineLegend,
-                                                         stops: stops,
-                                                         startPoint: .leading,
-                                                         endPoint: .trailing,
+                self.chartData.legends.append(LegendData(legend     : lineLegend,
+                                                         stops      : stops,
+                                                         startPoint : .leading,
+                                                         endPoint   : .trailing,
                                                          strokeStyle: Stroke.strokeStyleToStroke(strokeStyle: style.strokeStyle),
-                                                         prioity: 1))
+                                                         prioity    : 1,
+                                                         chartType  : .line))
             }
         }
         chartData.viewData.chartType = .line
@@ -162,7 +165,7 @@ internal struct LineShapeModifiers: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .background(Color(.systemGray).opacity(0.01))
+            .background(Color(.gray).opacity(0.01))
             .if(hasXAxisLabels) { $0.xAxisBorder() }
             .if(hasYAxisLabels) { $0.yAxisBorder() }
     }

@@ -24,8 +24,7 @@ internal struct YAxisPOI: ViewModifier {
                   markerValue : Double = 0,
                   lineColour  : Color,
                   strokeStyle : StrokeStyle,
-                  
-                  isAverage  : Bool
+                  isAverage   : Bool
     ) {
         self.markerName  = markerName
         self.markerValue = markerValue
@@ -43,10 +42,11 @@ internal struct YAxisPOI: ViewModifier {
                 .stroke(lineColour, style: strokeStyle)
                 .onAppear {
                     if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
-                        chartData.legends.append(LegendData(legend: markerName,
-                                                            colour: lineColour,
+                        chartData.legends.append(LegendData(legend      : markerName,
+                                                            colour      : lineColour,
                                                             strokeStyle : Stroke.strokeStyleToStroke(strokeStyle: strokeStyle),
-                                                            prioity: 2))
+                                                            prioity     : 2,
+                                                            chartType   : .line))
                     }
                 }
         }
@@ -63,7 +63,7 @@ extension View {
     /// - Returns: A marker line at the average of all the data points.
     public func yAxisPOI(markerName  : String,
                          markerValue : Double,
-                         lineColour  : Color        = Color(.systemBlue),
+                         lineColour  : Color        = Color(.blue),
                          strokeStyle : StrokeStyle  = StrokeStyle(lineWidth: 2,
                                                                   lineCap: .round,
                                                                   lineJoin: .round,

@@ -84,6 +84,41 @@ internal struct BarChartView: View {
         }
         .onAppear() {
             chartData.viewData.chartType = .bar
+            
+            guard let lineLegend = chartData.metadata?.lineLegend else { return }
+            let style : BarStyle = chartData.barStyle
+
+            if !chartData.legends.contains(where: { $0.legend == lineLegend }) { // init twice
+                if style.colourType == .colour,
+                   let colour = style.colour
+                {
+                    self.chartData.legends.append(LegendData(legend     : lineLegend,
+                                                             colour     : colour,
+                                                             strokeStyle: nil,
+                                                             prioity    : 1,
+                                                             chartType  : .bar))
+                } else if style.colourType == .gradientColour,
+                          let colours = style.colours
+                {
+                    self.chartData.legends.append(LegendData(legend     : lineLegend,
+                                                             colours    : colours,
+                                                             startPoint : .leading,
+                                                             endPoint   : .trailing,
+                                                             strokeStyle: nil,
+                                                             prioity    : 1,
+                                                             chartType  : .bar))
+                } else if style.colourType == .gradientStops,
+                          let stops = style.stops
+                {
+                    self.chartData.legends.append(LegendData(legend     : lineLegend,
+                                                             stops      : stops,
+                                                             startPoint : .leading,
+                                                             endPoint   : .trailing,
+                                                             strokeStyle: nil,
+                                                             prioity    : 1,
+                                                             chartType  : .bar))
+                }
+            }
         }
     }
     

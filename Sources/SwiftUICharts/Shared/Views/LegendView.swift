@@ -17,8 +17,9 @@ internal struct LegendView: View {
     
     // Expose to API ??
     let columns = [
-        GridItem(.flexible()),
+//        GridItem(.flexible()),
         GridItem(.flexible())
+        //geo.size.width / CGFloat(columns.count) / 2
     ]
     
     internal var body: some View {
@@ -26,37 +27,78 @@ internal struct LegendView: View {
         LazyVGrid(columns: columns, alignment: .leading) {
             ForEach(chartData.legendOrder(), id: \.self) { legend in
                 
-                let strokeStyle = Stroke.strokeToStrokeStyle(stroke: legend.strokeStyle)
+                switch legend.chartType {
                 
-                GeometryReader { geo in
-                    if let colour = legend.colour {
+                case .line:
+                    if let stroke = legend.strokeStyle {
+                        let strokeStyle = Stroke.strokeToStrokeStyle(stroke: stroke)
+                        if let colour = legend.colour {
+                            HStack {
+                                LegendLine(width: 40)
+                                    .stroke(colour, style: strokeStyle)
+                                    .frame(width: 40, height: 3)
+                                Text(legend.legend)
+                                    .font(.caption)
+                            }
+                        } else if let colours = legend.colours  {
+                            HStack {
+                                LegendLine(width: 40)
+                                    .stroke(LinearGradient(gradient: Gradient(colors: colours),
+                                                           startPoint: .leading,
+                                                           endPoint: .trailing),
+                                            style: strokeStyle)
+                                    .frame(width: 40, height: 3)
+                                Text(legend.legend)
+                                    .font(.caption)
+                            }
+                        } else if let stops = legend.stops {
+                            let stops = GradientStop.convertToGradientStopsArray(stops: stops)
+                            HStack {
+                                LegendLine(width: 40)
+                                    .stroke(LinearGradient(gradient: Gradient(stops: stops),
+                                                           startPoint: .leading,
+                                                           endPoint: .trailing),
+                                            style: strokeStyle)
+                                    .frame(width: 40, height: 3)
+                                Text(legend.legend)
+                                    .font(.caption)
+                            }
+                        }
+                    }
+                case .bar:
+                    if let colour = legend.colour
+                    {
                         HStack {
-                            LegendLine(width: geo.size.width / CGFloat(columns.count) / 2)
-                                .stroke(colour, style: strokeStyle)
-                                .frame(width: geo.size.width / CGFloat(columns.count) / 2, height: 3)
+                            Rectangle()
+                                .fill(colour)
+                                .frame(width: 20, height: 20)
                             Text(legend.legend)
                                 .font(.caption)
                         }
-                    } else if let colours = legend.colours  {
+                    } else if let colours = legend.colours,
+                              let startPoint = legend.startPoint,
+                              let endPoint = legend.endPoint
+                    {
                         HStack {
-                            LegendLine(width: geo.size.width / CGFloat(columns.count) / 2)
-                                .stroke(LinearGradient(gradient: Gradient(colors: colours),
-                                                       startPoint: .leading,
-                                                       endPoint: .trailing),
-                                        style: strokeStyle)
-                                .frame(width: geo.size.width / CGFloat(columns.count) / 2, height: 3)
+                            Rectangle()
+                                .fill(LinearGradient(gradient: Gradient(colors: colours),
+                                                     startPoint: startPoint,
+                                                     endPoint: endPoint))
+                                .frame(width: 20, height: 20)
                             Text(legend.legend)
                                 .font(.caption)
                         }
-                    } else if let stops = legend.stops {
+                    } else if let stops = legend.stops,
+                              let startPoint = legend.startPoint,
+                              let endPoint = legend.endPoint
+                    {
                         let stops = GradientStop.convertToGradientStopsArray(stops: stops)
                         HStack {
-                            LegendLine(width: geo.size.width / CGFloat(columns.count) / 2)
-                                .stroke(LinearGradient(gradient: Gradient(stops: stops),
-                                                       startPoint: .leading,
-                                                       endPoint: .trailing),
-                                        style: strokeStyle)
-                                .frame(width: geo.size.width / CGFloat(columns.count) / 2, height: 3)
+                            Rectangle()
+                                .fill(LinearGradient(gradient: Gradient(stops: stops),
+                                                     startPoint: startPoint,
+                                                     endPoint: endPoint))
+                                .frame(width: 20, height: 20)
                             Text(legend.legend)
                                 .font(.caption)
                         }
