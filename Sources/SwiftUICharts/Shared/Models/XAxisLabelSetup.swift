@@ -20,7 +20,7 @@ public struct XAxisLabelSetup {
     ///   - labelPosition: Location of the X axis labels - Top or Bottom
     ///   - labelsFrom: Where the label data come from. DataPoint or xAxisLabels
     public init(labelPosition: XAxisLabelPosistion = .bottom,
-                labelsFrom   : LabelsFrom = .xAxisLabel
+                labelsFrom   : LabelsFrom = .dataPoint
     ) {
         self.labelPosition  = labelPosition
         self.labelsFrom     = labelsFrom

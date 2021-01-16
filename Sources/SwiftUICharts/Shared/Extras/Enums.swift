@@ -183,15 +183,15 @@ public enum XAxisLabelPosistion {
  
  xAxisLabels comes from ChartData --> xAxisLabels
  ```
- case xAxisLabel // ChartData --> DataPoint --> xAxisLabel
- case xAxisLabels // ChartData --> xAxisLabels
+ case dataPoint // ChartData --> DataPoint --> xAxisLabel
+ case chartData // ChartData --> xAxisLabels
  ```
  */
 public enum LabelsFrom {
     /// ChartData --> DataPoint --> xAxisLabel
-    case xAxisLabel
+    case dataPoint
     /// ChartData --> xAxisLabels
-    case xAxisLabels
+    case chartData
 }
 
 // MARK: - YAxisLabels

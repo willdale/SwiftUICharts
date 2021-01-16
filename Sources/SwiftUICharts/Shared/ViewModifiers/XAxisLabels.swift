@@ -15,7 +15,7 @@ internal struct XAxisLabels: ViewModifier {
     internal var labels: some View {
         
         switch chartData.chartStyle.xAxisLabels.labelsFrom {
-        case .xAxisLabel:
+        case .dataPoint:
             // ChartData -> DataPoints -> xAxisLabel
             switch chartData.viewData.chartType {
             case .line:
@@ -58,7 +58,7 @@ internal struct XAxisLabels: ViewModifier {
             
 
             
-        case .xAxisLabels:
+        case .chartData:
             // ChartData -> xAxisLabels
             if let labelArray = chartData.xAxisLabels {
                 HStack {
