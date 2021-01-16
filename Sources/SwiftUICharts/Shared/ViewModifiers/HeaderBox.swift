@@ -76,14 +76,11 @@ internal struct HeaderBox: ViewModifier {
                     HStack(spacing: 0) {
                         titleBox
                         Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
                     }
                     .frame(minWidth: 0, maxWidth: .infinity)
                     Spacer()
-                        .frame(minWidth: 0, maxWidth: 500)
                     HStack(spacing: 0) {
                         Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
                         touchOverlay
                     }
                     .frame(minWidth: 0, maxWidth: .infinity)
