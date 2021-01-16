@@ -1,10 +1,16 @@
 # SwiftUICharts
 
-A charts / plotting library for SwiftUI. Works on macOS, iOS. Support for tvOS, and watchOS hopfully soon.
+A charts / plotting library for SwiftUI. Works on macOS and iOS. Support for tvOS, and watchOS hopfully soon.
 
 [Demo Project](https://github.com/willdale/SwiftUICharts-Demo)
 
+## Examples
+
+### Line Chart
+
 ![Example of Line Chart](Resources/LineOne.png)
+
+#### View
 ```swift
 LineChart()
     .touchOverlay()
@@ -19,7 +25,9 @@ LineChart()
     .legends()
     .environmentObject(data)
 ```
-Data Model
+
+#### Data Model
+
 ```swift
 static func weekOfData() -> ChartData {
     
@@ -43,7 +51,7 @@ static func weekOfData() -> ChartData {
                                                 lineWidth   : 1,
                                                 dash: [CGFloat]())
     
-    let chartStyle  : ChartStyle    = ChartStyle(infoBoxPlacement: .header,
+    let chartStyle  : ChartStyle    = ChartStyle(infoBoxPlacement: .floating,
                                                  xAxisGridStyle  : gridStyle,
                                                  yAxisGridStyle  : gridStyle,
                                                  xAxisLabels     : XAxisLabelSetup(labelPosition : .bottom,
@@ -69,8 +77,14 @@ static func weekOfData() -> ChartData {
                      pointStyle     : pointStyle
     )
 }
+
 ```
+
 ![Example of Line Chart](Resources/LineTwo.png)
+
+#### View
+
+
 ```swift
 LineChart()
     .touchOverlay(specifier: "%.2f")
@@ -81,6 +95,9 @@ LineChart()
     .legends()
     .environmentObject(data)
 ```
+
+#### Data Model
+
 ```swift
 static func yearOfDataMonthlyAverage() -> ChartData {
     
@@ -117,7 +134,136 @@ static func yearOfDataMonthlyAverage() -> ChartData {
                      calculations   : .averageMonth)
 }
 ```
+
+### Bar Chart
+
+![Example of Line Chart](Resources/BarOne.png)
+
+#### View
+
+
+```swift
+BarChart()
+    .touchOverlay()
+    .averageLine(markerName: "Average", lineColour: Color.primary, strokeStyle: StrokeStyle(lineWidth: 2, dash: [5, 10]))
+    .yAxisGrid()
+    .xAxisLabels()
+    .yAxisLabels()
+    .headerBox()
+    .legends()
+    .environmentObject(data)
+```
+
+#### Data Model
+
+```swift
+static func weekOfData() -> ChartData {
+    
+    let data : [ChartDataPoint] = [
+        ChartDataPoint(value: 20,  xAxisLabel: "M", pointLabel: "Monday"),
+        ChartDataPoint(value: 90,  xAxisLabel: "T", pointLabel: "Tuesday"),
+        ChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday"),
+        ChartDataPoint(value: 75,  xAxisLabel: "T", pointLabel: "Thursday"),
+        ChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"),
+        ChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday"),
+        ChartDataPoint(value: 90,  xAxisLabel: "S", pointLabel: "Sunday")
+    ]
+    
+    let metadata   : ChartMetadata  = ChartMetadata(title       : "Test Data",
+                                                    subtitle    : "A weeks worth",
+                                                    lineLegend  : "Data")
+            
+    let gridStyle   : GridStyle     = GridStyle(lineColour  : Color(.lightGray),
+                                                lineWidth   : 1)
+    
+    let chartStyle  : ChartStyle    = ChartStyle(infoBoxPlacement: .header,
+                                                 xAxisGridStyle  : gridStyle,
+                                                 yAxisGridStyle  : gridStyle)
+    
+    let barStyle    : BarStyle      = BarStyle(barWidth: 0.5,
+                                               colourFrom: .barStyle,
+                                               colours: [Color(red: 1.0, green: 0.15, blue: 0.15),
+                                                         Color(red: 1.0, green: 0.35, blue: 0.35)],
+                                               startPoint: .bottom,
+                                               endPoint: .top)
+    
+    return ChartData(dataPoints     : data,
+                     metadata       : metadata,
+                     chartStyle     : chartStyle,
+                     barStyle       : barStyle)
+}
+
+```
+
+
+![Example of Line Chart](Resources/BarTwo.png)
+
+#### View
+
+
+```swift
+BarChart()
+    .touchOverlay()
+    .averageLine(markerName: "Average", lineColour: Color.primary, strokeStyle: StrokeStyle(lineWidth: 2, dash: [5, 10]))
+    .yAxisGrid()
+    .xAxisLabels()
+    .yAxisLabels()
+    .headerBox()
+    .legends()
+    .environmentObject(data)
+```
+
+#### Data Model
+
+```swift
+static func weekOfData() -> ChartData {
+    
+    let data : [ChartDataPoint] = [
+        ChartDataPoint(value: 70,  xAxisLabel: "M", pointLabel: "Monday"   , colour: Color(.systemRed)),
+        ChartDataPoint(value: 40,  xAxisLabel: "T", pointLabel: "Tuesday"  , colour: Color(.systemBlue)),
+        ChartDataPoint(value: 90, xAxisLabel:  "W", pointLabel: "Wednesday", colour: Color(.systemGreen)),
+        ChartDataPoint(value: 35,  xAxisLabel: "T", pointLabel: "Thursday" , colour: Color(.systemOrange)),
+        ChartDataPoint(value: 60, xAxisLabel:  "F", pointLabel: "Friday"   , colour: Color(.systemTeal)),
+        ChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday" , colour: Color(.systemPurple)),
+        ChartDataPoint(value: 40,  xAxisLabel: "S", pointLabel: "Sunday"   , colour: Color(.systemYellow))
+    ]
+    
+    let metadata   : ChartMetadata  = ChartMetadata(title       : "Test Data",
+                                                    subtitle    : "A weeks worth",
+                                                    lineLegend  : "Data")
+    
+    
+    let gridStyle   : GridStyle     = GridStyle(lineColour  : Color(.lightGray),
+                                                lineWidth   : 1)
+    
+    let chartStyle  : ChartStyle    = ChartStyle(infoBoxPlacement: .header,
+                                                 xAxisGridStyle  : gridStyle,
+                                                 yAxisGridStyle  : gridStyle)
+    
+    let barStyle    : BarStyle      = BarStyle(barWidth: 1,
+                                               colourFrom: .dataPoints,
+                                               colours: [Color(red: 1.0, green: 0.15, blue: 0.15),
+                                                         Color(red: 1.0, green: 0.35, blue: 0.35)],
+                                               startPoint: .bottom,
+                                               endPoint: .top)
+    
+    return ChartData(dataPoints     : data,
+                     metadata       : metadata,
+                     chartStyle     : chartStyle,
+                     barStyle       : barStyle
+    )
+}
+```
+
+
+
 ## Documentation
+
+All data and most styling is passed into the view by an Environment Object. See [ChartData](#ChartData).
+
+```swift
+.environmentObject(data)
+```
 
 [View Modifiers](#View-Modifiers) 
 - [Touch Overlay](#Touch-Overlay) 
