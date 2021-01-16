@@ -2,8 +2,11 @@
 
 A charts / plotting library for SwiftUI. Works on macOS, iOS. Support for tvOS, and watchOS hopfully soon.
 
+[Demo Project](https://github.com/willdale/SwiftUICharts-Demo)
 
+![Example of Line Chart](../Resources/LineOne)
 
+![Example of Line Chart](../Resources/LineTwo)
 
 ## Documentation
 
