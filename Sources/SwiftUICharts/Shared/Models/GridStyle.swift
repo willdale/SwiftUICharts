@@ -26,7 +26,7 @@ public struct GridStyle {
     ///   - dash: Dash
     ///   - dashPhase: Dash Phase
     public init(numberOfLines: Int       = 10,
-                lineColour   : Color     = Color(.systemGray).opacity(0.25),
+                lineColour   : Color     = Color(.gray).opacity(0.25),
                 lineWidth    : CGFloat   = 1,
                 dash         : [CGFloat] = [10],
                 dashPhase    : CGFloat   = 0

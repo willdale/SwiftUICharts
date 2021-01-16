@@ -44,7 +44,7 @@ public struct LineStyle {
     ///   - lineType: Drawing style of the line
     ///   - strokeStyle: Stroke Style
     ///   - ignoreZero: Whether the chart should skip data points who's value is 0.
-    public init(colour      : Color      = Color(.systemRed),
+    public init(colour      : Color      = Color(.red),
                 lineType    : LineType   = .curvedLine,
                 strokeStyle : StrokeStyle = StrokeStyle(lineWidth: 3,
                                                         lineCap: .round,
@@ -75,7 +75,7 @@ public struct LineStyle {
     ///   - lineType: Drawing style of the line.
     ///   - strokeStyle: Stroke Style.
     ///   - ignoreZero: Whether the chart should skip data points who's value is 0.
-    public init(colours     : [Color]    =  [Color(.systemRed), Color(.systemBlue)],
+    public init(colours     : [Color]    =  [Color(.red), Color(.blue)],
                 startPoint  : UnitPoint  =  .leading,
                 endPoint    : UnitPoint  =  .trailing,
                 lineType    : LineType   = .curvedLine,
@@ -109,7 +109,7 @@ public struct LineStyle {
     ///   - lineType: Drawing style of the line.
     ///   - strokeStyle: Stroke Style.
     ///   - ignoreZero: Whether the chart should skip data points who's value is 0.
-    public init(stops       : [GradientStop]    = [GradientStop(color: Color(.systemRed), location: 0.0)],
+    public init(stops       : [GradientStop]    = [GradientStop(color: Color(.red), location: 0.0)],
                 startPoint  : UnitPoint         =  .leading,
                 endPoint    : UnitPoint         =  .trailing,
                 lineType    : LineType          = .curvedLine,

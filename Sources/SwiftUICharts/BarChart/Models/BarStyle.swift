@@ -42,7 +42,7 @@ public struct BarStyle {
     public init(barWidth    : CGFloat       = 1,
                 cornerRadius: CornerRadius  = CornerRadius(top: 5.0, bottom: 0.0),
                 colourFrom  : ColourFrom    = .barStyle,
-                colour      : Color?        = Color(.systemRed)
+                colour      : Color?        = Color(.red)
     ) {
         self.barWidth       = barWidth
         self.cornerRadius   = cornerRadius
@@ -66,7 +66,7 @@ public struct BarStyle {
     public init(barWidth    : CGFloat       = 1,
                 cornerRadius: CornerRadius  = CornerRadius(top: 5.0, bottom: 0.0),
                 colourFrom  : ColourFrom    = .barStyle,
-                colours     : [Color]       = [Color(.systemRed), Color(.systemBlue)],
+                colours     : [Color]       = [Color(.red), Color(.blue)],
                 startPoint  : UnitPoint     = .leading,
                 endPoint    : UnitPoint     = .trailing
     ) {
@@ -92,7 +92,7 @@ public struct BarStyle {
     public init(barWidth    : CGFloat = 1,
                 cornerRadius: CornerRadius      = CornerRadius(top: 5.0, bottom: 0.0),
                 colourFrom  : ColourFrom        = .barStyle,
-                stops       : [GradientStop]    = [GradientStop(color: Color(.systemRed), location: 0.0)],
+                stops       : [GradientStop]    = [GradientStop(color: Color(.red), location: 0.0)],
                 startPoint  : UnitPoint         =  .leading,
                 endPoint    : UnitPoint         =  .trailing
     ) {

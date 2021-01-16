@@ -33,7 +33,7 @@ public struct PointStyle {
     ///   - pointShape: Shape of the points
     public init(pointSize   : CGFloat    = 9,
                 borderColour: Color      = .primary,
-                fillColour  : Color      = Color(.systemRed),
+                fillColour  : Color      = Color(.gray),
                 lineWidth   : CGFloat    = 3,
                 pointType   : PointType  = .outline,
                 pointShape  : PointShape = .circle
