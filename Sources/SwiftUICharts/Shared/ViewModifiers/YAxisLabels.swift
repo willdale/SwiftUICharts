@@ -41,8 +41,8 @@ internal struct YAxisLabels: ViewModifier {
                     .font(.caption)
             }
         }
-//        .if(labelsAndBottom) { $0.padding(.top, -6) }
-//        .if(labelsAndTop) { $0.padding(.bottom, -6) }
+        .if(labelsAndBottom) { $0.padding(.top, -8) }
+        .if(labelsAndTop) { $0.padding(.bottom, -8) }
         .onAppear {
             chartData.viewData.hasYAxisLabels = true
         }

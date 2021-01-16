@@ -80,6 +80,7 @@ static func weekOfData() -> ChartData {
 
 ```
 
+
 ![Example of Line Chart](Resources/LineTwo.png)
 
 #### View
@@ -135,12 +136,13 @@ static func yearOfDataMonthlyAverage() -> ChartData {
 }
 ```
 
+
 ### Bar Chart
 
 ![Example of Line Chart](Resources/BarOne.png)
 
-#### View
 
+#### View
 
 ```swift
 BarChart()

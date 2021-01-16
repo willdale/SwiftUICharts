@@ -14,7 +14,6 @@ internal struct YAxisGrid: ViewModifier {
     internal func body(content: Content) -> some View {
         
          ZStack {
-            content
             VStack {
                 ForEach((0...chartData.chartStyle.yAxisGridStyle.numberOfLines), id: \.self) { index in
                     if index != 0 {
@@ -26,6 +25,7 @@ internal struct YAxisGrid: ViewModifier {
                 }
                 HorizontalGridView(chartData: chartData)
             }
+            content
         }
     }
 }
