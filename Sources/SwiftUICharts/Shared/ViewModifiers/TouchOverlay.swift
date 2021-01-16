@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-
+#if !os(tvOS)
 /// Detects input either from touch of pointer. Finds the nearest data point and displays the relevent information.
 internal struct TouchOverlay: ViewModifier {
     
@@ -79,7 +79,7 @@ internal struct TouchOverlay: ViewModifier {
                     )
                 if isTouchCurrent {
                     TouchOverlayMarker(position: pointLocation)
-                        .stroke(Color(.systemGray), lineWidth: touchMarkerLineWidth)
+                        .stroke(Color(.gray), lineWidth: touchMarkerLineWidth)
                     if chartData.chartStyle.infoBoxPlacement == .floating, let lineChartStyle = chartData.lineStyle {
                         TouchOverlayBox(selectedPoint: selectedPoint, specifier: specifier, boxFrame: $boxFrame, ignoreZero: lineChartStyle.ignoreZero)
                             .position(x: boxLocation.x, y: 0 + (boxFrame.height / 2))
@@ -209,11 +209,20 @@ internal struct TouchOverlay: ViewModifier {
         }
     }
 }
+#endif
 
 extension View {
+    #if !os(tvOS)
     /// Adds an overlay to detect touch and display the relivent information from the nearest data point.
     /// - Parameter specifier: Decimal precision for labels
     public func touchOverlay(specifier: String = "%.0f") -> some View {
         self.modifier(TouchOverlay(specifier: specifier))
     }
+    #elseif os(tvOS)
+    public func touchOverlay(specifier: String = "%.0f") -> some View {
+        self.modifier(EmptyModifier())
+    }
+    #endif
+    
 }
+
