@@ -9,10 +9,24 @@ import SwiftUI
 
 struct ColourBar: View {
     
-    let colour  : Color
-    let data    : ChartDataPoint
-    let maxValue: Double
-    let style   : BarStyle
+    let colour      : Color
+    let data        : ChartDataPoint
+    let maxValue    : Double
+    let chartStyle  : ChartStyle
+    let style       : BarStyle
+    
+    init(_ colour      : Color,
+         _ data        : ChartDataPoint,
+         _ maxValue    : Double,
+         _ chartStyle  : ChartStyle,
+         _ style       : BarStyle
+    ) {
+        self.colour     = colour
+        self.data       = data
+        self.maxValue   = maxValue
+        self.chartStyle = chartStyle
+        self.style      = style
+    }
     
     @State var startAnimation : Bool = false
     
@@ -21,7 +35,7 @@ struct ColourBar: View {
             .fill(colour)
             .scaleEffect(y: startAnimation ? CGFloat(data.value / maxValue) : 0, anchor: .bottom)
             .scaleEffect(x: style.barWidth, anchor: .center)
-            .animateOnAppear(using: .linear(duration: 1.0)) {
+            .animateOnAppear(using: chartStyle.globalAnimation) {
                 self.startAnimation.toggle()
             }
     }
@@ -34,9 +48,26 @@ struct GradientColoursBar: View {
     let endPoint    : UnitPoint
     let data        : ChartDataPoint
     let maxValue    : Double
+    let chartStyle  : ChartStyle
     let style       : BarStyle
     
-    
+    init(_ colours     : [Color],
+         _ startPoint  : UnitPoint,
+         _ endPoint    : UnitPoint,
+         _ data        : ChartDataPoint,
+         _ maxValue    : Double,
+         _ chartStyle  : ChartStyle,
+         _ style       : BarStyle
+    ) {
+        self.colours    = colours
+        self.startPoint = startPoint
+        self.endPoint   = endPoint
+        self.data       = data
+        self.maxValue   = maxValue
+        self.chartStyle = chartStyle
+        self.style      = style
+    }
+
     @State var startAnimation : Bool = false
     
     var body: some View {
@@ -46,7 +77,7 @@ struct GradientColoursBar: View {
                                  endPoint: endPoint))
             .scaleEffect(y: startAnimation ? CGFloat(data.value / maxValue) : 0, anchor: .bottom)
             .scaleEffect(x: style.barWidth, anchor: .center)
-            .animateOnAppear(using: Animation.linear(duration: 1.0)) {
+            .animateOnAppear(using: chartStyle.globalAnimation) {
                 self.startAnimation.toggle()
             }
     }
@@ -59,7 +90,25 @@ struct GradientStopsBar: View {
     let endPoint    : UnitPoint
     let data        : ChartDataPoint
     let maxValue    : Double
+    let chartStyle  : ChartStyle
     let style       : BarStyle
+    
+    init(_ stops       : [Gradient.Stop],
+         _ startPoint  : UnitPoint,
+         _ endPoint    : UnitPoint,
+         _ data        : ChartDataPoint,
+         _ maxValue    : Double,
+         _ chartStyle  : ChartStyle,
+         _ style       : BarStyle
+    ) {
+        self.stops      = stops
+        self.startPoint = startPoint
+        self.endPoint   = endPoint
+        self.data       = data
+        self.maxValue   = maxValue
+        self.chartStyle = chartStyle
+        self.style      = style
+    }
     
     @State var startAnimation : Bool = false
     
@@ -70,7 +119,7 @@ struct GradientStopsBar: View {
                                  endPoint: endPoint))
             .scaleEffect(y: startAnimation ? CGFloat(data.value / maxValue) : 0, anchor: .bottom)
             .scaleEffect(x: style.barWidth, anchor: .center)
-            .animateOnAppear(using: .linear(duration: 1.0)) {
+            .animateOnAppear(using: chartStyle.globalAnimation) {
                 self.startAnimation.toggle()
             }
     }

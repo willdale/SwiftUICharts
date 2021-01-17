@@ -33,24 +33,24 @@ internal struct BarChartView: View {
                        let colour = style.colour
                     {
                         
-                        ColourBar(colour: colour, data: data, maxValue: maxValue, style: style)
+                        ColourBar(colour, data, maxValue, chartData.chartStyle, style)
                         
                     } else if style.colourType == .gradientColour,
                               let colours    = style.colours,
                               let startPoint = style.startPoint,
                               let endPoint   = style.endPoint
                     {
-                        
-                        GradientColoursBar(colours: colours, startPoint: startPoint, endPoint: endPoint, data: data, maxValue: maxValue, style: style)
-                        
+
+                        GradientColoursBar(colours, startPoint, endPoint, data, maxValue, chartData.chartStyle, style)
+
                     } else if style.colourType == .gradientStops,
                               let stops      = style.stops,
                               let startPoint = style.startPoint,
                               let endPoint   = style.endPoint
                     {
-                        
+
                         let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
-                        GradientStopsBar(stops: safeStops, startPoint: startPoint, endPoint: endPoint, data: data, maxValue: maxValue, style: style)
+                        GradientStopsBar(safeStops, startPoint, endPoint, data, maxValue, chartData.chartStyle, style)
                         
                     }
                     
@@ -59,15 +59,14 @@ internal struct BarChartView: View {
                     if data.colourType == .colour,
                        let colour = data.colour
                     {
-                        ColourBar(colour: colour, data: data, maxValue: maxValue, style: style)
+                        ColourBar(colour, data, maxValue, chartData.chartStyle, style)
                     } else if data.colourType == .gradientColour,
                               let colours    = data.colours,
                               let startPoint = data.startPoint,
                               let endPoint   = data.endPoint
                     {
 
-                        GradientColoursBar(colours: colours, startPoint: startPoint, endPoint: endPoint, data: data, maxValue: maxValue, style: style)
-
+                        GradientColoursBar(colours, startPoint, endPoint, data, maxValue, chartData.chartStyle, style)
 
                     } else if data.colourType == .gradientStops,
                               let stops      = data.stops,
@@ -77,12 +76,12 @@ internal struct BarChartView: View {
 
                         let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
 
-                        GradientStopsBar(stops: safeStops, startPoint: startPoint, endPoint: endPoint, data: data, maxValue: maxValue, style: style)
+                        GradientStopsBar(safeStops, startPoint, endPoint, data, maxValue, chartData.chartStyle, style)
                     }
                 }
             }
         }
-        .onAppear() {
+        .onAppear {
             chartData.viewData.chartType = .bar
             
             guard let lineLegend = chartData.metadata?.lineLegend else { return }
