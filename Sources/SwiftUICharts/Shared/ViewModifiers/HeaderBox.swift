@@ -61,44 +61,42 @@ internal struct HeaderBox: ViewModifier {
     
     @ViewBuilder
     internal func body(content: Content) -> some View {
-        
-        #if !os(tvOS)
-        if chartData.chartStyle.infoBoxPlacement == .floating {
-            
+        if chartData.dataPoints.count > 2 {
+            #if !os(tvOS)
+            if chartData.chartStyle.infoBoxPlacement == .floating {
+                VStack(alignment: .leading) {
+                    titleBox
+                    content
+                }
+            } else if chartData.chartStyle.infoBoxPlacement == .header {
+                VStack(alignment: .leading) {
+                    HStack(spacing: 0) {
+                        HStack(spacing: 0) {
+                            titleBox
+                            Spacer()
+                        }
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        Spacer()
+                        HStack(spacing: 0) {
+                            Spacer()
+                            touchOverlay
+                        }
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                    }
+                    content
+                }
+            }
+            #elseif os(tvOS)
             VStack(alignment: .leading) {
                 titleBox
                 content
             }
-            
-        } else if chartData.chartStyle.infoBoxPlacement == .header {
-            VStack(alignment: .leading) {
-                HStack(spacing: 0) {
-                    HStack(spacing: 0) {
-                        titleBox
-                        Spacer()
-                    }
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    Spacer()
-                    HStack(spacing: 0) {
-                        Spacer()
-                        touchOverlay
-                    }
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                }
-                content
-            }
-        }
-        #elseif os(tvOS)
-        VStack(alignment: .leading) {
-            titleBox
-            content
-        }
-        #endif
-        }
+            #endif
+        } else { content }
+    }
 }
 
 extension View {
-    
     /// Displays the metadata about the chart
     /// - Returns: Chart title and subtitle.
     public func headerBox() -> some View {

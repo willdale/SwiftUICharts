@@ -38,17 +38,19 @@ internal struct YAxisPOI: ViewModifier {
     internal func body(content: Content) -> some View {
         ZStack {
             content
-            Marker(chartData: chartData, markerValue: markerValue, isAverage: isAverage, chartType: chartData.viewData.chartType)
-                .stroke(lineColour, style: strokeStyle)
-                .onAppear {
-                    if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
-                        chartData.legends.append(LegendData(legend      : markerName,
-                                                            colour      : lineColour,
-                                                            strokeStyle : Stroke.strokeStyleToStroke(strokeStyle: strokeStyle),
-                                                            prioity     : 2,
-                                                            chartType   : .line))
+            if chartData.dataPoints.count > 2 {
+                Marker(chartData: chartData, markerValue: markerValue, isAverage: isAverage, chartType: chartData.viewData.chartType)
+                    .stroke(lineColour, style: strokeStyle)
+                    .onAppear {
+                        if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
+                            chartData.legends.append(LegendData(legend      : markerName,
+                                                                colour      : lineColour,
+                                                                strokeStyle : Stroke.strokeStyleToStroke(strokeStyle: strokeStyle),
+                                                                prioity     : 2,
+                                                                chartType   : .line))
+                        }
                     }
-                }
+            }
         }
     }
 }

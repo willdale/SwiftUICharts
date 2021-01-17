@@ -14,24 +14,25 @@ internal struct PointMarkers: ViewModifier {
     internal func body(content: Content) -> some View {
         
         let pointStyle = chartData.pointStyle
-        
         return ZStack {
             content
-            switch pointStyle.pointType {
-            case .filled:
-                Point(chartData: chartData, pointSize: pointStyle.pointSize, pointType: pointStyle.pointShape, chartType: chartData.viewData.chartType)
-                    .fill(pointStyle.fillColour)
-            case .outline:
-                Point(chartData: chartData, pointSize: pointStyle.pointSize, pointType: pointStyle.pointShape, chartType: chartData.viewData.chartType)
-                    .stroke(pointStyle.borderColour, lineWidth: pointStyle.lineWidth)
-            case .filledOutLine:
-                Point(chartData: chartData, pointSize: pointStyle.pointSize, pointType: pointStyle.pointShape, chartType: chartData.viewData.chartType)
-                    .stroke(pointStyle.borderColour, lineWidth: pointStyle.lineWidth)
-                    .background(Point(chartData: chartData,
-                                      pointSize: pointStyle.pointSize,
-                                      pointType: pointStyle.pointShape, chartType: chartData.viewData.chartType)
-                                    .foregroundColor(pointStyle.fillColour)
-                    )
+            if chartData.dataPoints.count > 2 {
+                switch pointStyle.pointType {
+                case .filled:
+                    Point(chartData: chartData, pointSize: pointStyle.pointSize, pointType: pointStyle.pointShape, chartType: chartData.viewData.chartType)
+                        .fill(pointStyle.fillColour)
+                case .outline:
+                    Point(chartData: chartData, pointSize: pointStyle.pointSize, pointType: pointStyle.pointShape, chartType: chartData.viewData.chartType)
+                        .stroke(pointStyle.borderColour, lineWidth: pointStyle.lineWidth)
+                case .filledOutLine:
+                    Point(chartData: chartData, pointSize: pointStyle.pointSize, pointType: pointStyle.pointShape, chartType: chartData.viewData.chartType)
+                        .stroke(pointStyle.borderColour, lineWidth: pointStyle.lineWidth)
+                        .background(Point(chartData: chartData,
+                                          pointSize: pointStyle.pointSize,
+                                          pointType: pointStyle.pointShape, chartType: chartData.viewData.chartType)
+                                        .foregroundColor(pointStyle.fillColour)
+                        )
+                }
             }
         }
     }
