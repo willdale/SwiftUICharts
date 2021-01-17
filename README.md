@@ -51,13 +51,8 @@ static func weekOfData() -> ChartData {
                                                 lineWidth   : 1,
                                                 dash: [CGFloat]())
     
-    let chartStyle  : ChartStyle    = ChartStyle(infoBoxPlacement: .floating,
-                                                 xAxisGridStyle  : gridStyle,
-                                                 yAxisGridStyle  : gridStyle,
-                                                 xAxisLabels     : XAxisLabelSetup(labelPosition : .bottom,
-                                                                                   labelsFrom    : .xAxisLabel),
-                                                 yAxisLabels     : YAxisLabelSetup(labelPosition : .leading,
-                                                                              numberOfLabels: 7))
+    let chartStyle  : ChartStyle    = ChartStyle(infoBoxPlacement: .header,
+                                                 yAxisGridStyle: GridStyle(lineColour: Color.primary.opacity(0.5)))
     
     let lineStyle   : LineStyle     = LineStyle(colours     : [Color(red: 1.0, green: 0.15, blue: 0.15), Color(red: 1.0, green: 0.35, blue: 0.35)],
                                                 startPoint  : .leading,
@@ -240,7 +235,8 @@ static func weekOfData() -> ChartData {
     
     let chartStyle  : ChartStyle    = ChartStyle(infoBoxPlacement: .header,
                                                  xAxisGridStyle  : gridStyle,
-                                                 yAxisGridStyle  : gridStyle)
+                                                 yAxisGridStyle  : gridStyle,
+                                                 xAxisLabelsFrom: .dataPoint)
     
     let barStyle    : BarStyle      = BarStyle(barWidth: 1,
                                                colourFrom: .dataPoints,
@@ -260,6 +256,8 @@ static func weekOfData() -> ChartData {
 
 
 ## Documentation
+
+
 
 All data and most styling is passed into the view by an Environment Object. See [ChartData](#ChartData).
 
@@ -512,17 +510,23 @@ ChartMetadata(title: String?,
 Model for controlling the overall aesthetic of the chart.
 
 ```swift
-ChartStyle(infoBoxPlacement : InfoBoxPlacement,
-           xAxisGridStyle   : GridStyle,
-           yAxisGridStyle   : GridStyle,
-           xAxisLabels      : XAxisLabelSetup,
-           yAxisLabels      : YAxisLabelSetup)
+ChartStyle(infoBoxPlacement    : InfoBoxPlacement,
+           xAxisGridStyle      : GridStyle,
+           yAxisGridStyle      : GridStyle,
+           xAxisLabelPosition  : XAxisLabelPosistion,
+           xAxisLabelsFrom     : LabelsFrom,         
+           yAxisLabelPosition  : YAxisLabelPosistion,
+           yAxisNumberOfLabels : Int,
+           globalAnimation     : Animation
 ```
 - infoBoxPlacement: Placement of the information box that appears on touch input.
 - xAxisGridStyle: Style of the vertical lines breaking up the chart. See [GridStyle](#GridStyle).
 - yAxisGridStyle: Style of the horizontal lines breaking up the chart. See [GridStyle](#GridStyle).
-- xAxisLabels: Style of the labels on the X axis.
-- yAxisLabels: Style of the labels on the Y axis.
+- xAxisLabelPosition: Location of the X axis labels - Top or Bottom
+- xAxisLabelsFrom: Where the label data come from. DataPoint or xAxisLabels
+- yAxisLabelPosition: Location of the X axis labels - Leading or Trailing
+- yAxisNumberOfLabel: Number Of Labels on Y Axis
+- globalAnimation: Gobal control of animations.
 
 
 ### GridStyle
