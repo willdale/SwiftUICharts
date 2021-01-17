@@ -15,7 +15,6 @@ internal struct TouchOverlay: ViewModifier {
     
     /// Decimal precision for labels
     private let specifier               : String
-    private var dragGesture             : DragGesture
     private let touchMarkerLineWidth    : CGFloat = 1 // API?
     
     /// Boolean that indicates whether touch is currently being detected
@@ -39,54 +38,54 @@ internal struct TouchOverlay: ViewModifier {
     ///   - infoBoxPlacement: Placement of the data point information panel when touch overlay modifier is applied.
     internal init(specifier: String) {
         self.specifier = specifier
-        self.dragGesture = DragGesture()
-        self.dragGesture.minimumDistance = 0
     }
     
-    internal func body(content: Content) -> some View {
-        GeometryReader { geo in
-            ZStack {
-                content
-                    .gesture(
-                        dragGesture
-                            .onChanged { (value) in
-                                touchLocation   = value.location
-                                isTouchCurrent  = true
-                                
-                                switch chartData.viewData.chartType {
-                                case .line:
-                                    getPointLocationLineChart(touchLocation: touchLocation, chartSize: geo)
-                                    getDataPointLineChart(touchLocation: touchLocation, chartSize: geo)
-                                case .bar:
-                                    getPointLocationBarChart(touchLocation: touchLocation, chartSize: geo)
-                                    getDataPointBarChart(touchLocation: touchLocation, chartSize: geo)
+    @ViewBuilder internal func body(content: Content) -> some View {
+        if chartData.dataPoints.count > 2 {
+            GeometryReader { geo in
+                ZStack {
+                    content
+                        .gesture(
+                            DragGesture(minimumDistance: 0)
+                                .onChanged { (value) in
+                                    touchLocation   = value.location
+                                    isTouchCurrent  = true
+                                    
+                                    switch chartData.viewData.chartType {
+                                    case .line:
+                                        getPointLocationLineChart(touchLocation: touchLocation, chartSize: geo)
+                                        getDataPointLineChart(touchLocation: touchLocation, chartSize: geo)
+                                    case .bar:
+                                        getPointLocationBarChart(touchLocation: touchLocation, chartSize: geo)
+                                        getDataPointBarChart(touchLocation: touchLocation, chartSize: geo)
+                                    }
+                                    
+                                    if chartData.chartStyle.infoBoxPlacement == .floating {
+                                        setBoxLocationation(boxFrame: boxFrame, chartSize: geo)
+                                        markerLocation.x = setMarkerXLocation(chartSize: geo)
+                                        markerLocation.y = setMarkerYLocation(chartSize: geo)
+                                    } else if chartData.chartStyle.infoBoxPlacement == .header {
+                                        chartData.chartStyle.infoBoxPlacement = .header
+                                        chartData.viewData.isTouchCurrent   = true
+                                        chartData.viewData.touchOverlayInfo = selectedPoint
+                                    }
                                 }
-                                
-                                if chartData.chartStyle.infoBoxPlacement == .floating {
-                                    setBoxLocationation(boxFrame: boxFrame, chartSize: geo)
-                                    markerLocation.x = setMarkerXLocation(chartSize: geo)
-                                    markerLocation.y = setMarkerYLocation(chartSize: geo)
-                                } else if chartData.chartStyle.infoBoxPlacement == .header {
-                                    chartData.chartStyle.infoBoxPlacement = .header
-                                    chartData.viewData.isTouchCurrent   = true
-                                    chartData.viewData.touchOverlayInfo = selectedPoint
+                                .onEnded { _ in
+                                    isTouchCurrent = false
+                                    chartData.viewData.isTouchCurrent = false
                                 }
-                            }
-                            .onEnded { _ in
-                                isTouchCurrent = false
-                                chartData.viewData.isTouchCurrent = false
-                            }
-                    )
-                if isTouchCurrent {
-                    TouchOverlayMarker(position: pointLocation)
-                        .stroke(Color(.gray), lineWidth: touchMarkerLineWidth)
-                    if chartData.chartStyle.infoBoxPlacement == .floating, let lineChartStyle = chartData.lineStyle {
-                        TouchOverlayBox(selectedPoint: selectedPoint, specifier: specifier, boxFrame: $boxFrame, ignoreZero: lineChartStyle.ignoreZero)
-                            .position(x: boxLocation.x, y: 0 + (boxFrame.height / 2))
+                        )
+                    if isTouchCurrent {
+                        TouchOverlayMarker(position: pointLocation)
+                            .stroke(Color(.gray), lineWidth: touchMarkerLineWidth)
+                        if chartData.chartStyle.infoBoxPlacement == .floating, let lineChartStyle = chartData.lineStyle {
+                            TouchOverlayBox(selectedPoint: selectedPoint, specifier: specifier, boxFrame: $boxFrame, ignoreZero: lineChartStyle.ignoreZero)
+                                .position(x: boxLocation.x, y: 0 + (boxFrame.height / 2))
+                        }
                     }
                 }
             }
-        }
+        } else { content }
     }
     
     // MARK: - Bar Chart
