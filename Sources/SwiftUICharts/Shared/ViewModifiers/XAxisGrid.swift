@@ -13,7 +13,7 @@ internal struct XAxisGrid: ViewModifier {
         
     internal func body(content: Content) -> some View {
         ZStack {
-            if chartData.dataPoints.count > 2 {
+            if chartData.isGreaterThanTwo {
                 HStack {
                     ForEach((0...chartData.chartStyle.xAxisGridStyle.numberOfLines), id: \.self) { index in
                         if index != 0 {

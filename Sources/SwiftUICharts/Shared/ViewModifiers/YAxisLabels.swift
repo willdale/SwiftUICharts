@@ -61,7 +61,7 @@ internal struct YAxisLabels: ViewModifier {
         switch chartData.chartStyle.yAxisLabelPosition {
         case .leading:
             HStack {
-                if chartData.dataPoints.count > 2 {
+                if chartData.isGreaterThanTwo {
                     labels
                 }
                 content
@@ -69,7 +69,7 @@ internal struct YAxisLabels: ViewModifier {
         case .trailing:
             HStack {
                 content
-                if chartData.dataPoints.count > 2 {
+                if chartData.isGreaterThanTwo {
                     labels
                 }
             }

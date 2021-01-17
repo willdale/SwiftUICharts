@@ -13,7 +13,7 @@ internal struct YAxisGrid: ViewModifier {
     
     internal func body(content: Content) -> some View {
          ZStack {
-            if chartData.dataPoints.count > 2 {
+            if chartData.isGreaterThanTwo {
                 VStack {
                     ForEach((0...chartData.chartStyle.yAxisGridStyle.numberOfLines), id: \.self) { index in
                         if index != 0 {

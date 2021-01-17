@@ -24,7 +24,7 @@ internal struct LineChartView: View {
         let style : LineStyle = chartData.lineStyle
         let strokeStyle = style.strokeStyle
         
-        if chartData.dataPoints.count > 2 {
+        if chartData.isGreaterThanTwo {
             
             if style.colourType == .colour,
                let colour = style.colour

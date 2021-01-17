@@ -35,6 +35,8 @@ public class ChartData: ObservableObject, Identifiable {
     @Published var viewData : ChartViewData
     
     public var noDataText   : Text = Text("No Data")
+    
+    var isGreaterThanTwo: Bool = true
         
     // MARK: - init: Calculations
     /// ChartData is the central model from which the chart is drawn.
@@ -75,6 +77,8 @@ public class ChartData: ObservableObject, Identifiable {
         self.pointStyle     = pointStyle
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
+        
+        greaterThanTwo()
     }
     
     // MARK: - init: Custom Calculations
@@ -107,6 +111,7 @@ public class ChartData: ObservableObject, Identifiable {
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         
+        greaterThanTwo()
     }
     
     // MARK: - Functions
@@ -137,6 +142,9 @@ public class ChartData: ObservableObject, Identifiable {
          2021-01-07 13:59:50.490962+0000 LineChart[4519:237208] [Unknown process name] Error: this application, or a library it uses, has passed an invalid numeric value (NaN, or not-a-number) to CoreGraphics API and this value is being ignored. Please fix this problem.
          */
         return (maxValue - minValue) + 0.001
+    }
+    func greaterThanTwo() {
+        self.isGreaterThanTwo = dataPoints.count > 2
     }
     
     /// Sets the order the Legends are layed out in.

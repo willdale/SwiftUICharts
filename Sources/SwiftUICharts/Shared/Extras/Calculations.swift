@@ -45,6 +45,7 @@ internal struct Calculations {
                                                  pointLabel: formatterForPointLabel.string(from: date)))
             }
         }
+
         return outputData
     }
     
@@ -71,7 +72,7 @@ internal struct Calculations {
         
         var outputData : [ChartDataPoint] = []
         for index in 0...numberOfWeeks {
-            if let date = calendar.date(byAdding: .weekOfYear, value: index, to: firstDataPoint) {
+            if let date = calendar.date(byAdding: .weekOfYear, value: (index), to: firstDataPoint) {
                 
                 let requestedWeek = calendar.dateComponents([.year, .weekOfYear], from: date)
 
@@ -81,12 +82,13 @@ internal struct Calculations {
                 }
                 let sum = weekOfData.reduce(0) { $0 + $1.value }
                 let average = sum / Double(weekOfData.count)
-
+                
                 outputData.append(ChartDataPoint(value: average,
                                                  xAxisLabel: formatterForXAxisLabel.string(from: date),
                                                  pointLabel: formatterForPointLabel.string(from: date)))
             }
         }
+        
         return outputData
     }
     
@@ -106,26 +108,28 @@ internal struct Calculations {
         guard let firstDataPoint = dataPoints.first?.date else { return nil }
         guard let lastDataPoint  = dataPoints.last?.date else { return nil }
         
-        guard let numberOfWeeks = calendar.dateComponents([.day],
-                                                           from: firstDataPoint,
-                                                           to: lastDataPoint).day else { return nil }
+        guard let numberOfDays = calendar.dateComponents([.day],
+                                                         from: firstDataPoint,
+                                                         to: lastDataPoint).day else { return nil }
         
         var outputData : [ChartDataPoint] = []
-        for index in 0...numberOfWeeks {
+        for index in 0...numberOfDays {
             if let date = calendar.date(byAdding: .day, value: index, to: firstDataPoint) {
                 
                 let requestedDay = calendar.dateComponents([.year, .day], from: date)
 
                 let dayOfData = dataPoints.filter { (dataPoint) -> Bool in
                     let day = calendar.dateComponents([.year, .day], from:  dataPoint.date ?? Date())
+                    
                     return day == requestedDay
                 }
                 let sum = dayOfData.reduce(0) { $0 + $1.value }
                 let average = sum / Double(dayOfData.count)
-
+                if !average.isNaN {
                 outputData.append(ChartDataPoint(value: average,
                                                  xAxisLabel: formatterForXAxisLabel.string(from: date),
                                                  pointLabel: formatterForPointLabel.string(from: date)))
+                }
             }
         }
         return outputData

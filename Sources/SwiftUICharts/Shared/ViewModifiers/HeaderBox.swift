@@ -61,7 +61,7 @@ internal struct HeaderBox: ViewModifier {
     
     @ViewBuilder
     internal func body(content: Content) -> some View {
-        if chartData.dataPoints.count > 2 {
+        if chartData.isGreaterThanTwo {
             #if !os(tvOS)
             if chartData.chartStyle.infoBoxPlacement == .floating {
                 VStack(alignment: .leading) {

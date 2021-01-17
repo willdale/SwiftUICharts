@@ -41,7 +41,7 @@ internal struct TouchOverlay: ViewModifier {
     }
     
     @ViewBuilder internal func body(content: Content) -> some View {
-        if chartData.dataPoints.count > 2 {
+        if chartData.isGreaterThanTwo {
             GeometryReader { geo in
                 ZStack {
                     content

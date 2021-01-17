@@ -38,7 +38,7 @@ internal struct YAxisPOI: ViewModifier {
     internal func body(content: Content) -> some View {
         ZStack {
             content
-            if chartData.dataPoints.count > 2 {
+            if chartData.isGreaterThanTwo {
                 Marker(chartData: chartData, markerValue: markerValue, isAverage: isAverage, chartType: chartData.viewData.chartType)
                     .stroke(lineColour, style: strokeStyle)
                     .onAppear {

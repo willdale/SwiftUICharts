@@ -16,7 +16,7 @@ internal struct PointMarkers: ViewModifier {
         let pointStyle = chartData.pointStyle
         return ZStack {
             content
-            if chartData.dataPoints.count > 2 {
+            if chartData.isGreaterThanTwo {
                 switch pointStyle.pointType {
                 case .filled:
                     Point(chartData: chartData, pointSize: pointStyle.pointSize, pointType: pointStyle.pointShape, chartType: chartData.viewData.chartType)
