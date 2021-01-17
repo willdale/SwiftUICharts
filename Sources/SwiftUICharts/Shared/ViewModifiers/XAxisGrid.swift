@@ -13,15 +13,17 @@ internal struct XAxisGrid: ViewModifier {
         
     internal func body(content: Content) -> some View {
         ZStack {
-            HStack {
-                ForEach((0...chartData.chartStyle.xAxisGridStyle.numberOfLines), id: \.self) { index in
-                    if index != 0 {
-                        VerticalGridView(chartData: chartData)
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
+            if chartData.dataPoints.count > 2 {
+                HStack {
+                    ForEach((0...chartData.chartStyle.xAxisGridStyle.numberOfLines), id: \.self) { index in
+                        if index != 0 {
+                            VerticalGridView(chartData: chartData)
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                        }
                     }
+                    VerticalGridView(chartData: chartData)
                 }
-                VerticalGridView(chartData: chartData)
             }
             content
         }
@@ -52,7 +54,7 @@ internal struct VerticalGridView: View {
                                        dash     : chartData.chartStyle.xAxisGridStyle.dash,
                                        dashPhase: chartData.chartStyle.xAxisGridStyle.dashPhase))
             .frame(width: chartData.chartStyle.xAxisGridStyle.lineWidth)
-            .animateOnAppear(using: .linear(duration: 1.0)) {
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation.toggle()
             }
     }

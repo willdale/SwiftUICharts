@@ -12,19 +12,20 @@ internal struct YAxisGrid: ViewModifier {
     @EnvironmentObject var chartData : ChartData
     
     internal func body(content: Content) -> some View {
-        
          ZStack {
-            VStack {
-                ForEach((0...chartData.chartStyle.yAxisGridStyle.numberOfLines), id: \.self) { index in
-                    if index != 0 {
-                        
-                        HorizontalGridView(chartData: chartData)
-                        
-                        Spacer()
-                            .frame(minHeight: 0, maxHeight: 500)
+            if chartData.dataPoints.count > 2 {
+                VStack {
+                    ForEach((0...chartData.chartStyle.yAxisGridStyle.numberOfLines), id: \.self) { index in
+                        if index != 0 {
+                            
+                            HorizontalGridView(chartData: chartData)
+                            
+                            Spacer()
+                                .frame(minHeight: 0, maxHeight: 500)
+                        }
                     }
+                    HorizontalGridView(chartData: chartData)
                 }
-                HorizontalGridView(chartData: chartData)
             }
             content
         }
@@ -57,7 +58,7 @@ internal struct HorizontalGridView: View {
                                        dash     : chartData.chartStyle.yAxisGridStyle.dash,
                                        dashPhase: chartData.chartStyle.yAxisGridStyle.dashPhase))
             .frame(height: chartData.chartStyle.yAxisGridStyle.lineWidth)
-            .animateOnAppear(using: .linear(duration: 1.0)) {
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation.toggle()
             }
     }
