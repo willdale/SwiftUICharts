@@ -19,9 +19,9 @@ internal struct YAxisLabels: ViewModifier {
     }
 
     internal var labels: some View {
-        let labelsAndTop    = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabels.labelPosition == .top
-        let labelsAndBottom = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabels.labelPosition == .bottom
-        let numberOfLabels  = chartData.chartStyle.yAxisLabels.numberOfLabels
+        let labelsAndTop    = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .top
+        let labelsAndBottom = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .bottom
+        let numberOfLabels  = chartData.chartStyle.yAxisNumberOfLabels
         
         return VStack {
             if labelsAndTop {
@@ -58,22 +58,26 @@ internal struct YAxisLabels: ViewModifier {
     
     @ViewBuilder
     internal  func body(content: Content) -> some View {
-        switch chartData.chartStyle.yAxisLabels.labelPosition {
+        switch chartData.chartStyle.yAxisLabelPosition {
         case .leading:
             HStack {
-                labels
+                if chartData.dataPoints.count > 2 {
+                    labels
+                }
                 content
             }
         case .trailing:
             HStack {
                 content
-                labels
+                if chartData.dataPoints.count > 2 {
+                    labels
+                }
             }
         }
     }
     
     internal func getLabels() -> [Double] {
-        let numberOfLabels = chartData.chartStyle.yAxisLabels.numberOfLabels
+        let numberOfLabels = chartData.chartStyle.yAxisNumberOfLabels
         switch chartData.viewData.chartType {
         case .line:
             return self.getYLabelsLineChart(numberOfLabels)

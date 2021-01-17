@@ -14,8 +14,8 @@ internal struct XAxisBorder: ViewModifier {
     @ViewBuilder
     internal func body(content: Content) -> some View {
         
-        let labelsAndTop = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabels.labelPosition == .top
-        let labelsAndBottom = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabels.labelPosition == .bottom
+        let labelsAndTop = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .top
+        let labelsAndBottom = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .bottom
         
         if labelsAndBottom {
             VStack {
@@ -44,8 +44,8 @@ internal struct YAxisBorder: ViewModifier {
     @ViewBuilder
     internal func body(content: Content) -> some View {
         
-        let labelsAndLeading = chartData.viewData.hasYAxisLabels && chartData.chartStyle.yAxisLabels.labelPosition == .leading
-        let labelsAndTrailing = chartData.viewData.hasYAxisLabels && chartData.chartStyle.yAxisLabels.labelPosition == .trailing
+        let labelsAndLeading = chartData.viewData.hasYAxisLabels && chartData.chartStyle.yAxisLabelPosition == .leading
+        let labelsAndTrailing = chartData.viewData.hasYAxisLabels && chartData.chartStyle.yAxisLabelPosition == .trailing
         
         if labelsAndLeading {
             HStack {

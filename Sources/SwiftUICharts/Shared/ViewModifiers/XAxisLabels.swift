@@ -14,7 +14,7 @@ internal struct XAxisLabels: ViewModifier {
     @ViewBuilder
     internal var labels: some View {
         
-        switch chartData.chartStyle.xAxisLabels.labelsFrom {
+        switch chartData.chartStyle.xAxisLabelsFrom {
         case .dataPoint:
             // ChartData -> DataPoints -> xAxisLabel
             switch chartData.viewData.chartType {
@@ -102,7 +102,7 @@ internal struct XAxisLabels: ViewModifier {
     
     @ViewBuilder
     internal func body(content: Content) -> some View {
-        switch chartData.chartStyle.xAxisLabels.labelPosition {
+        switch chartData.chartStyle.xAxisLabelPosition {
         case .top:
             VStack {
                 labels
