@@ -13,27 +13,29 @@ public class ChartData: ObservableObject, Identifiable {
     public let id = UUID()
     
     /// Data model containing the datapoints: Value, Label, Description and Date. Individual colouring for bar chart.
-    @Published public var dataPoints       : [ChartDataPoint]
+    @Published public var dataPoints    : [ChartDataPoint]
     /// Data model containing: the charts Title, the charts Subtitle and the Line Legend.
-    @Published public var metadata         : ChartMetadata?
+    @Published public var metadata      : ChartMetadata?
     
     /// Array of strings for the labels on the X Axis instead of the the dataPoints labels.
-    @Published public var xAxisLabels  : [String]?
+    @Published public var xAxisLabels   : [String]?
     
     /// Data model conatining the style data for the chart.
-    @Published public var chartStyle        : ChartStyle
+    @Published public var chartStyle    : ChartStyle
     /// Data model conatining the style data for the line chart.
-    @Published public var lineStyle         : LineStyle
+    @Published public var lineStyle     : LineStyle
     /// Data model conatining the style data for the line chart.
-    @Published public var barStyle          : BarStyle
+    @Published public var barStyle      : BarStyle
     /// Data model containing the style data for the data point markers.
-    @Published public var pointStyle        : PointStyle
+    @Published public var pointStyle    : PointStyle
         
     /// Array of data to populate the chart legend.
-    @Published var legends          : [LegendData]
+    @Published var legends  : [LegendData]
     /// Data model to hold data about the Views layout.
-    @Published var viewData         : ChartViewData
+    @Published var viewData : ChartViewData
     
+    public var noDataText   : Text = Text("No Data")
+        
     // MARK: - init: Calculations
     /// ChartData is the central model from which the chart is drawn.
     /// - Parameters:
