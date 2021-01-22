@@ -9,83 +9,109 @@ import SwiftUI
 
 internal struct LineShape: Shape {
            
-    private let chartData   : ChartData
+    private let dataPoints : [ChartDataPoint]
         
     /// Drawing style of the line
     private let lineType    : LineType
     /// If it's to be filled some extra lines need to be drawn
     private let isFilled    : Bool
     
-    internal init(chartData : ChartData,
+    internal init(dataPoints : [ChartDataPoint],
                   lineType  : LineType,
                   isFilled  : Bool
     ) {
-        self.chartData  = chartData
+        self.dataPoints = dataPoints
         self.lineType   = lineType
         self.isFilled   = isFilled
     }
   
     internal func path(in rect: CGRect) -> Path {
         
-        let minValue: Double = chartData.minValue()
-        let range   : Double = chartData.range()
-                
+        let minValue: Double = DataFunctions.minValue(dataPoints: dataPoints)
+        let range   : Double = DataFunctions.range(dataPoints: dataPoints)
+        
+        let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
+        let y : CGFloat = rect.height / CGFloat(range)
+        
+        switch lineType {
+        case .curvedLine:
+            return curvedLine(rect, x, y, dataPoints, minValue, range, isFilled)
+        case .line:
+            return straightLine(rect, x, y, dataPoints, minValue, range, isFilled)
+        }
+        
+    }
+}
+
+extension LineShape {
+    func straightLine(_ rect        : CGRect,
+                      _ x           : CGFloat,
+                      _ y           : CGFloat,
+                      _ dataPoints  : [ChartDataPoint],
+                      _ minValue    : Double,
+                      _ range       : Double,
+                      _ isFilled    : Bool
+    ) -> Path {
+        
         var path = Path()
-                    
-            let x : CGFloat = rect.width / CGFloat(chartData.dataPoints.count - 1)
-            let y : CGFloat = rect.height / CGFloat(range)
-            
-            let firstPoint = CGPoint(x: 0,
-                                     y: (CGFloat(chartData.dataPoints[0].value - minValue) * -y) + rect.height)
-            path.move(to: firstPoint)
-            
-            var previousPoint = firstPoint
-            
-            if !chartData.lineStyle.ignoreZero {
-                for index in 1 ..< chartData.dataPoints.count - 1 {
-                    let nextPoint = CGPoint(x: CGFloat(index) * x,
-                                            y: (CGFloat(chartData.dataPoints[index].value - minValue) * -y) + rect.height)
-                    lineSwitch(&path, nextPoint, previousPoint)
-                    previousPoint = nextPoint
-                }
-            } else {
-                for index in 1 ..< chartData.dataPoints.count - 1 {
-                    if chartData.dataPoints[index].value != 0 {
-                        let nextPoint = CGPoint(x: CGFloat(index) * x,
-                                                y: (CGFloat(chartData.dataPoints[index].value - minValue) * -y) + rect.height)
-                        lineSwitch(&path, nextPoint, previousPoint)
-                        previousPoint = nextPoint
-                    }
-                }
-            }
-            
-            let lastPoint = CGPoint(x: CGFloat(chartData.dataPoints.count-1) * x,
-                                    y: (CGFloat(chartData.dataPoints[chartData.dataPoints.count-1].value - minValue) * -y) + rect.height)
-            lineSwitch(&path, lastPoint, previousPoint)
-            
-            if isFilled {
-                // Draw line straight down
-                path.addLine(to: CGPoint(x: CGFloat(chartData.dataPoints.count-1) * x,
-                                         y: rect.height))
-                // Draw line back to start along x axis
-                path.addLine(to: CGPoint(x: 0,
-                                         y: rect.height))
-                // close back to first data point
-                path.closeSubpath()
-            }
+ 
+        let firstPoint = CGPoint(x: 0,
+                                 y: (CGFloat(dataPoints[0].value - minValue) * -y) + rect.height)
+        path.move(to: firstPoint)
+                
+        for index in 1 ..< dataPoints.count {
+            let nextPoint = CGPoint(x: CGFloat(index) * x,
+                                    y: (CGFloat(dataPoints[index].value - minValue) * -y) + rect.height)
+            path.addLine(to: nextPoint)
+        }
+
+        if isFilled { filled(&path, rect, x, y, dataPoints) }
+        
         return path
     }
-
-    internal func lineSwitch(_ path: inout Path, _ nextPoint: CGPoint, _ previousPoint: CGPoint) {
-        switch lineType {
-        case .line:
-            path.addLine(to: nextPoint)
-        case .curvedLine:
+    
+    func curvedLine(_ rect          : CGRect,
+                    _ x             : CGFloat,
+                    _ y             : CGFloat,
+                    _ dataPoints    : [ChartDataPoint],
+                    _ minValue      : Double,
+                    _ range         : Double,
+                    _ isFilled      : Bool
+    ) -> Path {
+        
+        var path = Path()
+        
+        let firstPoint = CGPoint(x: 0,
+                                 y: (CGFloat(dataPoints[0].value - minValue) * -y) + rect.height)
+        path.move(to: firstPoint)
+        
+        var previousPoint = firstPoint
+        
+        for index in 1 ..< dataPoints.count {
+            let nextPoint = CGPoint(x: CGFloat(index) * x,
+                                    y: (CGFloat(dataPoints[index].value - minValue) * -y) + rect.height)
+            
             path.addCurve(to: nextPoint,
                           control1: CGPoint(x: previousPoint.x + (nextPoint.x - previousPoint.x) / 2,
                                             y: previousPoint.y),
                           control2: CGPoint(x: nextPoint.x - (nextPoint.x - previousPoint.x) / 2,
                                             y: nextPoint.y))
+            previousPoint = nextPoint
         }
+        
+        if isFilled { filled(&path, rect, x, y, dataPoints) }
+
+        return path
+    }
+    
+    func filled(_ path: inout Path, _ rect: CGRect, _ x : CGFloat, _ y : CGFloat, _ dataPoints: [ChartDataPoint]) {
+        // Draw line straight down
+        path.addLine(to: CGPoint(x: CGFloat(dataPoints.count-1) * x,
+                                 y: rect.height))
+        // Draw line back to start along x axis
+        path.addLine(to: CGPoint(x: 0,
+                                 y: rect.height))
+        // close back to first data point
+        path.closeSubpath()
     }
 }

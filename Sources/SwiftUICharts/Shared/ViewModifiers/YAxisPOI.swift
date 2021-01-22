@@ -39,7 +39,7 @@ internal struct YAxisPOI: ViewModifier {
         ZStack {
             content
             if chartData.isGreaterThanTwo {
-                Marker(chartData: chartData, markerValue: markerValue, isAverage: isAverage, chartType: chartData.viewData.chartType)
+                Marker(dataPoints: chartData.dataPoints, markerValue: markerValue, isAverage: isAverage, chartType: chartData.viewData.chartType)
                     .stroke(lineColour, style: strokeStyle)
                     .onAppear {
                         if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice

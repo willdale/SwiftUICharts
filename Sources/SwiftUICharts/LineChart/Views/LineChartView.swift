@@ -7,20 +7,15 @@
 
 import SwiftUI
 
-internal struct LineChartView: View {
+public struct LineChart: View {
     
     @EnvironmentObject var chartData: ChartData
     
     @State var startAnimation : Bool = false
+
+    public init() {}
     
-    let isFilled : Bool
-    
-    internal init(isFilled : Bool) {
-        self.isFilled = isFilled
-    }
-    
-    internal var body: some View {
-        
+    public var body: some View {
         let style : LineStyle = chartData.lineStyle
         let strokeStyle = style.strokeStyle
         
@@ -29,31 +24,22 @@ internal struct LineChartView: View {
             if style.colourType == .colour,
                let colour = style.colour
             {
-                if !isFilled {
-                    LineShape(chartData: chartData, lineType: style.lineType, isFilled: isFilled)
+                    LineShape(dataPoints: chartData.dataPoints, lineType: style.lineType, isFilled: false)
                         .trim(to: startAnimation ? 1 : 0)
                         .stroke(colour, style: strokeStyle)
                         .modifier(LineShapeModifiers(chartData))
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
-                } else {
-                    LineShape(chartData: chartData, lineType: style.lineType, isFilled: isFilled)
-                        .trim(to: startAnimation ? 1 : 0)
-                        .fill(colour)
-                        .modifier(LineShapeModifiers(chartData))
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                            self.startAnimation = true
-                        }
-                }
+                
                 
             } else if style.colourType == .gradientColour,
                       let colours     = style.colours,
                       let startPoint  = style.startPoint,
                       let endPoint    = style.endPoint
             {
-                if !isFilled {
-                    LineShape(chartData: chartData, lineType: style.lineType, isFilled: isFilled)
+
+                LineShape(dataPoints: chartData.dataPoints, lineType: style.lineType, isFilled: false)
                         .trim(to: startAnimation ? 1 : 0)
                         .stroke(LinearGradient(gradient: Gradient(colors: colours),
                                                startPoint: startPoint,
@@ -63,23 +49,15 @@ internal struct LineChartView: View {
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
-                } else {
-                    LineShape(chartData: chartData, lineType: style.lineType, isFilled: isFilled)
-                        .trim(to: startAnimation ? 1 : 0)
-                        .fill(LinearGradient(gradient: Gradient(colors: colours), startPoint: startPoint, endPoint: endPoint))
-                        .modifier(LineShapeModifiers(chartData))
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                            self.startAnimation = true
-                        }
-                }
+               
             } else if style.colourType == .gradientStops,
                       let stops      = style.stops,
                       let startPoint = style.startPoint,
                       let endPoint   = style.endPoint
             {
                 let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-                if !isFilled {
-                    LineShape(chartData: chartData, lineType: style.lineType, isFilled: isFilled)
+
+                LineShape(dataPoints: chartData.dataPoints, lineType: style.lineType, isFilled: false)
                         .trim(to: startAnimation ? 1 : 0)
                         .stroke(LinearGradient(gradient: Gradient(stops: stops),
                                                startPoint: startPoint,
@@ -89,8 +67,59 @@ internal struct LineChartView: View {
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
-                } else {
-                    LineShape(chartData: chartData, lineType: style.lineType, isFilled: isFilled)
+            }
+        } else { CustomNoDataView(chartData: chartData) }
+    }
+}
+
+public struct FilledLineChart: View {
+    
+    @EnvironmentObject var chartData: ChartData
+    
+    @State var startAnimation : Bool = false
+    
+    public init() {}
+    
+    public var body: some View {
+        
+        let style : LineStyle = chartData.lineStyle
+        
+        if chartData.isGreaterThanTwo {
+            
+            if style.colourType == .colour,
+               let colour = style.colour
+            {
+                
+                LineShape(dataPoints: chartData.dataPoints, lineType: style.lineType, isFilled: true)
+                    .trim(to: startAnimation ? 1 : 0)
+                    .fill(colour)
+                    .modifier(LineShapeModifiers(chartData))
+                    .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                        self.startAnimation = true
+                    }
+                
+            } else if style.colourType == .gradientColour,
+                      let colours     = style.colours,
+                      let startPoint  = style.startPoint,
+                      let endPoint    = style.endPoint
+            {
+                
+                    LineShape(dataPoints: chartData.dataPoints, lineType: style.lineType, isFilled: true)
+                        .trim(to: startAnimation ? 1 : 0)
+                        .fill(LinearGradient(gradient: Gradient(colors: colours), startPoint: startPoint, endPoint: endPoint))
+                        .modifier(LineShapeModifiers(chartData))
+                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                            self.startAnimation = true
+                        }
+
+            } else if style.colourType == .gradientStops,
+                      let stops      = style.stops,
+                      let startPoint = style.startPoint,
+                      let endPoint   = style.endPoint
+            {
+                let stops = GradientStop.convertToGradientStopsArray(stops: stops)
+                
+                    LineShape(dataPoints: chartData.dataPoints, lineType: style.lineType, isFilled: true)
                         .trim(to: startAnimation ? 1 : 0)
                         .fill(LinearGradient(gradient: Gradient(stops: stops),
                                              startPoint: startPoint,
@@ -99,7 +128,7 @@ internal struct LineChartView: View {
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
-                }
+
             }
         } else { CustomNoDataView(chartData: chartData) }
     }

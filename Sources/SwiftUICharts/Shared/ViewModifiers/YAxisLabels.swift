@@ -88,8 +88,9 @@ internal struct YAxisLabels: ViewModifier {
 
     internal func getYLabelsLineChart(_ numberOfLabels: Int) -> [Double] {
         var labels      : [Double]  = [Double]()
-        let dataRange   : Double    = chartData.range()
-        let minValue    : Double    = chartData.minValue()
+        let dataRange   : Double    = DataFunctions.range(dataPoints: chartData.dataPoints)
+        let minValue    : Double    = DataFunctions.minValue(dataPoints: chartData.dataPoints)
+        
         let range       : Double    = dataRange / Double(numberOfLabels)
         labels.append(minValue)
         for index in 1...numberOfLabels {
@@ -99,8 +100,9 @@ internal struct YAxisLabels: ViewModifier {
     }
     internal func getYLabelsBarChart(_ numberOfLabels: Int) -> [Double] {
         var labels : [Double]  = [Double]()
+        let maxValue    : Double    = DataFunctions.maxValue(dataPoints: chartData.dataPoints)
         for index in 0...numberOfLabels {
-            labels.append(chartData.maxValue() / Double(numberOfLabels) * Double(index))
+            labels.append(maxValue / Double(numberOfLabels) * Double(index))
         }
         return labels
     }

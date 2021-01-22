@@ -40,8 +40,8 @@ internal struct TouchOverlay: ViewModifier {
         self.specifier = specifier
     }
     
-    @ViewBuilder internal func body(content: Content) -> some View {
-        if chartData.isGreaterThanTwo {
+    internal func body(content: Content) -> some View {
+//        if chartData.isGreaterThanTwo {
             GeometryReader { geo in
                 ZStack {
                     content
@@ -85,7 +85,7 @@ internal struct TouchOverlay: ViewModifier {
                     }
                 }
             }
-        } else { content }
+//        } else { content }
     }
     
     // MARK: - Bar Chart
@@ -107,8 +107,8 @@ internal struct TouchOverlay: ViewModifier {
     ///   - chartSize: The size of the chart view as the parent view.
     internal func getPointLocationLineChart(touchLocation: CGPoint, chartSize: GeometryProxy) /* -> CGPoint */ {
         
-        let range    = chartData.range()
-        let minValue = chartData.minValue()
+        let range    = DataFunctions.range(dataPoints: chartData.dataPoints)
+        let minValue = DataFunctions.minValue(dataPoints: chartData.dataPoints)
         
         let dataPointCount : Int = chartData.dataPoints.count
         let xSection : CGFloat = chartSize.size.width / CGFloat(dataPointCount - 1)
@@ -159,7 +159,7 @@ internal struct TouchOverlay: ViewModifier {
         
         let dataPointCount : Int = chartData.dataPoints.count
         let xSection : CGFloat = chartSize.size.width / CGFloat(dataPointCount)
-        let ySection : CGFloat = chartSize.size.height / CGFloat(chartData.maxValue())
+        let ySection : CGFloat = chartSize.size.height / CGFloat(DataFunctions.maxValue(dataPoints: chartData.dataPoints))
         
         let index = Int((touchLocation.x) / xSection)
         
@@ -210,11 +210,26 @@ internal struct TouchOverlay: ViewModifier {
 }
 #endif
 
+
+//extension Chart {
+//    #if !os(tvOS)
+//    /// Adds an overlay to detect touch and display the relivent information from the nearest data point.
+//    /// - Parameter specifier: Decimal precision for labels
+//    public func touchOverlay(specifier: String = "%.0f") -> some View {
+//        self.modifier(TouchOverlay(specifier: specifier))
+//    }
+//    #elseif os(tvOS)
+//    public func touchOverlay(specifier: String = "%.0f") -> some View {
+//        self.modifier(EmptyModifier())
+//    }
+//    #endif
+//
+//}
 extension View {
     #if !os(tvOS)
     /// Adds an overlay to detect touch and display the relivent information from the nearest data point.
     /// - Parameter specifier: Decimal precision for labels
-    public func touchOverlay(specifier: String = "%.0f") -> some View {
+    public func touchOverlay(specifier: String = "%.0f") -> some View{
         self.modifier(TouchOverlay(specifier: specifier))
     }
     #elseif os(tvOS)
@@ -224,4 +239,3 @@ extension View {
     #endif
     
 }
-

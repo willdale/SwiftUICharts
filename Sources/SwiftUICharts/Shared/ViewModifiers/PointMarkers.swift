@@ -19,15 +19,15 @@ internal struct PointMarkers: ViewModifier {
             if chartData.isGreaterThanTwo {
                 switch pointStyle.pointType {
                 case .filled:
-                    Point(chartData: chartData, pointSize: pointStyle.pointSize, pointType: pointStyle.pointShape, chartType: chartData.viewData.chartType)
+                    Point(dataPoints: chartData.dataPoints, pointSize: pointStyle.pointSize, pointType: pointStyle.pointShape, chartType: chartData.viewData.chartType)
                         .fill(pointStyle.fillColour)
                 case .outline:
-                    Point(chartData: chartData, pointSize: pointStyle.pointSize, pointType: pointStyle.pointShape, chartType: chartData.viewData.chartType)
+                    Point(dataPoints: chartData.dataPoints, pointSize: pointStyle.pointSize, pointType: pointStyle.pointShape, chartType: chartData.viewData.chartType)
                         .stroke(pointStyle.borderColour, lineWidth: pointStyle.lineWidth)
                 case .filledOutLine:
-                    Point(chartData: chartData, pointSize: pointStyle.pointSize, pointType: pointStyle.pointShape, chartType: chartData.viewData.chartType)
+                    Point(dataPoints: chartData.dataPoints, pointSize: pointStyle.pointSize, pointType: pointStyle.pointShape, chartType: chartData.viewData.chartType)
                         .stroke(pointStyle.borderColour, lineWidth: pointStyle.lineWidth)
-                        .background(Point(chartData: chartData,
+                        .background(Point(dataPoints: chartData.dataPoints,
                                           pointSize: pointStyle.pointSize,
                                           pointType: pointStyle.pointShape, chartType: chartData.viewData.chartType)
                                         .foregroundColor(pointStyle.fillColour)

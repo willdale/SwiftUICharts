@@ -20,7 +20,7 @@ internal struct BarChartView: View {
     
     internal var body: some View {
         
-        let maxValue: Double    = chartData.maxValue()
+        let maxValue: Double    = DataFunctions.maxValue(dataPoints: chartData.dataPoints)
         let style   : BarStyle  = chartData.barStyle
         
         return HStack(spacing: 0) {

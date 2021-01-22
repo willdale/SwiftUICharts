@@ -7,13 +7,38 @@
 
 import SwiftUI
 
+public protocol ChartData: ObservableObject, Identifiable {
+    var dataPoints    : [ChartDataPoint] { get set }
+    
+    var metadata      : ChartMetadata? { get set }
+    
+    var xAxisLabels   : [String]? { get set }
+    
+    var chartStyle    : ChartStyle { get set }
+    
+    var lineStyle     : LineStyle
+    
+    var barStyle      : BarStyle
+    var pointStyle    : PointStyle
+    
+    var legends  : [LegendData]
+    var viewData : ChartViewData
+    
+    public var noDataText   : Text = Text("No Data")
+}
+
+public protocol Style {
+    
+}
+
 /// The central model from which the chart is drawn.
-public class ChartData: ObservableObject, Identifiable {
+public class LineChartData: ChartData {
     
     public let id = UUID()
     
     /// Data model containing the datapoints: Value, Label, Description and Date. Individual colouring for bar chart.
     @Published public var dataPoints    : [ChartDataPoint]
+    
     /// Data model containing: the charts Title, the charts Subtitle and the Line Legend.
     @Published public var metadata      : ChartMetadata?
     
@@ -22,9 +47,10 @@ public class ChartData: ObservableObject, Identifiable {
     
     /// Data model conatining the style data for the chart.
     @Published public var chartStyle    : ChartStyle
+    
     /// Data model conatining the style data for the line chart.
     @Published public var lineStyle     : LineStyle
-    /// Data model conatining the style data for the line chart.
+    
     @Published public var barStyle      : BarStyle
     /// Data model containing the style data for the data point markers.
     @Published public var pointStyle    : PointStyle
@@ -114,35 +140,6 @@ public class ChartData: ObservableObject, Identifiable {
         greaterThanTwo()
     }
     
-    // MARK: - Functions
-    /// Get the highest value from dataPoints array.
-    /// - Returns: Highest value.
-    func maxValue() -> Double {
-        return dataPoints.max { $0.value < $1.value }?.value ?? 0
-    }
-    /// Get the Lowest value from dataPoints array.
-    /// - Returns: Lowest value.
-    func minValue() -> Double {
-        return dataPoints.min { $0.value < $1.value }?.value ?? 0
-    }
-    /// Get the average of all the dataPoints.
-    /// - Returns: Average.
-    func average() -> Double {
-        let sum = dataPoints.reduce(0) { $0 + $1.value }
-        return sum / Double(dataPoints.count)
-    }
-    /// Get the difference between the hightest and lowest value in the dataPoints array.
-    /// - Returns: Difference.
-    func range() -> Double {
-        let maxValue = dataPoints.max { $0.value < $1.value }?.value ?? 0
-        let minValue = dataPoints.min { $0.value < $1.value }?.value ?? 0
-        
-        /*
-         Adding 0.001 stops the following error if there is no variation in value of the dataPoints
-         2021-01-07 13:59:50.490962+0000 LineChart[4519:237208] [Unknown process name] Error: this application, or a library it uses, has passed an invalid numeric value (NaN, or not-a-number) to CoreGraphics API and this value is being ignored. Please fix this problem.
-         */
-        return (maxValue - minValue) + 0.001
-    }
     func greaterThanTwo() {
         self.isGreaterThanTwo = dataPoints.count > 2
     }
@@ -155,4 +152,34 @@ public class ChartData: ObservableObject, Identifiable {
 }
 
 
-
+struct DataFunctions {
+    // MARK: - Functions
+    /// Get the highest value from dataPoints array.
+    /// - Returns: Highest value.
+    static func maxValue(dataPoints: [ChartDataPoint]) -> Double {
+        return dataPoints.max { $0.value < $1.value }?.value ?? 0
+    }
+    /// Get the Lowest value from dataPoints array.
+    /// - Returns: Lowest value.
+    static func minValue(dataPoints: [ChartDataPoint]) -> Double {
+        return dataPoints.min { $0.value < $1.value }?.value ?? 0
+    }
+    /// Get the average of all the dataPoints.
+    /// - Returns: Average.
+    static func average(dataPoints: [ChartDataPoint]) -> Double {
+        let sum = dataPoints.reduce(0) { $0 + $1.value }
+        return sum / Double(dataPoints.count)
+    }
+    /// Get the difference between the hightest and lowest value in the dataPoints array.
+    /// - Returns: Difference.
+    static func range(dataPoints: [ChartDataPoint]) -> Double {
+        let maxValue = dataPoints.max { $0.value < $1.value }?.value ?? 0
+        let minValue = dataPoints.min { $0.value < $1.value }?.value ?? 0
+        
+        /*
+         Adding 0.001 stops the following error if there is no variation in value of the dataPoints
+         2021-01-07 13:59:50.490962+0000 LineChart[4519:237208] [Unknown process name] Error: this application, or a library it uses, has passed an invalid numeric value (NaN, or not-a-number) to CoreGraphics API and this value is being ignored. Please fix this problem.
+         */
+        return (maxValue - minValue) + 0.001
+    }
+}
