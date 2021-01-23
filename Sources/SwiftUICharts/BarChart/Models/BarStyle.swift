@@ -8,8 +8,8 @@
 import SwiftUI
 
 /// Model for controlling the aesthetic of the bar chart.
-public struct BarStyle {
-      
+public struct BarStyle: Style, Hashable {
+   
     /// How much of the available width to use. 0 ..1
     var barWidth    : CGFloat
     /// Corner radius of the bar shape.
@@ -17,21 +17,21 @@ public struct BarStyle {
     /// Where to get the colour data from.
     var colourFrom  : ColourFrom
     /// Type of colour styling for the chart.
-    var colourType  : ColourType
+    public var colourType  : ColourType
     
     /// Single Colour
-    var colour  : Color?
+    public var colour  : Color?
     /// Colours for Gradient
-    var colours : [Color]?
+    public var colours : [Color]?
     /// Colours and Stops for Gradient with stop control
-    var stops   : [GradientStop]?
+    public var stops   : [GradientStop]?
     
     /// Start point for Gradient
-    var startPoint  : UnitPoint?
+    public var startPoint  : UnitPoint?
     /// End point for Gradient
-    var endPoint    : UnitPoint?
+    public var endPoint    : UnitPoint?
     
-    
+//    public var ignoreZero: Bool
     
     /// Bar Chart with single colour
     /// - Parameters:
@@ -109,7 +109,7 @@ public struct BarStyle {
 }
 
 /// Corner radius of the bar shape.
-public struct CornerRadius {
+public struct CornerRadius: Hashable {
     
     var top     : CGFloat
     var bottom  : CGFloat

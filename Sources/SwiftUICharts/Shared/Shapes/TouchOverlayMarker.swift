@@ -16,10 +16,10 @@ internal struct TouchOverlayMarker: Shape {
     private var position : CGPoint
     
     internal init(type     : MarkerLineType = .fullWidth,
-                  position : CGPoint
+                  position : HashablePoint
     ) {
         self.type       = type
-        self.position   = position
+        self.position   = CGPoint(x: position.x, y: position.y)
     }
     
     internal func path(in rect: CGRect) -> Path {

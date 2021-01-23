@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-internal struct XAxisLabels: ViewModifier {
+internal struct XAxisLabels<T>: ViewModifier where T: ChartData {
     
-    @EnvironmentObject var chartData: ChartData
+    @ObservedObject var chartData: T
 
     @ViewBuilder
     internal var labels: some View {
@@ -19,13 +19,14 @@ internal struct XAxisLabels: ViewModifier {
             // ChartData -> DataPoints -> xAxisLabel
             switch chartData.viewData.chartType {
             case .line:
+                let lineChartData = chartData as! LineChartData
                 HStack(spacing: 0) {
-                    ForEach(chartData.dataPoints, id: \.self) { data in
+                    ForEach(lineChartData.dataSets[0].dataPoints, id: \.self) { data in
                         Text(data.xAxisLabel ?? "")
                             .font(.caption)
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
-                        if data != chartData.dataPoints[chartData.dataPoints.count - 1] {
+                        if data != lineChartData.dataSets[0].dataPoints[lineChartData.dataSets[0].dataPoints.count - 1] {
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
                         }
@@ -35,10 +36,10 @@ internal struct XAxisLabels: ViewModifier {
                 .onAppear {
                     chartData.viewData.hasXAxisLabels = true
                 }
-            
             case .bar:
+                let barChartData = chartData as! BarChartData
                 HStack(spacing: 0) {
-                    ForEach(chartData.dataPoints, id: \.self) { data in
+                    ForEach(barChartData.dataSets[0].dataPoints, id: \.self) { data in
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
                             Text(data.xAxisLabel ?? "")
@@ -114,14 +115,13 @@ internal struct XAxisLabels: ViewModifier {
                 content
                 labels
             }
-            
         }
     }
 }
 
 extension View {
     /// Labels for the X axis.
-    public func xAxisLabels() -> some View {
-        self.modifier(XAxisLabels())
+    public func xAxisLabels<T: ChartData>(chartData: T) -> some View {
+        self.modifier(XAxisLabels(chartData: chartData))
     }
 }

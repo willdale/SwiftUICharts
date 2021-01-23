@@ -6,16 +6,16 @@
 //
 
 import SwiftUI
- 
+
 /// Model for controlling the  aesthetic of the line chart.
-public struct LineStyle {
+public struct LineStyle: Style, Hashable {    
         
     /// Type of colour styling for the chart.
     public var colourType   : ColourType
     /// Drawing style of the line
     public var lineType    : LineType
     
-    public var strokeStyle : StrokeStyle
+    public var strokeStyle : Stroke
      
     /// Single Colour
     public var colour      : Color?
@@ -46,12 +46,12 @@ public struct LineStyle {
     ///   - ignoreZero: Whether the chart should skip data points who's value is 0.
     public init(colour      : Color      = Color(.red),
                 lineType    : LineType   = .curvedLine,
-                strokeStyle : StrokeStyle = StrokeStyle(lineWidth: 3,
-                                                        lineCap: .round,
-                                                        lineJoin: .round,
-                                                        miterLimit: 10,
-                                                        dash: [CGFloat](),
-                                                        dashPhase: 0),
+                strokeStyle : Stroke = Stroke(lineWidth: 3,
+                                              lineCap: .round,
+                                              lineJoin: .round,
+                                              miterLimit: 10,
+                                              dash: [CGFloat](),
+                                              dashPhase: 0),
                 ignoreZero  : Bool       = false
     ) {
         self.colourType     = .colour
@@ -80,7 +80,7 @@ public struct LineStyle {
                 endPoint    : UnitPoint  =  .trailing,
                 lineType    : LineType   = .curvedLine,
                 
-                strokeStyle : StrokeStyle = StrokeStyle(lineWidth: 3,
+                strokeStyle : Stroke     = Stroke(lineWidth: 3,
                                                         lineCap: .round,
                                                         lineJoin: .round,
                                                         miterLimit: 10,
@@ -90,7 +90,7 @@ public struct LineStyle {
     ) {
         self.colourType  = .gradientColour
         self.lineType   = lineType
-        self.strokeStyle    = strokeStyle
+        self.strokeStyle = strokeStyle
         
         self.colour     = nil
         self.stops      = nil
@@ -114,12 +114,12 @@ public struct LineStyle {
                 endPoint    : UnitPoint         =  .trailing,
                 lineType    : LineType          = .curvedLine,
                 
-                strokeStyle : StrokeStyle = StrokeStyle(lineWidth: 3,
-                                                        lineCap: .round,
-                                                        lineJoin: .round,
-                                                        miterLimit: 10,
-                                                        dash: [CGFloat](),
-                                                        dashPhase: 0),
+                strokeStyle : Stroke = Stroke(lineWidth: 3,
+                                              lineCap: .round,
+                                              lineJoin: .round,
+                                              miterLimit: 10,
+                                              dash: [CGFloat](),
+                                              dashPhase: 0),
                 ignoreZero  : Bool       = false
     ) {
         self.colourType     = .gradientStops
@@ -131,7 +131,7 @@ public struct LineStyle {
         self.stops          = stops
         self.startPoint     = startPoint
         self.endPoint       = endPoint
-                
+        
         self.ignoreZero     = ignoreZero
     }
 }

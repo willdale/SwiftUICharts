@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-internal struct Legends: ViewModifier {
+internal struct Legends<T>: ViewModifier where T: ChartData {
     
-    @EnvironmentObject var chartData: ChartData
+    @ObservedObject var chartData: T
     
     internal func body(content: Content) -> some View {
         VStack {
@@ -21,7 +21,7 @@ internal struct Legends: ViewModifier {
 extension View {
     /// Displays legends under the chart.
     /// - Returns: Legends from the charts data and any markers.
-    public func legends() -> some View {
-        self.modifier(Legends())
+    public func legends<T:ChartData>(chartData: T) -> some View {
+        self.modifier(Legends(chartData: chartData))
     }
 }

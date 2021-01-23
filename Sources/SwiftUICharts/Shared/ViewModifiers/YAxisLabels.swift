@@ -7,14 +7,17 @@
 
 import SwiftUI
 
-internal struct YAxisLabels: ViewModifier {
+internal struct YAxisLabels<T>: ViewModifier where T: ChartData {
     
-    @EnvironmentObject var chartData: ChartData
+    @ObservedObject var chartData: T
 
     let specifier       : String
     var labelsArray     : [Double] { getLabels() }
 
-    internal init(specifier: String) {
+    internal init(chartData: T,
+                  specifier: String
+    ) {
+        self.chartData = chartData
         self.specifier = specifier
     }
 
@@ -61,17 +64,17 @@ internal struct YAxisLabels: ViewModifier {
         switch chartData.chartStyle.yAxisLabelPosition {
         case .leading:
             HStack {
-                if chartData.isGreaterThanTwo {
+//                if chartData.isGreaterThanTwo {
                     labels
-                }
+//                }
                 content
             }
         case .trailing:
             HStack {
                 content
-                if chartData.isGreaterThanTwo {
+//                if chartData.isGreaterThanTwo {
                     labels
-                }
+//                }
             }
         }
     }
@@ -88,8 +91,8 @@ internal struct YAxisLabels: ViewModifier {
 
     internal func getYLabelsLineChart(_ numberOfLabels: Int) -> [Double] {
         var labels      : [Double]  = [Double]()
-        let dataRange   : Double    = DataFunctions.range(dataPoints: chartData.dataPoints)
-        let minValue    : Double    = DataFunctions.minValue(dataPoints: chartData.dataPoints)
+        let dataRange   : Double    = DataFunctions.dataSetRange(from: chartData.dataSets)
+        let minValue    : Double    = DataFunctions.dataSetMinValue(from: chartData.dataSets)
         
         let range       : Double    = dataRange / Double(numberOfLabels)
         labels.append(minValue)
@@ -100,7 +103,7 @@ internal struct YAxisLabels: ViewModifier {
     }
     internal func getYLabelsBarChart(_ numberOfLabels: Int) -> [Double] {
         var labels : [Double]  = [Double]()
-        let maxValue    : Double    = DataFunctions.maxValue(dataPoints: chartData.dataPoints)
+        let maxValue    : Double    = DataFunctions.dataSetMaxValue(from: chartData.dataSets)
         for index in 0...numberOfLabels {
             labels.append(maxValue / Double(numberOfLabels) * Double(index))
         }
@@ -115,7 +118,7 @@ extension View {
       - specifier: Decimal precision specifier
      - Returns: HStack of labels
      */
-    public func yAxisLabels(specifier: String = "%.0f") -> some View {
-        self.modifier(YAxisLabels(specifier: specifier))
+    public func yAxisLabels<T: ChartData>(chartData: T, specifier: String = "%.0f") -> some View {
+        self.modifier(YAxisLabels(chartData: chartData, specifier: specifier))
     }
 }

@@ -8,32 +8,30 @@
 import SwiftUI
 
 /// Generic line drawn horrizontally across the chart
-internal struct Marker: Shape { 
+internal struct Marker: Shape {
     
-    private let dataPoints : [ChartDataPoint]
-    private let markerValue : Double
-    private let isAverage   : Bool
-    
+    private let value : Double
     private let chartType   : ChartType
     
-    internal init(dataPoints : [ChartDataPoint],
-                  markerValue : Double = 0,
-                  isAverage   : Bool,
+    let range   : Double
+    let minValue: Double
+    let maxValue: Double
+    
+    internal init(value       : Double,
+                  range       : Double,
+                  minValue    : Double,
+                  maxValue    : Double,
                   chartType   : ChartType
     ) {
-        self.dataPoints  = dataPoints
-        self.markerValue = markerValue
-        self.isAverage   = isAverage
-        self.chartType   = chartType
+        self.value      = value
+        self.range      = range
+        self.minValue   = minValue
+        self.maxValue   = maxValue
+        self.chartType  = chartType
     }
     
     internal func path(in rect: CGRect) -> Path {
-        
-        let range   : Double = DataFunctions.range(dataPoints: dataPoints)
-        let minValue: Double = DataFunctions.minValue(dataPoints: dataPoints)
-        let maxValue: Double = DataFunctions.maxValue(dataPoints: dataPoints)
-        let value   : Double = isAverage ? DataFunctions.average(dataPoints: dataPoints) : markerValue
-        
+
         var path  = Path()
 
         let pointY  : CGFloat

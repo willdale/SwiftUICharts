@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Model for controlling the aesthetic of the point markers.
-public struct PointStyle {
+public struct PointStyle: Hashable {
 
     /// Overall size of the mark
     public var pointSize   : CGFloat

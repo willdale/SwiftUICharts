@@ -9,9 +9,9 @@ import SwiftUI
 
 #if !os(tvOS)
 /// Detects input either from touch of pointer. Finds the nearest data point and displays the relevent information.
-internal struct TouchOverlay: ViewModifier {
+internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
     
-    @EnvironmentObject var chartData: ChartData
+    @ObservedObject var chartData: T
     
     /// Decimal precision for labels
     private let specifier               : String
@@ -22,9 +22,9 @@ internal struct TouchOverlay: ViewModifier {
     /// Current location of the touch input
     @State private var touchLocation    : CGPoint   = CGPoint(x: 0, y: 0)
     /// The data point closest to the touch input
-    @State private var selectedPoint    : ChartDataPoint?
+    @State private var selectedPoints   : [ChartDataPoint] = []
     /// The location for the nearest data point to the touch input
-    @State private var pointLocation    : CGPoint   = CGPoint(x: 0, y: 0)
+    @State private var pointLocations   : [HashablePoint]  = [HashablePoint(x: 0, y: 0)]
     /// Frame information of the data point information box
     @State private var boxFrame         : CGRect    = CGRect(x: 0, y: 0, width: 0, height: 50)
     /// Placement of the data point information box
@@ -34,9 +34,12 @@ internal struct TouchOverlay: ViewModifier {
     
     /// Detects input either from touch of pointer. Finds the nearest data point and displays the relevent information.
     /// - Parameters:
+    ///   - chartData:
     ///   - specifier: Decimal precision for labels
-    ///   - infoBoxPlacement: Placement of the data point information panel when touch overlay modifier is applied.
-    internal init(specifier: String) {
+    internal init(chartData: T,
+                  specifier: String
+    ) {
+        self.chartData = chartData
         self.specifier = specifier
     }
     
@@ -53,11 +56,19 @@ internal struct TouchOverlay: ViewModifier {
                                     
                                     switch chartData.viewData.chartType {
                                     case .line:
-                                        getPointLocationLineChart(touchLocation: touchLocation, chartSize: geo)
-                                        getDataPointLineChart(touchLocation: touchLocation, chartSize: geo)
+                                        getPointLocationLineChart(dataSets      : chartData.dataSets,
+                                                                  touchLocation : touchLocation,
+                                                                  chartSize     : geo)
+                                        getDataPointLineChart(dataSets      : chartData.dataSets,
+                                                              touchLocation : touchLocation,
+                                                              chartSize     : geo)
                                     case .bar:
-                                        getPointLocationBarChart(touchLocation: touchLocation, chartSize: geo)
-                                        getDataPointBarChart(touchLocation: touchLocation, chartSize: geo)
+                                        getPointLocationBarChart(dataSets: chartData.dataSets,
+                                                                 touchLocation: touchLocation,
+                                                                 chartSize: geo)
+                                        getDataPointBarChart(dataSets: chartData.dataSets,
+                                                             touchLocation: touchLocation,
+                                                             chartSize: geo)
                                     }
                                     
                                     if chartData.chartStyle.infoBoxPlacement == .floating {
@@ -65,9 +76,8 @@ internal struct TouchOverlay: ViewModifier {
                                         markerLocation.x = setMarkerXLocation(chartSize: geo)
                                         markerLocation.y = setMarkerYLocation(chartSize: geo)
                                     } else if chartData.chartStyle.infoBoxPlacement == .header {
-                                        chartData.chartStyle.infoBoxPlacement = .header
                                         chartData.viewData.isTouchCurrent   = true
-                                        chartData.viewData.touchOverlayInfo = selectedPoint
+                                        chartData.viewData.touchOverlayInfo = selectedPoints
                                     }
                                 }
                                 .onEnded { _ in
@@ -76,10 +86,12 @@ internal struct TouchOverlay: ViewModifier {
                                 }
                         )
                     if isTouchCurrent {
-                        TouchOverlayMarker(position: pointLocation)
-                            .stroke(Color(.gray), lineWidth: touchMarkerLineWidth)
-                        if chartData.chartStyle.infoBoxPlacement == .floating, let lineChartStyle = chartData.lineStyle {
-                            TouchOverlayBox(selectedPoint: selectedPoint, specifier: specifier, boxFrame: $boxFrame, ignoreZero: lineChartStyle.ignoreZero)
+                        ForEach(pointLocations, id: \.self) { location in
+                            TouchOverlayMarker(position: location)
+                                .stroke(Color(.gray), lineWidth: touchMarkerLineWidth)
+                        }
+                        if chartData.chartStyle.infoBoxPlacement == .floating {
+                            TouchOverlayBox(selectedPoints: selectedPoints, specifier: specifier, boxFrame: $boxFrame)
                                 .position(x: boxLocation.x, y: 0 + (boxFrame.height / 2))
                         }
                     }
@@ -88,53 +100,48 @@ internal struct TouchOverlay: ViewModifier {
 //        } else { content }
     }
     
-    // MARK: - Bar Chart
+    // MARK: - Line Chart
     /// Gets the nearest data point to the touch location based on the X axis.
     /// - Parameters:
     ///   - touchLocation: Current location of the touch
     ///   - chartSize: The size of the chart view as the parent view.
-    internal func getDataPointLineChart(touchLocation: CGPoint, chartSize: GeometryProxy) /* -> ChartDataPoint */ {
-        let dataPoints  : [ChartDataPoint]  = chartData.dataPoints
-        let xSection    : CGFloat           = chartSize.size.width / CGFloat(dataPoints.count - 1)
-        let index       = Int((touchLocation.x + (xSection / 2)) / xSection)
-        if index >= 0 && index < dataPoints.count {
-            self.selectedPoint = dataPoints[index]
+    internal func getDataPointLineChart<U: DataSet>(dataSets       : [U],
+                                                    touchLocation : CGPoint,
+                                                    chartSize     : GeometryProxy)  { // -> [ChartDataPoint]
+        var points : [ChartDataPoint] = []
+        for dataSet in dataSets {
+            let xSection    : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count - 1)
+            let index       = Int((touchLocation.x + (xSection / 2)) / xSection)
+            if index >= 0 && index < dataSet.dataPoints.count {
+                points.append(dataSet.dataPoints[index])
+            }
         }
+        self.selectedPoints = points
     }
     /// Gets the location of the data point in the view. For Line Chart
     /// - Parameters:
     ///   - touchLocation: Current location of the touch
     ///   - chartSize: The size of the chart view as the parent view.
-    internal func getPointLocationLineChart(touchLocation: CGPoint, chartSize: GeometryProxy) /* -> CGPoint */ {
+    internal func getPointLocationLineChart<U: DataSet>(dataSets: [U],
+                                                        touchLocation: CGPoint,
+                                                        chartSize: GeometryProxy) { // -> CGPoint
         
-        let range    = DataFunctions.range(dataPoints: chartData.dataPoints)
-        let minValue = DataFunctions.minValue(dataPoints: chartData.dataPoints)
+        let range    = DataFunctions.dataSetRange(from: dataSets)
+        let minValue = DataFunctions.dataSetMinValue(from: dataSets)
         
-        let dataPointCount : Int = chartData.dataPoints.count
-        let xSection : CGFloat = chartSize.size.width / CGFloat(dataPointCount - 1)
-        let ySection : CGFloat = chartSize.size.height / CGFloat(range)
-        let index = Int((touchLocation.x + (xSection / 2)) / xSection)
-        
-        if index >= 0 && index < dataPointCount {
-            if !chartData.lineStyle.ignoreZero {
-                self.pointLocation = CGPoint(x: CGFloat(index) * xSection,
-                                             y: (CGFloat(chartData.dataPoints[index].value - minValue) * -ySection) + chartSize.size.height)
-            } else {
-                var pointValue : Double
-                if chartData.dataPoints[index].value == 0 {
-                    if index > 0 && index < chartData.dataPoints.count - 1 {
-                        // Set data point value as halfway between the previous and next value
-                        pointValue = (chartData.dataPoints[index-1].value + chartData.dataPoints[index+1].value) / 2
-                    } else {
-                        pointValue = chartData.dataPoints[index].value
-                    }
-                } else {
-                    pointValue = chartData.dataPoints[index].value
-                }
-                self.pointLocation = CGPoint(x: CGFloat(index) * xSection,
-                                             y: (CGFloat(pointValue - minValue) * -ySection) + chartSize.size.height)
+        var locations : [HashablePoint] = []
+        for dataSet in dataSets {
+           
+            let dataPointCount : Int = dataSet.dataPoints.count
+            let xSection : CGFloat = chartSize.size.width / CGFloat(dataPointCount - 1)
+            let ySection : CGFloat = chartSize.size.height / CGFloat(range)
+            let index = Int((touchLocation.x + (xSection / 2)) / xSection)
+            if index >= 0 && index < dataPointCount {
+                locations.append(HashablePoint(x: CGFloat(index) * xSection,
+                                               y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.size.height))
             }
         }
+        self.pointLocations = locations
     }
     
     // MARK: - Bar Chart
@@ -142,31 +149,41 @@ internal struct TouchOverlay: ViewModifier {
     /// - Parameters:
     ///   - touchLocation: Current location of the touch
     ///   - chartSize: The size of the chart view as the parent view.
-    internal func getDataPointBarChart(touchLocation: CGPoint, chartSize: GeometryProxy) /* -> ChartDataPoint */ {
-        let dataPoints  : [ChartDataPoint]  = chartData.dataPoints
-        let xSection    : CGFloat           = chartSize.size.width / CGFloat(dataPoints.count)
-        let index       : Int               = Int((touchLocation.x) / xSection)
-        if index >= 0 && index < dataPoints.count {
-            self.selectedPoint = dataPoints[index]
+    internal func getDataPointBarChart<U: DataSet>(dataSets       : [U],
+                                                   touchLocation : CGPoint,
+                                                   chartSize     : GeometryProxy)  { // -> [ChartDataPoint]
+        var points : [ChartDataPoint] = []
+        for dataSet in dataSets {
+            let xSection    : CGFloat   = chartSize.size.width / CGFloat(dataSet.dataPoints.count)
+            let index       : Int       = Int((touchLocation.x) / xSection)
+            if index >= 0 && index < dataSet.dataPoints.count {
+                points.append(dataSet.dataPoints[index])
+            }
         }
+        self.selectedPoints = points
     }
     
     /// Gets the location of the data point in the view. For BarChart
     /// - Parameters:
     ///   - touchLocation: Current location of the touch
     ///   - chartSize: The size of the chart view as the parent view.
-    internal func getPointLocationBarChart(touchLocation: CGPoint, chartSize: GeometryProxy) /* -> CGPoint */ {
-        
-        let dataPointCount : Int = chartData.dataPoints.count
-        let xSection : CGFloat = chartSize.size.width / CGFloat(dataPointCount)
-        let ySection : CGFloat = chartSize.size.height / CGFloat(DataFunctions.maxValue(dataPoints: chartData.dataPoints))
-        
-        let index = Int((touchLocation.x) / xSection)
-        
-        if index >= 0 && index < dataPointCount {
-            self.pointLocation = CGPoint(x: (CGFloat(index) * xSection) + (xSection / 2),
-                                         y: (chartSize.size.height - CGFloat(chartData.dataPoints[index].value) * ySection))
+    internal func getPointLocationBarChart<U: DataSet>(dataSets: [U],
+                                                       touchLocation: CGPoint,
+                                                       chartSize: GeometryProxy) { // -> CGPoint
+        var locations : [HashablePoint] = []
+        for dataSet in dataSets {
+            let dataPointCount : Int = dataSet.dataPoints.count
+            let xSection : CGFloat = chartSize.size.width / CGFloat(dataPointCount)
+            let ySection : CGFloat = chartSize.size.height / CGFloat(DataFunctions.dataSetMaxValue(from: dataSets))
+            
+            let index = Int((touchLocation.x) / xSection)
+            
+            if index >= 0 && index < dataPointCount {
+                locations.append(HashablePoint(x: (CGFloat(index) * xSection) + (xSection / 2),
+                                               y: (chartSize.size.height - CGFloat(dataSet.dataPoints[index].value) * ySection)))
+            }
         }
+        self.pointLocations = locations
     }
     
     // MARK: - Both
@@ -210,32 +227,28 @@ internal struct TouchOverlay: ViewModifier {
 }
 #endif
 
-
-//extension Chart {
-//    #if !os(tvOS)
-//    /// Adds an overlay to detect touch and display the relivent information from the nearest data point.
-//    /// - Parameter specifier: Decimal precision for labels
-//    public func touchOverlay(specifier: String = "%.0f") -> some View {
-//        self.modifier(TouchOverlay(specifier: specifier))
-//    }
-//    #elseif os(tvOS)
-//    public func touchOverlay(specifier: String = "%.0f") -> some View {
-//        self.modifier(EmptyModifier())
-//    }
-//    #endif
-//
-//}
 extension View {
     #if !os(tvOS)
     /// Adds an overlay to detect touch and display the relivent information from the nearest data point.
     /// - Parameter specifier: Decimal precision for labels
-    public func touchOverlay(specifier: String = "%.0f") -> some View{
-        self.modifier(TouchOverlay(specifier: specifier))
+    public func touchOverlay<T: ChartData>(chartData: T, specifier: String = "%.0f") -> some View {
+        self.modifier(TouchOverlay(chartData: chartData, specifier: specifier))
     }
     #elseif os(tvOS)
     public func touchOverlay(specifier: String = "%.0f") -> some View {
         self.modifier(EmptyModifier())
     }
     #endif
+}
+
+
+public struct HashablePoint: Hashable {
     
+   public let x : CGFloat
+   public let y : CGFloat
+    
+    public init(x: CGFloat, y: CGFloat) {
+        self.x = x
+        self.y = y
+    }
 }

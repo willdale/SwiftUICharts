@@ -9,18 +9,18 @@ import SwiftUI
 
 internal struct TouchOverlayBox: View {
     
-    private var selectedPoint   : ChartDataPoint?
+    private var selectedPoints  : [ChartDataPoint]
     private var specifier       : String
     private var ignoreZero      : Bool
     
     @Binding private var boxFrame   :  CGRect
     
-    internal init(selectedPoint  : ChartDataPoint?,
-         specifier      : String = "%.0f",
-         boxFrame       : Binding<CGRect>,
-         ignoreZero     : Bool
+    internal init(selectedPoints : [ChartDataPoint],
+                  specifier      : String = "%.0f",
+                  boxFrame       : Binding<CGRect>,
+                  ignoreZero     : Bool = false
     ) {
-        self.selectedPoint  = selectedPoint
+        self.selectedPoints  = selectedPoints
         self.specifier      = specifier
         self._boxFrame      = boxFrame
         self.ignoreZero     = ignoreZero
@@ -28,15 +28,17 @@ internal struct TouchOverlayBox: View {
     
     internal var body: some View {
         VStack {
-            if ignoreZero && selectedPoint?.value != 0 {
-                Text("\(selectedPoint?.value ?? 0, specifier: specifier)")
-            } else if !ignoreZero {
-                Text("\(selectedPoint?.value ?? 0, specifier: specifier)")
-            }
-            if let label = selectedPoint?.pointDescription {
-                Text(label)
-            } else if let label = selectedPoint?.xAxisLabel {
-                Text(label)
+            ForEach(selectedPoints, id: \.self) { point in
+                if ignoreZero && point.value != 0 {
+                    Text("\(point.value, specifier: specifier)")
+                } else if !ignoreZero {
+                    Text("\(point.value, specifier: specifier)")
+                }
+                if let label = point.pointDescription {
+                    Text(label)
+                } else if let label = point.xAxisLabel {
+                    Text(label)
+                }
             }
         }
         .padding(.all, 8)

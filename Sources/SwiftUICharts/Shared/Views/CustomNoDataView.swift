@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-public struct CustomNoDataView: View {
-    
-    let chartData : ChartData
-    
-    init(chartData: ChartData) {
-        self.chartData = chartData
-    }
-    
-    public var body: some View {
-        chartData.noDataText
-    }
-}
+//public struct CustomNoDataView: View {
+//    
+//    let chartData : ChartData
+//    
+//    init(chartData: ChartData) {
+//        self.chartData = chartData
+//    }
+//    
+//    public var body: some View {
+//        chartData.noDataText
+//    }
+//}

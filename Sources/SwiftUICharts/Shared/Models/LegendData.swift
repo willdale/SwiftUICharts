@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Data model for Legends
-internal struct LegendData: Hashable {
+public struct LegendData: Hashable {
     
     var chartType   : ChartType
     
@@ -39,7 +39,7 @@ internal struct LegendData: Hashable {
     ///   - colour: Single Colour
     ///   - strokeStyle: Stroke Style
     ///   - prioity: Used to make sure the charts data legend is first
-    internal init(legend     : String,
+    public init(legend     : String,
                   colour     : Color,
                   strokeStyle: Stroke?,
                   prioity    : Int,
@@ -64,7 +64,7 @@ internal struct LegendData: Hashable {
     ///   - endPoint: End point for Gradient
     ///   - strokeStyle: Stroke Style
     ///   - prioity: Used to make sure the charts data legend is first
-    internal init(legend     : String,
+    public init(legend     : String,
                   colours    : [Color],
                   startPoint : UnitPoint,
                   endPoint   : UnitPoint,
@@ -91,7 +91,7 @@ internal struct LegendData: Hashable {
     ///   - endPoint: End point for Gradient
     ///   - strokeStyle: Stroke Style
     ///   - prioity: Used to make sure the charts data legend is first
-    internal init(legend     : String,
+    public init(legend     : String,
                   stops      : [GradientStop],
                   startPoint : UnitPoint,
                   endPoint   : UnitPoint,

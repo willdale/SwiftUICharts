@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-internal struct XAxisGrid: ViewModifier {
+internal struct XAxisGrid<T>: ViewModifier where T: ChartData {
     
-    @EnvironmentObject var chartData : ChartData
+    @ObservedObject var chartData : T
         
     internal func body(content: Content) -> some View {
         ZStack {
-            if chartData.isGreaterThanTwo {
+//            if chartData.isGreaterThanTwo {
                 HStack {
                     ForEach((0...chartData.chartStyle.xAxisGridStyle.numberOfLines), id: \.self) { index in
                         if index != 0 {
@@ -24,7 +24,7 @@ internal struct XAxisGrid: ViewModifier {
                     }
                     VerticalGridView(chartData: chartData)
                 }
-            }
+//            }
             content
         }
     }
@@ -34,15 +34,15 @@ extension View {
     /**
      Adds vertical lines along the X axis.
     */
-    public func xAxisGrid() -> some View {
-        self.modifier(XAxisGrid())
+    public func xAxisGrid<T: ChartData>(chartData: T) -> some View {
+        self.modifier(XAxisGrid(chartData: chartData))
     }
 }
 
 
-internal struct VerticalGridView: View {
+internal struct VerticalGridView<T>: View where T: ChartData {
     
-    var chartData : ChartData
+    var chartData : T
     
     @State var startAnimation : Bool = false
     

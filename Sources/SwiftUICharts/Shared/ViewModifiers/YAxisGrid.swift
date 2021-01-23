@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-internal struct YAxisGrid: ViewModifier {
+internal struct YAxisGrid<T>: ViewModifier where T: ChartData {
     
-    @EnvironmentObject var chartData : ChartData
+    @ObservedObject var chartData : T
     
     internal func body(content: Content) -> some View {
          ZStack {
-            if chartData.isGreaterThanTwo {
+//            if chartData.isGreaterThanTwo {
                 VStack {
                     ForEach((0...chartData.chartStyle.yAxisGridStyle.numberOfLines), id: \.self) { index in
                         if index != 0 {
@@ -26,7 +26,7 @@ internal struct YAxisGrid: ViewModifier {
                     }
                     HorizontalGridView(chartData: chartData)
                 }
-            }
+//            }
             content
         }
     }
@@ -38,15 +38,15 @@ extension View {
     - Parameter numberOfLines: Number of lines subdividing the chart
     - Returns: View of evenly spaced horizontal lines
     */
-    public func yAxisGrid() -> some View {
-        self.modifier(YAxisGrid())
+    public func yAxisGrid<T:ChartData>(chartData: T) -> some View {
+        self.modifier(YAxisGrid<T>(chartData: chartData))
     }
 }
 
 
-internal struct HorizontalGridView: View {
+internal struct HorizontalGridView<T>: View where T: ChartData {
     
-    var chartData : ChartData
+    var chartData : T
     
     @State var startAnimation : Bool = false
     

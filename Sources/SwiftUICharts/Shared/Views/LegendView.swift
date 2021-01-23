@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-internal struct LegendView: View {
+internal struct LegendView<T>: View where T: ChartData {
     
-    @ObservedObject var chartData : ChartData
+    @ObservedObject var chartData : T
         
-    internal init(chartData: ChartData) {
+    internal init(chartData: T) {
         self.chartData = chartData
     }
     
@@ -66,43 +66,44 @@ internal struct LegendView: View {
                         }
                     }
                 case .bar:
-                    if let colour = legend.colour
-                    {
-                        HStack {
-                            Rectangle()
-                                .fill(colour)
-                                .frame(width: 20, height: 20)
-                            Text(legend.legend)
-                                .font(.caption)
-                        }
-                    } else if let colours = legend.colours,
-                              let startPoint = legend.startPoint,
-                              let endPoint = legend.endPoint
-                    {
-                        HStack {
-                            Rectangle()
-                                .fill(LinearGradient(gradient: Gradient(colors: colours),
-                                                     startPoint: startPoint,
-                                                     endPoint: endPoint))
-                                .frame(width: 20, height: 20)
-                            Text(legend.legend)
-                                .font(.caption)
-                        }
-                    } else if let stops = legend.stops,
-                              let startPoint = legend.startPoint,
-                              let endPoint = legend.endPoint
-                    {
-                        let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-                        HStack {
-                            Rectangle()
-                                .fill(LinearGradient(gradient: Gradient(stops: stops),
-                                                     startPoint: startPoint,
-                                                     endPoint: endPoint))
-                                .frame(width: 20, height: 20)
-                            Text(legend.legend)
-                                .font(.caption)
-                        }
-                    }
+                    Text("Hello")
+//                    if let colour = legend.colour
+//                    {
+//                        HStack {
+//                            Rectangle()
+//                                .fill(colour)
+//                                .frame(width: 20, height: 20)
+//                            Text(legend.legend)
+//                                .font(.caption)
+//                        }
+//                    } else if let colours = legend.colours,
+//                              let startPoint = legend.startPoint,
+//                              let endPoint = legend.endPoint
+//                    {
+//                        HStack {
+//                            Rectangle()
+//                                .fill(LinearGradient(gradient: Gradient(colors: colours),
+//                                                     startPoint: startPoint,
+//                                                     endPoint: endPoint))
+//                                .frame(width: 20, height: 20)
+//                            Text(legend.legend)
+//                                .font(.caption)
+//                        }
+//                    } else if let stops = legend.stops,
+//                              let startPoint = legend.startPoint,
+//                              let endPoint = legend.endPoint
+//                    {
+//                        let stops = GradientStop.convertToGradientStopsArray(stops: stops)
+//                        HStack {
+//                            Rectangle()
+//                                .fill(LinearGradient(gradient: Gradient(stops: stops),
+//                                                     startPoint: startPoint,
+//                                                     endPoint: endPoint))
+//                                .frame(width: 20, height: 20)
+//                            Text(legend.legend)
+//                                .font(.caption)
+//                        }
+//                    }
                 }
             }
         }

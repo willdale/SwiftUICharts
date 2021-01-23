@@ -9,35 +9,38 @@ import SwiftUI
 
 internal struct LineShape: Shape {
            
-    private let dataPoints : [ChartDataPoint]
-        
+    private let dataSet     : LineDataSet
     /// Drawing style of the line
     private let lineType    : LineType
     /// If it's to be filled some extra lines need to be drawn
     private let isFilled    : Bool
     
-    internal init(dataPoints : [ChartDataPoint],
+    private let minValue : Double
+    private let range    : Double
+    
+    internal init(dataSet   : LineDataSet,
                   lineType  : LineType,
-                  isFilled  : Bool
+                  isFilled  : Bool,
+                  minValue  : Double,
+                  range     : Double
     ) {
-        self.dataPoints = dataPoints
+        self.dataSet    = dataSet
         self.lineType   = lineType
         self.isFilled   = isFilled
+        self.minValue   = minValue
+        self.range      = range
     }
   
     internal func path(in rect: CGRect) -> Path {
-        
-        let minValue: Double = DataFunctions.minValue(dataPoints: dataPoints)
-        let range   : Double = DataFunctions.range(dataPoints: dataPoints)
-        
-        let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
+                
+        let x : CGFloat = rect.width / CGFloat(dataSet.dataPoints.count - 1)
         let y : CGFloat = rect.height / CGFloat(range)
         
         switch lineType {
         case .curvedLine:
-            return curvedLine(rect, x, y, dataPoints, minValue, range, isFilled)
+            return curvedLine(rect, x, y, dataSet.dataPoints, minValue, range, isFilled)
         case .line:
-            return straightLine(rect, x, y, dataPoints, minValue, range, isFilled)
+            return straightLine(rect, x, y, dataSet.dataPoints, minValue, range, isFilled)
         }
         
     }

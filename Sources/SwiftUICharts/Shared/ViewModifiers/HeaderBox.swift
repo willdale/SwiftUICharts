@@ -7,16 +7,18 @@
 
 import SwiftUI
 
-internal struct HeaderBox: ViewModifier {
+internal struct HeaderBox<T>: ViewModifier where T: ChartData {
     
-    @EnvironmentObject var chartData: ChartData
+    @ObservedObject var chartData: T
     
     let showTitle   : Bool
     let showSubtitle: Bool
     
-    init(showTitle      : Bool = true,
+    init(chartData      : T,
+         showTitle      : Bool = true,
          showSubtitle   : Bool = true
     ) {
+        self.chartData     = chartData
         self.showTitle     = showTitle
         self.showSubtitle  = showSubtitle
     }
@@ -42,17 +44,16 @@ internal struct HeaderBox: ViewModifier {
     
     var touchOverlay: some View {
         VStack(alignment: .trailing) {
-            if chartData.viewData.isTouchCurrent, let value = chartData.viewData.touchOverlayInfo?.value {
-                Text("\(value, specifier: chartData.viewData.touchSpecifier)")
-                    .font(.title3)
+            if chartData.viewData.isTouchCurrent {
+                ForEach(chartData.viewData.touchOverlayInfo, id: \.self) { info in
+                    Text("\(info.value, specifier: chartData.viewData.touchSpecifier)")
+                        .font(.title3)
+                    Text("\(info.pointDescription ?? "")")
+                        .font(.subheadline)
+                }
             } else {
                 Text("")
                     .font(.title3)
-            }
-            if chartData.viewData.isTouchCurrent, let label = chartData.viewData.touchOverlayInfo?.pointDescription {
-                Text("\(label)")
-                    .font(.subheadline)
-            } else {
                 Text("")
                     .font(.subheadline)
             }
@@ -61,7 +62,7 @@ internal struct HeaderBox: ViewModifier {
     
     @ViewBuilder
     internal func body(content: Content) -> some View {
-        if chartData.isGreaterThanTwo {
+//        if chartData.isGreaterThanTwo {
             #if !os(tvOS)
             if chartData.chartStyle.infoBoxPlacement == .floating {
                 VStack(alignment: .leading) {
@@ -92,14 +93,14 @@ internal struct HeaderBox: ViewModifier {
                 content
             }
             #endif
-        } else { content }
+//        } else { content }
     }
 }
 
 extension View {
     /// Displays the metadata about the chart
     /// - Returns: Chart title and subtitle.
-    public func headerBox() -> some View {
-        self.modifier(HeaderBox())
+    public func headerBox<T:ChartData>(chartData: T) -> some View {
+        self.modifier(HeaderBox(chartData: chartData))
     }
 }
