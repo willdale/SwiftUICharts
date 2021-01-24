@@ -1,14 +1,14 @@
 //
-//  ChartDataPoints.swift
-//  LineChart
+//  BarChartDataPoint.swift
+//  
 //
-//  Created by Will Dale on 02/01/2021.
+//  Created by Will Dale on 24/01/2021.
 //
 
 import SwiftUI
 
 /// Data model for a data point.
-public struct ChartDataPoint: Hashable, Identifiable {
+public struct BarChartDataPoint: ChartDataPoint, CTColourStyle {
     
     public let id = UUID()
 
@@ -124,3 +124,4 @@ public struct ChartDataPoint: Hashable, Identifiable {
         self.colourType  = .gradientStops
     }
 }
+

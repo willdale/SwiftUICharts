@@ -10,12 +10,12 @@ import SwiftUI
 public struct LineDataSet: SingleDataSet {
 
     public let id           : UUID
-    public var dataPoints   : [ChartDataPoint]
+    public var dataPoints   : [LineChartDataPoint]
     public var legendTitle  : String
     public var pointStyle   : PointStyle
     public var style        : Styling
     
-    public init(dataPoints  : [ChartDataPoint],
+    public init(dataPoints  : [LineChartDataPoint],
                 legendTitle : String,
                 pointStyle  : PointStyle = PointStyle(),
                 style       : LineDataSet.Styling

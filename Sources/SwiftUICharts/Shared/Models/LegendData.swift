@@ -8,27 +8,27 @@
 import SwiftUI
 
 /// Data model for Legends
-public struct LegendData: Hashable {
+public struct LegendData: CTColourStyle, Hashable {
     
     var chartType   : ChartType
-    
+    public var colourType  : ColourType
     /// Text to be displayed
     var legend      : String
-
+    
     /// Style of the stroke
     var strokeStyle : Stroke?
     
     /// Single Colour
-    var colour      : Color?
+    public var colour      : Color?
     /// Colours for Gradient
-    var colours     : [Color]?
+    public var colours     : [Color]?
     /// Colours and Stops for Gradient with stop control
-    var stops       : [GradientStop]?
+    public var stops       : [GradientStop]?
     
     /// Start point for Gradient
-    var startPoint  : UnitPoint?
+    public var startPoint  : UnitPoint?
     /// End point for Gradient
-    var endPoint    : UnitPoint?
+    public var endPoint    : UnitPoint?
     
     /// Used to make sure the charts data legend is first
     let prioity     : Int
@@ -40,10 +40,10 @@ public struct LegendData: Hashable {
     ///   - strokeStyle: Stroke Style
     ///   - prioity: Used to make sure the charts data legend is first
     public init(legend     : String,
-                  colour     : Color,
-                  strokeStyle: Stroke?,
-                  prioity    : Int,
-                  chartType  : ChartType
+                colour     : Color,
+                strokeStyle: Stroke?,
+                prioity    : Int,
+                chartType  : ChartType
     ) {
         self.legend      = legend
         self.colour      = colour
@@ -54,6 +54,7 @@ public struct LegendData: Hashable {
         self.strokeStyle = strokeStyle
         self.prioity     = prioity
         self.chartType   = chartType
+        self.colourType  = .colour
     }
     
     /// Legend with a gradient colour
@@ -65,12 +66,12 @@ public struct LegendData: Hashable {
     ///   - strokeStyle: Stroke Style
     ///   - prioity: Used to make sure the charts data legend is first
     public init(legend     : String,
-                  colours    : [Color],
-                  startPoint : UnitPoint,
-                  endPoint   : UnitPoint,
-                  strokeStyle: Stroke?,
-                  prioity    : Int,
-                  chartType  : ChartType
+                colours    : [Color],
+                startPoint : UnitPoint,
+                endPoint   : UnitPoint,
+                strokeStyle: Stroke?,
+                prioity    : Int,
+                chartType  : ChartType
     ) {
         self.legend      = legend
         self.colour      = nil
@@ -81,6 +82,7 @@ public struct LegendData: Hashable {
         self.strokeStyle = strokeStyle
         self.prioity     = prioity
         self.chartType   = chartType
+        self.colourType  = .gradientColour
     }
     
     /// Legend with a gradient with stop control
@@ -92,12 +94,12 @@ public struct LegendData: Hashable {
     ///   - strokeStyle: Stroke Style
     ///   - prioity: Used to make sure the charts data legend is first
     public init(legend     : String,
-                  stops      : [GradientStop],
-                  startPoint : UnitPoint,
-                  endPoint   : UnitPoint,
-                  strokeStyle: Stroke?,
-                  prioity    : Int,
-                  chartType  : ChartType
+                stops      : [GradientStop],
+                startPoint : UnitPoint,
+                endPoint   : UnitPoint,
+                strokeStyle: Stroke?,
+                prioity    : Int,
+                chartType  : ChartType
     ) {
         self.legend      = legend
         self.colour      = nil
@@ -108,5 +110,6 @@ public struct LegendData: Hashable {
         self.strokeStyle = strokeStyle
         self.prioity     = prioity
         self.chartType   = chartType
+        self.colourType  = .gradientStops
     }
 }

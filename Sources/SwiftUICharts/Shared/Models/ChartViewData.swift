@@ -8,8 +8,8 @@
 import Foundation
 
 /// Data model to pass view information internally so the layout can configure its self.
-public struct ChartViewData {
-    
+public struct ChartViewData<D: ChartDataPoint> {
+        
     /// Pass the type of chart being used to view modifiers.
     var chartType   : ChartType = .line
     
@@ -34,7 +34,7 @@ public struct ChartViewData {
      
      Used by TitleBox
      */
-    var touchOverlayInfo    : [ChartDataPoint] = []
+    var touchOverlayInfo    : [D] = []
     /**
      Set specifier of data point readout
      

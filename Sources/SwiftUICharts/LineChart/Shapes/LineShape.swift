@@ -50,7 +50,7 @@ extension LineShape {
     func straightLine(_ rect        : CGRect,
                       _ x           : CGFloat,
                       _ y           : CGFloat,
-                      _ dataPoints  : [ChartDataPoint],
+                      _ dataPoints  : [LineChartDataPoint],
                       _ minValue    : Double,
                       _ range       : Double,
                       _ isFilled    : Bool
@@ -76,7 +76,7 @@ extension LineShape {
     func curvedLine(_ rect          : CGRect,
                     _ x             : CGFloat,
                     _ y             : CGFloat,
-                    _ dataPoints    : [ChartDataPoint],
+                    _ dataPoints    : [LineChartDataPoint],
                     _ minValue      : Double,
                     _ range         : Double,
                     _ isFilled      : Bool
@@ -107,7 +107,7 @@ extension LineShape {
         return path
     }
     
-    func filled(_ path: inout Path, _ rect: CGRect, _ x : CGFloat, _ y : CGFloat, _ dataPoints: [ChartDataPoint]) {
+    func filled(_ path: inout Path, _ rect: CGRect, _ x : CGFloat, _ y : CGFloat, _ dataPoints: [LineChartDataPoint]) {
         // Draw line straight down
         path.addLine(to: CGPoint(x: CGFloat(dataPoints.count-1) * x,
                                  y: rect.height))

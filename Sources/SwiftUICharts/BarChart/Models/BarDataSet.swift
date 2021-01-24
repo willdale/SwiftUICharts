@@ -10,12 +10,12 @@ import SwiftUI
 public struct BarDataSet: SingleDataSet {
 
     public let id           : UUID
-    public var dataPoints   : [ChartDataPoint]
+    public var dataPoints   : [BarChartDataPoint]
     public var legendTitle  : String
     public var pointStyle   : PointStyle
     public var style        : BarStyle
     
-    public init(dataPoints  : [ChartDataPoint],
+    public init(dataPoints  : [BarChartDataPoint],
                 legendTitle : String,
                 pointStyle  : PointStyle,
                 style       : BarStyle

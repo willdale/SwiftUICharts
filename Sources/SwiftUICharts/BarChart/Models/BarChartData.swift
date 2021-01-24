@@ -16,7 +16,7 @@ public class BarChartData: ChartData {
     @Published public var xAxisLabels  : [String]?
     @Published public var chartStyle   : ChartStyle
     @Published public var legends      : [LegendData]
-    @Published public var viewData     : ChartViewData
+    @Published public var viewData     : ChartViewData<BarChartDataPoint>
     public var noDataText   : Text  = Text("No Data")
     public var chartType: (ChartType, DataSetType)
 
@@ -39,7 +39,7 @@ public class BarChartData: ChartData {
                 metadata    : ChartMetadata?    = nil,
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : ChartStyle        = ChartStyle(),
-                customCalc  : @escaping ([ChartDataPoint]) -> [ChartDataPoint]?
+                customCalc  : @escaping ([BarChartDataPoint]) -> [BarChartDataPoint]?
     ) {
         self.dataSets       = dataSets
         self.metadata       = metadata
@@ -65,9 +65,9 @@ public class MultiBarChartData: ChartData {
     @Published public var xAxisLabels  : [String]?
     @Published public var chartStyle   : ChartStyle
     @Published public var legends      : [LegendData]
-    @Published public var viewData     : ChartViewData
+    @Published public var viewData     : ChartViewData<BarChartDataPoint>
     public var noDataText   : Text  = Text("No Data")
-    public var chartType: (ChartType, DataSetType)
+    public var chartType    : (ChartType, DataSetType)
 
     public init(dataSets    : MultiBarDataSet,
                 metadata    : ChartMetadata?    = nil,
@@ -88,7 +88,7 @@ public class MultiBarChartData: ChartData {
                 metadata    : ChartMetadata?    = nil,
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : ChartStyle        = ChartStyle(),
-                customCalc  : @escaping ([ChartDataPoint]) -> [ChartDataPoint]?
+                customCalc  : @escaping ([BarChartDataPoint]) -> [BarChartDataPoint]?
     ) {
         self.dataSets       = dataSets
         self.metadata       = metadata

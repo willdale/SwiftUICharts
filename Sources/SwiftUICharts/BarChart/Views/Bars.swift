@@ -10,13 +10,13 @@ import SwiftUI
 struct ColourBar: View {
 
     let colour      : Color
-    let data        : ChartDataPoint
+    let data        : BarChartDataPoint
     let maxValue    : Double
     let chartStyle  : ChartStyle
     let style       : BarStyle
 
     init(_ colour      : Color,
-         _ data        : ChartDataPoint,
+         _ data        : BarChartDataPoint,
          _ maxValue    : Double,
          _ chartStyle  : ChartStyle,
          _ style       : BarStyle
@@ -46,7 +46,7 @@ struct GradientColoursBar: View {
     let colours     : [Color]
     let startPoint  : UnitPoint
     let endPoint    : UnitPoint
-    let data        : ChartDataPoint
+    let data        : BarChartDataPoint
     let maxValue    : Double
     let chartStyle  : ChartStyle
     let style       : BarStyle
@@ -54,7 +54,7 @@ struct GradientColoursBar: View {
     init(_ colours     : [Color],
          _ startPoint  : UnitPoint,
          _ endPoint    : UnitPoint,
-         _ data        : ChartDataPoint,
+         _ data        : BarChartDataPoint,
          _ maxValue    : Double,
          _ chartStyle  : ChartStyle,
          _ style       : BarStyle
@@ -88,7 +88,7 @@ struct GradientStopsBar: View {
     let stops       : [Gradient.Stop]
     let startPoint  : UnitPoint
     let endPoint    : UnitPoint
-    let data        : ChartDataPoint
+    let data        : BarChartDataPoint
     let maxValue    : Double
     let chartStyle  : ChartStyle
     let style       : BarStyle
@@ -96,7 +96,7 @@ struct GradientStopsBar: View {
     init(_ stops       : [Gradient.Stop],
          _ startPoint  : UnitPoint,
          _ endPoint    : UnitPoint,
-         _ data        : ChartDataPoint,
+         _ data        : BarChartDataPoint,
          _ maxValue    : Double,
          _ chartStyle  : ChartStyle,
          _ style       : BarStyle

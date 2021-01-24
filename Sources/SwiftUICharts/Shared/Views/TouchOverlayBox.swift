@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-internal struct TouchOverlayBox: View {
+internal struct TouchOverlayBox<D: ChartDataPoint>: View {
     
-    private var selectedPoints  : [ChartDataPoint]
+    private var selectedPoints  : [D]
     private var specifier       : String
     private var ignoreZero      : Bool
     
     @Binding private var boxFrame   :  CGRect
     
-    internal init(selectedPoints : [ChartDataPoint],
+    internal init(selectedPoints : [D],
                   specifier      : String = "%.0f",
                   boxFrame       : Binding<CGRect>,
                   ignoreZero     : Bool = false

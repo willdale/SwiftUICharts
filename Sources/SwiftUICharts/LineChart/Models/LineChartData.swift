@@ -28,7 +28,7 @@ public class LineChartData: ChartData {
     @Published public var legends       : [LegendData]
     
     /// Data model to hold data about the Views layout.
-    @Published public var viewData      : ChartViewData
+    @Published public var viewData      : ChartViewData<LineChartDataPoint>
     
     public var noDataText   : Text      = Text("No Data")
     
@@ -53,7 +53,7 @@ public class LineChartData: ChartData {
                 metadata    : ChartMetadata?    = nil,
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : ChartStyle        = ChartStyle(),
-                customCalc  : @escaping ([ChartDataPoint]) -> [ChartDataPoint]?
+                customCalc  : @escaping ([LineChartDataPoint]) -> [LineChartDataPoint]?
     ) {
         self.dataSets       = dataSets
         self.metadata       = metadata

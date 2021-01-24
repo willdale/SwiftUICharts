@@ -9,15 +9,16 @@ import SwiftUI
 
 public protocol ChartData: ObservableObject, Identifiable {
     associatedtype Set : DataSet
+    associatedtype DataPoint : ChartDataPoint
     var id          : UUID { get }
     var dataSets    : Set { get set }
     var metadata    : ChartMetadata? { get set }
     var xAxisLabels : [String]? { get set }
     var chartStyle  : ChartStyle { get set }
     var legends     : [LegendData] { get set }
-    var viewData    : ChartViewData { get set }
+    var viewData    : ChartViewData<DataPoint> { get set }
     var noDataText  : Text { get set }
-    var chartType : (ChartType, DataSetType) { get }
+    var chartType   : (ChartType, DataSetType) { get }
     func legendOrder() -> [LegendData]
 }
 extension ChartData {
@@ -33,7 +34,8 @@ public protocol DataSet: Hashable, Identifiable {
 
 public protocol SingleDataSet: DataSet {
     associatedtype Styling : CTColourStyle
-    var dataPoints  : [ChartDataPoint] { get set }
+    associatedtype DataPoint : ChartDataPoint
+    var dataPoints  : [DataPoint] { get set }
     var legendTitle : String { get set }
     var pointStyle  : PointStyle { get set }
     var style       : Styling { get set }
@@ -56,11 +58,10 @@ public protocol CTColourStyle {
 
 public protocol ChartDataPoint: Hashable, Identifiable {
     var id  : ID { get }
-
-    var value            : Double
-    var xAxisLabel       : String?
-    var pointDescription : String?
-    var date             : Date?
+    var value            : Double { get set }
+    var xAxisLabel       : String? { get set }
+    var pointDescription : String? { get set }
+    var date             : Date? { get set }
 }
 
 

@@ -12,23 +12,23 @@ struct DataFunctions {
     // MARK: - Just DataPoints
     /// Get the highest value from dataPoints array.
     /// - Returns: Highest value.
-    static func maxValue(dataPoints: [ChartDataPoint]) -> Double {
+    static func maxValue<D: ChartDataPoint>(dataPoints: [D]) -> Double {
         return dataPoints.max { $0.value < $1.value }?.value ?? 0
     }
     /// Get the Lowest value from dataPoints array.
     /// - Returns: Lowest value.
-    static func minValue(dataPoints: [ChartDataPoint]) -> Double {
+    static func minValue<D: ChartDataPoint>(dataPoints: [D]) -> Double {
         return dataPoints.min { $0.value < $1.value }?.value ?? 0
     }
     /// Get the average of all the dataPoints.
     /// - Returns: Average.
-    static func average(dataPoints: [ChartDataPoint]) -> Double {
+    static func average<D: ChartDataPoint>(dataPoints: [D]) -> Double {
         let sum = dataPoints.reduce(0) { $0 + $1.value }
         return sum / Double(dataPoints.count)
     }
     /// Get the difference between the hightest and lowest value in the dataPoints array.
     /// - Returns: Difference.
-    static func range(dataPoints: [ChartDataPoint]) -> Double {
+    static func range<D: ChartDataPoint>(dataPoints: [D]) -> Double {
         let maxValue = dataPoints.max { $0.value < $1.value }?.value ?? 0
         let minValue = dataPoints.min { $0.value < $1.value }?.value ?? 0
         
