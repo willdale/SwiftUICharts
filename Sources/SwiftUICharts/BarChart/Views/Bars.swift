@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct ColourBar: View {
-    
+
     let colour      : Color
     let data        : ChartDataPoint
     let maxValue    : Double
     let chartStyle  : ChartStyle
     let style       : BarStyle
-    
+
     init(_ colour      : Color,
          _ data        : ChartDataPoint,
          _ maxValue    : Double,
@@ -27,9 +27,9 @@ struct ColourBar: View {
         self.chartStyle = chartStyle
         self.style      = style
     }
-    
+
     @State var startAnimation : Bool = false
-    
+
     var body: some View {
         RoundedRectangleBarShape(tl: style.cornerRadius.top, tr: style.cornerRadius.top, bl: style.cornerRadius.bottom, br: style.cornerRadius.bottom)
             .fill(colour)

@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Model for controlling the  aesthetic of the line chart.
-public struct LineStyle: Style, Hashable {    
+public struct LineStyle: CTColourStyle, Hashable {    
         
     /// Type of colour styling for the chart.
     public var colourType   : ColourType

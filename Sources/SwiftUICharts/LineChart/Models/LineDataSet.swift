@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct LineDataSet: DataSet {
+public struct LineDataSet: SingleDataSet {
 
     public let id           : UUID
     public var dataPoints   : [ChartDataPoint]
@@ -31,3 +31,17 @@ public struct LineDataSet: DataSet {
     public typealias Styling = LineStyle
 }
 
+
+
+public struct MultiLineDataSet: MultiDataSet {
+    
+    public let id       : UUID
+    
+    public var dataSets : [LineDataSet]
+    
+    public init(dataSets: [LineDataSet]) {
+        self.id       = UUID()
+        self.dataSets = dataSets
+    }
+        
+}

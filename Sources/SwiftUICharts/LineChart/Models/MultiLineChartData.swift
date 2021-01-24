@@ -1,15 +1,15 @@
 //
-//  LineChartData.swift
+//  MultiLineChartData.swift
 //  
 //
-//  Created by Will Dale on 23/01/2021.
+//  Created by Will Dale on 24/01/2021.
 //
 
 import SwiftUI
 
 /// The central model from which the chart is drawn.
-public class LineChartData: ChartData {
-    
+public class MultiLineChartData: ChartData {
+        
     public let id   : UUID  = UUID()
     
     /// Data model containing the datapoints: Value, Label, Description and Date. Individual colouring for bar chart.
@@ -30,7 +30,7 @@ public class LineChartData: ChartData {
     /// Data model to hold data about the Views layout.
     @Published public var viewData      : ChartViewData
     
-    public var noDataText   : Text      = Text("No Data")
+    public var noDataText   : Text = Text("No Data")
     
     public var chartType    : (ChartType, DataSetType)
             
@@ -46,7 +46,7 @@ public class LineChartData: ChartData {
         self.chartStyle     = chartStyle
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
-        self.chartType      = (.line, .single)
+        self.chartType      = (.line, .multi)
     }
     
     public init(dataSets    : Set,
@@ -61,9 +61,8 @@ public class LineChartData: ChartData {
         self.chartStyle     = chartStyle
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
-        self.chartType      = (.line, .single)
+        self.chartType      = (.line, .multi)
     }
     
-    
-    public typealias Set = LineDataSet
+    public typealias Set = MultiLineDataSet
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct BarDataSet: DataSet {
+public struct BarDataSet: SingleDataSet {
 
     public let id           : UUID
     public var dataPoints   : [ChartDataPoint]
@@ -29,4 +29,16 @@ public struct BarDataSet: DataSet {
 
     public typealias ID      = UUID
     public typealias Styling = BarStyle
+}
+
+public struct MultiBarDataSet: MultiDataSet {
+    
+    public let id       : UUID
+    
+    public var dataSets : [LineDataSet]
+    
+    public init(dataSets: [LineDataSet]) {
+        self.id       = UUID()
+        self.dataSets = dataSets
+    }
 }

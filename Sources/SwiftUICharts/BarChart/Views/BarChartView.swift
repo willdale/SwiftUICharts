@@ -15,22 +15,15 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
     
     public init(chartData: ChartData) {
         self.chartData = chartData
-        
-        self.maxValue = DataFunctions.dataSetMaxValue(from: chartData.dataSets)
-        
+        self.maxValue = DataFunctions.maxValue(dataPoints: chartData.dataSets.dataPoints)
         chartData.viewData.chartType = .bar
     }
     
     public var body: some View {
-        
-//        let maxValue: Double    = DataFunctions.maxValue(dataPoints: chartData.dataPoints)
-//        let style   : BarStyle  = chartData.barStyle
-        
+
         HStack(spacing: 0) {
-            ForEach(chartData.dataSets, id: \.self) { dataSet in
-                ForEach(dataSet.dataPoints, id: \.self) { dataPoint in
-                    ColourBar(dataSet.style.colour!, dataPoint, maxValue, chartData.chartStyle, dataSet.style)
-                }
+            ForEach(chartData.dataSets.dataPoints) { dataPoint in
+                ColourBar(chartData.dataSets.style.colour!, dataPoint, maxValue, chartData.chartStyle, chartData.dataSets.style)
             }
         }
     }
@@ -64,8 +57,8 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
 //                        GradientStopsBar(safeStops, startPoint, endPoint, data, maxValue, chartData.chartStyle, style)
 //
 //                    }
-                    
-                    
+//
+//
 //                case .dataPoints:
 //                    if data.colourType == .colour,
 //                       let colour = data.colour
@@ -90,8 +83,8 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
 //                        GradientStopsBar(safeStops, startPoint, endPoint, data, maxValue, chartData.chartStyle, style)
 //                    }
 //                }
-
-
+//
+//
 //        .onAppear {
 //            chartData.viewData.chartType = .bar
 //

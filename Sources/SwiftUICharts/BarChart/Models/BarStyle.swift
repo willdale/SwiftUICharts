@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Model for controlling the aesthetic of the bar chart.
-public struct BarStyle: Style, Hashable {
+public struct BarStyle: CTColourStyle, Hashable {
    
     /// How much of the available width to use. 0 ..1
     var barWidth    : CGFloat
