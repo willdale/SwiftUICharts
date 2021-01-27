@@ -54,10 +54,66 @@ public class BarChartData: LineAndBarChartData {
         return self.chartStyle.infoBoxPlacement
     }
     
-    public func legendOrder() -> [LegendData] {
-        return [LegendData]()
+    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [BarChartDataPoint] {
+        var points      : [BarChartDataPoint] = []
+        let xSection    : CGFloat   = chartSize.size.width / CGFloat(dataSets.dataPoints.count)
+        let index       : Int       = Int((touchLocation.x) / xSection)
+        if index >= 0 && index < dataSets.dataPoints.count {
+            points.append(dataSets.dataPoints[index])
+        }
+        return points
     }
 
+    public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
+        var locations : [HashablePoint] = []
+        
+        let xSection : CGFloat = chartSize.size.width / CGFloat(dataSets.dataPoints.count)
+        let ySection : CGFloat = chartSize.size.height / CGFloat(DataFunctions.dataSetMaxValue(from: dataSets))
+        let index    : Int     = Int((touchLocation.x) / xSection)
+        
+        if index >= 0 && index < dataSets.dataPoints.count {
+            locations.append(HashablePoint(x: (CGFloat(index) * xSection) + (xSection / 2),
+                                           y: (chartSize.size.height - CGFloat(dataSets.dataPoints[index].value) * ySection)))
+        }
+        return locations
+    }
+        
+    public func getXAxidLabels() -> some View {
+        HStack(spacing: 0) {
+            ForEach(dataSets.dataPoints) { data in
+                Spacer()
+                    .frame(minWidth: 0, maxWidth: 500)
+                Text(data.xAxisLabel ?? "")
+                    .font(.caption)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                    Spacer()
+                        .frame(minWidth: 0, maxWidth: 500)
+            }
+        }
+    }
+    public func getYLabels() -> [Double] {
+        var labels  : [Double]  = [Double]()
+        let maxValue: Double    = DataFunctions.dataSetMaxValue(from: dataSets)
+        for index in 0...self.chartStyle.yAxisNumberOfLabels {
+            labels.append(maxValue / Double(self.chartStyle.yAxisNumberOfLabels) * Double(index))
+        }
+        return labels
+    }
+    
+    public func getRange() -> Double {
+        DataFunctions.dataSetRange(from: dataSets)
+    }
+    public func getMinValue() -> Double {
+        DataFunctions.dataSetMinValue(from: dataSets)
+    }
+    public func getMaxValue() -> Double {
+        DataFunctions.dataSetMaxValue(from: dataSets)
+    }
+    public func getAverage() -> Double {
+        DataFunctions.dataSetAverage(from: dataSets)
+    }
+    
     public typealias Set = BarDataSet
     public typealias DataPoint = BarChartDataPoint
 }

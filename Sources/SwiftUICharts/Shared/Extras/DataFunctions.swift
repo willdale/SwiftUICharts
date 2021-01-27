@@ -49,14 +49,9 @@ struct DataFunctions {
             return dataSets.dataPoints.min { $0.value < $1.value }?.value ?? 0
     }
     
-    static func dataSetAverage<T:SingleDataSet>(from dataSets: [T]) -> Double {
-        var setHolder : [Double] = []
-        for set in dataSets {
-            let sum = set.dataPoints.reduce(0) { $0 + $1.value }
-            setHolder.append(sum / Double(set.dataPoints.count))
-        }
-        let sum = setHolder.reduce(0) { $0 + $1 }
-        return sum / Double(setHolder.count)
+    static func dataSetAverage<T:SingleDataSet>(from dataSets: T) -> Double {
+        let sum = dataSets.dataPoints.reduce(0) { $0 + $1.value }
+        return sum / Double(dataSets.dataPoints.count)
     }
     
     static func dataSetRange<T:SingleDataSet>(from dataSets: T) -> Double {

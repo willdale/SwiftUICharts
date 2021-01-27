@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// The central model from which the chart is drawn.
-public class MultiLineChartData: LineAndBarChartData {
+public class MultiLineChartData: LineAndBarChartData, LineChartProtocol {
         
     public let id   : UUID  = UUID()
     
@@ -67,9 +67,73 @@ public class MultiLineChartData: LineAndBarChartData {
     public func getHeaderLocation() -> InfoBoxPlacement {
         return self.chartStyle.infoBoxPlacement
     }
+
+    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [LineChartDataPoint] {
+        var points : [LineChartDataPoint] = []
+        for dataSet in dataSets.dataSets {
+            let xSection    : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count - 1)
+            let index       = Int((touchLocation.x + (xSection / 2)) / xSection)
+            if index >= 0 && index < dataSet.dataPoints.count {
+                points.append(dataSet.dataPoints[index])
+            }
+        }
+        return points
+    }
     
-    public func getDataSet() -> MultiLineDataSet {
-        return self.dataSets
+    public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
+
+        var locations : [HashablePoint] = []
+        for dataSet in dataSets.dataSets {
+            
+            let xSection : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count - 1)
+            let ySection : CGFloat = chartSize.size.height / CGFloat(DataFunctions.multiDataSetRange(from: dataSets))
+            let index    : Int     = Int((touchLocation.x + (xSection / 2)) / xSection)
+            if index >= 0 && index < dataSet.dataPoints.count {
+                locations.append(HashablePoint(x: CGFloat(index) * xSection,
+                                               y: (CGFloat(dataSet.dataPoints[index].value - DataFunctions.multiDataSetMinValue(from: dataSets)) * -ySection) + chartSize.size.height))
+            }
+        }
+        return locations
+    }
+    public func getXAxidLabels() -> some View {
+        HStack(spacing: 0) {
+            ForEach(dataSets.dataSets[0].dataPoints) { data in
+                Text(data.xAxisLabel ?? "")
+                    .font(.caption)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                if data != self.dataSets.dataSets[0].dataPoints[self.dataSets.dataSets[0].dataPoints.count - 1] {
+                    Spacer()
+                        .frame(minWidth: 0, maxWidth: 500)
+                }
+            }
+        }
+        .padding(.horizontal, -4)
+    }
+    public func getYLabels() -> [Double] {
+        var labels      : [Double]  = [Double]()
+        let dataRange   : Double    = DataFunctions.multiDataSetRange(from: dataSets)
+        let minValue    : Double    = DataFunctions.multiDataSetMinValue(from: dataSets)
+        
+        let range       : Double    = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
+        labels.append(minValue)
+        for index in 1...self.chartStyle.yAxisNumberOfLabels {
+            labels.append(minValue + range * Double(index))
+        }
+        return labels
+    }
+    
+    public func getRange() -> Double {
+        DataFunctions.multiDataSetRange(from: dataSets)
+    }
+    public func getMinValue() -> Double {
+        DataFunctions.multiDataSetMinValue(from: dataSets)
+    }
+    public func getMaxValue() -> Double {
+        DataFunctions.multiDataSetMaxValue(from: dataSets)
+    }
+    public func getAverage() -> Double {
+        DataFunctions.multiDataSetAverage(from: dataSets)
     }
     
     public typealias Set = MultiLineDataSet

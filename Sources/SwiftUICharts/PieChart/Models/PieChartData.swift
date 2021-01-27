@@ -40,6 +40,16 @@ public class PieChartData: PieChartDataProtocol {
         return self.chartStyle.infoBoxPlacement
     }
     
+    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [PieChartDataPoint] {
+        let points : [PieChartDataPoint] = []
+
+        return points
+    }
+    
+    public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
+        return [HashablePoint(x: 0, y: 0)]
+    }
+    
     public typealias Set = PieDataSet
     public typealias DataPoint = PieChartDataPoint
 }

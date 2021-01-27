@@ -4,7 +4,7 @@
 //
 //  Created by Will Dale on 23/01/2021.
 //
-
+ 
 import SwiftUI
 
 public protocol ChartData: ObservableObject, Identifiable {
@@ -21,6 +21,20 @@ public protocol ChartData: ObservableObject, Identifiable {
     var chartType   : (chartType: ChartType, dataSetType: DataSetType) { get }
     func legendOrder() -> [LegendData]
     func getHeaderLocation() -> InfoBoxPlacement
+    
+    /// Gets the nearest data point to the touch location based on the X axis.
+    /// - Parameters:
+    ///   - touchLocation: Current location of the touch
+    ///   - chartSize: The size of the chart view as the parent view.
+    func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [DataPoint]
+    
+    /// Gets the location of the data point in the view.
+    /// - Parameters:
+    ///   - touchLocation: Current location of the touch
+    ///   - chartSize: The size of the chart view as the parent view.
+    func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint]
+    
+    
 }
 extension ChartData {
     /// Sets the order the Legends are layed out in.
@@ -29,12 +43,19 @@ extension ChartData {
         return legends.sorted { $0.prioity < $1.prioity}
     }
 }
+public protocol LineChartProtocol {}
 public protocol LineAndBarChartData : ChartData {
     associatedtype Style : CTLineAndBarChartStyle
+    associatedtype Body  : View
     
     var chartStyle  : Style { get set }
     
-   
+    func getXAxidLabels() -> Body
+    func getYLabels() -> [Double]
+    func getRange() -> Double
+    func getMinValue() -> Double
+    func getMaxValue() -> Double
+    func getAverage() -> Double
 }
 public protocol PieChartDataProtocol : ChartData {
     associatedtype Style : CTPieChartStyle

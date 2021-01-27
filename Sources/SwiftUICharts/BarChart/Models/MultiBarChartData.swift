@@ -58,6 +58,73 @@ public class MultiBarChartData: LineAndBarChartData {
         return self.chartStyle.infoBoxPlacement
     }
     
+    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [BarChartDataPoint] {
+        var points : [BarChartDataPoint] = []
+        for dataSet in dataSets.dataSets {
+            let xSection    : CGFloat   = chartSize.size.width / CGFloat(dataSet.dataPoints.count)
+            let index       : Int       = Int((touchLocation.x) / xSection)
+            if index >= 0 && index < dataSet.dataPoints.count {
+                points.append(dataSet.dataPoints[index])
+            }
+        }
+        return points
+    }
+    public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
+        var locations : [HashablePoint] = []
+        for dataSet in dataSets.dataSets {
+            let xSection : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count)
+            let ySection : CGFloat = chartSize.size.height / CGFloat(DataFunctions.multiDataSetMaxValue(from: dataSets))
+            
+            let index = Int((touchLocation.x) / xSection)
+            
+            if index >= 0 && index < dataSet.dataPoints.count {
+                locations.append(HashablePoint(x: (CGFloat(index) * xSection) + (xSection / 2),
+                                               y: (chartSize.size.height - CGFloat(dataSet.dataPoints[index].value) * ySection)))
+            }
+        }
+        return locations
+    }
+    public func getXAxidLabels() -> some View {
+        HStack(spacing: 100) {
+            ForEach(dataSets.dataSets) { dataSet in
+                HStack(spacing: 0) {
+                    ForEach(dataSet.dataPoints) { data in
+                        Text(data.xAxisLabel ?? "")
+                            .font(.caption)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
+                        if data != dataSet.dataPoints[dataSet.dataPoints.count - 1] {
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                        }
+                    }
+                }
+            }
+        }
+        .padding(.horizontal, -4)
+    }
+    public func getYLabels() -> [Double] {
+        var labels : [Double]  = [Double]()
+        let maxValue    : Double    = DataFunctions.multiDataSetMaxValue(from: dataSets)
+        for index in 0...self.chartStyle.yAxisNumberOfLabels {
+            labels.append(maxValue / Double(self.chartStyle.yAxisNumberOfLabels) * Double(index))
+        }
+        return labels
+    }
+    
+    public func getRange() -> Double {
+        DataFunctions.multiDataSetRange(from: dataSets)
+    }
+    public func getMinValue() -> Double {
+        DataFunctions.multiDataSetMinValue(from: dataSets)
+    }
+    public func getMaxValue() -> Double {
+        DataFunctions.multiDataSetMaxValue(from: dataSets)
+    }
+    public func getAverage() -> Double {
+        DataFunctions.multiDataSetAverage(from: dataSets)
+    }
+    
     public typealias Set = MultiBarDataSet
     public typealias DataPoint = BarChartDataPoint
 }

@@ -25,31 +25,29 @@ public struct GroupedBarChart<ChartData>: View where ChartData: MultiBarChartDat
         HStack(spacing: 100) {
             ForEach(chartData.dataSets.dataSets) { dataSet in
                 VStack {
-                HStack(spacing: 0) {
-                    ForEach(dataSet.dataPoints) { dataPoint in
-                        
-                        switch dataSet.style.colourFrom {
-                        case .barStyle:
-
-                            BarChartDataSetSubView(colourType: dataSet.style.colourType,
-                                                   dataPoint: dataPoint,
-                                                   style: dataSet.style,
-                                                   chartStyle: chartData.chartStyle,
-                                                   maxValue: maxValue)
+                    HStack(spacing: 0) {
+                        ForEach(dataSet.dataPoints) { dataPoint in
                             
-                        case .dataPoints:
-                            
-                            BarChartDataPointSubView(colourType: dataPoint.colourType,
-                                                     dataPoint: dataPoint,
-                                                     style: dataSet.style,
-                                                     chartStyle: chartData.chartStyle,
-                                                     maxValue: maxValue)
-                            
+                            switch dataSet.style.colourFrom {
+                            case .barStyle:
+                                
+                                BarChartDataSetSubView(colourType: dataSet.style.colourType,
+                                                       dataPoint: dataPoint,
+                                                       style: dataSet.style,
+                                                       chartStyle: chartData.chartStyle,
+                                                       maxValue: maxValue)
+                                
+                            case .dataPoints:
+                                
+                                BarChartDataPointSubView(colourType: dataPoint.colourType,
+                                                         dataPoint: dataPoint,
+                                                         style: dataSet.style,
+                                                         chartStyle: chartData.chartStyle,
+                                                         maxValue: maxValue)
+                                
+                            }
                         }
                     }
-                }
-                    Text(dataSet.legendTitle)
-
                 }
             }
         }
