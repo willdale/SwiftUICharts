@@ -12,13 +12,13 @@ struct ColourBar: View {
     let colour      : Color
     let data        : BarChartDataPoint
     let maxValue    : Double
-    let chartStyle  : ChartStyle
+    let chartStyle  : BarChartStyle
     let style       : BarStyle
 
     init(_ colour      : Color,
          _ data        : BarChartDataPoint,
          _ maxValue    : Double,
-         _ chartStyle  : ChartStyle,
+         _ chartStyle  : BarChartStyle,
          _ style       : BarStyle
     ) {
         self.colour     = colour
@@ -48,7 +48,7 @@ struct GradientColoursBar: View {
     let endPoint    : UnitPoint
     let data        : BarChartDataPoint
     let maxValue    : Double
-    let chartStyle  : ChartStyle
+    let chartStyle  : BarChartStyle
     let style       : BarStyle
     
     init(_ colours     : [Color],
@@ -56,7 +56,7 @@ struct GradientColoursBar: View {
          _ endPoint    : UnitPoint,
          _ data        : BarChartDataPoint,
          _ maxValue    : Double,
-         _ chartStyle  : ChartStyle,
+         _ chartStyle  : BarChartStyle,
          _ style       : BarStyle
     ) {
         self.colours    = colours
@@ -90,7 +90,7 @@ struct GradientStopsBar: View {
     let endPoint    : UnitPoint
     let data        : BarChartDataPoint
     let maxValue    : Double
-    let chartStyle  : ChartStyle
+    let chartStyle  : BarChartStyle
     let style       : BarStyle
     
     init(_ stops       : [Gradient.Stop],
@@ -98,7 +98,7 @@ struct GradientStopsBar: View {
          _ endPoint    : UnitPoint,
          _ data        : BarChartDataPoint,
          _ maxValue    : Double,
-         _ chartStyle  : ChartStyle,
+         _ chartStyle  : BarChartStyle,
          _ style       : BarStyle
     ) {
         self.stops      = stops

@@ -29,56 +29,31 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
         ZStack {
             ForEach(chartData.dataSets.dataSets, id: \.self) { dataSet in
 
-                let style : LineStyle = dataSet.style
-                let strokeStyle = style.strokeStyle
-
 //        if chartData.isGreaterThanTwo {
 
-                if style.colourType == .colour,
-                   let colour = style.colour
+                if dataSet.style.colourType == .colour,
+                   let colour = dataSet.style.colour
                 {
-                    LineShape(dataSet: dataSet, lineType: style.lineType, isFilled: false, minValue: minValue, range: range)
-                        .trim(to: startAnimation ? 1 : 0)
-                        .stroke(colour, style: Stroke.strokeToStrokeStyle(stroke: strokeStyle))
-                        .modifier(LineShapeModifiers(chartData))
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                            self.startAnimation = true
-                        }
-                
-                } else if style.colourType == .gradientColour,
-                          let colours     = style.colours,
-                          let startPoint  = style.startPoint,
-                          let endPoint    = style.endPoint
-                {
-
-                    LineShape(dataSet: dataSet, lineType: style.lineType, isFilled: false, minValue: minValue, range: range)
-                        .trim(to: startAnimation ? 1 : 0)
-                        .stroke(LinearGradient(gradient: Gradient(colors: colours),
-                                               startPoint: startPoint,
-                                               endPoint: endPoint),
-                                style: Stroke.strokeToStrokeStyle(stroke: strokeStyle))
-                        .modifier(LineShapeModifiers(chartData))
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                            self.startAnimation = true
-                        }
                     
-                } else if style.colourType == .gradientStops,
-                          let stops      = style.stops,
-                          let startPoint = style.startPoint,
-                          let endPoint   = style.endPoint
+                    LineChartColourSubView(chartData: chartData, dataSet: dataSet, style: dataSet.style, minValue: minValue, range: range, colour: colour, isFilled: false)
+
+                } else if dataSet.style.colourType == .gradientColour,
+                          let colours     = dataSet.style.colours,
+                          let startPoint  = dataSet.style.startPoint,
+                          let endPoint    = dataSet.style.endPoint
+                {
+                    
+                    LineChartColoursSubView(chartData: chartData, dataSet: dataSet, style: dataSet.style, minValue: minValue, range: range, colours: colours, startPoint: startPoint, endPoint: endPoint, isFilled: false)
+                           
+                } else if dataSet.style.colourType == .gradientStops,
+                          let stops      = dataSet.style.stops,
+                          let startPoint = dataSet.style.startPoint,
+                          let endPoint   = dataSet.style.endPoint
                 {
                     let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-
-                    LineShape(dataSet: dataSet, lineType: style.lineType, isFilled: false, minValue: minValue, range: range)
-                        .trim(to: startAnimation ? 1 : 0)
-                        .stroke(LinearGradient(gradient: Gradient(stops: stops),
-                                               startPoint: startPoint,
-                                               endPoint: endPoint),
-                                style: Stroke.strokeToStrokeStyle(stroke: strokeStyle))
-                        .modifier(LineShapeModifiers(chartData))
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                            self.startAnimation = true
-                        }
+                    
+                    LineChartStopsSubView(chartData: chartData, dataSet: dataSet, style: dataSet.style, minValue: minValue, range: range, stops: stops, startPoint: startPoint, endPoint: endPoint, isFilled: false)
+                    
                 }
             }
         }
@@ -86,7 +61,7 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
     }
     internal mutating func setupLegends() {
         for dataSet in chartData.dataSets.dataSets {
-            LineLegends.setup(chartData: &chartData, dataSet: dataSet)
+            AddLegends.setupLine(chartData: &chartData, dataSet: dataSet)
         }
     }
 }

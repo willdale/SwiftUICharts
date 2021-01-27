@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-internal struct YAxisGrid<T>: ViewModifier where T: ChartData {
+internal struct YAxisGrid<T>: ViewModifier where T: LineAndBarChartData {
     
     @ObservedObject var chartData : T
     
@@ -38,13 +38,13 @@ extension View {
     - Parameter numberOfLines: Number of lines subdividing the chart
     - Returns: View of evenly spaced horizontal lines
     */
-    public func yAxisGrid<T:ChartData>(chartData: T) -> some View {
+    public func yAxisGrid<T: LineAndBarChartData>(chartData: T) -> some View {
         self.modifier(YAxisGrid<T>(chartData: chartData))
     }
 }
 
 
-internal struct HorizontalGridView<T>: View where T: ChartData {
+internal struct HorizontalGridView<T>: View where T: LineAndBarChartData {
     
     var chartData : T
     

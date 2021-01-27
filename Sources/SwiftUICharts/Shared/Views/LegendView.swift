@@ -104,6 +104,8 @@ internal struct LegendView<T>: View where T: ChartData {
 //                                .font(.caption)
 //                        }
 //                    }
+                case .pie:
+                    Text("")
                 }
             }
         }

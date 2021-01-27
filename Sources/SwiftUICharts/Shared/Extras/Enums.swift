@@ -42,6 +42,8 @@ public enum ChartType {
     case line
     /// Bar Chart Type
     case bar
+    
+    case pie
 }
 
 // MARK: - Style

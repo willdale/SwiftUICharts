@@ -18,7 +18,7 @@ public struct LineDataSet: SingleDataSet {
     public init(dataPoints  : [LineChartDataPoint],
                 legendTitle : String,
                 pointStyle  : PointStyle = PointStyle(),
-                style       : LineDataSet.Styling
+                style       : LineStyle  = LineStyle()
     ) {
         self.id             = UUID()
         self.dataPoints     = dataPoints
@@ -30,7 +30,6 @@ public struct LineDataSet: SingleDataSet {
     public typealias ID      = UUID
     public typealias Styling = LineStyle
 }
-
 
 
 public struct MultiLineDataSet: MultiDataSet {

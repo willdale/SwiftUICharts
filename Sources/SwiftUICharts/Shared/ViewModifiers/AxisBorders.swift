@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-internal struct XAxisBorder<T>: ViewModifier where T: ChartData {
+internal struct XAxisBorder<T>: ViewModifier where T: LineAndBarChartData {
     
     @ObservedObject var chartData: T
         
@@ -37,7 +37,7 @@ internal struct XAxisBorder<T>: ViewModifier where T: ChartData {
     }
 }
 
-internal struct YAxisBorder<T>: ViewModifier where T: ChartData {
+internal struct YAxisBorder<T>: ViewModifier where T: LineAndBarChartData {
     
     @ObservedObject var chartData: T
     
@@ -68,11 +68,11 @@ internal struct YAxisBorder<T>: ViewModifier where T: ChartData {
 }
 
 extension View {
-    internal func xAxisBorder<T: ChartData>(chartData: T) -> some View {
+    internal func xAxisBorder<T: LineAndBarChartData>(chartData: T) -> some View {
         self.modifier(XAxisBorder(chartData: chartData))
     }
 
-    internal func yAxisBorder<T: ChartData>(chartData: T) -> some View {
+    internal func yAxisBorder<T: LineAndBarChartData>(chartData: T) -> some View {
         self.modifier(YAxisBorder(chartData: chartData))
     }
 }

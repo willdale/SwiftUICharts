@@ -1,17 +1,17 @@
 //
-//  File.swift
+//  MultiBarChartData.swift
 //  
 //
-//  Created by Will Dale on 23/01/2021.
+//  Created by Will Dale on 26/01/2021.
 //
 
 import SwiftUI
 
-public class BarChartData: LineAndBarChartData {
+public class MultiBarChartData: LineAndBarChartData {
 
     public let id   : UUID  = UUID()
 
-    @Published public var dataSets     : BarDataSet
+    @Published public var dataSets     : MultiBarDataSet
     @Published public var metadata     : ChartMetadata?
     @Published public var xAxisLabels  : [String]?
     @Published public var chartStyle   : BarChartStyle
@@ -20,7 +20,7 @@ public class BarChartData: LineAndBarChartData {
     public var noDataText   : Text  = Text("No Data")
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
 
-    public init(dataSets    : BarDataSet,
+    public init(dataSets    : MultiBarDataSet,
                 metadata    : ChartMetadata?    = nil,
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : BarChartStyle     = BarChartStyle(),
@@ -32,10 +32,10 @@ public class BarChartData: LineAndBarChartData {
         self.chartStyle     = chartStyle
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
-        self.chartType      = (.bar, .single)
+        self.chartType      = (chartType: .bar, dataSetType: .multi)
     }
     
-    public init(dataSets    : BarDataSet,
+    public init(dataSets    : MultiBarDataSet,
                 metadata    : ChartMetadata?    = nil,
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : BarChartStyle     = BarChartStyle(),
@@ -47,18 +47,18 @@ public class BarChartData: LineAndBarChartData {
         self.chartStyle     = chartStyle
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
-        self.chartType      = (chartType: .bar, dataSetType: .single)
-    }
-    
-    public func getHeaderLocation() -> InfoBoxPlacement {
-        return self.chartStyle.infoBoxPlacement
+        self.chartType      = (chartType: .bar, dataSetType: .multi)
     }
     
     public func legendOrder() -> [LegendData] {
         return [LegendData]()
     }
 
-    public typealias Set = BarDataSet
+    public func getHeaderLocation() -> InfoBoxPlacement {
+        return self.chartStyle.infoBoxPlacement
+    }
+    
+    public typealias Set = MultiBarDataSet
     public typealias DataPoint = BarChartDataPoint
 }
 

@@ -35,9 +35,9 @@ public struct MultiBarDataSet: MultiDataSet {
     
     public let id       : UUID
     
-    public var dataSets : [LineDataSet]
+    public var dataSets : [BarDataSet]
     
-    public init(dataSets: [LineDataSet]) {
+    public init(dataSets: [BarDataSet]) {
         self.id       = UUID()
         self.dataSets = dataSets
     }

@@ -7,9 +7,15 @@
 
 import SwiftUI
 
-internal struct XAxisLabels<T>: ViewModifier where T: ChartData {
+internal struct XAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
     
     @ObservedObject var chartData: T
+    
+    internal init(chartData: T) {
+        self.chartData = chartData
+        
+        self.chartData.viewData.hasXAxisLabels = true
+    }
 
     @ViewBuilder
     internal var labels: some View {
@@ -17,79 +23,32 @@ internal struct XAxisLabels<T>: ViewModifier where T: ChartData {
         switch chartData.chartStyle.xAxisLabelsFrom {
         case .dataPoint:
             // ChartData -> DataPoints -> xAxisLabel
-            switch chartData.viewData.chartType {
-            case .line:
-                Text("")
-                if chartData.chartType == (.line, .multi) {
-                    
-                    let lineChartData = chartData as! MultiLineChartData
-                    let dataSet = lineChartData.dataSets.dataSets
-                    
-                    HStack(spacing: 0) {
-                        ForEach(dataSet[0].dataPoints) { data in
-                            Text(data.xAxisLabel ?? "")
-                                .font(.caption)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
-                            if data != dataSet[0].dataPoints[dataSet[0].dataPoints.count - 1] {
-                                Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
-                            }
-                        }
-                    }
-                    .padding(.horizontal, -4)
-                    .onAppear {
-                        chartData.viewData.hasXAxisLabels = true
-                    }
-                    
-                } else if chartData.chartType == (.line, .single) {
-                    
-                    let lineChartData = chartData as! LineChartData
-                    let dataSet = lineChartData.dataSets
-                    
-                    HStack(spacing: 0) {
-                        ForEach(dataSet.dataPoints) { data in
-                            Text(data.xAxisLabel ?? "")
-                                .font(.caption)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
-                            if data != dataSet.dataPoints[dataSet.dataPoints.count - 1] {
-                                Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
-                            }
-                        }
-                    }
-                    .padding(.horizontal, -4)
-                    .onAppear {
-                        chartData.viewData.hasXAxisLabels = true
-                    }
-                }
+            
+            switch chartData.chartType {
+            case (.line, .single):
+
+                XLabelSingleLineDataSet(chartData: chartData as! LineChartData)
+
+            case (.line, .multi):
+
+                XLabelMultiLineDataSet(chartData: chartData as! MultiLineChartData)
                 
+            case (.bar, .single):
                 
-            case .bar:
-                Text("hello")
-//                let barChartData = chartData as! BarChartData
-//                HStack(spacing: 0) {
-//                    ForEach(barChartData.dataSets[0].dataPoints, id: \.self) { data in
-//                            Spacer()
-//                                .frame(minWidth: 0, maxWidth: 500)
-//                            Text(data.xAxisLabel ?? "")
-//                                .font(.caption)
-//                                .lineLimit(1)
-//                                .minimumScaleFactor(0.5)
-//                            Spacer()
-//                                .frame(minWidth: 0, maxWidth: 500)
-//                    }
-//                }
-//                .onAppear {
-//                    chartData.viewData.hasXAxisLabels = true
-//                }
+                XLabelSingleBarDataSet(chartData: chartData as! BarChartData)
+                
+            case (.bar, .multi):
+
+                XLabelMultiBarDataSet(chartData: chartData as! MultiBarChartData)
+                
+            default:
+                Text("Should not be here")
             }
             
 
             
         case .chartData:
-            switch chartData.viewData.chartType {
+            switch chartData.chartType.chartType {
             case .line:
                 // ChartData -> xAxisLabels
                 if let labelArray = chartData.xAxisLabels {
@@ -106,29 +65,25 @@ internal struct XAxisLabels<T>: ViewModifier where T: ChartData {
                         }
                     }
                     .padding(.horizontal, -4)
-                    .onAppear {
-                        chartData.viewData.hasXAxisLabels = true
-                    }
+
                 }
             case .bar:
-                Text("Hello")
-//                if let labelArray = chartData.xAxisLabels {
-//                    HStack(spacing: 0) {
-//                        ForEach(labelArray, id: \.self) { data in
-//                            Spacer()
-//                                .frame(minWidth: 0, maxWidth: 500)
-//                            Text(data)
-//                                .font(.caption)
-//                                .lineLimit(1)
-//                                .minimumScaleFactor(0.5)
-//                            Spacer()
-//                                .frame(minWidth: 0, maxWidth: 500)
-//                        }
-//                    }
-//                    .onAppear {
-//                        chartData.viewData.hasXAxisLabels = true
-//                    }
-//                }
+                if let labelArray = chartData.xAxisLabels {
+                    HStack(spacing: 0) {
+                        ForEach(labelArray, id: \.self) { data in
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                            Text(data)
+                                .font(.caption)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                        }
+                    }
+                }
+            case .pie:
+                Text("Should not be here")
             }
         }
     }
@@ -153,7 +108,95 @@ internal struct XAxisLabels<T>: ViewModifier where T: ChartData {
 
 extension View {
     /// Labels for the X axis.
-    public func xAxisLabels<T: ChartData>(chartData: T) -> some View {
+    public func xAxisLabels<T: LineAndBarChartData>(chartData: T) -> some View {
         self.modifier(XAxisLabels(chartData: chartData))
     }
+}
+
+
+internal struct XLabelSingleLineDataSet<CD>: View where CD: LineChartData {
+    
+    let chartData: CD
+    
+    var body: some View {
+        
+        HStack(spacing: 0) {
+            ForEach(chartData.dataSets.dataPoints) { data in
+                Text(data.xAxisLabel ?? "")
+                    .font(.caption)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                if data != chartData.dataSets.dataPoints[chartData.dataSets.dataPoints.count - 1] {
+                    Spacer()
+                        .frame(minWidth: 0, maxWidth: 500)
+                }
+            }
+        }
+        .padding(.horizontal, -4)
+    }
+    
+}
+
+internal struct XLabelMultiLineDataSet<CD>: View where CD: MultiLineChartData {
+    
+    let chartData: CD
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(chartData.dataSets.dataSets[0].dataPoints) { data in
+                Text(data.xAxisLabel ?? "")
+                    .font(.caption)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                if data != chartData.dataSets.dataSets[0].dataPoints[chartData.dataSets.dataSets[0].dataPoints.count - 1] {
+                    Spacer()
+                        .frame(minWidth: 0, maxWidth: 500)
+                }
+            }
+        }
+        .padding(.horizontal, -4)
+    }
+
+}
+internal struct XLabelSingleBarDataSet<CD>: View where CD: BarChartData {
+    
+    let chartData: CD
+    
+    var body: some View {
+        
+        HStack(spacing: 0) {
+            ForEach(chartData.dataSets.dataPoints) { data in
+                Spacer()
+                    .frame(minWidth: 0, maxWidth: 500)
+                Text(data.xAxisLabel ?? "")
+                    .font(.caption)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                    Spacer()
+                        .frame(minWidth: 0, maxWidth: 500)
+            }
+        }
+    }
+}
+
+internal struct XLabelMultiBarDataSet<CD>: View where CD: MultiBarChartData {
+    
+    let chartData: CD
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(chartData.dataSets.dataSets[0].dataPoints) { data in
+                Text(data.xAxisLabel ?? "")
+                    .font(.caption)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                if data != chartData.dataSets.dataSets[0].dataPoints[chartData.dataSets.dataSets[0].dataPoints.count - 1] {
+                    Spacer()
+                        .frame(minWidth: 0, maxWidth: 500)
+                }
+            }
+        }
+        .padding(.horizontal, -4)
+    }
+
 }

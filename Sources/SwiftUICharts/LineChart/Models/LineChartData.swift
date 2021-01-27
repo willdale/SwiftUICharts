@@ -8,12 +8,12 @@
 import SwiftUI
 
 /// The central model from which the chart is drawn.
-public class LineChartData: ChartData {
+public class LineChartData: LineAndBarChartData {
     
     public let id   : UUID  = UUID()
     
     /// Data model containing the datapoints: Value, Label, Description and Date. Individual colouring for bar chart.
-    @Published public var dataSets      : Set
+    @Published public var dataSets      : LineDataSet
     
     /// Data model containing: the charts Title, the charts Subtitle and the Line Legend.
     @Published public var metadata      : ChartMetadata?
@@ -22,7 +22,7 @@ public class LineChartData: ChartData {
     @Published public var xAxisLabels   : [String]?
     
     /// Data model conatining the style data for the chart.
-    @Published public var chartStyle    : ChartStyle
+    @Published public var chartStyle    : LineChartStyle
                 
     /// Array of data to populate the chart legend.
     @Published public var legends       : [LegendData]
@@ -32,12 +32,12 @@ public class LineChartData: ChartData {
     
     public var noDataText   : Text      = Text("No Data")
     
-    public var chartType    : (ChartType, DataSetType)
+    public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
             
-    public init(dataSets    : Set,
+    public init(dataSets    : LineDataSet,
                 metadata    : ChartMetadata?    = nil,
                 xAxisLabels : [String]?         = nil,
-                chartStyle  : ChartStyle        = ChartStyle(),
+                chartStyle  : LineChartStyle = LineChartStyle(),
                 calculations: CalculationType   = .none
     ) {
         self.dataSets       = dataSets
@@ -46,13 +46,13 @@ public class LineChartData: ChartData {
         self.chartStyle     = chartStyle
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
-        self.chartType      = (.line, .single)
+        self.chartType      = (chartType: .line, dataSetType: .single)
     }
     
-    public init(dataSets    : Set,
+    public init(dataSets    : LineDataSet,
                 metadata    : ChartMetadata?    = nil,
                 xAxisLabels : [String]?         = nil,
-                chartStyle  : ChartStyle        = ChartStyle(),
+                chartStyle  : LineChartStyle = LineChartStyle(),
                 customCalc  : @escaping ([LineChartDataPoint]) -> [LineChartDataPoint]?
     ) {
         self.dataSets       = dataSets
@@ -61,9 +61,13 @@ public class LineChartData: ChartData {
         self.chartStyle     = chartStyle
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
-        self.chartType      = (.line, .single)
+        self.chartType      = (chartType: .line, dataSetType: .single)
     }
     
-    
-    public typealias Set = LineDataSet
+    public func getHeaderLocation() -> InfoBoxPlacement {
+        return self.chartStyle.infoBoxPlacement
+    }
+
+    public typealias Set       = LineDataSet
+    public typealias DataPoint = LineChartDataPoint
 }

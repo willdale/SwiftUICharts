@@ -40,20 +40,13 @@ struct DataFunctions {
     }
     
     // MARK: - Single Data Set
-    static func dataSetMaxValue<T:SingleDataSet>(from dataSets: [T]) -> Double {
-        var setHolder : [Double] = []
-        for set in dataSets {
-            setHolder.append(set.dataPoints.max { $0.value < $1.value }?.value ?? 0)
-        }
-        return setHolder.max { $0 < $1 } ?? 0
+    static func dataSetMaxValue<T:SingleDataSet>(from dataSets: T) -> Double {
+            return dataSets.dataPoints.max { $0.value < $1.value }?.value ?? 0
+        
     }
     
-    static func dataSetMinValue<T:SingleDataSet>(from dataSets: [T]) -> Double {
-        var setHolder : [Double] = []
-        for set in dataSets {
-            setHolder.append(set.dataPoints.min { $0.value < $1.value }?.value ?? 0)
-        }
-        return setHolder.min { $0 < $1 } ?? 0
+    static func dataSetMinValue<T:SingleDataSet>(from dataSets: T) -> Double {
+            return dataSets.dataPoints.min { $0.value < $1.value }?.value ?? 0
     }
     
     static func dataSetAverage<T:SingleDataSet>(from dataSets: [T]) -> Double {
@@ -66,18 +59,10 @@ struct DataFunctions {
         return sum / Double(setHolder.count)
     }
     
-    static func dataSetRange<T:SingleDataSet>(from dataSets: [T]) -> Double {
-        var setMaxHolder : [Double] = []
-        for set in dataSets {
-            setMaxHolder.append(set.dataPoints.max { $0.value < $1.value }?.value ?? 0)
-        }
-        let maxValue = setMaxHolder.max { $0 < $1 } ?? 0
+    static func dataSetRange<T:SingleDataSet>(from dataSets: T) -> Double {
         
-        var setMinHolder : [Double] = []
-        for set in dataSets {
-            setMinHolder.append(set.dataPoints.min { $0.value < $1.value }?.value ?? 0)
-        }
-        let minValue = setMinHolder.min { $0 < $1 } ?? 0
+        let maxValue = dataSets.dataPoints.max { $0.value < $1.value }?.value ?? 0
+        let minValue = dataSets.dataPoints.min { $0.value < $1.value }?.value ?? 0
         
         /*
          Adding 0.001 stops the following error if there is no variation in value of the dataPoints

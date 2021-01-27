@@ -23,57 +23,36 @@ public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
     }
     
     public var body: some View {
-        
-        let style : LineStyle = chartData.dataSets.style
-        
+                
 //        if chartData.isGreaterThanTwo {
         
-        if style.colourType == .colour,
-           let colour = style.colour
-        {
-            LineShape(dataSet: chartData.dataSets, lineType: style.lineType, isFilled: true, minValue: minValue, range: range)
-                .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                .fill(colour)
-                .modifier(LineShapeModifiers(chartData))
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                    self.startAnimation = true
-                }
-        } else if style.colourType == .gradientColour,
-                  let colours     = style.colours,
-                  let startPoint  = style.startPoint,
-                  let endPoint    = style.endPoint
+        if chartData.dataSets.style.colourType == .colour,
+           let colour = chartData.dataSets.style.colour
         {
             
-            LineShape(dataSet: chartData.dataSets, lineType: style.lineType, isFilled: true, minValue: minValue, range: range)
-                .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                .fill(LinearGradient(gradient: Gradient(colors: colours),
-                                     startPoint: startPoint,
-                                     endPoint: endPoint))
-                .modifier(LineShapeModifiers(chartData))
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                    self.startAnimation = true
-                }
+            LineChartColourSubView(chartData: chartData, dataSet: chartData.dataSets, style: chartData.dataSets.style, minValue: minValue, range: range, colour: colour, isFilled: true)
             
-        } else if style.colourType == .gradientStops,
-                  let stops      = style.stops,
-                  let startPoint = style.startPoint,
-                  let endPoint   = style.endPoint
+        } else if chartData.dataSets.style.colourType == .gradientColour,
+                  let colours     = chartData.dataSets.style.colours,
+                  let startPoint  = chartData.dataSets.style.startPoint,
+                  let endPoint    = chartData.dataSets.style.endPoint
+        {
+            
+            LineChartColoursSubView(chartData: chartData, dataSet: chartData.dataSets, style: chartData.dataSets.style, minValue: minValue, range: range, colours: colours, startPoint: startPoint, endPoint: endPoint, isFilled: true)
+            
+        } else if chartData.dataSets.style.colourType == .gradientStops,
+                  let stops      = chartData.dataSets.style.stops,
+                  let startPoint = chartData.dataSets.style.startPoint,
+                  let endPoint   = chartData.dataSets.style.endPoint
         {
             let stops = GradientStop.convertToGradientStopsArray(stops: stops)
             
-            LineShape(dataSet: chartData.dataSets, lineType: style.lineType, isFilled: true, minValue: minValue, range: range)
-                .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                .fill(LinearGradient(gradient: Gradient(stops: stops),
-                                       startPoint: startPoint,
-                                       endPoint: endPoint))
-                .modifier(LineShapeModifiers(chartData))
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                    self.startAnimation = true
-                }
+            LineChartStopsSubView(chartData: chartData, dataSet: chartData.dataSets, style: chartData.dataSets.style, minValue: minValue, range: range, stops: stops, startPoint: startPoint, endPoint: endPoint, isFilled: true)
+            
         }
 //        } else { CustomNoDataView(chartData: chartData) }
     }
     internal mutating func setupLegends() {
-        LineLegends.setup(chartData: &chartData, dataSet: chartData.dataSets)
+        AddLegends.setupLine(chartData: &chartData, dataSet: chartData.dataSets)
     }
 }

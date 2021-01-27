@@ -42,6 +42,8 @@ internal struct Marker: Shape {
         case .bar:
             let y = rect.height / CGFloat(maxValue)
             pointY = rect.height - CGFloat(value) * y
+        case .pie:
+            pointY = 0
         }
         
         let firstPoint = CGPoint(x: 0,

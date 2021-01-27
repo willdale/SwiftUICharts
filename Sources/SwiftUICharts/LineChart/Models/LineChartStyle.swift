@@ -1,14 +1,14 @@
 //
-//  ChartStyle.swift
+//  LineChartStyle.swift
 //  
 //
-//  Created by Will Dale on 12/01/2021.
+//  Created by Will Dale on 25/01/2021.
 //
 
 import SwiftUI
 
 /// Model for controlling the overall aesthetic of the chart.
-public struct ChartStyle {
+public struct LineChartStyle: CTLineAndBarChartStyle {
         
     /// Placement of the information box that appears on touch input.
     public var infoBoxPlacement : InfoBoxPlacement
@@ -62,5 +62,3 @@ public struct ChartStyle {
         self.globalAnimation     = globalAnimation
     }
 }
-
-

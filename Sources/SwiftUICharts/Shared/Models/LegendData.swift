@@ -10,8 +10,8 @@ import SwiftUI
 /// Data model for Legends
 public struct LegendData: CTColourStyle, Hashable {
     
-    var chartType   : ChartType
-    public var colourType  : ColourType
+    var chartType           : ChartType
+    public var colourType   : ColourType
     /// Text to be displayed
     var legend      : String
     

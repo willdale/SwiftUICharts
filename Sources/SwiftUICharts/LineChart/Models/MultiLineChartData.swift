@@ -8,12 +8,12 @@
 import SwiftUI
 
 /// The central model from which the chart is drawn.
-public class MultiLineChartData: ChartData {
+public class MultiLineChartData: LineAndBarChartData {
         
     public let id   : UUID  = UUID()
     
     /// Data model containing the datapoints: Value, Label, Description and Date. Individual colouring for bar chart.
-    @Published public var dataSets      : Set
+    @Published public var dataSets      : MultiLineDataSet
     
     /// Data model containing: the charts Title, the charts Subtitle and the Line Legend.
     @Published public var metadata      : ChartMetadata?
@@ -22,7 +22,7 @@ public class MultiLineChartData: ChartData {
     @Published public var xAxisLabels   : [String]?
     
     /// Data model conatining the style data for the chart.
-    @Published public var chartStyle    : ChartStyle
+    @Published public var chartStyle    : LineChartStyle
                 
     /// Array of data to populate the chart legend.
     @Published public var legends       : [LegendData]
@@ -32,12 +32,12 @@ public class MultiLineChartData: ChartData {
     
     public var noDataText   : Text = Text("No Data")
     
-    public var chartType    : (ChartType, DataSetType)
+    public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
             
-    public init(dataSets    : Set,
+    public init(dataSets    : MultiLineDataSet,
                 metadata    : ChartMetadata?    = nil,
                 xAxisLabels : [String]?         = nil,
-                chartStyle  : ChartStyle        = ChartStyle(),
+                chartStyle  : LineChartStyle    = LineChartStyle(),
                 calculations: CalculationType   = .none
     ) {
         self.dataSets       = dataSets
@@ -49,10 +49,10 @@ public class MultiLineChartData: ChartData {
         self.chartType      = (.line, .multi)
     }
     
-    public init(dataSets    : Set,
+    public init(dataSets    : MultiLineDataSet,
                 metadata    : ChartMetadata?    = nil,
                 xAxisLabels : [String]?         = nil,
-                chartStyle  : ChartStyle        = ChartStyle(),
+                chartStyle  : LineChartStyle    = LineChartStyle(),
                 customCalc  : @escaping ([LineChartDataPoint]) -> [LineChartDataPoint]?
     ) {
         self.dataSets       = dataSets
@@ -61,8 +61,17 @@ public class MultiLineChartData: ChartData {
         self.chartStyle     = chartStyle
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
-        self.chartType      = (.line, .multi)
+        self.chartType      = (chartType: .line, dataSetType: .multi)
+    }
+    
+    public func getHeaderLocation() -> InfoBoxPlacement {
+        return self.chartStyle.infoBoxPlacement
+    }
+    
+    public func getDataSet() -> MultiLineDataSet {
+        return self.dataSets
     }
     
     public typealias Set = MultiLineDataSet
+    public typealias DataPoint = LineChartDataPoint
 }

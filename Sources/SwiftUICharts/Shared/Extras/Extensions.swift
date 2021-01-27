@@ -15,6 +15,20 @@ extension View {
         else { self }
     }
 }
+extension View {
+    @ViewBuilder
+    func `ifElse`<TrueContent: View, FalseContent: View>(_ condition: Bool,
+                                                     if ifTransform: (Self) -> TrueContent,
+                                                     else elseTransform: (Self) -> FalseContent
+    ) -> some View {
+        
+        if condition {
+            ifTransform(self)
+        } else {
+            elseTransform(self)
+        }
+    }
+}
 
 
 // https://www.hackingwithswift.com/quick-start/swiftui/how-to-start-an-animation-immediately-after-a-view-appears

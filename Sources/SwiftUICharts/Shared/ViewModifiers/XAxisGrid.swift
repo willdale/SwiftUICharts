@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-internal struct XAxisGrid<T>: ViewModifier where T: ChartData {
+internal struct XAxisGrid<T>: ViewModifier where T: LineAndBarChartData {
     
     @ObservedObject var chartData : T
         
@@ -34,13 +34,13 @@ extension View {
     /**
      Adds vertical lines along the X axis.
     */
-    public func xAxisGrid<T: ChartData>(chartData: T) -> some View {
+    public func xAxisGrid<T: LineAndBarChartData>(chartData: T) -> some View {
         self.modifier(XAxisGrid(chartData: chartData))
     }
 }
 
 
-internal struct VerticalGridView<T>: View where T: ChartData {
+internal struct VerticalGridView<T>: View where T: LineAndBarChartData {
     
     var chartData : T
     
