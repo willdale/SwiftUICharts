@@ -21,9 +21,9 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
         self.minValue   = DataFunctions.minValue(dataPoints: chartData.dataSets.dataPoints)
         self.range      = DataFunctions.range(dataPoints: chartData.dataSets.dataPoints)
         
-        setupLegends()
+//        setupLegends()
     }
-    
+     
     public var body: some View {
         
 //        if chartData.isGreaterThanTwo {

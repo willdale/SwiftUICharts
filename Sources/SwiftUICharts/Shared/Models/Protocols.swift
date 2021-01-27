@@ -7,6 +7,13 @@
  
 import SwiftUI
 
+/*
+ ToDo
+ 
+ setupLegend causes crash on second init --- Maybe ass to protocol
+ 
+ */
+
 public protocol ChartData: ObservableObject, Identifiable {
     associatedtype Set      : DataSet
     associatedtype DataPoint: ChartDataPoint
