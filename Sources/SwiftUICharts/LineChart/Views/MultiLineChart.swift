@@ -21,7 +21,7 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
         self.minValue   = DataFunctions.multiDataSetMinValue(from: chartData.dataSets)
         self.range      = DataFunctions.multiDataSetRange(from: chartData.dataSets)
 
-        setupLegends()
+        chartData.setupLegends()
     }
     
     public var body: some View {
@@ -58,10 +58,5 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
             }
         }
 //        } else { CustomNoDataView(chartData: chartData) }
-    }
-    internal mutating func setupLegends() {
-        for dataSet in chartData.dataSets.dataSets {
-            AddLegends.setupLine(chartData: &chartData, dataSet: dataSet)
-        }
     }
 }

@@ -50,6 +50,38 @@ public class PieChartData: PieChartDataProtocol {
         return [HashablePoint(x: 0, y: 0)]
     }
     
+    public func setupLegends() {
+        if dataSets.style.colourType == .colour,
+           let colour = dataSets.style.colour
+        {
+            self.legends.append(LegendData(legend     : dataSets.legendTitle,
+                                           colour     : colour,
+                                           strokeStyle: nil,
+                                           prioity    : 1,
+                                           chartType  : .bar))
+        } else if dataSets.style.colourType == .gradientColour,
+                  let colours = dataSets.style.colours
+        {
+            self.legends.append(LegendData(legend     : dataSets.legendTitle,
+                                           colours    : colours,
+                                           startPoint : .leading,
+                                           endPoint   : .trailing,
+                                           strokeStyle: nil,
+                                           prioity    : 1,
+                                           chartType  : .bar))
+        } else if dataSets.style.colourType == .gradientStops,
+                  let stops = dataSets.style.stops
+        {
+            self.legends.append(LegendData(legend     : dataSets.legendTitle,
+                                           stops      : stops,
+                                           startPoint : .leading,
+                                           endPoint   : .trailing,
+                                           strokeStyle: nil,
+                                           prioity    : 1,
+                                           chartType  : .bar))
+        }
+    }
+    
     public typealias Set = PieDataSet
     public typealias DataPoint = PieChartDataPoint
 }

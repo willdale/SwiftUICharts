@@ -16,9 +16,8 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
     public init(chartData: ChartData) {
         self.chartData = chartData
         self.maxValue = DataFunctions.maxValue(dataPoints: chartData.dataSets.dataPoints)
-//        chartData.viewData.chartType = .bar
 
-        setupLegends()
+        chartData.setupLegends()
     }
     
     public var body: some View {
@@ -46,8 +45,5 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
                 }
             }
         }
-    }
-    internal mutating func setupLegends() {
-        AddLegends.setupBar(chartData: &chartData, dataSet: chartData.dataSets)
     }
 }

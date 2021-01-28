@@ -136,6 +136,42 @@ public class MultiLineChartData: LineAndBarChartData, LineChartProtocol {
         DataFunctions.multiDataSetAverage(from: dataSets)
     }
     
+    public func setupLegends() {
+        for dataSet in dataSets.dataSets {
+            if dataSet.style.colourType == .colour,
+               let colour = dataSet.style.colour
+            {
+                self.legends.append(LegendData(legend     : dataSet.legendTitle,
+                                               colour     : colour,
+                                               strokeStyle: dataSet.style.strokeStyle,
+                                               prioity    : 1,
+                                               chartType  : .line))
+                
+            } else if dataSet.style.colourType == .gradientColour,
+                      let colours = dataSet.style.colours
+            {
+                self.legends.append(LegendData(legend     : dataSet.legendTitle,
+                                               colours    : colours,
+                                               startPoint : .leading,
+                                               endPoint   : .trailing,
+                                               strokeStyle: dataSet.style.strokeStyle,
+                                               prioity    : 1,
+                                               chartType  : .line))
+                
+            } else if dataSet.style.colourType == .gradientStops,
+                      let stops = dataSet.style.stops
+            {
+                self.legends.append(LegendData(legend     : dataSet.legendTitle,
+                                               stops      : stops,
+                                               startPoint : .leading,
+                                               endPoint   : .trailing,
+                                               strokeStyle: dataSet.style.strokeStyle,
+                                               prioity    : 1,
+                                               chartType  : .line))
+            }
+        }
+    }
+    
     public typealias Set = MultiLineDataSet
     public typealias DataPoint = LineChartDataPoint
 }

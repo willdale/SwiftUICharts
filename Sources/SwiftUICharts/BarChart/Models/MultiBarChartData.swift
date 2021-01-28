@@ -49,10 +49,6 @@ public class MultiBarChartData: LineAndBarChartData {
         self.viewData       = ChartViewData()
         self.chartType      = (chartType: .bar, dataSetType: .multi)
     }
-    
-    public func legendOrder() -> [LegendData] {
-        return [LegendData]()
-    }
 
     public func getHeaderLocation() -> InfoBoxPlacement {
         return self.chartStyle.infoBoxPlacement
@@ -123,6 +119,78 @@ public class MultiBarChartData: LineAndBarChartData {
     }
     public func getAverage() -> Double {
         DataFunctions.multiDataSetAverage(from: dataSets)
+    }
+    
+    public func setupLegends() {
+        switch dataSets.dataSets[0].style.colourFrom {
+        case .barStyle:
+            if dataSets.dataSets[0].style.colourType == .colour,
+               let colour = dataSets.dataSets[0].style.colour
+            {
+                self.legends.append(LegendData(legend     : dataSets.dataSets[0].legendTitle,
+                                               colour     : colour,
+                                               strokeStyle: nil,
+                                               prioity    : 1,
+                                               chartType  : .bar))
+            } else if dataSets.dataSets[0].style.colourType == .gradientColour,
+                      let colours = dataSets.dataSets[0].style.colours
+            {
+                self.legends.append(LegendData(legend     : dataSets.dataSets[0].legendTitle,
+                                               colours    : colours,
+                                               startPoint : .leading,
+                                               endPoint   : .trailing,
+                                               strokeStyle: nil,
+                                               prioity    : 1,
+                                               chartType  : .bar))
+            } else if dataSets.dataSets[0].style.colourType == .gradientStops,
+                      let stops = dataSets.dataSets[0].style.stops
+            {
+                self.legends.append(LegendData(legend     : dataSets.dataSets[0].legendTitle,
+                                               stops      : stops,
+                                               startPoint : .leading,
+                                               endPoint   : .trailing,
+                                               strokeStyle: nil,
+                                               prioity    : 1,
+                                               chartType  : .bar))
+            }
+        case .dataPoints:
+            
+            for data in dataSets.dataSets[0].dataPoints {
+                
+                if data.colourType == .colour,
+                   let colour = data.colour,
+                   let legend = data.pointDescription
+                {
+                    self.legends.append(LegendData(legend     : legend,
+                                                   colour     : colour,
+                                                   strokeStyle: nil,
+                                                   prioity    : 1,
+                                                   chartType  : .bar))
+                } else if data.colourType == .gradientColour,
+                          let colours = data.colours,
+                          let legend = data.pointDescription
+                {
+                    self.legends.append(LegendData(legend     : legend,
+                                                   colours    : colours,
+                                                   startPoint : .leading,
+                                                   endPoint   : .trailing,
+                                                   strokeStyle: nil,
+                                                   prioity    : 1,
+                                                   chartType  : .bar))
+                } else if data.colourType == .gradientStops,
+                          let stops = data.stops,
+                          let legend = data.pointDescription
+                {
+                    self.legends.append(LegendData(legend     : legend,
+                                                   stops      : stops,
+                                                   startPoint : .leading,
+                                                   endPoint   : .trailing,
+                                                   strokeStyle: nil,
+                                                   prioity    : 1,
+                                                   chartType  : .bar))
+                }
+            }
+        }
     }
     
     public typealias Set = MultiBarDataSet

@@ -131,6 +131,40 @@ public class LineChartData: LineAndBarChartData, LineChartProtocol {
         DataFunctions.dataSetAverage(from: dataSets)
     }
     
+    public func setupLegends() {
+        if dataSets.style.colourType == .colour,
+           let colour = dataSets.style.colour
+        {
+            self.legends.append(LegendData(legend     : dataSets.legendTitle,
+                                           colour     : colour,
+                                           strokeStyle: dataSets.style.strokeStyle,
+                                           prioity    : 1,
+                                           chartType  : .line))
+            
+        } else if dataSets.style.colourType == .gradientColour,
+                  let colours = dataSets.style.colours
+        {
+            self.legends.append(LegendData(legend     : dataSets.legendTitle,
+                                           colours    : colours,
+                                           startPoint : .leading,
+                                           endPoint   : .trailing,
+                                           strokeStyle: dataSets.style.strokeStyle,
+                                           prioity    : 1,
+                                           chartType  : .line))
+            
+        } else if dataSets.style.colourType == .gradientStops,
+                  let stops = dataSets.style.stops
+        {
+            self.legends.append(LegendData(legend     : dataSets.legendTitle,
+                                           stops      : stops,
+                                           startPoint : .leading,
+                                           endPoint   : .trailing,
+                                           strokeStyle: dataSets.style.strokeStyle,
+                                           prioity    : 1,
+                                           chartType  : .line))
+        }
+    }
+    
     public typealias Set       = LineDataSet
     public typealias DataPoint = LineChartDataPoint
 }

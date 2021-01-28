@@ -21,7 +21,7 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
         self.minValue   = DataFunctions.minValue(dataPoints: chartData.dataSets.dataPoints)
         self.range      = DataFunctions.range(dataPoints: chartData.dataSets.dataPoints)
         
-//        setupLegends()
+        chartData.setupLegends()
     }
      
     public var body: some View {
@@ -75,24 +75,4 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
         }
 //        } else { CustomNoDataView(chartData: chartData) }
     }
-    internal mutating func setupLegends() {
-        AddLegends.setupLine(chartData: &chartData, dataSet: chartData.dataSets)
-    }
 }
-
-
-//internal struct LineShapeModifiers<T: LineAndBarChartData>: ViewModifier {
-//    private let chartData : T
-//
-//    internal init(_ chartData : T) {
-//        self.chartData  = chartData
-//    }
-//
-//    func body(content: Content) -> some View {
-//        content
-//            .background(Color(.gray).opacity(0.01))
-//            .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
-//            .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }
-//    }
-//}
-//

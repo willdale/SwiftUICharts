@@ -20,6 +20,7 @@ public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
         self.chartData  = chartData
         self.minValue   = DataFunctions.minValue(dataPoints: chartData.dataSets.dataPoints)
         self.range      = DataFunctions.range(dataPoints: chartData.dataSets.dataPoints)
+        chartData.setupLegends()
     }
     
     public var body: some View {
@@ -51,8 +52,5 @@ public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
             
         }
 //        } else { CustomNoDataView(chartData: chartData) }
-    }
-    internal mutating func setupLegends() {
-        AddLegends.setupLine(chartData: &chartData, dataSet: chartData.dataSets)
     }
 }

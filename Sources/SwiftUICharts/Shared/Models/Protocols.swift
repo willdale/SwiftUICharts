@@ -7,13 +7,6 @@
  
 import SwiftUI
 
-/*
- ToDo
- 
- setupLegend causes crash on second init --- Maybe ass to protocol
- 
- */
-
 public protocol ChartData: ObservableObject, Identifiable {
     associatedtype Set      : DataSet
     associatedtype DataPoint: ChartDataPoint
@@ -41,7 +34,7 @@ public protocol ChartData: ObservableObject, Identifiable {
     ///   - chartSize: The size of the chart view as the parent view.
     func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint]
     
-    
+    func setupLegends() -> Void
 }
 extension ChartData {
     /// Sets the order the Legends are layed out in.

@@ -8,7 +8,9 @@
 import SwiftUI
 
 /// Data model for Legends
-public struct LegendData: CTColourStyle, Hashable {
+public struct LegendData: CTColourStyle, Hashable, Identifiable {
+    
+    public var id: UUID = UUID()
     
     var chartType           : ChartType
     public var colourType   : ColourType

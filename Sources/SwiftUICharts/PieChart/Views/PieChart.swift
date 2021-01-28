@@ -7,16 +7,16 @@
 
 import SwiftUI
 
-public struct PieChart: View {
+public struct PieChart<ChartData>: View where ChartData: PieChartData {
     
-    let chartData   : PieChartData
+    @ObservedObject var chartData   : ChartData
     
     let pieSegments : [PieSegmentShape]
     let strokeWidth : Double?
     
     @State var startAnimation : Bool = false
     
-    public init(chartData  : PieChartData,
+    public init(chartData  : ChartData,
                 strokeWidth: Double? = nil
     ) {
         self.chartData = chartData
@@ -34,6 +34,8 @@ public struct PieChart: View {
             startAngle += amount
         }
         pieSegments = segments
+        
+        chartData.setupLegends()
     }
     
     @ViewBuilder

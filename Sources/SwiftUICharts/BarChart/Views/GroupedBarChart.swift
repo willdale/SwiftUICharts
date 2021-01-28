@@ -16,9 +16,8 @@ public struct GroupedBarChart<ChartData>: View where ChartData: MultiBarChartDat
     public init(chartData: ChartData) {
         self.chartData = chartData
         self.maxValue = DataFunctions.multiDataSetMaxValue(from: chartData.dataSets)
-//        chartData.viewData.chartType = .bar
         
-//        setupLegends()
+        chartData.setupLegends()
     }
     
     public var body: some View {
@@ -52,7 +51,4 @@ public struct GroupedBarChart<ChartData>: View where ChartData: MultiBarChartDat
             }
         }
     }
-//    internal mutating func setupLegends() {
-//        Legends.setupBar(chartData: &chartData, dataSet: chartData.dataSets)
-//    }
 }
