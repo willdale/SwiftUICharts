@@ -36,7 +36,10 @@ struct ColourBar: View {
             .scaleEffect(y: startAnimation ? CGFloat(data.value / maxValue) : 0, anchor: .bottom)
             .scaleEffect(x: style.barWidth, anchor: .center)
             .animateOnAppear(using: chartStyle.globalAnimation) {
-                self.startAnimation.toggle()
+                self.startAnimation = true
+            }
+            .animateOnDisAppear(using: chartStyle.globalAnimation) {
+                self.startAnimation = false
             }
     }
 }
@@ -78,7 +81,10 @@ struct GradientColoursBar: View {
             .scaleEffect(y: startAnimation ? CGFloat(data.value / maxValue) : 0, anchor: .bottom)
             .scaleEffect(x: style.barWidth, anchor: .center)
             .animateOnAppear(using: chartStyle.globalAnimation) {
-                self.startAnimation.toggle()
+                self.startAnimation = true
+            }
+            .animateOnDisAppear(using: chartStyle.globalAnimation) {
+                self.startAnimation = false
             }
     }
 }
@@ -120,7 +126,10 @@ struct GradientStopsBar: View {
             .scaleEffect(y: startAnimation ? CGFloat(data.value / maxValue) : 0, anchor: .bottom)
             .scaleEffect(x: style.barWidth, anchor: .center)
             .animateOnAppear(using: chartStyle.globalAnimation) {
-                self.startAnimation.toggle()
+                self.startAnimation = true
+            }
+            .animateOnDisAppear(using: chartStyle.globalAnimation) {
+                self.startAnimation = false
             }
     }
 }

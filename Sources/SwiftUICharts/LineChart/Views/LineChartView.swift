@@ -37,6 +37,9 @@ internal struct LineChartView: View {
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
+                        .animateOnDisAppear(using: chartData.chartStyle.globalAnimation) {
+                            self.startAnimation = false
+                        }
                 } else {
                     LineShape(chartData: chartData, lineType: style.lineType, isFilled: isFilled)
                         .trim(to: startAnimation ? 1 : 0)
@@ -44,6 +47,9 @@ internal struct LineChartView: View {
                         .modifier(LineShapeModifiers(chartData))
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
+                        }
+                        .animateOnDisAppear(using: chartData.chartStyle.globalAnimation) {
+                            self.startAnimation = false
                         }
                 }
                 
@@ -63,6 +69,9 @@ internal struct LineChartView: View {
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
+                        .animateOnDisAppear(using: chartData.chartStyle.globalAnimation) {
+                            self.startAnimation = false
+                        }
                 } else {
                     LineShape(chartData: chartData, lineType: style.lineType, isFilled: isFilled)
                         .trim(to: startAnimation ? 1 : 0)
@@ -70,6 +79,9 @@ internal struct LineChartView: View {
                         .modifier(LineShapeModifiers(chartData))
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
+                        }
+                        .animateOnDisAppear(using: chartData.chartStyle.globalAnimation) {
+                            self.startAnimation = false
                         }
                 }
             } else if style.colourType == .gradientStops,
@@ -89,6 +101,9 @@ internal struct LineChartView: View {
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
+                        .animateOnDisAppear(using: chartData.chartStyle.globalAnimation) {
+                            self.startAnimation = false
+                        }
                 } else {
                     LineShape(chartData: chartData, lineType: style.lineType, isFilled: isFilled)
                         .trim(to: startAnimation ? 1 : 0)
@@ -98,6 +113,9 @@ internal struct LineChartView: View {
                         .modifier(LineShapeModifiers(chartData))
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
+                        }
+                        .animateOnDisAppear(using: chartData.chartStyle.globalAnimation) {
+                            self.startAnimation = false
                         }
                 }
             }

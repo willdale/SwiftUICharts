@@ -26,4 +26,12 @@ extension View {
             }
         }
     }
+    
+    func animateOnDisAppear(using animation: Animation = Animation.easeInOut(duration: 1), _ action: @escaping () -> Void) -> some View {
+        return onDisappear {
+            withAnimation(animation) {
+                action()
+            }
+        }
+    }
 }

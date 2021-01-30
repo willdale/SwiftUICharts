@@ -59,8 +59,12 @@ internal struct HorizontalGridView: View {
                                        dashPhase: chartData.chartStyle.yAxisGridStyle.dashPhase))
             .frame(height: chartData.chartStyle.yAxisGridStyle.lineWidth)
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation.toggle()
+                self.startAnimation = true
             }
+            .animateOnDisAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
+            }
+        
     }
 }
 internal struct HorizontalGridShape: Shape {
