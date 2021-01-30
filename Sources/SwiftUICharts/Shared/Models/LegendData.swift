@@ -10,7 +10,7 @@ import SwiftUI
 /// Data model for Legends
 public struct LegendData: CTColourStyle, Hashable, Identifiable {
     
-    public var id: UUID = UUID()
+    public var id           : UUID
     
     var chartType           : ChartType
     public var colourType   : ColourType
@@ -41,12 +41,14 @@ public struct LegendData: CTColourStyle, Hashable, Identifiable {
     ///   - colour: Single Colour
     ///   - strokeStyle: Stroke Style
     ///   - prioity: Used to make sure the charts data legend is first
-    public init(legend     : String,
+    public init(id         : UUID,
+                legend     : String,
                 colour     : Color,
                 strokeStyle: Stroke?,
                 prioity    : Int,
                 chartType  : ChartType
     ) {
+        self.id          = id
         self.legend      = legend
         self.colour      = colour
         self.colours     = nil
@@ -67,7 +69,8 @@ public struct LegendData: CTColourStyle, Hashable, Identifiable {
     ///   - endPoint: End point for Gradient
     ///   - strokeStyle: Stroke Style
     ///   - prioity: Used to make sure the charts data legend is first
-    public init(legend     : String,
+    public init(id         : UUID,
+                legend     : String,
                 colours    : [Color],
                 startPoint : UnitPoint,
                 endPoint   : UnitPoint,
@@ -75,6 +78,7 @@ public struct LegendData: CTColourStyle, Hashable, Identifiable {
                 prioity    : Int,
                 chartType  : ChartType
     ) {
+        self.id          = id
         self.legend      = legend
         self.colour      = nil
         self.colours     = colours
@@ -95,7 +99,8 @@ public struct LegendData: CTColourStyle, Hashable, Identifiable {
     ///   - endPoint: End point for Gradient
     ///   - strokeStyle: Stroke Style
     ///   - prioity: Used to make sure the charts data legend is first
-    public init(legend     : String,
+    public init(id         : UUID,
+                legend     : String,
                 stops      : [GradientStop],
                 startPoint : UnitPoint,
                 endPoint   : UnitPoint,
@@ -103,6 +108,7 @@ public struct LegendData: CTColourStyle, Hashable, Identifiable {
                 prioity    : Int,
                 chartType  : ChartType
     ) {
+        self.id          = id
         self.legend      = legend
         self.colour      = nil
         self.colours     = nil

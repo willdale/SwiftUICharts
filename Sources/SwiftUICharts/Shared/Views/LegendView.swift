@@ -25,7 +25,6 @@ internal struct LegendView<T>: View where T: ChartData {
     internal var body: some View {
         
         LazyVGrid(columns: columns, alignment: .leading) {
-                        
             ForEach(chartData.legendOrder(), id: \.self) { legend in
                 
                 switch legend.chartType {
@@ -33,15 +32,15 @@ internal struct LegendView<T>: View where T: ChartData {
                 case .line:
                     
                     line(legend)
-                    
+
                 case .bar:
 
                     bar(legend)
-                   
-                case .pie:
-                    
-                    pie(legend)
 
+                case .pie:
+                                        
+                    pie(legend)
+                        .if(chartData.infoView.isTouchCurrent && legend.id == chartData.infoView.touchOverlayInfo[0].id as! UUID) { $0.scaleEffect(1.2, anchor: .leading) }
                 }
             }
         }

@@ -52,7 +52,8 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
                 .stroke(lineColour, style: strokeStyle)
                 .onAppear {
                     if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
-                        chartData.legends.append(LegendData(legend      : markerName,
+                        chartData.legends.append(LegendData(id          : UUID(),
+                                                            legend      : markerName,
                                                             colour      : lineColour,
                                                             strokeStyle : Stroke.strokeStyleToStroke(strokeStyle: strokeStyle),
                                                             prioity     : 2,
