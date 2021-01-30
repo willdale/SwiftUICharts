@@ -21,10 +21,12 @@ internal struct XAxisLabels: ViewModifier {
             case .line:
                 HStack(spacing: 0) {
                     ForEach(chartData.dataPoints, id: \.self) { data in
-                        Text(data.xAxisLabel ?? "")
+                        if let label = data.xAxisLabel {
+                        Text(label)
                             .font(.caption)
                             .lineLimit(1)
-                            .minimumScaleFactor(0.5)
+                            .minimumScaleFactor(0.75)
+                        }
                         if data != chartData.dataPoints[chartData.dataPoints.count - 1] {
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
@@ -39,14 +41,18 @@ internal struct XAxisLabels: ViewModifier {
             case .bar:
                 HStack(spacing: 0) {
                     ForEach(chartData.dataPoints, id: \.self) { data in
+                        if let label = data.xAxisLabel {
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
-                            Text(data.xAxisLabel ?? "")
+
+                            Text(label)
                                 .font(.caption)
                                 .lineLimit(1)
-                                .minimumScaleFactor(0.5)
+                                .minimumScaleFactor(0.75)
+
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
+                        }
                     }
                 }
                 .onAppear {
