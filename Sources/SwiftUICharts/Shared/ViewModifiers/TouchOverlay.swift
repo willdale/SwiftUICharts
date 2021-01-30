@@ -56,16 +56,16 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                                     
                                     self.selectedPoints = chartData.getDataPoint(touchLocation: touchLocation,
                                                                                  chartSize: geo)
+
                                     self.pointLocations = chartData.getPointLocation(touchLocation: touchLocation,
                                                                                      chartSize: geo)
                                     
-
                                     if chartData.getHeaderLocation() == .floating {
                                         
                                         setBoxLocationation(boxFrame: boxFrame, chartSize: geo)
                                         markerLocation.x = setMarkerXLocation(chartSize: geo)
                                         markerLocation.y = setMarkerYLocation(chartSize: geo)
-                                        
+                                                                                
                                     } else if chartData.getHeaderLocation() == .header {
                                         
                                         chartData.viewData.isTouchCurrent   = true

@@ -9,10 +9,7 @@ import Foundation
 
 /// Data model to pass view information internally so the layout can configure its self.
 public struct ChartViewData<D: ChartDataPoint> {
-        
-    /// Pass the type of chart being used to view modifiers.
-//    var chartTypchartData.chartTypee   : ChartType = .line
-    
+
     /// If the chart has labels on the X axis, the Y axis needs a different layout
     var hasXAxisLabels      : Bool = false
     

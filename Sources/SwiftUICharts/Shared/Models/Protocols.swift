@@ -19,6 +19,9 @@ public protocol ChartData: ObservableObject, Identifiable {
     var viewData    : ChartViewData<DataPoint> { get set }
     var noDataText  : Text { get set }
     var chartType   : (chartType: ChartType, dataSetType: DataSetType) { get }
+    
+    // Sets the order the Legends are layed out in.
+    /// - Returns: Ordered array of Legends.
     func legendOrder() -> [LegendData]
     func getHeaderLocation() -> InfoBoxPlacement
     
@@ -34,11 +37,11 @@ public protocol ChartData: ObservableObject, Identifiable {
     ///   - chartSize: The size of the chart view as the parent view.
     func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint]
     
-    func setupLegends() -> Void
+    func setupLegends() /*-> [LegendData]*/
 }
+
+
 extension ChartData {
-    /// Sets the order the Legends are layed out in.
-    /// - Returns: Ordered array of Legends.
     public func legendOrder() -> [LegendData] {
         return legends.sorted { $0.prioity < $1.prioity}
     }
@@ -107,8 +110,6 @@ public protocol CTColourStyle {
     var startPoint  : UnitPoint? { get set }
     var endPoint    : UnitPoint? { get set }
 }
-
-
 
 
 public protocol ChartDataPoint: Hashable, Identifiable {

@@ -9,33 +9,18 @@ import SwiftUI
 
 public struct PieChart<ChartData>: View where ChartData: PieChartData {
     
-    @ObservedObject var chartData   : ChartData
+    @ObservedObject var chartData : ChartData
     
-    let pieSegments : [PieSegmentShape]
     let strokeWidth : Double?
     
     @State var startAnimation : Bool = false
-    
+        
     public init(chartData  : ChartData,
                 strokeWidth: Double? = nil
     ) {
         self.chartData = chartData
         
         self.strokeWidth = strokeWidth
-        
-        var segments    = [PieSegmentShape]()
-        let total       = chartData.dataSets.dataPoints.reduce(0) { $0 + $1.value }
-        var startAngle  = -Double.pi / 2
-        
-        for data in chartData.dataSets.dataPoints {
-            let amount = .pi * 2 * (data.value / total)
-            let segment = PieSegmentShape(data: data, startAngle: startAngle, amount: amount)
-            segments.append(segment)
-            startAngle += amount
-        }
-        pieSegments = segments
-        
-        chartData.setupLegends()
     }
     
     @ViewBuilder
@@ -49,15 +34,24 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
     }
     
     public var body: some View {
-        ZStack {
-            ForEach(pieSegments) { segment in
-                segment
-                    .fill(segment.data.colour)
+        GeometryReader { geo in
+            ZStack {
+                ForEach(chartData.dataSets.dataPoints.indices, id: \.self) { data in
+                    PieSegmentShape(id:         chartData.dataSets.dataPoints[data].id,
+                                    startAngle: chartData.dataSets.dataPoints[data].startAngle,
+                                    amount:     chartData.dataSets.dataPoints[data].amount)
+                        .fill(chartData.dataSets.dataPoints[data].colour)
+                        .scaleEffect(startAnimation ? 1 : 0)
+                        .scaleEffect(chartData.viewData.isTouchCurrent ? 1 : 10)
+                        .opacity(startAnimation ? 1 : 0)
+                        .animation(Animation.spring().delay(Double(data) * 0.06))
+                        .if(chartData.viewData.isTouchCurrent) { $0.scaleEffect(2) }
+                }
             }
-        }
-        .mask(mask)
-        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-            self.startAnimation = true
+            .mask(mask)
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
         }
     }
 }

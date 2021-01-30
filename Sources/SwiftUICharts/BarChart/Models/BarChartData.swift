@@ -188,5 +188,6 @@ public class BarChartData: LineAndBarChartData {
     
     public typealias Set = BarDataSet
     public typealias DataPoint = BarChartDataPoint
+    
 }
 

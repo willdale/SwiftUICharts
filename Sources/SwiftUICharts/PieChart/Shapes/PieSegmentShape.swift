@@ -9,18 +9,9 @@ import SwiftUI
 
 internal struct PieSegmentShape: Shape, Identifiable {
     
-    let data        : PieChartDataPoint
-    var id          : UUID { data.id }
+    var id          : UUID
     var startAngle  : Double
     var amount      : Double
-    
-    var animatableData: AnimatablePair<Double, Double> {
-        get { AnimatablePair(startAngle, amount) }
-        set {
-            startAngle = newValue.first
-            amount = newValue.second
-        }
-    }
     
     internal func path(in rect: CGRect) -> Path {
         
