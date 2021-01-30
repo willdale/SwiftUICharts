@@ -9,14 +9,14 @@ import SwiftUI
 
 public class PieChartData: PieChartDataProtocol {
     
-    @Published public var id: UUID = UUID()
-    @Published public var dataSets: PieDataSet
-    @Published public var metadata: ChartMetadata?
-    @Published public var xAxisLabels: [String]?
-    @Published public var chartStyle: PieChartStyle
-    @Published public var legends: [LegendData]
-    @Published public var viewData: ChartViewData<PieChartDataPoint>
-    
+    @Published public var id            : UUID = UUID()
+    @Published public var dataSets      : PieDataSet
+    @Published public var metadata      : ChartMetadata?
+    @Published public var xAxisLabels   : [String]?
+    @Published public var chartStyle    : PieChartStyle
+    @Published public var legends       : [LegendData]
+    @Published public var viewData      : ChartViewData<PieChartDataPoint>
+        
     public var noDataText: Text
     public var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
@@ -34,52 +34,92 @@ public class PieChartData: PieChartDataProtocol {
         self.viewData    = ChartViewData()
         self.noDataText  = noDataText
         self.chartType   = (chartType: .pie, dataSetType: .single)
+        
+        self.setupLegends()
+        
+        self.makeDataPoints()
+    }
+    
+    internal func makeDataPoints() {
+        let total       = self.dataSets.dataPoints.reduce(0) { $0 + $1.value }
+        var startAngle  = -Double.pi / 2
+        
+        self.dataSets.dataPoints.indices.forEach { (point) in
+            let amount = .pi * 2 * (self.dataSets.dataPoints[point].value / total)
+            self.dataSets.dataPoints[point].amount = amount
+            self.dataSets.dataPoints[point].startAngle = startAngle
+            startAngle += amount
+        }
     }
     
     public func getHeaderLocation() -> InfoBoxPlacement {
         return self.chartStyle.infoBoxPlacement
     }
-    
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [PieChartDataPoint] {
-        let points : [PieChartDataPoint] = []
 
+    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [PieChartDataPoint] {
+        var points : [PieChartDataPoint] = []
+        let touchDegree = degree(from: touchLocation, in: chartSize.frame(in: .local))
+        let dataPoint = self.dataSets.dataPoints.first(where: { $0.startAngle * Double(180 / Double.pi) <= Double(touchDegree) && ($0.startAngle * Double(180 / Double.pi)) + ($0.amount * Double(180 / Double.pi)) >= Double(touchDegree) } )
+        if let data = dataPoint {
+            points.append(data)
+        }
         return points
     }
     
     public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
+        
+        
         return [HashablePoint(x: 0, y: 0)]
     }
     
     public func setupLegends() {
-        if dataSets.style.colourType == .colour,
-           let colour = dataSets.style.colour
-        {
-            self.legends.append(LegendData(legend     : dataSets.legendTitle,
-                                           colour     : colour,
-                                           strokeStyle: nil,
-                                           prioity    : 1,
-                                           chartType  : .bar))
-        } else if dataSets.style.colourType == .gradientColour,
-                  let colours = dataSets.style.colours
-        {
-            self.legends.append(LegendData(legend     : dataSets.legendTitle,
-                                           colours    : colours,
-                                           startPoint : .leading,
-                                           endPoint   : .trailing,
-                                           strokeStyle: nil,
-                                           prioity    : 1,
-                                           chartType  : .bar))
-        } else if dataSets.style.colourType == .gradientStops,
-                  let stops = dataSets.style.stops
-        {
-            self.legends.append(LegendData(legend     : dataSets.legendTitle,
-                                           stops      : stops,
-                                           startPoint : .leading,
-                                           endPoint   : .trailing,
-                                           strokeStyle: nil,
-                                           prioity    : 1,
-                                           chartType  : .bar))
+        for data in dataSets.dataPoints {
+            if let legend = data.pointDescription {
+                self.legends.append(LegendData(legend     : legend,
+                                               colour     : data.colour,
+                                               strokeStyle: nil,
+                                               prioity    : 1,
+                                               chartType  : .pie))
+            }
         }
+    }
+    
+    
+    func degree(from touchLocation: CGPoint, in rect: CGRect) -> CGFloat {
+        
+        // http://www.cplusplus.com/reference/cmath/atan2/
+        // https://stackoverflow.com/a/25398191
+        
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        
+        let coordinates = CGPoint(x: touchLocation.x - center.x,
+                                  y: touchLocation.y - center.y)
+            
+        // -90 is north
+        let degrees = atan2(-coordinates.x, -coordinates.y) * CGFloat(180 / Double.pi)
+        if (degrees > 0) {
+            return 270 - degrees
+        } else {
+            return -90 - degrees
+        }
+
+        
+        /*
+        // Where 0 is north
+        let degrees = atan2(-x, -y) * CGFloat(180 / Double.pi)
+        if (degrees > 0) {
+            return 360 - degrees
+        } else {
+           return 0 - degrees
+        }
+        
+         Where 0 is East
+        var degrees = atan2(y, x) * CGFloat(180 / Double.pi)
+        if (degrees < 0) {
+            degrees = 360 + degrees
+        }
+        return degrees
+        */
     }
     
     public typealias Set = PieDataSet
@@ -95,6 +135,9 @@ public struct PieChartDataPoint: ChartDataPoint {
     public var date             : Date?
     
     public var colour           : Color
+    
+    var startAngle  : Double = 0
+    var amount      : Double = 0
     
     public init(value           : Double,
                 xAxisLabel      : String?   = nil,
