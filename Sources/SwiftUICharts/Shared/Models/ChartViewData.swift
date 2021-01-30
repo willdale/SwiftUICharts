@@ -8,7 +8,7 @@
 import Foundation
 
 /// Data model to pass view information internally so the layout can configure its self.
-public struct ChartViewData<D: ChartDataPoint> {
+public struct ChartViewData {
 
     /// If the chart has labels on the X axis, the Y axis needs a different layout
     var hasXAxisLabels      : Bool = false
@@ -16,6 +16,10 @@ public struct ChartViewData<D: ChartDataPoint> {
     /// If the chart has labels on the Y axis, the X axis needs a different layout
     var hasYAxisLabels      : Bool = false
     
+}
+
+/// Data model to pass view information internally so the layout can configure its self.
+public struct InfoViewData<DP: ChartDataPoint> {
     /**
     Is there currently input (touch or click) on the chart
     
@@ -31,7 +35,7 @@ public struct ChartViewData<D: ChartDataPoint> {
      
      Used by TitleBox
      */
-    var touchOverlayInfo    : [D] = []
+    var touchOverlayInfo    : [DP] = []
     /**
      Set specifier of data point readout
      

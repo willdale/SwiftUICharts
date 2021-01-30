@@ -17,8 +17,6 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
     private let specifier               : String
     private let touchMarkerLineWidth    : CGFloat = 1 // API?
 
-    /// Boolean that indicates whether touch is currently being detected
-    @State private var isTouchCurrent   : Bool      = false
     /// Current location of the touch input
     @State private var touchLocation    : CGPoint   = CGPoint(x: 0, y: 0)
     /// The data point closest to the touch input
@@ -52,7 +50,6 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                             DragGesture(minimumDistance: 0)
                                 .onChanged { (value) in
                                     touchLocation   = value.location
-                                    isTouchCurrent  = true
                                     
                                     self.selectedPoints = chartData.getDataPoint(touchLocation: touchLocation,
                                                                                  chartSize: geo)
@@ -68,16 +65,16 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                                                                                 
                                     } else if chartData.getHeaderLocation() == .header {
                                         
-                                        chartData.viewData.isTouchCurrent   = true
-                                        chartData.viewData.touchOverlayInfo = selectedPoints
+                                        chartData.infoView.isTouchCurrent   = true
+                                        chartData.infoView.touchOverlayInfo = selectedPoints
                                     }
                                 }
                                 .onEnded { _ in
-                                    isTouchCurrent = false
-                                    chartData.viewData.isTouchCurrent = false
+                                    chartData.infoView.isTouchCurrent = false
+                                    chartData.infoView.touchOverlayInfo = []
                                 }
                         )
-                    if isTouchCurrent {
+                    if chartData.infoView.isTouchCurrent {
                         ForEach(pointLocations, id: \.self) { location in
                             TouchOverlayMarker(position: location)
                                 .stroke(Color(.gray), lineWidth: touchMarkerLineWidth)

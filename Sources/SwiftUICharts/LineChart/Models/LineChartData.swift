@@ -28,7 +28,9 @@ public class LineChartData: LineAndBarChartData, LineChartProtocol {
     @Published public var legends       : [LegendData]
     
     /// Data model to hold data about the Views layout.
-    @Published public var viewData      : ChartViewData<LineChartDataPoint>
+    @Published public var viewData      : ChartViewData
+    
+    @Published public var infoView      : InfoViewData<LineChartDataPoint> = InfoViewData()
     
     public var noDataText   : Text      = Text("No Data")
     
@@ -37,7 +39,7 @@ public class LineChartData: LineAndBarChartData, LineChartProtocol {
     public init(dataSets    : LineDataSet,
                 metadata    : ChartMetadata?    = nil,
                 xAxisLabels : [String]?         = nil,
-                chartStyle  : LineChartStyle = LineChartStyle(),
+                chartStyle  : LineChartStyle    = LineChartStyle(),
                 calculations: CalculationType   = .none
     ) {
         self.dataSets       = dataSets
@@ -93,10 +95,12 @@ public class LineChartData: LineAndBarChartData, LineChartProtocol {
     public func getXAxidLabels() -> some View {
         HStack(spacing: 0) {
             ForEach(dataSets.dataPoints) { data in
-                Text(data.xAxisLabel ?? "")
-                    .font(.caption)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.5)
+                if let label = data.xAxisLabel {
+                    Text(label)
+                        .font(.caption)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
+                }
                 if data != self.dataSets.dataPoints[self.dataSets.dataPoints.count - 1] {
                     Spacer()
                         .frame(minWidth: 0, maxWidth: 500)
@@ -135,7 +139,8 @@ public class LineChartData: LineAndBarChartData, LineChartProtocol {
         if dataSets.style.colourType == .colour,
            let colour = dataSets.style.colour
         {
-            self.legends.append(LegendData(legend     : dataSets.legendTitle,
+            self.legends.append(LegendData(id         : dataSets.id,
+                                           legend     : dataSets.legendTitle,
                                            colour     : colour,
                                            strokeStyle: dataSets.style.strokeStyle,
                                            prioity    : 1,
@@ -144,7 +149,8 @@ public class LineChartData: LineAndBarChartData, LineChartProtocol {
         } else if dataSets.style.colourType == .gradientColour,
                   let colours = dataSets.style.colours
         {
-            self.legends.append(LegendData(legend     : dataSets.legendTitle,
+            self.legends.append(LegendData(id         : dataSets.id,
+                                           legend     : dataSets.legendTitle,
                                            colours    : colours,
                                            startPoint : .leading,
                                            endPoint   : .trailing,
@@ -155,7 +161,8 @@ public class LineChartData: LineAndBarChartData, LineChartProtocol {
         } else if dataSets.style.colourType == .gradientStops,
                   let stops = dataSets.style.stops
         {
-            self.legends.append(LegendData(legend     : dataSets.legendTitle,
+            self.legends.append(LegendData(id         : dataSets.id,
+                                           legend     : dataSets.legendTitle,
                                            stops      : stops,
                                            startPoint : .leading,
                                            endPoint   : .trailing,

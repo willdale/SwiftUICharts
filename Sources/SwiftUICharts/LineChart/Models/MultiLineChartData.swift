@@ -28,7 +28,9 @@ public class MultiLineChartData: LineAndBarChartData, LineChartProtocol {
     @Published public var legends       : [LegendData]
     
     /// Data model to hold data about the Views layout.
-    @Published public var viewData      : ChartViewData<LineChartDataPoint>
+    @Published public var viewData      : ChartViewData
+    
+    @Published public var infoView      : InfoViewData<LineChartDataPoint> = InfoViewData()
     
     public var noDataText   : Text = Text("No Data")
     
@@ -98,10 +100,12 @@ public class MultiLineChartData: LineAndBarChartData, LineChartProtocol {
     public func getXAxidLabels() -> some View {
         HStack(spacing: 0) {
             ForEach(dataSets.dataSets[0].dataPoints) { data in
-                Text(data.xAxisLabel ?? "")
-                    .font(.caption)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.5)
+                if let label = data.xAxisLabel {
+                    Text(label)
+                        .font(.caption)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
+                }
                 if data != self.dataSets.dataSets[0].dataPoints[self.dataSets.dataSets[0].dataPoints.count - 1] {
                     Spacer()
                         .frame(minWidth: 0, maxWidth: 500)
@@ -141,7 +145,8 @@ public class MultiLineChartData: LineAndBarChartData, LineChartProtocol {
             if dataSet.style.colourType == .colour,
                let colour = dataSet.style.colour
             {
-                self.legends.append(LegendData(legend     : dataSet.legendTitle,
+                self.legends.append(LegendData(id         : dataSets.id,
+                                               legend     : dataSet.legendTitle,
                                                colour     : colour,
                                                strokeStyle: dataSet.style.strokeStyle,
                                                prioity    : 1,
@@ -150,7 +155,8 @@ public class MultiLineChartData: LineAndBarChartData, LineChartProtocol {
             } else if dataSet.style.colourType == .gradientColour,
                       let colours = dataSet.style.colours
             {
-                self.legends.append(LegendData(legend     : dataSet.legendTitle,
+                self.legends.append(LegendData(id         : dataSets.id,
+                                               legend     : dataSet.legendTitle,
                                                colours    : colours,
                                                startPoint : .leading,
                                                endPoint   : .trailing,
@@ -161,7 +167,8 @@ public class MultiLineChartData: LineAndBarChartData, LineChartProtocol {
             } else if dataSet.style.colourType == .gradientStops,
                       let stops = dataSet.style.stops
             {
-                self.legends.append(LegendData(legend     : dataSet.legendTitle,
+                self.legends.append(LegendData(id         : dataSets.id,
+                                               legend     : dataSet.legendTitle,
                                                stops      : stops,
                                                startPoint : .leading,
                                                endPoint   : .trailing,

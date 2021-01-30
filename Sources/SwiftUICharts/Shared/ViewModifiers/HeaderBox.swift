@@ -44,9 +44,9 @@ internal struct HeaderBox<T>: ViewModifier where T: ChartData {
     
     var touchOverlay: some View {
         VStack(alignment: .trailing) {
-            if chartData.viewData.isTouchCurrent {
-                ForEach(chartData.viewData.touchOverlayInfo, id: \.self) { info in
-                    Text("\(info.value, specifier: chartData.viewData.touchSpecifier)")
+            if chartData.infoView.isTouchCurrent {
+                ForEach(chartData.infoView.touchOverlayInfo, id: \.self) { info in
+                    Text("\(info.value, specifier: chartData.infoView.touchSpecifier)")
                         .font(.title3)
                     Text("\(info.pointDescription ?? "")")
                         .font(.subheadline)
@@ -60,40 +60,43 @@ internal struct HeaderBox<T>: ViewModifier where T: ChartData {
         }
     }
     
-    @ViewBuilder
+    
     internal func body(content: Content) -> some View {
 //        if chartData.isGreaterThanTwo {
-        #if !os(tvOS)
         
-        if chartData.getHeaderLocation() == .floating {
+        Group {
+            #if !os(tvOS)
+            if chartData.getHeaderLocation() == .floating {
+                VStack(alignment: .leading) {
+                    titleBox
+                    content
+                }
+            } else if chartData.getHeaderLocation() == .header {
+                VStack(alignment: .leading) {
+                    HStack(spacing: 0) {
+                        HStack(spacing: 0) {
+                            titleBox
+                            Spacer()
+                        }
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        Spacer()
+                        HStack(spacing: 0) {
+                            Spacer()
+                            touchOverlay
+                        }
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                    }
+                    content
+                }
+            }
+            
+            #elseif os(tvOS)
             VStack(alignment: .leading) {
                 titleBox
                 content
             }
-        } else if chartData.getHeaderLocation() == .header {
-            VStack(alignment: .leading) {
-                HStack(spacing: 0) {
-                    HStack(spacing: 0) {
-                        titleBox
-                        Spacer()
-                    }
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    Spacer()
-                    HStack(spacing: 0) {
-                        Spacer()
-                        touchOverlay
-                    }
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                }
-                content
-            }
+            #endif
         }
-        #elseif os(tvOS)
-        VStack(alignment: .leading) {
-            titleBox
-            content
-        }
-        #endif
 //        } else { content }
     }
 }

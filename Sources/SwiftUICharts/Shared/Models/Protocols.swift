@@ -16,7 +16,7 @@ public protocol ChartData: ObservableObject, Identifiable {
     var metadata    : ChartMetadata? { get set }
     var xAxisLabels : [String]? { get set } // Not pie
     var legends     : [LegendData] { get set }
-    var viewData    : ChartViewData<DataPoint> { get set }
+    var infoView    : InfoViewData<DataPoint> { get set }
     var noDataText  : Text { get set }
     var chartType   : (chartType: ChartType, dataSetType: DataSetType) { get }
     
@@ -37,7 +37,7 @@ public protocol ChartData: ObservableObject, Identifiable {
     ///   - chartSize: The size of the chart view as the parent view.
     func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint]
     
-    func setupLegends() /*-> [LegendData]*/
+    func setupLegends()
 }
 
 
@@ -52,6 +52,7 @@ public protocol LineAndBarChartData : ChartData {
     associatedtype Body  : View
     
     var chartStyle  : Style { get set }
+    var viewData    : ChartViewData { get set }
     
     func getXAxidLabels() -> Body
     func getYLabels() -> [Double]

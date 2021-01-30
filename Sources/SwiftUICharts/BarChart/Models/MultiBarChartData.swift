@@ -16,7 +16,9 @@ public class MultiBarChartData: LineAndBarChartData {
     @Published public var xAxisLabels  : [String]?
     @Published public var chartStyle   : BarChartStyle
     @Published public var legends      : [LegendData]
-    @Published public var viewData     : ChartViewData<BarChartDataPoint>
+    @Published public var viewData     : ChartViewData
+    @Published public var infoView      : InfoViewData<BarChartDataPoint> = InfoViewData()
+    
     public var noDataText   : Text  = Text("No Data")
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
 
@@ -127,7 +129,8 @@ public class MultiBarChartData: LineAndBarChartData {
             if dataSets.dataSets[0].style.colourType == .colour,
                let colour = dataSets.dataSets[0].style.colour
             {
-                self.legends.append(LegendData(legend     : dataSets.dataSets[0].legendTitle,
+                self.legends.append(LegendData(id         : dataSets.dataSets[0].id,
+                                               legend     : dataSets.dataSets[0].legendTitle,
                                                colour     : colour,
                                                strokeStyle: nil,
                                                prioity    : 1,
@@ -135,7 +138,8 @@ public class MultiBarChartData: LineAndBarChartData {
             } else if dataSets.dataSets[0].style.colourType == .gradientColour,
                       let colours = dataSets.dataSets[0].style.colours
             {
-                self.legends.append(LegendData(legend     : dataSets.dataSets[0].legendTitle,
+                self.legends.append(LegendData(id         : dataSets.dataSets[0].id,
+                                               legend     : dataSets.dataSets[0].legendTitle,
                                                colours    : colours,
                                                startPoint : .leading,
                                                endPoint   : .trailing,
@@ -145,7 +149,8 @@ public class MultiBarChartData: LineAndBarChartData {
             } else if dataSets.dataSets[0].style.colourType == .gradientStops,
                       let stops = dataSets.dataSets[0].style.stops
             {
-                self.legends.append(LegendData(legend     : dataSets.dataSets[0].legendTitle,
+                self.legends.append(LegendData(id         : dataSets.dataSets[0].id,
+                                               legend     : dataSets.dataSets[0].legendTitle,
                                                stops      : stops,
                                                startPoint : .leading,
                                                endPoint   : .trailing,
@@ -161,7 +166,8 @@ public class MultiBarChartData: LineAndBarChartData {
                    let colour = data.colour,
                    let legend = data.pointDescription
                 {
-                    self.legends.append(LegendData(legend     : legend,
+                    self.legends.append(LegendData(id         : data.id,
+                                                   legend     : legend,
                                                    colour     : colour,
                                                    strokeStyle: nil,
                                                    prioity    : 1,
@@ -170,7 +176,8 @@ public class MultiBarChartData: LineAndBarChartData {
                           let colours = data.colours,
                           let legend = data.pointDescription
                 {
-                    self.legends.append(LegendData(legend     : legend,
+                    self.legends.append(LegendData(id         : data.id,
+                                                   legend     : legend,
                                                    colours    : colours,
                                                    startPoint : .leading,
                                                    endPoint   : .trailing,
@@ -181,7 +188,8 @@ public class MultiBarChartData: LineAndBarChartData {
                           let stops = data.stops,
                           let legend = data.pointDescription
                 {
-                    self.legends.append(LegendData(legend     : legend,
+                    self.legends.append(LegendData(id         : data.id,
+                                                   legend     : legend,
                                                    stops      : stops,
                                                    startPoint : .leading,
                                                    endPoint   : .trailing,

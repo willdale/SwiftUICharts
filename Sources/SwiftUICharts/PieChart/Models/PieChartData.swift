@@ -15,8 +15,8 @@ public class PieChartData: PieChartDataProtocol {
     @Published public var xAxisLabels   : [String]?
     @Published public var chartStyle    : PieChartStyle
     @Published public var legends       : [LegendData]
-    @Published public var viewData      : ChartViewData<PieChartDataPoint>
-        
+    @Published public var infoView      : InfoViewData<PieChartDataPoint>
+            
     public var noDataText: Text
     public var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
@@ -31,7 +31,7 @@ public class PieChartData: PieChartDataProtocol {
         self.xAxisLabels = xAxisLabels
         self.chartStyle  = chartStyle
         self.legends     = [LegendData]()
-        self.viewData    = ChartViewData()
+        self.infoView    = InfoViewData()
         self.noDataText  = noDataText
         self.chartType   = (chartType: .pie, dataSetType: .single)
         
@@ -43,11 +43,14 @@ public class PieChartData: PieChartDataProtocol {
     internal func makeDataPoints() {
         let total       = self.dataSets.dataPoints.reduce(0) { $0 + $1.value }
         var startAngle  = -Double.pi / 2
-        
+
         self.dataSets.dataPoints.indices.forEach { (point) in
             let amount = .pi * 2 * (self.dataSets.dataPoints[point].value / total)
             self.dataSets.dataPoints[point].amount = amount
             self.dataSets.dataPoints[point].startAngle = startAngle
+            
+            print(startAngle, amount)
+            
             startAngle += amount
         }
     }
@@ -68,14 +71,14 @@ public class PieChartData: PieChartDataProtocol {
     
     public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
         
-        
-        return [HashablePoint(x: 0, y: 0)]
+        return [HashablePoint(x: touchLocation.x, y: touchLocation.y)]
     }
     
     public func setupLegends() {
         for data in dataSets.dataPoints {
             if let legend = data.pointDescription {
-                self.legends.append(LegendData(legend     : legend,
+                self.legends.append(LegendData(id         : data.id,
+                                               legend     : legend,
                                                colour     : data.colour,
                                                strokeStyle: nil,
                                                prioity    : 1,
