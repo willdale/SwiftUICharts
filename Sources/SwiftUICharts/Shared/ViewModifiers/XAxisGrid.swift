@@ -55,7 +55,10 @@ internal struct VerticalGridView<T>: View where T: LineAndBarChartData {
                                        dashPhase: chartData.chartStyle.xAxisGridStyle.dashPhase))
             .frame(width: chartData.chartStyle.xAxisGridStyle.lineWidth)
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation.toggle()
+                self.startAnimation = true
+            }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
             }
     }
 }

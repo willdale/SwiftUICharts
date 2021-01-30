@@ -18,8 +18,8 @@ extension View {
 extension View {
     @ViewBuilder
     func `ifElse`<TrueContent: View, FalseContent: View>(_ condition: Bool,
-                                                     if ifTransform: (Self) -> TrueContent,
-                                                     else elseTransform: (Self) -> FalseContent
+                                                         if ifTransform: (Self) -> TrueContent,
+                                                         else elseTransform: (Self) -> FalseContent
     ) -> some View {
         
         if condition {
@@ -40,4 +40,12 @@ extension View {
             }
         }
     }
+    
+    func animateOnDisappear(using animation: Animation = Animation.easeInOut(duration: 1), _ action: @escaping () -> Void) -> some View {
+            return onDisappear {
+                withAnimation(animation) {
+                    action()
+                }
+            }
+        }
 }

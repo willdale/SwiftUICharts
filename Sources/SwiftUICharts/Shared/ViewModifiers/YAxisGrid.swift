@@ -59,7 +59,10 @@ internal struct HorizontalGridView<T>: View where T: LineAndBarChartData {
                                        dashPhase: chartData.chartStyle.yAxisGridStyle.dashPhase))
             .frame(height: chartData.chartStyle.yAxisGridStyle.lineWidth)
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation.toggle()
+                self.startAnimation = true
+            }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
             }
     }
 }

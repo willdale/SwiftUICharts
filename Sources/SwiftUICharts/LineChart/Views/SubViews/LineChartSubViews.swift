@@ -37,6 +37,9 @@ struct LineChartColourSubView<CD>: View where CD: LineAndBarChartData {
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
+            }
     }
 }
 
@@ -81,6 +84,9 @@ struct LineChartColoursSubView<CD>: View where CD: LineAndBarChartData {
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
+            }
     }
 }
 
@@ -123,6 +129,9 @@ struct LineChartStopsSubView<CD>: View where CD: LineAndBarChartData {
             .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
+            }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
             }
     }
 }
