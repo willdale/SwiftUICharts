@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+public enum Baseline {
+    case minimumValue
+    case zero
+}
+
 internal struct LineShape: Shape {
            
     private let chartData   : ChartData
@@ -16,6 +21,9 @@ internal struct LineShape: Shape {
     /// If it's to be filled some extra lines need to be drawn
     private let isFilled    : Bool
     
+    private let minValue : Double
+    private let range    : Double
+    
     internal init(chartData : ChartData,
                   lineType  : LineType,
                   isFilled  : Bool
@@ -23,13 +31,19 @@ internal struct LineShape: Shape {
         self.chartData  = chartData
         self.lineType   = lineType
         self.isFilled   = isFilled
+        
+        switch chartData.lineStyle.baseline {
+        case .minimumValue:
+            self.minValue = chartData.minValue()
+            self.range    = chartData.range()
+        case .zero:
+            self.minValue = 0
+            self.range    = chartData.maxValue()
+        }
     }
   
     internal func path(in rect: CGRect) -> Path {
-        
-        let minValue: Double = chartData.minValue()
-        let range   : Double = chartData.range()
-                
+              
         var path = Path()
                     
             let x : CGFloat = rect.width / CGFloat(chartData.dataPoints.count - 1)
@@ -41,23 +55,23 @@ internal struct LineShape: Shape {
             
             var previousPoint = firstPoint
             
-            if !chartData.lineStyle.ignoreZero {
+//            if !chartData.lineStyle.ignoreZero {
                 for index in 1 ..< chartData.dataPoints.count - 1 {
                     let nextPoint = CGPoint(x: CGFloat(index) * x,
                                             y: (CGFloat(chartData.dataPoints[index].value - minValue) * -y) + rect.height)
                     lineSwitch(&path, nextPoint, previousPoint)
                     previousPoint = nextPoint
                 }
-            } else {
-                for index in 1 ..< chartData.dataPoints.count - 1 {
-                    if chartData.dataPoints[index].value != 0 {
-                        let nextPoint = CGPoint(x: CGFloat(index) * x,
-                                                y: (CGFloat(chartData.dataPoints[index].value - minValue) * -y) + rect.height)
-                        lineSwitch(&path, nextPoint, previousPoint)
-                        previousPoint = nextPoint
-                    }
-                }
-            }
+//            } else {
+//                for index in 1 ..< chartData.dataPoints.count - 1 {
+//                    if chartData.dataPoints[index].value != 0 {
+//                        let nextPoint = CGPoint(x: CGFloat(index) * x,
+//                                                y: (CGFloat(chartData.dataPoints[index].value - minValue) * -y) + rect.height)
+//                        lineSwitch(&path, nextPoint, previousPoint)
+//                        previousPoint = nextPoint
+//                    }
+//                }
+//            }
             
             let lastPoint = CGPoint(x: CGFloat(chartData.dataPoints.count-1) * x,
                                     y: (CGFloat(chartData.dataPoints[chartData.dataPoints.count-1].value - minValue) * -y) + rect.height)

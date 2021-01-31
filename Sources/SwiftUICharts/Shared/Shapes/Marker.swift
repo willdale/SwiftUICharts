@@ -16,6 +16,9 @@ internal struct Marker: Shape {
     
     private let chartType   : ChartType
     
+    private let minValue : Double
+    private let range    : Double
+    
     internal init(chartData   : ChartData,
                   markerValue : Double = 0,
                   isAverage   : Bool,
@@ -25,12 +28,19 @@ internal struct Marker: Shape {
         self.markerValue = markerValue
         self.isAverage   = isAverage
         self.chartType   = chartType
+        
+        switch chartData.lineStyle.baseline {
+        case .minimumValue:
+            self.minValue = chartData.minValue()
+            self.range    = chartData.range()
+        case .zero:
+            self.minValue = 0
+            self.range    = chartData.maxValue()
+        }
     }
     
     internal func path(in rect: CGRect) -> Path {
         
-        let range   : Double = chartData.range()
-        let minValue: Double = chartData.minValue()
         let value   : Double = isAverage ? chartData.average() : markerValue
         
         var path  = Path()

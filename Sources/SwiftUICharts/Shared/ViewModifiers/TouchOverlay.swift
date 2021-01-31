@@ -107,8 +107,17 @@ internal struct TouchOverlay: ViewModifier {
     ///   - chartSize: The size of the chart view as the parent view.
     internal func getPointLocationLineChart(touchLocation: CGPoint, chartSize: GeometryProxy) /* -> CGPoint */ {
         
-        let range    = chartData.range()
-        let minValue = chartData.minValue()
+        let minValue : Double
+        let range    : Double
+        
+        switch chartData.lineStyle.baseline {
+        case .minimumValue:
+            minValue = chartData.minValue()
+            range    = chartData.range()
+        case .zero:
+            minValue = 0
+            range    = chartData.maxValue()
+        }
         
         let dataPointCount : Int = chartData.dataPoints.count
         let xSection : CGFloat = chartSize.size.width / CGFloat(dataPointCount - 1)

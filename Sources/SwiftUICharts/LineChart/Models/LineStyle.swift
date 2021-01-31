@@ -15,6 +15,8 @@ public struct LineStyle {
     /// Drawing style of the line
     public var lineType    : LineType
     
+    public var baseline    : Baseline
+    
     public var strokeStyle : StrokeStyle
      
     /// Single Colour
@@ -52,6 +54,7 @@ public struct LineStyle {
                                                         miterLimit: 10,
                                                         dash: [CGFloat](),
                                                         dashPhase: 0),
+                baseline    : Baseline   = .minimumValue,
                 ignoreZero  : Bool       = false
     ) {
         self.colourType     = .colour
@@ -64,6 +67,7 @@ public struct LineStyle {
         self.startPoint = nil
         self.endPoint   = nil
                 
+        self.baseline  = baseline
         self.ignoreZero = ignoreZero
     }
     
@@ -86,6 +90,7 @@ public struct LineStyle {
                                                         miterLimit: 10,
                                                         dash: [CGFloat](),
                                                         dashPhase: 0),
+                baseline    : Baseline   = .minimumValue,
                 ignoreZero  : Bool       = false
     ) {
         self.colourType  = .gradientColour
@@ -98,6 +103,7 @@ public struct LineStyle {
         self.startPoint = startPoint
         self.endPoint   = endPoint
                 
+        self.baseline  = baseline
         self.ignoreZero = ignoreZero
     }
     
@@ -113,13 +119,13 @@ public struct LineStyle {
                 startPoint  : UnitPoint         =  .leading,
                 endPoint    : UnitPoint         =  .trailing,
                 lineType    : LineType          = .curvedLine,
-                
                 strokeStyle : StrokeStyle = StrokeStyle(lineWidth: 3,
                                                         lineCap: .round,
                                                         lineJoin: .round,
                                                         miterLimit: 10,
                                                         dash: [CGFloat](),
                                                         dashPhase: 0),
+                baseline    : Baseline   = .minimumValue,
                 ignoreZero  : Bool       = false
     ) {
         self.colourType     = .gradientStops
@@ -131,6 +137,7 @@ public struct LineStyle {
         self.stops          = stops
         self.startPoint     = startPoint
         self.endPoint       = endPoint
+        self.baseline  = baseline
                 
         self.ignoreZero     = ignoreZero
     }

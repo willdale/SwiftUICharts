@@ -34,7 +34,19 @@ internal struct Point: Shape {
                 
         switch chartType {
         case .line:
-            lineChartDrawPoints(&path, rect, chartData.minValue(), chartData.range())
+            
+            let minValue : Double
+            let range    : Double
+            
+            switch chartData.lineStyle.baseline {
+            case .minimumValue:
+                minValue = chartData.minValue()
+                range    = chartData.range()
+            case .zero:
+                minValue = 0
+                range    = chartData.maxValue()
+            }
+            lineChartDrawPoints(&path, rect, minValue, range)
         case .bar:
             barChartDrawPoints(&path, rect, chartData.minValue(), chartData.maxValue())
         }
