@@ -30,6 +30,10 @@ public enum CalculationType {
 }
 
 // MARK: - ChartViewData
+public enum DataSetType {
+    case single
+    case multi
+}
 /**
  Pass the type of chart being used to view modifiers.
  ```

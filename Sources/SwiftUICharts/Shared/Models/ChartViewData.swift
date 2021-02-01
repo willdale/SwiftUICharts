@@ -19,7 +19,7 @@ public struct ChartViewData {
 }
 
 /// Data model to pass view information internally so the layout can configure its self.
-public struct InfoViewData<DP: ChartDataPoint> {
+public struct InfoViewData<DP: CTChartDataPoint> {
     /**
     Is there currently input (touch or click) on the chart
     

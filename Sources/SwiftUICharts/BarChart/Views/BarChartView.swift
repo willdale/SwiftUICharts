@@ -10,14 +10,9 @@ import SwiftUI
 public struct BarChart<ChartData>: View where ChartData: BarChartData {
     
     @ObservedObject var chartData: ChartData
-    
-    let maxValue : Double
-    
+        
     public init(chartData: ChartData) {
         self.chartData = chartData
-        self.maxValue = DataFunctions.maxValue(dataPoints: chartData.dataSets.dataPoints)
-
-        chartData.setupLegends()
     }
     
     public var body: some View {
@@ -32,7 +27,7 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
                                            dataPoint: dataPoint,
                                            style: chartData.dataSets.style,
                                            chartStyle: chartData.chartStyle,
-                                           maxValue: maxValue)
+                                           maxValue: chartData.getMaxValue())
 
                 case .dataPoints:
                     
@@ -40,7 +35,7 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
                                              dataPoint   : dataPoint,
                                              style       : chartData.dataSets.style,
                                              chartStyle  : chartData.chartStyle,
-                                             maxValue    : maxValue)
+                                             maxValue    : chartData.getMaxValue())
 
                 }
             }

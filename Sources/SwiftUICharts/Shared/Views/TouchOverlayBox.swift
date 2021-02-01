@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-internal struct TouchOverlayBox<D: ChartDataPoint>: View {
+internal struct TouchOverlayBox<D: CTChartDataPoint>: View {
     
     private var selectedPoints  : [D]
     private var specifier       : String
@@ -35,8 +35,6 @@ internal struct TouchOverlayBox<D: ChartDataPoint>: View {
                     Text("\(point.value, specifier: specifier)")
                 }
                 if let label = point.pointDescription {
-                    Text(label)
-                } else if let label = point.xAxisLabel {
                     Text(label)
                 }
             }

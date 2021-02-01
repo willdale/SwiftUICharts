@@ -8,8 +8,9 @@
 import SwiftUI
 
 /// Replica of Apple's `StrokeStyle` that conforms to `Hashable`
-public struct Stroke: Hashable {
+public struct Stroke: Hashable, Identifiable {
     
+    public let id          : UUID = UUID()
     var lineWidth   : CGFloat
     var lineCap     : CGLineCap
     var lineJoin    : CGLineJoin

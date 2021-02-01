@@ -15,12 +15,9 @@ internal struct Legends<T>: ViewModifier where T: ChartData {
         VStack {
             content
             LegendView(chartData: chartData)
-            
         }
     }
 }
-
-    
     
 extension View {
     /// Displays legends under the chart.

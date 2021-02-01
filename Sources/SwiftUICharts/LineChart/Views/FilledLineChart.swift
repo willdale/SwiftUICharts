@@ -18,9 +18,15 @@ public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
 
     public init(chartData: ChartData) {
         self.chartData  = chartData
-        self.minValue   = DataFunctions.minValue(dataPoints: chartData.dataSets.dataPoints)
-        self.range      = DataFunctions.range(dataPoints: chartData.dataSets.dataPoints)
-        chartData.setupLegends()
+        
+        switch chartData.chartStyle.baseline {
+        case .minimumValue:
+            self.minValue = chartData.getMinValue()
+            self.range    = chartData.getRange()
+        case .zero:
+            self.minValue = 0
+            self.range    = chartData.getMaxValue()
+        }
     }
     
     public var body: some View {
@@ -31,7 +37,12 @@ public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
            let colour = chartData.dataSets.style.colour
         {
             
-            LineChartColourSubView(chartData: chartData, dataSet: chartData.dataSets, style: chartData.dataSets.style, minValue: minValue, range: range, colour: colour, isFilled: true)
+            LineChartColourSubView(chartData: chartData,
+                                   dataSet: chartData.dataSets,
+                                   minValue: minValue,
+                                   range: range,
+                                   colour: colour,
+                                   isFilled: true)
             
         } else if chartData.dataSets.style.colourType == .gradientColour,
                   let colours     = chartData.dataSets.style.colours,
@@ -39,7 +50,14 @@ public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
                   let endPoint    = chartData.dataSets.style.endPoint
         {
             
-            LineChartColoursSubView(chartData: chartData, dataSet: chartData.dataSets, style: chartData.dataSets.style, minValue: minValue, range: range, colours: colours, startPoint: startPoint, endPoint: endPoint, isFilled: true)
+            LineChartColoursSubView(chartData: chartData,
+                                    dataSet: chartData.dataSets,
+                                    minValue: minValue,
+                                    range: range,
+                                    colours: colours,
+                                    startPoint: startPoint,
+                                    endPoint: endPoint,
+                                    isFilled: true)
             
         } else if chartData.dataSets.style.colourType == .gradientStops,
                   let stops      = chartData.dataSets.style.stops,
@@ -48,7 +66,14 @@ public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
         {
             let stops = GradientStop.convertToGradientStopsArray(stops: stops)
             
-            LineChartStopsSubView(chartData: chartData, dataSet: chartData.dataSets, style: chartData.dataSets.style, minValue: minValue, range: range, stops: stops, startPoint: startPoint, endPoint: endPoint, isFilled: true)
+            LineChartStopsSubView(chartData: chartData,
+                                  dataSet: chartData.dataSets,
+                                  minValue: minValue,
+                                  range: range,
+                                  stops: stops,
+                                  startPoint: startPoint,
+                                  endPoint: endPoint,
+                                  isFilled: true)
             
         }
 //        } else { CustomNoDataView(chartData: chartData) }

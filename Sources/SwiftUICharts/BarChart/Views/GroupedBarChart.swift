@@ -10,14 +10,9 @@ import SwiftUI
 public struct GroupedBarChart<ChartData>: View where ChartData: MultiBarChartData {
     
     @ObservedObject var chartData: ChartData
-    
-    let maxValue : Double
-    
+        
     public init(chartData: ChartData) {
         self.chartData = chartData
-        self.maxValue = DataFunctions.multiDataSetMaxValue(from: chartData.dataSets)
-        
-        chartData.setupLegends()
     }
     
     public var body: some View {
@@ -34,7 +29,7 @@ public struct GroupedBarChart<ChartData>: View where ChartData: MultiBarChartDat
                                                        dataPoint: dataPoint,
                                                        style: dataSet.style,
                                                        chartStyle: chartData.chartStyle,
-                                                       maxValue: maxValue)
+                                                       maxValue: chartData.getMaxValue())
                                 
                             case .dataPoints:
                                 
@@ -42,7 +37,7 @@ public struct GroupedBarChart<ChartData>: View where ChartData: MultiBarChartDat
                                                          dataPoint: dataPoint,
                                                          style: dataSet.style,
                                                          chartStyle: chartData.chartStyle,
-                                                         maxValue: maxValue)
+                                                         maxValue: chartData.getMaxValue())
                                 
                             }
                         }

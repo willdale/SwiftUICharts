@@ -12,28 +12,29 @@ public struct LegendData: CTColourStyle, Hashable, Identifiable {
     
     public var id           : UUID
     
-    var chartType           : ChartType
-    public var colourType   : ColourType
+    public var chartType    : ChartType
+    
     /// Text to be displayed
-    var legend      : String
+    public var legend       : String
     
     /// Style of the stroke
-    var strokeStyle : Stroke?
+    public var strokeStyle  : Stroke?
     
+    public var colourType   : ColourType
     /// Single Colour
-    public var colour      : Color?
+    public var colour       : Color?
     /// Colours for Gradient
-    public var colours     : [Color]?
+    public var colours      : [Color]?
     /// Colours and Stops for Gradient with stop control
-    public var stops       : [GradientStop]?
+    public var stops        : [GradientStop]?
     
     /// Start point for Gradient
-    public var startPoint  : UnitPoint?
+    public var startPoint   : UnitPoint?
     /// End point for Gradient
-    public var endPoint    : UnitPoint?
+    public var endPoint     : UnitPoint?
     
     /// Used to make sure the charts data legend is first
-    let prioity     : Int
+    public let prioity      : Int
     
     /// Legend with single colour
     /// - Parameters:

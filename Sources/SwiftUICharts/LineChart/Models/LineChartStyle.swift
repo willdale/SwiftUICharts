@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Model for controlling the overall aesthetic of the chart.
-public struct LineChartStyle: CTLineAndBarChartStyle {
+public struct LineChartStyle: CTLineChartStyle {
         
     /// Placement of the information box that appears on touch input.
     public var infoBoxPlacement : InfoBoxPlacement
@@ -28,6 +28,8 @@ public struct LineChartStyle: CTLineAndBarChartStyle {
     /// Number Of Labels on Y Axis
     public var yAxisNumberOfLabels   : Int
     
+    public var baseline    : Baseline
+    
     /// Gobal control of animations.
     public var globalAnimation : Animation
     
@@ -40,6 +42,7 @@ public struct LineChartStyle: CTLineAndBarChartStyle {
     ///   - xAxisLabelsFrom: Where the label data come from. DataPoint or xAxisLabels
     ///   - yAxisLabelPosition: Location of the X axis labels - Leading or Trailing
     ///   - yAxisNumberOfLabel: Number Of Labels on Y Axis
+    ///   - baseline: Whether the chart is drawn from baseline of zero or the minimum datapoint value.
     ///   - globalAnimation: Gobal control of animations.
     public init(infoBoxPlacement    : InfoBoxPlacement      = .floating,
                 xAxisGridStyle      : GridStyle             = GridStyle(),
@@ -48,6 +51,7 @@ public struct LineChartStyle: CTLineAndBarChartStyle {
                 xAxisLabelsFrom     : LabelsFrom            = .dataPoint,
                 yAxisLabelPosition  : YAxisLabelPosistion   = .leading,
                 yAxisNumberOfLabels : Int                   = 10,
+                baseline            : Baseline              = .minimumValue,
                 globalAnimation     : Animation             = Animation.linear(duration: 1)
     ) {
         self.infoBoxPlacement   = infoBoxPlacement
@@ -59,6 +63,13 @@ public struct LineChartStyle: CTLineAndBarChartStyle {
         self.yAxisLabelPosition  = yAxisLabelPosition
         self.yAxisNumberOfLabels = yAxisNumberOfLabels
         
+        self.baseline            = baseline
+        
         self.globalAnimation     = globalAnimation
     }
+}
+
+public enum Baseline {
+    case minimumValue
+    case zero
 }

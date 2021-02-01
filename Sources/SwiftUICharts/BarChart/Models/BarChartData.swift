@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public class BarChartData: LineAndBarChartData {
+public class BarChartData: BarChartDataProtocol {
 
     public let id   : UUID  = UUID()
 
@@ -17,7 +17,7 @@ public class BarChartData: LineAndBarChartData {
     @Published public var chartStyle   : BarChartStyle
     @Published public var legends      : [LegendData]
     @Published public var viewData     : ChartViewData
-    @Published public var infoView      : InfoViewData<BarChartDataPoint> = InfoViewData()
+    @Published public var infoView     : InfoViewData<BarChartDataPoint> = InfoViewData()
         
     public var noDataText   : Text  = Text("No Data")
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
@@ -35,6 +35,7 @@ public class BarChartData: LineAndBarChartData {
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (.bar, .single)
+        self.setupLegends()
     }
     
     public init(dataSets    : BarDataSet,
@@ -50,6 +51,7 @@ public class BarChartData: LineAndBarChartData {
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (chartType: .bar, dataSetType: .single)
+        self.setupLegends()
     }
     
     public func getHeaderLocation() -> InfoBoxPlacement {
@@ -70,7 +72,7 @@ public class BarChartData: LineAndBarChartData {
         var locations : [HashablePoint] = []
         
         let xSection : CGFloat = chartSize.size.width / CGFloat(dataSets.dataPoints.count)
-        let ySection : CGFloat = chartSize.size.height / CGFloat(DataFunctions.dataSetMaxValue(from: dataSets))
+        let ySection : CGFloat = chartSize.size.height / CGFloat(self.getMaxValue())
         let index    : Int     = Int((touchLocation.x) / xSection)
         
         if index >= 0 && index < dataSets.dataPoints.count {
@@ -79,7 +81,7 @@ public class BarChartData: LineAndBarChartData {
         }
         return locations
     }
-        
+    
     public func getXAxidLabels() -> some View {
         HStack(spacing: 0) {
             ForEach(dataSets.dataPoints) { data in
@@ -94,28 +96,7 @@ public class BarChartData: LineAndBarChartData {
             }
         }
     }
-    public func getYLabels() -> [Double] {
-        var labels  : [Double]  = [Double]()
-        let maxValue: Double    = DataFunctions.dataSetMaxValue(from: dataSets)
-        for index in 0...self.chartStyle.yAxisNumberOfLabels {
-            labels.append(maxValue / Double(self.chartStyle.yAxisNumberOfLabels) * Double(index))
-        }
-        return labels
-    }
-    
-    public func getRange() -> Double {
-        DataFunctions.dataSetRange(from: dataSets)
-    }
-    public func getMinValue() -> Double {
-        DataFunctions.dataSetMinValue(from: dataSets)
-    }
-    public func getMaxValue() -> Double {
-        DataFunctions.dataSetMaxValue(from: dataSets)
-    }
-    public func getAverage() -> Double {
-        DataFunctions.dataSetAverage(from: dataSets)
-    }
-    
+
     public func setupLegends() {
         switch self.dataSets.style.colourFrom {
         case .barStyle:

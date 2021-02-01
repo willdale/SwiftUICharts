@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public class MultiBarChartData: LineAndBarChartData {
+public class MultiBarChartData: BarChartDataProtocol {
 
     public let id   : UUID  = UUID()
 
@@ -35,6 +35,7 @@ public class MultiBarChartData: LineAndBarChartData {
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (chartType: .bar, dataSetType: .multi)
+        self.setupLegends()
     }
     
     public init(dataSets    : MultiBarDataSet,
@@ -50,6 +51,7 @@ public class MultiBarChartData: LineAndBarChartData {
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (chartType: .bar, dataSetType: .multi)
+        self.setupLegends()
     }
 
     public func getHeaderLocation() -> InfoBoxPlacement {
@@ -71,7 +73,7 @@ public class MultiBarChartData: LineAndBarChartData {
         var locations : [HashablePoint] = []
         for dataSet in dataSets.dataSets {
             let xSection : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count)
-            let ySection : CGFloat = chartSize.size.height / CGFloat(DataFunctions.multiDataSetMaxValue(from: dataSets))
+            let ySection : CGFloat = chartSize.size.height / CGFloat(getMaxValue())
             
             let index = Int((touchLocation.x) / xSection)
             
@@ -82,7 +84,7 @@ public class MultiBarChartData: LineAndBarChartData {
         }
         return locations
     }
-    public func getXAxidLabels() -> some View {
+   public func getXAxidLabels() -> some View {
         HStack(spacing: 100) {
             ForEach(dataSets.dataSets) { dataSet in
                 HStack(spacing: 0) {
@@ -100,27 +102,6 @@ public class MultiBarChartData: LineAndBarChartData {
             }
         }
         .padding(.horizontal, -4)
-    }
-    public func getYLabels() -> [Double] {
-        var labels : [Double]  = [Double]()
-        let maxValue    : Double    = DataFunctions.multiDataSetMaxValue(from: dataSets)
-        for index in 0...self.chartStyle.yAxisNumberOfLabels {
-            labels.append(maxValue / Double(self.chartStyle.yAxisNumberOfLabels) * Double(index))
-        }
-        return labels
-    }
-    
-    public func getRange() -> Double {
-        DataFunctions.multiDataSetRange(from: dataSets)
-    }
-    public func getMinValue() -> Double {
-        DataFunctions.multiDataSetMinValue(from: dataSets)
-    }
-    public func getMaxValue() -> Double {
-        DataFunctions.multiDataSetMaxValue(from: dataSets)
-    }
-    public func getAverage() -> Double {
-        DataFunctions.multiDataSetAverage(from: dataSets)
     }
     
     public func setupLegends() {

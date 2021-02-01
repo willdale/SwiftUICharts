@@ -11,17 +11,14 @@ internal struct Point<T>: Shape where T: SingleDataSet {
     
     private let dataSet     : T
     
-    private let maxValue : Double
     private let minValue : Double
     private let range    : Double
         
     internal init(dataSet   : T,
-                  maxValue  : Double,
                   minValue  : Double,
                   range     : Double
     ) {
         self.dataSet    = dataSet
-        self.maxValue   = maxValue
         self.minValue   = minValue
         self.range      = range
     }
@@ -32,7 +29,7 @@ internal struct Point<T>: Shape where T: SingleDataSet {
         return path
     }
 
-    internal func lineChartDrawPoints<DP: ChartDataPoint>(_ path: inout Path, _ rect: CGRect, _ dataPoints: [DP], _ minValue: Double, _ range: Double) {
+    internal func lineChartDrawPoints<DP: CTChartDataPoint>(_ path: inout Path, _ rect: CGRect, _ dataPoints: [DP], _ minValue: Double, _ range: Double) {
                 
         let x = rect.width / CGFloat(dataPoints.count-1)
         let y = rect.height / CGFloat(range)

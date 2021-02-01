@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct BarChartStyle: CTLineAndBarChartStyle {
+public struct BarChartStyle: CTBarChartStyle {
         
     /// Placement of the information box that appears on touch input.
     public var infoBoxPlacement : InfoBoxPlacement

@@ -8,25 +8,20 @@
 import SwiftUI
 
 /// The central model from which the chart is drawn.
-public class LineChartData: LineAndBarChartData, LineChartProtocol {
+public class LineChartData: LineChartDataProtocol {
     
     public let id   : UUID  = UUID()
     
     /// Data model containing the datapoints: Value, Label, Description and Date. Individual colouring for bar chart.
     @Published public var dataSets      : LineDataSet
-    
     /// Data model containing: the charts Title, the charts Subtitle and the Line Legend.
     @Published public var metadata      : ChartMetadata?
-    
     /// Array of strings for the labels on the X Axis instead of the the dataPoints labels.
     @Published public var xAxisLabels   : [String]?
-    
     /// Data model conatining the style data for the chart.
     @Published public var chartStyle    : LineChartStyle
-                
     /// Array of data to populate the chart legend.
     @Published public var legends       : [LegendData]
-    
     /// Data model to hold data about the Views layout.
     @Published public var viewData      : ChartViewData
     
@@ -49,6 +44,8 @@ public class LineChartData: LineAndBarChartData, LineChartProtocol {
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (chartType: .line, dataSetType: .single)
+        
+        self.setupLegends()
     }
     
     public init(dataSets    : LineDataSet,
@@ -64,12 +61,15 @@ public class LineChartData: LineAndBarChartData, LineChartProtocol {
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (chartType: .line, dataSetType: .single)
+        
+        self.setupLegends()
     }
     
     public func getHeaderLocation() -> InfoBoxPlacement {
         return self.chartStyle.infoBoxPlacement
     }
     
+    // MARK: Touch
     public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [LineChartDataPoint] {
         var points      : [LineChartDataPoint] = []
         let xSection    : CGFloat = chartSize.size.width / CGFloat(dataSets.dataPoints.count - 1)
@@ -83,15 +83,76 @@ public class LineChartData: LineAndBarChartData, LineChartProtocol {
     public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
         var locations : [HashablePoint] = []
         
+        let minValue : Double
+        let range    : Double
+        
+        switch self.chartStyle.baseline {
+        case .minimumValue:
+            minValue = self.getMinValue()
+            range    = self.getRange()
+        case .zero:
+            minValue = 0
+            range    = self.getMaxValue()
+        }
+            
+        let ySection : CGFloat = chartSize.size.height / CGFloat(range)
         let xSection : CGFloat = chartSize.size.width / CGFloat(dataSets.dataPoints.count - 1)
-        let ySection : CGFloat = chartSize.size.height / CGFloat(DataFunctions.dataSetRange(from: dataSets))
+        
         let index    : Int     = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
             locations.append(HashablePoint(x: CGFloat(index) * xSection,
-                                           y: (CGFloat(dataSets.dataPoints[index].value - DataFunctions.dataSetMinValue(from: dataSets)) * -ySection) + chartSize.size.height))
+                                           y: (CGFloat(dataSets.dataPoints[index].value - minValue) * -ySection) + chartSize.size.height))
         }
         return locations
     }
+    // MARK: Legends
+    public func setupLegends() {
+        
+        if dataSets.style.colourType == .colour,
+           let colour = dataSets.style.colour
+        {
+            self.legends.append(LegendData(id         : dataSets.id,
+                                           legend     : dataSets.legendTitle,
+                                           colour     : colour,
+                                           strokeStyle: dataSets.style.strokeStyle,
+                                           prioity    : 1,
+                                           chartType  : .line))
+
+        } else if dataSets.style.colourType == .gradientColour,
+                  let colours = dataSets.style.colours
+        {
+            self.legends.append(LegendData(id         : dataSets.id,
+                                           legend     : dataSets.legendTitle,
+                                           colours    : colours,
+                                           startPoint : .leading,
+                                           endPoint   : .trailing,
+                                           strokeStyle: dataSets.style.strokeStyle,
+                                           prioity    : 1,
+                                           chartType  : .line))
+
+        } else if dataSets.style.colourType == .gradientStops,
+                  let stops = dataSets.style.stops
+        {
+            self.legends.append(LegendData(id         : dataSets.id,
+                                           legend     : dataSets.legendTitle,
+                                           stops      : stops,
+                                           startPoint : .leading,
+                                           endPoint   : .trailing,
+                                           strokeStyle: dataSets.style.strokeStyle,
+                                           prioity    : 1,
+                                           chartType  : .line))
+        }
+    }
+    
+    public typealias Set       = LineDataSet
+    public typealias DataPoint = LineChartDataPoint
+}
+
+//MARK: - LineAndBarChartData
+
+extension LineChartData {
+    
+    // MARK: Labels
     public func getXAxidLabels() -> some View {
         HStack(spacing: 0) {
             ForEach(dataSets.dataPoints) { data in
@@ -109,69 +170,4 @@ public class LineChartData: LineAndBarChartData, LineChartProtocol {
         }
         .padding(.horizontal, -4)
     }
-    public func getYLabels() -> [Double] {
-        var labels      : [Double]  = [Double]()
-        let dataRange   : Double    = DataFunctions.dataSetRange(from: dataSets)
-        let minValue    : Double    = DataFunctions.dataSetMinValue(from: dataSets)
-        
-        let range       : Double    = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
-        labels.append(minValue)
-        for index in 1...self.chartStyle.yAxisNumberOfLabels {
-            labels.append(minValue + range * Double(index))
-        }
-        return labels
-    }
-    
-    public func getRange() -> Double {
-        DataFunctions.dataSetRange(from: dataSets)
-    }
-    public func getMinValue() -> Double {
-        DataFunctions.dataSetMinValue(from: dataSets)
-    }
-    public func getMaxValue() -> Double {
-        DataFunctions.dataSetMaxValue(from: dataSets)
-    }
-    public func getAverage() -> Double {
-        DataFunctions.dataSetAverage(from: dataSets)
-    }
-    
-    public func setupLegends() {
-        if dataSets.style.colourType == .colour,
-           let colour = dataSets.style.colour
-        {
-            self.legends.append(LegendData(id         : dataSets.id,
-                                           legend     : dataSets.legendTitle,
-                                           colour     : colour,
-                                           strokeStyle: dataSets.style.strokeStyle,
-                                           prioity    : 1,
-                                           chartType  : .line))
-            
-        } else if dataSets.style.colourType == .gradientColour,
-                  let colours = dataSets.style.colours
-        {
-            self.legends.append(LegendData(id         : dataSets.id,
-                                           legend     : dataSets.legendTitle,
-                                           colours    : colours,
-                                           startPoint : .leading,
-                                           endPoint   : .trailing,
-                                           strokeStyle: dataSets.style.strokeStyle,
-                                           prioity    : 1,
-                                           chartType  : .line))
-            
-        } else if dataSets.style.colourType == .gradientStops,
-                  let stops = dataSets.style.stops
-        {
-            self.legends.append(LegendData(id         : dataSets.id,
-                                           legend     : dataSets.legendTitle,
-                                           stops      : stops,
-                                           startPoint : .leading,
-                                           endPoint   : .trailing,
-                                           strokeStyle: dataSets.style.strokeStyle,
-                                           prioity    : 1,
-                                           chartType  : .line))
-        }
-    }
-    
-    public typealias Set       = LineDataSet
-    public typealias DataPoint = LineChartDataPoint
 }

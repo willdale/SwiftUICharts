@@ -18,16 +18,21 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
 
     public init(chartData: ChartData) {
         self.chartData  = chartData
-        self.minValue   = DataFunctions.multiDataSetMinValue(from: chartData.dataSets)
-        self.range      = DataFunctions.multiDataSetRange(from: chartData.dataSets)
-
-        chartData.setupLegends()
+        
+        switch chartData.chartStyle.baseline {
+        case .minimumValue:
+            self.minValue = chartData.getMinValue()
+            self.range    = chartData.getRange()
+        case .zero:
+            self.minValue = 0
+            self.range    = chartData.getMaxValue()
+        }
     }
     
     public var body: some View {
         
         ZStack {
-            ForEach(chartData.dataSets.dataSets, id: \.self) { dataSet in
+            ForEach(chartData.dataSets.dataSets, id: \.id) { dataSet in
 
 //        if chartData.isGreaterThanTwo {
 
@@ -35,7 +40,12 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
                    let colour = dataSet.style.colour
                 {
                     
-                    LineChartColourSubView(chartData: chartData, dataSet: dataSet, style: dataSet.style, minValue: minValue, range: range, colour: colour, isFilled: false)
+                    LineChartColourSubView(chartData: chartData,
+                                           dataSet: dataSet,
+                                           minValue: minValue,
+                                           range: range,
+                                           colour: colour,
+                                           isFilled: false)
 
                 } else if dataSet.style.colourType == .gradientColour,
                           let colours     = dataSet.style.colours,
@@ -43,7 +53,14 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
                           let endPoint    = dataSet.style.endPoint
                 {
                     
-                    LineChartColoursSubView(chartData: chartData, dataSet: dataSet, style: dataSet.style, minValue: minValue, range: range, colours: colours, startPoint: startPoint, endPoint: endPoint, isFilled: false)
+                    LineChartColoursSubView(chartData: chartData,
+                                            dataSet: dataSet,
+                                            minValue: minValue,
+                                            range: range,
+                                            colours: colours,
+                                            startPoint: startPoint,
+                                            endPoint: endPoint,
+                                            isFilled: false)
                            
                 } else if dataSet.style.colourType == .gradientStops,
                           let stops      = dataSet.style.stops,
@@ -52,7 +69,14 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
                 {
                     let stops = GradientStop.convertToGradientStopsArray(stops: stops)
                     
-                    LineChartStopsSubView(chartData: chartData, dataSet: dataSet, style: dataSet.style, minValue: minValue, range: range, stops: stops, startPoint: startPoint, endPoint: endPoint, isFilled: false)
+                    LineChartStopsSubView(chartData: chartData,
+                                          dataSet: dataSet,
+                                          minValue: minValue,
+                                          range: range,
+                                          stops: stops,
+                                          startPoint: startPoint,
+                                          endPoint: endPoint,
+                                          isFilled: false)
                     
                 }
             }

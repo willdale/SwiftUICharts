@@ -1,26 +1,36 @@
 //
-//  PieChart.swift
+//  DoughnutChart.swift
 //  
 //
-//  Created by Will Dale on 24/01/2021.
+//  Created by Will Dale on 01/02/2021.
 //
 
 import SwiftUI
 
-public struct PieChart<ChartData>: View where ChartData: PieChartData {
+public struct DoughnutChart<ChartData>: View where ChartData: PieChartData {
     
     @ObservedObject var chartData: ChartData
     
-    let strokeWidth : Double?
+    private let strokeWidth : Double
     
     @State var startAnimation : Bool = false
         
-    public init(chartData: ChartData) {
+    public init(chartData: ChartData,
+                strokeWidth: Double
+    ) {
         self.chartData = chartData
+        
+        self.strokeWidth = strokeWidth
+    }
+
+    var mask: some View {
+        Circle()
+            .strokeBorder(Color(.white), lineWidth: CGFloat(strokeWidth))
     }
     
     public var body: some View {
         GeometryReader { geo in
+            
             ZStack {
                 ForEach(chartData.dataSets.dataPoints.indices, id: \.self) { data in
                     PieSegmentShape(id:         chartData.dataSets.dataPoints[data].id,
@@ -39,11 +49,12 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
                 }
             }
         }
-        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-            self.startAnimation = true
-        }
-        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
-            self.startAnimation = false
-        }
+            .mask(mask)
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
+            }
     }
 }

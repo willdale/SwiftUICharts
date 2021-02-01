@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// The central model from which the chart is drawn.
-public class MultiLineChartData: LineAndBarChartData, LineChartProtocol {
+public class MultiLineChartData: LineChartDataProtocol {
         
     public let id   : UUID  = UUID()
     
@@ -49,6 +49,7 @@ public class MultiLineChartData: LineAndBarChartData, LineChartProtocol {
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (.line, .multi)
+        self.setupLegends()
     }
     
     public init(dataSets    : MultiLineDataSet,
@@ -64,6 +65,7 @@ public class MultiLineChartData: LineAndBarChartData, LineChartProtocol {
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (chartType: .line, dataSetType: .multi)
+        self.setupLegends()
     }
     
     public func getHeaderLocation() -> InfoBoxPlacement {
@@ -87,12 +89,24 @@ public class MultiLineChartData: LineAndBarChartData, LineChartProtocol {
         var locations : [HashablePoint] = []
         for dataSet in dataSets.dataSets {
             
+            let minValue : Double
+            let range    : Double
+            
+            switch self.chartStyle.baseline {
+            case .minimumValue:
+                minValue = self.getMinValue()
+                range    = self.getRange()
+            case .zero:
+                minValue = 0
+                range    = self.getMaxValue()
+            }
+            
             let xSection : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count - 1)
-            let ySection : CGFloat = chartSize.size.height / CGFloat(DataFunctions.multiDataSetRange(from: dataSets))
+            let ySection : CGFloat = chartSize.size.height / CGFloat(range)
             let index    : Int     = Int((touchLocation.x + (xSection / 2)) / xSection)
             if index >= 0 && index < dataSet.dataPoints.count {
                 locations.append(HashablePoint(x: CGFloat(index) * xSection,
-                                               y: (CGFloat(dataSet.dataPoints[index].value - DataFunctions.multiDataSetMinValue(from: dataSets)) * -ySection) + chartSize.size.height))
+                                               y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.size.height))
             }
         }
         return locations
@@ -114,38 +128,13 @@ public class MultiLineChartData: LineAndBarChartData, LineChartProtocol {
         }
         .padding(.horizontal, -4)
     }
-    public func getYLabels() -> [Double] {
-        var labels      : [Double]  = [Double]()
-        let dataRange   : Double    = DataFunctions.multiDataSetRange(from: dataSets)
-        let minValue    : Double    = DataFunctions.multiDataSetMinValue(from: dataSets)
-        
-        let range       : Double    = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
-        labels.append(minValue)
-        for index in 1...self.chartStyle.yAxisNumberOfLabels {
-            labels.append(minValue + range * Double(index))
-        }
-        return labels
-    }
-    
-    public func getRange() -> Double {
-        DataFunctions.multiDataSetRange(from: dataSets)
-    }
-    public func getMinValue() -> Double {
-        DataFunctions.multiDataSetMinValue(from: dataSets)
-    }
-    public func getMaxValue() -> Double {
-        DataFunctions.multiDataSetMaxValue(from: dataSets)
-    }
-    public func getAverage() -> Double {
-        DataFunctions.multiDataSetAverage(from: dataSets)
-    }
     
     public func setupLegends() {
         for dataSet in dataSets.dataSets {
             if dataSet.style.colourType == .colour,
                let colour = dataSet.style.colour
             {
-                self.legends.append(LegendData(id         : dataSets.id,
+                self.legends.append(LegendData(id         : dataSet.id,
                                                legend     : dataSet.legendTitle,
                                                colour     : colour,
                                                strokeStyle: dataSet.style.strokeStyle,
@@ -155,7 +144,7 @@ public class MultiLineChartData: LineAndBarChartData, LineChartProtocol {
             } else if dataSet.style.colourType == .gradientColour,
                       let colours = dataSet.style.colours
             {
-                self.legends.append(LegendData(id         : dataSets.id,
+                self.legends.append(LegendData(id         : dataSet.id,
                                                legend     : dataSet.legendTitle,
                                                colours    : colours,
                                                startPoint : .leading,
@@ -167,7 +156,7 @@ public class MultiLineChartData: LineAndBarChartData, LineChartProtocol {
             } else if dataSet.style.colourType == .gradientStops,
                       let stops = dataSet.style.stops
             {
-                self.legends.append(LegendData(id         : dataSets.id,
+                self.legends.append(LegendData(id         : dataSet.id,
                                                legend     : dataSet.legendTitle,
                                                stops      : stops,
                                                startPoint : .leading,

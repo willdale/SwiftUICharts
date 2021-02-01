@@ -43,14 +43,10 @@ public class PieChartData: PieChartDataProtocol {
     internal func makeDataPoints() {
         let total       = self.dataSets.dataPoints.reduce(0) { $0 + $1.value }
         var startAngle  = -Double.pi / 2
-
         self.dataSets.dataPoints.indices.forEach { (point) in
             let amount = .pi * 2 * (self.dataSets.dataPoints[point].value / total)
             self.dataSets.dataPoints[point].amount = amount
             self.dataSets.dataPoints[point].startAngle = startAngle
-            
-            print(startAngle, amount)
-            
             startAngle += amount
         }
     }
@@ -89,15 +85,11 @@ public class PieChartData: PieChartDataProtocol {
     
     
     func degree(from touchLocation: CGPoint, in rect: CGRect) -> CGFloat {
-        
         // http://www.cplusplus.com/reference/cmath/atan2/
         // https://stackoverflow.com/a/25398191
-        
         let center = CGPoint(x: rect.midX, y: rect.midY)
-        
         let coordinates = CGPoint(x: touchLocation.x - center.x,
                                   y: touchLocation.y - center.y)
-            
         // -90 is north
         let degrees = atan2(-coordinates.x, -coordinates.y) * CGFloat(180 / Double.pi)
         if (degrees > 0) {
@@ -105,100 +97,8 @@ public class PieChartData: PieChartDataProtocol {
         } else {
             return -90 - degrees
         }
-
-        
-        /*
-        // Where 0 is north
-        let degrees = atan2(-x, -y) * CGFloat(180 / Double.pi)
-        if (degrees > 0) {
-            return 360 - degrees
-        } else {
-           return 0 - degrees
-        }
-        
-         Where 0 is East
-        var degrees = atan2(y, x) * CGFloat(180 / Double.pi)
-        if (degrees < 0) {
-            degrees = 360 + degrees
-        }
-        return degrees
-        */
     }
     
     public typealias Set = PieDataSet
     public typealias DataPoint = PieChartDataPoint
-}
-
-public struct PieChartDataPoint: ChartDataPoint {
-    
-    public var id               : UUID = UUID()
-    public var value            : Double
-    public var xAxisLabel       : String?
-    public var pointDescription : String?
-    public var date             : Date?
-    
-    public var colour           : Color
-    
-    var startAngle  : Double = 0
-    var amount      : Double = 0
-    
-    public init(value           : Double,
-                xAxisLabel      : String?   = nil,
-                pointDescription: String?   = nil,
-                date            : Date?     = nil,
-                colour          : Color     = Color.red
-    ) {
-        self.value              = value
-        self.xAxisLabel         = xAxisLabel
-        self.pointDescription   = pointDescription
-        self.date               = date
-        self.colour             = colour
-    }
-}
-
-public struct PieDataSet: SingleDataSet {
-
-    public var id           : UUID = UUID()
-    public var dataPoints   : [PieChartDataPoint]
-    public var legendTitle  : String
-    public var pointStyle   : PointStyle
-    public var style        : PieStyle
-    
-    public init(dataPoints  : [PieChartDataPoint],
-                legendTitle : String,
-                pointStyle  : PointStyle,
-                style       : PieStyle
-    ) {
-        self.dataPoints     = dataPoints
-        self.legendTitle    = legendTitle
-        self.pointStyle     = pointStyle
-        self.style          = style
-    }
-
-    public typealias Styling = PieStyle
-    public typealias DataPoint = PieChartDataPoint
-}
-
-public struct PieStyle: CTColourStyle, Hashable {
-
-    public var colourType: ColourType
-    public var colour: Color?
-    public var colours: [Color]?
-    public var stops: [GradientStop]?
-    public var startPoint: UnitPoint?
-    public var endPoint: UnitPoint?
-    
-    public init(colour      : Color?          = nil,
-                colours     : [Color]?        = nil,
-                stops       : [GradientStop]? = nil,
-                startPoint  : UnitPoint?      = nil,
-                endPoint    : UnitPoint?      = nil
-    ) {
-        self.colourType     = .colour
-        self.colour         = colour
-        self.colours        = colours
-        self.stops          = stops
-        self.startPoint     = startPoint
-        self.endPoint       = endPoint
-    }
 }

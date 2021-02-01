@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Data model for a data point.
-public struct BarChartDataPoint: ChartDataPoint, CTColourStyle {
+public struct BarChartDataPoint: CTLineAndBarDataPoint, CTColourStyle {
     
     public let id = UUID()
 

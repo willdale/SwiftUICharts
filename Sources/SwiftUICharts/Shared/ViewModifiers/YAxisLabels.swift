@@ -19,7 +19,6 @@ internal struct YAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
     ) {
         self.chartData = chartData
         self.specifier = specifier
-        
         chartData.viewData.hasYAxisLabels = true
     }
     
