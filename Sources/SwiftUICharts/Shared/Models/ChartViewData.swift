@@ -8,6 +8,7 @@
 import Foundation
 
 /// Data model to pass view information internally so the layout can configure its self.
+/// - Tag: ChartViewData
 public struct ChartViewData {
 
     /// If the chart has labels on the X axis, the Y axis needs a different layout
@@ -19,6 +20,11 @@ public struct ChartViewData {
 }
 
 /// Data model to pass view information internally so the layout can configure its self.
+///
+///  # Reference
+///  [CTChartDataPoint](x-source-tag://CTChartDataPoint)
+///
+/// - Tag: InfoViewData
 public struct InfoViewData<DP: CTChartDataPoint> {
     /**
     Is there currently input (touch or click) on the chart

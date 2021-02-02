@@ -8,6 +8,7 @@
 import SwiftUI
 
 /// Model for controlling the look of the Grid
+/// - Tag: GridStyle
 public struct GridStyle {
     
     /// Number of lines to break up the axis

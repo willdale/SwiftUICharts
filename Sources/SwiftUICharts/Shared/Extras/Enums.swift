@@ -67,7 +67,7 @@ public enum ChartType {
 
 // MARK: - Style
 /**
- Type of colour styling for the chart.
+ Type of colour styling.
  ```
  case colour // Single Colour
  case gradientColour // Colour Gradient
@@ -100,6 +100,22 @@ public enum LineType {
     case line
     /// Dual control point curved line
     case curvedLine
+}
+
+/**
+ Where to start drawing the line chart from.
+ ```
+ case minimumValue // Lowest value in the data set(s)
+ case zero // Set 0 as the lowest value
+ ```
+ 
+ - Tag: Baseline
+ */
+public enum Baseline {
+    /// Lowest value in the data set(s)
+    case minimumValue
+    /// Set 0 as the lowest value
+    case zero
 }
 
 // MARK: - BarStyle

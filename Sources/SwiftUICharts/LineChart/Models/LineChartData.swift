@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-/// The central model from which the chart is drawn.
 public class LineChartData: LineChartDataProtocol {
     
     public let id   : UUID  = UUID()
@@ -15,12 +14,10 @@ public class LineChartData: LineChartDataProtocol {
     @Published public var dataSets      : LineDataSet
     @Published public var metadata      : ChartMetadata?
     @Published public var xAxisLabels   : [String]?
-    /// Data model conatining the style data for the chart.
     @Published public var chartStyle    : LineChartStyle
     @Published public var legends       : [LegendData]
     @Published public var viewData      : ChartViewData
     @Published public var isFilled      : Bool = false
-    
     @Published public var infoView      : InfoViewData<LineChartDataPoint> = InfoViewData()
     
     public var noDataText   : Text      = Text("No Data")
@@ -62,6 +59,7 @@ public class LineChartData: LineChartDataProtocol {
     }
     
     // MARK: Labels
+    // TODO --- Add from xaxis labels
     public func getXAxidLabels() -> some View {
         HStack(spacing: 0) {
             ForEach(dataSets.dataPoints) { data in

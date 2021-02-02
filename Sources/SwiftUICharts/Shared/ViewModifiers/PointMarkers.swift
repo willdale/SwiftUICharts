@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+/// - Tag: PointMarkers
 internal struct PointMarkers<T>: ViewModifier where T: LineChartDataProtocol {
         
     @ObservedObject var chartData: T

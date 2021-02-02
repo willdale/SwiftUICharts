@@ -10,28 +10,22 @@ import SwiftUI
 /// Model for controlling the overall aesthetic of the chart.
 public struct LineChartStyle: CTLineChartStyle {
         
-    /// Placement of the information box that appears on touch input.
+    
     public var infoBoxPlacement : InfoBoxPlacement
-        
-    /// Style of the vertical lines breaking up the chart.
+    public var globalAnimation  : Animation
+    
     public var xAxisGridStyle   : GridStyle
-    /// Style of the horizontal lines breaking up the chart.
     public var yAxisGridStyle   : GridStyle
     
-    /// Location of the X axis labels - Top or Bottom
     public var xAxisLabelPosition: XAxisLabelPosistion
-    /// Where the label data come from. DataPoint or xAxisLabels
     public var xAxisLabelsFrom   : LabelsFrom
-
-    /// Location of the X axis labels - Leading or Trailing
     public var yAxisLabelPosition    : YAxisLabelPosistion
-    /// Number Of Labels on Y Axis
     public var yAxisNumberOfLabels   : Int
     
     public var baseline    : Baseline
     
-    /// Gobal control of animations.
-    public var globalAnimation : Animation
+    
+    
     
     /// Model for controlling the overall aesthetic of the chart.
     /// - Parameters:
@@ -67,9 +61,4 @@ public struct LineChartStyle: CTLineChartStyle {
         
         self.globalAnimation     = globalAnimation
     }
-}
-
-public enum Baseline {
-    case minimumValue
-    case zero
 }

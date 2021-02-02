@@ -6,7 +6,9 @@
 //
 
 import SwiftUI
-
+/**
+ - Tag: Calculations
+ */
 //internal struct Calculations {
 //    /// Get an array of data points converted into and array of data points averaged by their calendar month.
 //    /// - Parameter dataPoints: Array of ChartDataPoint.

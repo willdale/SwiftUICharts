@@ -8,6 +8,8 @@
 import Foundation
 
 /// Data model for the chart's metadata
+///
+/// - Tag: ChartMetadata
 public struct ChartMetadata {
     /// The charts Title
     var title       : String?

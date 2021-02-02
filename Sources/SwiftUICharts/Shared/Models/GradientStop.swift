@@ -20,7 +20,9 @@ public struct GradientStop: Hashable {
         self.color    = color
         self.location = location
     }
-    
+}
+
+extension GradientStop {
     /// Convert an array of GradientStop into and array of Gradient.Stop
     /// - Parameter stops: Array of GradientStop
     /// - Returns: Array of Gradient.Stop
@@ -32,4 +34,3 @@ public struct GradientStop: Hashable {
         return stopsArray
     }
 }
-
