@@ -12,18 +12,14 @@ public class LineChartData: LineChartDataProtocol {
     
     public let id   : UUID  = UUID()
     
-    /// Data model containing the datapoints: Value, Label, Description and Date. Individual colouring for bar chart.
     @Published public var dataSets      : LineDataSet
-    /// Data model containing: the charts Title, the charts Subtitle and the Line Legend.
     @Published public var metadata      : ChartMetadata?
-    /// Array of strings for the labels on the X Axis instead of the the dataPoints labels.
     @Published public var xAxisLabels   : [String]?
     /// Data model conatining the style data for the chart.
     @Published public var chartStyle    : LineChartStyle
-    /// Array of data to populate the chart legend.
     @Published public var legends       : [LegendData]
-    /// Data model to hold data about the Views layout.
     @Published public var viewData      : ChartViewData
+    @Published public var isFilled      : Bool = false
     
     @Published public var infoView      : InfoViewData<LineChartDataPoint> = InfoViewData()
     
@@ -65,8 +61,23 @@ public class LineChartData: LineChartDataProtocol {
         self.setupLegends()
     }
     
-    public func getHeaderLocation() -> InfoBoxPlacement {
-        return self.chartStyle.infoBoxPlacement
+    // MARK: Labels
+    public func getXAxidLabels() -> some View {
+        HStack(spacing: 0) {
+            ForEach(dataSets.dataPoints) { data in
+                if let label = data.xAxisLabel {
+                    Text(label)
+                        .font(.caption)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
+                }
+                if data != self.dataSets.dataPoints[self.dataSets.dataPoints.count - 1] {
+                    Spacer()
+                        .frame(minWidth: 0, maxWidth: 500)
+                }
+            }
+        }
+        .padding(.horizontal, -4)
     }
     
     // MARK: Touch
@@ -146,28 +157,4 @@ public class LineChartData: LineChartDataProtocol {
     
     public typealias Set       = LineDataSet
     public typealias DataPoint = LineChartDataPoint
-}
-
-//MARK: - LineAndBarChartData
-
-extension LineChartData {
-    
-    // MARK: Labels
-    public func getXAxidLabels() -> some View {
-        HStack(spacing: 0) {
-            ForEach(dataSets.dataPoints) { data in
-                if let label = data.xAxisLabel {
-                    Text(label)
-                        .font(.caption)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.5)
-                }
-                if data != self.dataSets.dataPoints[self.dataSets.dataPoints.count - 1] {
-                    Spacer()
-                        .frame(minWidth: 0, maxWidth: 500)
-                }
-            }
-        }
-        .padding(.horizontal, -4)
-    }
 }

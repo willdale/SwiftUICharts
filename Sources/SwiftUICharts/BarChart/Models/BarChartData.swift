@@ -54,10 +54,6 @@ public class BarChartData: BarChartDataProtocol {
         self.setupLegends()
     }
     
-    public func getHeaderLocation() -> InfoBoxPlacement {
-        return self.chartStyle.infoBoxPlacement
-    }
-    
     public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [BarChartDataPoint] {
         var points      : [BarChartDataPoint] = []
         let xSection    : CGFloat   = chartSize.size.width / CGFloat(dataSets.dataPoints.count)
@@ -91,8 +87,8 @@ public class BarChartData: BarChartDataProtocol {
                     .font(.caption)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
-                    Spacer()
-                        .frame(minWidth: 0, maxWidth: 500)
+                Spacer()
+                    .frame(minWidth: 0, maxWidth: 500)
             }
         }
     }

@@ -8,6 +8,7 @@
 import SwiftUI
 
 /// Data model for Legends
+/// - Tag: LegendData
 public struct LegendData: CTColourStyle, Hashable, Identifiable {
     
     public var id           : UUID

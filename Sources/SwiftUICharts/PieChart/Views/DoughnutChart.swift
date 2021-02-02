@@ -7,36 +7,24 @@
 
 import SwiftUI
 
-public struct DoughnutChart<ChartData>: View where ChartData: PieChartData {
+public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData {
     
     @ObservedObject var chartData: ChartData
-    
-    private let strokeWidth : Double
-    
+        
     @State var startAnimation : Bool = false
         
-    public init(chartData: ChartData,
-                strokeWidth: Double
-    ) {
+    public init(chartData : ChartData) {
         self.chartData = chartData
-        
-        self.strokeWidth = strokeWidth
-    }
-
-    var mask: some View {
-        Circle()
-            .strokeBorder(Color(.white), lineWidth: CGFloat(strokeWidth))
     }
     
     public var body: some View {
         GeometryReader { geo in
-            
             ZStack {
                 ForEach(chartData.dataSets.dataPoints.indices, id: \.self) { data in
-                    PieSegmentShape(id:         chartData.dataSets.dataPoints[data].id,
-                                    startAngle: chartData.dataSets.dataPoints[data].startAngle,
-                                    amount:     chartData.dataSets.dataPoints[data].amount)
-                        .fill(chartData.dataSets.dataPoints[data].colour)
+                    DoughnutSegmentShape(id:         chartData.dataSets.dataPoints[data].id,
+                                         startAngle: chartData.dataSets.dataPoints[data].startAngle,
+                                         amount:     chartData.dataSets.dataPoints[data].amount)
+                        .strokeBorder(chartData.dataSets.dataPoints[data].colour, lineWidth: chartData.strokeWidth)
                         .scaleEffect(startAnimation ? 1 : 0)
                         .opacity(startAnimation ? 1 : 0)
                         .animation(Animation.spring().delay(Double(data) * 0.06))
@@ -49,12 +37,11 @@ public struct DoughnutChart<ChartData>: View where ChartData: PieChartData {
                 }
             }
         }
-            .mask(mask)
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = true
-            }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = false
-            }
+        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            self.startAnimation = true
+        }
+        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            self.startAnimation = false
+        }
     }
 }

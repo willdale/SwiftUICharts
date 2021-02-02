@@ -13,9 +13,7 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
     
     private let minValue : Double
     private let range    : Double
-    
-    @State var startAnimation : Bool = false
-    
+        
     public init(chartData: ChartData) {
         self.chartData  = chartData
         

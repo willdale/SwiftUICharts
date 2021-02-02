@@ -29,7 +29,8 @@ public class MultiLineChartData: LineChartDataProtocol {
     
     /// Data model to hold data about the Views layout.
     @Published public var viewData      : ChartViewData
-    
+    @Published public var isFilled      : Bool = false
+
     @Published public var infoView      : InfoViewData<LineChartDataPoint> = InfoViewData()
     
     public var noDataText   : Text = Text("No Data")
@@ -66,10 +67,6 @@ public class MultiLineChartData: LineChartDataProtocol {
         self.viewData       = ChartViewData()
         self.chartType      = (chartType: .line, dataSetType: .multi)
         self.setupLegends()
-    }
-    
-    public func getHeaderLocation() -> InfoBoxPlacement {
-        return self.chartStyle.infoBoxPlacement
     }
 
     public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [LineChartDataPoint] {

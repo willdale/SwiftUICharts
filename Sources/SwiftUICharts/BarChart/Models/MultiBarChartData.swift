@@ -54,10 +54,6 @@ public class MultiBarChartData: BarChartDataProtocol {
         self.setupLegends()
     }
 
-    public func getHeaderLocation() -> InfoBoxPlacement {
-        return self.chartStyle.infoBoxPlacement
-    }
-    
     public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [BarChartDataPoint] {
         var points : [BarChartDataPoint] = []
         for dataSet in dataSets.dataSets {

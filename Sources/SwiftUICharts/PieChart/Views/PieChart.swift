@@ -10,9 +10,7 @@ import SwiftUI
 public struct PieChart<ChartData>: View where ChartData: PieChartData {
     
     @ObservedObject var chartData: ChartData
-    
-    let strokeWidth : Double?
-    
+        
     @State var startAnimation : Bool = false
         
     public init(chartData: ChartData) {

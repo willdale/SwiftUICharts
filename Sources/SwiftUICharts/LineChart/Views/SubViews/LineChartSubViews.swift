@@ -48,7 +48,6 @@ internal struct LineChartColourSubView<CD>: View where CD: LineAndBarChartData {
                 $0.trim(to: startAnimation ? 1 : 0)
                 .stroke(colour, style: Stroke.strokeToStrokeStyle(stroke: dataSet.style.strokeStyle))
             })
-
             .background(Color(.gray).opacity(0.01))
             .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
             .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }

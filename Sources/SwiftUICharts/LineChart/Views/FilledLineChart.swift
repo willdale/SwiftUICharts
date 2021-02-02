@@ -27,6 +27,7 @@ public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
             self.minValue = 0
             self.range    = chartData.getMaxValue()
         }
+        self.chartData.isFilled = true
     }
     
     public var body: some View {

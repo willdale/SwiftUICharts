@@ -17,6 +17,8 @@ import Foundation
  case averageWeek // Weekly Average
  case averageDay // Daily Average
  ```
+ 
+ - Tag: CalculationType
  */
 public enum CalculationType {
     /// No function
@@ -30,23 +32,36 @@ public enum CalculationType {
 }
 
 // MARK: - ChartViewData
+/**
+ The type of `DataSet` being used
+ ```
+ case single // Single data set - i.e LineDataSet
+ case multi // Multi data set - i.e MultiLineDataSet
+ ```
+ 
+ - Tag: DataSetType
+ */
 public enum DataSetType {
     case single
     case multi
 }
+
 /**
- Pass the type of chart being used to view modifiers.
+ The type of chart being used.
  ```
  case line // Line Chart Type
  case bar // Bar Chart Type
+ case pie // Pie Chart Type
  ```
+ 
+ - Tag: ChartType
  */
 public enum ChartType {
     /// Line Chart Type
     case line
     /// Bar Chart Type
     case bar
-    
+    /// Pie Chart Type
     case pie
 }
 
@@ -58,6 +73,8 @@ public enum ChartType {
  case gradientColour // Colour Gradient
  case gradientStops // Colour Gradient with stop control
  ```
+ 
+ - Tag: ColourType
  */
 public enum ColourType {
     /// Single Colour
@@ -75,6 +92,8 @@ public enum ColourType {
  case line // Straight line from point to point
  case curvedLine // Dual control point curved line
  ```
+ 
+ - Tag: LineType
  */
 public enum LineType {
     /// Straight line from point to point
@@ -90,13 +109,31 @@ public enum LineType {
  case barStyle // From BarStyle data model
  case dataPoints // From each data point
  ```
+ 
+ - Tag: ColourFrom
  */
 public enum ColourFrom {
     case barStyle
     case dataPoints
 }
 
-// MARK: - TouchOverlayMarker
+// MARK: - TouchOverlay
+/**
+ Placement of the data point information panel when touch overlay modifier is applied.
+ ```
+ case floating // Follows input across the chart
+ case header // Fix in the Header box. Must have .headerBox()
+ ```
+ 
+ - Tag: InfoBoxPlacement
+ */
+public enum InfoBoxPlacement {
+    /// Follows input across the chart
+    case floating
+    /// Fix in the Header box. Must have .headerBox()
+    case header
+}
+
 /**
  Where the marker lines come from to meet at a specified point.
  ```
@@ -106,6 +143,8 @@ public enum ColourFrom {
  case topLeading // From top and leading edges meeting at touch location
  case topTrailing // From top and trailing edges meeting at touch location
  ```
+ 
+ - Tag: MarkerLineType
  */
 public enum MarkerLineType {
     /// Full width and height of view intersecting at a specified point
@@ -128,6 +167,8 @@ public enum MarkerLineType {
  case outline // Just stroke
  case filledOutLine // Both fill and stroke
  ```
+ 
+ - Tag: PointType
  */
 public enum PointType {
     /// Just fill
@@ -144,6 +185,8 @@ public enum PointType {
  case square
  case roundSquare
  ```
+ 
+ - Tag: PointShape
  */
 public enum PointShape {
     /// Circle Shape
@@ -154,22 +197,6 @@ public enum PointShape {
     case roundSquare
 }
 
-// MARK: - TouchOverlay
-/**
- Placement of the data point information panel when touch overlay modifier is applied.
- ```
- case floating // Follows input across the chart
- case header // Fix in the Header box. Must have .headerBox()
- 
- ```
- */
-public enum InfoBoxPlacement {
-    /// Follows input across the chart
-    case floating
-    /// Fix in the Header box. Must have .headerBox()
-    case header
-}
-
 // MARK: - XAxisLabels
 /**
 Location of the X axis labels
@@ -177,6 +204,8 @@ Location of the X axis labels
  case top
  case bottom
  ```
+ 
+ - Tag: XAxisLabelPosistion
  */
 public enum XAxisLabelPosistion {
     case top
@@ -192,6 +221,8 @@ public enum XAxisLabelPosistion {
  case dataPoint // ChartData --> DataPoint --> xAxisLabel
  case chartData // ChartData --> xAxisLabels
  ```
+ 
+ - Tag: LabelsFrom
  */
 public enum LabelsFrom {
     /// ChartData --> DataPoint --> xAxisLabel
@@ -207,6 +238,8 @@ Location of the Y axis labels
  case leading
  case trailing
  ```
+ 
+ - Tag: YAxisLabelPosistion
  */
 public enum YAxisLabelPosistion {
     case leading
