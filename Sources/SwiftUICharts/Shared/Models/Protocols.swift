@@ -7,6 +7,8 @@
  
 import SwiftUI
 
+
+// MARK: Chart Data
 /**
  Main protocol for passing data around library.
  
@@ -28,10 +30,10 @@ public protocol ChartData: ObservableObject, Identifiable {
     var dataSets: Set { get set }
     
     /**
-    Data model containing: the charts Title, the charts Subtitle and the Line Legend.
+     Data model containing the charts Title, Subtitle and the Title for Legend.
      
      # Reference
-     [ChartType](x-source-tag://ChartType)
+     [ChartMetadata](x-source-tag://ChartMetadata)
     */
     var metadata: ChartMetadata? { get set }
     
@@ -53,7 +55,7 @@ public protocol ChartData: ObservableObject, Identifiable {
     var noDataText: Text { get set }
     
     /**
-     Holds metadata about the chart.
+     Holds data about the charts type.
      
      Allows for internal logic based on the type of chart.
      
@@ -145,7 +147,9 @@ public protocol SingleDataSet: DataSet {
     associatedtype DataPoint : CTChartDataPoint
     
     /**
-     Array of data points. [See CTChartDataPoint](x-source-tag://CTChartDataPoint)
+     Array of data points.
+     
+     [See CTChartDataPoint](x-source-tag://CTChartDataPoint)
      */
     var dataPoints  : [DataPoint] { get set }
     
@@ -261,9 +265,12 @@ public protocol CTColourStyle {
  
  */
 public protocol CTChartDataPoint: Hashable, Identifiable {
+    
     var id               : ID { get }
     
-    /// Value of the data point
+    /**
+     Value of the data point
+     */
     var value            : Double { get set }
     
     /**

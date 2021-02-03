@@ -7,6 +7,148 @@
 
 import SwiftUI
 
+/**
+ Data for drawing and styling a single line, line chart.
+ 
+ This model contains all the data and styling information for a single line, line chart.
+ 
+ # Example
+ ```
+ static func makeData() -> LineChartData {
+     
+     let data = LineDataSet(dataPoints: [
+         LineChartDataPoint(value: 20,  xAxisLabel: "M", pointLabel: "Monday"),
+         LineChartDataPoint(value: 90,  xAxisLabel: "T", pointLabel: "Tuesday"),
+         LineChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday"),
+         LineChartDataPoint(value: 75,  xAxisLabel: "T", pointLabel: "Thursday"),
+         LineChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"),
+         LineChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday"),
+         LineChartDataPoint(value: 90,  xAxisLabel: "S", pointLabel: "Sunday")
+     ],
+     legendTitle: "Data",
+     pointStyle: PointStyle(),
+     style: LineStyle())
+     
+     let metadata = ChartMetadata(title: "Some Data", subtitle: "A Week")
+     
+     let labels = ["Monday", "Thursday", "Sunday"]
+     
+     return LineChartData(dataSets: data,
+                          metadata: metadata,
+                          xAxisLabels: labels,
+                          chartStyle: LineChartStyle(),
+                          calculations: .none)
+ }
+ 
+ ```
+ 
+ ---
+ 
+ # Parts
+ 
+ ## LineDataSet
+ ```
+ LineDataSet(dataPoints: [LineChartDataPoint],
+                         legendTitle: String,
+                         pointStyle: PointStyle,
+                         style: LineStyle)
+ ```
+ ### LineChartDataPoint
+ ```
+ LineChartDataPoint(value: Double,
+                    xAxisLabel: String?,
+                    pointLabel: String?,
+                    date: Date?)
+ ```
+ 
+ ### PointStyle
+ ```
+ PointStyle(pointSize: CGFloat,
+            borderColour: Color,
+            fillColour: Color,
+            lineWidth: CGFloat,
+            pointType: PointType,
+            pointShape: PointShape)
+ ```
+ 
+ ### LineStyle
+ ```
+ LineStyle(colour: Color,
+           ...)
+ 
+ LineStyle(colours: [Color],
+           startPoint: UnitPoint,
+           endPoint: UnitPoint,
+           ...)
+ 
+ LineStyle(stops: [GradientStop],
+           startPoint: UnitPoint,
+           endPoint: UnitPoint,
+           ...)
+ 
+ LineStyle(...,
+           lineType: LineType,
+           strokeStyle: Stroke,
+           ignoreZero: Bool)
+ ```
+ 
+ ## ChartMetadata
+ ```
+ ChartMetadata(title: String?, subtitle: String?)
+ ```
+ 
+ ## LineChartStyle
+ 
+ ```
+ LineChartStyle(infoBoxPlacement    : InfoBoxPlacement,
+                xAxisGridStyle      : GridStyle,
+                yAxisGridStyle      : GridStyle,
+                xAxisLabelPosition  : XAxisLabelPosistion,
+                xAxisLabelsFrom     : LabelsFrom,
+                yAxisLabelPosition  : YAxisLabelPosistion,
+                yAxisNumberOfLabels : Int,
+                baseline            : Baseline,
+                globalAnimation     : Animation)
+ ```
+ 
+ ### GridStyle
+ ```
+ GridStyle(numberOfLines: Int,
+           lineColour   : Color,
+           lineWidth    : CGFloat,
+           dash         : [CGFloat],
+           dashPhase    : CGFloat)
+ ```
+ 
+ ---
+ 
+ # Also See
+ - [Line Data Set](x-source-tag://LineDataSet)
+    - [Line Chart Data Point](x-source-tag://LineChartDataPoint)
+    - [Point Style](x-source-tag://PointStyle)
+        - [PointType](x-source-tag://PointType)
+        - [PointShape](x-source-tag://PointShape)
+    - [Line Style](x-source-tag://LineStyle)
+        - [ColourType](x-source-tag://ColourType)
+        - [LineType](x-source-tag://LineType)
+        - [GradientStop](x-source-tag://GradientStop)
+ - [Chart Metadata](x-source-tag://ChartMetadata)
+ - [Line Chart Style](x-source-tag://LineChartStyle)
+    - [InfoBoxPlacement](x-source-tag://InfoBoxPlacement)
+    - [GridStyle](x-source-tag://GridStyle)
+    - [XAxisLabelPosistion](x-source-tag://XAxisLabelPosistion)
+    - [LabelsFrom](x-source-tag://LabelsFrom)
+    - [YAxisLabelPosistion](x-source-tag://YAxisLabelPosistion)
+
+ # Conforms to
+ - ObservableObject
+ - Identifiable
+ - LineChartDataProtocol
+ - LineAndBarChartData
+ - ChartData
+ 
+ - Tag: LineChartData
+ */
 public class LineChartData: LineChartDataProtocol {
     
     public let id   : UUID  = UUID()
@@ -21,9 +163,21 @@ public class LineChartData: LineChartDataProtocol {
     @Published public var infoView      : InfoViewData<LineChartDataPoint> = InfoViewData()
     
     public var noDataText   : Text      = Text("No Data")
-    
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
-            
+    
+    /// Initialises a Single Line Chart with optional calculation
+    ///
+    /// Has the option perform optional calculation on the data set, such as averaging based on date.
+    ///
+    /// - Note:
+    /// To add custom calculations use the initialiser with `customCalc`.
+    ///
+    /// - Parameters:
+    ///   - dataSets: Data to draw and style a line.
+    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
+    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
+    ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - calculations: Addition calculations that can be performed on the data set before drawing.
     public init(dataSets    : LineDataSet,
                 metadata    : ChartMetadata?    = nil,
                 xAxisLabels : [String]?         = nil,
@@ -37,10 +191,22 @@ public class LineChartData: LineChartDataProtocol {
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (chartType: .line, dataSetType: .single)
-        
         self.setupLegends()
     }
     
+    /// Initializes a Single Line Chart with custom calculation
+    ///
+    /// Has the option perform custom calculations on the data set.
+    ///
+    /// - Note:
+    /// To add pre built calculations use the initialiser with `calculations`.
+    ///
+    /// - Parameters:
+    ///   - dataSets: Data to draw a line.
+    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
+    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
+    ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - customCalc: Custom calculations that can be performed on the data set before drawing.    
     public init(dataSets    : LineDataSet,
                 metadata    : ChartMetadata?    = nil,
                 xAxisLabels : [String]?         = nil,
@@ -54,7 +220,6 @@ public class LineChartData: LineChartDataProtocol {
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (chartType: .line, dataSetType: .single)
-        
         self.setupLegends()
     }
     

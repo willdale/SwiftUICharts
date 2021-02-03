@@ -7,23 +7,59 @@
 
 import SwiftUI
 
-/// Model for controlling the aesthetic of the point markers.
+/**
+ Model for controlling the aesthetic of the point markers.
+ 
+ Point markers are placed on top of the line marking where the data points are.
+ 
+ # Example
+ ```
+ PointStyle(pointSize: 9,
+            borderColour: Color.primary,
+            fillColour: Color.red,
+            lineWidth: 2, pointType: .filledOutLine,
+            pointShape: .circle)
+ ```
+ 
+ # Options
+ ```
+ PointStyle(pointSize: CGFloat,
+            borderColour: Color,
+            fillColour: Color,
+            lineWidth: CGFloat,
+            pointType: PointType,
+            pointShape: PointShape)
+ ```
+ # Also See
+ - [PointType](x-source-tag://PointType)
+ - [PointShape](x-source-tag://PointShape)
+ 
+ # Conforms to
+ - Hashable
+ 
+ - Tag: PointStyle
+ */
 public struct PointStyle: Hashable {
 
     /// Overall size of the mark
     public var pointSize   : CGFloat
+    
     /// Outter ring colour
     public var borderColour: Color
+    
     /// Center fill colour
     public var fillColour  : Color
+    
     /// Outter ring line width
     public var lineWidth   : CGFloat
+    
     /// Style of the point marks
     public var pointType   : PointType
+    
     /// Shape of the points
     public var pointShape  : PointShape
     
-    /// Style of the point markers.
+    /// Styling for the point markers.
     /// - Parameters:
     ///   - pointSize: Overall size of the mark
     ///   - borderColour: Outter ring colour

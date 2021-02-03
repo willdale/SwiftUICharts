@@ -7,27 +7,76 @@
 
 import SwiftUI
 
-/// Model for controlling the  aesthetic of the line chart.
+/**
+ Model for controlling the  aesthetic of the line chart.
+ 
+ # Example
+ 
+ ```
+ LineStyle(colour: .red,
+           lineType: .curvedLine,
+           strokeStyle: Stroke(lineWidth: 2,
+                               lineCap: .round,
+                               lineJoin: .round,
+                               miterLimit: 10,
+                               dash: [CGFloat](),
+                               dashPhase: 0),
+           ignoreZero: false)
+ ```
+ 
+ ---
+ 
+ # Options
+ 
+ ```
+ LineStyle(colour: Color,
+           ...)
+ 
+ LineStyle(colours: [Color],
+           startPoint: UnitPoint,
+           endPoint: UnitPoint,
+           ...)
+ 
+ LineStyle(stops: [GradientStop],
+           startPoint: UnitPoint,
+           endPoint: UnitPoint,
+           ...)
+ 
+ LineStyle(...,
+           lineType: LineType,
+           strokeStyle: Stroke,
+           ignoreZero: Bool)
+ ```
+ 
+ # Also See
+ - [ColourType](x-source-tag://ColourType)
+ - [LineType](x-source-tag://LineType)
+ - [GradientStop](x-source-tag://GradientStop)
+ 
+ # Conforms to
+ - CTColourStyle
+ - Hashable
+ 
+ - Tag: LineStyle
+ */
 public struct LineStyle: CTColourStyle, Hashable {    
         
-    /// Type of colour styling for the chart.
-    public var colourType   : ColourType
+    public var colourType  : ColourType
+    public var colour      : Color?
+    public var colours     : [Color]?
+    public var stops       : [GradientStop]?
+    public var startPoint  : UnitPoint?
+    public var endPoint    : UnitPoint?
+    
     /// Drawing style of the line
     public var lineType    : LineType
     
-    public var strokeStyle : Stroke
+    /**
+     Styling for stroke
      
-    /// Single Colour
-    public var colour      : Color?
-    /// Colours for Gradient
-    public var colours     : [Color]?
-    /// Colours and Stops for Gradient with stop control
-    public var stops       : [GradientStop]?
-    
-    /// Start point for Gradient
-    public var startPoint  : UnitPoint?
-    /// End point for Gradient
-    public var endPoint    : UnitPoint?
+     Replica of Apple’s StrokeStyle that conforms to Hashable
+     */
+    public var strokeStyle : Stroke
 
     /**
      Whether the chart should skip data points who's value is 0.

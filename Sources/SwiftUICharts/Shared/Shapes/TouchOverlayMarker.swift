@@ -11,11 +11,11 @@ import SwiftUI
 internal struct TouchOverlayMarker: Shape {
     
     /// Where the marker lines come from to meet at a specified point
-    private var type     : MarkerLineType = .fullWidth
+    private var type     : MarkerType = .fullWidth
     /// Point that the marker lines should intersect
     private var position : CGPoint
     
-    internal init(type     : MarkerLineType = .fullWidth,
+    internal init(type     : MarkerType = .fullWidth,
                   position : HashablePoint
     ) {
         self.type       = type

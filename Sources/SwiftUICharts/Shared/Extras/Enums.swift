@@ -160,9 +160,9 @@ public enum InfoBoxPlacement {
  case topTrailing // From top and trailing edges meeting at touch location
  ```
  
- - Tag: MarkerLineType
+ - Tag: MarkerType
  */
-public enum MarkerLineType {
+public enum MarkerType {
     /// Full width and height of view intersecting at a specified point
     case fullWidth
     /// From bottom and leading edges meeting at a specified point

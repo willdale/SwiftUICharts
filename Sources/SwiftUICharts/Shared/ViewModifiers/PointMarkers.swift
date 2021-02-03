@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-/// - Tag: PointMarkers
+
 internal struct PointMarkers<T>: ViewModifier where T: LineChartDataProtocol {
         
     @ObservedObject var chartData: T
@@ -50,25 +50,60 @@ internal struct PointMarkers<T>: ViewModifier where T: LineChartDataProtocol {
 }
 
 extension View {
-    /// Lays out markers over each of the data point.
-    ///
-    /// The style of the markers is set in the PointStyle data model as parameter in ChartData
+    /**
+     Lays out markers over each of the data point.
+     
+     The style of the markers is set in the PointStyle data model as parameter in ChartData
+     
+     - Requires:
+     Chart Data to conform to LineChartDataProtocol.
+     - LineChartData
+     - MultiLineChartData
+     
+     # Available for:
+     - Line Chart
+     - Multi Line Chart
+     
+     # Unavailable for:
+     - Bar Chart
+     - Grouped Bar Chart
+     - Pie Chart
+     - Doughnut Chart
+     
+     - Parameter chartData: Chart data model.
+     - Returns: A  new view containing the chart with point markers.
+     
+     - Tag: PointMarkers
+     */
     public func pointMarkers<T: LineChartDataProtocol>(chartData: T) -> some View {
         self.modifier(PointMarkers(chartData: chartData))
     }
 }
 
-struct PointsSubView: View {
+internal struct PointsSubView: View {
     
-    let dataSets: LineDataSet
-    let minValue : Double
-    let range    : Double
-    let animation: Animation
-    let isFilled : Bool
+    private let dataSets: LineDataSet
+    private let minValue : Double
+    private let range    : Double
+    private let animation: Animation
+    private let isFilled : Bool
     
     @State var startAnimation : Bool = false
     
-    var body: some View {
+    internal init(dataSets  : LineDataSet,
+                  minValue  : Double,
+                  range     : Double,
+                  animation : Animation,
+                  isFilled  : Bool
+    ) {
+        self.dataSets = dataSets
+        self.minValue = minValue
+        self.range = range
+        self.animation = animation
+        self.isFilled = isFilled
+    }
+    
+    internal var body: some View {
         switch dataSets.pointStyle.pointType {
         case .filled:
             

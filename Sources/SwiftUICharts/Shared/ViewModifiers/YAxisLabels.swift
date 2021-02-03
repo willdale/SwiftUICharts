@@ -80,9 +80,26 @@ internal struct YAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
 extension View {
     /**
      Automatically generated labels for the Y axis
+     
+     Controls are in ChartData --> ChartStyle
+     
+     - Requires:
+     Chart Data to conform to LineAndBarChartData.
+     
+     # Available for:
+     - Line Chart
+     - Multi Line Chart
+     - Bar Chart
+     - Grouped Bar Chart
+     
+     # Unavailable for:
+     - Pie Chart
+     - Doughnut Chart
+     
      - Parameters:
       - specifier: Decimal precision specifier
      - Returns: HStack of labels
+     - Tag: YAxisLabels
      */
     public func yAxisLabels<T: LineAndBarChartData>(chartData: T, specifier: String = "%.0f") -> some View {
         self.modifier(YAxisLabels(chartData: chartData, specifier: specifier))

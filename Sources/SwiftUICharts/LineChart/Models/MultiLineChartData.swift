@@ -7,7 +7,161 @@
 
 import SwiftUI
 
-/// The central model from which the chart is drawn.
+/**
+ Data for drawing and styling a multi line, line chart.
+ 
+ This model contains all the data and styling information for a single line, line chart.
+ 
+ # Example
+ ```
+ static func weekOfData() -> MultiLineChartData {
+  
+      let data = MultiLineDataSet(dataSets: [
+                                      LineDataSet(dataPoints: [
+                                          LineChartDataPoint(value: 20,  xAxisLabel: "M", pointLabel: "Monday"),
+                                          LineChartDataPoint(value: 90,  xAxisLabel: "T", pointLabel: "Tuesday"),
+                                          LineChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday"),
+                                          LineChartDataPoint(value: 75,  xAxisLabel: "T", pointLabel: "Thursday"),
+                                          LineChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"),
+                                          LineChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday"),
+                                          LineChartDataPoint(value: 90,  xAxisLabel: "S", pointLabel: "Sunday")
+                                      ],
+                                      legendTitle: "Test One",
+                                      pointStyle: PointStyle(),
+                                      style: LineStyle(colour: Color.red)),
+                                      LineDataSet(dataPoints: [
+                                          LineChartDataPoint(value: 90,  xAxisLabel: "M", pointLabel: "Monday"),
+                                          LineChartDataPoint(value: 20,   xAxisLabel: "T", pointLabel: "Tuesday"),
+                                          LineChartDataPoint(value: 120, xAxisLabel: "W", pointLabel: "Wednesday"),
+                                          LineChartDataPoint(value: 85,  xAxisLabel: "T", pointLabel: "Thursday"),
+                                          LineChartDataPoint(value: 140, xAxisLabel: "F", pointLabel: "Friday"),
+                                          LineChartDataPoint(value: 10,  xAxisLabel: "S", pointLabel: "Saturday"),
+                                          LineChartDataPoint(value: 20,   xAxisLabel: "S", pointLabel: "Sunday")
+                                      ],
+                                      legendTitle: "Test Two",
+                                      pointStyle: PointStyle(),
+                                      style: LineStyle(colour: Color.blue))])
+      
+      let metadata = ChartMetadata(title: "Some Data", subtitle: "A Week")
+      let labels = ["Monday", "Thursday", "Sunday"]
+      
+      return MultiLineChartData(dataSets: data,
+                                metadata: metadata,
+                                xAxisLabels: labels,
+                                chartStyle: LineChartStyle(baseline: .zero),
+                                calculations: .none)
+  }
+}
+ 
+ ```
+ 
+ ---
+ 
+ # Parts
+ 
+ ## LineDataSet
+ ```
+ LineDataSet(dataPoints: [LineChartDataPoint],
+                         legendTitle: String,
+                         pointStyle: PointStyle,
+                         style: LineStyle)
+ ```
+ ### LineChartDataPoint
+ ```
+ LineChartDataPoint(value: Double,
+                    xAxisLabel: String?,
+                    pointLabel: String?,
+                    date: Date?)
+ ```
+ 
+ ### PointStyle
+ ```
+ PointStyle(pointSize: CGFloat,
+            borderColour: Color,
+            fillColour: Color,
+            lineWidth: CGFloat,
+            pointType: PointType,
+            pointShape: PointShape)
+ ```
+ 
+ ### LineStyle
+ ```
+ LineStyle(colour: Color,
+           ...)
+ 
+ LineStyle(colours: [Color],
+           startPoint: UnitPoint,
+           endPoint: UnitPoint,
+           ...)
+ 
+ LineStyle(stops: [GradientStop],
+           startPoint: UnitPoint,
+           endPoint: UnitPoint,
+           ...)
+ 
+ LineStyle(...,
+           lineType: LineType,
+           strokeStyle: Stroke,
+           ignoreZero: Bool)
+ ```
+ 
+ ## ChartMetadata
+ ```
+ ChartMetadata(title: String?, subtitle: String?)
+ ```
+ 
+ ## LineChartStyle
+ 
+ ```
+ LineChartStyle(infoBoxPlacement    : InfoBoxPlacement,
+                xAxisGridStyle      : GridStyle,
+                yAxisGridStyle      : GridStyle,
+                xAxisLabelPosition  : XAxisLabelPosistion,
+                xAxisLabelsFrom     : LabelsFrom,
+                yAxisLabelPosition  : YAxisLabelPosistion,
+                yAxisNumberOfLabels : Int,
+                baseline            : Baseline,
+                globalAnimation     : Animation)
+ ```
+ 
+ ### GridStyle
+ ```
+ GridStyle(numberOfLines: Int,
+           lineColour   : Color,
+           lineWidth    : CGFloat,
+           dash         : [CGFloat],
+           dashPhase    : CGFloat)
+ ```
+ 
+ ---
+ 
+ # Also See
+ - [Line Data Set](x-source-tag://LineDataSet)
+    - [Line Chart Data Point](x-source-tag://LineChartDataPoint)
+    - [Point Style](x-source-tag://PointStyle)
+        - [PointType](x-source-tag://PointType)
+        - [PointShape](x-source-tag://PointShape)
+    - [Line Style](x-source-tag://LineStyle)
+        - [ColourType](x-source-tag://ColourType)
+        - [LineType](x-source-tag://LineType)
+        - [GradientStop](x-source-tag://GradientStop)
+ - [Chart Metadata](x-source-tag://ChartMetadata)
+ - [Line Chart Style](x-source-tag://LineChartStyle)
+    - [InfoBoxPlacement](x-source-tag://InfoBoxPlacement)
+    - [GridStyle](x-source-tag://GridStyle)
+    - [XAxisLabelPosistion](x-source-tag://XAxisLabelPosistion)
+    - [LabelsFrom](x-source-tag://LabelsFrom)
+    - [YAxisLabelPosistion](x-source-tag://YAxisLabelPosistion)
+
+ # Conforms to
+ - ObservableObject
+ - Identifiable
+ - LineChartDataProtocol
+ - LineAndBarChartData
+ - ChartData
+ 
+ - Tag: LineChartData
+ */
 public class MultiLineChartData: LineChartDataProtocol {
         
     public let id   : UUID  = UUID()

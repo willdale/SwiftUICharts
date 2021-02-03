@@ -33,6 +33,26 @@ internal struct XAxisGrid<T>: ViewModifier where T: LineAndBarChartData {
 extension View {
     /**
      Adds vertical lines along the X axis.
+     
+     The style is set in ChartData --> LineChartStyle --> xAxisGridStyle
+     
+     - Requires:
+     Chart Data to conform to LineAndBarChartData.
+     
+     # Available for:
+     - Line Chart
+     - Multi Line Chart
+     - Bar Chart
+     - Grouped Bar Chart
+     
+     # Unavailable for:
+     - Pie Chart
+     - Doughnut Chart
+     
+     - Parameter chartData: Chart data model.
+     - Returns: A  new view containing the chart with vertical lines under it.
+     
+     - Tag: XAxisGrid
     */
     public func xAxisGrid<T: LineAndBarChartData>(chartData: T) -> some View {
         self.modifier(XAxisGrid(chartData: chartData))

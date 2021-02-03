@@ -7,21 +7,35 @@
 
 import SwiftUI
 
-/// Data model for a data point.
+/**
+ Data for a single data point.
+ 
+ # Example
+ ```
+ LineChartDataPoint(value: 20,
+                    xAxisLabel: "M",
+                    pointLabel: "Monday",
+                    data: Date())
+ ```
+ 
+ # Conforms to
+ - CTLineAndBarDataPoint
+ - CTChartDataPoint
+ - Hashable
+ - Identifiable
+ 
+ - Tag: LineChartDataPoint
+ */
 public struct LineChartDataPoint: CTLineAndBarDataPoint {
     
     public let id = UUID()
 
-    /// Value of the data point
     public var value            : Double
-    /// Label that can be shown on the X axis.
     public var xAxisLabel       : String?
-    /// A longer label that can be shown on touch input.
     public var pointDescription : String?
-    /// Date of the data point if any data based calculations are asked for.
     public var date             : Date?
     
-    /// Data model for a single data point with colour for use with a bar chart.
+    /// Data model for a single data point with colour for use with a line chart.
     /// - Parameters:
     ///   - value: Value of the data point
     ///   - xAxisLabel: Label that can be shown on the X axis.

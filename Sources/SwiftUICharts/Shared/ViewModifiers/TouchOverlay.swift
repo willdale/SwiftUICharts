@@ -8,7 +8,12 @@
 import SwiftUI
 
 #if !os(tvOS)
-/// Detects input either from touch of pointer. Finds the nearest data point and displays the relevent information.
+/**
+ Detects input either from touch of pointer.
+ 
+ Finds the nearest data point and displays the relevent information.
+ 
+ */
 internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
 
     @ObservedObject var chartData: T
@@ -130,12 +135,37 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
 
 extension View {
     #if !os(tvOS)
-    /// Adds an overlay to detect touch and display the relivent information from the nearest data point.
-    /// - Parameter specifier: Decimal precision for labels
-    public func touchOverlay<T: ChartData>(chartData: T, specifier: String = "%.0f") -> some View {
+    /**
+     Adds touch interaction with the chart.
+     
+     Adds an overlay to detect touch and display the relivent information from the nearest data point.
+     
+     - Requires:
+     If  LineChartStyle --> infoBoxPlacement is set to .header
+     then `.headerBox` is required.
+     
+     - Attention:
+     Unavailable in tvOS
+     
+     - Parameters:
+        - chartData: Chart data model.
+        - specifier: Decimal precision for labels.
+     - Returns: A  new view containing the chart with a touch overlay.
+     
+     - Tag: TouchOverlay
+     */
+    public func touchOverlay<T: ChartData>(chartData: T,
+                                           specifier: String = "%.0f"
+    ) -> some View {
         self.modifier(TouchOverlay(chartData: chartData, specifier: specifier))
     }
     #elseif os(tvOS)
+    /**
+     Adds touch interaction with the chart.
+     
+     - Attention:
+     Unavailable in tvOS
+     */
     public func touchOverlay(specifier: String = "%.0f") -> some View {
         self.modifier(EmptyModifier())
     }
@@ -143,13 +173,4 @@ extension View {
 }
 
 
-public struct HashablePoint: Hashable {
 
-   public let x : CGFloat
-   public let y : CGFloat
-
-    public init(x: CGFloat, y: CGFloat) {
-        self.x = x
-        self.y = y
-    }
-}

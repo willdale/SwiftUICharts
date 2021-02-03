@@ -34,9 +34,27 @@ internal struct YAxisGrid<T>: ViewModifier where T: LineAndBarChartData {
 
 extension View {
     /**
-    Adds horizontal lines along the Y axis.
-    - Parameter numberOfLines: Number of lines subdividing the chart
-    - Returns: View of evenly spaced horizontal lines
+     Adds horizontal lines along the X axis.
+     
+     The style is set in ChartData --> LineChartStyle --> yAxisGridStyle
+     
+     - Requires:
+     Chart Data to conform to LineAndBarChartData.
+          
+     # Available for:
+     - Line Chart
+     - Multi Line Chart
+     - Bar Chart
+     - Grouped Bar Chart
+     
+     # Unavailable for:
+     - Pie Chart
+     - Doughnut Chart
+     
+     - Parameter chartData: Chart data model.
+     - Returns: A  new view containing the chart with horizontal lines under it.
+     
+     - Tag: YAxisGrid
     */
     public func yAxisGrid<T: LineAndBarChartData>(chartData: T) -> some View {
         self.modifier(YAxisGrid<T>(chartData: chartData))

@@ -86,7 +86,30 @@ internal struct XAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
 }
 
 extension View {
-    /// Labels for the X axis.
+    /**
+     Labels for the X axis.
+     
+     The labels can either come from ChartData -->  xAxisLabels
+     or ChartData --> DataSets --> DataPoints
+     
+     - Requires:
+     Chart Data to conform to LineAndBarChartData.
+          
+     # Available for:
+     - Line Chart
+     - Multi Line Chart
+     - Bar Chart
+     - Grouped Bar Chart
+     
+     # Unavailable for:
+     - Pie Chart
+     - Doughnut Chart
+     
+     - Parameter chartData: Chart data model.
+     - Returns: A  new view containing the chart with labels marking the x axis.
+     
+     - Tag: XAxisLabels
+     */
     public func xAxisLabels<T: LineAndBarChartData>(chartData: T) -> some View {
         self.modifier(XAxisLabels(chartData: chartData))
     }

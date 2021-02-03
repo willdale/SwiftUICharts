@@ -20,8 +20,14 @@ internal struct Legends<T>: ViewModifier where T: ChartData {
 }
     
 extension View {
-    /// Displays legends under the chart.
-    /// - Returns: Legends from the charts data and any markers.
+    /**
+     Displays legends under the chart.
+     
+     - Parameter chartData: Chart data model.
+     - Returns: A  new view containing the chart with chart legends under.
+     
+     - Tag: Legends
+     */
     public func legends<T:ChartData>(chartData: T) -> some View {
         self.modifier(Legends(chartData: chartData))
     }

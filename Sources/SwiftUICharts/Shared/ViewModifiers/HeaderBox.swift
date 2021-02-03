@@ -102,8 +102,19 @@ internal struct HeaderBox<T>: ViewModifier where T: ChartData {
 }
 
 extension View {
-    /// Displays the metadata about the chart
-    /// - Returns: Chart title and subtitle.
+    /**
+     Displays the metadata about the chart
+     
+     Adds a view above the chart that displays the title and subtitle.
+     infoBoxPlacement is set to .header then the datapoint info will
+     be displayed here as well.
+     
+     - Parameter chartData: Chart data model.
+     - Returns: A  new view containing the chart with a view above
+     to display metadata.
+     
+     - Tag: HeaderBox
+     */
     public func headerBox<T:ChartData>(chartData: T) -> some View {
         self.modifier(HeaderBox(chartData: chartData))
     }

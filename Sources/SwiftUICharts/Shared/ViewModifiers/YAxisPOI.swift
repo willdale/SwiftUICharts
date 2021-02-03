@@ -90,23 +90,52 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
 }
 
 extension View {
-    /// Shows a marker line at chosen point.
-    /// - Parameters:
-    ///   - markerName: Title of marker, for the legend
-    ///   - markerValue : Chosen point.
-    ///   - lineColour: Line Colour
-    ///   - strokeStyle: Style of Stroke
-    /// - Returns: A marker line at the average of all the data points.
+    /**
+     Horizontal line marking a custom value
+     
+     Shows a marker line at a specified value.
+     
+     # Example
+     ```
+     .yAxisPOI(chartData: data,
+                  markerName: "Marker",
+                  lineColour: .blue,
+                  strokeStyle: StrokeStyle(lineWidth: 2,
+                                           lineCap: .round,
+                                           lineJoin: .round,
+                                           miterLimit: 10,
+                                           dash: [8],
+                                           dashPhase: 0))
+     ```
+     
+     - Requires:
+     Chart Data to conform to LineAndBarChartData.
+     
+     # Available for:
+     - Line Chart
+     - Multi Line Chart
+     - Bar Chart
+     - Grouped Bar Chart
+     
+     # Unavailable for:
+     - Pie Chart
+     - Doughnut Chart
+     
+     - Parameters:
+        - chartData: Chart data model.
+        - markerName: Title of marker, for the legend.
+        - markerValue: Value to mark
+        - lineColour: Line Colour.
+        - strokeStyle: Style of Stroke.
+     - Returns: A  new view containing the chart with a marker line at a specified value.
+     
+     - Tag: YAxisPOI
+    */
     public func yAxisPOI<T:LineAndBarChartData>(chartData     : T,
                                                 markerName    : String,
                                                 markerValue   : Double,
                                                 lineColour    : Color        = Color(.blue),
-                                                strokeStyle   : StrokeStyle  = StrokeStyle(lineWidth: 2,
-                                                                                           lineCap: .round,
-                                                                                           lineJoin: .round,
-                                                                                           miterLimit: 10,
-                                                                                           dash: [CGFloat](),
-                                                                                           dashPhase: 0)
+                                                strokeStyle   : StrokeStyle  = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
     ) -> some View {
         self.modifier(YAxisPOI(chartData    : chartData,
                                markerName   : markerName,
@@ -117,21 +146,51 @@ extension View {
     }
     
     
-    /// Shows a marker line at the average of all the data points.
-    /// - Parameters:
-    ///   - markerName: Title of marker, for the legend
-    ///   - lineColour: Line Colour
-    ///   - strokeStyle: Style of Stroke
-    /// - Returns: A marker line at the average of all the data points.
+    /**
+     Horizontal line marking the average
+     
+     Shows a marker line at the average of all the data points within
+     the relevant data set(s).
+     
+     # Example
+     ```
+     .averageLine(chartData: data,
+                  markerName: "Average",
+                  lineColour: .primary,
+                  strokeStyle: StrokeStyle(lineWidth: 2,
+                                           lineCap: .round,
+                                           lineJoin: .round,
+                                           miterLimit: 10,
+                                           dash: [8],
+                                           dashPhase: 0))
+     ```
+     
+     - Requires:
+     Chart Data to conform to LineAndBarChartData.
+     
+     # Available for:
+     - Line Chart
+     - Multi Line Chart
+     - Bar Chart
+     - Grouped Bar Chart
+     
+     # Unavailable for:
+     - Pie Chart
+     - Doughnut Chart
+     
+     - Parameters:
+        - chartData: Chart data model.
+        - markerName: Title of marker, for the legend.
+        - lineColour: Line Colour.
+        - strokeStyle: Style of Stroke.
+     - Returns: A  new view containing the chart with a marker line at the average.
+     
+    - Tag: AverageLine
+    */
     public func averageLine<T:LineAndBarChartData>(chartData      : T,
                                                    markerName     : String        = "Average",
                                                    lineColour     : Color         = Color.primary,
-                                                   strokeStyle    : StrokeStyle   = StrokeStyle(lineWidth: 2,
-                                                                                                lineCap: .round,
-                                                                                                lineJoin: .round,
-                                                                                                miterLimit: 10,
-                                                                                                dash: [CGFloat](),
-                                                                                                dashPhase: 0)
+                                                   strokeStyle    : StrokeStyle   = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
     ) -> some View {
         self.modifier(YAxisPOI(chartData    : chartData,
                                markerName   : markerName,

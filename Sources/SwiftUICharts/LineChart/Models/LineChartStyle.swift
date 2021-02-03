@@ -7,25 +7,75 @@
 
 import SwiftUI
 
-/// Model for controlling the overall aesthetic of the chart.
+/**
+ Control of the overall aesthetic of the line chart.
+ 
+ Controls the look of the chart as a whole, not including any styling
+ specific to the data set(s),
+ 
+ # Example
+ ```
+ LineChartStyle(infoBoxPlacement: .header,
+                xAxisGridStyle  : GridStyle(numberOfLines: 7,
+                                            lineColour   : .gray,
+                                            lineWidth    : 1,
+                                            dash         : [8],
+                                            dashPhase    : 0),
+                yAxisGridStyle  : GridStyle(numberOfLines: 7,
+                                            lineColour   : .gray,
+                                            lineWidth    : 1,
+                                            dash         : [8],
+                                            dashPhase    : 0),
+                xAxisLabelPosition  : .bottom,
+                xAxisLabelsFrom     : .dataPoint,
+                yAxisLabelPosition  : .leading,
+                yAxisNumberOfLabels : 5,
+                baseline            : .minimumValue,
+                globalAnimation     : .linear(duration: 1))
+ ```
+
+ # Options
+ ```
+ LineChartStyle(infoBoxPlacement    : InfoBoxPlacement,
+                xAxisGridStyle      : GridStyle,
+                yAxisGridStyle      : GridStyle,
+                xAxisLabelPosition  : XAxisLabelPosistion,
+                xAxisLabelsFrom     : LabelsFrom,
+                yAxisLabelPosition  : YAxisLabelPosistion,
+                yAxisNumberOfLabels : Int,
+                baseline            : Baseline,
+                globalAnimation     : Animation)
+ ```
+ 
+ ---
+ 
+ # Also See
+ - [InfoBoxPlacement](x-source-tag://InfoBoxPlacement)
+ - [GridStyle](x-source-tag://GridStyle)
+ - [XAxisLabelPosistion](x-source-tag://XAxisLabelPosistion)
+ - [LabelsFrom](x-source-tag://LabelsFrom)
+ - [YAxisLabelPosistion](x-source-tag://YAxisLabelPosistion)
+ 
+ # Conforms to
+ - CTLineChartStyle
+ - CTLineAndBarChartStyle
+ - CTChartStyle
+ 
+ - Tag: LineChartStyle
+ */
 public struct LineChartStyle: CTLineChartStyle {
-        
     
-    public var infoBoxPlacement : InfoBoxPlacement
-    public var globalAnimation  : Animation
+    public var infoBoxPlacement     : InfoBoxPlacement
+    public var globalAnimation      : Animation
     
-    public var xAxisGridStyle   : GridStyle
-    public var yAxisGridStyle   : GridStyle
+    public var xAxisGridStyle       : GridStyle
+    public var yAxisGridStyle       : GridStyle
+    public var xAxisLabelPosition   : XAxisLabelPosistion
+    public var xAxisLabelsFrom      : LabelsFrom
+    public var yAxisLabelPosition   : YAxisLabelPosistion
+    public var yAxisNumberOfLabels  : Int
     
-    public var xAxisLabelPosition: XAxisLabelPosistion
-    public var xAxisLabelsFrom   : LabelsFrom
-    public var yAxisLabelPosition    : YAxisLabelPosistion
-    public var yAxisNumberOfLabels   : Int
-    
-    public var baseline    : Baseline
-    
-    
-    
+    public var baseline             : Baseline
     
     /// Model for controlling the overall aesthetic of the chart.
     /// - Parameters:
