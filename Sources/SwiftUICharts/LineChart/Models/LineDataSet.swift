@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Data set for a single line
  
- Contains information specific to each line such as:
+ Contains information specific to each line within the chart .
  
  # Example
  ```
@@ -114,21 +114,4 @@ public struct LineDataSet: SingleDataSet {
     
     public typealias ID      = UUID
     public typealias Styling = LineStyle
-}
-
-/**
- 
- - Tag: MultiLineDataSet
- */
-public struct MultiLineDataSet: MultiDataSet {
-    
-    public let id       : UUID
-    
-    public var dataSets : [LineDataSet]
-    
-    public init(dataSets: [LineDataSet]) {
-        self.id       = UUID()
-        self.dataSets = dataSets
-    }
-        
 }

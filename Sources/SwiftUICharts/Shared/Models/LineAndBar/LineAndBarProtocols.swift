@@ -94,6 +94,7 @@ extension LineAndBarChartData {
         return self.chartStyle.infoBoxPlacement
     }
 }
+
 extension LineAndBarChartData where Set: SingleDataSet {
     public func getRange() -> Double {
         DataFunctions.dataSetRange(from: dataSets)
