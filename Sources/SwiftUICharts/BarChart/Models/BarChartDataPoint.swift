@@ -7,33 +7,76 @@
 
 import SwiftUI
 
-/// Data model for a data point.
+/**
+ Data for a single data point.
+ 
+ # Example
+ ```
+ BarChartDataPoint(value: 20,
+                   xAxisLabel: "M",
+                   pointLabel: "Monday",
+                   date: Date())
+ ```
+ 
+ # Options
+ Common to all.
+ ```
+ BarChartDataPoint(value: Double,
+                   xAxisLabel: String?,
+                   pointLabel: String?,
+                   date: Date?,
+                   ...)
+ ```
+ 
+ Single Colour.
+ ```
+ BarChartDataPoint(...
+                   colour: Color?)
+ ```
+ 
+ Gradient Colours.
+ ```
+ BarChartDataPoint(...
+                   colours: [Color]?,
+                   startPoint: UnitPoint?,
+                   endPoint: UnitPoint?)
+ ```
+ 
+ Gradient Colours with stop control.
+ ```
+ BarChartDataPoint(...
+                   stops: [GradientStop]?,
+                   startPoint: UnitPoint?,
+                   endPoint: UnitPoint?)
+ ```
+ 
+ # Also See
+ - [GradientStopt](x-source-tag://GradientStop)
+ 
+ # Conforms to
+ - CTLineAndBarDataPoint
+ - CTChartDataPoint
+ - Hashable
+ - Identifiable
+ - CTColourStyle
+ 
+ - Tag: BarChartDataPoint
+ */
 public struct BarChartDataPoint: CTLineAndBarDataPoint, CTColourStyle {
     
     public let id = UUID()
 
-    /// Value of the data point
     public var value            : Double
-    /// Label that can be shown on the X axis.
     public var xAxisLabel       : String?
-    /// A longer label that can be shown on touch input.
     public var pointDescription : String?
-    /// Date of the data point if any data based calculations are asked for.
     public var date             : Date?
     
-    /// Type of colour styling for the chart.
     public var colourType   : ColourType
-    /// Single Colour
-    public var colour  : Color?
-    /// Colours for Gradient
-    public var colours : [Color]?
-    /// Colours and Stops for Gradient with stop control
-    public var stops   : [GradientStop]?
-    
-    /// Start point for Gradient
-    public var startPoint  : UnitPoint?
-    /// End point for Gradient
-    public var endPoint    : UnitPoint?
+    public var colour       : Color?
+    public var colours      : [Color]?
+    public var stops        : [GradientStop]?
+    public var startPoint   : UnitPoint?
+    public var endPoint     : UnitPoint?
     
     // MARK: - init: single colour
     /// Data model for a single data point with colour for use with a bar chart.

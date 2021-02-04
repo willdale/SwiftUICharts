@@ -7,6 +7,70 @@
 
 import SwiftUI
 
+/**
+ Data set for a standard bar chart.
+ 
+ # Example
+ ```
+ let data = BarDataSet(dataPoints: [
+     BarChartDataPoint(value: 20,  xAxisLabel: "M", pointLabel: "Monday"),
+     BarChartDataPoint(value: 90,  xAxisLabel: "T", pointLabel: "Tuesday"),
+     BarChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday"),
+     BarChartDataPoint(value: 75,  xAxisLabel: "T", pointLabel: "Thursday"),
+     BarChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"),
+     BarChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday"),
+     BarChartDataPoint(value: 90,  xAxisLabel: "S", pointLabel: "Sunday")
+ ],
+ legendTitle: "Data",
+ pointStyle : PointStyle(),
+ style      : LineStyle())
+ ```
+ 
+ # BarChartDataPoint
+ ```
+ BarChartDataPoint(value        : Double,
+                   xAxisLabel   : String?,
+                   pointLabel   : String?,
+                   date         : Date?)
+ ```
+ 
+ # BarStyle
+ ```
+ BarStyle(barWidth     : CGFloat,
+          cornerRadius : CornerRadius,
+          colourFrom   : ColourFrom,
+          ...)
+ 
+ BarStyle(...
+          colour: Color)
+ 
+ BarStyle(...
+          colours: [Color],
+          startPoint: UnitPoint,
+          endPoint: UnitPoint)
+ 
+ BarStyle(...
+          stops: [GradientStop],
+          startPoint: UnitPoint,
+          endPoint: UnitPoint)
+ ```
+ ---
+ # Also See
+ - [BarChartDataPoint](x-source-tag://BarChartDataPoint)
+ - [BarStyle](x-source-tag://BarStyle)
+    - [CornerRadius](x-source-tag://CornerRadius)
+    - [ColourFrom](x-source-tag://ColourFrom)
+    - [GradientStop](x-source-tag://GradientStop)
+ 
+ # Conforms to
+ - SingleDataSet
+ - DataSet
+ - Hashable
+ - Identifiable
+ 
+ - Tag: BarDataSet
+ */
+
 public struct BarDataSet: SingleDataSet {
 
     public let id           : UUID
@@ -15,6 +79,12 @@ public struct BarDataSet: SingleDataSet {
     public var pointStyle   : PointStyle
     public var style        : BarStyle
     
+    /// Initialises a new data set for a Bar Chart.
+    /// - Parameters:
+    ///   - dataPoints: Array of elements.
+    ///   - legendTitle: label for the data in legend.
+    ///   - pointStyle: Styling information for the data point markers.
+    ///   - style: Styling for how the line will be drawin.
     public init(dataPoints  : [BarChartDataPoint],
                 legendTitle : String,
                 pointStyle  : PointStyle,
@@ -29,16 +99,4 @@ public struct BarDataSet: SingleDataSet {
 
     public typealias ID      = UUID
     public typealias Styling = BarStyle
-}
-
-public struct MultiBarDataSet: MultiDataSet {
-    
-    public let id       : UUID
-    
-    public var dataSets : [BarDataSet]
-    
-    public init(dataSets: [BarDataSet]) {
-        self.id       = UUID()
-        self.dataSets = dataSets
-    }
 }

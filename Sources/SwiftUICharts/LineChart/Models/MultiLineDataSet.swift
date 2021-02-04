@@ -12,7 +12,7 @@ import SwiftUI
  
  Contains information about each of lines within the chart.
  
- 
+ # Example
  ```
  let data = MultiLineDataSet(dataSets: [
                                  LineDataSet(dataPoints: [
@@ -117,6 +117,7 @@ public struct MultiLineDataSet: MultiDataSet {
     
     public var dataSets : [LineDataSet]
     
+    /// Initialises a new data set for Multiline Line Chart.
     public init(dataSets: [LineDataSet]) {
         self.id       = UUID()
         self.dataSets = dataSets

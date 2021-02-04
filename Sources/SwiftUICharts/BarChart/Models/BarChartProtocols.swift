@@ -20,6 +20,12 @@ import SwiftUI
  - Tag: BarChartDataProtocol
  */
 public protocol BarChartDataProtocol: LineAndBarChartData where CTStyle: CTBarChartStyle {
+    /**
+     Data model conatining the style data for the chart.
+     
+     # Reference
+     [CTChartStyle](x-source-tag://CTChartStyle)
+     */
     var chartStyle  : CTStyle { get set }
 }
 

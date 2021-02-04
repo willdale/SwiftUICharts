@@ -18,13 +18,16 @@ import SwiftUI
  */
 public protocol LineAndBarChartData : ChartData {
     
+    /// Apple's `associatedtype` for outputting `some View`.
     associatedtype Body    : View
+    /// `associatedtype` to set the which `ChartStyle` to use.
     associatedtype CTStyle : CTLineAndBarChartStyle
     
     /**
      Data model to hold data about the Views layout.
 
-     This informs some `ViewModifiers` whether the chart has X and/or Y axis labels so they can configure thier layouts appropriately.
+     This informs some `ViewModifiers` whether the chart has X and/or Y
+     axis labels so they can configure thier layouts appropriately.
      */
     var viewData: ChartViewData { get set }
     /**
@@ -38,14 +41,16 @@ public protocol LineAndBarChartData : ChartData {
     /**
      Array of strings for the labels on the X Axis instead of the labels in the data points.
 
-     To control where the labels should come from. Set [LabelsFrom](x-source-tag://LabelsFrom) in [ChartStyle](x-source-tag://CTChartStyle).
+     To control where the labels should come from.
+     Set [LabelsFrom](x-source-tag://LabelsFrom) in [ChartStyle](x-source-tag://CTChartStyle).
     */
     var xAxisLabels: [String]? { get set }
     
     /**
      Displays a view for the labels on the X Axis.
      
-     Labels can come from either [CTChartDataPoint](x-source-tag://CTChartDataPoint) or [ChartData](x-source-tag://ChartData)
+     Labels can come from either [CTChartDataPoint](x-source-tag://CTChartDataPoint)
+     or [ChartData](x-source-tag://ChartData)
      
      - Returns: An `HStack` of `Text` containin x axis labels.
      
@@ -56,7 +61,8 @@ public protocol LineAndBarChartData : ChartData {
     /**
      Labels to display on the Y axis
      
-     The labels are generated based on the range between the lowest number in the data set (or 0) and highest number in the data set.
+     The labels are generated based on the range between the lowest number in the
+     data set (or 0) and highest number in the data set.
      
      - Returns: Array of evenly spaced numbers.
      
@@ -180,7 +186,9 @@ public protocol CTLineAndBarChartStyle: CTChartStyle {
  */
 public protocol CTLineAndBarDataPoint: CTChartDataPoint {
     
-    /// Data points label for the X axis.
+    /**
+     Data points label for the X axis.
+     */
     var xAxisLabel       : String? { get set }
 }
 

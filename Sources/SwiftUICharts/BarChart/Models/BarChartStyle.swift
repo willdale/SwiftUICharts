@@ -7,28 +7,72 @@
 
 import SwiftUI
 
+/**
+ Control of the overall aesthetic of the bar chart.
+ 
+ Controls the look of the chart as a whole, not including any styling
+ specific to the data set(s),
+ 
+ # Example
+ ```
+ BarChartStyle(infoBoxPlacement: .header,
+               xAxisGridStyle  : GridStyle(numberOfLines: 7,
+                                           lineColour   : .gray,
+                                           lineWidth    : 1,
+                                           dash         : [8],
+                                           dashPhase    : 0),
+               yAxisGridStyle  : GridStyle(numberOfLines: 7,
+                                           lineColour   : .gray,
+                                           lineWidth    : 1,
+                                           dash         : [8],
+                                           dashPhase    : 0),
+               xAxisLabelPosition  : .bottom,
+               xAxisLabelsFrom     : .dataPoint,
+               yAxisLabelPosition  : .leading,
+               yAxisNumberOfLabels : 5,
+               baseline            : .minimumValue,
+               globalAnimation     : .linear(duration: 1))
+ ```
+
+ # Options
+ ```
+ BarChartStyle(infoBoxPlacement     : InfoBoxPlacement,
+               xAxisGridStyle       : GridStyle,
+               yAxisGridStyle       : GridStyle,
+               xAxisLabelPosition   : XAxisLabelPosistion,
+               xAxisLabelsFrom      : LabelsFrom,
+               yAxisLabelPosition   : YAxisLabelPosistion,
+               yAxisNumberOfLabels  : Int,
+               globalAnimation      : Animation)
+ ```
+ 
+ ---
+ 
+ # Also See
+ - [InfoBoxPlacement](x-source-tag://InfoBoxPlacement)
+ - [GridStyle](x-source-tag://GridStyle)
+ - [XAxisLabelPosistion](x-source-tag://XAxisLabelPosistion)
+ - [LabelsFrom](x-source-tag://LabelsFrom)
+ - [YAxisLabelPosistion](x-source-tag://YAxisLabelPosistion)
+ 
+ # Conforms to
+ - CTBarChartStyle
+ - CTLineAndBarChartStyle
+ - CTChartStyle
+ 
+ - Tag: BarChartStyle
+ */
 public struct BarChartStyle: CTBarChartStyle {
         
-    /// Placement of the information box that appears on touch input.
-    public var infoBoxPlacement : InfoBoxPlacement
+    public var infoBoxPlacement     : InfoBoxPlacement
+    public var globalAnimation      : Animation
         
-    /// Style of the vertical lines breaking up the chart.
-    public var xAxisGridStyle   : GridStyle
-    /// Style of the horizontal lines breaking up the chart.
-    public var yAxisGridStyle   : GridStyle
-    
-    /// Location of the X axis labels - Top or Bottom
-    public var xAxisLabelPosition: XAxisLabelPosistion
-    /// Where the label data come from. DataPoint or xAxisLabels
-    public var xAxisLabelsFrom   : LabelsFrom
-
-    /// Location of the X axis labels - Leading or Trailing
-    public var yAxisLabelPosition    : YAxisLabelPosistion
-    /// Number Of Labels on Y Axis
-    public var yAxisNumberOfLabels   : Int
-    
-    /// Gobal control of animations.
-    public var globalAnimation : Animation
+    public var xAxisGridStyle       : GridStyle
+    public var yAxisGridStyle       : GridStyle
+    public var xAxisLabelPosition   : XAxisLabelPosistion
+    public var xAxisLabelsFrom      : LabelsFrom
+    public var yAxisLabelPosition   : YAxisLabelPosistion
+    public var yAxisNumberOfLabels  : Int
     
     /// Model for controlling the overall aesthetic of the chart.
     /// - Parameters:

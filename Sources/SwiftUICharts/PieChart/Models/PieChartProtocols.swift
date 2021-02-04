@@ -18,10 +18,14 @@ import SwiftUI
  - Tag: PieAndDoughnutChartDataProtocol
  */
 public protocol PieAndDoughnutChartDataProtocol: ChartData {
+    /// `associatedtype` to set the which `ChartStyle` to use.
     associatedtype CTStyle : CTPieAndDoughnutChartStyle
     
     /**
-     Protocol to set the styling data for the chart.
+     Data model conatining the style data for the chart.
+     
+     # Reference
+     [CTChartStyle](x-source-tag://CTChartStyle)
      */
     var chartStyle  : CTStyle { get set }
 }
@@ -37,7 +41,10 @@ public protocol PieAndDoughnutChartDataProtocol: ChartData {
 public protocol PieChartDataProtocol : PieAndDoughnutChartDataProtocol where CTStyle: CTPieChartStyle {
    
     /**
-     Protocol to set the styling data for the chart.
+     Data model conatining the style data for the chart.
+     
+     # Reference
+     [CTChartStyle](x-source-tag://CTChartStyle)
      */
     var chartStyle  : CTStyle { get set }
 }
@@ -53,7 +60,10 @@ public protocol PieChartDataProtocol : PieAndDoughnutChartDataProtocol where CTS
 public protocol DoughnutChartDataProtocol : PieAndDoughnutChartDataProtocol where CTStyle: CTDoughnutChartStyle {
     
     /**
-     Protocol to set the styling data for the chart.
+     Data model conatining the style data for the chart.
+     
+     # Reference
+     [CTChartStyle](x-source-tag://CTChartStyle)
      */
     var chartStyle  : CTStyle { get set }
 }

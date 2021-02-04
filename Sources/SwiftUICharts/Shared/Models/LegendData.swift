@@ -12,30 +12,22 @@ import SwiftUI
 public struct LegendData: CTColourStyle, Hashable, Identifiable {
     
     public var id           : UUID
-    
+    /// The type of chart being used.
     public var chartType    : ChartType
-    
     /// Text to be displayed
     public var legend       : String
-    
     /// Style of the stroke
     public var strokeStyle  : Stroke?
     
-    public var colourType   : ColourType
-    /// Single Colour
-    public var colour       : Color?
-    /// Colours for Gradient
-    public var colours      : [Color]?
-    /// Colours and Stops for Gradient with stop control
-    public var stops        : [GradientStop]?
-    
-    /// Start point for Gradient
-    public var startPoint   : UnitPoint?
-    /// End point for Gradient
-    public var endPoint     : UnitPoint?
-    
     /// Used to make sure the charts data legend is first
     public let prioity      : Int
+    
+    public var colourType   : ColourType
+    public var colour       : Color?
+    public var colours      : [Color]?
+    public var stops        : [GradientStop]?
+    public var startPoint   : UnitPoint?
+    public var endPoint     : UnitPoint?
     
     /// Legend with single colour
     /// - Parameters:

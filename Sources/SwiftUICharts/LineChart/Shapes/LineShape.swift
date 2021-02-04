@@ -12,7 +12,6 @@ internal struct LineShape: Shape {
     private let dataPoints  : [LineChartDataPoint]
     /// Drawing style of the line
     private let lineType    : LineType
-    /// If it's to be filled some extra lines need to be drawn
     private let isFilled    : Bool
     
     private let minValue : Double

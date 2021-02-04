@@ -106,6 +106,7 @@ public enum LineType {
  Where to start drawing the line chart from.
  ```
  case minimumValue // Lowest value in the data set(s)
+ case minimumWithMaximum(of: Double) // Set a custom baseline
  case zero // Set 0 as the lowest value
  ```
  

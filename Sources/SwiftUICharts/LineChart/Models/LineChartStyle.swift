@@ -98,17 +98,14 @@ public struct LineChartStyle: CTLineChartStyle {
                 baseline            : Baseline              = .minimumValue,
                 globalAnimation     : Animation             = Animation.linear(duration: 1)
     ) {
-        self.infoBoxPlacement   = infoBoxPlacement
-        self.xAxisGridStyle     = xAxisGridStyle
-        self.yAxisGridStyle     = yAxisGridStyle
-
+        self.infoBoxPlacement    = infoBoxPlacement
+        self.xAxisGridStyle      = xAxisGridStyle
+        self.yAxisGridStyle      = yAxisGridStyle
         self.xAxisLabelPosition  = xAxisLabelPosition
         self.xAxisLabelsFrom     = xAxisLabelsFrom
         self.yAxisLabelPosition  = yAxisLabelPosition
         self.yAxisNumberOfLabels = yAxisNumberOfLabels
-        
         self.baseline            = baseline
-        
         self.globalAnimation     = globalAnimation
     }
 }

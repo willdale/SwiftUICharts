@@ -7,31 +7,70 @@
 
 import SwiftUI
 
-/// Model for controlling the aesthetic of the bar chart.
+/**
+ Model for controlling the  aesthetic of the line chart.
+ 
+ # Example
+ ```
+ BarStyle(barWidth      : 0.5,
+          cornerRadius  : CornerRadius(top: 15),
+          colourFrom    : .barStyle,
+          colour        : .blue)
+ ```
+ 
+ ---
+ 
+ # Options
+ ```
+ BarStyle(barWidth     : CGFloat,
+          cornerRadius : CornerRadius,
+          colourFrom   : ColourFrom,
+          ...)
+ 
+ BarStyle(...
+          colour: Color)
+ 
+ BarStyle(...
+          colours: [Color],
+          startPoint: UnitPoint,
+          endPoint: UnitPoint)
+ 
+ BarStyle(...
+          stops: [GradientStop],
+          startPoint: UnitPoint,
+          endPoint: UnitPoint)
+ ```
+ 
+ ---
+ 
+ # Also See
+ - [ColourType](x-source-tag://ColourType)
+ - [CornerRadius](x-source-tag://CornerRadius)
+ - [ColourFrom](x-source-tag://ColourFrom)
+ - [GradientStop](x-source-tag://GradientStop)
+ 
+ # Conforms to
+ - CTColourStyle
+ - Hashable
+ 
+ - Tag: BarStyle
+ */
 public struct BarStyle: CTColourStyle, Hashable {
    
-    /// How much of the available width to use. 0 ..1
+    /// How much of the available width to use. 0...1
     var barWidth    : CGFloat
     /// Corner radius of the bar shape.
     var cornerRadius: CornerRadius
     /// Where to get the colour data from.
     var colourFrom  : ColourFrom
-    /// Type of colour styling for the chart.
-    public var colourType  : ColourType
+
+    public var colourType   : ColourType
+    public var colour       : Color?
+    public var colours      : [Color]?
+    public var stops        : [GradientStop]?
+    public var startPoint   : UnitPoint?
+    public var endPoint     : UnitPoint?
     
-    /// Single Colour
-    public var colour  : Color?
-    /// Colours for Gradient
-    public var colours : [Color]?
-    /// Colours and Stops for Gradient with stop control
-    public var stops   : [GradientStop]?
-    
-    /// Start point for Gradient
-    public var startPoint  : UnitPoint?
-    /// End point for Gradient
-    public var endPoint    : UnitPoint?
-    
-//    public var ignoreZero: Bool
     
     /// Bar Chart with single colour
     /// - Parameters:
@@ -107,17 +146,3 @@ public struct BarStyle: CTColourStyle, Hashable {
         self.colourType     = .gradientStops
     }
 }
-
-/// Corner radius of the bar shape.
-public struct CornerRadius: Hashable {
-    
-    var top     : CGFloat
-    var bottom  : CGFloat
-    
-    public init(top: CGFloat, bottom: CGFloat) {
-        self.top = top
-        self.bottom = bottom
-    }
-}
-
-

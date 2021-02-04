@@ -7,6 +7,161 @@
 
 import SwiftUI
 
+/**
+ Data for drawing and styling a bar chart.
+ 
+ This model contains all the data and styling information for a single data set bar chart.
+ 
+ # Example
+ ```
+ static func weekOfData() -> BarChartData {
+             
+     let data : BarDataSet =
+         BarDataSet(dataPoints: [
+             BarChartDataPoint(value: 20,  xAxisLabel: "M", pointLabel: "Monday"),
+             BarChartDataPoint(value: 90,  xAxisLabel: "T", pointLabel: "Tuesday"),
+             BarChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday"),
+             BarChartDataPoint(value: 75,  xAxisLabel: "T", pointLabel: "Thursday"),
+             BarChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"),
+             BarChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday"),
+             BarChartDataPoint(value: 90,  xAxisLabel: "S", pointLabel: "Sunday")
+         ],
+         legendTitle: "Data",
+         pointStyle: PointStyle(),
+         style: BarStyle())
+     
+     let metadata   : ChartMetadata  = ChartMetadata(title       : "Test Data",
+                                                     subtitle    : "A weeks worth")
+     
+     let labels      : [String]      = ["Mon", "Thu", "Sun"]
+
+     let chartStyle  : BarChartStyle = BarChartStyle(infoBoxPlacement: .floating,
+                                                        xAxisGridStyle  : GridStyle(),
+                                                        yAxisGridStyle  : GridStyle(),
+                                                        xAxisLabelPosition: .bottom,
+                                                        xAxisLabelsFrom: .dataPoint,
+                                                        yAxisLabelPosition: .leading,
+                                                        yAxisNumberOfLabels: 5)
+     
+     return BarChartData(dataSets: data,
+                         metadata: metadata,
+                         xAxisLabels: labels,
+                         chartStyle: chartStyle,
+                         calculations: .none)
+ }
+ 
+ ```
+ 
+ ---
+ 
+ # Parts
+ ## BarChartDataPoint
+ ### Options
+ Common to all.
+ ```
+ BarChartDataPoint(value: Double,
+                   xAxisLabel: String?,
+                   pointLabel: String?,
+                   date: Date?,
+                   ...)
+ ```
+ 
+ Single Colour.
+ ```
+ BarChartDataPoint(...
+                   colour: Color?)
+ ```
+ 
+ Gradient Colours.
+ ```
+ BarChartDataPoint(...
+                   colours: [Color]?,
+                   startPoint: UnitPoint?,
+                   endPoint: UnitPoint?)
+ ```
+ 
+ Gradient Colours with stop control.
+ ```
+ BarChartDataPoint(...
+                   stops: [GradientStop]?,
+                   startPoint: UnitPoint?,
+                   endPoint: UnitPoint?)
+ ```
+ ## BarStyle
+ ### Options
+ ```
+ BarStyle(barWidth     : CGFloat,
+          cornerRadius : CornerRadius,
+          colourFrom   : ColourFrom,
+          ...)
+ 
+ BarStyle(...
+          colour: Color)
+ 
+ BarStyle(...
+          colours: [Color],
+          startPoint: UnitPoint,
+          endPoint: UnitPoint)
+ 
+ BarStyle(...
+          stops: [GradientStop],
+          startPoint: UnitPoint,
+          endPoint: UnitPoint)
+ ```
+ 
+ ## ChartMetadata
+ ```
+ ChartMetadata(title: String?, subtitle: String?)
+ ```
+ 
+ ## BarChartStyle
+ ```
+ BarChartStyle(infoBoxPlacement     : InfoBoxPlacement,
+               xAxisGridStyle       : GridStyle,
+               yAxisGridStyle       : GridStyle,
+               xAxisLabelPosition   : XAxisLabelPosistion,
+               xAxisLabelsFrom      : LabelsFrom,
+               yAxisLabelPosition   : YAxisLabelPosistion,
+               yAxisNumberOfLabels  : Int,
+               globalAnimation      : Animation)
+ ```
+ 
+ ### GridStyle
+ ```
+ GridStyle(numberOfLines: Int,
+           lineColour   : Color,
+           lineWidth    : CGFloat,
+           dash         : [CGFloat],
+           dashPhase    : CGFloat)
+ ```
+ 
+ ---
+ 
+ # Also See
+ - [BarDataSet](x-source-tag://BarDataSet)
+    - [BarChartDataPoint](x-source-tag://BarChartDataPoint)
+ - [BarStyle](x-source-tag://BarStyle)
+    - [ColourType](x-source-tag://ColourType)
+    - [CornerRadius](x-source-tag://CornerRadius)
+    - [ColourFrom](x-source-tag://ColourFrom)
+    - [GradientStop](x-source-tag://GradientStop)
+ - [Chart Metadata](x-source-tag://ChartMetadata)
+ - [BarChartStyle](x-source-tag://BarChartStyle)
+    - [InfoBoxPlacement](x-source-tag://InfoBoxPlacement)
+    - [GridStyle](x-source-tag://GridStyle)
+    - [XAxisLabelPosistion](x-source-tag://XAxisLabelPosistion)
+    - [LabelsFrom](x-source-tag://LabelsFrom)
+    - [YAxisLabelPosistion](x-source-tag://YAxisLabelPosistion)
+
+ # Conforms to
+ - ObservableObject
+ - Identifiable
+ - BarChartDataProtocol
+ - LineAndBarChartData
+ - ChartData
+ 
+ - Tag: BarChartData
+ */
 public class BarChartData: BarChartDataProtocol {
 
     public let id   : UUID  = UUID()

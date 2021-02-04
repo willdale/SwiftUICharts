@@ -15,7 +15,7 @@ import SwiftUI
  LineChartDataPoint(value: 20,
                     xAxisLabel: "M",
                     pointLabel: "Monday",
-                    data: Date())
+                    date: Date())
  ```
  
  # Conforms to
