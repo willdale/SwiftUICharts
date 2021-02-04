@@ -95,9 +95,12 @@ internal struct YAxisLabels: ViewModifier {
         case .minimumValue:
             minValue  = chartData.minValue()
             dataRange = chartData.range()
+        case .minimumWithMaximum(of: let value):
+            minValue  = min(chartData.minValue(), value)
+            dataRange = chartData.maxValue() - min(chartData.minValue(), value)
         case .zero:
             minValue  = 0
-            dataRange = chartData.maxValue()
+            dataRange = chartData.maxValue()            
         }
         
         var labels      : [Double]  = [Double]()

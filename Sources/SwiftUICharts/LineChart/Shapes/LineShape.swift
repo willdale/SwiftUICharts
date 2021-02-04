@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-public enum Baseline {
-    case minimumValue
-    case zero
-}
-
 internal struct LineShape: Shape {
            
     private let chartData   : ChartData
@@ -36,6 +31,9 @@ internal struct LineShape: Shape {
         case .minimumValue:
             self.minValue = chartData.minValue()
             self.range    = chartData.range()
+        case .minimumWithMaximum(of: let value):
+            self.minValue = min(chartData.minValue(), value)
+            self.range    = chartData.maxValue() - min(chartData.minValue(), value)
         case .zero:
             self.minValue = 0
             self.range    = chartData.maxValue()

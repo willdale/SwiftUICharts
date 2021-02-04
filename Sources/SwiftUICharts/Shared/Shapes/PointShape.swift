@@ -42,6 +42,9 @@ internal struct Point: Shape {
             case .minimumValue:
                 minValue = chartData.minValue()
                 range    = chartData.range()
+            case .minimumWithMaximum(of: let value):
+                minValue = min(chartData.minValue(), value)
+                range    = chartData.maxValue() - min(chartData.minValue(), value)
             case .zero:
                 minValue = 0
                 range    = chartData.maxValue()
