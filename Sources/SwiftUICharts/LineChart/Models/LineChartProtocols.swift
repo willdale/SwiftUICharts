@@ -25,25 +25,59 @@ public protocol LineChartDataProtocol: LineAndBarChartData where CTStyle: CTLine
 extension LineAndBarChartData where Self: LineChartDataProtocol {
     public func getYLabels() -> [Double] {
         var labels      : [Double]  = [Double]()
-        let dataRange   : Double
-        let minValue    : Double
-        let range       : Double
-        
-        switch self.chartStyle.baseline {
-        case .minimumValue:
-            minValue  = self.getMinValue()
-            dataRange = self.getRange()
-            range     = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
-        case .zero:
-            minValue  = 0
-            dataRange = self.getMaxValue()
-            range     = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
-        }
+        let dataRange   : Double = self.getRange()
+        let minValue    : Double = self.getMinValue()
+        let range       : Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
+
         labels.append(minValue)
         for index in 1...self.chartStyle.yAxisNumberOfLabels {
             labels.append(minValue + range * Double(index))
         }
         return labels
+    }
+}
+extension LineAndBarChartData where Self: LineChartData {
+    public func getRange() -> Double {
+        switch self.chartStyle.baseline {
+        case .minimumValue:
+            return DataFunctions.dataSetRange(from: dataSets)
+        case .minimumWithMaximum(of: let value):
+            return DataFunctions.dataSetMaxValue(from: dataSets) - min(DataFunctions.dataSetMinValue(from: dataSets), value)
+        case .zero:
+            return DataFunctions.dataSetMaxValue(from: dataSets)
+        }
+    }
+    public func getMinValue() -> Double {
+        switch self.chartStyle.baseline {
+        case .minimumValue:
+            return DataFunctions.dataSetMinValue(from: dataSets)
+        case .minimumWithMaximum(of: let value):
+            return min(DataFunctions.dataSetMinValue(from: dataSets), value)
+        case .zero:
+           return 0
+        }
+    }
+}
+extension LineAndBarChartData where Self: MultiLineChartData {
+    public func getRange() -> Double {
+        switch self.chartStyle.baseline {
+        case .minimumValue:
+            return DataFunctions.multiDataSetRange(from: dataSets)
+        case .minimumWithMaximum(of: let value):
+            return DataFunctions.multiDataSetMaxValue(from: dataSets) - min(DataFunctions.multiDataSetMinValue(from: dataSets), value)
+        case .zero:
+            return DataFunctions.multiDataSetMaxValue(from: dataSets)
+        }
+    }
+    public func getMinValue() -> Double {
+        switch self.chartStyle.baseline {
+        case .minimumValue:
+            return DataFunctions.multiDataSetMinValue(from: dataSets)
+        case .minimumWithMaximum(of: let value):
+            return min(DataFunctions.multiDataSetMinValue(from: dataSets), value)
+        case .zero:
+           return 0
+        }
     }
 }
 

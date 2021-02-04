@@ -257,17 +257,8 @@ public class LineChartData: LineChartDataProtocol {
     public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
         var locations : [HashablePoint] = []
         
-        let minValue : Double
-        let range    : Double
-        
-        switch self.chartStyle.baseline {
-        case .minimumValue:
-            minValue = self.getMinValue()
-            range    = self.getRange()
-        case .zero:
-            minValue = 0
-            range    = self.getMaxValue()
-        }
+        let minValue : Double = self.getMinValue()
+        let range    : Double = self.getRange()
             
         let ySection : CGFloat = chartSize.size.height / CGFloat(range)
         let xSection : CGFloat = chartSize.size.width / CGFloat(dataSets.dataPoints.count - 1)
@@ -317,7 +308,6 @@ public class LineChartData: LineChartDataProtocol {
                                            chartType  : .line))
         }
     }
-    
     public typealias Set       = LineDataSet
     public typealias DataPoint = LineChartDataPoint
 }

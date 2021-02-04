@@ -18,15 +18,9 @@ public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
 
     public init(chartData: ChartData) {
         self.chartData  = chartData
+        self.minValue = chartData.getMinValue()
+        self.range    = chartData.getRange()
         
-        switch chartData.chartStyle.baseline {
-        case .minimumValue:
-            self.minValue = chartData.getMinValue()
-            self.range    = chartData.getRange()
-        case .zero:
-            self.minValue = 0
-            self.range    = chartData.getMaxValue()
-        }
         self.chartData.isFilled = true
     }
     

@@ -18,15 +18,8 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
 
     public init(chartData: ChartData) {
         self.chartData  = chartData
-        
-        switch chartData.chartStyle.baseline {
-        case .minimumValue:
-            self.minValue = chartData.getMinValue()
-            self.range    = chartData.getRange()
-        case .zero:
-            self.minValue = 0
-            self.range    = chartData.getMaxValue()
-        }
+        self.minValue = chartData.getMinValue()
+        self.range    = chartData.getRange()
     }
     
     public var body: some View {

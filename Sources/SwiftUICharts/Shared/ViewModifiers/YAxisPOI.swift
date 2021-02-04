@@ -33,35 +33,10 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
         self.lineColour  = lineColour
         self.strokeStyle = strokeStyle
         
-        if chartData.chartType.chartType == .line {
-            
-            let chartData = chartData as! LineChartData
-            
-            switch chartData.chartStyle.baseline {
-            case .minimumValue:
-                
-                self.markerValue = isAverage ? chartData.getAverage() : markerValue
-                self.range       = chartData.getRange()
-                self.minValue    = chartData.getMinValue()
-                self.maxValue    = chartData.getMaxValue()
-                
-            case .zero:
-                
-                self.markerValue = isAverage ? chartData.getAverage() : markerValue
-                self.range       = chartData.getRange()
-                self.minValue    = 0
-                self.maxValue    = chartData.getMaxValue()
-                
-            }
-            
-        } else {
-            self.markerValue = isAverage ? chartData.getAverage() : markerValue
-            self.range       = chartData.getRange()
-            self.minValue    = chartData.getMinValue()
-            self.maxValue    = chartData.getMaxValue()
-        }
-
-
+        self.markerValue = isAverage ? chartData.getAverage() : markerValue
+        self.maxValue    = chartData.getMaxValue()
+        self.range = chartData.getRange()
+        self.minValue = chartData.getMinValue()
     }
     
     internal func body(content: Content) -> some View {

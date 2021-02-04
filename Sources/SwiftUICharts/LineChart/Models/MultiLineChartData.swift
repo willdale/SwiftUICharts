@@ -240,17 +240,8 @@ public class MultiLineChartData: LineChartDataProtocol {
         var locations : [HashablePoint] = []
         for dataSet in dataSets.dataSets {
             
-            let minValue : Double
-            let range    : Double
-            
-            switch self.chartStyle.baseline {
-            case .minimumValue:
-                minValue = self.getMinValue()
-                range    = self.getRange()
-            case .zero:
-                minValue = 0
-                range    = self.getMaxValue()
-            }
+            let minValue : Double = self.getMinValue()
+            let range    : Double = self.getRange()
             
             let xSection : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count - 1)
             let ySection : CGFloat = chartSize.size.height / CGFloat(range)

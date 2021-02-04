@@ -114,6 +114,8 @@ public enum LineType {
 public enum Baseline {
     /// Lowest value in the data set(s)
     case minimumValue
+    /// Set a custom baseline
+    case minimumWithMaximum(of: Double)
     /// Set 0 as the lowest value
     case zero
 }
