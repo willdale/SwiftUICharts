@@ -9,7 +9,7 @@ import SwiftUI
  
 /// Model for controlling the  aesthetic of the line chart.
 public struct LineStyle {
-        
+
     /// Type of colour styling for the chart.
     public var colourType   : ColourType
     /// Drawing style of the line
@@ -46,16 +46,16 @@ public struct LineStyle {
     ///   - lineType: Drawing style of the line
     ///   - strokeStyle: Stroke Style
     ///   - ignoreZero: Whether the chart should skip data points who's value is 0.
-    public init(colour      : Color      = Color(.red),
-                lineType    : LineType   = .curvedLine,
-                strokeStyle : StrokeStyle = StrokeStyle(lineWidth: 3,
-                                                        lineCap: .round,
-                                                        lineJoin: .round,
-                                                        miterLimit: 10,
-                                                        dash: [CGFloat](),
-                                                        dashPhase: 0),
-                baseline    : Baseline   = .minimumValue,
-                ignoreZero  : Bool       = false
+    public init(colour       : Color       = Color(.red),
+                lineType     : LineType    = .curvedLine,
+                strokeStyle  : StrokeStyle = StrokeStyle(lineWidth: 3,
+                                                         lineCap: .round,
+                                                         lineJoin: .round,
+                                                         miterLimit: 10,
+                                                         dash: [CGFloat](),
+                                                         dashPhase: 0),
+                baseline     : Baseline   = .minimumValue,
+                ignoreZero   : Bool       = false
     ) {
         self.colourType     = .colour
         self.lineType       = lineType
@@ -83,7 +83,6 @@ public struct LineStyle {
                 startPoint  : UnitPoint  =  .leading,
                 endPoint    : UnitPoint  =  .trailing,
                 lineType    : LineType   = .curvedLine,
-                
                 strokeStyle : StrokeStyle = StrokeStyle(lineWidth: 3,
                                                         lineCap: .round,
                                                         lineJoin: .round,
@@ -140,6 +139,12 @@ public struct LineStyle {
         self.baseline  = baseline
                 
         self.ignoreZero     = ignoreZero
+    }
+    
+    public enum Baseline {
+        case minimumValue
+        case minimumWithMaximum(of: Double)
+        case zero
     }
 }
 
