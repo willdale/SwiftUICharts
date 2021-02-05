@@ -18,23 +18,21 @@ public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData 
     }
     
     public var body: some View {
-        GeometryReader { geo in
-            ZStack {
-                ForEach(chartData.dataSets.dataPoints.indices, id: \.self) { data in
-                    DoughnutSegmentShape(id:         chartData.dataSets.dataPoints[data].id,
-                                         startAngle: chartData.dataSets.dataPoints[data].startAngle,
-                                         amount:     chartData.dataSets.dataPoints[data].amount)
-                        .strokeBorder(chartData.dataSets.dataPoints[data].colour, lineWidth: chartData.chartStyle.strokeWidth)
-                        .scaleEffect(startAnimation ? 1 : 0)
-                        .opacity(startAnimation ? 1 : 0)
-                        .animation(Animation.spring().delay(Double(data) * 0.06))
-                        .if(chartData.infoView.touchOverlayInfo == [chartData.dataSets.dataPoints[data]]) {
-                            $0
-                                .scaleEffect(1.1)
-                                .zIndex(1)
-                                .shadow(color: Color.primary, radius: 10)
-                        }
-                }
+        ZStack {
+            ForEach(chartData.dataSets.dataPoints.indices, id: \.self) { data in
+                DoughnutSegmentShape(id:         chartData.dataSets.dataPoints[data].id,
+                                     startAngle: chartData.dataSets.dataPoints[data].startAngle,
+                                     amount:     chartData.dataSets.dataPoints[data].amount)
+                    .strokeBorder(chartData.dataSets.dataPoints[data].colour, lineWidth: chartData.chartStyle.strokeWidth)
+                    .scaleEffect(startAnimation ? 1 : 0)
+                    .opacity(startAnimation ? 1 : 0)
+                    .animation(Animation.spring().delay(Double(data) * 0.06))
+                    .if(chartData.infoView.touchOverlayInfo == [chartData.dataSets.dataPoints[data]]) {
+                        $0
+                            .scaleEffect(1.1)
+                            .zIndex(1)
+                            .shadow(color: Color.primary, radius: 10)
+                    }
             }
         }
         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {

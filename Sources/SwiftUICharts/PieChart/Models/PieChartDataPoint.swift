@@ -17,8 +17,8 @@ public struct PieChartDataPoint: CTPieDataPoint {
     
     public var colour           : Color
     
-    var startAngle  : Double = 0
-    var amount      : Double = 0
+    public var startAngle  : Double = 0
+    public var amount      : Double = 0
     
     public init(value           : Double,
                 xAxisLabel      : String?   = nil,
