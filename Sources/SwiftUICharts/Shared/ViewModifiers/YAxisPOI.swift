@@ -175,7 +175,7 @@ extension View {
     public func yAxisPOI(markerName     : String,
                          markerValue    : Double,
                          labelPosition  : DisplayValue = .none,
-                         labelBackground: Color        = Color(.clear),
+                         labelBackground: Color        = Color.clear,
                          lineColour     : Color        = Color(.blue),
                          strokeStyle    : StrokeStyle  = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
     ) -> some View {
@@ -199,7 +199,7 @@ extension View {
     /// - Returns: A marker line at the average of all the data points.
     public func averageLine(markerName      : String        = "Average",
                             labelPosition   : DisplayValue  = .none,
-                            labelBackground : Color         = Color(.clear),
+                            labelBackground : Color         = Color.clear,
                             lineColour      : Color         = Color.primary,
                             strokeStyle     : StrokeStyle   = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
     ) -> some View {
