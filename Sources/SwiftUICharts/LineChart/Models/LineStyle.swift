@@ -136,7 +136,7 @@ public struct LineStyle {
         self.stops          = stops
         self.startPoint     = startPoint
         self.endPoint       = endPoint
-        self.baseline  = baseline
+        self.baseline       = baseline
                 
         self.ignoreZero     = ignoreZero
     }
