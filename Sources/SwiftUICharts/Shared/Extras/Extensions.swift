@@ -15,6 +15,7 @@ extension View {
         else { self }
     }
 }
+// https://fivestars.blog/swiftui/conditional-modifiers.html
 extension View {
     @ViewBuilder
     func `ifElse`<TrueContent: View, FalseContent: View>(_ condition: Bool,
@@ -42,10 +43,24 @@ extension View {
     }
     
     func animateOnDisappear(using animation: Animation = Animation.easeInOut(duration: 1), _ action: @escaping () -> Void) -> some View {
-            return onDisappear {
-                withAnimation(animation) {
-                    action()
-                }
+        return onDisappear {
+            withAnimation(animation) {
+                action()
             }
         }
+    }
+}
+
+extension Color {
+    public static var systemsBackground: Color {
+        #if os(iOS)
+        return Color(.systemBackground)
+        #elseif os(watchOS)
+        return Color(.black)
+        #elseif os(tvOS)
+        return Color(.darkGray)
+        #elseif os(macOS)
+        return Color(.windowBackgroundColor)
+        #endif
+    }
 }
