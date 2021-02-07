@@ -264,3 +264,21 @@ public enum YAxisLabelPosistion {
     case leading
     case trailing
 }
+
+/**
+ Option to display the markers' value inline with the marker..
+ 
+ ```
+ case none // No label.
+ case yAxis(specifier: String) // Places the label in the yAxis labels.
+ case center(specifier: String) // Places the label in the center of chart.
+ ```
+ */
+public enum DisplayValue {
+    /// No label.
+    case none
+    /// Places the label in the yAxis labels.
+    case yAxis(specifier: String)
+    /// Places the label in the center of chart.
+    case center(specifier: String)
+}

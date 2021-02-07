@@ -17,48 +17,101 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
     private let lineColour  : Color
     private let strokeStyle : StrokeStyle
     
+    private let labelPosition  : DisplayValue
+    private let labelBackground: Color
+    
     private let range       : Double
     private let minValue    : Double
     private let maxValue    : Double
         
-    internal init(chartData   : T,
-                  markerName  : String,
-                  markerValue : Double = 0,
-                  lineColour  : Color,
-                  strokeStyle : StrokeStyle,
-                  isAverage   : Bool
+    internal init(chartData      : T,
+                  markerName     : String,
+                  markerValue    : Double = 0,
+                  labelPosition  : DisplayValue,
+                  labelBackground: Color,
+                  lineColour     : Color,
+                  strokeStyle    : StrokeStyle,
+                  isAverage      : Bool
     ) {
         self.chartData   = chartData
         self.markerName  = markerName
         self.lineColour  = lineColour
         self.strokeStyle = strokeStyle
         
+        self.labelPosition   = labelPosition
+        self.labelBackground = labelBackground
+        
         self.markerValue = isAverage ? chartData.getAverage() : markerValue
         self.maxValue    = chartData.getMaxValue()
-        self.range = chartData.getRange()
-        self.minValue = chartData.getMinValue()
+        self.range       = chartData.getRange()
+        self.minValue    = chartData.getMinValue()
     }
     
     internal func body(content: Content) -> some View {
         ZStack {
             content
 //            if chartData.isGreaterThanTwo {
-            Marker(value        : markerValue,
-                   range        : range,
-                   minValue     : minValue,
-                   maxValue     : maxValue,
-                   chartType    : chartData.chartType.chartType)
-                .stroke(lineColour, style: strokeStyle)
-                .onAppear {
-                    if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
-                        chartData.legends.append(LegendData(id          : UUID(),
-                                                            legend      : markerName,
-                                                            colour      : lineColour,
-                                                            strokeStyle : Stroke.strokeStyleToStroke(strokeStyle: strokeStyle),
-                                                            prioity     : 2,
-                                                            chartType   : .line))
-                    }
+            marker
+            valueLabel
 //                    }
+        }
+    }
+    
+    var marker: some View {
+        Marker(value        : markerValue,
+               range        : range,
+               minValue     : minValue,
+               maxValue     : maxValue,
+               chartType    : chartData.chartType.chartType)
+            .stroke(lineColour, style: strokeStyle)
+            .onAppear {
+                if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
+                    chartData.legends.append(LegendData(id          : UUID(),
+                                                        legend      : markerName,
+                                                        colour      : lineColour,
+                                                        strokeStyle : Stroke.strokeStyleToStroke(strokeStyle: strokeStyle),
+                                                        prioity     : 2,
+                                                        chartType   : .line))
+                }
+        }
+    }
+    
+    var valueLabel: some View {
+        GeometryReader { geo in
+                        
+            let y = geo.size.height / CGFloat(range)
+            let pointY = (CGFloat(markerValue - minValue) * -y) + geo.size.height
+            
+            switch labelPosition {
+            case .none:
+                
+                EmptyView()
+                
+            case .yAxis(specifier: let specifier):
+                
+                Text("\(markerValue, specifier: specifier)")
+                    .padding(4)
+                    .background(labelBackground)
+                    .font(.caption)
+                    .ifElse(self.chartData.chartStyle.yAxisLabelPosition == .leading, if: {
+                        $0.position(x: -18,
+                                    y: pointY)
+                    }, else: {
+                        $0.position(x: geo.size.width + 18,
+                                    y: pointY)
+                    })
+                
+            case .center(specifier: let specifier):
+                
+                Text("\(markerValue, specifier: specifier)")
+                    .font(.caption)
+                    .padding()
+                    .background(labelBackground)
+                    .clipShape(DiamondShape())
+                    .overlay(DiamondShape()
+                                .stroke(lineColour, style: strokeStyle)
+                    )
+                    .position(x: geo.size.width / 2, y: pointY)
             }
         }
     }
@@ -109,15 +162,19 @@ extension View {
     public func yAxisPOI<T:LineAndBarChartData>(chartData     : T,
                                                 markerName    : String,
                                                 markerValue   : Double,
-                                                lineColour    : Color        = Color(.blue),
-                                                strokeStyle   : StrokeStyle  = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
+                                                labelPosition  : DisplayValue = .center(specifier: "%.0f"),
+                                                labelBackground: Color        = Color.systemsBackground,
+                                                lineColour    : Color         = Color(.blue),
+                                                strokeStyle   : StrokeStyle   = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
     ) -> some View {
-        self.modifier(YAxisPOI(chartData    : chartData,
-                               markerName   : markerName,
-                               markerValue  : markerValue,
-                               lineColour   : lineColour,
-                               strokeStyle  : strokeStyle,
-                               isAverage    : false))
+        self.modifier(YAxisPOI(chartData      : chartData,
+                               markerName     : markerName,
+                               markerValue    : markerValue,
+                               labelPosition  : labelPosition,
+                               labelBackground: labelBackground,
+                               lineColour     : lineColour,
+                               strokeStyle    : strokeStyle,
+                               isAverage      : false))
     }
     
     
@@ -164,13 +221,17 @@ extension View {
     */
     public func averageLine<T:LineAndBarChartData>(chartData      : T,
                                                    markerName     : String        = "Average",
+                                                   labelPosition  : DisplayValue  = .yAxis(specifier: "%.0f"),
+                                                   labelBackground: Color         = Color.systemsBackground,
                                                    lineColour     : Color         = Color.primary,
                                                    strokeStyle    : StrokeStyle   = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
     ) -> some View {
-        self.modifier(YAxisPOI(chartData    : chartData,
-                               markerName   : markerName,
-                               lineColour   : lineColour,
-                               strokeStyle  : strokeStyle,
-                               isAverage    : true))
+        self.modifier(YAxisPOI(chartData      : chartData,
+                               markerName     : markerName,
+                               labelPosition  : labelPosition,
+                               labelBackground: labelBackground,
+                               lineColour     : lineColour,
+                               strokeStyle    : strokeStyle,
+                               isAverage      : true))
     }
 }
