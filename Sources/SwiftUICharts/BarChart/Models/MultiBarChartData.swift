@@ -180,7 +180,7 @@ public class MultiBarChartData: BarChartDataProtocol {
     public let id   : UUID  = UUID()
 
     @Published public var dataSets     : MultiBarDataSet
-    @Published public var metadata     : ChartMetadata?
+    @Published public var metadata     : ChartMetadata
     @Published public var xAxisLabels  : [String]?
     @Published public var chartStyle   : BarChartStyle
     @Published public var legends      : [LegendData]
@@ -191,7 +191,7 @@ public class MultiBarChartData: BarChartDataProtocol {
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
 
     public init(dataSets    : MultiBarDataSet,
-                metadata    : ChartMetadata?    = nil,
+                metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : BarChartStyle     = BarChartStyle(),
                 calculations: CalculationType   = .none
@@ -207,7 +207,7 @@ public class MultiBarChartData: BarChartDataProtocol {
     }
     
     public init(dataSets    : MultiBarDataSet,
-                metadata    : ChartMetadata?    = nil,
+                metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : BarChartStyle     = BarChartStyle(),
                 customCalc  : @escaping ([BarChartDataPoint]) -> [BarChartDataPoint]?

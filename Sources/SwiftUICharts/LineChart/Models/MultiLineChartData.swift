@@ -170,7 +170,7 @@ public class MultiLineChartData: LineChartDataProtocol {
     @Published public var dataSets      : MultiLineDataSet
     
     /// Data model containing: the charts Title, the charts Subtitle and the Line Legend.
-    @Published public var metadata      : ChartMetadata?
+    @Published public var metadata      : ChartMetadata
     
     /// Array of strings for the labels on the X Axis instead of the the dataPoints labels.
     @Published public var xAxisLabels   : [String]?
@@ -192,7 +192,7 @@ public class MultiLineChartData: LineChartDataProtocol {
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
             
     public init(dataSets    : MultiLineDataSet,
-                metadata    : ChartMetadata?    = nil,
+                metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : LineChartStyle    = LineChartStyle(),
                 calculations: CalculationType   = .none
@@ -208,7 +208,7 @@ public class MultiLineChartData: LineChartDataProtocol {
     }
     
     public init(dataSets    : MultiLineDataSet,
-                metadata    : ChartMetadata?    = nil,
+                metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : LineChartStyle    = LineChartStyle(),
                 customCalc  : @escaping ([LineChartDataPoint]) -> [LineChartDataPoint]?

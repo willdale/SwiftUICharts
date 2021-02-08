@@ -422,7 +422,7 @@ The ChartData type is where the majority of the configuration is done. The only 
 
 ```swift
 ChartData(dataPoints    : [ChartDataPoint],
-          metadata      : ChartMetadata?,
+          metadata      : ChartMetadata,
           xAxisLabels   : [String]?,
           chartStyle    : ChartStyle,
           lineStyle     : LineStyle,

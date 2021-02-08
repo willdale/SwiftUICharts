@@ -35,7 +35,7 @@ public protocol ChartData: ObservableObject, Identifiable {
      # Reference
      [ChartMetadata](x-source-tag://ChartMetadata)
     */
-    var metadata: ChartMetadata? { get set }
+    var metadata: ChartMetadata { get set }
     
     /**
      Array of `LegendData` to populate the chart legend.

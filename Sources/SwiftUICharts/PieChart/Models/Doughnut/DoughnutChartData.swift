@@ -11,7 +11,7 @@ public class DoughnutChartData: DoughnutChartDataProtocol {
 
     @Published public var id            : UUID = UUID()
     @Published public var dataSets      : PieDataSet
-    @Published public var metadata      : ChartMetadata?
+    @Published public var metadata      : ChartMetadata
     @Published public var chartStyle    : DoughnutChartStyle
     @Published public var legends       : [LegendData]
     @Published public var infoView      : InfoViewData<PieChartDataPoint>
@@ -20,7 +20,7 @@ public class DoughnutChartData: DoughnutChartDataProtocol {
     public var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
     public init(dataSets    : PieDataSet,
-                metadata    : ChartMetadata? = nil,
+                metadata    : ChartMetadata,
                 chartStyle  : DoughnutChartStyle  = DoughnutChartStyle(),
                 noDataText  : Text
     ) {
