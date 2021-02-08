@@ -20,6 +20,8 @@ public protocol ChartData: ObservableObject, Identifiable {
     associatedtype Set      : DataSet
     associatedtype DataPoint: CTChartDataPoint
     
+    associatedtype CTStyle : CTChartStyle
+    
     var id: ID { get }
     
     /**
@@ -35,7 +37,7 @@ public protocol ChartData: ObservableObject, Identifiable {
      # Reference
      [ChartMetadata](x-source-tag://ChartMetadata)
     */
-    var metadata: ChartMetadata? { get set }
+    var metadata: ChartMetadata { get set }
     
     /**
      Array of `LegendData` to populate the chart legend.
@@ -48,6 +50,14 @@ public protocol ChartData: ObservableObject, Identifiable {
      Data model to hold temporary data from `TouchOverlay` ViewModifier and pass the data points to display in the `HeaderView`.
     */
     var infoView: InfoViewData<DataPoint> { get set }
+    
+    /**
+     Data model conatining the style data for the chart.
+     
+     # Reference
+     [CTChartStyle](x-source-tag://CTChartStyle)
+     */
+    var chartStyle: CTStyle { get set }
     
     /**
      Customisable `Text` to display when where is not enough data to draw the chart.
@@ -90,6 +100,15 @@ public protocol ChartData: ObservableObject, Identifiable {
      - Tag: getHeaderLocation
      */
     func getHeaderLocation() -> InfoBoxPlacement
+    
+    
+    
+    
+    
+//    func getInfoColor() -> (Color, Color)
+    
+    
+    
     
     /**
     Gets the nearest data points to the touch location.
@@ -196,13 +215,24 @@ public protocol MultiDataSet: DataSet {
   - Tag: CTChartStyle
  */
 public protocol CTChartStyle {
+    
     /**
      Placement of the information box that appears on touch input.
      
      # Reference
      [See InfoBoxPlacement](x-source-tag://InfoBoxPlacement)
      */
-    var infoBoxPlacement : InfoBoxPlacement { get set }
+    var infoBoxPlacement        : InfoBoxPlacement { get set }
+    
+    /**
+     Colour of the value part of the touch info.
+     */
+    var infoBoxValueColour      : Color { get set }
+    
+    /**
+     Colour of the description part of the touch info.
+     */
+    var infoBoxDescriptionColor : Color { get set }
     
     /**
      Global control of animations.

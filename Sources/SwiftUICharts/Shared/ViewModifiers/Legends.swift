@@ -11,10 +11,12 @@ internal struct Legends<T>: ViewModifier where T: ChartData {
     
     @ObservedObject var chartData: T
     
+    let textColor: Color
+    
     internal func body(content: Content) -> some View {
         VStack {
             content
-            LegendView(chartData: chartData)
+            LegendView(chartData: chartData, textColor: textColor)
         }
     }
 }
@@ -28,8 +30,8 @@ extension View {
      
      - Tag: Legends
      */
-    public func legends<T:ChartData>(chartData: T) -> some View {
-        self.modifier(Legends(chartData: chartData))
+    public func legends<T:ChartData>(chartData: T, textColor: Color = Color.primary) -> some View {
+        self.modifier(Legends(chartData: chartData, textColor: textColor))
     }
 }
 

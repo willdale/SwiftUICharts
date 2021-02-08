@@ -41,6 +41,7 @@ internal struct YAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
             ForEach((0...numberOfLabels).reversed(), id: \.self) { i in
                 Text("\(labelsArray[i], specifier: specifier)")
                     .font(.caption)
+                    .foregroundColor(chartData.chartStyle.yAxisLabelColour)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                 if i != 0 {

@@ -10,9 +10,12 @@ import SwiftUI
 internal struct LegendView<T>: View where T: ChartData {
     
     @ObservedObject var chartData : T
+    
+    let textColor: Color
             
-    internal init(chartData: T) {
+    internal init(chartData: T, textColor: Color) {
         self.chartData = chartData
+        self.textColor = textColor
     }
     
     // Expose to API ??
@@ -57,6 +60,7 @@ internal struct LegendView<T>: View where T: ChartData {
                             .frame(width: 40, height: 3)
                         Text(legend.legend)
                             .font(.caption)
+                            .foregroundColor(textColor)
                     }
                     
                 } else if let colours = legend.colours  {
@@ -69,6 +73,7 @@ internal struct LegendView<T>: View where T: ChartData {
                             .frame(width: 40, height: 3)
                         Text(legend.legend)
                             .font(.caption)
+                            .foregroundColor(textColor)
                     }
                 } else if let stops = legend.stops {
                     let stops = GradientStop.convertToGradientStopsArray(stops: stops)
@@ -81,6 +86,7 @@ internal struct LegendView<T>: View where T: ChartData {
                             .frame(width: 40, height: 3)
                         Text(legend.legend)
                             .font(.caption)
+                            .foregroundColor(textColor)
                     }
                 }
             }

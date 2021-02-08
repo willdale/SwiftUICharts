@@ -11,7 +11,7 @@ public class MultiLayerPieChartData {
 
     @Published public var id            : UUID = UUID()
     @Published public var dataSets      : MultiPieDataSet
-    @Published public var metadata      : ChartMetadata?
+    @Published public var metadata      : ChartMetadata
     @Published public var chartStyle    : PieChartStyle
     @Published public var legends       : [LegendData]
 //    @Published public var infoView      : InfoViewData<MultiPieDataPoint>
@@ -20,7 +20,7 @@ public class MultiLayerPieChartData {
     public var chartType: (chartType: ChartType, dataSetType: DataSetType)
 
     public init(dataSets    : MultiPieDataSet,
-                metadata    : ChartMetadata? = nil,
+                metadata    : ChartMetadata  = ChartMetadata(),
                 chartStyle  : PieChartStyle  = PieChartStyle(),
                 noDataText  : Text
     ) {

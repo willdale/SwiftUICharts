@@ -11,34 +11,19 @@ internal struct HeaderBox<T>: ViewModifier where T: ChartData {
     
     @ObservedObject var chartData: T
     
-    let showTitle   : Bool
-    let showSubtitle: Bool
-    
-    init(chartData      : T,
-         showTitle      : Bool = true,
-         showSubtitle   : Bool = true
-    ) {
-        self.chartData     = chartData
-        self.showTitle     = showTitle
-        self.showSubtitle  = showSubtitle
+    init(chartData: T) {
+        self.chartData = chartData
     }
     
     var titleBox: some View {
         VStack(alignment: .leading) {
-            if showTitle, let title = chartData.metadata?.title {
-                Text(title)
-                    .font(.title3)
-            }  else {
-                Text("")
-                    .font(.title3)
-            }
-            if showSubtitle, let subtitle = chartData.metadata?.subtitle {
-                Text(subtitle)
-                    .font(.subheadline)
-            } else {
-                Text("")
-                    .font(.subheadline)
-            }
+            Text(chartData.metadata.title)
+                .font(.title3)
+                .foregroundColor(chartData.metadata.titleColour)
+            
+            Text(chartData.metadata.subtitle)
+                .font(.subheadline)
+                .foregroundColor(chartData.metadata.subtitleColour)
         }
     }
     
@@ -48,8 +33,10 @@ internal struct HeaderBox<T>: ViewModifier where T: ChartData {
                 ForEach(chartData.infoView.touchOverlayInfo, id: \.self) { info in
                     Text("\(info.value, specifier: chartData.infoView.touchSpecifier)")
                         .font(.title3)
+                        .foregroundColor(chartData.chartStyle.infoBoxValueColour)
                     Text("\(info.pointDescription ?? "")")
                         .font(.subheadline)
+                        .foregroundColor(chartData.chartStyle.infoBoxDescriptionColor)
                 }
             } else {
                 Text("")

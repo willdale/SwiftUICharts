@@ -154,7 +154,7 @@ public class LineChartData: LineChartDataProtocol {
     public let id   : UUID  = UUID()
     
     @Published public var dataSets      : LineDataSet
-    @Published public var metadata      : ChartMetadata?
+    @Published public var metadata      : ChartMetadata
     @Published public var xAxisLabels   : [String]?
     @Published public var chartStyle    : LineChartStyle
     @Published public var legends       : [LegendData]
@@ -179,7 +179,7 @@ public class LineChartData: LineChartDataProtocol {
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - calculations: Addition calculations that can be performed on the data set before drawing.
     public init(dataSets    : LineDataSet,
-                metadata    : ChartMetadata?    = nil,
+                metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : LineChartStyle    = LineChartStyle(),
                 calculations: CalculationType   = .none
@@ -208,7 +208,7 @@ public class LineChartData: LineChartDataProtocol {
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - customCalc: Custom calculations that can be performed on the data set before drawing.    
     public init(dataSets    : LineDataSet,
-                metadata    : ChartMetadata?    = nil,
+                metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : LineChartStyle = LineChartStyle(),
                 customCalc  : @escaping ([LineChartDataPoint]) -> [LineChartDataPoint]?

@@ -11,17 +11,25 @@ internal struct TouchOverlayBox<D: CTChartDataPoint>: View {
     
     private var selectedPoints  : [D]
     private var specifier       : String
+    
+    private let valueColour        : Color
+    private let descriptionColour  : Color
+    
     private var ignoreZero      : Bool
     
     @Binding private var boxFrame   :  CGRect
     
     internal init(selectedPoints : [D],
-                  specifier      : String = "%.0f",
+                  specifier      : String   = "%.0f",
+                  valueColour        : Color,
+                  descriptionColour  : Color,
                   boxFrame       : Binding<CGRect>,
-                  ignoreZero     : Bool = false
+                  ignoreZero     : Bool     = false
     ) {
-        self.selectedPoints  = selectedPoints
+        self.selectedPoints = selectedPoints
         self.specifier      = specifier
+        self.valueColour       = valueColour
+        self.descriptionColour = descriptionColour
         self._boxFrame      = boxFrame
         self.ignoreZero     = ignoreZero
     }
@@ -31,11 +39,14 @@ internal struct TouchOverlayBox<D: CTChartDataPoint>: View {
             ForEach(selectedPoints, id: \.self) { point in
                 if ignoreZero && point.value != 0 {
                     Text("\(point.value, specifier: specifier)")
+                        .foregroundColor(valueColour)
                 } else if !ignoreZero {
                     Text("\(point.value, specifier: specifier)")
+                        .foregroundColor(valueColour)
                 }
                 if let label = point.pointDescription {
                     Text(label)
+                        .foregroundColor(descriptionColour)
                 }
             }
         }
