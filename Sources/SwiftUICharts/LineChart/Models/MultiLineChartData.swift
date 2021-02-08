@@ -113,15 +113,19 @@ import SwiftUI
  ## LineChartStyle
  
  ```
- LineChartStyle(infoBoxPlacement    : InfoBoxPlacement,
-                xAxisGridStyle      : GridStyle,
-                yAxisGridStyle      : GridStyle,
-                xAxisLabelPosition  : XAxisLabelPosistion,
-                xAxisLabelsFrom     : LabelsFrom,
-                yAxisLabelPosition  : YAxisLabelPosistion,
-                yAxisNumberOfLabels : Int,
-                baseline            : Baseline,
-                globalAnimation     : Animation)
+ LineChartStyle(infoBoxPlacement        : InfoBoxPlacement,
+                infoBoxValueColour      : Color,
+                infoBoxDescriptionColor : Color,
+                xAxisGridStyle          : GridStyle,
+                xAxisLabelPosition      : XAxisLabelPosistion,
+                xAxisLabelColour        : Color,
+                xAxisLabelsFrom         : LabelsFrom,
+                yAxisGridStyle          : GridStyle,
+                yAxisLabelPosition      : YAxisLabelPosistion,
+                yAxisLabelColour        : Color,
+                yAxisNumberOfLabels     : Int,
+                baseline                : Baseline,
+                globalAnimation         : Animation)
  ```
  
  ### GridStyle

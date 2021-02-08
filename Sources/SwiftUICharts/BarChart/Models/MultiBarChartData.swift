@@ -129,14 +129,18 @@ import SwiftUI
  
  ## BarChartStyle
  ```
- BarChartStyle(infoBoxPlacement     : InfoBoxPlacement,
-               xAxisGridStyle       : GridStyle,
-               yAxisGridStyle       : GridStyle,
-               xAxisLabelPosition   : XAxisLabelPosistion,
-               xAxisLabelsFrom      : LabelsFrom,
-               yAxisLabelPosition   : YAxisLabelPosistion,
-               yAxisNumberOfLabels  : Int,
-               globalAnimation      : Animation)
+ BarChartStyle(infoBoxPlacement        : InfoBoxPlacement,
+               infoBoxValueColour      : Color,
+               infoBoxDescriptionColor : Color,
+               xAxisGridStyle          : GridStyle,
+               xAxisLabelPosition      : XAxisLabelPosistion,
+               xAxisLabelColour        : Color,
+               xAxisLabelsFrom         : LabelsFrom,
+               yAxisGridStyle          : GridStyle,
+               yAxisLabelPosition      : YAxisLabelPosistion,
+               yAxisLabelColour        : Color,
+               yAxisNumberOfLabels     : Int,
+               globalAnimation         : Animation)
  ```
  
  ### GridStyle
