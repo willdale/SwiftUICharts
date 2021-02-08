@@ -170,7 +170,9 @@ extension View {
      - Attention:
      Unavailable in tvOS
      */
-    public func touchOverlay(specifier: String = "%.0f") -> some View {
+    public func touchOverlay<T: ChartData>(chartData: T,
+                                           specifier: String = "%.0f"
+    ) -> some View {
         self.modifier(EmptyModifier())
     }
     #endif
