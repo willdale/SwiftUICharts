@@ -100,15 +100,19 @@ import SwiftUI
  ## LineChartStyle
  
  ```
- LineChartStyle(infoBoxPlacement    : InfoBoxPlacement,
-                xAxisGridStyle      : GridStyle,
-                yAxisGridStyle      : GridStyle,
-                xAxisLabelPosition  : XAxisLabelPosistion,
-                xAxisLabelsFrom     : LabelsFrom,
-                yAxisLabelPosition  : YAxisLabelPosistion,
-                yAxisNumberOfLabels : Int,
-                baseline            : Baseline,
-                globalAnimation     : Animation)
+ LineChartStyle(infoBoxPlacement        : InfoBoxPlacement,
+                infoBoxValueColour      : Color,
+                infoBoxDescriptionColor : Color,
+                xAxisGridStyle          : GridStyle,
+                xAxisLabelPosition      : XAxisLabelPosistion,
+                xAxisLabelColour        : Color,
+                xAxisLabelsFrom         : LabelsFrom,
+                yAxisGridStyle          : GridStyle,
+                yAxisLabelPosition      : YAxisLabelPosistion,
+                yAxisLabelColour        : Color,
+                yAxisNumberOfLabels     : Int,
+                baseline                : Baseline,
+                globalAnimation         : Animation)
  ```
  
  ### GridStyle
@@ -224,23 +228,47 @@ public class LineChartData: LineChartDataProtocol {
     }
     
     // MARK: Labels
-    // TODO --- Add from xaxis labels
-    public func getXAxidLabels() -> some View {
-        HStack(spacing: 0) {
-            ForEach(dataSets.dataPoints) { data in
-                if let label = data.xAxisLabel {
-                    Text(label)
-                        .font(.caption)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.5)
+    public func getXAxisLabels() -> some View {
+        Group {
+            switch self.chartStyle.xAxisLabelsFrom {
+            case .dataPoint:
+                
+                HStack(spacing: 0) {
+                    ForEach(dataSets.dataPoints) { data in
+                        if let label = data.xAxisLabel {
+                            Text(label)
+                                .font(.caption)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                        }
+                        if data != self.dataSets.dataPoints[self.dataSets.dataPoints.count - 1] {
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                        }
+                    }
                 }
-                if data != self.dataSets.dataPoints[self.dataSets.dataPoints.count - 1] {
-                    Spacer()
-                        .frame(minWidth: 0, maxWidth: 500)
+                .padding(.horizontal, -4)
+                
+                
+            case .chartData:
+                if let labelArray = self.xAxisLabels {
+                    HStack(spacing: 0) {
+                        ForEach(labelArray, id: \.self) { data in
+                            Text(data)
+                                .font(.caption)
+                                .foregroundColor(self.chartStyle.xAxisLabelColour)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                            if data != labelArray[labelArray.count - 1] {
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
+                            }
+                        }
+                    }
+                    .padding(.horizontal, -4)
                 }
             }
         }
-        .padding(.horizontal, -4)
     }
     
     // MARK: Touch
@@ -308,6 +336,7 @@ public class LineChartData: LineChartDataProtocol {
                                            chartType  : .line))
         }
     }
+    
     public typealias Set       = LineDataSet
     public typealias DataPoint = LineChartDataPoint
 }

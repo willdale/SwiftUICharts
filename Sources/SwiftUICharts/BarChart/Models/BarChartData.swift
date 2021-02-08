@@ -116,14 +116,18 @@ import SwiftUI
  
  ## BarChartStyle
  ```
- BarChartStyle(infoBoxPlacement     : InfoBoxPlacement,
-               xAxisGridStyle       : GridStyle,
-               yAxisGridStyle       : GridStyle,
-               xAxisLabelPosition   : XAxisLabelPosistion,
-               xAxisLabelsFrom      : LabelsFrom,
-               yAxisLabelPosition   : YAxisLabelPosistion,
-               yAxisNumberOfLabels  : Int,
-               globalAnimation      : Animation)
+ BarChartStyle(infoBoxPlacement        : InfoBoxPlacement,
+               infoBoxValueColour      : Color,
+               infoBoxDescriptionColor : Color,
+               xAxisGridStyle          : GridStyle,
+               xAxisLabelPosition      : XAxisLabelPosistion,
+               xAxisLabelColour        : Color,
+               xAxisLabelsFrom         : LabelsFrom,
+               yAxisGridStyle          : GridStyle,
+               yAxisLabelPosition      : YAxisLabelPosistion,
+               yAxisLabelColour        : Color,
+               yAxisNumberOfLabels     : Int,
+               globalAnimation         : Animation)
  ```
  
  ### GridStyle
@@ -162,6 +166,7 @@ import SwiftUI
  
  - Tag: BarChartData
  */
+
 public class BarChartData: BarChartDataProtocol {
 
     public let id   : UUID  = UUID()
@@ -233,17 +238,41 @@ public class BarChartData: BarChartDataProtocol {
         return locations
     }
     
-    public func getXAxidLabels() -> some View {
-        HStack(spacing: 0) {
-            ForEach(dataSets.dataPoints) { data in
-                Spacer()
-                    .frame(minWidth: 0, maxWidth: 500)
-                Text(data.xAxisLabel ?? "")
-                    .font(.caption)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.5)
-                Spacer()
-                    .frame(minWidth: 0, maxWidth: 500)
+    public func getXAxisLabels() -> some View {
+        Group {
+            switch self.chartStyle.xAxisLabelsFrom {
+            case .dataPoint:
+          
+                HStack(spacing: 0) {
+                    ForEach(dataSets.dataPoints) { data in
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                        Text(data.xAxisLabel ?? "")
+                            .font(.caption)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                    }
+                }
+                
+            case .chartData:
+                
+                if let labelArray = self.xAxisLabels {
+                    HStack(spacing: 0) {
+                        ForEach(labelArray, id: \.self) { data in
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                            Text(data)
+                                .font(.caption)
+                                .foregroundColor(self.chartStyle.xAxisLabelColour)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                        }
+                    }
+                }
             }
         }
     }
@@ -330,4 +359,3 @@ public class BarChartData: BarChartDataProtocol {
     public typealias DataPoint = BarChartDataPoint
     
 }
-

@@ -101,15 +101,6 @@ public protocol ChartData: ObservableObject, Identifiable {
      */
     func getHeaderLocation() -> InfoBoxPlacement
     
-    
-    
-    
-    
-//    func getInfoColor() -> (Color, Color)
-    
-    
-    
-    
     /**
     Gets the nearest data points to the touch location.
     - Parameters:

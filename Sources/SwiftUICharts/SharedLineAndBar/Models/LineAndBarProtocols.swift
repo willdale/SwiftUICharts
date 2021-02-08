@@ -48,7 +48,7 @@ public protocol LineAndBarChartData : ChartData where CTStyle: CTLineAndBarChart
      
      - Tag: getXAxidLabels
      */
-    func getXAxidLabels() -> Body
+    func getXAxisLabels() -> Body
     
     /**
      Labels to display on the Y axis
@@ -85,41 +85,6 @@ public protocol LineAndBarChartData : ChartData where CTStyle: CTLineAndBarChart
      - Tag: getAverage
      */
     func getAverage() -> Double
-}
-
-extension LineAndBarChartData {
-    public func getHeaderLocation() -> InfoBoxPlacement {
-        return self.chartStyle.infoBoxPlacement
-    }
-}
-
-extension LineAndBarChartData where Set: SingleDataSet {
-    public func getRange() -> Double {
-        DataFunctions.dataSetRange(from: dataSets)
-    }
-    public func getMinValue() -> Double {
-        DataFunctions.dataSetMinValue(from: dataSets)
-    }
-    public func getMaxValue() -> Double {
-        DataFunctions.dataSetMaxValue(from: dataSets)
-    }
-    public func getAverage() -> Double {
-        DataFunctions.dataSetAverage(from: dataSets)
-    }
-}
-extension LineAndBarChartData where Set: MultiDataSet {
-    public func getRange() -> Double {
-        DataFunctions.multiDataSetRange(from: dataSets)
-    }
-    public func getMinValue() -> Double {
-        DataFunctions.multiDataSetMinValue(from: dataSets)
-    }
-    public func getMaxValue() -> Double {
-        DataFunctions.multiDataSetMaxValue(from: dataSets)
-    }
-    public func getAverage() -> Double {
-        DataFunctions.multiDataSetAverage(from: dataSets)
-    }
 }
 
 // MARK: - Style
@@ -185,7 +150,7 @@ public protocol CTLineAndBarChartStyle: CTChartStyle {
     
 }
 
-// MARK: DataPoints
+// MARK: - DataPoints
 /**
  A protocol to extend functionality of `CTChartDataPoint` specifically for Line and Bar Charts.
   
@@ -200,3 +165,37 @@ public protocol CTLineAndBarDataPoint: CTChartDataPoint {
 }
 
 
+// MARK: Extensions
+extension LineAndBarChartData {
+    public func getHeaderLocation() -> InfoBoxPlacement {
+        return self.chartStyle.infoBoxPlacement
+    }
+}
+extension LineAndBarChartData where Set: SingleDataSet {
+    public func getRange() -> Double {
+        DataFunctions.dataSetRange(from: dataSets)
+    }
+    public func getMinValue() -> Double {
+        DataFunctions.dataSetMinValue(from: dataSets)
+    }
+    public func getMaxValue() -> Double {
+        DataFunctions.dataSetMaxValue(from: dataSets)
+    }
+    public func getAverage() -> Double {
+        DataFunctions.dataSetAverage(from: dataSets)
+    }
+}
+extension LineAndBarChartData where Set: MultiDataSet {
+    public func getRange() -> Double {
+        DataFunctions.multiDataSetRange(from: dataSets)
+    }
+    public func getMinValue() -> Double {
+        DataFunctions.multiDataSetMinValue(from: dataSets)
+    }
+    public func getMaxValue() -> Double {
+        DataFunctions.multiDataSetMaxValue(from: dataSets)
+    }
+    public func getAverage() -> Double {
+        DataFunctions.multiDataSetAverage(from: dataSets)
+    }
+}

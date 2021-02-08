@@ -12,6 +12,8 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
         
     @ObservedObject var chartData: T
     
+    private let uuid = UUID()
+    
     private let markerName  : String
     private var markerValue : Double
     private let lineColour  : Color
@@ -58,6 +60,16 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
             valueLabel
 //                    }
         }
+        .onAppear {
+            if !chartData.legends.contains(where: { $0.id == uuid }) { // init twice
+                chartData.legends.append(LegendData(id          : uuid,
+                                                    legend      : markerName,
+                                                    colour      : lineColour,
+                                                    strokeStyle : Stroke.strokeStyleToStroke(strokeStyle: strokeStyle),
+                                                    prioity     : 2,
+                                                    chartType   : .line))
+            }
+        }
     }
     
     var marker: some View {
@@ -67,16 +79,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
                maxValue     : maxValue,
                chartType    : chartData.chartType.chartType)
             .stroke(lineColour, style: strokeStyle)
-            .onAppear {
-                if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
-                    chartData.legends.append(LegendData(id          : UUID(),
-                                                        legend      : markerName,
-                                                        colour      : lineColour,
-                                                        strokeStyle : Stroke.strokeStyleToStroke(strokeStyle: strokeStyle),
-                                                        prioity     : 2,
-                                                        chartType   : .line))
-                }
-        }
+            
     }
     
     var valueLabel: some View {
@@ -96,7 +99,11 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
                     .font(.caption)
                     .foregroundColor(labelColour)
                     .padding(4)
-                    .background(labelBackground)
+                    .background(Color.blue)
+                    .clipShape(LabelShape())
+                    .overlay(LabelShape()
+                                .stroke(lineColour)
+                    )
                     .ifElse(self.chartData.chartStyle.yAxisLabelPosition == .leading, if: {
                         $0.position(x: -18,
                                     y: pointY)

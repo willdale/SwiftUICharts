@@ -36,6 +36,8 @@ extension LineAndBarChartData where Self: LineChartDataProtocol {
         return labels
     }
 }
+
+
 extension LineAndBarChartData where Self: LineChartData {
     public func getRange() -> Double {
         switch self.chartStyle.baseline {
