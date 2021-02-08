@@ -257,22 +257,47 @@ public class MultiLineChartData: LineChartDataProtocol {
         }
         return locations
     }
-    public func getXAxidLabels() -> some View {
-        HStack(spacing: 0) {
-            ForEach(dataSets.dataSets[0].dataPoints) { data in
-                if let label = data.xAxisLabel {
-                    Text(label)
-                        .font(.caption)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.5)
+    public func getXAxisLabels() -> some View {
+        Group {
+            switch self.chartStyle.xAxisLabelsFrom {
+            case .dataPoint:
+                
+                HStack(spacing: 0) {
+                    ForEach(dataSets.dataSets[0].dataPoints) { data in
+                        if let label = data.xAxisLabel {
+                            Text(label)
+                                .font(.caption)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                        }
+                        if data != self.dataSets.dataSets[0].dataPoints[self.dataSets.dataSets[0].dataPoints.count - 1] {
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                        }
+                    }
                 }
-                if data != self.dataSets.dataSets[0].dataPoints[self.dataSets.dataSets[0].dataPoints.count - 1] {
-                    Spacer()
-                        .frame(minWidth: 0, maxWidth: 500)
+                .padding(.horizontal, -4)
+                
+                
+            case .chartData:
+                if let labelArray = self.xAxisLabels {
+                    HStack(spacing: 0) {
+                        ForEach(labelArray, id: \.self) { data in
+                            Text(data)
+                                .font(.caption)
+                                .foregroundColor(self.chartStyle.xAxisLabelColour)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                            if data != labelArray[labelArray.count - 1] {
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
+                            }
+                        }
+                    }
+                    .padding(.horizontal, -4)
                 }
             }
         }
-        .padding(.horizontal, -4)
     }
     
     public func setupLegends() {

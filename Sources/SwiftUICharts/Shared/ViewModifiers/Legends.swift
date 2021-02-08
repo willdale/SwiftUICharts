@@ -10,13 +10,22 @@ import SwiftUI
 internal struct Legends<T>: ViewModifier where T: ChartData {
     
     @ObservedObject var chartData: T
+    private let columns     : [GridItem]
+    private let textColor   : Color
     
-    let textColor: Color
+    init(chartData: T,
+         columns  : [GridItem],
+         textColor: Color
+    ) {
+        self.chartData = chartData
+        self.columns   = columns
+        self.textColor = textColor
+    }
     
     internal func body(content: Content) -> some View {
         VStack {
             content
-            LegendView(chartData: chartData, textColor: textColor)
+            LegendView(chartData: chartData, columns: columns, textColor: textColor)
         }
     }
 }
@@ -30,8 +39,8 @@ extension View {
      
      - Tag: Legends
      */
-    public func legends<T:ChartData>(chartData: T, textColor: Color = Color.primary) -> some View {
-        self.modifier(Legends(chartData: chartData, textColor: textColor))
+    public func legends<T:ChartData>(chartData: T, columns: [GridItem] = [GridItem(.flexible())], textColor: Color = Color.primary) -> some View {
+        self.modifier(Legends(chartData: chartData, columns: columns, textColor: textColor))
     }
 }
 

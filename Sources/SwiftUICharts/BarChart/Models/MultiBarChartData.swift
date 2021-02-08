@@ -252,16 +252,42 @@ public class MultiBarChartData: BarChartDataProtocol {
         }
         return locations
     }
-   public func getXAxidLabels() -> some View {
-        HStack(spacing: 100) {
-            ForEach(dataSets.dataSets) { dataSet in
-                HStack(spacing: 0) {
-                    ForEach(dataSet.dataPoints) { data in
-                        Text(data.xAxisLabel ?? "")
-                            .font(.caption)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.5)
-                        if data != dataSet.dataPoints[dataSet.dataPoints.count - 1] {
+    
+    public func getXAxisLabels() -> some View {
+        Group {
+            switch self.chartStyle.xAxisLabelsFrom {
+            case .dataPoint:
+          
+                HStack(spacing: 100) {
+                    ForEach(dataSets.dataSets) { dataSet in
+                        HStack(spacing: 0) {
+                            ForEach(dataSet.dataPoints) { data in
+                                Text(data.xAxisLabel ?? "")
+                                    .font(.caption)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.5)
+                                if data != dataSet.dataPoints[dataSet.dataPoints.count - 1] {
+                                    Spacer()
+                                        .frame(minWidth: 0, maxWidth: 500)
+                                }
+                            }
+                        }
+                    }
+                }
+                .padding(.horizontal, -4)
+                
+            case .chartData:
+                
+                if let labelArray = self.xAxisLabels {
+                    HStack(spacing: 0) {
+                        ForEach(labelArray, id: \.self) { data in
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                            Text(data)
+                                .font(.caption)
+                                .foregroundColor(self.chartStyle.xAxisLabelColour)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
                         }
@@ -269,7 +295,6 @@ public class MultiBarChartData: BarChartDataProtocol {
                 }
             }
         }
-        .padding(.horizontal, -4)
     }
     
     public func setupLegends() {

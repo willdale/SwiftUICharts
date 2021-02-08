@@ -10,22 +10,27 @@ import SwiftUI
 internal struct XAxisBorder<T>: ViewModifier where T: LineAndBarChartData {
     
     @ObservedObject var chartData: T
-        
+    private let labelsAndTop     : Bool
+    private let labelsAndBottom  : Bool
+    
+    init(chartData: T) {
+        self.chartData = chartData
+        self.labelsAndTop    = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .top
+        self.labelsAndBottom = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .bottom
+    }
+    
     @ViewBuilder
     internal func body(content: Content) -> some View {
-        
-        let labelsAndTop = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .top
-        let labelsAndBottom = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .bottom
-        
+
         if labelsAndBottom {
-            VStack {
+           VStack {
                 ZStack(alignment: .bottom) {
                     content
                     Divider()
                 }
             }
         } else if labelsAndTop {
-            VStack {
+           VStack {
                 ZStack(alignment: .top) {
                     content
                     Divider()
@@ -40,15 +45,20 @@ internal struct XAxisBorder<T>: ViewModifier where T: LineAndBarChartData {
 internal struct YAxisBorder<T>: ViewModifier where T: LineAndBarChartData {
     
     @ObservedObject var chartData: T
+    private let labelsAndLeading : Bool
+    private let labelsAndTrailing: Bool
+    
+    init(chartData: T) {
+        self.chartData = chartData
+        self.labelsAndLeading  = chartData.viewData.hasYAxisLabels && chartData.chartStyle.yAxisLabelPosition == .leading
+        self.labelsAndTrailing = chartData.viewData.hasYAxisLabels && chartData.chartStyle.yAxisLabelPosition == .trailing
+    }
     
     @ViewBuilder
     internal func body(content: Content) -> some View {
         
-        let labelsAndLeading = chartData.viewData.hasYAxisLabels && chartData.chartStyle.yAxisLabelPosition == .leading
-        let labelsAndTrailing = chartData.viewData.hasYAxisLabels && chartData.chartStyle.yAxisLabelPosition == .trailing
-        
         if labelsAndLeading {
-            HStack {
+           HStack {
                 ZStack(alignment: .leading) {
                     content
                     Divider()
@@ -62,7 +72,7 @@ internal struct YAxisBorder<T>: ViewModifier where T: LineAndBarChartData {
                 }
             }
         } else {
-            content
+           content
         }
     }
 }

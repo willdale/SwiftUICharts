@@ -238,17 +238,41 @@ public class BarChartData: BarChartDataProtocol {
         return locations
     }
     
-    public func getXAxidLabels() -> some View {
-        HStack(spacing: 0) {
-            ForEach(dataSets.dataPoints) { data in
-                Spacer()
-                    .frame(minWidth: 0, maxWidth: 500)
-                Text(data.xAxisLabel ?? "")
-                    .font(.caption)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.5)
-                Spacer()
-                    .frame(minWidth: 0, maxWidth: 500)
+    public func getXAxisLabels() -> some View {
+        Group {
+            switch self.chartStyle.xAxisLabelsFrom {
+            case .dataPoint:
+          
+                HStack(spacing: 0) {
+                    ForEach(dataSets.dataPoints) { data in
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                        Text(data.xAxisLabel ?? "")
+                            .font(.caption)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                    }
+                }
+                
+            case .chartData:
+                
+                if let labelArray = self.xAxisLabels {
+                    HStack(spacing: 0) {
+                        ForEach(labelArray, id: \.self) { data in
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                            Text(data)
+                                .font(.caption)
+                                .foregroundColor(self.chartStyle.xAxisLabelColour)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                        }
+                    }
+                }
             }
         }
     }

@@ -11,19 +11,17 @@ internal struct LegendView<T>: View where T: ChartData {
     
     @ObservedObject var chartData : T
     
-    let textColor: Color
+    private let columns     : [GridItem]
+    private let textColor   : Color
             
-    internal init(chartData: T, textColor: Color) {
+    internal init(chartData: T,
+                  columns  : [GridItem],
+                  textColor: Color
+    ) {
         self.chartData = chartData
+        self.columns   = columns
         self.textColor = textColor
     }
-    
-    // Expose to API ??
-    let columns = [
-//        GridItem(.flexible()),
-        GridItem(.flexible())
-        //geo.size.width / CGFloat(columns.count) / 2
-    ]
     
     internal var body: some View {
         
