@@ -14,6 +14,7 @@ import SwiftUI
 ///
 /// - Tag: InfoViewData
 public struct InfoViewData<DP: CTChartDataPoint> {
+    
     /**
     Is there currently input (touch or click) on the chart
     
@@ -22,6 +23,7 @@ public struct InfoViewData<DP: CTChartDataPoint> {
     Used by TitleBox
      */
     var isTouchCurrent      : Bool = false
+    
     /**
      Closest data point to input
      
@@ -30,6 +32,7 @@ public struct InfoViewData<DP: CTChartDataPoint> {
      Used by TitleBox
      */
     var touchOverlayInfo    : [DP] = []
+    
     /**
      Set specifier of data point readout
      
@@ -38,5 +41,5 @@ public struct InfoViewData<DP: CTChartDataPoint> {
      Used by TitleBox
      */
     var touchSpecifier      : String = "%.0f"
-    
+
 }

@@ -17,8 +17,9 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
     private let lineColour  : Color
     private let strokeStyle : StrokeStyle
     
-    private let labelPosition  : DisplayValue
-    private let labelBackground: Color
+    private let labelPosition   : DisplayValue
+    private let labelColour     : Color
+    private let labelBackground : Color
     
     private let range       : Double
     private let minValue    : Double
@@ -28,6 +29,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
                   markerName     : String,
                   markerValue    : Double = 0,
                   labelPosition  : DisplayValue,
+                  labelColour    : Color,
                   labelBackground: Color,
                   lineColour     : Color,
                   strokeStyle    : StrokeStyle,
@@ -39,6 +41,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
         self.strokeStyle = strokeStyle
         
         self.labelPosition   = labelPosition
+        self.labelColour     = labelColour
         self.labelBackground = labelBackground
         
         self.markerValue = isAverage ? chartData.getAverage() : markerValue
@@ -90,9 +93,10 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
             case .yAxis(specifier: let specifier):
                 
                 Text("\(markerValue, specifier: specifier)")
+                    .font(.caption)
+                    .foregroundColor(labelColour)
                     .padding(4)
                     .background(labelBackground)
-                    .font(.caption)
                     .ifElse(self.chartData.chartStyle.yAxisLabelPosition == .leading, if: {
                         $0.position(x: -18,
                                     y: pointY)
@@ -100,11 +104,13 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
                         $0.position(x: geo.size.width + 18,
                                     y: pointY)
                     })
+                    
                 
             case .center(specifier: let specifier):
                 
                 Text("\(markerValue, specifier: specifier)")
                     .font(.caption)
+                    .foregroundColor(labelColour)
                     .padding()
                     .background(labelBackground)
                     .clipShape(DiamondShape())
@@ -127,6 +133,10 @@ extension View {
      ```
      .yAxisPOI(chartData: data,
                   markerName: "Marker",
+                  markerValue: 110,
+                  labelPosition: .center(specifier: "%.0f"),
+                  labelColour: Color.white,
+                  labelBackground: Color.red,
                   lineColour: .blue,
                   strokeStyle: StrokeStyle(lineWidth: 2,
                                            lineCap: .round,
@@ -153,24 +163,29 @@ extension View {
         - chartData: Chart data model.
         - markerName: Title of marker, for the legend.
         - markerValue: Value to mark
+        - labelPosition: Option to display the markers’ value inline with the marker.
+        - labelColour: Colour of the`Text`.
+        - labelBackground: Colour of the background.
         - lineColour: Line Colour.
         - strokeStyle: Style of Stroke.
      - Returns: A  new view containing the chart with a marker line at a specified value.
      
      - Tag: YAxisPOI
     */
-    public func yAxisPOI<T:LineAndBarChartData>(chartData     : T,
-                                                markerName    : String,
-                                                markerValue   : Double,
+    public func yAxisPOI<T:LineAndBarChartData>(chartData      : T,
+                                                markerName     : String,
+                                                markerValue    : Double,
                                                 labelPosition  : DisplayValue = .center(specifier: "%.0f"),
+                                                labelColour    : Color        = Color.primary,
                                                 labelBackground: Color        = Color.systemsBackground,
-                                                lineColour    : Color         = Color(.blue),
-                                                strokeStyle   : StrokeStyle   = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
+                                                lineColour     : Color        = Color(.blue),
+                                                strokeStyle    : StrokeStyle  = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
     ) -> some View {
         self.modifier(YAxisPOI(chartData      : chartData,
                                markerName     : markerName,
                                markerValue    : markerValue,
                                labelPosition  : labelPosition,
+                               labelColour    : labelColour,
                                labelBackground: labelBackground,
                                lineColour     : lineColour,
                                strokeStyle    : strokeStyle,
@@ -188,6 +203,9 @@ extension View {
      ```
      .averageLine(chartData: data,
                   markerName: "Average",
+                  labelPosition: .center(specifier: "%.0f"),
+                  labelColour: Color.white,
+                  labelBackground: Color.red,
                   lineColour: .primary,
                   strokeStyle: StrokeStyle(lineWidth: 2,
                                            lineCap: .round,
@@ -213,6 +231,9 @@ extension View {
      - Parameters:
         - chartData: Chart data model.
         - markerName: Title of marker, for the legend.
+        - labelPosition: Option to display the markers’ value inline with the marker.
+        - labelColour: Colour of the`Text`.
+        - labelBackground: Colour of the background.
         - lineColour: Line Colour.
         - strokeStyle: Style of Stroke.
      - Returns: A  new view containing the chart with a marker line at the average.
@@ -222,6 +243,7 @@ extension View {
     public func averageLine<T:LineAndBarChartData>(chartData      : T,
                                                    markerName     : String        = "Average",
                                                    labelPosition  : DisplayValue  = .yAxis(specifier: "%.0f"),
+                                                   labelColour    : Color         = Color.primary,
                                                    labelBackground: Color         = Color.systemsBackground,
                                                    lineColour     : Color         = Color.primary,
                                                    strokeStyle    : StrokeStyle   = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
@@ -229,6 +251,7 @@ extension View {
         self.modifier(YAxisPOI(chartData      : chartData,
                                markerName     : markerName,
                                labelPosition  : labelPosition,
+                               labelColour    : labelColour,
                                labelBackground: labelBackground,
                                lineColour     : lineColour,
                                strokeStyle    : strokeStyle,

@@ -35,6 +35,7 @@ internal struct XAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
                         ForEach(labelArray, id: \.self) { data in
                             Text(data)
                                 .font(.caption)
+                                .foregroundColor(chartData.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
                             if data != labelArray[labelArray.count - 1] {
@@ -54,6 +55,7 @@ internal struct XAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
                                 .frame(minWidth: 0, maxWidth: 500)
                             Text(data)
                                 .font(.caption)
+                                .foregroundColor(chartData.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
                             Spacer()

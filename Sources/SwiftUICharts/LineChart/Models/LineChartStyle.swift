@@ -65,46 +65,72 @@ import SwiftUI
  */
 public struct LineChartStyle: CTLineChartStyle {
     
-    public var infoBoxPlacement     : InfoBoxPlacement
-    public var globalAnimation      : Animation
-    
+    public var infoBoxPlacement        : InfoBoxPlacement
+    public var infoBoxValueColour      : Color
+    public var infoBoxDescriptionColor : Color
+        
     public var xAxisGridStyle       : GridStyle
-    public var yAxisGridStyle       : GridStyle
     public var xAxisLabelPosition   : XAxisLabelPosistion
+    public var xAxisLabelColour     : Color
     public var xAxisLabelsFrom      : LabelsFrom
+    
+    public var yAxisGridStyle       : GridStyle
     public var yAxisLabelPosition   : YAxisLabelPosistion
+    public var yAxisLabelColour     : Color
     public var yAxisNumberOfLabels  : Int
     
     public var baseline             : Baseline
+    public var globalAnimation      : Animation
     
     /// Model for controlling the overall aesthetic of the chart.
     /// - Parameters:
     ///   - infoBoxPlacement: Placement of the information box that appears on touch input.
+    ///   - infoBoxValueColour: Colour of the value part of the touch info.
+    ///   - infoBoxDescriptionColor: Colour of the description part of the touch info.
+    ///
     ///   - xAxisGridStyle: Style of the vertical lines breaking up the chart.
+    ///   - xAxisLabelPosition: Location of the X axis labels - Top or Bottom.
+    ///   - xAxisLabelColour: Text Colour for the labels on the X axis.
+    ///   - xAxisLabelsFrom: Where the label data come from. DataPoint or xAxisLabels.
+    ///
     ///   - yAxisGridStyle: Style of the horizontal lines breaking up the chart.
-    ///   - xAxisLabelPosition: Location of the X axis labels - Top or Bottom
-    ///   - xAxisLabelsFrom: Where the label data come from. DataPoint or xAxisLabels
-    ///   - yAxisLabelPosition: Location of the X axis labels - Leading or Trailing
-    ///   - yAxisNumberOfLabel: Number Of Labels on Y Axis
+    ///   - yAxisLabelPosition: Location of the X axis labels - Leading or Trailing.
+    ///   - yAxisLabelColour: Text Colour for the labels on the Y axis.
+    ///   - yAxisNumberOfLabel: Number Of Labels on Y Axis.
+    ///
     ///   - baseline: Whether the chart is drawn from baseline of zero or the minimum datapoint value.
     ///   - globalAnimation: Gobal control of animations.
-    public init(infoBoxPlacement    : InfoBoxPlacement      = .floating,
+    public init(infoBoxPlacement        : InfoBoxPlacement  = .floating,
+                infoBoxValueColour      : Color             = Color.primary,
+                infoBoxDescriptionColor : Color             = Color.primary,
+                
                 xAxisGridStyle      : GridStyle             = GridStyle(),
-                yAxisGridStyle      : GridStyle             = GridStyle(),
                 xAxisLabelPosition  : XAxisLabelPosistion   = .bottom,
+                xAxisLabelColour    : Color                 = Color.primary,
                 xAxisLabelsFrom     : LabelsFrom            = .dataPoint,
+                
+                yAxisGridStyle      : GridStyle             = GridStyle(),
                 yAxisLabelPosition  : YAxisLabelPosistion   = .leading,
+                yAxisLabelColour    : Color                 = Color.primary,
                 yAxisNumberOfLabels : Int                   = 10,
+
                 baseline            : Baseline              = .minimumValue,
                 globalAnimation     : Animation             = Animation.linear(duration: 1)
     ) {
-        self.infoBoxPlacement    = infoBoxPlacement
+        self.infoBoxPlacement        = infoBoxPlacement
+        self.infoBoxValueColour      = infoBoxValueColour
+        self.infoBoxDescriptionColor = infoBoxDescriptionColor
+        
         self.xAxisGridStyle      = xAxisGridStyle
-        self.yAxisGridStyle      = yAxisGridStyle
         self.xAxisLabelPosition  = xAxisLabelPosition
         self.xAxisLabelsFrom     = xAxisLabelsFrom
+        self.xAxisLabelColour    = xAxisLabelColour
+        
+        self.yAxisGridStyle      = yAxisGridStyle
         self.yAxisLabelPosition  = yAxisLabelPosition
         self.yAxisNumberOfLabels = yAxisNumberOfLabels
+        self.yAxisLabelColour    = yAxisLabelColour
+        
         self.baseline            = baseline
         self.globalAnimation     = globalAnimation
     }

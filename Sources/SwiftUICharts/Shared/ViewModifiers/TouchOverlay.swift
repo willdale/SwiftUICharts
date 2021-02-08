@@ -19,15 +19,14 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
     @ObservedObject var chartData: T
 
     /// Decimal precision for labels
-    private let specifier               : String
-    private let touchMarkerLineWidth    : CGFloat = 1 // API?
-
+    private let specifier           : String
+    
     /// Current location of the touch input
     @State private var touchLocation    : CGPoint   = CGPoint(x: 0, y: 0)
     /// The data point closest to the touch input
-    @State private var selectedPoints   : [T.DataPoint] = []
+    @State private var selectedPoints   : [T.DataPoint]     = []
     /// The location for the nearest data point to the touch input
-    @State private var pointLocations   : [HashablePoint]  = [HashablePoint(x: 0, y: 0)]
+    @State private var pointLocations   : [HashablePoint]   = [HashablePoint(x: 0, y: 0)]
     /// Frame information of the data point information box
     @State private var boxFrame         : CGRect    = CGRect(x: 0, y: 0, width: 0, height: 50)
     /// Placement of the data point information box
@@ -39,11 +38,11 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
     /// - Parameters:
     ///   - chartData:
     ///   - specifier: Decimal precision for labels
-    internal init(chartData: T,
-                  specifier: String
+    internal init(chartData         : T,
+                  specifier         : String
     ) {
-        self.chartData = chartData
-        self.specifier = specifier
+        self.chartData         = chartData
+        self.specifier         = specifier
     }
 
     internal func body(content: Content) -> some View {
@@ -81,10 +80,14 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                     if chartData.infoView.isTouchCurrent {
                         ForEach(pointLocations, id: \.self) { location in
                             TouchOverlayMarker(position: location)
-                                .stroke(Color(.gray), lineWidth: touchMarkerLineWidth)
+                                .stroke(Color(.gray), lineWidth: 1)
                         }
                         if chartData.getHeaderLocation() == .floating {
-                            TouchOverlayBox(selectedPoints: selectedPoints, specifier: specifier, boxFrame: $boxFrame)
+                            TouchOverlayBox(selectedPoints   : selectedPoints,
+                                            specifier        : specifier,
+                                            valueColour      : chartData.chartStyle.infoBoxValueColour,
+                                            descriptionColour: chartData.chartStyle.infoBoxDescriptionColor,
+                                            boxFrame         : $boxFrame)
                                 .position(x: boxLocation.x, y: 0 + (boxFrame.height / 2))
                         }
                     }
@@ -157,7 +160,8 @@ extension View {
     public func touchOverlay<T: ChartData>(chartData: T,
                                            specifier: String = "%.0f"
     ) -> some View {
-        self.modifier(TouchOverlay(chartData: chartData, specifier: specifier))
+        self.modifier(TouchOverlay(chartData: chartData,
+                                   specifier: specifier))
     }
     #elseif os(tvOS)
     /**

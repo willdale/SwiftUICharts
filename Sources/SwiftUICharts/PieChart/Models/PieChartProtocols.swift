@@ -17,9 +17,7 @@ import SwiftUI
   
  - Tag: PieAndDoughnutChartDataProtocol
  */
-public protocol PieAndDoughnutChartDataProtocol: ChartData {
-    /// `associatedtype` to set the which `ChartStyle` to use.
-    associatedtype CTStyle : CTPieAndDoughnutChartStyle
+public protocol PieAndDoughnutChartDataProtocol: ChartData where CTStyle : CTPieAndDoughnutChartStyle{
     
     /**
      Data model conatining the style data for the chart.
