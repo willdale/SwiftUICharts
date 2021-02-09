@@ -327,4 +327,5 @@ public protocol CTChartDataPoint: Hashable, Identifiable {
      [See Calculations](x-source-tag://Calculations)
      */
     var date             : Date? { get set }
+    
 }

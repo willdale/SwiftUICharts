@@ -186,24 +186,17 @@ public class BarChartData: BarChartDataProtocol {
     // MARK: - Initializers
     /// Initialises a standard Bar Chart with optional calculation
     ///
-    /// Has the option perform optional calculation on the data set, such as averaging based on date.
-    ///
-    /// - Note:
-    /// To add custom calculations use the initialiser with `customCalc`.
-    ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the bars.
     ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    ///   - calculations: Addition calculations that can be performed on the data set before drawing.
     public init(dataSets    : BarDataSet,
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : BarChartStyle     = BarChartStyle(),
-                noDataText  : Text              = Text("No Data"),
-                calculations: CalculationType   = .none
+                noDataText  : Text              = Text("No Data")
     ) {
         self.dataSets       = dataSets
         self.metadata       = metadata
@@ -215,39 +208,7 @@ public class BarChartData: BarChartDataProtocol {
         self.chartType      = (.bar, .single)
         self.setupLegends()
     }
-    
-    /// Initializes a standar Bar Chart with custom calculation
-    ///
-    /// Has the option perform custom calculations on the data set.
-    ///
-    /// - Note:
-    /// To add pre built calculations use the initialiser with `calculations`.
-    ///
-    /// - Parameters:
-    ///   - dataSets: Data to draw and style the bars.
-    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
-    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
-    ///   - chartStyle: The style data for the aesthetic of the chart.
-    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    ///   - customCalc: Custom calculations that can be performed on the data set before drawing.
-    public init(dataSets    : BarDataSet,
-                metadata    : ChartMetadata     = ChartMetadata(),
-                xAxisLabels : [String]?         = nil,
-                chartStyle  : BarChartStyle     = BarChartStyle(),
-                noDataText  : Text              = Text("No Data"),
-                customCalc  : @escaping ([BarChartDataPoint]) -> [BarChartDataPoint]?
-    ) {
-        self.dataSets       = dataSets
-        self.metadata       = metadata
-        self.xAxisLabels    = xAxisLabels
-        self.chartStyle     = chartStyle
-        self.noDataText     = noDataText
-        self.legends        = [LegendData]()
-        self.viewData       = ChartViewData()
-        self.chartType      = (chartType: .bar, dataSetType: .single)
-        self.setupLegends()
-    }
-    
+
     // MARK: - Labels
     public func getXAxisLabels() -> some View {
         Group {

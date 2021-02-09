@@ -7,30 +7,6 @@
 
 import Foundation
 
-
-// MARK: - DataPoints
-/**
- Inbuild functions for manipulating the datapoints before drawing the chart.
- ```
- case none // No function
- case averageMonth // Monthly Average
- case averageWeek // Weekly Average
- case averageDay // Daily Average
- ```
- 
- - Tag: CalculationType
- */
-public enum CalculationType {
-    /// No function
-    case none
-    /// Monthly Average
-    case averageMonth
-    /// Weekly Average
-    case averageWeek
-    /// Daily Average
-    case averageDay
-}
-
 // MARK: - ChartViewData
 /**
  The type of `DataSet` being used
