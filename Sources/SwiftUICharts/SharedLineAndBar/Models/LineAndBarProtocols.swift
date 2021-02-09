@@ -22,21 +22,20 @@ public protocol LineAndBarChartData : ChartData where CTStyle: CTLineAndBarChart
     associatedtype Body : View
     
     /**
-     Data model to hold data about the Views layout.
-
-     This informs some `ViewModifiers` whether the chart has X and/or Y
-     axis labels so they can configure thier layouts appropriately.
-     */
-    var viewData: ChartViewData { get set }
-
-    
-    /**
      Array of strings for the labels on the X Axis instead of the labels in the data points.
 
      To control where the labels should come from.
      Set [LabelsFrom](x-source-tag://LabelsFrom) in [ChartStyle](x-source-tag://CTChartStyle).
     */
     var xAxisLabels: [String]? { get set }
+    
+    /**
+     Data model to hold data about the Views layout.
+
+     This informs some `ViewModifiers` whether the chart has X and/or Y
+     axis labels so they can configure thier layouts appropriately.
+     */
+    var viewData: ChartViewData { get set }
     
     /**
      Displays a view for the labels on the X Axis.

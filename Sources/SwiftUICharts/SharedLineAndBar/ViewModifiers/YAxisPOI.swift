@@ -53,7 +53,6 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
     }
     
     internal func body(content: Content) -> some View {
-        
         ZStack {
             if chartData.isGreaterThanTwo() {
                 content
@@ -62,7 +61,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
             } else { content }
         }
         .onAppear {
-            if !chartData.legends.contains(where: { $0.id == uuid }) { // init twice
+            if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
                 chartData.legends.append(LegendData(id          : uuid,
                                                     legend      : markerName,
                                                     colour      : lineColour,
@@ -80,7 +79,6 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
                maxValue     : maxValue,
                chartType    : chartData.chartType.chartType)
             .stroke(lineColour, style: strokeStyle)
-            
     }
     
     var valueLabel: some View {
