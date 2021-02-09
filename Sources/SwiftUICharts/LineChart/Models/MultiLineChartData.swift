@@ -45,10 +45,11 @@ import SwiftUI
       let metadata = ChartMetadata(title: "Some Data", subtitle: "A Week")
       let labels = ["Monday", "Thursday", "Sunday"]
       
-      return MultiLineChartData(dataSets: data,
-                                metadata: metadata,
-                                xAxisLabels: labels,
-                                chartStyle: LineChartStyle(baseline: .zero),
+      return MultiLineChartData(dataSets    : data,
+                                metadata    : metadata,
+                                xAxisLabels : labels,
+                                chartStyle  : LineChartStyle(baseline: .zero),
+                                noDataText  : Text("No Data"),
                                 calculations: .none)
   }
 }
@@ -167,96 +168,88 @@ import SwiftUI
  - Tag: LineChartData
  */
 public class MultiLineChartData: LineChartDataProtocol {
-        
+    
+    // MARK: - Properties
     public let id   : UUID  = UUID()
     
-    /// Data model containing the datapoints: Value, Label, Description and Date. Individual colouring for bar chart.
     @Published public var dataSets      : MultiLineDataSet
-    
-    /// Data model containing: the charts Title, the charts Subtitle and the Line Legend.
     @Published public var metadata      : ChartMetadata
-    
-    /// Array of strings for the labels on the X Axis instead of the the dataPoints labels.
     @Published public var xAxisLabels   : [String]?
-    
-    /// Data model conatining the style data for the chart.
     @Published public var chartStyle    : LineChartStyle
-                
-    /// Array of data to populate the chart legend.
     @Published public var legends       : [LegendData]
-    
-    /// Data model to hold data about the Views layout.
     @Published public var viewData      : ChartViewData
     @Published public var isFilled      : Bool = false
-
     @Published public var infoView      : InfoViewData<LineChartDataPoint> = InfoViewData()
     
-    public var noDataText   : Text = Text("No Data")
-    
+    public var noDataText   : Text
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
-            
+    
+    // MARK: - Initializers
+    /// Initialises a Multi Line Chart with optional calculation
+    ///
+    /// Has the option perform optional calculation on the data set, such as averaging based on date.
+    ///
+    /// - Note:
+    /// To add custom calculations use the initialiser with `customCalc`.
+    ///
+    /// - Parameters:
+    ///   - dataSets: Data to draw and style the lines.
+    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
+    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
+    ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
+    ///   - calculations: Addition calculations that can be performed on the data set before drawing.
     public init(dataSets    : MultiLineDataSet,
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : LineChartStyle    = LineChartStyle(),
+                noDataText  : Text              = Text("No Data"),
                 calculations: CalculationType   = .none
     ) {
         self.dataSets       = dataSets
         self.metadata       = metadata
         self.xAxisLabels    = xAxisLabels
         self.chartStyle     = chartStyle
+        self.noDataText     = noDataText
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (.line, .multi)
         self.setupLegends()
     }
     
+    /// Initializes a Multi Line Chart with custom calculation
+    ///
+    /// Has the option perform custom calculations on the data set.
+    ///
+    /// - Note:
+    /// To add pre built calculations use the initialiser with `calculations`.
+    ///
+    /// - Parameters:
+    ///   - dataSets: Data to draw and style the lines.
+    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
+    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
+    ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
+    ///   - customCalc: Custom calculations that can be performed on the data set before drawing.
     public init(dataSets    : MultiLineDataSet,
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : LineChartStyle    = LineChartStyle(),
+                noDataText  : Text              = Text("No Data"),
                 customCalc  : @escaping ([LineChartDataPoint]) -> [LineChartDataPoint]?
     ) {
         self.dataSets       = dataSets
         self.metadata       = metadata
         self.xAxisLabels    = xAxisLabels
         self.chartStyle     = chartStyle
+        self.noDataText     = noDataText
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (chartType: .line, dataSetType: .multi)
         self.setupLegends()
     }
 
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [LineChartDataPoint] {
-        var points : [LineChartDataPoint] = []
-        for dataSet in dataSets.dataSets {
-            let xSection    : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count - 1)
-            let index       = Int((touchLocation.x + (xSection / 2)) / xSection)
-            if index >= 0 && index < dataSet.dataPoints.count {
-                points.append(dataSet.dataPoints[index])
-            }
-        }
-        return points
-    }
-    
-    public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
-
-        var locations : [HashablePoint] = []
-        for dataSet in dataSets.dataSets {
-            
-            let minValue : Double = self.getMinValue()
-            let range    : Double = self.getRange()
-            
-            let xSection : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count - 1)
-            let ySection : CGFloat = chartSize.size.height / CGFloat(range)
-            let index    : Int     = Int((touchLocation.x + (xSection / 2)) / xSection)
-            if index >= 0 && index < dataSet.dataPoints.count {
-                locations.append(HashablePoint(x: CGFloat(index) * xSection,
-                                               y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.size.height))
-            }
-        }
-        return locations
-    }
+    // MARK: - Labels
     public func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
@@ -300,6 +293,38 @@ public class MultiLineChartData: LineChartDataProtocol {
         }
     }
     
+    // MARK: - Touch
+    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [LineChartDataPoint] {
+        var points : [LineChartDataPoint] = []
+        for dataSet in dataSets.dataSets {
+            let xSection    : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count - 1)
+            let index       = Int((touchLocation.x + (xSection / 2)) / xSection)
+            if index >= 0 && index < dataSet.dataPoints.count {
+                points.append(dataSet.dataPoints[index])
+            }
+        }
+        return points
+    }
+    public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
+
+        var locations : [HashablePoint] = []
+        for dataSet in dataSets.dataSets {
+            
+            let minValue : Double = self.getMinValue()
+            let range    : Double = self.getRange()
+            
+            let xSection : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count - 1)
+            let ySection : CGFloat = chartSize.size.height / CGFloat(range)
+            let index    : Int     = Int((touchLocation.x + (xSection / 2)) / xSection)
+            if index >= 0 && index < dataSet.dataPoints.count {
+                locations.append(HashablePoint(x: CGFloat(index) * xSection,
+                                               y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.size.height))
+            }
+        }
+        return locations
+    }
+    
+    // MARK: - Legends
     public func setupLegends() {
         for dataSet in dataSets.dataSets {
             if dataSet.style.colourType == .colour,

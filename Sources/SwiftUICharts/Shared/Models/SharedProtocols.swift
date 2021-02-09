@@ -19,13 +19,12 @@ import SwiftUI
 public protocol ChartData: ObservableObject, Identifiable {
     associatedtype Set      : DataSet
     associatedtype DataPoint: CTChartDataPoint
-    
-    associatedtype CTStyle : CTChartStyle
+    associatedtype CTStyle  : CTChartStyle
     
     var id: ID { get }
     
     /**
-     Data model containing the datapoints.
+     Data model containing datapoints and styling information.
     
      `Set` is either `SingleData` or `MultiDataSet`.
     */
@@ -129,11 +128,31 @@ public protocol ChartData: ObservableObject, Identifiable {
      - Tag: setupLegends
      */
     func setupLegends()
+    
+    /**
+     Returns whether there are two or more dataPoints
+     */
+    func isGreaterThanTwo() -> Bool
 }
 
 extension ChartData {
     public func legendOrder() -> [LegendData] {
         return legends.sorted { $0.prioity < $1.prioity}
+    }
+}
+
+extension ChartData where Set: SingleDataSet {
+    public func isGreaterThanTwo() -> Bool {
+        return dataSets.dataPoints.count > 2
+    }
+}
+extension ChartData where Set: MultiDataSet {
+    public func isGreaterThanTwo() -> Bool {
+        var returnValue: Bool = true
+        dataSets.dataSets.forEach { dataSet in
+            returnValue = dataSet.dataPoints.count > 2
+        }
+        return returnValue
     }
 }
 

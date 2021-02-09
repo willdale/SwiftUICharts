@@ -28,9 +28,9 @@ import SwiftUI
  around the previous views.
  ```
     .touchOverlay(chartData: data)
-    .pointMarkers(chartData: data)
     .averageLine(chartData: data)
     .yAxisPOI(chartData: data)
+    .pointMarkers(chartData: data)
     .xAxisGrid(chartData: data)
     .yAxisGrid(chartData: data)
     .xAxisLabels(chartData: data)
@@ -101,56 +101,56 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
         
     public init(chartData: ChartData) {
         self.chartData  = chartData
-        self.minValue = chartData.getMinValue()
-        self.range    = chartData.getRange()
+        self.minValue   = chartData.getMinValue()
+        self.range      = chartData.getRange()
     }
      
     public var body: some View {
         
-//        if chartData.isGreaterThanTwo {
-        
-        if chartData.dataSets.style.colourType == .colour,
-           let colour = chartData.dataSets.style.colour
-        {
-            LineChartColourSubView(chartData: chartData,
-                                   dataSet  : chartData.dataSets,
-                                   minValue : minValue,
-                                   range    : range,
-                                   colour   : colour,
-                                   isFilled : false)
+        if chartData.isGreaterThanTwo() {
             
-        } else if chartData.dataSets.style.colourType == .gradientColour,
-                  let colours     = chartData.dataSets.style.colours,
-                  let startPoint  = chartData.dataSets.style.startPoint,
-                  let endPoint    = chartData.dataSets.style.endPoint
-        {
-            
-            LineChartColoursSubView(chartData   : chartData,
-                                    dataSet     : chartData.dataSets,
-                                    minValue    : minValue,
-                                    range       : range,
-                                    colours     : colours,
-                                    startPoint  : startPoint,
-                                    endPoint    : endPoint,
-                                    isFilled    : false)
-            
-        } else if chartData.dataSets.style.colourType == .gradientStops,
-                  let stops      = chartData.dataSets.style.stops,
-                  let startPoint = chartData.dataSets.style.startPoint,
-                  let endPoint   = chartData.dataSets.style.endPoint
-        {
-            let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-            
-            LineChartStopsSubView(chartData : chartData,
-                                  dataSet   : chartData.dataSets,
-                                  minValue  : minValue,
-                                  range     : range,
-                                  stops     : stops,
-                                  startPoint: startPoint,
-                                  endPoint  : endPoint,
-                                  isFilled  : false)
-            
-        }
-//        } else { CustomNoDataView(chartData: chartData) }
+            if chartData.dataSets.style.colourType == .colour,
+               let colour = chartData.dataSets.style.colour
+            {
+                LineChartColourSubView(chartData: chartData,
+                                       dataSet  : chartData.dataSets,
+                                       minValue : minValue,
+                                       range    : range,
+                                       colour   : colour,
+                                       isFilled : false)
+                
+            } else if chartData.dataSets.style.colourType == .gradientColour,
+                      let colours     = chartData.dataSets.style.colours,
+                      let startPoint  = chartData.dataSets.style.startPoint,
+                      let endPoint    = chartData.dataSets.style.endPoint
+            {
+                
+                LineChartColoursSubView(chartData   : chartData,
+                                        dataSet     : chartData.dataSets,
+                                        minValue    : minValue,
+                                        range       : range,
+                                        colours     : colours,
+                                        startPoint  : startPoint,
+                                        endPoint    : endPoint,
+                                        isFilled    : false)
+                
+            } else if chartData.dataSets.style.colourType == .gradientStops,
+                      let stops      = chartData.dataSets.style.stops,
+                      let startPoint = chartData.dataSets.style.startPoint,
+                      let endPoint   = chartData.dataSets.style.endPoint
+            {
+                let stops = GradientStop.convertToGradientStopsArray(stops: stops)
+                
+                LineChartStopsSubView(chartData : chartData,
+                                      dataSet   : chartData.dataSets,
+                                      minValue  : minValue,
+                                      range     : range,
+                                      stops     : stops,
+                                      startPoint: startPoint,
+                                      endPoint  : endPoint,
+                                      isFilled  : false)
+                
+            }
+        } else { CustomNoDataView(chartData: chartData) }
     }
 }

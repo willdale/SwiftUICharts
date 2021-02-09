@@ -13,7 +13,7 @@ internal struct XAxisGrid<T>: ViewModifier where T: LineAndBarChartData {
         
     internal func body(content: Content) -> some View {
         ZStack {
-//            if chartData.isGreaterThanTwo {
+            if chartData.isGreaterThanTwo() {
                 HStack {
                     ForEach((0...chartData.chartStyle.xAxisGridStyle.numberOfLines), id: \.self) { index in
                         if index != 0 {
@@ -24,8 +24,9 @@ internal struct XAxisGrid<T>: ViewModifier where T: LineAndBarChartData {
                     }
                     VerticalGridView(chartData: chartData)
                 }
-//            }
-            content
+                content
+            } else { content }
+            
         }
     }
 }

@@ -16,18 +16,23 @@ internal struct XAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
         self.chartData.viewData.hasXAxisLabels = true
     }
     
-    @ViewBuilder
     internal func body(content: Content) -> some View {
-        switch chartData.chartStyle.xAxisLabelPosition {
-        case .top:
-            VStack {
-                chartData.getXAxisLabels()
-                content
-            }
-        case .bottom:
-            VStack {
-                content
-                chartData.getXAxisLabels()
+        Group {
+            switch chartData.chartStyle.xAxisLabelPosition {
+            case .top:
+                if chartData.isGreaterThanTwo() {
+                    VStack {
+                        chartData.getXAxisLabels()
+                        content
+                    }
+                } else { content }
+            case .bottom:
+                if chartData.isGreaterThanTwo() {
+                    VStack {
+                        content
+                        chartData.getXAxisLabels()
+                    }
+                } else { content }
             }
         }
     }

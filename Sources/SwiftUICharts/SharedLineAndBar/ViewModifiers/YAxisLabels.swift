@@ -13,13 +13,19 @@ internal struct YAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
 
     let specifier       : String
     var labelsArray     : [Double] { chartData.getYLabels() }
-
+    
+    let labelsAndTop    : Bool
+    let labelsAndBottom : Bool
+    
     internal init(chartData: T,
                   specifier: String
     ) {
         self.chartData = chartData
         self.specifier = specifier
         chartData.viewData.hasYAxisLabels = true
+        
+        labelsAndTop    = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .top
+        labelsAndBottom = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .bottom
     }
     
     internal var textAsSpacer: some View {
@@ -30,15 +36,12 @@ internal struct YAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
     }
     
     internal var labels: some View {
-        let labelsAndTop    = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .top
-        let labelsAndBottom = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .bottom
-        let numberOfLabels  = chartData.chartStyle.yAxisNumberOfLabels
         
-        return VStack {
+        VStack {
             if labelsAndTop {
                 textAsSpacer
             }
-            ForEach((0...numberOfLabels).reversed(), id: \.self) { i in
+            ForEach((0...chartData.chartStyle.yAxisNumberOfLabels).reversed(), id: \.self) { i in
                 Text("\(labelsArray[i], specifier: specifier)")
                     .font(.caption)
                     .foregroundColor(chartData.chartStyle.yAxisLabelColour)
@@ -57,23 +60,22 @@ internal struct YAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
         .if(labelsAndTop) { $0.padding(.bottom, -8) }
     }
     
-    @ViewBuilder
     internal  func body(content: Content) -> some View {
-        switch chartData.chartStyle.yAxisLabelPosition {
-        case .leading:
-            HStack {
-//                if chartData.isGreaterThanTwo {
-                    labels
-//                }
-                content
-            }
-        case .trailing:
-            HStack {
-                content
-//                if chartData.isGreaterThanTwo {
-                    labels
-//                }
-            }
+        Group {
+            if chartData.isGreaterThanTwo() {
+                switch chartData.chartStyle.yAxisLabelPosition {
+                case .leading:
+                    HStack {
+                        labels
+                        content
+                    }
+                case .trailing:
+                    HStack {
+                        content
+                        labels
+                    }
+                }
+            } else { content }
         }
     }
 }

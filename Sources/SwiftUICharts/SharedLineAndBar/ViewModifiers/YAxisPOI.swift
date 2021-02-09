@@ -53,12 +53,13 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
     }
     
     internal func body(content: Content) -> some View {
+        
         ZStack {
-            content
-//            if chartData.isGreaterThanTwo {
-            marker
-            valueLabel
-//                    }
+            if chartData.isGreaterThanTwo() {
+                content
+                marker
+                valueLabel
+            } else { content }
         }
         .onAppear {
             if !chartData.legends.contains(where: { $0.id == uuid }) { // init twice

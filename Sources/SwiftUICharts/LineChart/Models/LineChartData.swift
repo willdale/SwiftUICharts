@@ -26,18 +26,19 @@ import SwiftUI
          LineChartDataPoint(value: 90,  xAxisLabel: "S", pointLabel: "Sunday")
      ],
      legendTitle: "Data",
-     pointStyle: PointStyle(),
-     style: LineStyle())
+     pointStyle : PointStyle(),
+     style      : LineStyle())
      
      let metadata = ChartMetadata(title: "Some Data", subtitle: "A Week")
      
      let labels = ["Monday", "Thursday", "Sunday"]
      
-     return LineChartData(dataSets: data,
-                          metadata: metadata,
-                          xAxisLabels: labels,
-                          chartStyle: LineChartStyle(),
-                          calculations: .none)
+     return LineChartData(dataSets      : data,
+                          metadata      : metadata,
+                          xAxisLabels   : labels,
+                          chartStyle    : LineChartStyle(),
+                          noDataText    : Text("No Data"),
+                          calculations  : .none)
  }
  
  ```
@@ -155,6 +156,7 @@ import SwiftUI
  */
 public class LineChartData: LineChartDataProtocol {
     
+    // MARK: - Properties
     public let id   : UUID  = UUID()
     
     @Published public var dataSets      : LineDataSet
@@ -166,9 +168,10 @@ public class LineChartData: LineChartDataProtocol {
     @Published public var isFilled      : Bool = false
     @Published public var infoView      : InfoViewData<LineChartDataPoint> = InfoViewData()
     
-    public var noDataText   : Text      = Text("No Data")
+    public var noDataText   : Text
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
+    // MARK: - Initializers
     /// Initialises a Single Line Chart with optional calculation
     ///
     /// Has the option perform optional calculation on the data set, such as averaging based on date.
@@ -181,17 +184,20 @@ public class LineChartData: LineChartDataProtocol {
     ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     ///   - calculations: Addition calculations that can be performed on the data set before drawing.
     public init(dataSets    : LineDataSet,
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : LineChartStyle    = LineChartStyle(),
+                noDataText  : Text              = Text("No Data"),
                 calculations: CalculationType   = .none
     ) {
         self.dataSets       = dataSets
         self.metadata       = metadata
         self.xAxisLabels    = xAxisLabels
         self.chartStyle     = chartStyle
+        self.noDataText     = noDataText
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (chartType: .line, dataSetType: .single)
@@ -206,28 +212,31 @@ public class LineChartData: LineChartDataProtocol {
     /// To add pre built calculations use the initialiser with `calculations`.
     ///
     /// - Parameters:
-    ///   - dataSets: Data to draw a line.
+    ///   - dataSets: Data to draw and style the line.
     ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     ///   - customCalc: Custom calculations that can be performed on the data set before drawing.    
     public init(dataSets    : LineDataSet,
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
-                chartStyle  : LineChartStyle = LineChartStyle(),
+                chartStyle  : LineChartStyle    = LineChartStyle(),
+                noDataText  : Text              = Text("No Data"),
                 customCalc  : @escaping ([LineChartDataPoint]) -> [LineChartDataPoint]?
     ) {
         self.dataSets       = dataSets
         self.metadata       = metadata
         self.xAxisLabels    = xAxisLabels
         self.chartStyle     = chartStyle
+        self.noDataText     = noDataText
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (chartType: .line, dataSetType: .single)
         self.setupLegends()
     }
     
-    // MARK: Labels
+    // MARK: - Labels
     public func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
@@ -271,7 +280,7 @@ public class LineChartData: LineChartDataProtocol {
         }
     }
     
-    // MARK: Touch
+    // MARK: - Touch
     public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [LineChartDataPoint] {
         var points      : [LineChartDataPoint] = []
         let xSection    : CGFloat = chartSize.size.width / CGFloat(dataSets.dataPoints.count - 1)
@@ -298,7 +307,7 @@ public class LineChartData: LineChartDataProtocol {
         }
         return locations
     }
-    // MARK: Legends
+    // MARK: - Legends
     public func setupLegends() {
         
         if dataSets.style.colourType == .colour,

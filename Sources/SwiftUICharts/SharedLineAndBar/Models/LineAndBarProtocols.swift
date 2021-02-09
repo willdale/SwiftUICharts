@@ -19,7 +19,7 @@ import SwiftUI
 public protocol LineAndBarChartData : ChartData where CTStyle: CTLineAndBarChartStyle {
     
     /// Apple's `associatedtype` for outputting `some View`.
-    associatedtype Body    : View
+    associatedtype Body : View
     
     /**
      Data model to hold data about the Views layout.

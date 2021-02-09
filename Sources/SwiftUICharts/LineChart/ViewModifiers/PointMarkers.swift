@@ -21,18 +21,30 @@ internal struct PointMarkers<T>: ViewModifier where T: LineChartDataProtocol {
     }
     internal func body(content: Content) -> some View {
         ZStack {
+            if chartData.isGreaterThanTwo() {
             content
-            if chartData.chartType.dataSetType == .single {
-                
-                let data = chartData as! LineChartData
-                PointsSubView(dataSets: data.dataSets, minValue: minValue, range: range, animation: chartData.chartStyle.globalAnimation, isFilled: chartData.isFilled)
-            } else if chartData.chartType.dataSetType == .multi {
-                
-                let data = chartData as! MultiLineChartData
-                ForEach(data.dataSets.dataSets, id: \.self) { dataSet in
-                    PointsSubView(dataSets: dataSet, minValue: minValue, range: range,  animation: chartData.chartStyle.globalAnimation, isFilled: chartData.isFilled)
+            
+                if chartData.chartType.dataSetType == .single {
+                    
+                    let data = chartData as! LineChartData
+                    PointsSubView(dataSets: data.dataSets,
+                                  minValue: minValue,
+                                  range: range,
+                                  animation: chartData.chartStyle.globalAnimation,
+                                  isFilled: chartData.isFilled)
+                    
+                } else if chartData.chartType.dataSetType == .multi {
+                    
+                    let data = chartData as! MultiLineChartData
+                    ForEach(data.dataSets.dataSets, id: \.self) { dataSet in
+                        PointsSubView(dataSets: dataSet,
+                                      minValue: minValue,
+                                      range: range,
+                                      animation: chartData.chartStyle.globalAnimation,
+                                      isFilled: chartData.isFilled)
+                    }
                 }
-            }
+            } else { content }
         }
     }
 }

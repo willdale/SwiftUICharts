@@ -23,9 +23,13 @@ internal struct Legends<T>: ViewModifier where T: ChartData {
     }
     
     internal func body(content: Content) -> some View {
-        VStack {
-            content
-            LegendView(chartData: chartData, columns: columns, textColor: textColor)
+        Group {
+            if chartData.isGreaterThanTwo() {
+                VStack {
+                    content
+                    LegendView(chartData: chartData, columns: columns, textColor: textColor)
+                }
+            } else { content }
         }
     }
 }

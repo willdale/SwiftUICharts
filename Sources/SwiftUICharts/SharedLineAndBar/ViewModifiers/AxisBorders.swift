@@ -19,25 +19,27 @@ internal struct XAxisBorder<T>: ViewModifier where T: LineAndBarChartData {
         self.labelsAndBottom = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .bottom
     }
     
-    @ViewBuilder
     internal func body(content: Content) -> some View {
-
-        if labelsAndBottom {
-           VStack {
-                ZStack(alignment: .bottom) {
+        Group {
+            if chartData.isGreaterThanTwo() {
+                if labelsAndBottom {
+                    VStack {
+                        ZStack(alignment: .bottom) {
+                            content
+                            Divider()
+                        }
+                    }
+                } else if labelsAndTop {
+                    VStack {
+                        ZStack(alignment: .top) {
+                            content
+                            Divider()
+                        }
+                    }
+                } else {
                     content
-                    Divider()
                 }
-            }
-        } else if labelsAndTop {
-           VStack {
-                ZStack(alignment: .top) {
-                    content
-                    Divider()
-                }
-            }
-        } else {
-            content
+            } else { content }
         }
     }
 }
@@ -54,25 +56,25 @@ internal struct YAxisBorder<T>: ViewModifier where T: LineAndBarChartData {
         self.labelsAndTrailing = chartData.viewData.hasYAxisLabels && chartData.chartStyle.yAxisLabelPosition == .trailing
     }
     
-    @ViewBuilder
     internal func body(content: Content) -> some View {
-        
-        if labelsAndLeading {
-           HStack {
-                ZStack(alignment: .leading) {
-                    content
-                    Divider()
+        Group {
+            if labelsAndLeading {
+                HStack {
+                    ZStack(alignment: .leading) {
+                        content
+                        Divider()
+                    }
                 }
-            }
-        } else if labelsAndTrailing {
-            HStack {
-                ZStack(alignment: .trailing) {
-                    content
-                    Divider()
+            } else if labelsAndTrailing {
+                HStack {
+                    ZStack(alignment: .trailing) {
+                        content
+                        Divider()
+                    }
                 }
+            } else {
+                content
             }
-        } else {
-           content
         }
     }
 }

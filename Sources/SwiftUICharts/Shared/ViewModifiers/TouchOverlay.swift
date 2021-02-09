@@ -46,54 +46,56 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
     }
 
     internal func body(content: Content) -> some View {
-//        if chartData.isGreaterThanTwo {
-            GeometryReader { geo in
-                ZStack {
-                    content
-                        .gesture(
-                            DragGesture(minimumDistance: 0)
-                                .onChanged { (value) in
-                                    touchLocation   = value.location
-                                    
-                                    chartData.infoView.isTouchCurrent   = true
-                                    
-                                    self.selectedPoints = chartData.getDataPoint(touchLocation: touchLocation,
-                                                                                 chartSize: geo)
-                                    self.pointLocations = chartData.getPointLocation(touchLocation: touchLocation,
+        Group {
+            if chartData.isGreaterThanTwo() {
+                GeometryReader { geo in
+                    ZStack {
+                        content
+                            .gesture(
+                                DragGesture(minimumDistance: 0)
+                                    .onChanged { (value) in
+                                        touchLocation   = value.location
+                                        
+                                        chartData.infoView.isTouchCurrent   = true
+                                        
+                                        self.selectedPoints = chartData.getDataPoint(touchLocation: touchLocation,
                                                                                      chartSize: geo)
-                                    if chartData.getHeaderLocation() == .floating {
-                                        
-                                        setBoxLocationation(boxFrame: boxFrame, chartSize: geo)
-                                        markerLocation.x = setMarkerXLocation(chartSize: geo)
-                                        markerLocation.y = setMarkerYLocation(chartSize: geo)
-                                                                                
-                                    } else if chartData.getHeaderLocation() == .header {
-                                        
-                                        chartData.infoView.touchOverlayInfo = selectedPoints
+                                        self.pointLocations = chartData.getPointLocation(touchLocation: touchLocation,
+                                                                                         chartSize: geo)
+                                        if chartData.getHeaderLocation() == .floating {
+                                            
+                                            setBoxLocationation(boxFrame: boxFrame, chartSize: geo)
+                                            markerLocation.x = setMarkerXLocation(chartSize: geo)
+                                            markerLocation.y = setMarkerYLocation(chartSize: geo)
+                                            
+                                        } else if chartData.getHeaderLocation() == .header {
+                                            
+                                            chartData.infoView.touchOverlayInfo = selectedPoints
+                                        }
                                     }
-                                }
-                                .onEnded { _ in
-                                    chartData.infoView.isTouchCurrent = false
-                                    chartData.infoView.touchOverlayInfo = []
-                                }
-                        )
-                    if chartData.infoView.isTouchCurrent {
-                        ForEach(pointLocations, id: \.self) { location in
-                            TouchOverlayMarker(position: location)
-                                .stroke(Color(.gray), lineWidth: 1)
-                        }
-                        if chartData.getHeaderLocation() == .floating {
-                            TouchOverlayBox(selectedPoints   : selectedPoints,
-                                            specifier        : specifier,
-                                            valueColour      : chartData.chartStyle.infoBoxValueColour,
-                                            descriptionColour: chartData.chartStyle.infoBoxDescriptionColor,
-                                            boxFrame         : $boxFrame)
-                                .position(x: boxLocation.x, y: 0 + (boxFrame.height / 2))
+                                    .onEnded { _ in
+                                        chartData.infoView.isTouchCurrent = false
+                                        chartData.infoView.touchOverlayInfo = []
+                                    }
+                            )
+                        if chartData.infoView.isTouchCurrent {
+                            ForEach(pointLocations, id: \.self) { location in
+                                TouchOverlayMarker(position: location)
+                                    .stroke(Color(.gray), lineWidth: 1)
+                            }
+                            if chartData.getHeaderLocation() == .floating {
+                                TouchOverlayBox(selectedPoints   : selectedPoints,
+                                                specifier        : specifier,
+                                                valueColour      : chartData.chartStyle.infoBoxValueColour,
+                                                descriptionColour: chartData.chartStyle.infoBoxDescriptionColor,
+                                                boxFrame         : $boxFrame)
+                                    .position(x: boxLocation.x, y: 0 + (boxFrame.height / 2))
+                            }
                         }
                     }
                 }
-            }
-//        } else { content }
+            } else { content }
+        }
     }
 
     /// Sets the point info box location while keeping it within the parent view.

@@ -43,10 +43,11 @@ import SwiftUI
                                                         yAxisLabelPosition: .leading,
                                                         yAxisNumberOfLabels: 5)
      
-     return BarChartData(dataSets: data,
-                         metadata: metadata,
-                         xAxisLabels: labels,
-                         chartStyle: chartStyle,
+     return BarChartData(dataSets    : data,
+                         metadata    : metadata,
+                         xAxisLabels : labels,
+                         chartStyle  : chartStyle,
+                         noDataText  : Text("No Data"),
                          calculations: .none)
  }
  
@@ -168,7 +169,7 @@ import SwiftUI
  */
 
 public class BarChartData: BarChartDataProtocol {
-
+    // MARK: - Properties
     public let id   : UUID  = UUID()
 
     @Published public var dataSets     : BarDataSet
@@ -179,65 +180,75 @@ public class BarChartData: BarChartDataProtocol {
     @Published public var viewData     : ChartViewData
     @Published public var infoView     : InfoViewData<BarChartDataPoint> = InfoViewData()
         
-    public var noDataText   : Text  = Text("No Data")
+    public var noDataText   : Text
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
-
+    
+    // MARK: - Initializers
+    /// Initialises a standard Bar Chart with optional calculation
+    ///
+    /// Has the option perform optional calculation on the data set, such as averaging based on date.
+    ///
+    /// - Note:
+    /// To add custom calculations use the initialiser with `customCalc`.
+    ///
+    /// - Parameters:
+    ///   - dataSets: Data to draw and style the bars.
+    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
+    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
+    ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
+    ///   - calculations: Addition calculations that can be performed on the data set before drawing.
     public init(dataSets    : BarDataSet,
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : BarChartStyle     = BarChartStyle(),
+                noDataText  : Text              = Text("No Data"),
                 calculations: CalculationType   = .none
     ) {
         self.dataSets       = dataSets
         self.metadata       = metadata
         self.xAxisLabels    = xAxisLabels
         self.chartStyle     = chartStyle
+        self.noDataText     = noDataText
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (.bar, .single)
         self.setupLegends()
     }
     
+    /// Initializes a standar Bar Chart with custom calculation
+    ///
+    /// Has the option perform custom calculations on the data set.
+    ///
+    /// - Note:
+    /// To add pre built calculations use the initialiser with `calculations`.
+    ///
+    /// - Parameters:
+    ///   - dataSets: Data to draw and style the bars.
+    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
+    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
+    ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
+    ///   - customCalc: Custom calculations that can be performed on the data set before drawing.
     public init(dataSets    : BarDataSet,
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : BarChartStyle     = BarChartStyle(),
+                noDataText  : Text              = Text("No Data"),
                 customCalc  : @escaping ([BarChartDataPoint]) -> [BarChartDataPoint]?
     ) {
         self.dataSets       = dataSets
         self.metadata       = metadata
         self.xAxisLabels    = xAxisLabels
         self.chartStyle     = chartStyle
+        self.noDataText     = noDataText
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (chartType: .bar, dataSetType: .single)
         self.setupLegends()
     }
     
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [BarChartDataPoint] {
-        var points      : [BarChartDataPoint] = []
-        let xSection    : CGFloat   = chartSize.size.width / CGFloat(dataSets.dataPoints.count)
-        let index       : Int       = Int((touchLocation.x) / xSection)
-        if index >= 0 && index < dataSets.dataPoints.count {
-            points.append(dataSets.dataPoints[index])
-        }
-        return points
-    }
-
-    public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
-        var locations : [HashablePoint] = []
-        
-        let xSection : CGFloat = chartSize.size.width / CGFloat(dataSets.dataPoints.count)
-        let ySection : CGFloat = chartSize.size.height / CGFloat(self.getMaxValue())
-        let index    : Int     = Int((touchLocation.x) / xSection)
-        
-        if index >= 0 && index < dataSets.dataPoints.count {
-            locations.append(HashablePoint(x: (CGFloat(index) * xSection) + (xSection / 2),
-                                           y: (chartSize.size.height - CGFloat(dataSets.dataPoints[index].value) * ySection)))
-        }
-        return locations
-    }
-    
+    // MARK: - Labels
     public func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
@@ -276,7 +287,33 @@ public class BarChartData: BarChartDataProtocol {
             }
         }
     }
+    
+    // MARK: - Touch
+    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [BarChartDataPoint] {
+        var points      : [BarChartDataPoint] = []
+        let xSection    : CGFloat   = chartSize.size.width / CGFloat(dataSets.dataPoints.count)
+        let index       : Int       = Int((touchLocation.x) / xSection)
+        if index >= 0 && index < dataSets.dataPoints.count {
+            points.append(dataSets.dataPoints[index])
+        }
+        return points
+    }
 
+    public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
+        var locations : [HashablePoint] = []
+        
+        let xSection : CGFloat = chartSize.size.width / CGFloat(dataSets.dataPoints.count)
+        let ySection : CGFloat = chartSize.size.height / CGFloat(self.getMaxValue())
+        let index    : Int     = Int((touchLocation.x) / xSection)
+        
+        if index >= 0 && index < dataSets.dataPoints.count {
+            locations.append(HashablePoint(x: (CGFloat(index) * xSection) + (xSection / 2),
+                                           y: (chartSize.size.height - CGFloat(dataSets.dataPoints[index].value) * ySection)))
+        }
+        return locations
+    }
+    
+    // MARK: - Legends
     public func setupLegends() {
         switch self.dataSets.style.colourFrom {
         case .barStyle:

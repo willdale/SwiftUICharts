@@ -49,42 +49,42 @@ internal struct HeaderBox<T>: ViewModifier where T: ChartData {
     
     
     internal func body(content: Content) -> some View {
-//        if chartData.isGreaterThanTwo {
-        
         Group {
             #if !os(tvOS)
-            if chartData.getHeaderLocation() == .floating {
+            if chartData.isGreaterThanTwo() {
+                if chartData.getHeaderLocation() == .floating {
+                    VStack(alignment: .leading) {
+                        titleBox
+                        content
+                    }
+                } else if chartData.getHeaderLocation() == .header {
+                    VStack(alignment: .leading) {
+                        HStack(spacing: 0) {
+                            HStack(spacing: 0) {
+                                titleBox
+                                Spacer()
+                            }
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            Spacer()
+                            HStack(spacing: 0) {
+                                Spacer()
+                                touchOverlay
+                            }
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                        }
+                        content
+                    }
+                }
+            } else { content }
+            #elseif os(tvOS)
+            if chartData.isGreaterThanTwo() {
                 VStack(alignment: .leading) {
                     titleBox
                     content
                 }
-            } else if chartData.getHeaderLocation() == .header {
-                VStack(alignment: .leading) {
-                    HStack(spacing: 0) {
-                        HStack(spacing: 0) {
-                            titleBox
-                            Spacer()
-                        }
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        Spacer()
-                        HStack(spacing: 0) {
-                            Spacer()
-                            touchOverlay
-                        }
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                    }
-                    content
-                }
-            }
-            
-            #elseif os(tvOS)
-            VStack(alignment: .leading) {
-                titleBox
-                content
-            }
+            } else { content }
             #endif
         }
-//        } else { content }
     }
 }
 
