@@ -55,8 +55,7 @@ import SwiftUI
                               metadata    : ChartMetadata(title: "Hello", subtitle: "Bob"),
                               xAxisLabels : ["Hello"],
                               chartStyle  : BarChartStyle(),
-                              noDataText  : Text("No Data"),
-                              calculations: .none)
+                              noDataText  : Text("No Data"))
  }
  ```
   
@@ -198,56 +197,17 @@ public class MultiBarChartData: BarChartDataProtocol {
     // MARK: - Initializers
     /// Initialises a multi part Bar Chart with optional calculation
     ///
-    /// Has the option perform optional calculation on the data set, such as averaging based on date.
-    ///
-    /// - Note:
-    /// To add custom calculations use the initialiser with `customCalc`.
-    ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the bars.
     ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    ///   - calculations: Addition calculations that can be performed on the data set before drawing.
     public init(dataSets    : MultiBarDataSet,
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : BarChartStyle     = BarChartStyle(),
-                noDataText  : Text              = Text("No Data"),
-                calculations: CalculationType   = .none
-    ) {
-        self.dataSets       = dataSets
-        self.metadata       = metadata
-        self.xAxisLabels    = xAxisLabels
-        self.chartStyle     = chartStyle
-        self.noDataText     = noDataText
-        self.legends        = [LegendData]()
-        self.viewData       = ChartViewData()
-        self.chartType      = (chartType: .bar, dataSetType: .multi)
-        self.setupLegends()
-    }
-    
-    /// Initializes a standar Bar Chart with custom calculation
-    ///
-    /// Has the option perform custom calculations on the data set.
-    ///
-    /// - Note:
-    /// To add pre built calculations use the initialiser with `calculations`.
-    ///
-    /// - Parameters:
-    ///   - dataSets: Data to draw and style the bars.
-    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
-    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
-    ///   - chartStyle: The style data for the aesthetic of the chart.
-    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    ///   - customCalc: Custom calculations that can be performed on the data set before drawing.
-    public init(dataSets    : MultiBarDataSet,
-                metadata    : ChartMetadata     = ChartMetadata(),
-                xAxisLabels : [String]?         = nil,
-                chartStyle  : BarChartStyle     = BarChartStyle(),
-                noDataText  : Text              = Text("No Data"),
-                customCalc  : @escaping ([BarChartDataPoint]) -> [BarChartDataPoint]?
+                noDataText  : Text              = Text("No Data")
     ) {
         self.dataSets       = dataSets
         self.metadata       = metadata

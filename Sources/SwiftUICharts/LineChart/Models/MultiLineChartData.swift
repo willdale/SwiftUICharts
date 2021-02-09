@@ -49,8 +49,7 @@ import SwiftUI
                                 metadata    : metadata,
                                 xAxisLabels : labels,
                                 chartStyle  : LineChartStyle(baseline: .zero),
-                                noDataText  : Text("No Data"),
-                                calculations: .none)
+                                noDataText  : Text("No Data"))
   }
 }
  
@@ -141,17 +140,17 @@ import SwiftUI
  ---
  
  # Also See
- - [Line Data Set](x-source-tag://LineDataSet)
-    - [Line Chart Data Point](x-source-tag://LineChartDataPoint)
-    - [Point Style](x-source-tag://PointStyle)
+ - [LineDataSet](x-source-tag://LineDataSet)
+    - [LineChartDataPoint](x-source-tag://LineChartDataPoint)
+    - [PointStyle](x-source-tag://PointStyle)
         - [PointType](x-source-tag://PointType)
         - [PointShape](x-source-tag://PointShape)
-    - [Line Style](x-source-tag://LineStyle)
+    - [LineStyle](x-source-tag://LineStyle)
         - [ColourType](x-source-tag://ColourType)
         - [LineType](x-source-tag://LineType)
         - [GradientStop](x-source-tag://GradientStop)
- - [Chart Metadata](x-source-tag://ChartMetadata)
- - [Line Chart Style](x-source-tag://LineChartStyle)
+ - [ChartMetadata](x-source-tag://ChartMetadata)
+ - [LineChartStyle](x-source-tag://LineChartStyle)
     - [InfoBoxPlacement](x-source-tag://InfoBoxPlacement)
     - [GridStyle](x-source-tag://GridStyle)
     - [XAxisLabelPosistion](x-source-tag://XAxisLabelPosistion)
@@ -185,12 +184,7 @@ public class MultiLineChartData: LineChartDataProtocol {
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
     // MARK: - Initializers
-    /// Initialises a Multi Line Chart with optional calculation
-    ///
-    /// Has the option perform optional calculation on the data set, such as averaging based on date.
-    ///
-    /// - Note:
-    /// To add custom calculations use the initialiser with `customCalc`.
+    /// Initialises a Multi Line Chart.
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the lines.
@@ -198,13 +192,11 @@ public class MultiLineChartData: LineChartDataProtocol {
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    ///   - calculations: Addition calculations that can be performed on the data set before drawing.
     public init(dataSets    : MultiLineDataSet,
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 chartStyle  : LineChartStyle    = LineChartStyle(),
-                noDataText  : Text              = Text("No Data"),
-                calculations: CalculationType   = .none
+                noDataText  : Text              = Text("No Data")
     ) {
         self.dataSets       = dataSets
         self.metadata       = metadata
@@ -214,38 +206,6 @@ public class MultiLineChartData: LineChartDataProtocol {
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (.line, .multi)
-        self.setupLegends()
-    }
-    
-    /// Initializes a Multi Line Chart with custom calculation
-    ///
-    /// Has the option perform custom calculations on the data set.
-    ///
-    /// - Note:
-    /// To add pre built calculations use the initialiser with `calculations`.
-    ///
-    /// - Parameters:
-    ///   - dataSets: Data to draw and style the lines.
-    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
-    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
-    ///   - chartStyle: The style data for the aesthetic of the chart.
-    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    ///   - customCalc: Custom calculations that can be performed on the data set before drawing.
-    public init(dataSets    : MultiLineDataSet,
-                metadata    : ChartMetadata     = ChartMetadata(),
-                xAxisLabels : [String]?         = nil,
-                chartStyle  : LineChartStyle    = LineChartStyle(),
-                noDataText  : Text              = Text("No Data"),
-                customCalc  : @escaping ([LineChartDataPoint]) -> [LineChartDataPoint]?
-    ) {
-        self.dataSets       = dataSets
-        self.metadata       = metadata
-        self.xAxisLabels    = xAxisLabels
-        self.chartStyle     = chartStyle
-        self.noDataText     = noDataText
-        self.legends        = [LegendData]()
-        self.viewData       = ChartViewData()
-        self.chartType      = (chartType: .line, dataSetType: .multi)
         self.setupLegends()
     }
 
