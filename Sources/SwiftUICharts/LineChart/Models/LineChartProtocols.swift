@@ -31,7 +31,6 @@ public protocol LineChartDataProtocol: LineAndBarChartData where CTStyle: CTLine
 extension LineChartDataProtocol {
     
     public func straightLine(rect: CGRect, dataPoints: [LineChartDataPoint], minValue: Double, range: Double, isFilled: Bool) -> Path {
-        
         let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
         let y : CGFloat = rect.height / CGFloat(range)
         
@@ -96,9 +95,12 @@ extension LineChartDataProtocol {
 
         return path
     }
-    
+}
+
+extension LineChartDataProtocol {
     // MARK: - position indicator
     // Maybe put all into extentions of: Path / CGPoint / CGFloat
+    // https://developer.apple.com/documentation/swiftui/path/element
     public func getTotalLength(of path: Path) -> CGFloat {
         var total       : CGFloat = 0
         var currentPoint: CGPoint = .zero

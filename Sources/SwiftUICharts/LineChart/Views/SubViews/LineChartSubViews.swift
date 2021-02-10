@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-internal struct LineChartColourSubView<CD>: View where CD: LineAndBarChartData {
+internal struct LineChartColourSubView<CD>: View where CD: LineChartDataProtocol {
     
     let chartData   : CD
     let dataSet     : LineDataSet
@@ -35,7 +35,8 @@ internal struct LineChartColourSubView<CD>: View where CD: LineAndBarChartData {
     
     internal var body: some View {
         
-        LineShape(dataPoints: dataSet.dataPoints,
+        LineShape(chartData : chartData,
+                  dataPoints: dataSet.dataPoints,
                   lineType  : dataSet.style.lineType,
                   isFilled  : isFilled,
                   minValue  : minValue,
@@ -59,7 +60,7 @@ internal struct LineChartColourSubView<CD>: View where CD: LineAndBarChartData {
     }
 }
 
-internal struct LineChartColoursSubView<CD>: View where CD: LineAndBarChartData {
+internal struct LineChartColoursSubView<CD>: View where CD: LineChartDataProtocol {
     
     let chartData   : CD
     let dataSet     : LineDataSet
@@ -76,7 +77,8 @@ internal struct LineChartColoursSubView<CD>: View where CD: LineAndBarChartData 
     
     internal var body: some View {
         
-        LineShape(dataPoints: dataSet.dataPoints,
+        LineShape(chartData : chartData,
+                  dataPoints: dataSet.dataPoints,
                   lineType: dataSet.style.lineType,
                   isFilled: isFilled,
                   minValue: minValue,
@@ -109,7 +111,7 @@ internal struct LineChartColoursSubView<CD>: View where CD: LineAndBarChartData 
     }
 }
 
-internal struct LineChartStopsSubView<CD>: View where CD: LineAndBarChartData {
+internal struct LineChartStopsSubView<CD>: View where CD: LineChartDataProtocol {
     
     let chartData   : CD
     let dataSet     : LineDataSet
@@ -126,7 +128,8 @@ internal struct LineChartStopsSubView<CD>: View where CD: LineAndBarChartData {
     
     internal var body: some View {
         
-        LineShape(dataPoints: dataSet.dataPoints,
+        LineShape(chartData : chartData,
+                  dataPoints: dataSet.dataPoints,
                   lineType: dataSet.style.lineType,
                   isFilled: isFilled,
                   minValue: minValue,

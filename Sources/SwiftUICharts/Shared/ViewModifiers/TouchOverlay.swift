@@ -108,29 +108,30 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                                 PosistionIndicator()
                                     .frame(width: 5, height: 5)
                                     .position(data.locationOnPath(pointLocation, path))
+                            
+                            } else if chartData.chartType == (.line, .multi) {
+
+                                let data = chartData as! MultiLineChartData
+
+                                ForEach(data.dataSets.dataSets, id: \.self) { dataSet in
+
+                                    let path = data.curvedLine(rect       : geo.frame(in: .global),
+                                                               dataPoints : dataSet.dataPoints,
+                                                               minValue   : data.getMinValue(),
+                                                               range      : data.getRange(),
+                                                               isFilled   : false)
+
+                                    let totalLength   = data.getTotalLength(of: path)
+                                    let lengthToTouch = data.getLength(to: touchLocation, on: path)
+                                    let pointLocation = lengthToTouch / totalLength
+
+
+                                    PosistionIndicator()
+                                        .frame(width: 5, height: 5)
+                                        .position(data.locationOnPath(pointLocation, path))
+                                }
+
                             }
-//                            else if chartData.chartType == (.line, .multi) {
-//
-//                                let data = chartData as! MultiLineChartData
-//
-//                                // FOR EACH
-//
-//                                ForEach(data.dataSets.dataSets, id: \.self) { dataSet in
-//
-//                                    let framePercent = (touchLocation.x / geo.size.width) * 100
-//                                    let path = data.straightLine(rect       : geo.frame(in: .global),
-//                                                                 dataPoints : dataSet.dataPoints,
-//                                                                 minValue   : data.getMinValue(),
-//                                                                 range      : data.getRange(),
-//                                                                 isFilled   : false)
-//
-//                                    Image(systemName: "person").resizable().foregroundColor(Color.red)
-//                                        .frame(width: 50, height: 50)
-//                                        .position(x: data.locationOnPath(framePercent / 100, path).x,
-//                                                  y: data.locationOnPath(framePercent / 100, path).y)
-//                                }
-//
-//                            }
                             
                             
                             
