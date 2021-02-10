@@ -10,12 +10,12 @@ import SwiftUI
 internal struct LineShape: Shape {
            
     private let dataPoints  : [LineChartDataPoint]
-    /// Drawing style of the line
     private let lineType    : LineType
     private let isFilled    : Bool
     
     private let minValue : Double
     private let range    : Double
+    
     
     internal init(dataPoints: [LineChartDataPoint],
                   lineType  : LineType,
@@ -31,29 +31,26 @@ internal struct LineShape: Shape {
     }
   
     internal func path(in rect: CGRect) -> Path {
-                
-        let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
-        let y : CGFloat = rect.height / CGFloat(range)
         
         switch lineType {
         case .curvedLine:
-            return curvedLine(rect, x, y, dataPoints, minValue, range, isFilled)
+            return curvedLine(rect, dataPoints, minValue, range, isFilled)
         case .line:
-            return straightLine(rect, x, y, dataPoints, minValue, range, isFilled)
+            return straightLine(rect, dataPoints, minValue, range, isFilled)
         }
-        
     }
 }
 
 extension LineShape {
     func straightLine(_ rect        : CGRect,
-                      _ x           : CGFloat,
-                      _ y           : CGFloat,
                       _ dataPoints  : [LineChartDataPoint],
                       _ minValue    : Double,
                       _ range       : Double,
                       _ isFilled    : Bool
     ) -> Path {
+        
+        let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
+        let y : CGFloat = rect.height / CGFloat(range)
         
         var path = Path()
  
@@ -73,13 +70,14 @@ extension LineShape {
     }
     
     func curvedLine(_ rect          : CGRect,
-                    _ x             : CGFloat,
-                    _ y             : CGFloat,
                     _ dataPoints    : [LineChartDataPoint],
                     _ minValue      : Double,
                     _ range         : Double,
                     _ isFilled      : Bool
     ) -> Path {
+        
+        let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
+        let y : CGFloat = rect.height / CGFloat(range)
         
         var path = Path()
         

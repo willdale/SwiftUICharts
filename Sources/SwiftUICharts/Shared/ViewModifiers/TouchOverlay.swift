@@ -44,10 +44,9 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
         self.chartData         = chartData
         self.specifier         = specifier
     }
-
     internal func body(content: Content) -> some View {
-        Group {
-            if chartData.isGreaterThanTwo() {
+//        Group {
+//            if chartData.isGreaterThanTwo() {
                 GeometryReader { geo in
                     ZStack {
                         content
@@ -62,6 +61,7 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                                                                                      chartSize: geo)
                                         self.pointLocations = chartData.getPointLocation(touchLocation: touchLocation,
                                                                                          chartSize: geo)
+                                        
                                         if chartData.getHeaderLocation() == .floating {
                                             
                                             setBoxLocationation(boxFrame: boxFrame, chartSize: geo)
@@ -72,6 +72,7 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                                             
                                             chartData.infoView.touchOverlayInfo = selectedPoints
                                         }
+                                        
                                     }
                                     .onEnded { _ in
                                         chartData.infoView.isTouchCurrent = false
@@ -83,6 +84,56 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                                 TouchOverlayMarker(position: location)
                                     .stroke(Color(.gray), lineWidth: 1)
                             }
+                            
+                            
+                            
+                            // MARK: - position indicator
+                            if chartData.chartType == (.line, .single) {
+                                
+                                let data = chartData as! LineChartData
+                                                                
+                                
+                                let path = data.curvedLine(rect       : geo.frame(in: .global),
+                                                           dataPoints : data.dataSets.dataPoints,
+                                                           minValue   : data.getMinValue(),
+                                                           range      : data.getRange(),
+                                                           isFilled   : false)
+                                
+                                
+                                let totalLength   = data.getTotalLength(of: path)
+                                let lengthToTouch = data.getLength(to: touchLocation, on: path)
+                                let pointLocation = lengthToTouch / totalLength
+                                
+                                
+                                PosistionIndicator()
+                                    .frame(width: 5, height: 5)
+                                    .position(data.locationOnPath(pointLocation, path))
+                            }
+//                            else if chartData.chartType == (.line, .multi) {
+//
+//                                let data = chartData as! MultiLineChartData
+//
+//                                // FOR EACH
+//
+//                                ForEach(data.dataSets.dataSets, id: \.self) { dataSet in
+//
+//                                    let framePercent = (touchLocation.x / geo.size.width) * 100
+//                                    let path = data.straightLine(rect       : geo.frame(in: .global),
+//                                                                 dataPoints : dataSet.dataPoints,
+//                                                                 minValue   : data.getMinValue(),
+//                                                                 range      : data.getRange(),
+//                                                                 isFilled   : false)
+//
+//                                    Image(systemName: "person").resizable().foregroundColor(Color.red)
+//                                        .frame(width: 50, height: 50)
+//                                        .position(x: data.locationOnPath(framePercent / 100, path).x,
+//                                                  y: data.locationOnPath(framePercent / 100, path).y)
+//                                }
+//
+//                            }
+                            
+                            
+                            
                             if chartData.getHeaderLocation() == .floating {
                                 TouchOverlayBox(selectedPoints   : selectedPoints,
                                                 specifier        : specifier,
@@ -93,8 +144,8 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                             }
                         }
                     }
-                }
-            } else { content }
+//                }
+//            } else { content }
         }
     }
 
@@ -135,6 +186,8 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
             return touchLocation.y
         }
     }
+    
+    
 }
 #endif
 
@@ -180,5 +233,12 @@ extension View {
     #endif
 }
 
-
-
+struct PosistionIndicator: View {
+        
+    var body: some View {
+        Circle()
+            .border(Color.secondary, width: 3)
+            .foregroundColor(.primary)
+            
+    }
+}

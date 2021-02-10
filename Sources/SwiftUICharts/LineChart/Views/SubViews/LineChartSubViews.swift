@@ -14,9 +14,8 @@ internal struct LineChartColourSubView<CD>: View where CD: LineAndBarChartData {
     let minValue    : Double
     let range       : Double
     let colour      : Color
-    
     let isFilled    : Bool
-    
+        
     @State var startAnimation : Bool = false
     
     internal init(chartData : CD,
