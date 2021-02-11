@@ -44,7 +44,6 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
         self.chartData         = chartData
         self.specifier         = specifier
     }
-
     internal func body(content: Content) -> some View {
         Group {
             if chartData.isGreaterThanTwo() {
@@ -62,6 +61,7 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                                                                                      chartSize: geo)
                                         self.pointLocations = chartData.getPointLocation(touchLocation: touchLocation,
                                                                                          chartSize: geo)
+                                        
                                         if chartData.getHeaderLocation() == .floating {
                                             
                                             setBoxLocationation(boxFrame: boxFrame, chartSize: geo)
@@ -72,6 +72,7 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                                             
                                             chartData.infoView.touchOverlayInfo = selectedPoints
                                         }
+                                        
                                     }
                                     .onEnded { _ in
                                         chartData.infoView.isTouchCurrent = false
@@ -90,6 +91,37 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                                                 descriptionColour: chartData.chartStyle.infoBoxDescriptionColor,
                                                 boxFrame         : $boxFrame)
                                     .position(x: boxLocation.x, y: 0 + (boxFrame.height / 2))
+                            }
+                            
+                            
+                            // MARK: - Position Indicator
+                            // TODO: Refactor
+                            if chartData.chartType == (.line, .single) {
+                                
+                                let data = chartData as! LineChartData
+                                
+                                let position = data.getIndicatorLocation(rect: geo.frame(in: .global),
+                                                                         dataSet: data.dataSets,
+                                                                         touchLocation: touchLocation)
+                                
+                                PosistionIndicator()
+                                    .frame(width: 15, height: 15)
+                                    .position(position)
+                                
+                            } else if chartData.chartType == (.line, .multi) {
+
+                                let data = chartData as! MultiLineChartData
+
+                                ForEach(data.dataSets.dataSets, id: \.self) { dataSet in
+                                    
+                                    let position = data.getIndicatorLocation(rect: geo.frame(in: .global),
+                                                                             dataSet: dataSet,
+                                                                             touchLocation: touchLocation)
+                                    
+                                    PosistionIndicator()
+                                        .frame(width: 15, height: 15)
+                                        .position(position)
+                                }
                             }
                         }
                     }
@@ -135,6 +167,8 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
             return touchLocation.y
         }
     }
+    
+    
 }
 #endif
 
@@ -180,5 +214,10 @@ extension View {
     #endif
 }
 
-
-
+struct PosistionIndicator: View {
+        
+    var body: some View {
+        Circle()
+            .strokeBorder(Color.red, lineWidth: 3)
+    }
+}

@@ -7,16 +7,15 @@
 
 import SwiftUI
 
-internal struct LineChartColourSubView<CD>: View where CD: LineAndBarChartData {
+internal struct LineChartColourSubView<CD>: View where CD: LineChartDataProtocol {
     
     let chartData   : CD
     let dataSet     : LineDataSet
     let minValue    : Double
     let range       : Double
     let colour      : Color
-    
     let isFilled    : Bool
-    
+        
     @State var startAnimation : Bool = false
     
     internal init(chartData : CD,
@@ -60,7 +59,7 @@ internal struct LineChartColourSubView<CD>: View where CD: LineAndBarChartData {
     }
 }
 
-internal struct LineChartColoursSubView<CD>: View where CD: LineAndBarChartData {
+internal struct LineChartColoursSubView<CD>: View where CD: LineChartDataProtocol {
     
     let chartData   : CD
     let dataSet     : LineDataSet
@@ -110,7 +109,7 @@ internal struct LineChartColoursSubView<CD>: View where CD: LineAndBarChartData 
     }
 }
 
-internal struct LineChartStopsSubView<CD>: View where CD: LineAndBarChartData {
+internal struct LineChartStopsSubView<CD>: View where CD: LineChartDataProtocol {
     
     let chartData   : CD
     let dataSet     : LineDataSet
