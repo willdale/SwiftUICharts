@@ -7,9 +7,8 @@
 
 import SwiftUI
 
-internal struct LineShape<CD>: Shape where CD: LineChartDataProtocol {
+internal struct LineShape: Shape {
            
-    @ObservedObject var chartData: CD
     private let dataPoints  : [LineChartDataPoint]
     private let lineType    : LineType
     private let isFilled    : Bool
@@ -18,14 +17,12 @@ internal struct LineShape<CD>: Shape where CD: LineChartDataProtocol {
     private let range    : Double
     
     
-    internal init(chartData : CD,
-                  dataPoints: [LineChartDataPoint],
+    internal init(dataPoints: [LineChartDataPoint],
                   lineType  : LineType,
                   isFilled  : Bool,
                   minValue  : Double,
                   range     : Double
     ) {
-        self.chartData  = chartData
         self.dataPoints = dataPoints
         self.lineType   = lineType
         self.isFilled   = isFilled
@@ -34,12 +31,11 @@ internal struct LineShape<CD>: Shape where CD: LineChartDataProtocol {
     }
   
     internal func path(in rect: CGRect) -> Path {
-        
         switch lineType {
         case .curvedLine:
-            return chartData.curvedLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
+            return Path.curvedLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
         case .line:
-            return chartData.straightLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
+            return Path.straightLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
         }
     }
 }

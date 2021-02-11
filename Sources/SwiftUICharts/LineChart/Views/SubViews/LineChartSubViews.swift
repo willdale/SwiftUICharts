@@ -35,8 +35,7 @@ internal struct LineChartColourSubView<CD>: View where CD: LineChartDataProtocol
     
     internal var body: some View {
         
-        LineShape(chartData : chartData,
-                  dataPoints: dataSet.dataPoints,
+        LineShape(dataPoints: dataSet.dataPoints,
                   lineType  : dataSet.style.lineType,
                   isFilled  : isFilled,
                   minValue  : minValue,
@@ -77,8 +76,7 @@ internal struct LineChartColoursSubView<CD>: View where CD: LineChartDataProtoco
     
     internal var body: some View {
         
-        LineShape(chartData : chartData,
-                  dataPoints: dataSet.dataPoints,
+        LineShape(dataPoints: dataSet.dataPoints,
                   lineType: dataSet.style.lineType,
                   isFilled: isFilled,
                   minValue: minValue,
@@ -128,8 +126,7 @@ internal struct LineChartStopsSubView<CD>: View where CD: LineChartDataProtocol 
     
     internal var body: some View {
         
-        LineShape(chartData : chartData,
-                  dataPoints: dataSet.dataPoints,
+        LineShape(dataPoints: dataSet.dataPoints,
                   lineType: dataSet.style.lineType,
                   isFilled: isFilled,
                   minValue: minValue,
