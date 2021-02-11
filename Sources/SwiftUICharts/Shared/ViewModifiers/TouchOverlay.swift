@@ -45,8 +45,8 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
         self.specifier         = specifier
     }
     internal func body(content: Content) -> some View {
-//        Group {
-//            if chartData.isGreaterThanTwo() {
+        Group {
+            if chartData.isGreaterThanTwo() {
                 GeometryReader { geo in
                     ZStack {
                         content
@@ -84,57 +84,6 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                                 TouchOverlayMarker(position: location)
                                     .stroke(Color(.gray), lineWidth: 1)
                             }
-                            
-                            
-                            
-                            // MARK: - position indicator
-                            if chartData.chartType == (.line, .single) {
-                                
-                                let data = chartData as! LineChartData
-                                                                
-                                
-                                let path = data.curvedLine(rect       : geo.frame(in: .global),
-                                                           dataPoints : data.dataSets.dataPoints,
-                                                           minValue   : data.getMinValue(),
-                                                           range      : data.getRange(),
-                                                           isFilled   : false)
-                                
-                                
-                                let totalLength   = data.getTotalLength(of: path)
-                                let lengthToTouch = data.getLength(to: touchLocation, on: path)
-                                let pointLocation = lengthToTouch / totalLength
-                                
-                                
-                                PosistionIndicator()
-                                    .frame(width: 5, height: 5)
-                                    .position(data.locationOnPath(pointLocation, path))
-                            
-                            } else if chartData.chartType == (.line, .multi) {
-
-                                let data = chartData as! MultiLineChartData
-
-                                ForEach(data.dataSets.dataSets, id: \.self) { dataSet in
-
-                                    let path = data.curvedLine(rect       : geo.frame(in: .global),
-                                                               dataPoints : dataSet.dataPoints,
-                                                               minValue   : data.getMinValue(),
-                                                               range      : data.getRange(),
-                                                               isFilled   : false)
-
-                                    let totalLength   = data.getTotalLength(of: path)
-                                    let lengthToTouch = data.getLength(to: touchLocation, on: path)
-                                    let pointLocation = lengthToTouch / totalLength
-
-
-                                    PosistionIndicator()
-                                        .frame(width: 5, height: 5)
-                                        .position(data.locationOnPath(pointLocation, path))
-                                }
-
-                            }
-                            
-                            
-                            
                             if chartData.getHeaderLocation() == .floating {
                                 TouchOverlayBox(selectedPoints   : selectedPoints,
                                                 specifier        : specifier,
@@ -143,10 +92,41 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                                                 boxFrame         : $boxFrame)
                                     .position(x: boxLocation.x, y: 0 + (boxFrame.height / 2))
                             }
+                            
+                            
+                            // MARK: - Position Indicator
+                            // TODO: Refactor
+                            if chartData.chartType == (.line, .single) {
+                                
+                                let data = chartData as! LineChartData
+                                
+                                let position = data.getIndicatorLocation(rect: geo.frame(in: .global),
+                                                                         dataSet: data.dataSets,
+                                                                         touchLocation: touchLocation)
+                                
+                                PosistionIndicator()
+                                    .frame(width: 15, height: 15)
+                                    .position(position)
+                                
+                            } else if chartData.chartType == (.line, .multi) {
+
+                                let data = chartData as! MultiLineChartData
+
+                                ForEach(data.dataSets.dataSets, id: \.self) { dataSet in
+                                    
+                                    let position = data.getIndicatorLocation(rect: geo.frame(in: .global),
+                                                                             dataSet: dataSet,
+                                                                             touchLocation: touchLocation)
+                                    
+                                    PosistionIndicator()
+                                        .frame(width: 15, height: 15)
+                                        .position(position)
+                                }
+                            }
                         }
                     }
-//                }
-//            } else { content }
+                }
+            } else { content }
         }
     }
 
@@ -238,8 +218,6 @@ struct PosistionIndicator: View {
         
     var body: some View {
         Circle()
-            .border(Color.secondary, width: 3)
-            .foregroundColor(.primary)
-            
+            .strokeBorder(Color.red, lineWidth: 3)
     }
 }

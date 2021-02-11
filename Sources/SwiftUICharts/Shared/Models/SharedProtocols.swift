@@ -100,6 +100,20 @@ public protocol ChartData: ObservableObject, Identifiable {
      */
     func getHeaderLocation() -> InfoBoxPlacement
     
+    
+    /**
+     Configures the legends based on the type of chart.
+     
+     - Tag: setupLegends
+     */
+    func setupLegends()
+    
+    /**
+     Returns whether there are two or more dataPoints
+     */
+    func isGreaterThanTwo() -> Bool
+    
+    // MARK: Touch
     /**
     Gets the nearest data points to the touch location.
     - Parameters:
@@ -121,18 +135,6 @@ public protocol ChartData: ObservableObject, Identifiable {
     - Tag: getDataPoint
     */
     func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint]
-    
-    /**
-     Configures the legends based on the type of chart.
-     
-     - Tag: setupLegends
-     */
-    func setupLegends()
-    
-    /**
-     Returns whether there are two or more dataPoints
-     */
-    func isGreaterThanTwo() -> Bool
 }
 
 extension ChartData {
