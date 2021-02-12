@@ -194,6 +194,8 @@ public class MultiBarChartData: BarChartDataProtocol {
     public var noDataText   : Text
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
+    var groupSpacing : CGFloat = 0
+    
     // MARK: - Initializers
     /// Initialises a multi part Bar Chart with optional calculation
     ///
@@ -221,44 +223,42 @@ public class MultiBarChartData: BarChartDataProtocol {
     }
     
     // MARK: - Labels
+    @ViewBuilder
     public func getXAxisLabels() -> some View {
-        Group {
-            switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint:
-          
-                HStack(spacing: 100) {
-                    ForEach(dataSets.dataSets) { dataSet in
-                        HStack(spacing: 0) {
-                            ForEach(dataSet.dataPoints) { data in
-                                Text(data.xAxisLabel ?? "")
-                                    .font(.caption)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.5)
-                                if data != dataSet.dataPoints[dataSet.dataPoints.count - 1] {
-                                    Spacer()
-                                        .frame(minWidth: 0, maxWidth: 500)
-                                }
+        switch self.chartStyle.xAxisLabelsFrom {
+        case .dataPoint:
+            HStack(spacing: 100) {
+                ForEach(dataSets.dataSets) { dataSet in
+                    HStack(spacing: 0) {
+                        ForEach(dataSet.dataPoints) { data in
+                            Text(data.xAxisLabel ?? "")
+                                .font(.caption)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                            if data != dataSet.dataPoints[dataSet.dataPoints.count - 1] {
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
                             }
                         }
                     }
                 }
-                .padding(.horizontal, -4)
-                
-            case .chartData:
-                
-                if let labelArray = self.xAxisLabels {
-                    HStack(spacing: 0) {
-                        ForEach(labelArray, id: \.self) { data in
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
-                            Text(data)
-                                .font(.caption)
-                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
-                        }
+            }
+            .padding(.horizontal, -4)
+            
+        case .chartData:
+            
+            if let labelArray = self.xAxisLabels {
+                HStack(spacing: 0) {
+                    ForEach(labelArray, id: \.self) { data in
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                        Text(data)
+                            .font(.caption)
+                            .foregroundColor(self.chartStyle.xAxisLabelColour)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
                     }
                 }
             }
@@ -267,29 +267,65 @@ public class MultiBarChartData: BarChartDataProtocol {
     
     // MARK: - Touch
     public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [BarChartDataPoint] {
+        
         var points : [BarChartDataPoint] = []
-        for dataSet in dataSets.dataSets {
-            let xSection    : CGFloat   = chartSize.size.width / CGFloat(dataSet.dataPoints.count)
-            let index       : Int       = Int((touchLocation.x) / xSection)
-            if index >= 0 && index < dataSet.dataPoints.count {
-                points.append(dataSet.dataPoints[index])
+        
+        // Divide the chart into equal sections.
+        let superXSection   : CGFloat   = (chartSize.size.width / CGFloat(dataSets.dataSets.count))
+        let superIndex      : Int       = Int((touchLocation.x) / superXSection)
+        
+        // Work out how much to remove from xSection due to groupSpacing.
+        let compensation : CGFloat = ((groupSpacing * CGFloat(dataSets.dataSets.count - 1)) / CGFloat(dataSets.dataSets.count))
+        
+        // Make those sections take account of spacing between groups.
+        let xSection : CGFloat  = (chartSize.size.width / CGFloat(dataSets.dataSets.count)) - compensation
+        let index    : Int      = Int((touchLocation.x - CGFloat((groupSpacing * CGFloat(superIndex)))) / xSection)
+
+        if index >= 0 && index < dataSets.dataSets.count && superIndex == index {
+            let dataSet = dataSets.dataSets[index]
+            let xSubSection : CGFloat   = (xSection / CGFloat(dataSet.dataPoints.count))
+            let subIndex    : Int       = Int((touchLocation.x - CGFloat((groupSpacing * CGFloat(superIndex)))) / xSubSection) - (dataSet.dataPoints.count * index)
+            if subIndex >= 0 && subIndex < dataSet.dataPoints.count {
+                points.append(dataSet.dataPoints[subIndex])
             }
         }
         return points
     }
+//    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [BarChartDataPoint] {
+//
+//        var points : [BarChartDataPoint] = []
+//
+//        // Divide the chart into equal sections.
+//        let superXSection   : CGFloat   = (chartSize.size.width / CGFloat(dataSets.dataSets.count))
+//        let superIndex      : Int       = Int((touchLocation.x) / superXSection)
+//
+//        // Make those sections take account of spacing between groups.
+//        let xSection : CGFloat  = (chartSize.size.width / CGFloat(dataSets.dataSets.count)) - 75
+//        let index    : Int      = Int((touchLocation.x - CGFloat((100 * superIndex))) / xSection)
+//
+//        if index >= 0 && index < dataSets.dataSets.count && superIndex == index {
+//            let dataSet = dataSets.dataSets[index]
+//            let xSubSection : CGFloat   = (xSection / CGFloat(dataSet.dataPoints.count))
+//            let subIndex    : Int       = Int((touchLocation.x - CGFloat((100 * superIndex))) / xSubSection) - (dataSet.dataPoints.count * index)
+//            if subIndex >= 0 && subIndex < dataSet.dataPoints.count {
+//                points.append(dataSet.dataPoints[subIndex])
+//            }
+//        }
+//        return points
+//    }
     public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
-        var locations : [HashablePoint] = []
-        for dataSet in dataSets.dataSets {
-            let xSection : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count)
-            let ySection : CGFloat = chartSize.size.height / CGFloat(getMaxValue())
-            
-            let index = Int((touchLocation.x) / xSection)
-            
-            if index >= 0 && index < dataSet.dataPoints.count {
-                locations.append(HashablePoint(x: (CGFloat(index) * xSection) + (xSection / 2),
-                                               y: (chartSize.size.height - CGFloat(dataSet.dataPoints[index].value) * ySection)))
-            }
-        }
+        let locations : [HashablePoint] = []
+//        for dataSet in dataSets.dataSets {
+//            let xSection : CGFloat = (chartSize.size.width / CGFloat(dataSet.dataPoints.count))
+//            let ySection : CGFloat = chartSize.size.height / CGFloat(getMaxValue())
+//
+//            let index = Int((touchLocation.x) / xSection)
+//
+//            if index >= 0 && index < dataSet.dataPoints.count {
+//                locations.append(HashablePoint(x: (CGFloat(index) * xSection) + (xSection / 2),
+//                                               y: (chartSize.size.height - CGFloat(dataSet.dataPoints[index].value) * ySection)))
+//            }
+//        }
         return locations
     }
     

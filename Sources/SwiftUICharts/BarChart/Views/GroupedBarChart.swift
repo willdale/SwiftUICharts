@@ -16,34 +16,34 @@ public struct GroupedBarChart<ChartData>: View where ChartData: MultiBarChartDat
     public init(chartData: ChartData, groupSpacing : CGFloat) {
         self.chartData    = chartData
         self.groupSpacing = groupSpacing
+        
+        self.chartData.groupSpacing = groupSpacing
     }
     
     public var body: some View {
         if chartData.isGreaterThanTwo() {
             HStack(spacing: groupSpacing) {
                 ForEach(chartData.dataSets.dataSets) { dataSet in
-                    VStack {
-                        HStack(spacing: 0) {
-                            ForEach(dataSet.dataPoints) { dataPoint in
+                    HStack(spacing: 0) {
+                        ForEach(dataSet.dataPoints) { dataPoint in
+                            
+                            switch dataSet.style.colourFrom {
+                            case .barStyle:
                                 
-                                switch dataSet.style.colourFrom {
-                                case .barStyle:
-                                    
-                                    BarChartDataSetSubView(colourType: dataSet.style.colourType,
-                                                           dataPoint: dataPoint,
-                                                           style: dataSet.style,
-                                                           chartStyle: chartData.chartStyle,
-                                                           maxValue: chartData.getMaxValue())
-                                    
-                                case .dataPoints:
-                                    
-                                    BarChartDataPointSubView(colourType: dataPoint.colourType,
-                                                             dataPoint: dataPoint,
-                                                             style: dataSet.style,
-                                                             chartStyle: chartData.chartStyle,
-                                                             maxValue: chartData.getMaxValue())
-                                    
-                                }
+                                BarChartDataSetSubView(colourType: dataSet.style.colourType,
+                                                       dataPoint: dataPoint,
+                                                       style: dataSet.style,
+                                                       chartStyle: chartData.chartStyle,
+                                                       maxValue: chartData.getMaxValue())
+                                
+                            case .dataPoints:
+                                
+                                BarChartDataPointSubView(colourType: dataPoint.colourType,
+                                                         dataPoint: dataPoint,
+                                                         style: dataSet.style,
+                                                         chartStyle: chartData.chartStyle,
+                                                         maxValue: chartData.getMaxValue())
+                                
                             }
                         }
                     }
