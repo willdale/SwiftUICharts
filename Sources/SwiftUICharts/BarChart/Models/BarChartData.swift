@@ -262,11 +262,9 @@ public class BarChartData: BarChartDataProtocol {
 
     public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
         var locations : [HashablePoint] = []
-        
         let xSection : CGFloat = chartSize.size.width / CGFloat(dataSets.dataPoints.count)
         let ySection : CGFloat = chartSize.size.height / CGFloat(self.getMaxValue())
         let index    : Int     = Int((touchLocation.x) / xSection)
-        
         if index >= 0 && index < dataSets.dataPoints.count {
             locations.append(HashablePoint(x: (CGFloat(index) * xSection) + (xSection / 2),
                                            y: (chartSize.size.height - CGFloat(dataSets.dataPoints[index].value) * ySection)))
@@ -353,7 +351,6 @@ public class BarChartData: BarChartDataProtocol {
         }
     }
     
-    public typealias Set = BarDataSet
-    public typealias DataPoint = BarChartDataPoint
-    
+    public typealias Set        = BarDataSet
+    public typealias DataPoint  = BarChartDataPoint
 }

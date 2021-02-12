@@ -18,7 +18,17 @@ import SwiftUI
  - Tag: LineChartDataProtocol
  */
 public protocol LineChartDataProtocol: LineAndBarChartData where CTStyle: CTLineChartStyle {
+    /**
+     Data model conatining the style data for the chart.
+     
+     # Reference
+     [CTChartStyle](x-source-tag://CTChartStyle)
+     */
     var chartStyle  : CTStyle { get set }
+    
+    /**
+     Whether it is a normal or filled line.
+     */
     var isFilled    : Bool { get set}
     
     /**

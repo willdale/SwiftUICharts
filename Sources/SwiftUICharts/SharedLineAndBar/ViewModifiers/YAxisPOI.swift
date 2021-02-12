@@ -83,9 +83,6 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
     
     var valueLabel: some View {
         GeometryReader { geo in
-                        
-            let y = geo.size.height / CGFloat(range)
-            let pointY = (CGFloat(markerValue - minValue) * -y) + geo.size.height
             
             switch labelPosition {
             case .none:
@@ -105,10 +102,10 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
                     )
                     .ifElse(self.chartData.chartStyle.yAxisLabelPosition == .leading, if: {
                         $0.position(x: -18,
-                                    y: pointY)
+                                    y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo))
                     }, else: {
                         $0.position(x: geo.size.width + 18,
-                                    y: pointY)
+                                    y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo))
                     })
                     
                 
@@ -123,8 +120,22 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
                     .overlay(DiamondShape()
                                 .stroke(lineColour, style: strokeStyle)
                     )
-                    .position(x: geo.size.width / 2, y: pointY)
+                    .position(x: geo.size.width / 2,
+                              y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo))
             }
+        }
+    }
+    
+    func getYPoint(chartType: ChartType, chartSize: GeometryProxy) -> CGFloat {
+        switch chartData.chartType.chartType {
+        case .line:
+            let y = chartSize.size.height / CGFloat(range)
+           return (CGFloat(markerValue - minValue) * -y) + chartSize.size.height
+        case .bar:
+            let y = chartSize.size.height / CGFloat(maxValue)
+            return  chartSize.size.height - CGFloat(markerValue) * y
+        case .pie:
+            return 0
         }
     }
 }

@@ -50,5 +50,4 @@ extension LineAndBarChartData where Self: BarChartDataProtocol {
  
  - Tag: CTBarChartStyle
  */
-public protocol CTBarChartStyle : CTLineAndBarChartStyle {}
-
+public protocol CTBarChartStyle: CTLineAndBarChartStyle {}
