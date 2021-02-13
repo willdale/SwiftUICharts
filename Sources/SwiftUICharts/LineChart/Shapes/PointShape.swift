@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-internal struct Point<T>: Shape where T: SingleDataSet {
+internal struct Point<T>: Shape where T: CTLineChartDataSet {
     
     private let dataSet     : T
     

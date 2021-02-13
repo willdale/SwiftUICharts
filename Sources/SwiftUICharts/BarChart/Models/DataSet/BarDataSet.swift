@@ -22,8 +22,7 @@ import SwiftUI
      BarChartDataPoint(value: 90,  xAxisLabel: "S", pointLabel: "Sunday")
  ],
  legendTitle: "Data",
- pointStyle : PointStyle(),
- style      : LineStyle())
+ style      : BarStyle())
  ```
  
  # BarChartDataPoint
@@ -70,30 +69,25 @@ import SwiftUI
  
  - Tag: BarDataSet
  */
-
 public struct BarDataSet: SingleDataSet {
 
     public let id           : UUID
     public var dataPoints   : [BarChartDataPoint]
     public var legendTitle  : String
-    public var pointStyle   : PointStyle
     public var style        : BarStyle
     
     /// Initialises a new data set for a Bar Chart.
     /// - Parameters:
     ///   - dataPoints: Array of elements.
     ///   - legendTitle: label for the data in legend.
-    ///   - pointStyle: Styling information for the data point markers.
     ///   - style: Styling for how the line will be drawin.
     public init(dataPoints  : [BarChartDataPoint],
                 legendTitle : String,
-                pointStyle  : PointStyle,
                 style       : BarStyle
     ) {
         self.id             = UUID()
         self.dataPoints     = dataPoints
         self.legendTitle    = legendTitle
-        self.pointStyle     = pointStyle
         self.style          = style
     }
 

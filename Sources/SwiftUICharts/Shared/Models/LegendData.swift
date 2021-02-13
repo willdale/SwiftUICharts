@@ -11,6 +11,8 @@ import SwiftUI
 /// - Tag: LegendData
 public struct LegendData: CTColourStyle, Hashable, Identifiable {
     
+    // MARK: - Parameters
+    
     public var id           : UUID
     /// The type of chart being used.
     public var chartType    : ChartType
@@ -29,6 +31,7 @@ public struct LegendData: CTColourStyle, Hashable, Identifiable {
     public var startPoint   : UnitPoint?
     public var endPoint     : UnitPoint?
     
+    // MARK: - Single Color
     /// Legend with single colour
     /// - Parameters:
     ///   - legend: Text to be displayed
@@ -55,6 +58,7 @@ public struct LegendData: CTColourStyle, Hashable, Identifiable {
         self.colourType  = .colour
     }
     
+    // MARK: - Gradient Color
     /// Legend with a gradient colour
     /// - Parameters:
     ///   - legend: Text to be displayed
@@ -85,6 +89,7 @@ public struct LegendData: CTColourStyle, Hashable, Identifiable {
         self.colourType  = .gradientColour
     }
     
+    // MARK: - Gradient Stops Color
     /// Legend with a gradient with stop control
     /// - Parameters:
     ///   - legend: Text to be displayed

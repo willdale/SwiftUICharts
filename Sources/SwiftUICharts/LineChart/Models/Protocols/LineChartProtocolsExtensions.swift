@@ -1,48 +1,26 @@
 //
-//  LineChartProtocols.swift
+//  LineChartProtocolsExtensions.swift
 //  
 //
-//  Created by Will Dale on 02/02/2021.
+//  Created by Will Dale on 13/02/2021.
 //
 
 import SwiftUI
 
-/**
- A protocol to extend functionality of `LineAndBarChartData` specifically for Line Charts.
- 
- # Reference
- [See LineAndBarChartData](x-source-tag://LineAndBarChartData)
- 
- `LineAndBarChartData` conforms to [ChartData](x-source-tag://ChartData)
- 
- - Tag: LineChartDataProtocol
- */
-public protocol LineChartDataProtocol: LineAndBarChartData where CTStyle: CTLineChartStyle {
-    /**
-     Data model conatining the style data for the chart.
-     
-     # Reference
-     [CTChartStyle](x-source-tag://CTChartStyle)
-     */
-    var chartStyle  : CTStyle { get set }
-    
-    /**
-     Whether it is a normal or filled line.
-     */
-    var isFilled    : Bool { get set}
-    
-    /**
-     Returns the position to place the indicator on the line
-     based on the users touch or pointer input.
-     
-     - Parameters:
-        - rect: Frame of the path.
-        - dataSet: Dataset used to draw the chart.
-        - touchLocation: Location of the touch or pointer input.
-     - Returns: The position to place the indicator.
-     */
-    func getIndicatorLocation(rect: CGRect, dataSet: LineDataSet, touchLocation: CGPoint) -> CGPoint
-    
+// MARK: Labels
+extension LineAndBarChartData where Self: LineChartDataProtocol {
+    public func getYLabels() -> [Double] {
+        var labels      : [Double]  = [Double]()
+        let dataRange   : Double = self.getRange()
+        let minValue    : Double = self.getMinValue()
+        let range       : Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
+
+        labels.append(minValue)
+        for index in 1...self.chartStyle.yAxisNumberOfLabels {
+            labels.append(minValue + range * Double(index))
+        }
+        return labels
+    }
 }
 
 // MARK: - Position Indicator
@@ -268,34 +246,4 @@ extension LineChartDataProtocol {
         return CGPoint(x: trimmedPoint.boundingRect.midX,
                        y: trimmedPoint.boundingRect.midY)
     }
-}
-
-// MARK: Labels
-extension LineAndBarChartData where Self: LineChartDataProtocol {
-    public func getYLabels() -> [Double] {
-        var labels      : [Double]  = [Double]()
-        let dataRange   : Double = self.getRange()
-        let minValue    : Double = self.getMinValue()
-        let range       : Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
-
-        labels.append(minValue)
-        for index in 1...self.chartStyle.yAxisNumberOfLabels {
-            labels.append(minValue + range * Double(index))
-        }
-        return labels
-    }
-}
-// MARK: - Style
-/**
- A protocol to extend functionality of `CTLineAndBarChartStyle` specifically for  Line Charts.
- 
- - Tag: CTLineChartStyle
- */
-public protocol CTLineChartStyle : CTLineAndBarChartStyle {
-    /**
-     Where to start drawing the line chart from. Zero or data set minium.
-     
-     [See Baseline](x-source-tag://Baseline)
-     */
-    var baseline: Baseline { get set }
 }
