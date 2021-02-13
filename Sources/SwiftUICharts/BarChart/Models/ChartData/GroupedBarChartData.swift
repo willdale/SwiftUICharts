@@ -14,7 +14,7 @@ import SwiftUI
  
  # Example
  ```
- static func makeData() -> MultiBarChartData {
+ static func makeData() -> GroupedBarChartData {
      
      let data = MultiBarDataSet(dataSets: [
          BarDataSet(dataPoints: [
@@ -51,7 +51,7 @@ import SwiftUI
                     style: BarStyle(barWidth: 1.0, colourFrom: .dataPoints))
      ])
      
-     return MultiBarChartData(dataSets    : data,
+     return GroupedBarChartData(dataSets    : data,
                               metadata    : ChartMetadata(title: "Hello", subtitle: "Bob"),
                               xAxisLabels : ["Hello"],
                               chartStyle  : BarChartStyle(),
@@ -177,9 +177,9 @@ import SwiftUI
  - LineAndBarChartData
  - ChartData
  
- - Tag: LineChartData
+ - Tag: GroupedBarChartData
  */
-public class MultiBarChartData: BarChartDataProtocol {
+public class GroupedBarChartData: BarChartDataProtocol {
     // MARK: - Properties
     public let id   : UUID  = UUID()
 
@@ -291,41 +291,9 @@ public class MultiBarChartData: BarChartDataProtocol {
         }
         return points
     }
-//    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [BarChartDataPoint] {
-//
-//        var points : [BarChartDataPoint] = []
-//
-//        // Divide the chart into equal sections.
-//        let superXSection   : CGFloat   = (chartSize.size.width / CGFloat(dataSets.dataSets.count))
-//        let superIndex      : Int       = Int((touchLocation.x) / superXSection)
-//
-//        // Make those sections take account of spacing between groups.
-//        let xSection : CGFloat  = (chartSize.size.width / CGFloat(dataSets.dataSets.count)) - 75
-//        let index    : Int      = Int((touchLocation.x - CGFloat((100 * superIndex))) / xSection)
-//
-//        if index >= 0 && index < dataSets.dataSets.count && superIndex == index {
-//            let dataSet = dataSets.dataSets[index]
-//            let xSubSection : CGFloat   = (xSection / CGFloat(dataSet.dataPoints.count))
-//            let subIndex    : Int       = Int((touchLocation.x - CGFloat((100 * superIndex))) / xSubSection) - (dataSet.dataPoints.count * index)
-//            if subIndex >= 0 && subIndex < dataSet.dataPoints.count {
-//                points.append(dataSet.dataPoints[subIndex])
-//            }
-//        }
-//        return points
-//    }
+
     public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
         let locations : [HashablePoint] = []
-//        for dataSet in dataSets.dataSets {
-//            let xSection : CGFloat = (chartSize.size.width / CGFloat(dataSet.dataPoints.count))
-//            let ySection : CGFloat = chartSize.size.height / CGFloat(getMaxValue())
-//
-//            let index = Int((touchLocation.x) / xSection)
-//
-//            if index >= 0 && index < dataSet.dataPoints.count {
-//                locations.append(HashablePoint(x: (CGFloat(index) * xSection) + (xSection / 2),
-//                                               y: (chartSize.size.height - CGFloat(dataSet.dataPoints[index].value) * ySection)))
-//            }
-//        }
         return locations
     }
     
@@ -408,7 +376,8 @@ public class MultiBarChartData: BarChartDataProtocol {
         }
     }
     
-    public typealias Set = MultiBarDataSet
-    public typealias DataPoint = BarChartDataPoint
+    public typealias Set        = MultiBarDataSet
+    public typealias DataPoint  = BarChartDataPoint
+    public typealias CTStyle    = BarChartStyle
 }
 

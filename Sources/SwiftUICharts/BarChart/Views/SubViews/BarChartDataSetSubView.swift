@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Bar segment where the colour information comes from chart style.
+ */
 internal struct BarChartDataSetSubView: View {
     
     let colourType  : ColourType
@@ -42,7 +45,9 @@ internal struct BarChartDataSetSubView: View {
     }
 }
 
-
+/**
+ Bar segment where the colour information comes from datapoints.
+ */
 internal struct BarChartDataPointSubView: View {
 
     let colourType  : ColourType
