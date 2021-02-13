@@ -299,3 +299,21 @@ public protocol CTLineChartStyle : CTLineAndBarChartStyle {
      */
     var baseline: Baseline { get set }
 }
+
+/**
+ A protocol to extend functionality of `SingleDataSet` specifically for Line Charts.
+ 
+ # Reference
+ [See SingleDataSet](x-source-tag://SingleDataSet)
+ 
+ - Tag: CTLineChartDataSet
+ */
+public protocol CTLineChartDataSet: SingleDataSet {
+    /**
+     Sets the look of the markers over the data points.
+     
+     The markers are layed out when the `ViewModifier` [.pointMarkers](x-source-tag://PointMarkers)
+     is applied.
+     */
+    var pointStyle  : PointStyle { get set }
+}

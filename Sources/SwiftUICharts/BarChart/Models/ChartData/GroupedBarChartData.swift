@@ -23,7 +23,6 @@ import SwiftUI
                      BarChartDataPoint(value: 30, xAxisLabel: "1.3", pointLabel: "One Three", colour: .purple),
                      BarChartDataPoint(value: 40, xAxisLabel: "1.4", pointLabel: "One Four" , colour: .green)],
                     legendTitle: "One",
-                    pointStyle: PointStyle(),
                     style: BarStyle(barWidth: 1.0, colourFrom: .dataPoints)),
          BarDataSet(dataPoints: [
                      BarChartDataPoint(value: 50, xAxisLabel: "2.1", pointLabel: "Two One"  , colour: .blue),
@@ -31,7 +30,6 @@ import SwiftUI
                      BarChartDataPoint(value: 40, xAxisLabel: "2.3", pointLabel: "Two Three", colour: .purple),
                      BarChartDataPoint(value: 60, xAxisLabel: "2.3", pointLabel: "Two Three", colour: .green)],
                     legendTitle: "Two",
-                    pointStyle: PointStyle(),
                     style: BarStyle(barWidth: 1.0, colourFrom: .dataPoints)),
          BarDataSet(dataPoints: [
                      BarChartDataPoint(value: 10, xAxisLabel: "3.1", pointLabel: "Three One"  , colour: .blue),
@@ -39,7 +37,6 @@ import SwiftUI
                      BarChartDataPoint(value: 30, xAxisLabel: "3.3", pointLabel: "Three Three", colour: .purple),
                      BarChartDataPoint(value: 99, xAxisLabel: "3.4", pointLabel: "Three Four" , colour: .green)],
                     legendTitle: "Three",
-                    pointStyle: PointStyle(),
                     style: BarStyle(barWidth: 1.0, colourFrom: .dataPoints)),
          BarDataSet(dataPoints: [
                      BarChartDataPoint(value: 80, xAxisLabel: "4.1", pointLabel: "Four One"  , colour: .blue),
@@ -47,7 +44,6 @@ import SwiftUI
                      BarChartDataPoint(value: 20, xAxisLabel: "4.3", pointLabel: "Four Three", colour: .purple),
                      BarChartDataPoint(value: 50, xAxisLabel: "4.3", pointLabel: "Four Three", colour: .green)],
                     legendTitle: "Four",
-                    pointStyle: PointStyle(),
                     style: BarStyle(barWidth: 1.0, colourFrom: .dataPoints))
      ])
      

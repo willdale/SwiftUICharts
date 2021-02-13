@@ -189,13 +189,7 @@ public protocol SingleDataSet: DataSet {
      */
     var legendTitle : String { get set }
     
-    /**
-     Sets the look of the markers over the data points.
-     
-     The markers are layed out when the `ViewModifier` [.pointMarkers](x-source-tag://PointMarkers)
-     is applied.
-     */
-    var pointStyle  : PointStyle { get set } // Line Only ----------------------------
+    
     
     /**
      Sets the style for the Data Set (as opposed to Chart Data Style).
@@ -262,7 +256,7 @@ public protocol CTChartStyle {
  
  Allows for single colour, gradient or gradient with stops control.
   
- - Tag: CTDoughnutChartStyle
+ - Tag: CTColourStyle
  */
 public protocol CTColourStyle {
     

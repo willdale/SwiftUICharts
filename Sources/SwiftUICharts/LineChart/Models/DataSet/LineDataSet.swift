@@ -85,7 +85,7 @@ import SwiftUI
  
  - Tag: LineDataSet
  */
-public struct LineDataSet: SingleDataSet {
+public struct LineDataSet: CTLineChartDataSet {
 
     public let id           : UUID
     public var dataPoints   : [LineChartDataPoint]
