@@ -66,16 +66,9 @@ public protocol DoughnutChartDataProtocol : PieAndDoughnutChartDataProtocol wher
     var chartStyle  : CTStyle { get set }
 }
 
-public protocol CTMultiPieChartDataPoints: CTChartDataPoint {
-    
-}
+public protocol CTMultiPieChartDataPoints: CTChartDataPoint {}
 
-public protocol CTMultiPieDataSet: DataSet {
-    
-//    var dataSets:
-    
-    
-}
+public protocol CTMultiPieDataSet: DataSet {}
 
 // MARK: - Pie and Doughnut
 extension PieAndDoughnutChartDataProtocol {
