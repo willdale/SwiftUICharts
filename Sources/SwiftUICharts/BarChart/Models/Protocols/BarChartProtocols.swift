@@ -30,16 +30,6 @@ public protocol BarChartDataProtocol: LineAndBarChartData where CTStyle: CTBarCh
 }
 
 
-extension LineAndBarChartData where Self: BarChartDataProtocol {
-    public func getYLabels() -> [Double] {
-        var labels  : [Double]  = [Double]()
-        let maxValue: Double    = self.getMaxValue()
-        for index in 0...self.chartStyle.yAxisNumberOfLabels {
-            labels.append(maxValue / Double(self.chartStyle.yAxisNumberOfLabels) * Double(index))
-        }
-        return labels
-    }
-}
 
 
 // MARK: - Style

@@ -113,7 +113,6 @@ public protocol ChartData: ObservableObject, Identifiable {
      */
     func isGreaterThanTwo() -> Bool
     
-    // MARK: Touch
     /**
     Gets the nearest data points to the touch location.
     - Parameters:
@@ -135,27 +134,6 @@ public protocol ChartData: ObservableObject, Identifiable {
     - Tag: getDataPoint
     */
     func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint]
-}
-
-extension ChartData {
-    public func legendOrder() -> [LegendData] {
-        return legends.sorted { $0.prioity < $1.prioity}
-    }
-}
-
-extension ChartData where Set: SingleDataSet {
-    public func isGreaterThanTwo() -> Bool {
-        return dataSets.dataPoints.count > 2
-    }
-}
-extension ChartData where Set: MultiDataSet {
-    public func isGreaterThanTwo() -> Bool {
-        var returnValue: Bool = true
-        dataSets.dataSets.forEach { dataSet in
-            returnValue = dataSet.dataPoints.count > 2
-        }
-        return returnValue
-    }
 }
 
 // MARK: - Data Sets
@@ -211,8 +189,38 @@ public protocol MultiDataSet: DataSet {
     var dataSets    : [DataSet] { get set }
 }
 
-
-
+// MARK: - Data Points
+/**
+ Protocol to set base configuration for data points.
+ 
+ - Tag: CTChartDataPoint
+ 
+ */
+public protocol CTChartDataPoint: Hashable, Identifiable {
+    
+    var id               : ID { get }
+    
+    /**
+     Value of the data point
+     */
+    var value            : Double { get set }
+    
+    /**
+     A laabel that can be displayed on touch input
+    
+     It can eight be displayed in a floating box that tracks the users input location
+     or placed in the header. [See InfoBoxPlacement](x-source-tag://InfoBoxPlacement).
+    */
+    var pointDescription : String? { get set }
+    
+    /**
+     Date can be used for performing additional calculations.
+     
+     [See Calculations](x-source-tag://Calculations)
+     */
+    var date             : Date? { get set }
+    
+}
 
 // MARK: - Styles
 /**
@@ -287,41 +295,4 @@ public protocol CTColourStyle {
     
     /// End point for the gradient
     var endPoint: UnitPoint? { get set }
-}
-
-
-
-
-// MARK: - Data Points
-
-/**
- Protocol to set base configuration for data points.
- 
- - Tag: CTChartDataPoint
- 
- */
-public protocol CTChartDataPoint: Hashable, Identifiable {
-    
-    var id               : ID { get }
-    
-    /**
-     Value of the data point
-     */
-    var value            : Double { get set }
-    
-    /**
-     A laabel that can be displayed on touch input
-    
-     It can eight be displayed in a floating box that tracks the users input location
-     or placed in the header. [See InfoBoxPlacement](x-source-tag://InfoBoxPlacement).
-    */
-    var pointDescription : String? { get set }
-    
-    /**
-     Date can be used for performing additional calculations.
-     
-     [See Calculations](x-source-tag://Calculations)
-     */
-    var date             : Date? { get set }
-    
 }
