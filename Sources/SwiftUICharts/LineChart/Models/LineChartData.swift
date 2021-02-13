@@ -306,6 +306,28 @@ public class LineChartData: LineChartDataProtocol {
         }
     }
     
+    // MARK: - Data Functions
+    public func getRange() -> Double {
+        switch self.chartStyle.baseline {
+        case .minimumValue:
+            return DataFunctions.dataSetRange(from: dataSets)
+        case .minimumWithMaximum(of: let value):
+            return DataFunctions.dataSetMaxValue(from: dataSets) - min(DataFunctions.dataSetMinValue(from: dataSets), value)
+        case .zero:
+            return DataFunctions.dataSetMaxValue(from: dataSets)
+        }
+    }
+    public func getMinValue() -> Double {
+        switch self.chartStyle.baseline {
+        case .minimumValue:
+            return DataFunctions.dataSetMinValue(from: dataSets)
+        case .minimumWithMaximum(of: let value):
+            return min(DataFunctions.dataSetMinValue(from: dataSets), value)
+        case .zero:
+            return 0
+        }
+    }
+    
     public typealias Set       = LineDataSet
     public typealias DataPoint = LineChartDataPoint
 }

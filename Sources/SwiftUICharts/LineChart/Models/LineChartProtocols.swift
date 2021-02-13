@@ -285,52 +285,6 @@ extension LineAndBarChartData where Self: LineChartDataProtocol {
         return labels
     }
 }
-
-// MARK: - Data Functions
-extension LineAndBarChartData where Self: LineChartData {
-    public func getRange() -> Double {
-        switch self.chartStyle.baseline {
-        case .minimumValue:
-            return DataFunctions.dataSetRange(from: dataSets)
-        case .minimumWithMaximum(of: let value):
-            return DataFunctions.dataSetMaxValue(from: dataSets) - min(DataFunctions.dataSetMinValue(from: dataSets), value)
-        case .zero:
-            return DataFunctions.dataSetMaxValue(from: dataSets)
-        }
-    }
-    public func getMinValue() -> Double {
-        switch self.chartStyle.baseline {
-        case .minimumValue:
-            return DataFunctions.dataSetMinValue(from: dataSets)
-        case .minimumWithMaximum(of: let value):
-            return min(DataFunctions.dataSetMinValue(from: dataSets), value)
-        case .zero:
-           return 0
-        }
-    }
-}
-extension LineAndBarChartData where Self: MultiLineChartData {
-    public func getRange() -> Double {
-        switch self.chartStyle.baseline {
-        case .minimumValue:
-            return DataFunctions.multiDataSetRange(from: dataSets)
-        case .minimumWithMaximum(of: let value):
-            return DataFunctions.multiDataSetMaxValue(from: dataSets) - min(DataFunctions.multiDataSetMinValue(from: dataSets), value)
-        case .zero:
-            return DataFunctions.multiDataSetMaxValue(from: dataSets)
-        }
-    }
-    public func getMinValue() -> Double {
-        switch self.chartStyle.baseline {
-        case .minimumValue:
-            return DataFunctions.multiDataSetMinValue(from: dataSets)
-        case .minimumWithMaximum(of: let value):
-            return min(DataFunctions.multiDataSetMinValue(from: dataSets), value)
-        case .zero:
-           return 0
-        }
-    }
-}
 // MARK: - Style
 /**
  A protocol to extend functionality of `CTLineAndBarChartStyle` specifically for  Line Charts.

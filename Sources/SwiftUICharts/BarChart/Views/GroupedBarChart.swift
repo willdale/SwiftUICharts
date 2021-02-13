@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct GroupedBarChart<ChartData>: View where ChartData: MultiBarChartData {
+public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartData {
     
     @ObservedObject var chartData: ChartData
     

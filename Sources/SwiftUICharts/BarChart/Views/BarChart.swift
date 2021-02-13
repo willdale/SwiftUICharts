@@ -1,5 +1,5 @@
 //
-//  BarChartView.swift
+//  BarChart.swift
 //  
 //
 //  Created by Will Dale on 11/01/2021.
