@@ -220,6 +220,7 @@ public class BarChartData: BarChartDataProtocol {
                             .frame(minWidth: 0, maxWidth: 500)
                         Text(data.xAxisLabel ?? "")
                             .font(.caption)
+                            .foregroundColor(self.chartStyle.xAxisLabelColour)
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
                         Spacer()

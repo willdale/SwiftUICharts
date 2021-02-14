@@ -29,9 +29,6 @@ public protocol BarChartDataProtocol: LineAndBarChartData where CTStyle: CTBarCh
     var chartStyle  : CTStyle { get set }
 }
 
-
-
-
 // MARK: - Style
 /**
  A protocol to extend functionality of `CTLineAndBarChartStyle` specifically for  Bar Charts.

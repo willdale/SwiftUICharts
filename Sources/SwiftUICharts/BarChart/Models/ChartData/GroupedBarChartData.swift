@@ -223,18 +223,19 @@ public class GroupedBarChartData: BarChartDataProtocol {
     public func getXAxisLabels() -> some View {
         switch self.chartStyle.xAxisLabelsFrom {
         case .dataPoint:
-            HStack(spacing: 100) {
+            HStack(spacing: self.groupSpacing) {
                 ForEach(dataSets.dataSets) { dataSet in
                     HStack(spacing: 0) {
                         ForEach(dataSet.dataPoints) { data in
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
                             Text(data.xAxisLabel ?? "")
                                 .font(.caption)
+                                .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
-                            if data != dataSet.dataPoints[dataSet.dataPoints.count - 1] {
-                                Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
-                            }
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
                         }
                     }
                 }

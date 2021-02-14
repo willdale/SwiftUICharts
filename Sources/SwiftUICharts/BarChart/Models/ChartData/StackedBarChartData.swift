@@ -44,26 +44,20 @@ public class StackedBarChartData: BarChartDataProtocol {
     public func getXAxisLabels() -> some View {
         switch self.chartStyle.xAxisLabelsFrom {
         case .dataPoint:
-            HStack(spacing: 100) {
+            HStack(spacing: 0) {
                 ForEach(dataSets.dataSets) { dataSet in
-                    HStack(spacing: 0) {
-                        ForEach(dataSet.dataPoints) { data in
-                            Text(data.xAxisLabel ?? "")
-                                .font(.caption)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
-                            if data != dataSet.dataPoints[dataSet.dataPoints.count - 1] {
-                                Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
-                            }
-                        }
-                    }
+                    Spacer()
+                        .frame(minWidth: 0, maxWidth: 500)
+                    Text(dataSet.legendTitle)
+                        .font(.caption)
+                        .foregroundColor(self.chartStyle.xAxisLabelColour)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
+                    Spacer()
+                        .frame(minWidth: 0, maxWidth: 500)
                 }
             }
-            .padding(.horizontal, -4)
-            
         case .chartData:
-            
             if let labelArray = self.xAxisLabels {
                 HStack(spacing: 0) {
                     ForEach(labelArray, id: \.self) { data in
