@@ -16,6 +16,8 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
         self.chartData = chartData
     }
     
+    @State private var startAnimation : Bool = false
+    
     public var body: some View {
                 
         if chartData.isGreaterThanTwo() {
@@ -23,9 +25,15 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
             HStack(alignment: .bottom, spacing: 0) {
                 ForEach(chartData.dataSets.dataSets) { dataSet in
                     
-                    MultiPartBarView(dataSet: dataSet)
-                        .scaleEffect(y: CGFloat(DataFunctions.dataSetMaxValue(from: dataSet) / chartData.getMaxValue()),
-                                     anchor: .bottom)
+                    MultiPartBarSubView(dataSet: dataSet)
+                        .scaleEffect(y: startAnimation ? CGFloat(DataFunctions.dataSetMaxValue(from: dataSet) / chartData.getMaxValue()) : 0, anchor: .bottom)
+                        .scaleEffect(x: dataSet.style.barWidth, anchor: .center)
+                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                            self.startAnimation = true
+                        }
+                        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                            self.startAnimation = false
+                        }
                 }
             }
 
@@ -33,31 +41,61 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
     }
 }
 
-struct MultiPartBarView: View {
+/**
+ 
+ */
+internal struct MultiPartBarSubView: View {
     
-    let dataSet : BarDataSet
+    private let dataSet : BarDataSet
     
-    init(dataSet: BarDataSet) {
+    internal init(dataSet: BarDataSet) {
         self.dataSet = dataSet
     }
     
-    var body: some View {
+    internal var body: some View {
         GeometryReader { geo in
             
             VStack(spacing: 0) {
-                ForEach(dataSet.dataPoints.reversed()) { datapoint in
+                ForEach(dataSet.dataPoints.reversed()) { dataPoint in
                     
-                    Rectangle()
-                        .fill(datapoint.colour ?? .pink)
-                        .frame(height: getHeight(height: geo.size.height,
-                                                 dataSet: dataSet,
-                                                 dataPoint: datapoint))
+                    if dataPoint.colourType == .colour,
+                       let colour = dataPoint.colour
+                    {
+                        
+                        ColourPartBar(colour, getHeight(height    : geo.size.height,
+                                                        dataSet   : dataSet,
+                                                        dataPoint : dataPoint))
+                    
+                    } else if dataPoint.colourType == .gradientColour,
+                              let colours    = dataPoint.colours,
+                              let startPoint = dataPoint.startPoint,
+                              let endPoint   = dataPoint.endPoint
+                    {
+
+                        GradientColoursPartBar(colours, startPoint, endPoint, getHeight(height: geo.size.height,
+                                                                                        dataSet   : dataSet,
+                                                                                        dataPoint : dataPoint))
+
+                    } else if dataPoint.colourType == .gradientStops,
+                              let stops      = dataPoint.stops,
+                              let startPoint = dataPoint.startPoint,
+                              let endPoint   = dataPoint.endPoint
+                    {
+
+                        let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
+                        
+                        GradientStopsPartBar(safeStops, startPoint, endPoint, getHeight(height: geo.size.height,
+                                                                                    dataSet   : dataSet,
+                                                                                    dataPoint : dataPoint))
+                    }
+                    
                 }
             }
         }
     }
     
-    func getHeight(height: CGFloat, dataSet: BarDataSet, dataPoint: BarChartDataPoint) -> CGFloat {
+    
+    private func getHeight(height: CGFloat, dataSet: BarDataSet, dataPoint: BarChartDataPoint) -> CGFloat {
         let value = dataPoint.value
         let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }
         return height * CGFloat(value / sum)
