@@ -207,6 +207,7 @@ public class LineChartData: LineChartDataProtocol {
                         if let label = data.xAxisLabel {
                             Text(label)
                                 .font(.caption)
+                                .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
                         }

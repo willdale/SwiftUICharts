@@ -23,7 +23,7 @@ public struct CornerRadius: Hashable {
     var bottom  : CGFloat
     
     /// Set the coner radius for the bar shapes
-    public init(top: CGFloat, bottom: CGFloat) {
+    public init(top: CGFloat = 15.0, bottom: CGFloat = 0.0) {
         self.top = top
         self.bottom = bottom
     }

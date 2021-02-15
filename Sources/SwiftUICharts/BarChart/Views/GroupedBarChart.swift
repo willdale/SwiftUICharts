@@ -13,12 +13,13 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
     
     private let groupSpacing : CGFloat
         
-    public init(chartData: ChartData, groupSpacing : CGFloat) {
+    public init(chartData: ChartData, groupSpacing: CGFloat) {
         self.chartData    = chartData
         self.groupSpacing = groupSpacing
-        
         self.chartData.groupSpacing = groupSpacing
     }
+    
+    @State private var startAnimation : Bool = false
     
     public var body: some View {
         if chartData.isGreaterThanTwo() {
@@ -27,23 +28,30 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                     HStack(spacing: 0) {
                         ForEach(dataSet.dataPoints) { dataPoint in
                             
-                            switch dataSet.style.colourFrom {
-                            case .barStyle:
+                            if dataPoint.colourType == .colour,
+                               let colour = dataPoint.colour
+                            {
                                 
-                                BarChartDataSetSubView(colourType: dataSet.style.colourType,
-                                                       dataPoint: dataPoint,
-                                                       style: dataSet.style,
-                                                       chartStyle: chartData.chartStyle,
-                                                       maxValue: chartData.getMaxValue())
+                                ColourBar(colour, dataPoint, chartData.getMaxValue(), chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
                                 
-                            case .dataPoints:
-                                
-                                BarChartDataPointSubView(colourType: dataPoint.colourType,
-                                                         dataPoint: dataPoint,
-                                                         style: dataSet.style,
-                                                         chartStyle: chartData.chartStyle,
-                                                         maxValue: chartData.getMaxValue())
-                                
+                            } else if dataPoint.colourType == .gradientColour,
+                                      let colours    = dataPoint.colours,
+                                      let startPoint = dataPoint.startPoint,
+                                      let endPoint   = dataPoint.endPoint
+                            {
+
+                                GradientColoursBar(colours, startPoint, endPoint, dataPoint, chartData.getMaxValue(), chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
+
+                            } else if dataPoint.colourType == .gradientStops,
+                                      let stops      = dataPoint.stops,
+                                      let startPoint = dataPoint.startPoint,
+                                      let endPoint   = dataPoint.endPoint
+                            {
+
+                                let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
+
+                                GradientStopsBar(safeStops, startPoint, endPoint, dataPoint, chartData.getMaxValue(), chartData.chartStyle,  chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
+
                             }
                         }
                     }

@@ -69,28 +69,24 @@ import SwiftUI
  
  - Tag: BarDataSet
  */
-public struct BarDataSet: SingleDataSet {
+public struct BarDataSet: CTStandardBarChartDataSet {
 
     public let id           : UUID
     public var dataPoints   : [BarChartDataPoint]
     public var legendTitle  : String
-    public var style        : BarStyle
     
     /// Initialises a new data set for a Bar Chart.
     /// - Parameters:
     ///   - dataPoints: Array of elements.
     ///   - legendTitle: label for the data in legend.
-    ///   - style: Styling for how the line will be drawin.
     public init(dataPoints  : [BarChartDataPoint],
-                legendTitle : String,
-                style       : BarStyle
+                legendTitle : String
     ) {
         self.id             = UUID()
         self.dataPoints     = dataPoints
         self.legendTitle    = legendTitle
-        self.style          = style
     }
 
-    public typealias ID      = UUID
-    public typealias Styling = BarStyle
+    public typealias ID        = UUID
+    public typealias DataPoint = BarChartDataPoint
 }
