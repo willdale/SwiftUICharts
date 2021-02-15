@@ -36,7 +36,7 @@ internal struct LegendView<T>: View where T: ChartData {
                 case .bar:
 
                     bar(legend)
-                        .if(self.scaleLegend(legend: legend)) { $0.scaleEffect(1.2, anchor: .leading) }
+//                        .if(self.scaleLegend(legend: legend)) { $0.scaleEffect(1.2, anchor: .leading) }
                 case .pie:
 
                     pie(legend)
@@ -46,20 +46,14 @@ internal struct LegendView<T>: View where T: ChartData {
         }.id(UUID())
     }
     private func scaleLegend(legend: LegendData) -> Bool {
-        
-                
         var matched : Bool = false
-        
         chartData.infoView.touchOverlayInfo.forEach { (dataPoint) in
             if matched { return }
-            
             if legend.id == dataPoint.id as! UUID {
                 matched = true
             }
         }
-        
         return matched
-        
     }
     
     

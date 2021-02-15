@@ -152,7 +152,6 @@ public protocol DataSet: Hashable, Identifiable {
  - Tag: SingleDataSet
  */
 public protocol SingleDataSet: DataSet {
-    associatedtype Styling   : CTColourStyle
     associatedtype DataPoint : CTChartDataPoint
     
     /**
@@ -167,12 +166,6 @@ public protocol SingleDataSet: DataSet {
      */
     var legendTitle : String { get set }
     
-    
-    
-    /**
-     Sets the style for the Data Set (as opposed to Chart Data Style).
-     */
-    var style       : Styling { get set }
 }
 
 /**
@@ -186,7 +179,7 @@ public protocol MultiDataSet: DataSet {
      Array of DataSets.
      [See SingleDataSet](x-source-tag://SingleDataSet)
      */
-    var dataSets    : [DataSet] { get set }
+    var dataSets : [DataSet] { get set }
 }
 
 // MARK: - Data Points

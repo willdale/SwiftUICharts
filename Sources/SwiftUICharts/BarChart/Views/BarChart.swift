@@ -20,22 +20,16 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
             HStack(spacing: 0) {
                 ForEach(chartData.dataSets.dataPoints) { dataPoint in
                     
-                    switch chartData.dataSets.style.colourFrom {
+                    switch chartData.barStyle.colourFrom {
                     case .barStyle:
                         
-                        BarChartDataSetSubView(colourType: chartData.dataSets.style.colourType,
-                                               dataPoint: dataPoint,
-                                               style: chartData.dataSets.style,
-                                               chartStyle: chartData.chartStyle,
-                                               maxValue: chartData.getMaxValue())
+                        BarChartDataSetSubView(chartData    : chartData,
+                                               dataPoint    : dataPoint)
                         
                     case .dataPoints:
                         
-                        BarChartDataPointSubView(colourType  : dataPoint.colourType,
-                                                 dataPoint   : dataPoint,
-                                                 style       : chartData.dataSets.style,
-                                                 chartStyle  : chartData.chartStyle,
-                                                 maxValue    : chartData.getMaxValue())
+                        BarChartDataPointSubView(chartData   : chartData,
+                                                 dataPoint   : dataPoint)
                         
                     }
                 }

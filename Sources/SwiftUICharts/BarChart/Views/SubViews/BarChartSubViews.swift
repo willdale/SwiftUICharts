@@ -10,36 +10,37 @@ import SwiftUI
 /**
  Bar segment where the colour information comes from chart style.
  */
-internal struct BarChartDataSetSubView: View {
+internal struct BarChartDataSetSubView<CD: BarChartData>: View {
     
-    let colourType  : ColourType
+    let chartData   : CD
     let dataPoint   : BarChartDataPoint
-    let style       : BarStyle
-    let chartStyle  : BarChartStyle
-    let maxValue    : Double
+    
+    @State private var startAnimation : Bool = false
     
     internal var body: some View {
-        if colourType == .colour,
-           let colour = style.colour
+        if chartData.barStyle.colourType == .colour,
+           let colour = chartData.barStyle.colour
         {
-            ColourBar(colour, dataPoint, maxValue, chartStyle, style)
-        
-        } else if colourType == .gradientColour,
-                  let colours    = style.colours,
-                  let startPoint = style.startPoint,
-                  let endPoint   = style.endPoint
+            
+            ColourBar(colour, dataPoint, chartData.getMaxValue(), chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
+            
+        } else if chartData.barStyle.colourType == .gradientColour,
+                  let colours    = chartData.barStyle.colours,
+                  let startPoint = chartData.barStyle.startPoint,
+                  let endPoint   = chartData.barStyle.endPoint
         {
+            
+            GradientColoursBar(colours, startPoint, endPoint, dataPoint, chartData.getMaxValue(), chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
 
-            GradientColoursBar(colours, startPoint, endPoint, dataPoint, maxValue, chartStyle, style)
-
-        } else if colourType == .gradientStops,
-                  let stops      = style.stops,
-                  let startPoint = style.startPoint,
-                  let endPoint   = style.endPoint
+        } else if chartData.barStyle.colourType == .gradientStops,
+                  let stops      = chartData.barStyle.stops,
+                  let startPoint = chartData.barStyle.startPoint,
+                  let endPoint   = chartData.barStyle.endPoint
         {
 
             let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
-            GradientStopsBar(safeStops, startPoint, endPoint, dataPoint, maxValue, chartStyle, style)
+            
+            GradientStopsBar(safeStops, startPoint, endPoint, dataPoint, chartData.getMaxValue(), chartData.chartStyle,  chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
 
         }
     }
@@ -48,13 +49,10 @@ internal struct BarChartDataSetSubView: View {
 /**
  Bar segment where the colour information comes from datapoints.
  */
-internal struct BarChartDataPointSubView: View {
+internal struct BarChartDataPointSubView<CD: BarChartData>: View {
 
-    let colourType  : ColourType
+    let chartData   : CD
     let dataPoint   : BarChartDataPoint
-    let style       : BarStyle
-    let chartStyle  : BarChartStyle
-    let maxValue    : Double
     
     internal var body: some View {
         
@@ -62,7 +60,7 @@ internal struct BarChartDataPointSubView: View {
            let colour = dataPoint.colour
         {
             
-            ColourBar(colour, dataPoint, maxValue, chartStyle, style)
+            ColourBar(colour, dataPoint, chartData.getMaxValue(), chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
         
         } else if dataPoint.colourType == .gradientColour,
                   let colours    = dataPoint.colours,
@@ -70,7 +68,7 @@ internal struct BarChartDataPointSubView: View {
                   let endPoint   = dataPoint.endPoint
         {
 
-            GradientColoursBar(colours, startPoint, endPoint, dataPoint, maxValue, chartStyle, style)
+            GradientColoursBar(colours, startPoint, endPoint, dataPoint, chartData.getMaxValue(), chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
 
         } else if dataPoint.colourType == .gradientStops,
                   let stops      = dataPoint.stops,
@@ -80,7 +78,7 @@ internal struct BarChartDataPointSubView: View {
 
             let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
 
-            GradientStopsBar(safeStops, startPoint, endPoint, dataPoint, maxValue, chartStyle, style)
+            GradientStopsBar(safeStops, startPoint, endPoint, dataPoint, chartData.getMaxValue(), chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
         }
         
     }

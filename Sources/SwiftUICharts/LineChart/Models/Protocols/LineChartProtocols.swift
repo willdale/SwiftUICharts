@@ -43,7 +43,6 @@ public protocol LineChartDataProtocol: LineAndBarChartData where CTStyle: CTLine
      - Returns: The position to place the indicator.
      */
     func getIndicatorLocation(rect: CGRect, dataSet: LineDataSet, touchLocation: CGPoint) -> CGPoint
-    
 }
 
 // MARK: - Style
@@ -61,6 +60,7 @@ public protocol CTLineChartStyle : CTLineAndBarChartStyle {
     var baseline: Baseline { get set }
 }
 
+// MARK: - DataSet
 /**
  A protocol to extend functionality of `SingleDataSet` specifically for Line Charts.
  
@@ -70,6 +70,11 @@ public protocol CTLineChartStyle : CTLineAndBarChartStyle {
  - Tag: CTLineChartDataSet
  */
 public protocol CTLineChartDataSet: SingleDataSet {
+    associatedtype Styling   : CTColourStyle
+    /**
+     Sets the style for the Data Set (as opposed to Chart Data Style).
+     */
+    var style       : Styling { get set }
     /**
      Sets the look of the markers over the data points.
      

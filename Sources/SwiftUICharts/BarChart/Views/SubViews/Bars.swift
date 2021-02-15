@@ -8,37 +8,41 @@
 import SwiftUI
 
 // MARK: Standard
-internal struct ColourBar: View {
+internal struct ColourBar<DP: CTBarDataPoint>: View {
     
     private let colour      : Color
-    private let data        : BarChartDataPoint
+    private let dataPoint   : DP
     private let maxValue    : Double
     private let chartStyle  : BarChartStyle
-    private let style       : BarStyle
+    
+    private let cornerRadius: CornerRadius
+    private let barWidth    : CGFloat
     
     internal init(_ colour      : Color,
-                  _ data        : BarChartDataPoint,
+                  _ dataPoint   : DP,
                   _ maxValue    : Double,
                   _ chartStyle  : BarChartStyle,
-                  _ style       : BarStyle
+                  _ cornerRadius: CornerRadius,
+                  _ barWidth    : CGFloat
     ) {
         self.colour     = colour
-        self.data       = data
+        self.dataPoint  = dataPoint
         self.maxValue   = maxValue
         self.chartStyle = chartStyle
-        self.style      = style
+        self.cornerRadius = cornerRadius
+        self.barWidth     = barWidth
     }
     
     @State private var startAnimation : Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(tl: style.cornerRadius.top,
-                                 tr: style.cornerRadius.top,
-                                 bl: style.cornerRadius.bottom,
-                                 br: style.cornerRadius.bottom)
+        RoundedRectangleBarShape(tl: cornerRadius.top,
+                                 tr: cornerRadius.top,
+                                 bl: cornerRadius.bottom,
+                                 br: cornerRadius.bottom)
             .fill(colour)
-            .scaleEffect(y: startAnimation ? CGFloat(data.value / maxValue) : 0, anchor: .bottom)
-            .scaleEffect(x: style.barWidth, anchor: .center)
+            .scaleEffect(y: startAnimation ? CGFloat(dataPoint.value / maxValue) : 0, anchor: .bottom)
+            .scaleEffect(x: barWidth, anchor: .center)
             .animateOnAppear(using: chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
@@ -48,23 +52,26 @@ internal struct ColourBar: View {
     }
 }
 
-internal struct GradientColoursBar: View {
+internal struct GradientColoursBar<DP: CTBarDataPoint>: View {
     
     private let colours     : [Color]
     private let startPoint  : UnitPoint
     private let endPoint    : UnitPoint
-    private let data        : BarChartDataPoint
+    private let data        : DP
     private let maxValue    : Double
     private let chartStyle  : BarChartStyle
-    private let style       : BarStyle
+    
+    private let cornerRadius: CornerRadius
+    private let barWidth    : CGFloat
     
     internal init(_ colours     : [Color],
                   _ startPoint  : UnitPoint,
                   _ endPoint    : UnitPoint,
-                  _ data        : BarChartDataPoint,
+                  _ data        : DP,
                   _ maxValue    : Double,
                   _ chartStyle  : BarChartStyle,
-                  _ style       : BarStyle
+                  _ cornerRadius: CornerRadius,
+                  _ barWidth    : CGFloat
     ) {
         self.colours    = colours
         self.startPoint = startPoint
@@ -72,21 +79,22 @@ internal struct GradientColoursBar: View {
         self.data       = data
         self.maxValue   = maxValue
         self.chartStyle = chartStyle
-        self.style      = style
+        self.cornerRadius = cornerRadius
+        self.barWidth     = barWidth
     }
     
     @State private var startAnimation : Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(tl: style.cornerRadius.top,
-                                 tr: style.cornerRadius.top,
-                                 bl: style.cornerRadius.bottom,
-                                 br: style.cornerRadius.bottom)
+        RoundedRectangleBarShape(tl: cornerRadius.top,
+                                 tr: cornerRadius.top,
+                                 bl: cornerRadius.bottom,
+                                 br: cornerRadius.bottom)
             .fill(LinearGradient(gradient: Gradient(colors: colours),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
             .scaleEffect(y: startAnimation ? CGFloat(data.value / maxValue) : 0, anchor: .bottom)
-            .scaleEffect(x: style.barWidth, anchor: .center)
+            .scaleEffect(x: barWidth, anchor: .center)
             .animateOnAppear(using: chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
@@ -96,23 +104,26 @@ internal struct GradientColoursBar: View {
     }
 }
 
-internal struct GradientStopsBar: View {
+internal struct GradientStopsBar<DP: CTBarDataPoint>: View {
     
     private let stops       : [Gradient.Stop]
     private let startPoint  : UnitPoint
     private let endPoint    : UnitPoint
-    private let data        : BarChartDataPoint
+    private let data        : DP
     private let maxValue    : Double
     private let chartStyle  : BarChartStyle
-    private let style       : BarStyle
+    
+    private let cornerRadius: CornerRadius
+    private let barWidth    : CGFloat
     
     internal init(_ stops       : [Gradient.Stop],
                   _ startPoint  : UnitPoint,
                   _ endPoint    : UnitPoint,
-                  _ data        : BarChartDataPoint,
+                  _ data        : DP,
                   _ maxValue    : Double,
                   _ chartStyle  : BarChartStyle,
-                  _ style       : BarStyle
+                  _ cornerRadius: CornerRadius,
+                  _ barWidth    : CGFloat
     ) {
         self.stops      = stops
         self.startPoint = startPoint
@@ -120,21 +131,22 @@ internal struct GradientStopsBar: View {
         self.data       = data
         self.maxValue   = maxValue
         self.chartStyle = chartStyle
-        self.style      = style
+        self.cornerRadius = cornerRadius
+        self.barWidth     = barWidth
     }
     
     @State private var startAnimation : Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(tl: style.cornerRadius.top,
-                                 tr: style.cornerRadius.top,
-                                 bl: style.cornerRadius.bottom,
-                                 br: style.cornerRadius.bottom)
+        RoundedRectangleBarShape(tl: cornerRadius.top,
+                                 tr: cornerRadius.top,
+                                 bl: cornerRadius.bottom,
+                                 br: cornerRadius.bottom)
             .fill(LinearGradient(gradient: Gradient(stops: stops),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
             .scaleEffect(y: startAnimation ? CGFloat(data.value / maxValue) : 0, anchor: .bottom)
-            .scaleEffect(x: style.barWidth, anchor: .center)
+            .scaleEffect(x: barWidth, anchor: .center)
             .animateOnAppear(using: chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
@@ -144,8 +156,10 @@ internal struct GradientStopsBar: View {
     }
 }
 
-// MARK: - Multi Part
 
+
+
+// MARK: - Multi Part
 internal struct ColourPartBar: View {
     
     private let colour  : Color
