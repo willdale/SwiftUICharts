@@ -11,7 +11,7 @@ internal struct HorizontalGridView<T>: View where T: LineAndBarChartData {
     
     var chartData : T
     
-    @State var startAnimation : Bool = false
+    @State private var startAnimation : Bool = false
     
     var body: some View {
         HorizontalGridShape()

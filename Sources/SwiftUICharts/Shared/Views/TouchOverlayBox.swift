@@ -61,36 +61,21 @@ internal struct TouchOverlayBox<D: CTChartDataPoint>: View {
         .background(
             GeometryReader { geo in
                 if isTouchCurrent {
-                ZStack {
-                    #if os(iOS)
-//                    RoundedRectangle(cornerRadius: 15.0, style: .continuous)
-//                        .shadow(color: Color(.systemGray), radius: 6, x: 0, y: 0)
-                    RoundedRectangle(cornerRadius: 15.0, style: .continuous)
-                        .fill(Color(.systemBackground))
-                    #elseif os(macOS)
-                    RoundedRectangle(cornerRadius: 15.0, style: .continuous)
-                        .shadow(color: Color(.highlightColor), radius: 6, x: 0, y: 0)
-                    RoundedRectangle(cornerRadius: 15.0, style: .continuous)
-                        .fill(Color(.windowBackgroundColor))
-                    #endif
-                    
-                }
-                .overlay(
                     Group {
-                        #if os(iOS)
-                        RoundedRectangle(cornerRadius: 15.0)
-                            .stroke(Color.primary, lineWidth: 1)
-                        #elseif os(macOS)
-                        RoundedRectangle(cornerRadius: 15.0)
-                            .stroke(Color.primary, lineWidth: 2)
-                        #endif
+                        RoundedRectangle(cornerRadius: 5.0, style: .continuous)
+                            .fill(Color.systemsBackground)
                     }
-                )
-                .onChange(of: geo.frame(in: .local)) { frame in
-                    self.boxFrame = frame
+                    .overlay(
+                        Group {
+                            RoundedRectangle(cornerRadius: 5.0)
+                                .stroke(Color.primary, lineWidth: 1)
+                        }
+                    )
+                    .onChange(of: geo.frame(in: .local)) { frame in
+                        self.boxFrame = frame
+                    }
                 }
             }
-                }
         )
     }
 }

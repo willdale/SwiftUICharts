@@ -10,12 +10,12 @@ import SwiftUI
 public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData {
     
     @ObservedObject var chartData: ChartData
-        
-    @State var startAnimation : Bool = false
-        
+    
     public init(chartData : ChartData) {
         self.chartData = chartData
     }
+    
+    @State private var startAnimation : Bool = false
     
     public var body: some View {
         ZStack {

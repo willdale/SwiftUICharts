@@ -13,9 +13,7 @@ public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
     
     private let minValue : Double
     private let range    : Double
-    
-    @State var startAnimation : Bool = false
-    
+
     public init(chartData: ChartData) {
         self.chartData  = chartData
         self.minValue   = chartData.getMinValue()
@@ -23,6 +21,8 @@ public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
         self.chartData.isFilled = true
     }
     
+    @State private var startAnimation : Bool = false
+
     public var body: some View {
         
         if chartData.isGreaterThanTwo() {

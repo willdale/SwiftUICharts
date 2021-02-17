@@ -9,14 +9,14 @@ import SwiftUI
 
 internal struct LineChartColourSubView<CD>: View where CD: LineChartDataProtocol {
     
-    let chartData   : CD
-    let dataSet     : LineDataSet
-    let minValue    : Double
-    let range       : Double
-    let colour      : Color
-    let isFilled    : Bool
+    private let chartData   : CD
+    private let dataSet     : LineDataSet
+    private let minValue    : Double
+    private let range       : Double
+    private let colour      : Color
+    private let isFilled    : Bool
         
-    @State var startAnimation : Bool = false
+    
     
     internal init(chartData : CD,
                   dataSet   : LineDataSet,
@@ -32,6 +32,8 @@ internal struct LineChartColourSubView<CD>: View where CD: LineChartDataProtocol
         self.colour     = colour
         self.isFilled   = isFilled
     }
+    
+    @State private var startAnimation : Bool = false
     
     internal var body: some View {
         
@@ -61,18 +63,37 @@ internal struct LineChartColourSubView<CD>: View where CD: LineChartDataProtocol
 
 internal struct LineChartColoursSubView<CD>: View where CD: LineChartDataProtocol {
     
-    let chartData   : CD
-    let dataSet     : LineDataSet
+    private let chartData   : CD
+    private let dataSet     : LineDataSet
 
-    let minValue    : Double
-    let range       : Double
-    let colours     : [Color]
-    let startPoint  : UnitPoint
-    let endPoint    : UnitPoint
+    private let minValue    : Double
+    private let range       : Double
+    private let colours     : [Color]
+    private let startPoint  : UnitPoint
+    private let endPoint    : UnitPoint
+
+    private let isFilled    : Bool
     
-    let isFilled    : Bool
+    internal init(chartData : CD,
+                  dataSet   : LineDataSet,
+                  minValue  : Double,
+                  range     : Double,
+                  colours   : [Color],
+                  startPoint: UnitPoint,
+                  endPoint  : UnitPoint,
+                  isFilled  : Bool
+    ) {
+        self.chartData  = chartData
+        self.dataSet    = dataSet
+        self.minValue   = minValue
+        self.range      = range
+        self.colours    = colours
+        self.startPoint = startPoint
+        self.endPoint   = endPoint
+        self.isFilled   = isFilled
+    }
     
-    @State var startAnimation : Bool = false
+    @State private var startAnimation : Bool = false
     
     internal var body: some View {
         
@@ -110,19 +131,40 @@ internal struct LineChartColoursSubView<CD>: View where CD: LineChartDataProtoco
 }
 
 internal struct LineChartStopsSubView<CD>: View where CD: LineChartDataProtocol {
-    
-    let chartData   : CD
-    let dataSet     : LineDataSet
 
-    let minValue    : Double
-    let range       : Double
-    let stops       : [Gradient.Stop]
-    let startPoint  : UnitPoint
-    let endPoint    : UnitPoint
     
-    let isFilled    : Bool
     
-    @State var startAnimation : Bool = false
+    private let chartData   : CD
+    private let dataSet     : LineDataSet
+
+    private let minValue    : Double
+    private let range       : Double
+    private let stops       : [Gradient.Stop]
+    private let startPoint  : UnitPoint
+    private let endPoint    : UnitPoint
+
+    private let isFilled    : Bool
+    
+    internal init(chartData : CD,
+                  dataSet   : LineDataSet,
+                  minValue  : Double,
+                  range     : Double,
+                  stops     : [Gradient.Stop],
+                  startPoint: UnitPoint,
+                  endPoint  : UnitPoint,
+                  isFilled  : Bool
+    ) {
+        self.chartData  = chartData
+        self.dataSet    = dataSet
+        self.minValue   = minValue
+        self.range      = range
+        self.stops      = stops
+        self.startPoint = startPoint
+        self.endPoint   = endPoint
+        self.isFilled   = isFilled
+    }
+    
+    @State private var startAnimation : Bool = false
     
     internal var body: some View {
         
