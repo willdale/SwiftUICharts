@@ -66,6 +66,7 @@ public enum ColourType {
  Placement of the data point information panel when touch overlay modifier is applied.
  ```
  case floating // Follows input across the chart
+ case fixed
  case header // Fix in the Header box. Must have .headerBox()
  ```
  
@@ -74,6 +75,7 @@ public enum ColourType {
 public enum InfoBoxPlacement {
     /// Follows input across the chart
     case floating
+    case fixed
     /// Fix in the Header box. Must have .headerBox()
     case header
 }
@@ -82,24 +84,31 @@ public enum InfoBoxPlacement {
 /**
  Where the marker lines come from to meet at a specified point.
  ```
- case fullWidth // Full width and height of view intersecting at touch location
- case bottomLeading // From bottom and leading edges meeting at touch location
- case bottomTrailing // From bottom and trailing edges meeting at touch location
- case topLeading // From top and leading edges meeting at touch location
- case topTrailing // From top and trailing edges meeting at touch location
+ case vertical // Vertical line from top to bottom.
+ case rectangle // Rounded rectangle.
+ case full // Full width and height of view intersecting at touch location.
+ case bottomLeading // From bottom and leading edges meeting at touch location.
+ case bottomTrailing // From bottom and trailing edges meeting at touch location.
+ case topLeading // From top and leading edges meeting at touch location.
+ case topTrailing // From top and trailing edges meeting at touch location.
+
  ```
  
  - Tag: MarkerType
  */
 public enum MarkerType {
-    /// Full width and height of view intersecting at a specified point
-    case fullWidth
-    /// From bottom and leading edges meeting at a specified point
+    /// Vertical line from top to bottom.
+    case vertical
+    /// Rounded rectangle.
+    case rectangle
+    /// Full width and height of view intersecting at a specified point.
+    case full
+    /// From bottom and leading edges meeting at a specified point.
     case bottomLeading
-    /// From bottom and trailing edges meeting at a specified point
+    /// From bottom and trailing edges meeting at a specified point.
     case bottomTrailing
-    /// From top and leading edges meeting at a specified point
+    /// From top and leading edges meeting at a specified point.
     case topLeading
-    /// From top and trailing edges meeting at a specified point
+    /// From top and trailing edges meeting at a specified point.
     case topTrailing
 }
