@@ -17,110 +17,229 @@ import SwiftUI
 internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
 
     @ObservedObject var chartData: T
-
-    /// Decimal precision for labels
-    private let specifier           : String
+    
+    private var markerType : MarkerType
     
     /// Current location of the touch input
     @State private var touchLocation    : CGPoint   = CGPoint(x: 0, y: 0)
-    /// The data point closest to the touch input
-    @State private var selectedPoints   : [T.DataPoint]     = []
-    /// The location for the nearest data point to the touch input
-    @State private var pointLocations   : [HashablePoint]   = [HashablePoint(x: 0, y: 0)]
     /// Frame information of the data point information box
     @State private var boxFrame         : CGRect    = CGRect(x: 0, y: 0, width: 0, height: 50)
-    /// Placement of the data point information box
-    @State private var boxLocation      : CGPoint   = CGPoint(x: 0, y: 0)
-    /// Placement of place the markers intersecting the data points location
-    @State private var markerLocation   : CGPoint   = CGPoint(x: 0, y: 0)
 
     /// Detects input either from touch of pointer. Finds the nearest data point and displays the relevent information.
     /// - Parameters:
     ///   - chartData:
     ///   - specifier: Decimal precision for labels
     internal init(chartData         : T,
-                  specifier         : String
+                  specifier         : String,
+                  markerType        : MarkerType
     ) {
-        self.chartData         = chartData
-        self.specifier         = specifier
+        self.chartData = chartData
+        self.markerType = markerType
+        self.chartData.infoView.touchSpecifier = specifier
     }
     internal func body(content: Content) -> some View {
         Group {
             if chartData.isGreaterThanTwo() {
+ 
                 GeometryReader { geo in
                     ZStack {
                         content
                             .gesture(
                                 DragGesture(minimumDistance: 0)
                                     .onChanged { (value) in
-                                        touchLocation   = value.location
-                                        
+                                        touchLocation = value.location
+                                                                                
                                         chartData.infoView.isTouchCurrent   = true
+                                        chartData.infoView.touchOverlayInfo = chartData.getDataPoint(touchLocation: touchLocation, chartSize: geo)
                                         
-                                        self.selectedPoints = chartData.getDataPoint(touchLocation: touchLocation,
-                                                                                     chartSize: geo)
-                                        self.pointLocations = chartData.getPointLocation(touchLocation: touchLocation,
-                                                                                         chartSize: geo)
+                                        chartData.infoView.positionX = setBoxLocationation(touchLocation: touchLocation, boxFrame: boxFrame, chartSize: geo).x
                                         
-                                        chartData.infoView.touchOverlayInfo = selectedPoints
-                                        
-                                        if chartData.getHeaderLocation() == .floating {
-                                            
-                                            setBoxLocationation(boxFrame: boxFrame, chartSize: geo)
-                                            markerLocation.x = setMarkerXLocation(chartSize: geo)
-                                            markerLocation.y = setMarkerYLocation(chartSize: geo)
-                                            
-                                        }
+                                        chartData.infoView.frame = geo.frame(in: .local)
                                         
                                     }
                                     .onEnded { _ in
-                                        chartData.infoView.isTouchCurrent = false
+                                        chartData.infoView.isTouchCurrent   = false
                                         chartData.infoView.touchOverlayInfo = []
                                     }
                             )
+                        /*
+                         TODO: -------------------------------
+                         Choose attachement style for markers
+                         Add touch event function to protocol
+                         */
                         if chartData.infoView.isTouchCurrent {
-                            ForEach(pointLocations, id: \.self) { location in
-                                TouchOverlayMarker(position: location)
-                                    .stroke(Color(.gray), lineWidth: 1)
-                            }
-                            if chartData.getHeaderLocation() == .floating {
-                                TouchOverlayBox(selectedPoints   : selectedPoints,
-                                                specifier        : specifier,
-                                                valueColour      : chartData.chartStyle.infoBoxValueColour,
-                                                descriptionColour: chartData.chartStyle.infoBoxDescriptionColor,
-                                                boxFrame         : $boxFrame)
-                                    .position(x: boxLocation.x, y: 0 + (boxFrame.height / 2))
-                            }
                             
-                            
-                            // MARK: - Position Indicator
-                            // TODO: Refactor
-                            if chartData.chartType == (.line, .single) {
-                                
-                                let data = chartData as! LineChartData
-                                
+                            switch chartData.chartType {
+                            case (.line, .single):
+                                Text("")
+                                if let data = chartData as? LineChartData {
                                 let position = data.getIndicatorLocation(rect: geo.frame(in: .global),
                                                                          dataSet: data.dataSets,
                                                                          touchLocation: touchLocation)
-                                
+
+                                switch markerType  {
+                                case .vertical:
+                                    Vertical(position: position)
+                                        .stroke(Color.primary, lineWidth: 2)
+                                case .rectangle:
+                                    RoundedRectangle(cornerRadius: 25.0, style: .continuous)
+                                        .fill(Color.clear)
+                                        .frame(width: 100, height: geo.frame(in: .local).height)
+                                        .position(x: position.x,
+                                                  y: geo.frame(in: .local).midY)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 25.0, style: .continuous)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                                .shadow(color: .primary, radius: 4, x: 0, y: 0)
+                                                .frame(width: 50, height: geo.frame(in: .local).height)
+                                                .position(x: position.x,
+                                                          y: geo.frame(in: .local).midY)
+                                        )
+                                case .full:
+                                    MarkerFull(position: position)
+                                        .stroke(Color.primary, lineWidth: 2)
+                                case .bottomLeading:
+                                    MarkerBottomLeading(position: position)
+                                        .stroke(Color.primary, lineWidth: 2)
+                                case .bottomTrailing:
+                                    MarkerBottomTrailing(position: position)
+                                        .stroke(Color.primary, lineWidth: 2)
+                                case .topLeading:
+                                    MarkerTopLeading(position: position)
+                                        .stroke(Color.primary, lineWidth: 2)
+                                case .topTrailing:
+                                    MarkerTopTrailing(position: position)
+                                        .stroke(Color.primary, lineWidth: 2)
+                                }
+
                                 PosistionIndicator()
                                     .frame(width: 15, height: 15)
                                     .position(position)
-                                
-                            } else if chartData.chartType == (.line, .multi) {
 
-                                let data = chartData as! MultiLineChartData
-
-                                ForEach(data.dataSets.dataSets, id: \.self) { dataSet in
-                                    
-                                    let position = data.getIndicatorLocation(rect: geo.frame(in: .global),
-                                                                             dataSet: dataSet,
-                                                                             touchLocation: touchLocation)
-                                    
-                                    PosistionIndicator()
-                                        .frame(width: 15, height: 15)
-                                        .position(position)
                                 }
+                                
+                            case (.line, .multi):
+
+                                if let data = chartData as? MultiLineChartData {
+
+                                    ForEach(data.dataSets.dataSets, id: \.self) { dataSet in
+                                        let position = data.getIndicatorLocation(rect: geo.frame(in: .global),
+                                                                                 dataSet: dataSet,
+                                                                                 touchLocation: touchLocation)
+
+                                        switch markerType  {
+                                        case .vertical:
+                                            Vertical(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .rectangle:
+                                            RoundedRectangle(cornerRadius: 25.0, style: .continuous)
+                                                .fill(Color.clear)
+                                                .frame(width: 100, height: geo.frame(in: .local).height)
+                                                .position(x: position.x,
+                                                          y: geo.frame(in: .local).midY)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 25.0, style: .continuous)
+                                                        .stroke(Color.primary, lineWidth: 2)
+                                                        .shadow(color: .primary, radius: 4, x: 0, y: 0)
+                                                        .frame(width: 50, height: geo.frame(in: .local).height)
+                                                        .position(x: position.x,
+                                                                  y: geo.frame(in: .local).midY)
+                                                )
+                                        case .full:
+                                            MarkerFull(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .bottomLeading:
+                                            MarkerBottomLeading(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .bottomTrailing:
+                                            MarkerBottomTrailing(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .topLeading:
+                                            MarkerTopLeading(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .topTrailing:
+                                            MarkerTopTrailing(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        }
+
+
+                                        PosistionIndicator()
+                                            .frame(width: 15, height: 15)
+                                            .position(position)
+                                    }
+                                }
+                                
+                            case (.bar, .single):
+
+                                if let data = chartData as? BarChartData {
+                                    
+                                    let positions = data.getPointLocation(touchLocation: touchLocation,
+                                                                          chartSize: geo)
+                                    ForEach(positions, id: \.self) { position in
+                                        
+                                        switch markerType  {
+                                        case .vertical:
+                                            MarkerFull(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .rectangle:
+                                            MarkerFull(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .full:
+                                            MarkerFull(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .bottomLeading:
+                                            MarkerBottomLeading(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .bottomTrailing:
+                                            MarkerBottomTrailing(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .topLeading:
+                                            MarkerTopLeading(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .topTrailing:
+                                            MarkerTopTrailing(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        }
+                                    }
+                                    
+                                }
+                            case (.bar, .multi):
+                                if let data = chartData as? GroupedBarChartData {
+
+                                    let positions = data.getPointLocation(touchLocation: touchLocation,
+                                                                          chartSize: geo)
+                                    ForEach(positions, id: \.self) { position in
+                                        
+                                        switch markerType  {
+                                        case .vertical:
+                                            MarkerFull(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .rectangle:
+                                            MarkerFull(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .full:
+                                            MarkerFull(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .bottomLeading:
+                                            MarkerBottomLeading(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .bottomTrailing:
+                                            MarkerBottomTrailing(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .topLeading:
+                                            MarkerTopLeading(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        case .topTrailing:
+                                            MarkerTopTrailing(position: position)
+                                                .stroke(Color.primary, lineWidth: 2)
+                                        }
+                                    }
+                                }
+                                
+                            case (.pie, .single):
+                                Text("")
+                            case (.pie, .multi):
+                                Text("")
                             }
                         }
                     }
@@ -133,41 +252,19 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
     /// - Parameters:
     ///   - boxFrame: The size of the point info box.
     ///   - chartSize: The size of the chart view as the parent view.
-    internal func setBoxLocationation(boxFrame: CGRect, chartSize: GeometryProxy) {
+    internal func setBoxLocationation(touchLocation: CGPoint, boxFrame: CGRect, chartSize: GeometryProxy) -> CGPoint {
+
+        var returnPoint : CGPoint = .zero
+
         if touchLocation.x < chartSize.frame(in: .local).minX + (boxFrame.width / 2) {
-            boxLocation.x = chartSize.frame(in: .local).minX + (boxFrame.width / 2)
+            returnPoint.x = chartSize.frame(in: .local).minX + (boxFrame.width / 2)
         } else if touchLocation.x > chartSize.frame(in: .local).maxX - (boxFrame.width / 2) {
-            boxLocation.x = chartSize.frame(in: .local).maxX - (boxFrame.width / 2)
+            returnPoint.x = chartSize.frame(in: .local).maxX - (boxFrame.width / 2)
         } else {
-            boxLocation.x = touchLocation.x
+            returnPoint.x = touchLocation.x
         }
+        return returnPoint
     }
-    /// Sets the X axis marker location while keeping it within the parent view.
-    /// - Parameter chartSize: The size of the chart view as the parent view.
-    /// - Returns: Position of the marker.
-    internal func setMarkerXLocation(chartSize: GeometryProxy) -> CGFloat {
-        if touchLocation.x < chartSize.frame(in: .local).minX {
-            return chartSize.frame(in: .local).minX
-        } else if touchLocation.x > chartSize.frame(in: .local).maxX {
-            return chartSize.frame(in: .local).maxX
-        } else {
-            return touchLocation.x
-        }
-    }
-    /// Sets the Y axis marker location while keeping it within the parent view.
-    /// - Parameter chartSize: The size of the chart view as the parent view.
-    /// - Returns: Position of the marker.
-    internal func setMarkerYLocation(chartSize: GeometryProxy) -> CGFloat {
-        if touchLocation.y < chartSize.frame(in: .local).minY {
-            return chartSize.frame(in: .local).minY
-        } else if touchLocation.y > chartSize.frame(in: .local).maxY {
-            return chartSize.frame(in: .local).maxY
-        } else {
-            return touchLocation.y
-        }
-    }
-    
-    
 }
 #endif
 
@@ -193,10 +290,12 @@ extension View {
      - Tag: TouchOverlay
      */
     public func touchOverlay<T: ChartData>(chartData: T,
-                                           specifier: String = "%.0f"
+                                           specifier: String = "%.0f",
+                                           markerType: MarkerType = .vertical
     ) -> some View {
         self.modifier(TouchOverlay(chartData: chartData,
-                                   specifier: specifier))
+                                   specifier: specifier,
+                                   markerType: markerType))
     }
     #elseif os(tvOS)
     /**
@@ -206,7 +305,8 @@ extension View {
      Unavailable in tvOS
      */
     public func touchOverlay<T: ChartData>(chartData: T,
-                                           specifier: String = "%.0f"
+                                           specifier: String = "%.0f",
+                                           markerType: MarkerType = .fullWidth
     ) -> some View {
         self.modifier(EmptyModifier())
     }
