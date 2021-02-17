@@ -67,7 +67,8 @@ public struct BarChartStyle: CTBarChartStyle {
     public var infoBoxPlacement        : InfoBoxPlacement
     public var infoBoxValueColour      : Color
     public var infoBoxDescriptionColor : Color
-        
+    public var markerType              : MarkerType
+    
     public var xAxisGridStyle       : GridStyle
     public var xAxisLabelPosition   : XAxisLabelPosistion
     public var xAxisLabelColour     : Color
@@ -85,18 +86,24 @@ public struct BarChartStyle: CTBarChartStyle {
     ///   - infoBoxPlacement: Placement of the information box that appears on touch input.
     ///   - infoBoxValueColour: Colour of the value part of the touch info.
     ///   - infoBoxDescriptionColor: Colour of the description part of the touch info.
+    ///   
+    ///   - markerType: Where the marker lines come from to meet at a specified point.
+    ///
     ///   - xAxisGridStyle: Style of the vertical lines breaking up the chart.
     ///   - xAxisLabelPosition: Location of the X axis labels - Top or Bottom.
     ///   - xAxisLabelsFrom: Where the label data come from. DataPoint or xAxisLabels.
     ///   - xAxisLabelColour: Text Colour for the labels on the X axis.
+    ///
     ///   - yAxisGridStyle: Style of the horizontal lines breaking up the chart.
     ///   - yAxisLabelPosition: Location of the X axis labels - Leading or Trailing.
     ///   - yAxisNumberOfLabel: Number Of Labels on Y Axis.
     ///   - yAxisLabelColour: Text Colour for the labels on the Y axis.
+    ///
     ///   - globalAnimation: Gobal control of animations.
     public init(infoBoxPlacement        : InfoBoxPlacement  = .floating,
                 infoBoxValueColour      : Color             = Color.primary,
                 infoBoxDescriptionColor : Color             = Color.primary,
+                markerType              : MarkerType        = .full,
                 
                 xAxisGridStyle      : GridStyle             = GridStyle(),
                 xAxisLabelPosition  : XAxisLabelPosistion   = .bottom,
@@ -111,8 +118,9 @@ public struct BarChartStyle: CTBarChartStyle {
                 globalAnimation     : Animation             = Animation.linear(duration: 1)
     ) {
         self.infoBoxPlacement        = infoBoxPlacement
-        self.infoBoxValueColour      =  infoBoxValueColour
-        self.infoBoxDescriptionColor =  infoBoxDescriptionColor
+        self.infoBoxValueColour      = infoBoxValueColour
+        self.infoBoxDescriptionColor = infoBoxDescriptionColor
+        self.markerType              = markerType
         
         self.xAxisGridStyle      = xAxisGridStyle
         self.xAxisLabelPosition  = xAxisLabelPosition

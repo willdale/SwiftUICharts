@@ -58,6 +58,12 @@ public protocol CTLineChartStyle : CTLineAndBarChartStyle {
      [See Baseline](x-source-tag://Baseline)
      */
     var baseline: Baseline { get set }
+    
+    /**
+     Where the Y and X touch markers should attach themselves to.
+     */
+    var markerAttachemnt : MarkerAttachemnt { get set }
+
 }
 
 // MARK: - DataSet

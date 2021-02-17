@@ -79,3 +79,19 @@ public enum PointShape {
     /// Rounded Square Shape
     case roundSquare
 }
+
+/**
+ Where the Y and X touch markers should attach themselves to.
+ ```
+ case line // Attached to the line.
+ case point // Attached to the data points.
+ ```
+ 
+ - Tag: MarkerAttachemnt
+ */
+public enum MarkerAttachemnt {
+    /// Attached to the line.
+    case line
+    /// Attached to the data points.
+    case point
+}
