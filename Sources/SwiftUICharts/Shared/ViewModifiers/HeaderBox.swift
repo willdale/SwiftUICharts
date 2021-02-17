@@ -52,12 +52,19 @@ internal struct HeaderBox<T>: ViewModifier where T: ChartData {
         Group {
             #if !os(tvOS)
             if chartData.isGreaterThanTwo() {
-                if chartData.getHeaderLocation() == .floating {
+                
+                switch chartData.getHeaderLocation() {
+                case .floating:
                     VStack(alignment: .leading) {
                         titleBox
                         content
                     }
-                } else if chartData.getHeaderLocation() == .header {
+                case .fixed:
+                    VStack(alignment: .leading) {
+                        titleBox
+                        content
+                    }
+                case .header:
                     VStack(alignment: .leading) {
                         HStack(spacing: 0) {
                             HStack(spacing: 0) {

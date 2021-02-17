@@ -42,4 +42,7 @@ public struct InfoViewData<DP: CTChartDataPoint> {
      */
     var touchSpecifier      : String = "%.0f"
 
+    var positionX    : CGFloat = 0
+    var frame       : CGRect = .zero
+    var yAxisLabelWidth: CGFloat = 0
 }
