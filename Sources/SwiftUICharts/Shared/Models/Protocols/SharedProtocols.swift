@@ -113,6 +113,7 @@ public protocol ChartData: ObservableObject, Identifiable {
      */
     func isGreaterThanTwo() -> Bool
     
+    // MARK: Touch
     /**
     Gets the nearest data points to the touch location.
     - Parameters:
