@@ -95,6 +95,11 @@ public protocol LineAndBarChartData : ChartData where CTStyle: CTLineAndBarChart
  */
 public protocol CTLineAndBarChartStyle: CTChartStyle {
     /**
+     Where the marker lines come from to meet at a specified point.
+     */
+    var markerType : MarkerType { get set }
+    
+    /**
      Style of the vertical lines breaking up the chart
      
      [See GridStyle](x-source-tag://GridStyle)
