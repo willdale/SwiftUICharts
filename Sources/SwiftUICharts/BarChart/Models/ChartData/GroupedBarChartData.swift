@@ -297,7 +297,36 @@ public class GroupedBarChartData: BarChartDataProtocol {
     }
 
     public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
-        let locations : [HashablePoint] = []
+        var locations : [HashablePoint] = []
+        
+        // Divide the chart into equal sections.
+        let superXSection   : CGFloat   = (chartSize.size.width / CGFloat(dataSets.dataSets.count))
+        let superIndex      : Int       = Int((touchLocation.x) / superXSection)
+        
+        // Work out how much to remove from xSection due to groupSpacing.
+        let compensation : CGFloat = ((groupSpacing * CGFloat(dataSets.dataSets.count - 1)) / CGFloat(dataSets.dataSets.count))
+        
+        // Make those sections take account of spacing between groups.
+        let xSection : CGFloat  = (chartSize.size.width / CGFloat(dataSets.dataSets.count)) - compensation
+        let ySection : CGFloat  = chartSize.size.height / CGFloat(self.getMaxValue())
+        
+        let index    : Int      = Int((touchLocation.x - CGFloat(groupSpacing * CGFloat(superIndex))) / xSection)
+
+        if index >= 0 && index < dataSets.dataSets.count && superIndex == index {
+            
+            let dataSet = dataSets.dataSets[index]
+            let xSubSection : CGFloat   = (xSection / CGFloat(dataSet.dataPoints.count))
+            let subIndex    : Int       = Int((touchLocation.x - CGFloat(groupSpacing * CGFloat(index))) / xSubSection) - (dataSet.dataPoints.count * index)
+            
+            if subIndex >= 0 && subIndex < dataSet.dataPoints.count {
+                let element : CGFloat = (CGFloat(subIndex) * xSubSection) + (xSubSection / 2)
+                let section : CGFloat = (superXSection * CGFloat(superIndex))
+                let spacing : CGFloat = ((groupSpacing / CGFloat(dataSets.dataSets.count)) * CGFloat(superIndex))
+                locations.append(HashablePoint(x: element + section + spacing,
+                                               y: (chartSize.size.height - CGFloat(dataSet.dataPoints[subIndex].value) * ySection)))
+                
+            }
+        }
         return locations
     }
     
