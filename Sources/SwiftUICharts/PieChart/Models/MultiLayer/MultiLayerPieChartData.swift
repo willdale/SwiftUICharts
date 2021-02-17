@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public class MultiLayerPieChartData {
+public final class MultiLayerPieChartData {
 
     @Published public var id            : UUID = UUID()
     @Published public var dataSets      : MultiPieDataSet

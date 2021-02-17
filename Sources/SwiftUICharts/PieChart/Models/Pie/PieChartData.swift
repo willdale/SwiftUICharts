@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public class PieChartData: PieChartDataProtocol {
+public final class PieChartData: PieChartDataProtocol {
     
     @Published public var id            : UUID = UUID()
     @Published public var dataSets      : PieDataSet

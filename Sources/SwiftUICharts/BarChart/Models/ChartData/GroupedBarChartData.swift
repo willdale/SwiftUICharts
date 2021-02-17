@@ -175,7 +175,7 @@ import SwiftUI
  
  - Tag: GroupedBarChartData
  */
-public class GroupedBarChartData: BarChartDataProtocol {
+public final class GroupedBarChartData: BarChartDataProtocol {
     
     // MARK: - Properties
     public let id   : UUID  = UUID()

@@ -153,7 +153,7 @@ import SwiftUI
  
  - Tag: LineChartData
  */
-public class LineChartData: LineChartDataProtocol {
+public final class LineChartData: LineChartDataProtocol {
     
     // MARK: - Properties
     public let id   : UUID  = UUID()

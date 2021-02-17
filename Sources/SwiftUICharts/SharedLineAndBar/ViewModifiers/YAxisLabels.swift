@@ -11,11 +11,11 @@ internal struct YAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
     
     @ObservedObject var chartData: T
 
-    let specifier       : String
-    var labelsArray     : [Double] { chartData.getYLabels() }
-    
-    let labelsAndTop    : Bool
-    let labelsAndBottom : Bool
+   private let specifier       : String
+   private var labelsArray     : [Double] { chartData.getYLabels() }
+
+   private let labelsAndTop    : Bool
+   private let labelsAndBottom : Bool
     
     internal init(chartData: T,
                   specifier: String

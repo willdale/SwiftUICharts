@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public class StackedBarChartData: BarChartDataProtocol {
+public final class StackedBarChartData: BarChartDataProtocol {
     
     // MARK: - Properties
     public let id   : UUID  = UUID()

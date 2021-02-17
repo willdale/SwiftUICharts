@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public class DoughnutChartData: DoughnutChartDataProtocol {
+public final class DoughnutChartData: DoughnutChartDataProtocol {
 
     @Published public var id            : UUID = UUID()
     @Published public var dataSets      : PieDataSet
