@@ -205,11 +205,11 @@ public final class GroupedBarChartData: BarChartDataProtocol {
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(dataSets    : GroupedBarDataSets,
+                groupLegends: [GroupedBarLegend],
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 barStyle    : BarStyle          = BarStyle(),
                 chartStyle  : BarChartStyle     = BarChartStyle(),
-                groupLegends: [GroupedBarLegend],
                 noDataText  : Text              = Text("No Data")
     ) {
         self.dataSets       = dataSets
