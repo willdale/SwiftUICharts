@@ -52,9 +52,14 @@ public protocol CTBarChartStyle: CTLineAndBarChartStyle {}
  
  - Tag: CTBarChartDataSet
  */
-public protocol CTStandardBarChartDataSet: SingleDataSet {}
+public protocol CTStandardBarChartDataSet: SingleDataSet {
+    /**
+     Label to display in the legend.
+     */
+    var legendTitle : String { get set }
+}
 
-public protocol CTGroupedBarChartDataSet: SingleDataSet {}
+public protocol CTGroupedBarChartDataSet: SingleDataSet  {}
 
 public protocol CTSStackedBarChartDataSet: SingleDataSet {}
 
@@ -85,4 +90,8 @@ public protocol CTStandardBarDataPoint: CTBarDataPoint, CTColourStyle {}
   
  - Tag: CTMultiPartBarDataPoint
  */
-public protocol CTGroupedBarDataPoint: CTBarDataPoint, CTColourStyle {}
+public protocol CTGroupedBarDataPoint: CTBarDataPoint {
+    
+    var group : GroupingData { get set }
+    
+}

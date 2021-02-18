@@ -74,6 +74,12 @@ public protocol CTLineChartStyle : CTLineAndBarChartStyle {
  */
 public protocol CTLineChartDataSet: SingleDataSet {
     associatedtype Styling   : CTColourStyle
+    
+    /**
+     Label to display in the legend.
+     */
+    var legendTitle : String { get set }
+    
     /**
      Sets the style for the Data Set (as opposed to Chart Data Style).
      */

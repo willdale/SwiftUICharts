@@ -28,24 +28,24 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                     HStack(spacing: 0) {
                         ForEach(dataSet.dataPoints) { dataPoint in
                             
-                            if dataPoint.colourType == .colour,
-                               let colour = dataPoint.colour
+                            if dataPoint.group.colourType == .colour,
+                               let colour = dataPoint.group.colour
                             {
                                 
                                 ColourBar(colour, dataPoint, chartData.getMaxValue(), chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
                                 
-                            } else if dataPoint.colourType == .gradientColour,
-                                      let colours    = dataPoint.colours,
-                                      let startPoint = dataPoint.startPoint,
-                                      let endPoint   = dataPoint.endPoint
+                            } else if dataPoint.group.colourType == .gradientColour,
+                                      let colours    = dataPoint.group.colours,
+                                      let startPoint = dataPoint.group.startPoint,
+                                      let endPoint   = dataPoint.group.endPoint
                             {
 
                                 GradientColoursBar(colours, startPoint, endPoint, dataPoint, chartData.getMaxValue(), chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
 
-                            } else if dataPoint.colourType == .gradientStops,
-                                      let stops      = dataPoint.stops,
-                                      let startPoint = dataPoint.startPoint,
-                                      let endPoint   = dataPoint.endPoint
+                            } else if dataPoint.group.colourType == .gradientStops,
+                                      let stops      = dataPoint.group.stops,
+                                      let startPoint = dataPoint.group.startPoint,
+                                      let endPoint   = dataPoint.group.endPoint
                             {
 
                                 let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)

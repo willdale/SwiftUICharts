@@ -167,6 +167,57 @@ public struct BarChartDataPoint: CTStandardBarDataPoint {
     }
 }
 
+public struct GroupingData: CTColourStyle, Hashable, Identifiable {
+    
+    public let id        : UUID = UUID()
+    public var title     : String
+    public var colourType: ColourType
+    public var colour    : Color?
+    public var colours   : [Color]?
+    public var stops     : [GradientStop]?
+    public var startPoint: UnitPoint?
+    public var endPoint  : UnitPoint?
+     
+    public init(title   : String,
+                colour  : Color
+    ) {
+        self.title      = title
+        self.colourType = .colour
+        self.colour     = colour
+        self.colours    = nil
+        self.stops      = nil
+        self.startPoint = nil
+        self.endPoint   = nil
+    }
+    
+    public init(title       : String,
+                colours     : [Color],
+                startPoint  : UnitPoint,
+                endPoint    : UnitPoint
+    ) {
+        self.title      = title
+        self.colourType = .gradientColour
+        self.colour     = nil
+        self.colours    = colours
+        self.stops      = nil
+        self.startPoint = startPoint
+        self.endPoint   = endPoint
+    }
+    
+    public init(title       : String,
+                stops       : [GradientStop],
+                startPoint  : UnitPoint,
+                endPoint    : UnitPoint
+    ) {
+        self.title      = title
+        self.colourType = .gradientStops
+        self.colour     = nil
+        self.colours    = nil
+        self.stops      = stops
+        self.startPoint = startPoint
+        self.endPoint   = endPoint
+    }
+}
 
 // MARK: - Grouped
 public struct GroupedBarChartDataPoint: CTGroupedBarDataPoint {
@@ -177,72 +228,22 @@ public struct GroupedBarChartDataPoint: CTGroupedBarDataPoint {
     public var xAxisLabel       : String?
     public var pointDescription : String?
     public var date             : Date?
-    
-    public var colourType   : ColourType
-    public var colour       : Color?
-    public var colours      : [Color]?
-    public var stops        : [GradientStop]?
-    public var startPoint   : UnitPoint?
-    public var endPoint     : UnitPoint?
+
+    public var group     : GroupingData
     
     public init(value       : Double,
                 xAxisLabel  : String?   = nil,
                 pointLabel  : String?   = nil,
                 date        : Date?     = nil,
-                colour      : Color?    = nil
-    ) {
-        self.value            = value
-        self.xAxisLabel       = xAxisLabel
-        self.pointDescription = pointLabel
-        self.date             = date
-        self.colour     = colour
-        self.colours    = nil
-        self.stops      = nil
-        self.startPoint = nil
-        self.endPoint   = nil
-        self.colourType = .colour
-    }
-    
-    public init(value       : Double,
-                xAxisLabel  : String? = nil,
-                pointLabel  : String? = nil,
-                date        : Date? = nil,
-                
-                colours     : [Color]?   =  nil,
-                startPoint  : UnitPoint? =  nil,
-                endPoint    : UnitPoint? =  nil
+                group: GroupingData
     ) {
         self.value            = value
         self.xAxisLabel       = xAxisLabel
         self.pointDescription = pointLabel
         self.date             = date
         
-        self.colour     = nil
-        self.stops      = nil
-        self.colours    = colours
-        self.startPoint = startPoint
-        self.endPoint   = endPoint
-        self.colourType  = .gradientColour
+        self.group            = group
+
     }
-    
-    public init(value       : Double,
-                xAxisLabel  : String? = nil,
-                pointLabel  : String? = nil,
-                date        : Date? = nil,
-                stops       : [GradientStop]? = nil,
-                startPoint  : UnitPoint? =  nil,
-                endPoint    : UnitPoint? =  nil
-    ) {
-        self.value            = value
-        self.xAxisLabel       = xAxisLabel
-        self.pointDescription = pointLabel
-        self.date             = date
-        self.colour     = nil
-        self.colours    = nil
-        self.stops      = stops
-        self.startPoint = startPoint
-        self.endPoint   = endPoint
-        self.colourType  = .gradientStops
-    }
-    
+    public typealias ID = UUID
 }

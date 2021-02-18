@@ -176,12 +176,7 @@ public protocol SingleDataSet: DataSet {
      [See CTChartDataPoint](x-source-tag://CTChartDataPoint)
      */
     var dataPoints  : [DataPoint] { get set }
-    
-    /**
-     Label to display in the legend.
-     */
-    var legendTitle : String { get set }
-    
+
 }
 
 /**

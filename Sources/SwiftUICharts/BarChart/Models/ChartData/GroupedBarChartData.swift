@@ -189,7 +189,9 @@ public final class GroupedBarChartData: BarChartDataProtocol {
     @Published public var viewData     : ChartViewData
     @Published public var infoView     : InfoViewData<GroupedBarChartDataPoint> = InfoViewData()
     
-    public var groupLegends : [GroupedBarLegend]
+    //ADD TO A PROTOCOL
+    @Published public var groups       : [GroupingData]
+    
     public var noDataText   : Text
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
@@ -200,12 +202,13 @@ public final class GroupedBarChartData: BarChartDataProtocol {
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the bars.
+    ///   - groups: Data for how to group data points.
     ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(dataSets    : GroupedBarDataSets,
-                groupLegends: [GroupedBarLegend],
+                groups      : [GroupingData],
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 barStyle    : BarStyle          = BarStyle(),
@@ -213,11 +216,11 @@ public final class GroupedBarChartData: BarChartDataProtocol {
                 noDataText  : Text              = Text("No Data")
     ) {
         self.dataSets       = dataSets
+        self.groups         = groups
         self.metadata       = metadata
         self.xAxisLabels    = xAxisLabels
         self.barStyle       = barStyle
         self.chartStyle     = chartStyle
-        self.groupLegends   = groupLegends
         self.noDataText     = noDataText
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
@@ -374,29 +377,45 @@ public final class GroupedBarChartData: BarChartDataProtocol {
     
     // MARK: - Legends
     public func setupLegends() {
-        
-        for legend in self.groupLegends {
-            self.legends.append(LegendData(id: UUID(),
-                                           legend: legend.title,
-                                           colour: legend.colour,
-                                           strokeStyle: nil,
-                                           prioity: 1,
-                                           chartType: .bar))
-        }
+            
+        for group in self.groups {
+                
+                if group.colourType == .colour,
+                   let colour = group.colour
+                {
+                    self.legends.append(LegendData(id         : group.id,
+                                                   legend     : group.title,
+                                                   colour     : colour,
+                                                   strokeStyle: nil,
+                                                   prioity    : 1,
+                                                   chartType  : .bar))
+                } else if group.colourType == .gradientColour,
+                          let colours = group.colours
+                {
+                    self.legends.append(LegendData(id         : group.id,
+                                                   legend     : group.title,
+                                                   colours    : colours,
+                                                   startPoint : .leading,
+                                                   endPoint   : .trailing,
+                                                   strokeStyle: nil,
+                                                   prioity    : 1,
+                                                   chartType  : .bar))
+                } else if group.colourType == .gradientStops,
+                          let stops  = group.stops
+                {
+                    self.legends.append(LegendData(id         : group.id,
+                                                   legend     : group.title,
+                                                   stops      : stops,
+                                                   startPoint : .leading,
+                                                   endPoint   : .trailing,
+                                                   strokeStyle: nil,
+                                                   prioity    : 1,
+                                                   chartType  : .bar))
+                }
+            }
     }
     
     public typealias Set        = GroupedBarDataSets
     public typealias DataPoint  = GroupedBarChartDataPoint
     public typealias CTStyle    = BarChartStyle
-}
-
-public struct GroupedBarLegend {
-    
-    public let title : String
-    public let colour: Color
-    
-    public init(title: String, colour: Color) {
-        self.title = title
-        self.colour = colour
-    }
 }

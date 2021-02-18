@@ -21,12 +21,13 @@ public final class StackedBarChartData: BarChartDataProtocol {
     @Published public var viewData     : ChartViewData
     @Published public var infoView     : InfoViewData<GroupedBarChartDataPoint> = InfoViewData()
     
-    public var groupLegends : [GroupedBarLegend]
+    @Published public var groups       : [GroupingData]
+    
     public var noDataText   : Text
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
     public init(dataSets    : GroupedBarDataSets,
-                groupLegends: [GroupedBarLegend],
+                groups      : [GroupingData],
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
                 barStyle    : BarStyle          = BarStyle(),
@@ -34,11 +35,11 @@ public final class StackedBarChartData: BarChartDataProtocol {
                 noDataText  : Text              = Text("No Data")
     ) {
         self.dataSets       = dataSets
+        self.groups         = groups
         self.metadata       = metadata
         self.xAxisLabels    = xAxisLabels
         self.barStyle       = barStyle
         self.chartStyle     = chartStyle
-        self.groupLegends   = groupLegends
         self.noDataText     = noDataText
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
@@ -51,10 +52,10 @@ public final class StackedBarChartData: BarChartDataProtocol {
         switch self.chartStyle.xAxisLabelsFrom {
         case .dataPoint:
             HStack(spacing: 0) {
-                ForEach(dataSets.dataSets) { dataSet in
+                ForEach(groups) { group in
                     Spacer()
                         .frame(minWidth: 0, maxWidth: 500)
-                    Text(dataSet.legendTitle)
+                    Text(group.title)
                         .font(.caption)
                         .foregroundColor(self.chartStyle.xAxisLabelColour)
                         .lineLimit(1)
@@ -221,14 +222,41 @@ public final class StackedBarChartData: BarChartDataProtocol {
     
     // MARK: - Legends
     public func setupLegends() {
-        for legend in self.groupLegends {
-            self.legends.append(LegendData(id: UUID(),
-                                           legend: legend.title,
-                                           colour: legend.colour,
-                                           strokeStyle: nil,
-                                           prioity: 1,
-                                           chartType: .bar))
-        }
+        for group in self.groups {
+                
+                if group.colourType == .colour,
+                   let colour = group.colour
+                {
+                    self.legends.append(LegendData(id         : group.id,
+                                                   legend     : group.title,
+                                                   colour     : colour,
+                                                   strokeStyle: nil,
+                                                   prioity    : 1,
+                                                   chartType  : .bar))
+                } else if group.colourType == .gradientColour,
+                          let colours = group.colours
+                {
+                    self.legends.append(LegendData(id         : group.id,
+                                                   legend     : group.title,
+                                                   colours    : colours,
+                                                   startPoint : .leading,
+                                                   endPoint   : .trailing,
+                                                   strokeStyle: nil,
+                                                   prioity    : 1,
+                                                   chartType  : .bar))
+                } else if group.colourType == .gradientStops,
+                          let stops  = group.stops
+                {
+                    self.legends.append(LegendData(id         : group.id,
+                                                   legend     : group.title,
+                                                   stops      : stops,
+                                                   startPoint : .leading,
+                                                   endPoint   : .trailing,
+                                                   strokeStyle: nil,
+                                                   prioity    : 1,
+                                                   chartType  : .bar))
+                }
+            }
     }
     public typealias Set        = GroupedBarDataSets
     public typealias DataPoint  = GroupedBarChartDataPoint
