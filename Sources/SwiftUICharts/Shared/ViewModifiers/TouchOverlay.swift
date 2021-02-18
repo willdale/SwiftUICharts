@@ -47,9 +47,7 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                                                                                 
                                         chartData.infoView.isTouchCurrent   = true
                                         chartData.infoView.touchOverlayInfo = chartData.getDataPoint(touchLocation: touchLocation, chartSize: geo)
-                                        
                                         chartData.infoView.positionX = setBoxLocationation(touchLocation: touchLocation, boxFrame: boxFrame, chartSize: geo).x
-                                        
                                         chartData.infoView.frame = geo.frame(in: .local)
                                         
                                     }
