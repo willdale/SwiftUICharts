@@ -17,9 +17,7 @@ import SwiftUI
 internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
 
     @ObservedObject var chartData: T
-    
-    private var markerType : MarkerType
-    
+        
     /// Current location of the touch input
     @State private var touchLocation    : CGPoint   = CGPoint(x: 0, y: 0)
     /// Frame information of the data point information box
@@ -30,11 +28,9 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
     ///   - chartData:
     ///   - specifier: Decimal precision for labels
     internal init(chartData         : T,
-                  specifier         : String,
-                  markerType        : MarkerType
+                  specifier         : String
     ) {
         self.chartData = chartData
-        self.markerType = markerType
         self.chartData.infoView.touchSpecifier = specifier
     }
     internal func body(content: Content) -> some View {
@@ -62,192 +58,15 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                                         chartData.infoView.touchOverlayInfo = []
                                     }
                             )
-                        /*
-                         TODO: -------------------------------
-                         Choose attachement style for markers
-                         Add touch event function to protocol
-                         */
                         if chartData.infoView.isTouchCurrent {
-                            
-                            switch chartData.chartType {
-                            case (.line, .single):
-                                Text("")
-                                if let data = chartData as? LineChartData {
-                                let position = data.getIndicatorLocation(rect: geo.frame(in: .global),
-                                                                         dataSet: data.dataSets,
-                                                                         touchLocation: touchLocation)
-
-                                switch markerType  {
-                                case .vertical:
-                                    Vertical(position: position)
-                                        .stroke(Color.primary, lineWidth: 2)
-                                case .rectangle:
-                                    RoundedRectangle(cornerRadius: 25.0, style: .continuous)
-                                        .fill(Color.clear)
-                                        .frame(width: 100, height: geo.frame(in: .local).height)
-                                        .position(x: position.x,
-                                                  y: geo.frame(in: .local).midY)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 25.0, style: .continuous)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                                .shadow(color: .primary, radius: 4, x: 0, y: 0)
-                                                .frame(width: 50, height: geo.frame(in: .local).height)
-                                                .position(x: position.x,
-                                                          y: geo.frame(in: .local).midY)
-                                        )
-                                case .full:
-                                    MarkerFull(position: position)
-                                        .stroke(Color.primary, lineWidth: 2)
-                                case .bottomLeading:
-                                    MarkerBottomLeading(position: position)
-                                        .stroke(Color.primary, lineWidth: 2)
-                                case .bottomTrailing:
-                                    MarkerBottomTrailing(position: position)
-                                        .stroke(Color.primary, lineWidth: 2)
-                                case .topLeading:
-                                    MarkerTopLeading(position: position)
-                                        .stroke(Color.primary, lineWidth: 2)
-                                case .topTrailing:
-                                    MarkerTopTrailing(position: position)
-                                        .stroke(Color.primary, lineWidth: 2)
-                                }
-
-                                PosistionIndicator()
-                                    .frame(width: 15, height: 15)
-                                    .position(position)
-
-                                }
-                                
-                            case (.line, .multi):
-
-                                if let data = chartData as? MultiLineChartData {
-
-                                    ForEach(data.dataSets.dataSets, id: \.self) { dataSet in
-                                        let position = data.getIndicatorLocation(rect: geo.frame(in: .global),
-                                                                                 dataSet: dataSet,
-                                                                                 touchLocation: touchLocation)
-
-                                        switch markerType  {
-                                        case .vertical:
-                                            Vertical(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .rectangle:
-                                            RoundedRectangle(cornerRadius: 25.0, style: .continuous)
-                                                .fill(Color.clear)
-                                                .frame(width: 100, height: geo.frame(in: .local).height)
-                                                .position(x: position.x,
-                                                          y: geo.frame(in: .local).midY)
-                                                .overlay(
-                                                    RoundedRectangle(cornerRadius: 25.0, style: .continuous)
-                                                        .stroke(Color.primary, lineWidth: 2)
-                                                        .shadow(color: .primary, radius: 4, x: 0, y: 0)
-                                                        .frame(width: 50, height: geo.frame(in: .local).height)
-                                                        .position(x: position.x,
-                                                                  y: geo.frame(in: .local).midY)
-                                                )
-                                        case .full:
-                                            MarkerFull(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .bottomLeading:
-                                            MarkerBottomLeading(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .bottomTrailing:
-                                            MarkerBottomTrailing(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .topLeading:
-                                            MarkerTopLeading(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .topTrailing:
-                                            MarkerTopTrailing(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        }
-
-
-                                        PosistionIndicator()
-                                            .frame(width: 15, height: 15)
-                                            .position(position)
-                                    }
-                                }
-                                
-                            case (.bar, .single):
-
-                                if let data = chartData as? BarChartData {
-                                    
-                                    let positions = data.getPointLocation(touchLocation: touchLocation,
-                                                                          chartSize: geo)
-                                    ForEach(positions, id: \.self) { position in
-                                        
-                                        switch markerType  {
-                                        case .vertical:
-                                            MarkerFull(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .rectangle:
-                                            MarkerFull(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .full:
-                                            MarkerFull(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .bottomLeading:
-                                            MarkerBottomLeading(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .bottomTrailing:
-                                            MarkerBottomTrailing(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .topLeading:
-                                            MarkerTopLeading(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .topTrailing:
-                                            MarkerTopTrailing(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        }
-                                    }
-                                    
-                                }
-                            case (.bar, .multi):
-                                if let data = chartData as? GroupedBarChartData {
-
-                                    let positions = data.getPointLocation(touchLocation: touchLocation,
-                                                                          chartSize: geo)
-                                    ForEach(positions, id: \.self) { position in
-                                        
-                                        switch markerType  {
-                                        case .vertical:
-                                            MarkerFull(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .rectangle:
-                                            MarkerFull(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .full:
-                                            MarkerFull(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .bottomLeading:
-                                            MarkerBottomLeading(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .bottomTrailing:
-                                            MarkerBottomTrailing(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .topLeading:
-                                            MarkerTopLeading(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        case .topTrailing:
-                                            MarkerTopTrailing(position: position)
-                                                .stroke(Color.primary, lineWidth: 2)
-                                        }
-                                    }
-                                }
-                                
-                            case (.pie, .single):
-                                Text("")
-                            case (.pie, .multi):
-                                Text("")
-                            }
+                            chartData.touchInteraction(touchLocation: touchLocation, chartSize: geo)
                         }
                     }
                 }
             } else { content }
         }
     }
-
+    // MOVE TO PROTOCOL -- SEE INFOBOX
     /// Sets the point info box location while keeping it within the parent view.
     /// - Parameters:
     ///   - boxFrame: The size of the point info box.
@@ -290,12 +109,10 @@ extension View {
      - Tag: TouchOverlay
      */
     public func touchOverlay<T: ChartData>(chartData: T,
-                                           specifier: String = "%.0f",
-                                           markerType: MarkerType = .vertical
+                                           specifier: String = "%.0f"
     ) -> some View {
         self.modifier(TouchOverlay(chartData: chartData,
-                                   specifier: specifier,
-                                   markerType: markerType))
+                                   specifier: specifier))
     }
     #elseif os(tvOS)
     /**

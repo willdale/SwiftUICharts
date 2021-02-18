@@ -283,6 +283,39 @@ public final class BarChartData: BarChartDataProtocol {
         return locations
     }
     
+    public func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View {
+        let positions = self.getPointLocation(touchLocation: touchLocation,
+                                              chartSize: chartSize)
+        return ZStack {
+            ForEach(positions, id: \.self) { position in
+                
+                switch self.chartStyle.markerType  {
+                case .vertical:
+                    MarkerFull(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .rectangle:
+                    MarkerFull(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .full:
+                    MarkerFull(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .bottomLeading:
+                    MarkerBottomLeading(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .bottomTrailing:
+                    MarkerBottomTrailing(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .topLeading:
+                    MarkerTopLeading(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .topTrailing:
+                    MarkerTopTrailing(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                }
+            }
+        }
+    }
+    
     // MARK: - Legends
     public func setupLegends() {
         

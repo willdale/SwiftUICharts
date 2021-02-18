@@ -21,8 +21,8 @@ public protocol ChartData: ObservableObject, Identifiable {
     associatedtype DataPoint: CTChartDataPoint
     associatedtype CTStyle  : CTChartStyle
     
-    associatedtype Body : View
-    
+    associatedtype XLabels : View
+    associatedtype Touch : View
     var id: ID { get }
     
     /**
@@ -148,9 +148,10 @@ public protocol ChartData: ObservableObject, Identifiable {
      
      - Tag: getXAxidLabels
      */
-    func getXAxisLabels() -> Body
+    func getXAxisLabels() -> XLabels
+    
+    func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> Touch
 }
-
 // MARK: - Data Sets
 /**
  Main protocol set conformace for types of Data Sets.

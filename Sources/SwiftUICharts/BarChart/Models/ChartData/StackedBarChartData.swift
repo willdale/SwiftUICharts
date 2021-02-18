@@ -139,8 +139,84 @@ public final class StackedBarChartData: BarChartDataProtocol {
     }
 
     public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
-        let locations : [HashablePoint] = []
+        var locations : [HashablePoint] = []
+        
+        // Filter to get the right dataset based on the x axis.
+        let superXSection : CGFloat = chartSize.size.width / CGFloat(dataSets.dataSets.count)
+        let superIndex    : Int     = Int((touchLocation.x) / superXSection)
+        
+        if superIndex >= 0 && superIndex < dataSets.dataSets.count {
+            
+            let dataSet = dataSets.dataSets[superIndex]
+            
+            // Get the max value of the dataset relative to max value of all datasets.
+            // This is used to set the height of the y axis filtering.
+            let setMaxValue = dataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
+            let allMaxValue = self.getMaxValue()
+            let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
+
+            // Gets the height of each datapoint
+            var heightOfElements : [CGFloat] = []
+            let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }
+            dataSet.dataPoints.forEach { datapoint in
+                heightOfElements.append((chartSize.size.height * fraction) * CGFloat(datapoint.value / sum))
+            }
+        
+            // Gets the highest point of each element.
+            var endPointOfElements : [CGFloat] = []
+            heightOfElements.enumerated().forEach { element in
+                var returnValue : CGFloat = 0
+                for index in 0...element.offset {
+                    returnValue += heightOfElements[index]
+                }
+                endPointOfElements.append(returnValue)
+            }
+
+            let yIndex = endPointOfElements.enumerated().first(where: { $0.element > abs(touchLocation.y - chartSize.size.height) })
+            
+            if let index = yIndex?.offset {
+                if index >= 0 && index < dataSet.dataPoints.count {
+                    
+                    locations.append(HashablePoint(x: (CGFloat(superIndex) * superXSection) + (superXSection / 2),
+                                                   y: (chartSize.size.height - endPointOfElements[index])))
+                }
+            }
+        }
+        
         return locations
+    }
+    
+    public func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View {
+        let positions = self.getPointLocation(touchLocation: touchLocation,
+                                              chartSize: chartSize)
+        return ZStack {
+            ForEach(positions, id: \.self) { position in
+                
+                switch self.chartStyle.markerType  {
+                case .vertical:
+                    MarkerFull(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .rectangle:
+                    MarkerFull(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .full:
+                    MarkerFull(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .bottomLeading:
+                    MarkerBottomLeading(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .bottomTrailing:
+                    MarkerBottomTrailing(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .topLeading:
+                    MarkerTopLeading(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .topTrailing:
+                    MarkerTopTrailing(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                }
+            }
+        }
     }
     
     // MARK: - Legends

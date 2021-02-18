@@ -25,9 +25,51 @@ extension LineChartDataProtocol {
         
         return self.locationOnPath(getPercentageOfPath(path: path, touchLocation: touchLocation), path)
     }
-    
+    /**
+     Returns the relevent path based on the line type.
+     
+     - Parameters:
+        - style: Styling of the line.
+        - rect: Frame the line will be in.
+        - dataPoints: Data points to draw the line.
+        - minValue: Lowest value in the dataset.
+        - range: Difference between the highest and lowest numbers in the dataset.
+        - touchLocation: Location of the touch or pointer input.
+        - isFilled: Whether it is a normal or filled line.
+     - Returns: The relevent path based on the line type
+     */
+    func getPath(style: LineStyle, rect: CGRect, dataPoints: [LineChartDataPoint], minValue: Double, range: Double, touchLocation: CGPoint, isFilled: Bool) -> Path {
+        switch style.lineType {
+        case .line:
+            return Path.straightLine(rect       : rect,
+                                     dataPoints : dataPoints,
+                                     minValue   : minValue,
+                                     range      : range,
+                                     isFilled   : isFilled)
+        case .curvedLine:
+            return Path.curvedLine(rect       : rect,
+                                   dataPoints : dataPoints,
+                                   minValue   : minValue,
+                                   range      : range,
+                                   isFilled   : isFilled)
+        }
+    }
     // Maybe put all into extentions of: Path / CGPoint / CGFloat
     // https://developer.apple.com/documentation/swiftui/path/element
+    /**
+     How far along the path the touch or pointer is as a percent of the total.
+     .
+     - Parameters:
+        - path: Path being acted on.
+        - touchLocation: Location of the touch or pointer input.
+     - Returns: How far along the path the touch is.
+     */
+    func getPercentageOfPath(path: Path, touchLocation: CGPoint) -> CGFloat {
+        let totalLength   = self.getTotalLength(of: path)
+        let lengthToTouch = self.getLength(to: touchLocation, on: path)
+        let pointLocation = lengthToTouch / totalLength
+        return pointLocation
+    }
     
     /**
      The total length of the path.
@@ -120,51 +162,7 @@ extension LineChartDataProtocol {
         }
         return total
     }
-    /**
-     Returns the relevent path based on the line type.
-     
-     - Parameters:
-        - style: Styling of the line.
-        - rect: Frame the line will be in.
-        - dataPoints: Data points to draw the line.
-        - minValue: Lowest value in the dataset.
-        - range: Difference between the highest and lowest numbers in the dataset.
-        - touchLocation: Location of the touch or pointer input.
-        - isFilled: Whether it is a normal or filled line.
-     - Returns: The relevent path based on the line type
-     */
-    func getPath(style: LineStyle, rect: CGRect, dataPoints: [LineChartDataPoint], minValue: Double, range: Double, touchLocation: CGPoint, isFilled: Bool) -> Path {
-        switch style.lineType {
-        case .line:
-            return Path.straightLine(rect       : rect,
-                                     dataPoints : dataPoints,
-                                     minValue   : minValue,
-                                     range      : range,
-                                     isFilled   : isFilled)
-        case .curvedLine:
-            return Path.curvedLine(rect       : rect,
-                                   dataPoints : dataPoints,
-                                   minValue   : minValue,
-                                   range      : range,
-                                   isFilled   : isFilled)
-        }
-    }
-    
-    /**
-     How far along the path the touch or pointer is as a percent of the total.
-     .
-     - Parameters:
-        - path: Path being acted on.
-        - touchLocation: Location of the touch or pointer input.
-     - Returns: How far along the path the touch is.
-     */
-    func getPercentageOfPath(path: Path, touchLocation: CGPoint) -> CGFloat {
-        let totalLength   = self.getTotalLength(of: path)
-        let lengthToTouch = self.getLength(to: touchLocation, on: path)
-        let pointLocation = lengthToTouch / totalLength
-        return pointLocation
-    }
-    
+
     /**
      Returns a point on the path based on the location of the touch
      or pointer input on the X axis.
