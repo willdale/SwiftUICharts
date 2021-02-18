@@ -18,15 +18,8 @@ import SwiftUI
  
  - Tag: LineChartDataProtocol
  */
-public protocol LineChartDataProtocol: LineAndBarChartData where CTStyle: CTLineChartStyle {
-    /**
-     Data model conatining the style data for the chart.
-     
-     # Reference
-     [CTChartStyle](x-source-tag://CTChartStyle)
-     */
-    var chartStyle  : CTStyle { get set }
-    
+public protocol LineChartDataProtocol: LineAndBarChartData {
+
     /**
      Whether it is a normal or filled line.
      */
@@ -44,6 +37,8 @@ public protocol LineChartDataProtocol: LineAndBarChartData where CTStyle: CTLine
      */
     func getIndicatorLocation(rect: CGRect, dataSet: LineDataSet, touchLocation: CGPoint) -> CGPoint
 }
+
+
 
 // MARK: - Style
 /**
@@ -65,6 +60,8 @@ public protocol CTLineChartStyle : CTLineAndBarChartStyle {
     var markerAttachemnt : MarkerAttachemnt { get set }
 
 }
+
+
 
 // MARK: - DataSet
 /**

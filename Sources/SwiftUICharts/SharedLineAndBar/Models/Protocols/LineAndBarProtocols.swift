@@ -16,11 +16,11 @@ import SwiftUI
  
  - Tag: LineAndBarChartData
  */
-public protocol LineAndBarChartData : ChartData where CTStyle: CTLineAndBarChartStyle {
+public protocol LineAndBarChartData : ChartData {
     
     /// Apple's `associatedtype` for outputting `some View`.
     associatedtype Body : View
-    
+    associatedtype CTLineAndBarCS : CTLineAndBarChartStyle
     /**
      Array of strings for the labels on the X Axis instead of the labels in the data points.
 
@@ -36,6 +36,15 @@ public protocol LineAndBarChartData : ChartData where CTStyle: CTLineAndBarChart
      axis labels so they can configure thier layouts appropriately.
      */
     var viewData: ChartViewData { get set }
+    
+    
+    /**
+     Data model conatining the style data for the chart.
+     
+     # Reference
+     [CTChartStyle](x-source-tag://CTChartStyle)
+     */
+    var chartStyle: CTLineAndBarCS { get set }
     
     /**
      Displays a view for the labels on the X Axis.

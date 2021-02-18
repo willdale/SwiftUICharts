@@ -251,6 +251,14 @@ public final class BarChartData: BarChartDataProtocol {
             }
         }
     }
+    public func getYLabels() -> [Double] {
+        var labels  : [Double]  = [Double]()
+        let maxValue: Double    = self.getMaxValue()
+        for index in 0...self.chartStyle.yAxisNumberOfLabels {
+            labels.append(maxValue / Double(self.chartStyle.yAxisNumberOfLabels) * Double(index))
+        }
+        return labels
+    }
     
     // MARK: - Touch
     public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [BarChartDataPoint] {
@@ -356,4 +364,5 @@ public final class BarChartData: BarChartDataProtocol {
     
     public typealias Set        = BarDataSet
     public typealias DataPoint  = BarChartDataPoint
+    public typealias CTStyle    = BarChartStyle
 }

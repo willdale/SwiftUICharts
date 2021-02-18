@@ -7,22 +7,6 @@
 
 import SwiftUI
 
-// MARK: Labels
-extension LineAndBarChartData where Self: LineChartDataProtocol {
-    public func getYLabels() -> [Double] {
-        var labels      : [Double]  = [Double]()
-        let dataRange   : Double = self.getRange()
-        let minValue    : Double = self.getMinValue()
-        let range       : Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
-
-        labels.append(minValue)
-        for index in 1...self.chartStyle.yAxisNumberOfLabels {
-            labels.append(minValue + range * Double(index))
-        }
-        return labels
-    }
-}
-
 // MARK: - Position Indicator
 extension LineChartDataProtocol {
     

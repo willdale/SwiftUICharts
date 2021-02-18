@@ -19,7 +19,8 @@ import SwiftUI
  
  - Tag: BarChartDataProtocol
  */
-public protocol BarChartDataProtocol: LineAndBarChartData where CTStyle: CTBarChartStyle {
+public protocol BarChartDataProtocol: LineAndBarChartData {
+        
     var barStyle    : BarStyle { get set }
     /**
      Data model conatining the style data for the chart.
@@ -27,10 +28,8 @@ public protocol BarChartDataProtocol: LineAndBarChartData where CTStyle: CTBarCh
      # Reference
      [CTChartStyle](x-source-tag://CTChartStyle)
      */
-    var chartStyle  : CTStyle { get set }
+//    var chartStyle  : CTStyle { get set }
 }
-
-//public protocol GroupedBarChartDataProtocol: BarChartDataProtocol {}
 
 
 
