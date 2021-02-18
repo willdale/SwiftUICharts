@@ -21,6 +21,8 @@ public protocol ChartData: ObservableObject, Identifiable {
     associatedtype DataPoint: CTChartDataPoint
     associatedtype CTStyle  : CTChartStyle
     
+    associatedtype Body : View
+    
     var id: ID { get }
     
     /**
@@ -135,6 +137,18 @@ public protocol ChartData: ObservableObject, Identifiable {
     - Tag: getDataPoint
     */
     func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint]
+    
+    /**
+     Displays a view for the labels on the X Axis.
+     
+     Labels can come from either [CTChartDataPoint](x-source-tag://CTChartDataPoint)
+     or [ChartData](x-source-tag://ChartData)
+     
+     - Returns: An `HStack` of `Text` containin x axis labels.
+     
+     - Tag: getXAxidLabels
+     */
+    func getXAxisLabels() -> Body
 }
 
 // MARK: - Data Sets

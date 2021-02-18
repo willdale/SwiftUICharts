@@ -22,13 +22,6 @@ import SwiftUI
 public protocol BarChartDataProtocol: LineAndBarChartData {
         
     var barStyle    : BarStyle { get set }
-    /**
-     Data model conatining the style data for the chart.
-     
-     # Reference
-     [CTChartStyle](x-source-tag://CTChartStyle)
-     */
-//    var chartStyle  : CTStyle { get set }
 }
 
 

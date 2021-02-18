@@ -37,8 +37,10 @@ public final class PieChartData: PieChartDataProtocol {
         self.makeDataPoints()
     }
     
+    public func getXAxisLabels() -> some View { EmptyView() }
     
-    public typealias Set = PieDataSet
+    public typealias Set       = PieDataSet
     public typealias DataPoint = PieChartDataPoint
+    public typealias CTStyle   = PieChartStyle
 }
 

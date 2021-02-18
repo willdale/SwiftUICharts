@@ -17,9 +17,7 @@ import SwiftUI
  - Tag: LineAndBarChartData
  */
 public protocol LineAndBarChartData : ChartData {
-    
-    /// Apple's `associatedtype` for outputting `some View`.
-    associatedtype Body : View
+
     associatedtype CTLineAndBarCS : CTLineAndBarChartStyle
     /**
      Array of strings for the labels on the X Axis instead of the labels in the data points.
@@ -45,19 +43,7 @@ public protocol LineAndBarChartData : ChartData {
      [CTChartStyle](x-source-tag://CTChartStyle)
      */
     var chartStyle: CTLineAndBarCS { get set }
-    
-    /**
-     Displays a view for the labels on the X Axis.
-     
-     Labels can come from either [CTChartDataPoint](x-source-tag://CTChartDataPoint)
-     or [ChartData](x-source-tag://ChartData)
-     
-     - Returns: An `HStack` of `Text` containin x axis labels.
-     
-     - Tag: getXAxidLabels
-     */
-    func getXAxisLabels() -> Body
-    
+        
     /**
      Labels to display on the Y axis
      

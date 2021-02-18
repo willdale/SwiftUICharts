@@ -362,7 +362,7 @@ public final class BarChartData: BarChartDataProtocol {
 //        }
     }
     
-    public typealias Set        = BarDataSet
-    public typealias DataPoint  = BarChartDataPoint
-    public typealias CTStyle    = BarChartStyle
+    public typealias Set            = BarDataSet
+    public typealias DataPoint      = BarChartDataPoint
+    public typealias CTStyle        = BarChartStyle
 }

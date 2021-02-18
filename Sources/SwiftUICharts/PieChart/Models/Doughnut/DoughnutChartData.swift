@@ -36,7 +36,10 @@ public final class DoughnutChartData: DoughnutChartDataProtocol {
         
         self.makeDataPoints()
     }
+    
+    public func getXAxisLabels() -> some View { EmptyView() }
 
-    public typealias Set = PieDataSet
-    public typealias DataPoint = PieChartDataPoint
+    public typealias Set        = PieDataSet
+    public typealias DataPoint  = PieChartDataPoint
+    public typealias CTStyle    = DoughnutChartStyle
 }

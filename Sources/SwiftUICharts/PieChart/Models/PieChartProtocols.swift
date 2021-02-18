@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 // MARK: - Chart Data
 /**
  A protocol to extend functionality of `ChartData` specifically for Pie and Doughnut Charts.
@@ -17,16 +16,7 @@ import SwiftUI
   
  - Tag: PieAndDoughnutChartDataProtocol
  */
-public protocol PieAndDoughnutChartDataProtocol: ChartData {
-    
-    /**
-     Data model conatining the style data for the chart.
-     
-     # Reference
-     [CTChartStyle](x-source-tag://CTChartStyle)
-     */
-//    var chartStyle  : CTStyle { get set }
-}
+public protocol PieAndDoughnutChartDataProtocol: ChartData {}
 
 /**
  A protocol to extend functionality of `PieAndDoughnutChartDataProtocol` specifically for Pie Charts.
@@ -36,16 +26,7 @@ public protocol PieAndDoughnutChartDataProtocol: ChartData {
   
  - Tag: PieChartDataProtocol
  */
-public protocol PieChartDataProtocol : PieAndDoughnutChartDataProtocol {
-   
-    /**
-     Data model conatining the style data for the chart.
-     
-     # Reference
-     [CTChartStyle](x-source-tag://CTChartStyle)
-     */
-//    var chartStyle  : CTStyle { get set }
-}
+public protocol PieChartDataProtocol : PieAndDoughnutChartDataProtocol {}
 
 /**
  A protocol to extend functionality of `PieAndDoughnutChartDataProtocol` specifically for  Doughnut Charts.
@@ -55,16 +36,9 @@ public protocol PieChartDataProtocol : PieAndDoughnutChartDataProtocol {
   
  - Tag: DoughnutChartDataProtocol
  */
-public protocol DoughnutChartDataProtocol : PieAndDoughnutChartDataProtocol {
-    
-    /**
-     Data model conatining the style data for the chart.
-     
-     # Reference
-     [CTChartStyle](x-source-tag://CTChartStyle)
-     */
-//    var chartStyle  : CTStyle { get set }
-}
+public protocol DoughnutChartDataProtocol : PieAndDoughnutChartDataProtocol {}
+
+
 
 public protocol CTMultiPieChartDataPoints: CTChartDataPoint {}
 
