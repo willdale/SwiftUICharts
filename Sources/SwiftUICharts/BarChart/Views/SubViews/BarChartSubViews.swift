@@ -79,6 +79,8 @@ internal struct BarChartDataPointSubView<CD: BarChartData>: View {
             let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
 
             GradientStopsBar(safeStops, startPoint, endPoint, dataPoint, chartData.getMaxValue(), chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
+        } else {
+            ColourBar(.blue, dataPoint, chartData.getMaxValue(), chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
         }
         
     }
