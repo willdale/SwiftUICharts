@@ -343,9 +343,6 @@ public final class GroupedBarChartData: GroupedBarChartDataProtocol {
                 case .vertical:
                     MarkerFull(position: position)
                         .stroke(Color.primary, lineWidth: 2)
-                case .rectangle:
-                    MarkerFull(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
                 case .full:
                     MarkerFull(position: position)
                         .stroke(Color.primary, lineWidth: 2)

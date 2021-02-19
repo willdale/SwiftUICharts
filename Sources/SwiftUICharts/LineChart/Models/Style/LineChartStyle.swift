@@ -72,8 +72,7 @@ public struct LineChartStyle: CTLineChartStyle {
     public var infoBoxPlacement        : InfoBoxPlacement
     public var infoBoxValueColour      : Color
     public var infoBoxDescriptionColor : Color
-    public var markerType              : MarkerType
-    public var markerAttachemnt        : MarkerAttachemnt
+    public var markerType              : LineMarkerType
         
     public var xAxisGridStyle       : GridStyle
     public var xAxisLabelPosition   : XAxisLabelPosistion
@@ -95,7 +94,6 @@ public struct LineChartStyle: CTLineChartStyle {
     ///   - infoBoxDescriptionColor: Colour of the description part of the touch info.
     ///
     ///   - markerType: Where the marker lines come from to meet at a specified point.
-    ///   - markerAttachemnt: Where the Y and X touch markers should attach themselves to.
     ///
     ///   - xAxisGridStyle: Style of the vertical lines breaking up the chart.
     ///   - xAxisLabelPosition: Location of the X axis labels - Top or Bottom.
@@ -113,8 +111,7 @@ public struct LineChartStyle: CTLineChartStyle {
                 infoBoxValueColour      : Color             = Color.primary,
                 infoBoxDescriptionColor : Color             = Color.primary,
                 
-                markerType              : MarkerType        = .rectangle,
-                markerAttachemnt        : MarkerAttachemnt  = .line,
+                markerType              : LineMarkerType    = .indicator(style: DotStyle()),
                 
                 xAxisGridStyle      : GridStyle             = GridStyle(),
                 xAxisLabelPosition  : XAxisLabelPosistion   = .bottom,
@@ -134,7 +131,6 @@ public struct LineChartStyle: CTLineChartStyle {
         self.infoBoxDescriptionColor = infoBoxDescriptionColor
         
         self.markerType          = markerType
-        self.markerAttachemnt    = markerAttachemnt
         
         self.xAxisGridStyle      = xAxisGridStyle
         self.xAxisLabelPosition  = xAxisLabelPosition

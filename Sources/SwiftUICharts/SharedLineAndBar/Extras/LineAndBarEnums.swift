@@ -64,6 +64,8 @@ public enum YAxisLabelPosistion {
  case yAxis(specifier: String) // Places the label in the yAxis labels.
  case center(specifier: String) // Places the label in the center of chart.
  ```
+ 
+ - Tag: DisplayValue
  */
 public enum DisplayValue {
     /// No label.

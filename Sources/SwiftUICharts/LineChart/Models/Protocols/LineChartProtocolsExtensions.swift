@@ -262,48 +262,39 @@ extension LineChartDataProtocol {
         }
         return .zero
     }
-    
+
     @ViewBuilder public func markerSubView(dataSet         : LineDataSet,
                                            touchLocation   : CGPoint,
                                            chartSize       : GeometryProxy
     ) -> some View {
         
-        switch self.chartStyle.markerType {
+        switch self.chartStyle.markerType as! LineMarkerType {
         case .none:
             EmptyView()
-        case .rectangle:
-            
-            let position : CGPoint = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+        case .indicator(let style):
+
+            PosistionIndicator(fillColour: style.fillColour, lineColour: style.lineColour, lineWidth: style.lineWidth)
+                .frame(width: style.size, height: style.size)
+                .position(self.getIndicatorLocation(rect: chartSize.frame(in: .global),
                                                     dataPoints: dataSet.dataPoints,
                                                     touchLocation: touchLocation,
-                                                    lineType: dataSet.style.lineType)
-            RoundedRectangle(cornerRadius: 25.0, style: .continuous)
-                .fill(Color.clear)
-                .frame(width: 100, height: chartSize.frame(in: .local).height)
-                .position(x: position.x,
-                          y: chartSize.frame(in: .local).midY)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 25.0, style: .continuous)
-                        .stroke(Color.primary, lineWidth: 2)
-                        .shadow(color: .primary, radius: 4, x: 0, y: 0)
-                        .frame(width: 50, height: chartSize.frame(in: .local).height)
-                        .position(x: position.x,
-                                  y: chartSize.frame(in: .local).midY)
-                )
-            
-            PosistionIndicator()
-                .frame(width: 15, height: 15)
-                .position(position)
+                                                    lineType: dataSet.style.lineType))
             
         case .vertical(attachment: let attach):
             
             switch attach {
-            case .line:
-                Vertical(position: self.getIndicatorLocation(rect: chartSize.frame(in: .global),
-                                                             dataPoints: dataSet.dataPoints,
-                                                             touchLocation: touchLocation,
-                                                             lineType: dataSet.style.lineType))
+            case .line(dot: let indicator):
+                
+                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                                                         dataPoints: dataSet.dataPoints,
+                                                         touchLocation: touchLocation,
+                                                         lineType: dataSet.style.lineType)
+                
+                Vertical(position: position)
                     .stroke(Color.primary, lineWidth: 2)
+                
+                IndicatorSwitch(indicator: indicator, location: position)
+                
             case .point:
                 Vertical(position: self.getSinglePoint(touchLocation: touchLocation,
                                                        chartSize: chartSize,
@@ -314,12 +305,18 @@ extension LineChartDataProtocol {
         case .full(attachment: let attach):
             
             switch attach {
-            case .line:
-                MarkerFull(position: self.getIndicatorLocation(rect: chartSize.frame(in: .global),
-                                                               dataPoints: dataSet.dataPoints,
-                                                               touchLocation: touchLocation,
-                                                               lineType: dataSet.style.lineType))
+            case .line(dot: let indicator):
+                
+                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                                                         dataPoints: dataSet.dataPoints,
+                                                         touchLocation: touchLocation,
+                                                         lineType: dataSet.style.lineType)
+                
+                MarkerFull(position: position)
                     .stroke(Color.primary, lineWidth: 2)
+                
+                IndicatorSwitch(indicator: indicator, location: position)
+
             case .point:
                 MarkerFull(position: self.getSinglePoint(touchLocation: touchLocation,
                                                          chartSize: chartSize,
@@ -330,12 +327,18 @@ extension LineChartDataProtocol {
         case .bottomLeading(attachment: let attach):
             
             switch attach {
-            case .line:
-                MarkerBottomLeading(position: self.getIndicatorLocation(rect: chartSize.frame(in: .global),
-                                                                        dataPoints: dataSet.dataPoints,
-                                                                        touchLocation: touchLocation,
-                                                                        lineType: dataSet.style.lineType))
+            case .line(dot: let indicator):
+                
+                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                                                         dataPoints: dataSet.dataPoints,
+                                                         touchLocation: touchLocation,
+                                                         lineType: dataSet.style.lineType)
+                
+                MarkerBottomLeading(position: position)
                     .stroke(Color.primary, lineWidth: 2)
+                
+                IndicatorSwitch(indicator: indicator, location: position)
+                
             case .point:
                 MarkerBottomLeading(position: self.getSinglePoint(touchLocation: touchLocation,
                                                                   chartSize: chartSize,
@@ -346,12 +349,18 @@ extension LineChartDataProtocol {
         case .bottomTrailing(attachment: let attach):
             
             switch attach {
-            case .line:
-                MarkerBottomTrailing(position: self.getIndicatorLocation(rect: chartSize.frame(in: .global),
-                                                                         dataPoints: dataSet.dataPoints,
-                                                                         touchLocation: touchLocation,
-                                                                         lineType: dataSet.style.lineType))
+            case .line(dot: let indicator):
+                
+                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                                                         dataPoints: dataSet.dataPoints,
+                                                         touchLocation: touchLocation,
+                                                         lineType: dataSet.style.lineType)
+                
+                MarkerBottomTrailing(position: position)
                     .stroke(Color.primary, lineWidth: 2)
+                
+                IndicatorSwitch(indicator: indicator, location: position)
+                
             case .point:
                 MarkerBottomTrailing(position: self.getSinglePoint(touchLocation: touchLocation,
                                                                    chartSize: chartSize,
@@ -362,12 +371,18 @@ extension LineChartDataProtocol {
         case .topLeading(attachment: let attach):
             
             switch attach {
-            case .line:
-                MarkerTopLeading(position: self.getIndicatorLocation(rect: chartSize.frame(in: .global),
-                                                                     dataPoints: dataSet.dataPoints,
-                                                                     touchLocation: touchLocation,
-                                                                     lineType: dataSet.style.lineType))
+            case .line(dot: let indicator):
+                
+                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                                                         dataPoints: dataSet.dataPoints,
+                                                         touchLocation: touchLocation,
+                                                         lineType: dataSet.style.lineType)
+                
+                MarkerTopLeading(position: position)
                     .stroke(Color.primary, lineWidth: 2)
+                
+                IndicatorSwitch(indicator: indicator, location: position)
+                
             case .point:
                 MarkerTopLeading(position: self.getSinglePoint(touchLocation: touchLocation,
                                                                chartSize: chartSize,
@@ -378,12 +393,18 @@ extension LineChartDataProtocol {
         case .topTrailing(attachment: let attach):
             
             switch attach {
-            case .line:
-                MarkerTopTrailing(position: self.getIndicatorLocation(rect: chartSize.frame(in: .global),
-                                                                      dataPoints: dataSet.dataPoints,
-                                                                      touchLocation: touchLocation,
-                                                                      lineType: dataSet.style.lineType))
+            case .line(dot: let indicator):
+                
+                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                                                         dataPoints: dataSet.dataPoints,
+                                                         touchLocation: touchLocation,
+                                                         lineType: dataSet.style.lineType)
+                
+                MarkerTopTrailing(position: position)
                     .stroke(Color.primary, lineWidth: 2)
+                
+                IndicatorSwitch(indicator: indicator, location: position)
+                
             case .point:
                 MarkerTopTrailing(position: self.getSinglePoint(touchLocation: touchLocation,
                                                                 chartSize: chartSize,
@@ -393,4 +414,21 @@ extension LineChartDataProtocol {
         }
         
     }
+}
+
+struct IndicatorSwitch: View {
+    
+    let indicator: Dot
+    let location : CGPoint
+    
+    var body: some View {
+        switch indicator {
+        case .none: EmptyView()
+        case .style(let style):
+            PosistionIndicator(fillColour: style.fillColour, lineColour: style.lineColour, lineWidth: style.lineWidth)
+                .frame(width: style.size, height: style.size)
+                .position(location)
+        }
+    }
+    
 }

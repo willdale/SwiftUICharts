@@ -95,7 +95,10 @@ public protocol LineAndBarChartData : ChartData {
     func getXAxisLabels() -> XLabels
 }
 
+
 // MARK: - Style
+
+public protocol MarkerType {}
 
 /**
  A protocol to extend functionality of `CTChartStyle` specifically for  Line and Bar Charts.
@@ -103,10 +106,13 @@ public protocol LineAndBarChartData : ChartData {
  - Tag: CTLineAndBarChartStyle
  */
 public protocol CTLineAndBarChartStyle: CTChartStyle {
+    
+    associatedtype Mark : MarkerType
+    
     /**
      Where the marker lines come from to meet at a specified point.
      */
-    var markerType : MarkerType { get set }
+    var markerType : Mark { get set }
     
     /**
      Style of the vertical lines breaking up the chart

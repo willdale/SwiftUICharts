@@ -20,7 +20,7 @@ import SwiftUI
  */
 public protocol LineChartDataProtocol: LineAndBarChartData {
 
-    associatedtype Bob : View
+    associatedtype Marker : View
     /**
      Whether it is a normal or filled line.
      */
@@ -40,10 +40,7 @@ public protocol LineChartDataProtocol: LineAndBarChartData {
     
     func getSinglePoint(touchLocation: CGPoint, chartSize: GeometryProxy, dataSet: LineDataSet) -> CGPoint
     
-    func markerSubView(dataSet         : LineDataSet,
-                       touchLocation   : CGPoint,
-                       chartSize       : GeometryProxy
-    ) -> Bob 
+    func markerSubView(dataSet: LineDataSet, touchLocation: CGPoint, chartSize: GeometryProxy) -> Marker
 }
 
 
@@ -61,11 +58,6 @@ public protocol CTLineChartStyle : CTLineAndBarChartStyle {
      [See Baseline](x-source-tag://Baseline)
      */
     var baseline: Baseline { get set }
-    
-    /**
-     Where the Y and X touch markers should attach themselves to.
-     */
-    var markerAttachemnt : MarkerAttachemnt { get set }
 
 }
 
