@@ -17,12 +17,12 @@ import SwiftUI
  - Tag: ChartData
  */
 public protocol ChartData: ObservableObject, Identifiable {
+    
     associatedtype Set      : DataSet
     associatedtype DataPoint: CTChartDataPoint
     associatedtype CTStyle  : CTChartStyle
+    associatedtype Touch    : View
     
-    associatedtype XLabels : View
-    associatedtype Touch : View
     var id: ID { get }
     
     /**
@@ -92,18 +92,6 @@ public protocol ChartData: ObservableObject, Identifiable {
     func legendOrder() -> [LegendData]
     
     /**
-     Gets the where to display the touch overlay information.
-     - Returns: Where to display the data points
-     
-     # Reference
-     [InfoBoxPlacement](x-source-tag://InfoBoxPlacement)
-     
-     - Tag: getHeaderLocation
-     */
-    func getHeaderLocation() -> InfoBoxPlacement
-    
-    
-    /**
      Configures the legends based on the type of chart.
      
      - Tag: setupLegends
@@ -119,7 +107,7 @@ public protocol ChartData: ObservableObject, Identifiable {
     /**
     Gets the nearest data points to the touch location.
     - Parameters:
-      - touchLocation: Current location of the touch
+      - touchLocation: Current location of the touch.
       - chartSize: The size of the chart view as the parent view.
     - Returns: Array of data points.
      
@@ -130,28 +118,26 @@ public protocol ChartData: ObservableObject, Identifiable {
     /**
     Gets the location of the data point in the view.
     - Parameters:
-      - touchLocation: Current location of the touch
+      - touchLocation: Current location of the touch.
       - chartSize: The size of the chart view as the parent view.
-    - Returns: Array of points with the location on screen of data points
+    - Returns: Array of points with the location on screen of data points.
      
     - Tag: getDataPoint
     */
     func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint]
     
-    /**
-     Displays a view for the labels on the X Axis.
-     
-     Labels can come from either [CTChartDataPoint](x-source-tag://CTChartDataPoint)
-     or [ChartData](x-source-tag://ChartData)
-     
-     - Returns: An `HStack` of `Text` containin x axis labels.
-     
-     - Tag: getXAxidLabels
-     */
-    func getXAxisLabels() -> XLabels
     
+    /**
+     Takes touch location and return a view based on the chart type and configuration.
+     
+     - Parameters:
+       - touchLocation: Current location of the touch
+       - chartSize: The size of the chart view as the parent view.
+     - Returns: The relevent view for the chart type and options.
+     */
     func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> Touch
 }
+
 // MARK: - Data Sets
 /**
  Main protocol set conformace for types of Data Sets.

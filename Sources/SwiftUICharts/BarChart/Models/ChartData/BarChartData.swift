@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  BarChartData.swift
 //  
 //
 //  Created by Will Dale on 23/01/2021.
@@ -251,14 +251,6 @@ public final class BarChartData: BarChartDataProtocol {
             }
         }
     }
-    public func getYLabels() -> [Double] {
-        var labels  : [Double]  = [Double]()
-        let maxValue: Double    = self.getMaxValue()
-        for index in 0...self.chartStyle.yAxisNumberOfLabels {
-            labels.append(maxValue / Double(self.chartStyle.yAxisNumberOfLabels) * Double(index))
-        }
-        return labels
-    }
     
     // MARK: - Touch
     public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [BarChartDataPoint] {
@@ -289,7 +281,9 @@ public final class BarChartData: BarChartDataProtocol {
         return ZStack {
             ForEach(positions, id: \.self) { position in
                 
-                switch self.chartStyle.markerType  {
+                switch self.chartStyle.markerType {
+                case .none:
+                    EmptyView()
                 case .vertical:
                     MarkerFull(position: position)
                         .stroke(Color.primary, lineWidth: 2)

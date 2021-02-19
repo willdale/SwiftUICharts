@@ -113,7 +113,7 @@ public struct LineChartStyle: CTLineChartStyle {
                 infoBoxValueColour      : Color             = Color.primary,
                 infoBoxDescriptionColor : Color             = Color.primary,
                 
-                markerType              : MarkerType        = .vertical,
+                markerType              : MarkerType        = .rectangle,
                 markerAttachemnt        : MarkerAttachemnt  = .line,
                 
                 xAxisGridStyle      : GridStyle             = GridStyle(),

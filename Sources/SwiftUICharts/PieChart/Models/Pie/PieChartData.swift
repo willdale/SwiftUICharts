@@ -37,7 +37,6 @@ public final class PieChartData: PieChartDataProtocol {
         self.makeDataPoints()
     }
     
-    public func getXAxisLabels() -> some View { EmptyView() }
     public func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View { EmptyView() }
     
     public typealias Set       = PieDataSet

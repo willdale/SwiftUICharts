@@ -103,7 +103,7 @@ public struct BarChartStyle: CTBarChartStyle {
     public init(infoBoxPlacement        : InfoBoxPlacement  = .floating,
                 infoBoxValueColour      : Color             = Color.primary,
                 infoBoxDescriptionColor : Color             = Color.primary,
-                markerType              : MarkerType        = .full,
+                markerType              : MarkerType        = .full(attachment: .line),
                 
                 xAxisGridStyle      : GridStyle             = GridStyle(),
                 xAxisLabelPosition  : XAxisLabelPosistion   = .bottom,

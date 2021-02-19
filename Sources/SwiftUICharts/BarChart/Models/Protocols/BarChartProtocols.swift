@@ -13,7 +13,9 @@ import SwiftUI
  A protocol to extend functionality of `LineAndBarChartData` specifically for Bar Charts.
  
  # Reference
- [See LineAndBarChartData](x-source-tag://LineAndBarChartData)
+ - [See LineAndBarChartData](x-source-tag://LineAndBarChartData)
+ - [See LineAndBarChartData](x-source-tag://LineAndBarChartData)
+ - [See ChartData](x-source-tag://ChartData)
  
  `LineAndBarChartData` conforms to [ChartData](x-source-tag://ChartData)
  
@@ -21,7 +23,33 @@ import SwiftUI
  */
 public protocol BarChartDataProtocol: LineAndBarChartData {
         
-    var barStyle    : BarStyle { get set }
+    /**
+     Overall styling for the bars
+     */
+    var barStyle : BarStyle { get set }
+}
+
+/**
+ A protocol to extend functionality of `LineAndBarChartData` specifically for Bar Charts.
+ 
+ # Reference
+ - [See GroupedBarChartDataProtocol](x-source-tag://GroupedBarChartDataProtocol)
+ - [See BarChartDataProtocol](x-source-tag://BarChartDataProtocol)
+ - [See LineAndBarChartData](x-source-tag://LineAndBarChartData)
+ - [See ChartData](x-source-tag://ChartData)
+ 
+ `GroupedBarChartDataProtocol` conforms to [BarChartDataProtocol](x-source-tag://ChartData)
+ 
+ `LineAndBarChartData` conforms to [ChartData](x-source-tag://ChartData)
+ 
+ - Tag: GroupedBarChartDataProtocol
+ */
+public protocol GroupedBarChartDataProtocol: BarChartDataProtocol {
+    
+    /**
+     Grouping data to inform the chart about the relationship between the datapoints.
+     */
+    var groups : [GroupingData] { get set }
 }
 
 

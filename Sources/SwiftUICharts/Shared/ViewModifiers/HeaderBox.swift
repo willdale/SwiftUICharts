@@ -52,8 +52,7 @@ internal struct HeaderBox<T>: ViewModifier where T: ChartData {
         Group {
             #if !os(tvOS)
             if chartData.isGreaterThanTwo() {
-                
-                switch chartData.getHeaderLocation() {
+                switch chartData.chartStyle.infoBoxPlacement {
                 case .floating:
                     VStack(alignment: .leading) {
                         titleBox

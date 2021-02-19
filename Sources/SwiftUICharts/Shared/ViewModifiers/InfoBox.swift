@@ -15,7 +15,7 @@ internal struct InfoBox<T>: ViewModifier where T: ChartData {
     
     internal func body(content: Content) -> some View {
         VStack {
-            switch chartData.getHeaderLocation() {
+            switch chartData.chartStyle.infoBoxPlacement {
             case .floating:
                 floating
             case .fixed:

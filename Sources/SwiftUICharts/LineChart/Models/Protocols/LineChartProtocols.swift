@@ -20,6 +20,7 @@ import SwiftUI
  */
 public protocol LineChartDataProtocol: LineAndBarChartData {
 
+    associatedtype Bob : View
     /**
      Whether it is a normal or filled line.
      */
@@ -35,7 +36,14 @@ public protocol LineChartDataProtocol: LineAndBarChartData {
         - touchLocation: Location of the touch or pointer input.
      - Returns: The position to place the indicator.
      */
-    func getIndicatorLocation(rect: CGRect, dataSet: LineDataSet, touchLocation: CGPoint) -> CGPoint
+    func getIndicatorLocation(rect: CGRect, dataPoints: [LineChartDataPoint], touchLocation: CGPoint, lineType: LineType) -> CGPoint
+    
+    func getSinglePoint(touchLocation: CGPoint, chartSize: GeometryProxy, dataSet: LineDataSet) -> CGPoint
+    
+    func markerSubView(dataSet         : LineDataSet,
+                       touchLocation   : CGPoint,
+                       chartSize       : GeometryProxy
+    ) -> Bob 
 }
 
 

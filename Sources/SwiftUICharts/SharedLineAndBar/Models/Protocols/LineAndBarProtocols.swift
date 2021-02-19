@@ -19,6 +19,8 @@ import SwiftUI
 public protocol LineAndBarChartData : ChartData {
 
     associatedtype CTLineAndBarCS : CTLineAndBarChartStyle
+    associatedtype XLabels  : View
+    
     /**
      Array of strings for the labels on the X Axis instead of the labels in the data points.
 
@@ -79,6 +81,18 @@ public protocol LineAndBarChartData : ChartData {
      - Tag: getAverage
      */
     func getAverage() -> Double
+    
+    /**
+     Displays a view for the labels on the X Axis.
+     
+     Labels can come from either [CTChartDataPoint](x-source-tag://CTChartDataPoint)
+     or [ChartData](x-source-tag://ChartData)
+     
+     - Returns: An `HStack` of `Text` containin x axis labels.
+     
+     - Tag: getXAxidLabels
+     */
+    func getXAxisLabels() -> XLabels
 }
 
 // MARK: - Style

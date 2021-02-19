@@ -45,11 +45,6 @@ public protocol CTMultiPieChartDataPoints: CTChartDataPoint {}
 public protocol CTMultiPieDataSet: DataSet {}
 
 // MARK: - Pie and Doughnut
-extension PieAndDoughnutChartDataProtocol {
-    public func getHeaderLocation() -> InfoBoxPlacement {
-        return self.chartStyle.infoBoxPlacement
-    }
-}
 extension PieAndDoughnutChartDataProtocol where Set == PieDataSet {
 
     internal func makeDataPoints() {

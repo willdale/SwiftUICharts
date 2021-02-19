@@ -241,19 +241,6 @@ public final class LineChartData: LineChartDataProtocol {
         }
     }
     
-    public func getYLabels() -> [Double] {
-        var labels      : [Double]  = [Double]()
-        let dataRange   : Double = self.getRange()
-        let minValue    : Double = self.getMinValue()
-        let range       : Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
-
-        labels.append(minValue)
-        for index in 1...self.chartStyle.yAxisNumberOfLabels {
-            labels.append(minValue + range * Double(index))
-        }
-        return labels
-    }
-    
     // MARK: - Touch
     public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [LineChartDataPoint] {
         var points      : [LineChartDataPoint] = []
@@ -283,49 +270,7 @@ public final class LineChartData: LineChartDataProtocol {
     }
     
     public func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View {
-        let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
-                                                 dataSet: dataSets,
-                                                 touchLocation: touchLocation)
-        return ZStack {
-        switch self.chartStyle.markerType  {
-        case .vertical:
-            Vertical(position: position)
-                .stroke(Color.primary, lineWidth: 2)
-        case .rectangle:
-            RoundedRectangle(cornerRadius: 25.0, style: .continuous)
-                .fill(Color.clear)
-                .frame(width: 100, height: chartSize.frame(in: .local).height)
-                .position(x: position.x,
-                          y: chartSize.frame(in: .local).midY)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 25.0, style: .continuous)
-                        .stroke(Color.primary, lineWidth: 2)
-                        .shadow(color: .primary, radius: 4, x: 0, y: 0)
-                        .frame(width: 50, height: chartSize.frame(in: .local).height)
-                        .position(x: position.x,
-                                  y: chartSize.frame(in: .local).midY)
-                )
-        case .full:
-            MarkerFull(position: position)
-                .stroke(Color.primary, lineWidth: 2)
-        case .bottomLeading:
-            MarkerBottomLeading(position: position)
-                .stroke(Color.primary, lineWidth: 2)
-        case .bottomTrailing:
-            MarkerBottomTrailing(position: position)
-                .stroke(Color.primary, lineWidth: 2)
-        case .topLeading:
-            MarkerTopLeading(position: position)
-                .stroke(Color.primary, lineWidth: 2)
-        case .topTrailing:
-            MarkerTopTrailing(position: position)
-                .stroke(Color.primary, lineWidth: 2)
-        }
-        
-        PosistionIndicator()
-            .frame(width: 15, height: 15)
-            .position(position)
-        }
+        self.markerSubView(dataSet: self.dataSets, touchLocation: touchLocation, chartSize: chartSize)
     }
     
     // MARK: - Legends

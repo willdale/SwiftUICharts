@@ -36,7 +36,6 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
     internal func body(content: Content) -> some View {
         Group {
             if chartData.isGreaterThanTwo() {
- 
                 GeometryReader { geo in
                     ZStack {
                         content
@@ -47,8 +46,8 @@ internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
                                                                                 
                                         chartData.infoView.isTouchCurrent   = true
                                         chartData.infoView.touchOverlayInfo = chartData.getDataPoint(touchLocation: touchLocation, chartSize: geo)
-                                        chartData.infoView.positionX = setBoxLocationation(touchLocation: touchLocation, boxFrame: boxFrame, chartSize: geo).x
-                                        chartData.infoView.frame = geo.frame(in: .local)
+                                        chartData.infoView.positionX        = setBoxLocationation(touchLocation: touchLocation, boxFrame: boxFrame, chartSize: geo).x
+                                        chartData.infoView.frame            = geo.frame(in: .local)
                                         
                                     }
                                     .onEnded { _ in
@@ -120,18 +119,9 @@ extension View {
      Unavailable in tvOS
      */
     public func touchOverlay<T: ChartData>(chartData: T,
-                                           specifier: String = "%.0f",
-                                           markerType: MarkerType = .fullWidth
+                                           specifier: String = "%.0f"
     ) -> some View {
         self.modifier(EmptyModifier())
     }
     #endif
-}
-
-struct PosistionIndicator: View {
-        
-    var body: some View {
-        Circle()
-            .strokeBorder(Color.red, lineWidth: 3)
-    }
 }

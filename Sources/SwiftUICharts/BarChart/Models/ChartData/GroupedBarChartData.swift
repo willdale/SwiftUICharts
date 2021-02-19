@@ -175,7 +175,7 @@ import SwiftUI
  
  - Tag: GroupedBarChartData
  */
-public final class GroupedBarChartData: BarChartDataProtocol {
+public final class GroupedBarChartData: GroupedBarChartDataProtocol {
     
     // MARK: - Properties
     public let id   : UUID  = UUID()
@@ -188,8 +188,6 @@ public final class GroupedBarChartData: BarChartDataProtocol {
     @Published public var legends      : [LegendData]
     @Published public var viewData     : ChartViewData
     @Published public var infoView     : InfoViewData<GroupedBarChartDataPoint> = InfoViewData()
-    
-    //ADD TO A PROTOCOL
     @Published public var groups       : [GroupingData]
     
     public var noDataText   : Text
@@ -272,15 +270,6 @@ public final class GroupedBarChartData: BarChartDataProtocol {
         }
     }
     
-    public func getYLabels() -> [Double] {
-        var labels  : [Double]  = [Double]()
-        let maxValue: Double    = self.getMaxValue()
-        for index in 0...self.chartStyle.yAxisNumberOfLabels {
-            labels.append(maxValue / Double(self.chartStyle.yAxisNumberOfLabels) * Double(index))
-        }
-        return labels
-    }
-    
     // MARK: - Touch
     public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [GroupedBarChartDataPoint] {
         
@@ -349,6 +338,8 @@ public final class GroupedBarChartData: BarChartDataProtocol {
             ForEach(positions, id: \.self) { position in
                 
                 switch self.chartStyle.markerType  {
+                case .none:
+                    EmptyView()
                 case .vertical:
                     MarkerFull(position: position)
                         .stroke(Color.primary, lineWidth: 2)

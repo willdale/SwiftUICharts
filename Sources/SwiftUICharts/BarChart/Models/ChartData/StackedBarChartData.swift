@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public final class StackedBarChartData: BarChartDataProtocol {
+public final class StackedBarChartData: GroupedBarChartDataProtocol {
     
     // MARK: - Properties
     public let id   : UUID  = UUID()
@@ -20,7 +20,6 @@ public final class StackedBarChartData: BarChartDataProtocol {
     @Published public var legends      : [LegendData]
     @Published public var viewData     : ChartViewData
     @Published public var infoView     : InfoViewData<GroupedBarChartDataPoint> = InfoViewData()
-    
     @Published public var groups       : [GroupingData]
     
     public var noDataText   : Text
@@ -81,15 +80,6 @@ public final class StackedBarChartData: BarChartDataProtocol {
                 }
             }
         }
-    }
-    
-    public func getYLabels() -> [Double] {
-        var labels  : [Double]  = [Double]()
-        let maxValue: Double    = self.getMaxValue()
-        for index in 0...self.chartStyle.yAxisNumberOfLabels {
-            labels.append(maxValue / Double(self.chartStyle.yAxisNumberOfLabels) * Double(index))
-        }
-        return labels
     }
     
     // MARK: - Touch
@@ -194,6 +184,8 @@ public final class StackedBarChartData: BarChartDataProtocol {
             ForEach(positions, id: \.self) { position in
                 
                 switch self.chartStyle.markerType  {
+                case .none:
+                    EmptyView()
                 case .vertical:
                     MarkerFull(position: position)
                         .stroke(Color.primary, lineWidth: 2)

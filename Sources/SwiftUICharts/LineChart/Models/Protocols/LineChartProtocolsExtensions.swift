@@ -7,17 +7,33 @@
 
 import SwiftUI
 
+// Standard / Multi
+extension LineAndBarChartData where Self: LineChartDataProtocol {
+    public func getYLabels() -> [Double] {
+        var labels      : [Double]  = [Double]()
+        let dataRange   : Double = self.getRange()
+        let minValue    : Double = self.getMinValue()
+        let range       : Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
+
+        labels.append(minValue)
+        for index in 1...self.chartStyle.yAxisNumberOfLabels {
+            labels.append(minValue + range * Double(index))
+        }
+        return labels
+    }
+}
+
 // MARK: - Position Indicator
 extension LineChartDataProtocol {
-    
     public func getIndicatorLocation(rect: CGRect,
-                                     dataSet: LineDataSet,
-                                     touchLocation: CGPoint
+                                     dataPoints: [LineChartDataPoint],
+                                     touchLocation: CGPoint,
+                                     lineType: LineType
     ) -> CGPoint {
         
-        let path = getPath(style        : dataSet.style,
+        let path = getPath(lineType     : lineType,
                            rect         : rect,
-                           dataPoints   : dataSet.dataPoints,
+                           dataPoints   : dataPoints,
                            minValue     : self.getMinValue(),
                            range        : self.getRange(),
                            touchLocation: touchLocation,
@@ -38,8 +54,8 @@ extension LineChartDataProtocol {
         - isFilled: Whether it is a normal or filled line.
      - Returns: The relevent path based on the line type
      */
-    func getPath(style: LineStyle, rect: CGRect, dataPoints: [LineChartDataPoint], minValue: Double, range: Double, touchLocation: CGPoint, isFilled: Bool) -> Path {
-        switch style.lineType {
+    func getPath(lineType: LineType, rect: CGRect, dataPoints: [LineChartDataPoint], minValue: Double, range: Double, touchLocation: CGPoint, isFilled: Bool) -> Path {
+        switch lineType {
         case .line:
             return Path.straightLine(rect       : rect,
                                      dataPoints : dataPoints,
@@ -227,5 +243,154 @@ extension LineChartDataProtocol {
         
         return CGPoint(x: trimmedPoint.boundingRect.midX,
                        y: trimmedPoint.boundingRect.midY)
+    }
+}
+
+// MARK: - Markers
+extension LineChartDataProtocol {
+    
+    public func getSinglePoint(touchLocation: CGPoint, chartSize: GeometryProxy, dataSet: LineDataSet) -> CGPoint {
+        let minValue : Double = self.getMinValue()
+        let range    : Double = self.getRange()
+        
+        let xSection : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count - 1)
+        let ySection : CGFloat = chartSize.size.height / CGFloat(range)
+        let index    : Int     = Int((touchLocation.x + (xSection / 2)) / xSection)
+        if index >= 0 && index < dataSet.dataPoints.count {
+            return CGPoint(x: CGFloat(index) * xSection,
+                           y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.size.height)
+        }
+        return .zero
+    }
+    
+    @ViewBuilder public func markerSubView(dataSet         : LineDataSet,
+                                           touchLocation   : CGPoint,
+                                           chartSize       : GeometryProxy
+    ) -> some View {
+        
+        switch self.chartStyle.markerType {
+        case .none:
+            EmptyView()
+        case .rectangle:
+            
+            let position : CGPoint = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                                                    dataPoints: dataSet.dataPoints,
+                                                    touchLocation: touchLocation,
+                                                    lineType: dataSet.style.lineType)
+            RoundedRectangle(cornerRadius: 25.0, style: .continuous)
+                .fill(Color.clear)
+                .frame(width: 100, height: chartSize.frame(in: .local).height)
+                .position(x: position.x,
+                          y: chartSize.frame(in: .local).midY)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 25.0, style: .continuous)
+                        .stroke(Color.primary, lineWidth: 2)
+                        .shadow(color: .primary, radius: 4, x: 0, y: 0)
+                        .frame(width: 50, height: chartSize.frame(in: .local).height)
+                        .position(x: position.x,
+                                  y: chartSize.frame(in: .local).midY)
+                )
+            
+            PosistionIndicator()
+                .frame(width: 15, height: 15)
+                .position(position)
+            
+        case .vertical(attachment: let attach):
+            
+            switch attach {
+            case .line:
+                Vertical(position: self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                                                             dataPoints: dataSet.dataPoints,
+                                                             touchLocation: touchLocation,
+                                                             lineType: dataSet.style.lineType))
+                    .stroke(Color.primary, lineWidth: 2)
+            case .point:
+                Vertical(position: self.getSinglePoint(touchLocation: touchLocation,
+                                                       chartSize: chartSize,
+                                                       dataSet: dataSet))
+                    .stroke(Color.primary, lineWidth: 2)
+            }
+            
+        case .full(attachment: let attach):
+            
+            switch attach {
+            case .line:
+                MarkerFull(position: self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                                                               dataPoints: dataSet.dataPoints,
+                                                               touchLocation: touchLocation,
+                                                               lineType: dataSet.style.lineType))
+                    .stroke(Color.primary, lineWidth: 2)
+            case .point:
+                MarkerFull(position: self.getSinglePoint(touchLocation: touchLocation,
+                                                         chartSize: chartSize,
+                                                         dataSet: dataSet))
+                    .stroke(Color.primary, lineWidth: 2)
+            }
+            
+        case .bottomLeading(attachment: let attach):
+            
+            switch attach {
+            case .line:
+                MarkerBottomLeading(position: self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                                                                        dataPoints: dataSet.dataPoints,
+                                                                        touchLocation: touchLocation,
+                                                                        lineType: dataSet.style.lineType))
+                    .stroke(Color.primary, lineWidth: 2)
+            case .point:
+                MarkerBottomLeading(position: self.getSinglePoint(touchLocation: touchLocation,
+                                                                  chartSize: chartSize,
+                                                                  dataSet: dataSet))
+                    .stroke(Color.primary, lineWidth: 2)
+            }
+            
+        case .bottomTrailing(attachment: let attach):
+            
+            switch attach {
+            case .line:
+                MarkerBottomTrailing(position: self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                                                                         dataPoints: dataSet.dataPoints,
+                                                                         touchLocation: touchLocation,
+                                                                         lineType: dataSet.style.lineType))
+                    .stroke(Color.primary, lineWidth: 2)
+            case .point:
+                MarkerBottomTrailing(position: self.getSinglePoint(touchLocation: touchLocation,
+                                                                   chartSize: chartSize,
+                                                                   dataSet: dataSet))
+                    .stroke(Color.primary, lineWidth: 2)
+            }
+            
+        case .topLeading(attachment: let attach):
+            
+            switch attach {
+            case .line:
+                MarkerTopLeading(position: self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                                                                     dataPoints: dataSet.dataPoints,
+                                                                     touchLocation: touchLocation,
+                                                                     lineType: dataSet.style.lineType))
+                    .stroke(Color.primary, lineWidth: 2)
+            case .point:
+                MarkerTopLeading(position: self.getSinglePoint(touchLocation: touchLocation,
+                                                               chartSize: chartSize,
+                                                               dataSet: dataSet))
+                    .stroke(Color.primary, lineWidth: 2)
+            }
+            
+        case .topTrailing(attachment: let attach):
+            
+            switch attach {
+            case .line:
+                MarkerTopTrailing(position: self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                                                                      dataPoints: dataSet.dataPoints,
+                                                                      touchLocation: touchLocation,
+                                                                      lineType: dataSet.style.lineType))
+                    .stroke(Color.primary, lineWidth: 2)
+            case .point:
+                MarkerTopTrailing(position: self.getSinglePoint(touchLocation: touchLocation,
+                                                                chartSize: chartSize,
+                                                                dataSet: dataSet))
+                    .stroke(Color.primary, lineWidth: 2)
+            }
+        }
+        
     }
 }
