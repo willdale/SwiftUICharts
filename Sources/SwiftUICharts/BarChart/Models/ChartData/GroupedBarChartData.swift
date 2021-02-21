@@ -175,7 +175,7 @@ import SwiftUI
  
  - Tag: GroupedBarChartData
  */
-public final class GroupedBarChartData: GroupedBarChartDataProtocol {
+public final class GroupedBarChartData: GroupedBarChartDataProtocol, LegendProtocol {
     
     // MARK: - Properties
     public let id   : UUID  = UUID()
@@ -364,7 +364,7 @@ public final class GroupedBarChartData: GroupedBarChartDataProtocol {
     }
     
     // MARK: - Legends
-    public func setupLegends() {
+    internal func setupLegends() {
             
         for group in self.groups {
                 
@@ -401,6 +401,10 @@ public final class GroupedBarChartData: GroupedBarChartDataProtocol {
                                                    chartType  : .bar))
                 }
             }
+    }
+    
+    internal func legendOrder() -> [LegendData] {
+        return legends.sorted { $0.prioity < $1.prioity}
     }
     
     public typealias Set        = GroupedBarDataSets

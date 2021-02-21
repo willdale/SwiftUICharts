@@ -167,7 +167,7 @@ import SwiftUI
  - Tag: BarChartData
  */
 
-public final class BarChartData: BarChartDataProtocol {
+public final class BarChartData: BarChartDataProtocol, LegendProtocol {
     // MARK: - Properties
     public let id   : UUID  = UUID()
 
@@ -308,7 +308,7 @@ public final class BarChartData: BarChartDataProtocol {
     }
     
     // MARK: - Legends
-    public func setupLegends() {
+    internal func setupLegends() {
         
         switch self.barStyle.colourFrom {
         case .barStyle:
@@ -385,6 +385,10 @@ public final class BarChartData: BarChartDataProtocol {
                 }
             }
         }
+    }
+    
+    internal func legendOrder() -> [LegendData] {
+        return legends.sorted { $0.prioity < $1.prioity}
     }
     
     public typealias Set            = BarDataSet

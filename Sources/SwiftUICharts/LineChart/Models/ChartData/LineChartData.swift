@@ -153,7 +153,7 @@ import SwiftUI
  
  - Tag: LineChartData
  */
-public final class LineChartData: LineChartDataProtocol {
+public final class LineChartData: LineChartDataProtocol, LegendProtocol {
     
     // MARK: - Properties
     public let id   : UUID  = UUID()
@@ -169,8 +169,8 @@ public final class LineChartData: LineChartDataProtocol {
     
     public var noDataText   : Text
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
-    
-    // MARK: - Initializers
+        
+    // MARK: - Initializer
     /// Initialises a Single Line Chart.
     ///
     /// - Parameters:
@@ -195,6 +195,7 @@ public final class LineChartData: LineChartDataProtocol {
         self.chartType      = (chartType: .line, dataSetType: .single)
         self.setupLegends()
     }
+    // , calc        : @escaping (LineDataSet) -> LineDataSet
     
     // MARK: - Labels
     public func getXAxisLabels() -> some View {
@@ -241,6 +242,16 @@ public final class LineChartData: LineChartDataProtocol {
         }
     }
     
+
+    // MARK: - Points
+    public func getPointMarker() -> some View {
+        PointsSubView(dataSets  : dataSets,
+                      minValue  : self.getMinValue(),
+                      range     : self.getRange(),
+                      animation : self.chartStyle.globalAnimation,
+                      isFilled  : self.isFilled)
+    }
+    
     // MARK: - Touch
     public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [LineChartDataPoint] {
         var points      : [LineChartDataPoint] = []
@@ -274,7 +285,7 @@ public final class LineChartData: LineChartDataProtocol {
     }
     
     // MARK: - Legends
-    public func setupLegends() {
+    internal func setupLegends() {
         
         if dataSets.style.colourType == .colour,
            let colour = dataSets.style.colour
@@ -311,7 +322,7 @@ public final class LineChartData: LineChartDataProtocol {
                                            chartType  : .line))
         }
     }
-    
+
     // MARK: - Data Functions
     public func getRange() -> Double {
         switch self.chartStyle.baseline {
@@ -332,6 +343,10 @@ public final class LineChartData: LineChartDataProtocol {
         case .zero:
             return 0
         }
+    }
+    
+    internal func legendOrder() -> [LegendData] {
+        return legends.sorted { $0.prioity < $1.prioity}
     }
     
     public typealias Set       = LineDataSet

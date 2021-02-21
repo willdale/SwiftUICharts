@@ -166,7 +166,7 @@ import SwiftUI
  
  - Tag: LineChartData
  */
-public final class MultiLineChartData: LineChartDataProtocol {
+public final class MultiLineChartData: LineChartDataProtocol, LegendProtocol {
     
     // MARK: - Properties
     public let id   : UUID  = UUID()
@@ -254,6 +254,17 @@ public final class MultiLineChartData: LineChartDataProtocol {
         }
     }
     
+    // MARK: - Points
+    public func getPointMarker() -> some View {
+        ForEach(self.dataSets.dataSets, id: \.self) { dataSet in
+            PointsSubView(dataSets  : dataSet,
+                          minValue  : self.getMinValue(),
+                          range     : self.getRange(),
+                          animation : self.chartStyle.globalAnimation,
+                          isFilled  : self.isFilled)
+        }
+    }
+    
     // MARK: - Touch
     public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [LineChartDataPoint] {
         var points : [LineChartDataPoint] = []
@@ -292,9 +303,19 @@ public final class MultiLineChartData: LineChartDataProtocol {
             }
         }
     }
+    
+//    public func getPointMarker() -> some View {
+//        ForEach(self.dataSets.dataSets, id: \.self) { dataSet in
+//            PointsSubView(dataSets  : dataSet,
+//                          minValue  : self.getMinValue(),
+//                          range     : self.getRange(),
+//                          animation : self.chartStyle.globalAnimation,
+//                          isFilled  : self.isFilled)
+//        }
+//    }
 
     // MARK: - Legends
-    public func setupLegends() {
+    internal func setupLegends() {
         for dataSet in dataSets.dataSets {
             if dataSet.style.colourType == .colour,
                let colour = dataSet.style.colour
@@ -354,6 +375,11 @@ public final class MultiLineChartData: LineChartDataProtocol {
             return 0
         }
     }
+    
+    internal func legendOrder() -> [LegendData] {
+        return legends.sorted { $0.prioity < $1.prioity}
+    }
+
     
     public typealias Set = MultiLineDataSet
     public typealias DataPoint = LineChartDataPoint

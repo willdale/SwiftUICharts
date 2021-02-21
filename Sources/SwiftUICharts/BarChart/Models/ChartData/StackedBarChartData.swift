@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public final class StackedBarChartData: GroupedBarChartDataProtocol {
+public final class StackedBarChartData: GroupedBarChartDataProtocol, LegendProtocol {
     
     // MARK: - Properties
     public let id   : UUID  = UUID()
@@ -210,7 +210,7 @@ public final class StackedBarChartData: GroupedBarChartDataProtocol {
     }
     
     // MARK: - Legends
-    public func setupLegends() {
+    internal func setupLegends() {
         for group in self.groups {
                 
                 if group.colourType == .colour,
@@ -247,6 +247,12 @@ public final class StackedBarChartData: GroupedBarChartDataProtocol {
                 }
             }
     }
+    
+    internal func legendOrder() -> [LegendData] {
+        return legends.sorted { $0.prioity < $1.prioity}
+    }
+
+    
     public typealias Set        = GroupedBarDataSets
     public typealias DataPoint  = GroupedBarChartDataPoint
     public typealias CTStyle    = BarChartStyle
