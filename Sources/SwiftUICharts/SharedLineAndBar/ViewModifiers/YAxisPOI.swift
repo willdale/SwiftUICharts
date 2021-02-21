@@ -129,10 +129,9 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
                     .overlay(DiamondShape()
                                 .stroke(lineColour, style: strokeStyle)
                     )
-                    .position(x: startAnimation ? geo.size.width / 2 : 0,
+                    .position(x: geo.size.width / 2,
                               y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo))
                     .opacity(startAnimation ? 1 : 0)
-                    .animation(chartData.chartStyle.globalAnimation.speed(2))
             }
         }
     }
