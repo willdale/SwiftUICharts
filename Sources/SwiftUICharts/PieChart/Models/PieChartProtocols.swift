@@ -73,7 +73,7 @@ extension PieAndDoughnutChartDataProtocol where Set == PieDataSet {
         return [HashablePoint(x: touchLocation.x, y: touchLocation.y)]
     }
     
-    public func setupLegends() {
+    internal func setupLegends() {
         for data in dataSets.dataPoints {
             if let legend = data.pointDescription {
                 self.legends.append(LegendData(id         : data.id,
