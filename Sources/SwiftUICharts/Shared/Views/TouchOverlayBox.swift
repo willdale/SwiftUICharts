@@ -43,16 +43,16 @@ internal struct TouchOverlayBox<D: CTChartDataPoint>: View {
             ForEach(selectedPoints, id: \.self) { point in
                 if ignoreZero && point.value != 0 {
                     Text("\(point.value, specifier: specifier)")
-                        .font(.body)
+                        .font(.subheadline)
                         .foregroundColor(valueColour)
                 } else if !ignoreZero {
                     Text("\(point.value, specifier: specifier)")
-                        .font(.body)
+                        .font(.subheadline)
                         .foregroundColor(valueColour)
                 }
                 if let label = point.pointDescription {
                     Text(label)
-                        .font(.body)
+                        .font(.subheadline)
                         .foregroundColor(descriptionColour)
                 }
             }

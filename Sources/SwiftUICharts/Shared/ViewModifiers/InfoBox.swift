@@ -47,16 +47,31 @@ internal struct InfoBox<T>: ViewModifier where T: ChartData {
             ForEach(chartData.infoView.touchOverlayInfo, id: \.self) { point in
                 HStack {
                     Text("\(point.value, specifier: chartData.infoView.touchSpecifier)")
-                        .font(.body)
+                        .font(.subheadline)
                         .foregroundColor(chartData.chartStyle.infoBoxValueColour)
                     if let label = point.pointDescription {
                         Text(label)
-                            .font(.body)
+                            .font(.subheadline)
                             .foregroundColor(chartData.chartStyle.infoBoxDescriptionColor)
                     }
                 }
             }
         }.frame(height: 40)
+        .padding(.horizontal, 6)
+        .background(
+            Group {
+                if chartData.infoView.isTouchCurrent {
+                    RoundedRectangle(cornerRadius: 5.0, style: .continuous)
+                        .fill(Color.systemsBackground)
+                        .overlay(
+                            Group {
+                                RoundedRectangle(cornerRadius: 5.0)
+                                    .stroke(Color.primary, lineWidth: 1)
+                            }
+                        )
+                }
+            }
+        )
     }
     
     
