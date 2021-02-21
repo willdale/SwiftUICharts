@@ -21,6 +21,8 @@ import SwiftUI
 public protocol LineChartDataProtocol: LineAndBarChartData {
 
     associatedtype Marker : View
+    associatedtype Points : View
+    
     /**
      Whether it is a normal or filled line.
      */
@@ -41,8 +43,9 @@ public protocol LineChartDataProtocol: LineAndBarChartData {
     func getSinglePoint(touchLocation: CGPoint, chartSize: GeometryProxy, dataSet: LineDataSet) -> CGPoint
     
     func markerSubView(dataSet: LineDataSet, touchLocation: CGPoint, chartSize: GeometryProxy) -> Marker
+    
+    func getPointMarker() -> Points
 }
-
 
 
 // MARK: - Style
