@@ -38,14 +38,49 @@ public protocol PieChartDataProtocol : PieAndDoughnutChartDataProtocol {}
  */
 public protocol DoughnutChartDataProtocol : PieAndDoughnutChartDataProtocol {}
 
+public protocol MultiPieChartDataProtocol : PieAndDoughnutChartDataProtocol {}
 
 
-public protocol CTMultiPieChartDataPoints: CTChartDataPoint {}
 
+
+// MARK: - DataSet
 public protocol CTMultiPieDataSet: DataSet {}
 
-// MARK: - Pie and Doughnut
-extension PieAndDoughnutChartDataProtocol where Set == PieDataSet {
+extension PieAndDoughnutChartDataProtocol where Set == MultiPieDataSet, DataPoint == MultiPieDataPoint {
+    internal func makeDataPoints() {
+        let total       = self.dataSets.dataPoints.reduce(0) { $0 + $1.value }
+        var startAngle  = -Double.pi / 2
+        
+        self.dataSets.dataPoints.indices.forEach { (point) in
+            let amount = .pi * 2 * (self.dataSets.dataPoints[point].value / total)
+
+            self.dataSets.dataPoints[point].startAngle  = startAngle
+            self.dataSets.dataPoints[point].amount      = amount
+ 
+            
+            let layerTotal       = self.dataSets.dataPoints[point].layerDataPoints?.reduce(0) { $0 + $1.value } ?? 0
+            var layerStartAngle  = startAngle
+            
+            self.dataSets.dataPoints[point].layerDataPoints?.indices.forEach { (layer) in
+                                 
+                let layerValue    =  self.dataSets.dataPoints[point].layerDataPoints?[layer].value ?? 0
+                let layerAmount   = amount * (layerValue / layerTotal)
+                
+                self.dataSets.dataPoints[point].layerDataPoints?[layer].startAngle  = layerStartAngle
+                self.dataSets.dataPoints[point].layerDataPoints?[layer].amount      = layerAmount
+                
+                
+                layerStartAngle += layerAmount
+                
+            }
+            startAngle += amount
+        }
+    }
+}
+
+// * (180 / Double.pi)
+
+extension PieAndDoughnutChartDataProtocol where Set == PieDataSet, DataPoint == PieChartDataPoint {
 
     internal func makeDataPoints() {
         let total       = self.dataSets.dataPoints.reduce(0) { $0 + $1.value }
@@ -102,7 +137,29 @@ extension PieAndDoughnutChartDataProtocol where Set == PieDataSet {
     }
 }
 
-// MARK: Style
+
+
+
+// MARK: - DataPoints
+
+/**
+ A protocol to extend functionality of `CTChartDataPoint` specifically for Pie and Doughnut Charts.
+ 
+ Currently empty.
+ 
+ - Tag: CTPieDataPoint
+ */
+public protocol CTPieDataPoint: CTChartDataPoint {
+    var startAngle  : Double { get set }
+    var amount      : Double { get set }
+}
+
+public protocol CTMultiPieChartDataPoints: CTChartDataPoint {}
+
+
+
+
+// MARK: - Style
 /**
  A protocol to extend functionality of `CTChartStyle` specifically for  Pie and Doughnut Charts.
  
@@ -135,20 +192,3 @@ public protocol CTDoughnutChartStyle: CTPieAndDoughnutChartStyle {
     */
     var strokeWidth: CGFloat { get set }
 }
-
-
-// MARK: DataPoints
-
-/**
- A protocol to extend functionality of `CTChartDataPoint` specifically for Pie and Doughnut Charts.
- 
- Currently empty.
- 
- - Tag: CTPieDataPoint
- */
-public protocol CTPieDataPoint: CTChartDataPoint {
-    var startAngle  : Double { get set }
-    var amount      : Double { get set }
-}
-
-
