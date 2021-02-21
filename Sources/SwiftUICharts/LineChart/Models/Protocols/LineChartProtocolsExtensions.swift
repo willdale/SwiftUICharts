@@ -262,13 +262,14 @@ extension LineChartDataProtocol {
         }
         return .zero
     }
-
+}
+extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType {
     @ViewBuilder public func markerSubView(dataSet         : LineDataSet,
                                            touchLocation   : CGPoint,
                                            chartSize       : GeometryProxy
     ) -> some View {
         
-        switch self.chartStyle.markerType as! LineMarkerType {
+        switch self.chartStyle.markerType {
         case .none:
             EmptyView()
         case .indicator(let style):
@@ -412,7 +413,6 @@ extension LineChartDataProtocol {
                     .stroke(Color.primary, lineWidth: 2)
             }
         }
-        
     }
 }
 
