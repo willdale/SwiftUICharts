@@ -80,28 +80,12 @@ public protocol ChartData: ObservableObject, Identifiable {
     */
     var chartType: (chartType: ChartType, dataSetType: DataSetType) { get }
     
-    /**
-    Sets the order the Legends are layed out in.
-     - Returns: Ordered array of Legends.
-     
-     # Reference
-     [LegendData](x-source-tag://LegendData)
-     
-     - Tag: legendOrder
-    */
-    func legendOrder() -> [LegendData]
-    
-    /**
-     Configures the legends based on the type of chart.
-     
-     - Tag: setupLegends
-     */
-    func setupLegends()
-    
+
     /**
      Returns whether there are two or more dataPoints
      */
     func isGreaterThanTwo() -> Bool
+    
     
     // MARK: Touch
     /**
@@ -136,7 +120,33 @@ public protocol ChartData: ObservableObject, Identifiable {
      - Returns: The relevent view for the chart type and options.
      */
     func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> Touch
+    
+  
 }
+
+internal protocol LegendProtocol {
+    
+    /**
+    Sets the order the Legends are layed out in.
+     - Returns: Ordered array of Legends.
+     
+     # Reference
+     [LegendData](x-source-tag://LegendData)
+     
+     - Tag: legendOrder
+    */
+    func legendOrder() -> [LegendData]
+    
+    /**
+     Configures the legends based on the type of chart.
+     
+     - Tag: setupLegends
+     */
+    func setupLegends()
+}
+
+
+
 
 // MARK: - Data Sets
 /**
