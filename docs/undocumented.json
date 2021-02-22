@@ -1,0 +1,215 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/BarStyle.swift",
+      "line": 117,
+      "symbol": "CornerRadius.init(top:bottom:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Views/BarChartView.swift",
+      "line": 10,
+      "symbol": "BarChart",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Views/BarChartView.swift",
+      "line": 11,
+      "symbol": "BarChart.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/LineStyle.swift",
+      "line": 18,
+      "symbol": "LineStyle.baseline",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/LineStyle.swift",
+      "line": 20,
+      "symbol": "LineStyle.strokeStyle",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/LineStyle.swift",
+      "line": 144,
+      "symbol": "LineStyle.Baseline",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/LineStyle.swift",
+      "line": 145,
+      "symbol": "LineStyle.Baseline.minimumValue",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/LineStyle.swift",
+      "line": 146,
+      "symbol": "LineStyle.Baseline.minimumWithMaximum(of:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/LineStyle.swift",
+      "line": 147,
+      "symbol": "LineStyle.Baseline.zero",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Views/LineChart.swift",
+      "line": 10,
+      "symbol": "LineChart",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Views/LineChart.swift",
+      "line": 11,
+      "symbol": "LineChart.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Views/LineChart.swift",
+      "line": 17,
+      "symbol": "FilledLineChart",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Views/LineChart.swift",
+      "line": 18,
+      "symbol": "FilledLineChart.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Extras/Enums.swift",
+      "line": 89,
+      "symbol": "ColourFrom.barStyle",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Extras/Enums.swift",
+      "line": 90,
+      "symbol": "ColourFrom.dataPoints",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Extras/Enums.swift",
+      "line": 176,
+      "symbol": "XAxisLabelPosistion.top",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Extras/Enums.swift",
+      "line": 177,
+      "symbol": "XAxisLabelPosistion.bottom",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Extras/Enums.swift",
+      "line": 206,
+      "symbol": "YAxisLabelPosistion.leading",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Extras/Enums.swift",
+      "line": 207,
+      "symbol": "YAxisLabelPosistion.trailing",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/ChartData.swift",
+      "line": 37,
+      "symbol": "ChartData.noDataText",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/GradientStop.swift",
+      "line": 14,
+      "symbol": "GradientStop.color",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/GradientStop.swift",
+      "line": 15,
+      "symbol": "GradientStop.location",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/GradientStop.swift",
+      "line": 17,
+      "symbol": "GradientStop.init(color:location:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/GridStyle.swift",
+      "line": 16,
+      "symbol": "GridStyle.lineColour",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/GridStyle.swift",
+      "line": 17,
+      "symbol": "GridStyle.lineWidth",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/GridStyle.swift",
+      "line": 18,
+      "symbol": "GridStyle.dash",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/GridStyle.swift",
+      "line": 19,
+      "symbol": "GridStyle.dashPhase",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Stroke.swift",
+      "line": 20,
+      "symbol": "Stroke.init(lineWidth:lineCap:lineJoin:miterLimit:dash:dashPhase:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Shapes/DiamondShape.swift",
+      "line": 10,
+      "symbol": "DiamondShape",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts/Sources/SwiftUICharts/Shared/Views/CustomNoDataView.swift",
+      "line": 10,
+      "symbol": "CustomNoDataView",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/willdale/Documents/Developer/iOS/Charts/SwiftUICharts"
+}

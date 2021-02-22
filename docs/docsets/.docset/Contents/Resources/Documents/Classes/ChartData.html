@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ChartData Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/ChartData" class="dashAnchor"></a>
+    <a title="ChartData Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html"> Docs</a> (81% documented)</p>
+        <p class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html"> Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        ChartData Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/ChartData.html">ChartData</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/CalculationType.html">CalculationType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ChartType.html">ChartType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ColourFrom.html">ColourFrom</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ColourType.html">ColourType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DisplayValue.html">DisplayValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/InfoBoxPlacement.html">InfoBoxPlacement</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LabelsFrom.html">LabelsFrom</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LineType.html">LineType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/MarkerLineType.html">MarkerLineType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/PointShape.html">PointShape</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/PointType.html">PointType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/XAxisLabelPosistion.html">XAxisLabelPosistion</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/YAxisLabelPosistion.html">YAxisLabelPosistion</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/View.html">View</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/BarChart.html">BarChart</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/BarStyle.html">BarStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ChartDataPoint.html">ChartDataPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ChartMetadata.html">ChartMetadata</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ChartStyle.html">ChartStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CornerRadius.html">CornerRadius</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CustomNoDataView.html">CustomNoDataView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiamondShape.html">DiamondShape</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/FilledLineChart.html">FilledLineChart</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GradientStop.html">GradientStop</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GridStyle.html">GridStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/LineChart.html">LineChart</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/LineStyle.html">LineStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/LineStyle/Baseline.html">– Baseline</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PointStyle.html">PointStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Stroke.html">Stroke</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>ChartData</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">ChartData</span> <span class="p">:</span> <span class="kt">ObservableObject</span><span class="p">,</span> <span class="kt">Identifiable</span></code></pre>
+
+                </div>
+              </div>
+            <p>The central model from which the chart is drawn.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:s12IdentifiableP2id2IDQzvp"></a>
+                    <a name="//apple_ref/swift/Property/id" class="dashAnchor"></a>
+                    <a class="token" href="#/s:s12IdentifiableP2id2IDQzvp">id</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">UUID</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts9ChartDataC10dataPointsSayAA0cD5PointVGvp"></a>
+                    <a name="//apple_ref/swift/Property/dataPoints" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts9ChartDataC10dataPointsSayAA0cD5PointVGvp">dataPoints</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Data model containing the datapoints: Value, Label, Description and Date. Individual colouring for bar chart.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">dataPoints</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/ChartDataPoint.html">ChartDataPoint</a></span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts9ChartDataC8metadataAA0C8MetadataVSgvp"></a>
+                    <a name="//apple_ref/swift/Property/metadata" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts9ChartDataC8metadataAA0C8MetadataVSgvp">metadata</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Data model containing: the charts Title, the charts Subtitle and the Line Legend.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">metadata</span><span class="p">:</span> <span class="kt"><a href="../Structs/ChartMetadata.html">ChartMetadata</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts9ChartDataC11xAxisLabelsSaySSGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/xAxisLabels" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts9ChartDataC11xAxisLabelsSaySSGSgvp">xAxisLabels</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Array of strings for the labels on the X Axis instead of the the dataPoints labels.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">xAxisLabels</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts9ChartDataC10chartStyleAA0cF0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/chartStyle" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts9ChartDataC10chartStyleAA0cF0Vvp">chartStyle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Data model conatining the style data for the chart.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">chartStyle</span><span class="p">:</span> <span class="kt"><a href="../Structs/ChartStyle.html">ChartStyle</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts9ChartDataC9lineStyleAA04LineF0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/lineStyle" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts9ChartDataC9lineStyleAA04LineF0Vvp">lineStyle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Data model conatining the style data for the line chart.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">lineStyle</span><span class="p">:</span> <span class="kt"><a href="../Structs/LineStyle.html">LineStyle</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts9ChartDataC8barStyleAA03BarF0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/barStyle" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts9ChartDataC8barStyleAA03BarF0Vvp">barStyle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Data model conatining the style data for the line chart.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">barStyle</span><span class="p">:</span> <span class="kt"><a href="../Structs/BarStyle.html">BarStyle</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts9ChartDataC10pointStyleAA05PointF0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/pointStyle" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts9ChartDataC10pointStyleAA05PointF0Vvp">pointStyle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Data model containing the style data for the data point markers.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">pointStyle</span><span class="p">:</span> <span class="kt"><a href="../Structs/PointStyle.html">PointStyle</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts9ChartDataC02noD4Text0A2UI0F0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/noDataText" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts9ChartDataC02noD4Text0A2UI0F0Vvp">noDataText</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">noDataText</span><span class="p">:</span> <span class="kt">Text</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/init%3A%20Calculations"></a>
+                <a name="//apple_ref/swift/Section/init: Calculations" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/init%3A%20Calculations"></a>
+                  <h3 class="section-name"><p>init: Calculations</p>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts9ChartDataC10dataPoints8metadata11xAxisLabels10chartStyle04lineK003barK005pointK012calculationsACSayAA0cD5PointVG_AA0C8MetadataVSgSaySSGSgAA0cK0VAA04LineK0VAA03BarK0VAA0pK0VAA15CalculationTypeOtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(dataPoints:metadata:xAxisLabels:chartStyle:lineStyle:barStyle:pointStyle:calculations:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts9ChartDataC10dataPoints8metadata11xAxisLabels10chartStyle04lineK003barK005pointK012calculationsACSayAA0cD5PointVG_AA0C8MetadataVSgSaySSGSgAA0cK0VAA04LineK0VAA03BarK0VAA0pK0VAA15CalculationTypeOtcfc">init(dataPoints:<wbr>metadata:<wbr>xAxisLabels:<wbr>chartStyle:<wbr>lineStyle:<wbr>barStyle:<wbr>pointStyle:<wbr>calculations:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>ChartData is the central model from which the chart is drawn.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">dataPoints</span>  <span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/ChartDataPoint.html">ChartDataPoint</a></span><span class="p">],</span>
+            <span class="nv">metadata</span>    <span class="p">:</span> <span class="kt"><a href="../Structs/ChartMetadata.html">ChartMetadata</a></span><span class="p">?</span>    <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+            <span class="nv">xAxisLabels</span> <span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span>         <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+            <span class="nv">chartStyle</span>  <span class="p">:</span> <span class="kt"><a href="../Structs/ChartStyle.html">ChartStyle</a></span>        <span class="o">=</span> <span class="kt"><a href="../Structs/ChartStyle.html">ChartStyle</a></span><span class="p">(),</span>
+            <span class="nv">lineStyle</span>   <span class="p">:</span> <span class="kt"><a href="../Structs/LineStyle.html">LineStyle</a></span>         <span class="o">=</span> <span class="kt"><a href="../Structs/LineStyle.html">LineStyle</a></span><span class="p">(),</span>
+            <span class="nv">barStyle</span>    <span class="p">:</span> <span class="kt"><a href="../Structs/BarStyle.html">BarStyle</a></span>          <span class="o">=</span> <span class="kt"><a href="../Structs/BarStyle.html">BarStyle</a></span><span class="p">(),</span>
+            <span class="nv">pointStyle</span>  <span class="p">:</span> <span class="kt"><a href="../Structs/PointStyle.html">PointStyle</a></span>        <span class="o">=</span> <span class="kt"><a href="../Structs/PointStyle.html">PointStyle</a></span><span class="p">(),</span>
+            <span class="nv">calculations</span><span class="p">:</span> <span class="kt"><a href="../Enums/CalculationType.html">CalculationType</a></span>   <span class="o">=</span> <span class="o">.</span><span class="k">none</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>dataPoints</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array of ChartDataPoints.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>metadata</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data to fill in the metadata box above the chart.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>xAxisLabels</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array of Strings for when there are too many data points to show all xAxisLabels.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>chartStyle</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters for the aesthetic of the chart.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>lineStyle</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters for the aesthetic of the line chart.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>barStyle</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters for the aesthetic of the bar chart.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>pointStyle</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters for the aesthetic of the data point markers.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>calculations</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Choose whether to perform calculations on the data points. If so then by what means.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/init%3A%20Custom%20Calculations"></a>
+                <a name="//apple_ref/swift/Section/init: Custom Calculations" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/init%3A%20Custom%20Calculations"></a>
+                  <h3 class="section-name"><p>init: Custom Calculations</p>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts9ChartDataC10dataPoints8metadata11xAxisLabels10chartStyle04lineK003barK005pointK010customCalcACSayAA0cD5PointVG_AA0C8MetadataVSgSaySSGSgAA0cK0VAA04LineK0VAA03BarK0VAA0qK0VANSgANctcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(dataPoints:metadata:xAxisLabels:chartStyle:lineStyle:barStyle:pointStyle:customCalc:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts9ChartDataC10dataPoints8metadata11xAxisLabels10chartStyle04lineK003barK005pointK010customCalcACSayAA0cD5PointVG_AA0C8MetadataVSgSaySSGSgAA0cK0VAA04LineK0VAA03BarK0VAA0qK0VANSgANctcfc">init(dataPoints:<wbr>metadata:<wbr>xAxisLabels:<wbr>chartStyle:<wbr>lineStyle:<wbr>barStyle:<wbr>pointStyle:<wbr>customCalc:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>ChartData is the central model from which the chart is drawn. This init has the option to add</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">dataPoints</span>  <span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/ChartDataPoint.html">ChartDataPoint</a></span><span class="p">],</span>
+            <span class="nv">metadata</span>    <span class="p">:</span> <span class="kt"><a href="../Structs/ChartMetadata.html">ChartMetadata</a></span><span class="p">?</span>    <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+            <span class="nv">xAxisLabels</span> <span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span>         <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+            <span class="nv">chartStyle</span>  <span class="p">:</span> <span class="kt"><a href="../Structs/ChartStyle.html">ChartStyle</a></span>        <span class="o">=</span> <span class="kt"><a href="../Structs/ChartStyle.html">ChartStyle</a></span><span class="p">(),</span>
+            <span class="nv">lineStyle</span>   <span class="p">:</span> <span class="kt"><a href="../Structs/LineStyle.html">LineStyle</a></span>         <span class="o">=</span> <span class="kt"><a href="../Structs/LineStyle.html">LineStyle</a></span><span class="p">(),</span>
+            <span class="nv">barStyle</span>    <span class="p">:</span> <span class="kt"><a href="../Structs/BarStyle.html">BarStyle</a></span>          <span class="o">=</span> <span class="kt"><a href="../Structs/BarStyle.html">BarStyle</a></span><span class="p">(),</span>
+            <span class="nv">pointStyle</span>  <span class="p">:</span> <span class="kt"><a href="../Structs/PointStyle.html">PointStyle</a></span>        <span class="o">=</span> <span class="kt"><a href="../Structs/PointStyle.html">PointStyle</a></span><span class="p">(),</span>
+            <span class="nv">customCalc</span>  <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/ChartDataPoint.html">ChartDataPoint</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/ChartDataPoint.html">ChartDataPoint</a></span><span class="p">]?</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>dataPoints</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array of ChartDataPoints.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>metadata</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data to fill in the metadata box above the chart.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>xAxisLabels</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array of Strings for when there are too many data points to show all xAxisLabels.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>chartStyle</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters for the aesthetic of the chart.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>lineStyle</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters for the aesthetic of the line chart.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>barStyle</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters for the aesthetic of the bar chart.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>pointStyle</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters for the aesthetic of the data point markers.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>customCalc</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Allows for custom calculations to be performed on the input data points before the chart is drawn custom calculations.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2021 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2021-02-22)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
