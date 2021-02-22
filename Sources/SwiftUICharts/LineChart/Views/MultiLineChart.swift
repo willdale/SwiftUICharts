@@ -13,14 +13,14 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
     
     private let minValue : Double
     private let range    : Double
-    
-    @State var startAnimation : Bool = false
-    
+
     public init(chartData: ChartData) {
         self.chartData  = chartData
         self.minValue   = chartData.getMinValue()
         self.range      = chartData.getRange()
     }
+    
+    @State private var startAnimation : Bool = false
     
     public var body: some View {
         

@@ -101,7 +101,7 @@ public struct LineDataSet: CTLineChartDataSet {
     ///   - pointStyle: Styling information for the data point markers.
     ///   - style: Styling for how the line will be drawin.
     public init(dataPoints  : [LineChartDataPoint],
-                legendTitle : String,
+                legendTitle : String     = "",
                 pointStyle  : PointStyle = PointStyle(),
                 style       : LineStyle  = LineStyle()
     ) {

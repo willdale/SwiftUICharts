@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public class PieChartData: PieChartDataProtocol {
+public final class PieChartData: PieChartDataProtocol, LegendProtocol {
     
     @Published public var id            : UUID = UUID()
     @Published public var dataSets      : PieDataSet
@@ -37,8 +37,14 @@ public class PieChartData: PieChartDataProtocol {
         self.makeDataPoints()
     }
     
+    public func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View { EmptyView() }
     
-    public typealias Set = PieDataSet
+    internal func legendOrder() -> [LegendData] {
+        return legends.sorted { $0.prioity < $1.prioity}
+    }
+    
+    public typealias Set       = PieDataSet
     public typealias DataPoint = PieChartDataPoint
+    public typealias CTStyle   = PieChartStyle
 }
 

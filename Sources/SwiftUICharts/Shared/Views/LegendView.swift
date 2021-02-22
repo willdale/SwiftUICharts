@@ -36,26 +36,47 @@ internal struct LegendView<T>: View where T: ChartData {
                 case .bar:
 
                     bar(legend)
-//                        .if(self.scaleLegend(legend: legend)) { $0.scaleEffect(1.2, anchor: .leading) }
+                        .if(scaleLegendBar(legend: legend)) { $0.scaleEffect(1.2, anchor: .leading) }
                 case .pie:
 
                     pie(legend)
-                        .if(chartData.infoView.isTouchCurrent && legend.id == chartData.infoView.touchOverlayInfo[0].id as! UUID) { $0.scaleEffect(1.2, anchor: .leading) }
+                        .if(scaleLegendPie(legend: legend)) {
+                            $0.scaleEffect(1.2, anchor: .leading)
+                        }
                 }
             }
         }.id(UUID())
     }
-    private func scaleLegend(legend: LegendData) -> Bool {
-        var matched : Bool = false
-        chartData.infoView.touchOverlayInfo.forEach { (dataPoint) in
-            if matched { return }
-            if legend.id == dataPoint.id as! UUID {
-                matched = true
+    private func scaleLegendBar(legend: LegendData) -> Bool {
+        
+        if chartData is BarChartData {
+            if let datapointID = chartData.infoView.touchOverlayInfo.first?.id as? UUID {
+                return chartData.infoView.isTouchCurrent && legend.id == datapointID
+            } else {
+                return false
             }
+        } else if chartData is GroupedBarChartData || chartData is StackedBarChartData {
+            if let datapoint = chartData.infoView.touchOverlayInfo.first as? GroupedBarChartDataPoint {
+                return chartData.infoView.isTouchCurrent && legend.colour == datapoint.group.colour
+            } else {
+                return false
+            }
+        } else {
+            return false
         }
-        return matched
     }
-    
+    private func scaleLegendPie(legend: LegendData) -> Bool {
+        
+        if chartData is PieChartData || chartData is DoughnutChartData {
+            if let datapointID = chartData.infoView.touchOverlayInfo.first?.id as? UUID {
+                return chartData.infoView.isTouchCurrent && legend.id == datapointID
+            } else {
+                return false
+            }
+        } else {
+           return false
+       }
+    }
     
     func line(_ legend: LegendData) -> some View {
         Group {

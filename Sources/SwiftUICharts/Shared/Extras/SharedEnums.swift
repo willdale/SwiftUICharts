@@ -65,41 +65,18 @@ public enum ColourType {
 /**
  Placement of the data point information panel when touch overlay modifier is applied.
  ```
- case floating // Follows input across the chart
- case header // Fix in the Header box. Must have .headerBox()
+ case floating // Follows input across the chart.
+ case fixed // Centered in view.
+ case header // Fix in the Header box. Must have .headerBox().
  ```
  
  - Tag: InfoBoxPlacement
  */
 public enum InfoBoxPlacement {
-    /// Follows input across the chart
+    /// Follows input across the chart.
     case floating
-    /// Fix in the Header box. Must have .headerBox()
+    /// Centered in view.
+    case fixed
+    /// Fix in the Header box. Must have .headerBox().
     case header
-}
-
-
-/**
- Where the marker lines come from to meet at a specified point.
- ```
- case fullWidth // Full width and height of view intersecting at touch location
- case bottomLeading // From bottom and leading edges meeting at touch location
- case bottomTrailing // From bottom and trailing edges meeting at touch location
- case topLeading // From top and leading edges meeting at touch location
- case topTrailing // From top and trailing edges meeting at touch location
- ```
- 
- - Tag: MarkerType
- */
-public enum MarkerType {
-    /// Full width and height of view intersecting at a specified point
-    case fullWidth
-    /// From bottom and leading edges meeting at a specified point
-    case bottomLeading
-    /// From bottom and trailing edges meeting at a specified point
-    case bottomTrailing
-    /// From top and leading edges meeting at a specified point
-    case topLeading
-    /// From top and trailing edges meeting at a specified point
-    case topTrailing
 }

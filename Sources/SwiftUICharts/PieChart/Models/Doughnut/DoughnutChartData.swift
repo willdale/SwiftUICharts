@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public class DoughnutChartData: DoughnutChartDataProtocol {
+public final class DoughnutChartData: DoughnutChartDataProtocol, LegendProtocol {
 
     @Published public var id            : UUID = UUID()
     @Published public var dataSets      : PieDataSet
@@ -36,7 +36,14 @@ public class DoughnutChartData: DoughnutChartDataProtocol {
         
         self.makeDataPoints()
     }
+    
+    public func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View { EmptyView() }
 
-    public typealias Set = PieDataSet
-    public typealias DataPoint = PieChartDataPoint
+    internal func legendOrder() -> [LegendData] {
+        return legends.sorted { $0.prioity < $1.prioity}
+    }
+    
+    public typealias Set        = PieDataSet
+    public typealias DataPoint  = PieChartDataPoint
+    public typealias CTStyle    = DoughnutChartStyle
 }

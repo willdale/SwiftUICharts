@@ -7,13 +7,6 @@
 
 import Foundation
 
-// MARK: Chart Data
-extension ChartData {
-    public func legendOrder() -> [LegendData] {
-        return legends.sorted { $0.prioity < $1.prioity}
-    }
-}
-
 extension ChartData where Set: SingleDataSet {
     public func isGreaterThanTwo() -> Bool {
         return dataSets.dataPoints.count > 2

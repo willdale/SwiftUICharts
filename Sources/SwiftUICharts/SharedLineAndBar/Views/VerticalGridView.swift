@@ -9,9 +9,13 @@ import SwiftUI
 
 internal struct VerticalGridView<T>: View where T: LineAndBarChartData {
     
-    var chartData : T
+   @ObservedObject private var chartData : T
     
-    @State var startAnimation : Bool = false
+    internal init(chartData: T) {
+        self.chartData = chartData
+    }
+    
+    @State private var startAnimation : Bool = false
     
     var body: some View {
         VerticalGridShape()

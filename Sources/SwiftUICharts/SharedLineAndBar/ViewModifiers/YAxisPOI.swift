@@ -52,6 +52,8 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
         self.minValue    = chartData.getMinValue()
     }
     
+    @State private var startAnimation : Bool = false
+    
     internal func body(content: Content) -> some View {
         ZStack {
             if chartData.isGreaterThanTwo() {
@@ -59,6 +61,12 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
                 marker
                 valueLabel
             } else { content }
+        }
+        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            self.startAnimation = true
+        }
+        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            self.startAnimation = false
         }
         .onAppear {
             if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
@@ -78,6 +86,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
                minValue     : minValue,
                maxValue     : maxValue,
                chartType    : chartData.chartType.chartType)
+            .trim(to: startAnimation ? 1 : 0)
             .stroke(lineColour, style: strokeStyle)
     }
     
@@ -122,6 +131,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
                     )
                     .position(x: geo.size.width / 2,
                               y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo))
+                    .opacity(startAnimation ? 1 : 0)
             }
         }
     }

@@ -24,15 +24,11 @@ public struct GroupedBarDataSet: CTGroupedBarChartDataSet {
 
     public let id           : UUID
     public var dataPoints   : [GroupedBarChartDataPoint]
-    public var legendTitle  : String
         
     /// Initialises a new data set for a Bar Chart.
-    public init(dataPoints  : [GroupedBarChartDataPoint],
-                legendTitle : String
-    ) {
+    public init(dataPoints  : [GroupedBarChartDataPoint]) {
         self.id             = UUID()
         self.dataPoints     = dataPoints
-        self.legendTitle    = legendTitle        
     }
 
     public typealias ID        = UUID

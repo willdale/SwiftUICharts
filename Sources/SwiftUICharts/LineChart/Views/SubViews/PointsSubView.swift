@@ -14,9 +14,7 @@ internal struct PointsSubView: View {
     private let range    : Double
     private let animation: Animation
     private let isFilled : Bool
-    
-    @State var startAnimation : Bool = false
-    
+
     internal init(dataSets  : LineDataSet,
                   minValue  : Double,
                   range     : Double,
@@ -29,6 +27,8 @@ internal struct PointsSubView: View {
         self.animation = animation
         self.isFilled = isFilled
     }
+    
+    @State private var startAnimation : Bool = false
     
     internal var body: some View {
         switch dataSets.pointStyle.pointType {
@@ -94,9 +94,7 @@ internal struct PointsSubView: View {
                 .animateOnDisappear(using: animation) {
                     self.startAnimation = false
                 }
-            
         }
     }
-    
 }
 

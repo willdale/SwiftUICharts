@@ -13,24 +13,44 @@ import SwiftUI
  A protocol to extend functionality of `LineAndBarChartData` specifically for Bar Charts.
  
  # Reference
- [See LineAndBarChartData](x-source-tag://LineAndBarChartData)
+ - [See LineAndBarChartData](x-source-tag://LineAndBarChartData)
+ - [See LineAndBarChartData](x-source-tag://LineAndBarChartData)
+ - [See ChartData](x-source-tag://ChartData)
  
  `LineAndBarChartData` conforms to [ChartData](x-source-tag://ChartData)
  
  - Tag: BarChartDataProtocol
  */
-public protocol BarChartDataProtocol: LineAndBarChartData where CTStyle: CTBarChartStyle {
-    var barStyle    : BarStyle { get set }
+public protocol BarChartDataProtocol: LineAndBarChartData {
+        
     /**
-     Data model conatining the style data for the chart.
-     
-     # Reference
-     [CTChartStyle](x-source-tag://CTChartStyle)
+     Overall styling for the bars
      */
-    var chartStyle  : CTStyle { get set }
+    var barStyle : BarStyle { get set }
 }
 
-//public protocol GroupedBarChartDataProtocol: BarChartDataProtocol {}
+/**
+ A protocol to extend functionality of `LineAndBarChartData` specifically for Bar Charts.
+ 
+ # Reference
+ - [See GroupedBarChartDataProtocol](x-source-tag://GroupedBarChartDataProtocol)
+ - [See BarChartDataProtocol](x-source-tag://BarChartDataProtocol)
+ - [See LineAndBarChartData](x-source-tag://LineAndBarChartData)
+ - [See ChartData](x-source-tag://ChartData)
+ 
+ `GroupedBarChartDataProtocol` conforms to [BarChartDataProtocol](x-source-tag://ChartData)
+ 
+ `LineAndBarChartData` conforms to [ChartData](x-source-tag://ChartData)
+ 
+ - Tag: GroupedBarChartDataProtocol
+ */
+public protocol GroupedBarChartDataProtocol: BarChartDataProtocol {
+    
+    /**
+     Grouping data to inform the chart about the relationship between the datapoints.
+     */
+    var groups : [GroupingData] { get set }
+}
 
 
 
@@ -60,9 +80,14 @@ public protocol CTBarChartStyle: CTLineAndBarChartStyle {}
  
  - Tag: CTBarChartDataSet
  */
-public protocol CTStandardBarChartDataSet: SingleDataSet {}
+public protocol CTStandardBarChartDataSet: SingleDataSet {
+    /**
+     Label to display in the legend.
+     */
+    var legendTitle : String { get set }
+}
 
-public protocol CTGroupedBarChartDataSet: SingleDataSet {}
+public protocol CTGroupedBarChartDataSet: SingleDataSet  {}
 
 public protocol CTSStackedBarChartDataSet: SingleDataSet {}
 
@@ -93,4 +118,8 @@ public protocol CTStandardBarDataPoint: CTBarDataPoint, CTColourStyle {}
   
  - Tag: CTMultiPartBarDataPoint
  */
-public protocol CTGroupedBarDataPoint: CTBarDataPoint, CTColourStyle {}
+public protocol CTGroupedBarDataPoint: CTBarDataPoint {
+    
+    var group : GroupingData { get set }
+    
+}

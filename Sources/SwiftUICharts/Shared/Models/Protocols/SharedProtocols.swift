@@ -17,9 +17,11 @@ import SwiftUI
  - Tag: ChartData
  */
 public protocol ChartData: ObservableObject, Identifiable {
+    
     associatedtype Set      : DataSet
     associatedtype DataPoint: CTChartDataPoint
     associatedtype CTStyle  : CTChartStyle
+    associatedtype Touch    : View
     
     var id: ID { get }
     
@@ -78,6 +80,52 @@ public protocol ChartData: ObservableObject, Identifiable {
     */
     var chartType: (chartType: ChartType, dataSetType: DataSetType) { get }
     
+
+    /**
+     Returns whether there are two or more dataPoints
+     */
+    func isGreaterThanTwo() -> Bool
+    
+    
+    // MARK: Touch
+    /**
+    Gets the nearest data points to the touch location.
+    - Parameters:
+      - touchLocation: Current location of the touch.
+      - chartSize: The size of the chart view as the parent view.
+    - Returns: Array of data points.
+     
+    - Tag: getDataPoint
+    */
+    func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [DataPoint]
+    
+    /**
+    Gets the location of the data point in the view.
+    - Parameters:
+      - touchLocation: Current location of the touch.
+      - chartSize: The size of the chart view as the parent view.
+    - Returns: Array of points with the location on screen of data points.
+     
+    - Tag: getDataPoint
+    */
+    func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint]
+    
+    
+    /**
+     Takes touch location and return a view based on the chart type and configuration.
+     
+     - Parameters:
+       - touchLocation: Current location of the touch
+       - chartSize: The size of the chart view as the parent view.
+     - Returns: The relevent view for the chart type and options.
+     */
+    func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> Touch
+    
+  
+}
+
+internal protocol LegendProtocol {
+    
     /**
     Sets the order the Legends are layed out in.
      - Returns: Ordered array of Legends.
@@ -90,51 +138,15 @@ public protocol ChartData: ObservableObject, Identifiable {
     func legendOrder() -> [LegendData]
     
     /**
-     Gets the where to display the touch overlay information.
-     - Returns: Where to display the data points
-     
-     # Reference
-     [InfoBoxPlacement](x-source-tag://InfoBoxPlacement)
-     
-     - Tag: getHeaderLocation
-     */
-    func getHeaderLocation() -> InfoBoxPlacement
-    
-    
-    /**
      Configures the legends based on the type of chart.
      
      - Tag: setupLegends
      */
     func setupLegends()
-    
-    /**
-     Returns whether there are two or more dataPoints
-     */
-    func isGreaterThanTwo() -> Bool
-    
-    /**
-    Gets the nearest data points to the touch location.
-    - Parameters:
-      - touchLocation: Current location of the touch
-      - chartSize: The size of the chart view as the parent view.
-    - Returns: Array of data points.
-     
-    - Tag: getDataPoint
-    */
-    func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [DataPoint]
-    
-    /**
-    Gets the location of the data point in the view.
-    - Parameters:
-      - touchLocation: Current location of the touch
-      - chartSize: The size of the chart view as the parent view.
-    - Returns: Array of points with the location on screen of data points
-     
-    - Tag: getDataPoint
-    */
-    func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint]
 }
+
+
+
 
 // MARK: - Data Sets
 /**
@@ -160,12 +172,7 @@ public protocol SingleDataSet: DataSet {
      [See CTChartDataPoint](x-source-tag://CTChartDataPoint)
      */
     var dataPoints  : [DataPoint] { get set }
-    
-    /**
-     Label to display in the legend.
-     */
-    var legendTitle : String { get set }
-    
+
 }
 
 /**

@@ -2,11 +2,12 @@
 //  BarChartProtocolsExtensions.swift
 //  
 //
-//  Created by Will Dale on 13/02/2021.
+//  Created by Will Dale on 19/02/2021.
 //
 
-import Foundation
+import SwiftUI
 
+// Standard / Grouped / Stacked
 extension LineAndBarChartData where Self: BarChartDataProtocol {
     public func getYLabels() -> [Double] {
         var labels  : [Double]  = [Double]()

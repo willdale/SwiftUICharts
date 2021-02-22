@@ -16,10 +16,10 @@ import SwiftUI
  
  - Tag: LineAndBarChartData
  */
-public protocol LineAndBarChartData : ChartData where CTStyle: CTLineAndBarChartStyle {
-    
-    /// Apple's `associatedtype` for outputting `some View`.
-    associatedtype Body : View
+public protocol LineAndBarChartData : ChartData {
+
+    associatedtype CTLineAndBarCS : CTLineAndBarChartStyle
+    associatedtype XLabels  : View
     
     /**
      Array of strings for the labels on the X Axis instead of the labels in the data points.
@@ -37,18 +37,15 @@ public protocol LineAndBarChartData : ChartData where CTStyle: CTLineAndBarChart
      */
     var viewData: ChartViewData { get set }
     
-    /**
-     Displays a view for the labels on the X Axis.
-     
-     Labels can come from either [CTChartDataPoint](x-source-tag://CTChartDataPoint)
-     or [ChartData](x-source-tag://ChartData)
-     
-     - Returns: An `HStack` of `Text` containin x axis labels.
-     
-     - Tag: getXAxidLabels
-     */
-    func getXAxisLabels() -> Body
     
+    /**
+     Data model conatining the style data for the chart.
+     
+     # Reference
+     [CTChartStyle](x-source-tag://CTChartStyle)
+     */
+    var chartStyle: CTLineAndBarCS { get set }
+        
     /**
      Labels to display on the Y axis
      
@@ -84,9 +81,24 @@ public protocol LineAndBarChartData : ChartData where CTStyle: CTLineAndBarChart
      - Tag: getAverage
      */
     func getAverage() -> Double
+    
+    /**
+     Displays a view for the labels on the X Axis.
+     
+     Labels can come from either [CTChartDataPoint](x-source-tag://CTChartDataPoint)
+     or [ChartData](x-source-tag://ChartData)
+     
+     - Returns: An `HStack` of `Text` containin x axis labels.
+     
+     - Tag: getXAxidLabels
+     */
+    func getXAxisLabels() -> XLabels
 }
 
+
 // MARK: - Style
+
+public protocol MarkerType {}
 
 /**
  A protocol to extend functionality of `CTChartStyle` specifically for  Line and Bar Charts.
@@ -94,6 +106,14 @@ public protocol LineAndBarChartData : ChartData where CTStyle: CTLineAndBarChart
  - Tag: CTLineAndBarChartStyle
  */
 public protocol CTLineAndBarChartStyle: CTChartStyle {
+    
+    associatedtype Mark : MarkerType
+    
+    /**
+     Where the marker lines come from to meet at a specified point.
+     */
+    var markerType : Mark { get set }
+    
     /**
      Style of the vertical lines breaking up the chart
      

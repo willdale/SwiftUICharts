@@ -15,6 +15,7 @@ internal struct XAxisBorder<T>: ViewModifier where T: LineAndBarChartData {
     
     init(chartData: T) {
         self.chartData = chartData
+        
         self.labelsAndTop    = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .top
         self.labelsAndBottom = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .bottom
     }

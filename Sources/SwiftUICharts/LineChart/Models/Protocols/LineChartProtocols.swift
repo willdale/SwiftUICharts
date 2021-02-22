@@ -18,14 +18,10 @@ import SwiftUI
  
  - Tag: LineChartDataProtocol
  */
-public protocol LineChartDataProtocol: LineAndBarChartData where CTStyle: CTLineChartStyle {
-    /**
-     Data model conatining the style data for the chart.
-     
-     # Reference
-     [CTChartStyle](x-source-tag://CTChartStyle)
-     */
-    var chartStyle  : CTStyle { get set }
+public protocol LineChartDataProtocol: LineAndBarChartData {
+
+    associatedtype Marker : View
+    associatedtype Points : View
     
     /**
      Whether it is a normal or filled line.
@@ -42,8 +38,15 @@ public protocol LineChartDataProtocol: LineAndBarChartData where CTStyle: CTLine
         - touchLocation: Location of the touch or pointer input.
      - Returns: The position to place the indicator.
      */
-    func getIndicatorLocation(rect: CGRect, dataSet: LineDataSet, touchLocation: CGPoint) -> CGPoint
+    func getIndicatorLocation(rect: CGRect, dataPoints: [LineChartDataPoint], touchLocation: CGPoint, lineType: LineType) -> CGPoint
+    
+    func getSinglePoint(touchLocation: CGPoint, chartSize: GeometryProxy, dataSet: LineDataSet) -> CGPoint
+    
+    func markerSubView(dataSet: LineDataSet, touchLocation: CGPoint, chartSize: GeometryProxy) -> Marker
+    
+    func getPointMarker() -> Points
 }
+
 
 // MARK: - Style
 /**
@@ -58,7 +61,10 @@ public protocol CTLineChartStyle : CTLineAndBarChartStyle {
      [See Baseline](x-source-tag://Baseline)
      */
     var baseline: Baseline { get set }
+
 }
+
+
 
 // MARK: - DataSet
 /**
@@ -71,6 +77,12 @@ public protocol CTLineChartStyle : CTLineAndBarChartStyle {
  */
 public protocol CTLineChartDataSet: SingleDataSet {
     associatedtype Styling   : CTColourStyle
+    
+    /**
+     Label to display in the legend.
+     */
+    var legendTitle : String { get set }
+    
     /**
      Sets the style for the Data Set (as opposed to Chart Data Style).
      */

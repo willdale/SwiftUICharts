@@ -10,12 +10,12 @@ import SwiftUI
 public struct PieChart<ChartData>: View where ChartData: PieChartData {
     
     @ObservedObject var chartData: ChartData
-        
-    @State var startAnimation : Bool = false
-        
+
     public init(chartData: ChartData) {
         self.chartData = chartData
     }
+    
+    @State private var startAnimation : Bool = false
     
     public var body: some View {
         ZStack {
