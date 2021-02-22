@@ -53,30 +53,55 @@ extension PieAndDoughnutChartDataProtocol where Set == MultiPieDataSet, DataPoin
         
         self.dataSets.dataPoints.indices.forEach { (point) in
             let amount = .pi * 2 * (self.dataSets.dataPoints[point].value / total)
-
             self.dataSets.dataPoints[point].startAngle  = startAngle
             self.dataSets.dataPoints[point].amount      = amount
  
             
             let layerTotal       = self.dataSets.dataPoints[point].layerDataPoints?.reduce(0) { $0 + $1.value } ?? 0
             var layerStartAngle  = startAngle
-            
             self.dataSets.dataPoints[point].layerDataPoints?.indices.forEach { (layer) in
-                                 
                 let layerValue    =  self.dataSets.dataPoints[point].layerDataPoints?[layer].value ?? 0
                 let layerAmount   = amount * (layerValue / layerTotal)
-                
                 self.dataSets.dataPoints[point].layerDataPoints?[layer].startAngle  = layerStartAngle
                 self.dataSets.dataPoints[point].layerDataPoints?[layer].amount      = layerAmount
                 
+
                 
+                let layerTwoTotal       = self.dataSets.dataPoints[point].layerDataPoints?[layer].layerDataPoints?.reduce(0) { $0 + $1.value } ?? 0
+                var layerTwoStartAngle  = layerStartAngle
+                self.dataSets.dataPoints[point].layerDataPoints?[layer].layerDataPoints?.indices.forEach { (layerTwo) in
+                    let layerTwoValue    = self.dataSets.dataPoints[point].layerDataPoints?[layer].layerDataPoints?[layerTwo].value ?? 0
+                    let layerTwoAmount   = layerAmount * (layerTwoValue / layerTwoTotal)
+                    self.dataSets.dataPoints[point].layerDataPoints?[layer].layerDataPoints?[layerTwo].startAngle  = layerTwoStartAngle
+                    self.dataSets.dataPoints[point].layerDataPoints?[layer].layerDataPoints?[layerTwo].amount      = layerTwoAmount
+                    
+                    
+                    
+                    let layerThreeTotal       = self.dataSets.dataPoints[point].layerDataPoints?[layer].layerDataPoints?[layerTwo].layerDataPoints?.reduce(0) { $0 + $1.value } ?? 0
+                    var layerThreeStartAngle  = layerTwoStartAngle
+                    self.dataSets.dataPoints[point].layerDataPoints?[layer].layerDataPoints?[layerTwo].layerDataPoints?.indices.forEach { (layerThree) in
+                        let layerThreeValue    = self.dataSets.dataPoints[point].layerDataPoints?[layer].layerDataPoints?[layerTwo].layerDataPoints?[layerThree].value ?? 0
+                        let layerThreeAmount   = layerTwoAmount * (layerThreeValue / layerThreeTotal)
+                        self.dataSets.dataPoints[point].layerDataPoints?[layer].layerDataPoints?[layerTwo].layerDataPoints?[layerThree].startAngle  = layerThreeStartAngle
+                        self.dataSets.dataPoints[point].layerDataPoints?[layer].layerDataPoints?[layerTwo].layerDataPoints?[layerThree].amount      = layerThreeAmount
+                        
+                        layerThreeStartAngle += layerThreeAmount
+                    }
+                    
+                    
+                    
+                    layerTwoStartAngle += layerTwoAmount
+                }
+                    
+                    
                 layerStartAngle += layerAmount
-                
             }
+            
             startAngle += amount
         }
     }
 }
+
 
 // * (180 / Double.pi)
 
@@ -154,7 +179,9 @@ public protocol CTPieDataPoint: CTChartDataPoint {
     var amount      : Double { get set }
 }
 
-public protocol CTMultiPieChartDataPoints: CTChartDataPoint {}
+public protocol CTMultiPieChartDataPoint: CTChartDataPoint {
+    var layerDataPoints  : [MultiPieDataPoint]? { get set }
+}
 
 
 

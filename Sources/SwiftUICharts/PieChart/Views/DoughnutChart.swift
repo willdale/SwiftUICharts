@@ -23,7 +23,7 @@ public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData 
                 DoughnutSegmentShape(id:         chartData.dataSets.dataPoints[data].id,
                                      startAngle: chartData.dataSets.dataPoints[data].startAngle,
                                      amount:     chartData.dataSets.dataPoints[data].amount)
-                    .strokeBorder(chartData.dataSets.dataPoints[data].colour, lineWidth: chartData.chartStyle.strokeWidth)
+                    .stroke/*Border*/(chartData.dataSets.dataPoints[data].colour, lineWidth: chartData.chartStyle.strokeWidth)
                     .scaleEffect(startAnimation ? 1 : 0)
                     .opacity(startAnimation ? 1 : 0)
                     .animation(Animation.spring().delay(Double(data) * 0.06))
