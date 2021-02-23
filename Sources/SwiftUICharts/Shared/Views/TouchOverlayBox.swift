@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+View that displays information from the touch events.
+ */
 internal struct TouchOverlayBox<D: CTChartDataPoint>: View {
     
     private var isTouchCurrent      : Bool

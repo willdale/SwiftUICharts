@@ -10,14 +10,12 @@ import SwiftUI
 /**
  Data model for the chart's metadata
  
- Contains the Title, Subtitle and Title for Legend.
+ Contains the Title, Subtitle and colour information for them.
  
  # Example
  ```
- let metadata = ChartMetadata(title: "Some Data", subtitle: "A Week")
+ ChartMetadata(title: "Some Data", subtitle: "A weeks worth")
  ```
- 
- - Tag: ChartMetadata
  */
 public struct ChartMetadata {
     /// The charts title

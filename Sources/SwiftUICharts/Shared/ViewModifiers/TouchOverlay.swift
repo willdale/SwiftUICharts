@@ -9,30 +9,24 @@ import SwiftUI
 
 #if !os(tvOS)
 /**
- Detects input either from touch of pointer.
- 
  Finds the nearest data point and displays the relevent information.
- 
  */
 internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
 
     @ObservedObject var chartData: T
         
-    /// Current location of the touch input
-    @State private var touchLocation    : CGPoint   = CGPoint(x: 0, y: 0)
-    /// Frame information of the data point information box
-    @State private var boxFrame         : CGRect    = CGRect(x: 0, y: 0, width: 0, height: 50)
-
-    /// Detects input either from touch of pointer. Finds the nearest data point and displays the relevent information.
-    /// - Parameters:
-    ///   - chartData:
-    ///   - specifier: Decimal precision for labels
     internal init(chartData         : T,
                   specifier         : String
     ) {
         self.chartData = chartData
         self.chartData.infoView.touchSpecifier = specifier
     }
+    
+    /// Current location of the touch input
+    @State private var touchLocation : CGPoint = CGPoint(x: 0, y: 0)
+    /// Frame information of the data point information box
+    @State private var boxFrame      : CGRect  = CGRect(x: 0, y: 0, width: 0, height: 50)
+    
     internal func body(content: Content) -> some View {
         Group {
             if chartData.isGreaterThanTwo() {
@@ -95,6 +89,9 @@ extension View {
      If  LineChartStyle --> infoBoxPlacement is set to .header
      then `.headerBox` is required.
      
+     If  LineChartStyle --> infoBoxPlacement is set to .fixed or . floating
+     then `.infoBox` is required.
+     
      - Attention:
      Unavailable in tvOS
      
@@ -102,8 +99,6 @@ extension View {
         - chartData: Chart data model.
         - specifier: Decimal precision for labels.
      - Returns: A  new view containing the chart with a touch overlay.
-     
-     - Tag: TouchOverlay
      */
     public func touchOverlay<T: ChartData>(chartData: T,
                                            specifier: String = "%.0f"

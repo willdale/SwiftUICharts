@@ -7,6 +7,9 @@
 
 import SwiftUI
  
+/**
+ Displays the metadata about the chart as well as optionally touch overlay information.
+ */
 internal struct HeaderBox<T>: ViewModifier where T: ChartData {
     
     @ObservedObject var chartData: T
@@ -36,7 +39,7 @@ internal struct HeaderBox<T>: ViewModifier where T: ChartData {
                         .foregroundColor(chartData.chartStyle.infoBoxValueColour)
                     Text("\(info.pointDescription ?? "")")
                         .font(.subheadline)
-                        .foregroundColor(chartData.chartStyle.infoBoxDescriptionColor)
+                        .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
                 }
             } else {
                 Text("")
@@ -96,7 +99,7 @@ internal struct HeaderBox<T>: ViewModifier where T: ChartData {
 
 extension View {
     /**
-     Displays the metadata about the chart
+     Displays the metadata about the chart.
      
      Adds a view above the chart that displays the title and subtitle.
      infoBoxPlacement is set to .header then the datapoint info will

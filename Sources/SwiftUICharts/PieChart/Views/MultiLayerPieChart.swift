@@ -7,10 +7,33 @@
 
 import SwiftUI
 
-public struct MultiLayerPie<ChartData>: View where ChartData: MultiLayerPieChartData {
+/**
+ View for creating a multi layer pie chart.
+ 
+ Uses `MultiLayerPieChartData` data model.
+ 
+ # Declaration
+ ```
+ MultiLayerPieChart(chartData: data)
+ ```
+ 
+ # View Modifiers
+ The order of the view modifiers is some what important
+ as the modifiers are various types for stacks that wrap
+ around the previous views.
+ ```
+ .touchOverlay(chartData: data)
+ .infoBox(chartData: data)
+ .headerBox(chartData: data)
+ .legends(chartData: data)
+ ```
+ */
+public struct MultiLayerPieChart<ChartData>: View where ChartData: MultiLayerPieChartData {
     
     @ObservedObject var chartData: ChartData
 
+    /// Initialises a bar chart view.
+    /// - Parameter chartData: Must be MultiLayerPieChartData.
     public init(chartData: ChartData) {
         self.chartData = chartData
     }

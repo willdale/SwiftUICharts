@@ -7,9 +7,11 @@
 
 import SwiftUI
 
-/// A mediator for `Gradient.Stop`. to allow it to be stored in LegendData
-///
-/// Gradient.Stop doesn't conform to Hashable
+/**
+ A mediator for `Gradient.Stop`. to allow it to be stored in `LegendData`.
+ 
+ Gradient.Stop doesn't conform to Hashable.
+ */
 public struct GradientStop: Hashable {
     public var color   : Color
     public var location: CGFloat

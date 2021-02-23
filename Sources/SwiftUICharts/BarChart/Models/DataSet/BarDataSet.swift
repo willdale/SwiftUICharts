@@ -30,7 +30,7 @@ public struct BarDataSet: CTStandardBarChartDataSet {
     public var dataPoints   : [BarChartDataPoint]
     public var legendTitle  : String
     
-    /// Initialises a new data set for a stabdard Bar Chart.
+    /// Initialises a new data set for standard Bar Charts.
     /// - Parameters:
     ///   - dataPoints: Array of elements.
     ///   - legendTitle: label for the data in legend.

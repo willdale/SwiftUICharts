@@ -7,25 +7,48 @@
 
 import Foundation
 
-struct DataFunctions {
+/**
+ A collection of functions for getting infomation about the data sets.
+*/
+ struct DataFunctions {
     
     // MARK: - Single Data Set
-    static func dataSetMaxValue<T:SingleDataSet>(from dataSets: T) -> Double {
-        return dataSets.dataPoints.max { $0.value < $1.value }?.value ?? 0
+    /**
+     Returns the highest value in the data set.
+     - Parameter dataSet: Target data set.
+     - Returns: Highest value in data set.
+     */
+    static func dataSetMaxValue<T:SingleDataSet>(from dataSet: T) -> Double {
+        return dataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
     }
     
-    static func dataSetMinValue<T:SingleDataSet>(from dataSets: T) -> Double {
-        return dataSets.dataPoints.min { $0.value < $1.value }?.value ?? 0
+    /**
+     Returns the lowest value in the data set.
+     - Parameter dataSet: Target data set.
+     - Returns: Lowest value in data set.
+     */
+    static func dataSetMinValue<T:SingleDataSet>(from dataSet: T) -> Double {
+        return dataSet.dataPoints.min { $0.value < $1.value }?.value ?? 0
     }
     
-    static func dataSetAverage<T:SingleDataSet>(from dataSets: T) -> Double {
-        let sum = dataSets.dataPoints.reduce(0) { $0 + $1.value }
-        return sum / Double(dataSets.dataPoints.count)
+    /**
+     Returns the average value from the data set.
+     - Parameter dataSet: Target data set.
+     - Returns: Average of values in data set.
+     */
+    static func dataSetAverage<T:SingleDataSet>(from dataSet: T) -> Double {
+        let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }
+        return sum / Double(dataSet.dataPoints.count)
     }
     
-    static func dataSetRange<T:SingleDataSet>(from dataSets: T) -> Double {
-        let maxValue = dataSets.dataPoints.max { $0.value < $1.value }?.value ?? 0
-        let minValue = dataSets.dataPoints.min { $0.value < $1.value }?.value ?? 0
+    /**
+     Returns the difference between the highest and lowest numbers in the data set.
+     - Parameter dataSet: Target data set.
+     - Returns: Difference between the highest and lowest values in data set.
+     */
+    static func dataSetRange<T:SingleDataSet>(from dataSet: T) -> Double {
+        let maxValue = dataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
+        let minValue = dataSet.dataPoints.min { $0.value < $1.value }?.value ?? 0
         
         /*
          Adding 0.001 stops the following error if there is no variation in value of the dataPoints
@@ -36,6 +59,11 @@ struct DataFunctions {
     
     
     // MARK: - Multi Data Sets
+    /**
+     Returns the highest value in the data sets
+     - Parameter dataSet: Target data sets.
+     - Returns: Highest value in data sets.
+     */
     static func multiDataSetMaxValue<T:MultiDataSet>(from dataSets: T) -> Double {
         var setHolder : [Double] = []
         for set in dataSets.dataSets {
@@ -44,6 +72,11 @@ struct DataFunctions {
         return setHolder.max { $0 < $1 } ?? 0
     }
     
+    /**
+     Returns the lowest value in the data sets.
+     - Parameter dataSet: Target data sets.
+     - Returns: Lowest value in data sets.
+     */
     static func multiDataSetMinValue<T:MultiDataSet>(from dataSets: T) -> Double {
         var setHolder : [Double] = []
         for set in dataSets.dataSets {
@@ -52,6 +85,11 @@ struct DataFunctions {
         return setHolder.min { $0 < $1 } ?? 0
     }
     
+    /**
+     Returns the average value from the data sets.
+     - Parameter dataSet: Target data sets.
+     - Returns: Average of values in data sets.
+     */
     static func multiDataSetAverage<T:MultiDataSet>(from dataSets: T) -> Double {
         var setHolder : [Double] = []
         for set in dataSets.dataSets {
@@ -62,6 +100,11 @@ struct DataFunctions {
         return sum / Double(setHolder.count)
     }
     
+    /**
+     Returns the difference between the highest and lowest numbers in the data sets.
+     - Parameter dataSet: Target data sets.
+     - Returns: Difference between the highest and lowest values in data sets.
+     */
     static func multiDataSetRange<T:MultiDataSet>(from dataSets: T) -> Double {
         var setMaxHolder : [Double] = []
         for set in dataSets.dataSets {

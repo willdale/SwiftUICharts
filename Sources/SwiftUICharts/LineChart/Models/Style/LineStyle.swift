@@ -8,56 +8,16 @@
 import SwiftUI
 
 /**
- Model for controlling the  aesthetic of the line chart.
+ Model for controlling the aesthetic of the line chart.
  
  # Example
  
  ```
- LineStyle(colour: .red,
-           lineType: .curvedLine,
-           strokeStyle: Stroke(lineWidth: 2,
-                               lineCap: .round,
-                               lineJoin: .round,
-                               miterLimit: 10,
-                               dash: [CGFloat](),
-                               dashPhase: 0),
-           ignoreZero: false)
+ LineStyle(colour     : .red,
+           lineType   : .curvedLine,
+           strokeStyle: Stroke(lineWidth: 2))
  ```
  
- ---
- 
- # Options
- 
- ```
- LineStyle(colour: Color,
-           ...)
- 
- LineStyle(colours: [Color],
-           startPoint: UnitPoint,
-           endPoint: UnitPoint,
-           ...)
- 
- LineStyle(stops: [GradientStop],
-           startPoint: UnitPoint,
-           endPoint: UnitPoint,
-           ...)
- 
- LineStyle(...,
-           lineType: LineType,
-           strokeStyle: Stroke,
-           ignoreZero: Bool)
- ```
- 
- # Also See
- - [ColourType](x-source-tag://ColourType)
- - [LineType](x-source-tag://LineType)
- - [GradientStop](x-source-tag://GradientStop)
- 
- # Conforms to
- - CTColourStyle
- - Hashable
- 
- - Tag: LineStyle
  */
 public struct LineStyle: CTColourStyle, Hashable {    
         
@@ -87,6 +47,7 @@ public struct LineStyle: CTColourStyle, Hashable {
     */
     public var ignoreZero  : Bool
         
+    // MARK: - Single colour
     /// Single Colour
     /// - Parameters:
     ///   - colour: Single Colour
@@ -95,12 +56,12 @@ public struct LineStyle: CTColourStyle, Hashable {
     ///   - ignoreZero: Whether the chart should skip data points who's value is 0.
     public init(colour      : Color      = Color(.red),
                 lineType    : LineType   = .curvedLine,
-                strokeStyle : Stroke = Stroke(lineWidth: 3,
-                                              lineCap: .round,
-                                              lineJoin: .round,
+                strokeStyle : Stroke = Stroke(lineWidth : 3,
+                                              lineCap   : .round,
+                                              lineJoin  : .round,
                                               miterLimit: 10,
-                                              dash: [CGFloat](),
-                                              dashPhase: 0),
+                                              dash      : [CGFloat](),
+                                              dashPhase : 0),
                 ignoreZero  : Bool       = false
     ) {
         self.colourType     = .colour
@@ -116,6 +77,7 @@ public struct LineStyle: CTColourStyle, Hashable {
         self.ignoreZero = ignoreZero
     }
     
+    // MARK: - Gradient colour
     /// Gradient Colour Line
     /// - Parameters:
     ///   - colours: Colours for Gradient.
@@ -150,6 +112,7 @@ public struct LineStyle: CTColourStyle, Hashable {
         self.ignoreZero = ignoreZero
     }
     
+    // MARK: - Gradient with stops
     /// Gradient with Stops Line
     /// - Parameters:
     ///   - stops: Colours and Stops for Gradient with stop control.

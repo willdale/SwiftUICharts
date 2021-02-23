@@ -14,98 +14,40 @@ import SwiftUI
  
  # Example
  ```
- let data = LineDataSet(dataPoints: [
-     LineChartDataPoint(value: 20,  xAxisLabel: "M", pointLabel: "Monday"),
-     LineChartDataPoint(value: 90,  xAxisLabel: "T", pointLabel: "Tuesday"),
+ LineDataSet(dataPoints: [
+     LineChartDataPoint(value: 120, xAxisLabel: "M", pointLabel: "Monday"),
+     LineChartDataPoint(value: 190, xAxisLabel: "T", pointLabel: "Tuesday"),
      LineChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday"),
-     LineChartDataPoint(value: 75,  xAxisLabel: "T", pointLabel: "Thursday"),
+     LineChartDataPoint(value: 175, xAxisLabel: "T", pointLabel: "Thursday"),
      LineChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"),
      LineChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday"),
-     LineChartDataPoint(value: 90,  xAxisLabel: "S", pointLabel: "Sunday")
+     LineChartDataPoint(value: 190, xAxisLabel: "S", pointLabel: "Sunday")
  ],
- legendTitle: "Data",
+ legendTitle: "Test One",
  pointStyle: PointStyle(),
- style: LineStyle())
+ style: LineStyle(colour: Color.red, lineType: .curvedLine))
  ```
- 
- # LineChartDataPoint
- ```
- LineChartDataPoint(value: Double,
-                    xAxisLabel: String?,
-                    pointLabel: String?,
-                    date: Date?)
- ```
- 
- # PointStyle
- ```
- PointStyle(pointSize: CGFloat,
-            borderColour: Color,
-            fillColour: Color,
-            lineWidth: CGFloat,
-            pointType: PointType,
-            pointShape: PointShape)
- ```
- 
- # LineStyle
- ```
- LineStyle(colour: Color,
-           ...)
- 
- LineStyle(colours: [Color],
-           startPoint: UnitPoint,
-           endPoint: UnitPoint,
-           ...)
- 
- LineStyle(stops: [GradientStop],
-           startPoint: UnitPoint,
-           endPoint: UnitPoint,
-           ...)
- 
- LineStyle(...,
-           lineType: LineType,
-           strokeStyle: Stroke,
-           ignoreZero: Bool)
- ```
- ---
- # Also See
- - [LineChartDataPoint](x-source-tag://LineChartDataPoint)
- - [PointStyle](x-source-tag://PointStyle)
-    - [PointType](x-source-tag://PointType)
-    - [PointShape](x-source-tag://PointShape)
- - [LineStyle](x-source-tag://LineStyle)
-    - [ColourType](x-source-tag://ColourType)
-    - [LineType](x-source-tag://LineType)
-    - [GradientStop](x-source-tag://GradientStop)
- 
- # Conforms to
- - SingleDataSet
- - DataSet
- - Hashable
- - Identifiable
- 
- - Tag: LineDataSet
  */
 public struct LineDataSet: CTLineChartDataSet {
 
-    public let id           : UUID
+    public let id           : UUID = UUID()
     public var dataPoints   : [LineChartDataPoint]
     public var legendTitle  : String
     public var pointStyle   : PointStyle
     public var style        : LineStyle
     
     
-    /// Initialises a new data set for Line Chart.
+    /// Initialises a data set for a line in a Line Chart.
     /// - Parameters:
     ///   - dataPoints: Array of elements.
-    ///   - legendTitle: label for the data in legend.
+    ///   - legendTitle: Label for the data in legend.
     ///   - pointStyle: Styling information for the data point markers.
-    ///   - style: Styling for how the line will be drawin.
+    ///   - style: Styling for how the line will be draw in.
     public init(dataPoints  : [LineChartDataPoint],
                 legendTitle : String     = "",
                 pointStyle  : PointStyle = PointStyle(),
                 style       : LineStyle  = LineStyle()
     ) {
-        self.id             = UUID()
         self.dataPoints     = dataPoints
         self.legendTitle    = legendTitle
         self.pointStyle     = pointStyle

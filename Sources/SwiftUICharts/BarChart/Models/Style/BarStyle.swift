@@ -34,7 +34,7 @@ public struct BarStyle: CTColourStyle, Hashable {
     public var startPoint   : UnitPoint?
     public var endPoint     : UnitPoint?
     
-    
+    // MARK: - Single colour
     /// Bar Chart with single colour
     /// - Parameters:
     ///   - barWidth: How much of the available width to use. 0...1
@@ -57,6 +57,7 @@ public struct BarStyle: CTColourStyle, Hashable {
         self.colourType     = .colour
     }
     
+    // MARK: - Gradient colour
     /// Bar Chart with Gradient Colour
     /// - Parameters:
     ///   - barWidth: How much of the available width to use. 0...1
@@ -83,6 +84,7 @@ public struct BarStyle: CTColourStyle, Hashable {
         self.colourType     = .gradientColour
     }
     
+    // MARK: - Gradient with stops
     /// Bar Chart with Gradient with Stops
     /// - Parameters:
     ///   - barWidth: How much of the available width to use. 0...1

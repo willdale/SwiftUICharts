@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Main line shape
+ */
 internal struct LineShape: Shape {
            
     private let dataPoints  : [LineChartDataPoint]
@@ -15,7 +18,6 @@ internal struct LineShape: Shape {
     
     private let minValue : Double
     private let range    : Double
-    
     
     internal init(dataPoints: [LineChartDataPoint],
                   lineType  : LineType,

@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ A view that displays information from `TouchOverlay`.
+ */
 internal struct InfoBox<T>: ViewModifier where T: ChartData {
     
     @ObservedObject var chartData: T
@@ -32,7 +35,7 @@ internal struct InfoBox<T>: ViewModifier where T: ChartData {
                         selectedPoints   : chartData.infoView.touchOverlayInfo,
                         specifier        : chartData.infoView.touchSpecifier,
                         valueColour      : chartData.chartStyle.infoBoxValueColour,
-                        descriptionColour: chartData.chartStyle.infoBoxDescriptionColor,
+                        descriptionColour: chartData.chartStyle.infoBoxDescriptionColour,
                         boxFrame         : $boxFrame)
             .position(x: setBoxLocationation(touchLocation: chartData.infoView.positionX,
                                              boxFrame     : boxFrame,
@@ -52,7 +55,7 @@ internal struct InfoBox<T>: ViewModifier where T: ChartData {
                     if let label = point.pointDescription {
                         Text(label)
                             .font(.subheadline)
-                            .foregroundColor(chartData.chartStyle.infoBoxDescriptionColor)
+                            .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
                     }
                 }
             }
@@ -95,6 +98,13 @@ internal struct InfoBox<T>: ViewModifier where T: ChartData {
 }
 
 extension View {
+    /**
+     A view that displays information from `TouchOverlay`.
+     
+     - Parameter chartData: Chart data model.
+     - Returns: A  new view containing the chart with a view to
+     display touch overlay information.
+     */
     public func infoBox<T: ChartData>(chartData: T) -> some View {
         self.modifier(InfoBox(chartData: chartData))
     }

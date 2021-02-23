@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Draws point markers over the data point locations.
+ */
 internal struct Point<T>: Shape where T: CTLineChartDataSet {
     
     private let dataSet     : T
@@ -25,43 +28,43 @@ internal struct Point<T>: Shape where T: CTLineChartDataSet {
    
     internal func path(in rect: CGRect) -> Path {
         var path = Path()
-        lineChartDrawPoints(&path, rect, dataSet.dataPoints, minValue, range)
-        return path
-    }
-
-    internal func lineChartDrawPoints<DP: CTChartDataPoint>(_ path: inout Path, _ rect: CGRect, _ dataPoints: [DP], _ minValue: Double, _ range: Double) {
-                
-        let x = rect.width / CGFloat(dataPoints.count-1)
+        let x = rect.width / CGFloat(dataSet.dataPoints.count-1)
         let y = rect.height / CGFloat(range)
         
         let firstPointX : CGFloat = (CGFloat(0) * x) -  dataSet.pointStyle.pointSize / CGFloat(2)
-        let firstPointY : CGFloat = ((CGFloat(dataPoints[0].value - minValue) * -y) + rect.height) -  dataSet.pointStyle.pointSize / CGFloat(2)
+        let firstPointY : CGFloat = ((CGFloat(dataSet.dataPoints[0].value - minValue) * -y) + rect.height) -  dataSet.pointStyle.pointSize / CGFloat(2)
         let firstPoint  : CGRect  = CGRect(x        : firstPointX,
                                            y        : firstPointY,
                                            width    :  dataSet.pointStyle.pointSize,
                                            height   :  dataSet.pointStyle.pointSize)
         pointSwitch(&path, firstPoint)
         
-            for index in 1 ..< dataPoints.count - 1 {
-                let pointX : CGFloat = (CGFloat(index) * x) -  dataSet.pointStyle.pointSize / CGFloat(2)
-                let pointY : CGFloat = ((CGFloat(dataPoints[index].value - minValue) * -y) + rect.height) -  dataSet.pointStyle.pointSize / CGFloat(2)
-                let point  : CGRect  = CGRect(x     : pointX,
-                                              y     : pointY,
-                                              width :  dataSet.pointStyle.pointSize,
-                                              height:  dataSet.pointStyle.pointSize)
-                pointSwitch(&path, point)
-            }
-
+        for index in 1 ..< dataSet.dataPoints.count - 1 {
+            let pointX : CGFloat = (CGFloat(index) * x) -  dataSet.pointStyle.pointSize / CGFloat(2)
+            let pointY : CGFloat = ((CGFloat(dataSet.dataPoints[index].value - minValue) * -y) + rect.height) -  dataSet.pointStyle.pointSize / CGFloat(2)
+            let point  : CGRect  = CGRect(x     : pointX,
+                                          y     : pointY,
+                                          width :  dataSet.pointStyle.pointSize,
+                                          height:  dataSet.pointStyle.pointSize)
+            pointSwitch(&path, point)
+        }
         
-        let lastPointX : CGFloat = (CGFloat(dataPoints.count-1) * x) -  dataSet.pointStyle.pointSize / CGFloat(2)
-        let lastPointY : CGFloat = ((CGFloat(dataPoints[dataPoints.count-1].value - minValue) * -y) + rect.height) -  dataSet.pointStyle.pointSize / CGFloat(2)
+        
+        let lastPointX : CGFloat = (CGFloat(dataSet.dataPoints.count-1) * x) - dataSet.pointStyle.pointSize / CGFloat(2)
+        let lastPointY : CGFloat = ((CGFloat(dataSet.dataPoints[dataSet.dataPoints.count-1].value - minValue) * -y) + rect.height) -  dataSet.pointStyle.pointSize / CGFloat(2)
         let lastPoint  : CGRect  = CGRect(x         : lastPointX,
                                           y         : lastPointY,
                                           width     :  dataSet.pointStyle.pointSize,
                                           height    :  dataSet.pointStyle.pointSize)
         pointSwitch(&path, lastPoint)
+        return path
     }
     
+    
+    /// Draws the points based on chosen parameters.
+    /// - Parameters:
+    ///   - path: Path to draw on.
+    ///   - point: Position to draw the point.
     internal func pointSwitch(_ path: inout Path, _ point: CGRect) {
         switch dataSet.pointStyle.pointShape {
         case .circle:

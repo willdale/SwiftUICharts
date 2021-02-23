@@ -15,63 +15,26 @@ import SwiftUI
  
  # Example
  ```
- LineChartStyle(infoBoxPlacement    : .header,
-                xAxisGridStyle      : GridStyle(numberOfLines: 7,
-                                                lineColour   : .gray,
-                                                lineWidth    : 1,
-                                                dash         : [8],
-                                                dashPhase    : 0),
+ LineChartStyle(infoBoxPlacement    : .floating,
+                markerType          : .indicator(style: DotStyle()),
+                xAxisGridStyle      : GridStyle(),
                 xAxisLabelPosition  : .bottom,
-                xAxisLabelsFrom     : .dataPoint,
-                yAxisGridStyle      : GridStyle(numberOfLines: 7,
-                                                lineColour   : .gray,
-                                                lineWidth    : 1,
-                                                dash         : [8],
-                                                dashPhase    : 0),
+                xAxisLabelColour    : Color.primary,
+                xAxisLabelsFrom     : .chartData,
+                yAxisGridStyle      : GridStyle(),
                 yAxisLabelPosition  : .leading,
-                yAxisNumberOfLabels : 5,
-                baseline            : .minimumValue,
-                globalAnimation     : .linear(duration: 1))
+                yAxisLabelColour    : Color.primary,
+                yAxisNumberOfLabels : 7,
+                baseline            : .minimumWithMaximum(of: 80),
+                globalAnimation     : .easeOut(duration: 1))
  ```
 
- # Options
- ```
- LineChartStyle(infoBoxPlacement: InfoBoxPlacement,
-                infoBoxValueColour: Color,
-                infoBoxDescriptionColor: Color,
-                xAxisGridStyle: GridStyle,
-                xAxisLabelPosition: XAxisLabelPosistion,
-                xAxisLabelColour: Color,
-                xAxisLabelsFrom: LabelsFrom,
-                yAxisGridStyle: GridStyle,
-                yAxisLabelPosition: YAxisLabelPosistion,
-                yAxisLabelColour: Color,
-                yAxisNumberOfLabels: Int,
-                baseline: Baseline,
-                globalAnimation: Animation)
- ```
- 
- ---
- 
- # Also See
- - [InfoBoxPlacement](x-source-tag://InfoBoxPlacement)
- - [GridStyle](x-source-tag://GridStyle)
- - [XAxisLabelPosistion](x-source-tag://XAxisLabelPosistion)
- - [LabelsFrom](x-source-tag://LabelsFrom)
- - [YAxisLabelPosistion](x-source-tag://YAxisLabelPosistion)
- 
- # Conforms to
- - CTLineChartStyle
- - CTLineAndBarChartStyle
- - CTChartStyle
- 
- - Tag: LineChartStyle
  */
 public struct LineChartStyle: CTLineChartStyle {
     
     public var infoBoxPlacement        : InfoBoxPlacement
     public var infoBoxValueColour      : Color
-    public var infoBoxDescriptionColor : Color
+    public var infoBoxDescriptionColour : Color
     public var markerType              : LineMarkerType
         
     public var xAxisGridStyle       : GridStyle
@@ -91,7 +54,7 @@ public struct LineChartStyle: CTLineChartStyle {
     /// - Parameters:
     ///   - infoBoxPlacement: Placement of the information box that appears on touch input.
     ///   - infoBoxValueColour: Colour of the value part of the touch info.
-    ///   - infoBoxDescriptionColor: Colour of the description part of the touch info.
+    ///   - infoBoxDescriptionColour: Colour of the description part of the touch info.
     ///
     ///   - markerType: Where the marker lines come from to meet at a specified point.
     ///
@@ -106,10 +69,10 @@ public struct LineChartStyle: CTLineChartStyle {
     ///   - yAxisNumberOfLabel: Number Of Labels on Y Axis.
     ///
     ///   - baseline: Whether the chart is drawn from baseline of zero or the minimum datapoint value.
-    ///   - globalAnimation: Gobal control of animations.
+    ///   - globalAnimation: Global control of animations.
     public init(infoBoxPlacement        : InfoBoxPlacement  = .floating,
                 infoBoxValueColour      : Color             = Color.primary,
-                infoBoxDescriptionColor : Color             = Color.primary,
+                infoBoxDescriptionColour: Color             = Color.primary,
                 
                 markerType              : LineMarkerType    = .indicator(style: DotStyle()),
                 
@@ -126,9 +89,9 @@ public struct LineChartStyle: CTLineChartStyle {
                 baseline            : Baseline              = .minimumValue,
                 globalAnimation     : Animation             = Animation.linear(duration: 1)
     ) {
-        self.infoBoxPlacement        = infoBoxPlacement
-        self.infoBoxValueColour      = infoBoxValueColour
-        self.infoBoxDescriptionColor = infoBoxDescriptionColor
+        self.infoBoxPlacement         = infoBoxPlacement
+        self.infoBoxValueColour       = infoBoxValueColour
+        self.infoBoxDescriptionColour = infoBoxDescriptionColour
         
         self.markerType          = markerType
         

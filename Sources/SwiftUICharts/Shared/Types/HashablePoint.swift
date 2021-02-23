@@ -9,6 +9,8 @@ import SwiftUI
 
 /**
  A hashable version of CGPoint
+ 
+ CGPoint doesn't conform to Hashable.
  */
 public struct HashablePoint: Hashable {
 

@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ A dot that follows the line on touch events.
+ */
 internal struct PosistionIndicator: View {
     
     private let fillColour : Color
@@ -31,13 +34,22 @@ internal struct PosistionIndicator: View {
     }
 }
 
+/**
+ Styling of the dot that follows the line on touch events.
+ */
 public struct DotStyle {
     
     let size       : CGFloat
     let fillColour : Color
     let lineColour : Color
     let lineWidth  : CGFloat
-
+    
+    /// Sets the style of the Posistion Indicator
+    /// - Parameters:
+    ///   - size: Size of the Indicator.
+    ///   - fillColour: Fill colour.
+    ///   - lineColour: Border colour.
+    ///   - lineWidth: Border width.
     public init(size       : CGFloat    = 15,
                 fillColour : Color      = Color.primary,
                 lineColour : Color      = Color.blue,

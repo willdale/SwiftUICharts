@@ -22,16 +22,16 @@ import SwiftUI
  as the modifiers are various types for stacks that wrap
  around the previous views.
  ```
-    .touchOverlay(chartData: data)
-    .averageLine(chartData: data)
-    .yAxisPOI(chartData: data)
-    .xAxisGrid(chartData: data)
-    .yAxisGrid(chartData: data)
-    .xAxisLabels(chartData: data)
-    .yAxisLabels(chartData: data)
-    .infoBox(chartData: data)
-    .headerBox(chartData: data)
-    .legends(chartData: data)
+.touchOverlay(chartData: data)
+.averageLine(chartData: data)
+.yAxisPOI(chartData: data)
+.xAxisGrid(chartData: data)
+.yAxisGrid(chartData: data)
+.xAxisLabels(chartData: data)
+.yAxisLabels(chartData: data)
+.infoBox(chartData: data)
+.headerBox(chartData: data)
+.legends(chartData: data)
  ```
  */
 public struct BarChart<ChartData>: View where ChartData: BarChartData {

@@ -29,7 +29,7 @@ public struct BarChartStyle: CTBarChartStyle {
         
     public var infoBoxPlacement        : InfoBoxPlacement
     public var infoBoxValueColour      : Color
-    public var infoBoxDescriptionColor : Color
+    public var infoBoxDescriptionColour : Color
     
     public var markerType              : BarMarkerType
     
@@ -50,7 +50,7 @@ public struct BarChartStyle: CTBarChartStyle {
     /// - Parameters:
     ///   - infoBoxPlacement: Placement of the information box that appears on touch input.
     ///   - infoBoxValueColour: Colour of the value part of the touch info.
-    ///   - infoBoxDescriptionColor: Colour of the description part of the touch info.
+    ///   - infoBoxDescriptionColour: Colour of the description part of the touch info.
     ///
     ///   - markerType: Where the marker lines come from to meet at a specified point.
     ///
@@ -64,10 +64,10 @@ public struct BarChartStyle: CTBarChartStyle {
     ///   - yAxisNumberOfLabel: Number Of Labels on Y Axis.
     ///   - yAxisLabelColour: Text Colour for the labels on the Y axis.
     ///
-    ///   - globalAnimation: Gobal control of animations.
+    ///   - globalAnimation: Global control of animations.
     public init(infoBoxPlacement        : InfoBoxPlacement  = .floating,
                 infoBoxValueColour      : Color             = Color.primary,
-                infoBoxDescriptionColor : Color             = Color.primary,
+                infoBoxDescriptionColour: Color             = Color.primary,
                 
                 markerType              : BarMarkerType     = .full,
                 
@@ -83,9 +83,9 @@ public struct BarChartStyle: CTBarChartStyle {
                 
                 globalAnimation     : Animation             = Animation.linear(duration: 1)
     ) {
-        self.infoBoxPlacement        = infoBoxPlacement
-        self.infoBoxValueColour      = infoBoxValueColour
-        self.infoBoxDescriptionColor = infoBoxDescriptionColor
+        self.infoBoxPlacement         = infoBoxPlacement
+        self.infoBoxValueColour       = infoBoxValueColour
+        self.infoBoxDescriptionColour = infoBoxDescriptionColour
         
         self.markerType              = markerType
         

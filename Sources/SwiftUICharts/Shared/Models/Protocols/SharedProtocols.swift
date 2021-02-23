@@ -13,50 +13,45 @@ import SwiftUI
  Main protocol for passing data around library.
  
  All Chart Data models ultimately conform to this.
- 
- - Tag: ChartData
  */
 public protocol ChartData: ObservableObject, Identifiable {
     
+    /// A type representing a  data set. -- `DataSet`
     associatedtype Set      : DataSet
+    /// A type representing a data point. -- `CTChartDataPoint`
     associatedtype DataPoint: CTChartDataPoint
+    /// A type representing the chart style. -- `CTChartStyle`
     associatedtype CTStyle  : CTChartStyle
+    /// A type representing opaque View
     associatedtype Touch    : View
     
     var id: ID { get }
     
     /**
      Data model containing datapoints and styling information.
-    
-     `Set` is either `SingleData` or `MultiDataSet`.
     */
     var dataSets: Set { get set }
     
     /**
      Data model containing the charts Title, Subtitle and the Title for Legend.
-     
-     # Reference
-     [ChartMetadata](x-source-tag://ChartMetadata)
     */
     var metadata: ChartMetadata { get set }
     
     /**
-     Array of `LegendData` to populate the chart legend.
+     Array of `LegendData` to populate the charts legend.
 
      This is populated automatically from within each view.
     */
     var legends: [LegendData] { get set }
     
     /**
-     Data model to hold temporary data from `TouchOverlay` ViewModifier and pass the data points to display in the `HeaderView`.
+     Data model pass data from `TouchOverlay` ViewModifier to
+     `HeaderBox` or `InfoBox` for display.
     */
     var infoView: InfoViewData<DataPoint> { get set }
     
     /**
      Data model conatining the style data for the chart.
-     
-     # Reference
-     [CTChartStyle](x-source-tag://CTChartStyle)
      */
     var chartStyle: CTStyle { get set }
     
@@ -71,18 +66,12 @@ public protocol ChartData: ObservableObject, Identifiable {
      Allows for internal logic based on the type of chart.
      
      This might get removed in favour of a more protocol based approach.
-     
-     # Reference
-     [ChartType](x-source-tag://ChartType)
-    
-     [DataSetType](x-source-tag://DataSetType)
-     
     */
     var chartType: (chartType: ChartType, dataSetType: DataSetType) { get }
     
 
     /**
-     Returns whether there are two or more dataPoints
+     Returns whether there are two or more data points.
      */
     func isGreaterThanTwo() -> Bool
     
@@ -94,8 +83,6 @@ public protocol ChartData: ObservableObject, Identifiable {
       - touchLocation: Current location of the touch.
       - chartSize: The size of the chart view as the parent view.
     - Returns: Array of data points.
-     
-    - Tag: getDataPoint
     */
     func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [DataPoint]
     
@@ -105,11 +92,8 @@ public protocol ChartData: ObservableObject, Identifiable {
       - touchLocation: Current location of the touch.
       - chartSize: The size of the chart view as the parent view.
     - Returns: Array of points with the location on screen of data points.
-     
-    - Tag: getDataPoint
     */
     func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint]
-    
     
     /**
      Takes touch location and return a view based on the chart type and configuration.
@@ -123,24 +107,19 @@ public protocol ChartData: ObservableObject, Identifiable {
     
   
 }
-
+/**
+ Protocol for dealing with legend data internally.
+ */
 internal protocol LegendProtocol {
     
     /**
     Sets the order the Legends are layed out in.
      - Returns: Ordered array of Legends.
-     
-     # Reference
-     [LegendData](x-source-tag://LegendData)
-     
-     - Tag: legendOrder
     */
     func legendOrder() -> [LegendData]
     
     /**
      Configures the legends based on the type of chart.
-     
-     - Tag: setupLegends
      */
     func setupLegends()
 }
@@ -150,9 +129,7 @@ internal protocol LegendProtocol {
 
 // MARK: - Data Sets
 /**
- Main protocol set conformace for types of Data Sets.
- 
- - Tag: DataSet
+ Main protocol to set conformace for types of Data Sets.
  */
 public protocol DataSet: Hashable, Identifiable {
     var id : ID { get }
@@ -160,16 +137,13 @@ public protocol DataSet: Hashable, Identifiable {
 
 /**
  Protocol for data sets that only require a single set of data .
-  
- - Tag: SingleDataSet
  */
 public protocol SingleDataSet: DataSet {
+    /// A type representing a data point. -- `CTChartDataPoint`
     associatedtype DataPoint : CTChartDataPoint
     
     /**
      Array of data points.
-     
-     [See CTChartDataPoint](x-source-tag://CTChartDataPoint)
      */
     var dataPoints  : [DataPoint] { get set }
 
@@ -177,14 +151,13 @@ public protocol SingleDataSet: DataSet {
 
 /**
  Protocol for data sets that require a multiple sets of data .
-  
- - Tag: MultiDataSet
  */
 public protocol MultiDataSet: DataSet {
+    /// A type representing a single data set -- `SingleDataSet`
     associatedtype DataSet : SingleDataSet
+    
     /**
-     Array of DataSets.
-     [See SingleDataSet](x-source-tag://SingleDataSet)
+     Array of single data sets.
      */
     var dataSets : [DataSet] { get set }
 }
@@ -192,9 +165,6 @@ public protocol MultiDataSet: DataSet {
 // MARK: - Data Points
 /**
  Protocol to set base configuration for data points.
- 
- - Tag: CTChartDataPoint
- 
  */
 public protocol CTChartDataPoint: Hashable, Identifiable {
     
@@ -206,17 +176,15 @@ public protocol CTChartDataPoint: Hashable, Identifiable {
     var value            : Double { get set }
     
     /**
-     A laabel that can be displayed on touch input
+     A label that can be displayed on touch input
     
      It can eight be displayed in a floating box that tracks the users input location
-     or placed in the header. [See InfoBoxPlacement](x-source-tag://InfoBoxPlacement).
+     or placed in the header.
     */
     var pointDescription : String? { get set }
     
     /**
-     Date can be used for performing additional calculations.
-     
-     [See Calculations](x-source-tag://Calculations)
+     Date can be used for optionally performing additional calculations.
      */
     var date             : Date? { get set }
     
@@ -225,16 +193,11 @@ public protocol CTChartDataPoint: Hashable, Identifiable {
 // MARK: - Styles
 /**
  Protocol to set the styling data for the chart.
- 
-  - Tag: CTChartStyle
  */
 public protocol CTChartStyle {
     
     /**
      Placement of the information box that appears on touch input.
-     
-     # Reference
-     [See InfoBoxPlacement](x-source-tag://InfoBoxPlacement)
      */
     var infoBoxPlacement        : InfoBoxPlacement { get set }
     
@@ -246,7 +209,7 @@ public protocol CTChartStyle {
     /**
      Colour of the description part of the touch info.
      */
-    var infoBoxDescriptionColor : Color { get set }
+    var infoBoxDescriptionColour : Color { get set }
     
     /**
      Global control of animations.
@@ -260,18 +223,14 @@ public protocol CTChartStyle {
 
 
 /**
- A protocol to set varius colour styles.
+ A protocol to set colour styling.
  
  Allows for single colour, gradient or gradient with stops control.
-  
- - Tag: CTColourStyle
  */
 public protocol CTColourStyle {
     
     /**
      Selection for the style of colour.
-     
-     [See ColourType](x-source-tag://ColourType)
      */
     var colourType: ColourType { get set }
     
@@ -284,9 +243,7 @@ public protocol CTColourStyle {
     /**
      Array of Gradient Stops.
      
-     GradientStop is a Hashable version of Gradient.Stop
-     
-     [See GradientStop](x-source-tag://GradientStop)
+     `GradientStop` is a Hashable version of Gradient.Stop
      */
     var stops: [GradientStop]? { get set }
     

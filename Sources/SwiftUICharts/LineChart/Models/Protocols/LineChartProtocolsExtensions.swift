@@ -45,7 +45,7 @@ extension LineChartDataProtocol {
      Returns the relevent path based on the line type.
      
      - Parameters:
-        - style: Styling of the line.
+        - lineType: Drawing style of the line.
         - rect: Frame the line will be in.
         - dataPoints: Data points to draw the line.
         - minValue: Lowest value in the dataset.
@@ -70,8 +70,7 @@ extension LineChartDataProtocol {
                                    isFilled   : isFilled)
         }
     }
-    // Maybe put all into extentions of: Path / CGPoint / CGFloat
-    // https://developer.apple.com/documentation/swiftui/path/element
+
     /**
      How far along the path the touch or pointer is as a percent of the total.
      .
@@ -89,6 +88,9 @@ extension LineChartDataProtocol {
     
     /**
      The total length of the path.
+     
+     # Reference
+     https://developer.apple.com/documentation/swiftui/path/element
      
      - Parameter path: Path to measure.
      - Returns: Total length of the path.
@@ -220,9 +222,12 @@ extension LineChartDataProtocol {
     }
     
     
-    // https://swiftui-lab.com/swiftui-animations-part2/
+    
     /**
      Returns a point on the path based on the X axis of the users touch input.
+     
+     # Reference
+     https://swiftui-lab.com/swiftui-animations-part2/
      
      - Parameters:
        - percent: The distance along the path as a percentage.
@@ -415,13 +420,20 @@ extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType
         }
     }
 }
+/**
+ Sub view for laying out and styling the indicator dot.
+ */
+internal struct IndicatorSwitch: View {
 
-struct IndicatorSwitch: View {
+    private let indicator: Dot
+    private let location : CGPoint
     
-    let indicator: Dot
-    let location : CGPoint
+    internal init(indicator: Dot, location: CGPoint) {
+        self.indicator = indicator
+        self.location = location
+    }
     
-    var body: some View {
+    internal var body: some View {
         switch indicator {
         case .none: EmptyView()
         case .style(let style):

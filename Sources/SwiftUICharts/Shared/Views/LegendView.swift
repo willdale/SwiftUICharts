@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Sub view to setup and display the legends.
+ */
 internal struct LegendView<T>: View where T: ChartData {
     
     @ObservedObject var chartData : T
@@ -47,6 +50,8 @@ internal struct LegendView<T>: View where T: ChartData {
             }
         }.id(UUID())
     }
+    
+    /// Detects whether to run the scale effect on the legend.
     private func scaleLegendBar(legend: LegendData) -> Bool {
         
         if chartData is BarChartData {
@@ -65,6 +70,7 @@ internal struct LegendView<T>: View where T: ChartData {
             return false
         }
     }
+    /// Detects whether to run the scale effect on the legend.
     private func scaleLegendPie(legend: LegendData) -> Bool {
         
         if chartData is PieChartData || chartData is DoughnutChartData {
@@ -78,10 +84,11 @@ internal struct LegendView<T>: View where T: ChartData {
        }
     }
     
+    /// Returns a Line legend.
     func line(_ legend: LegendData) -> some View {
         Group {
             if let stroke = legend.strokeStyle {
-                let strokeStyle = Stroke.strokeToStrokeStyle(stroke: stroke)
+                let strokeStyle = stroke.strokeToStrokeStyle()
                 if let colour = legend.colour {
                     HStack {
                         LegendLine(width: 40)
@@ -122,6 +129,7 @@ internal struct LegendView<T>: View where T: ChartData {
         }
     }
     
+    /// Returns a Bar legend.
     func bar(_ legend: LegendData) -> some View {
         Group {
             if let colour = legend.colour
@@ -164,6 +172,7 @@ internal struct LegendView<T>: View where T: ChartData {
         }
     }
     
+    /// Returns a Pie legend.
     func pie(_ legend: LegendData) -> some View {
         Group {
             if let colour = legend.colour {

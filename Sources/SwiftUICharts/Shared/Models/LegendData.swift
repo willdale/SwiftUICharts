@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-/// Data model for Legends
-/// - Tag: LegendData
-public struct LegendData: CTColourStyle, Hashable, Identifiable {
+/**
+ Data model to hold data for Legends
+ */
+ public struct LegendData: CTColourStyle, Hashable, Identifiable {
     
     // MARK: - Parameters
     
@@ -38,6 +39,7 @@ public struct LegendData: CTColourStyle, Hashable, Identifiable {
     ///   - colour: Single Colour
     ///   - strokeStyle: Stroke Style
     ///   - prioity: Used to make sure the charts data legend is first
+    ///   - chartType: Type of chart being used.
     public init(id         : UUID,
                 legend     : String,
                 colour     : Color,
@@ -67,6 +69,7 @@ public struct LegendData: CTColourStyle, Hashable, Identifiable {
     ///   - endPoint: End point for Gradient
     ///   - strokeStyle: Stroke Style
     ///   - prioity: Used to make sure the charts data legend is first
+    ///   - chartType: Type of chart being used.
     public init(id         : UUID,
                 legend     : String,
                 colours    : [Color],
@@ -98,6 +101,7 @@ public struct LegendData: CTColourStyle, Hashable, Identifiable {
     ///   - endPoint: End point for Gradient
     ///   - strokeStyle: Stroke Style
     ///   - prioity: Used to make sure the charts data legend is first
+    ///   - chartType: Type of chart being used.
     public init(id         : UUID,
                 legend     : String,
                 stops      : [GradientStop],

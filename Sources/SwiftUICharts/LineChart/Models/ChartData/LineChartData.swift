@@ -10,148 +10,39 @@ import SwiftUI
 /**
  Data for drawing and styling a single line, line chart.
  
- This model contains all the data and styling information for a single line, line chart.
+ This model contains the data and styling information for a single line, line chart.
  
  # Example
  ```
- static func makeData() -> LineChartData {
+ static func weekOfData() -> LineChartData {
      
      let data = LineDataSet(dataPoints: [
-         LineChartDataPoint(value: 20,  xAxisLabel: "M", pointLabel: "Monday"),
-         LineChartDataPoint(value: 90,  xAxisLabel: "T", pointLabel: "Tuesday"),
+         LineChartDataPoint(value: 120, xAxisLabel: "M", pointLabel: "Monday"),
+         LineChartDataPoint(value: 190, xAxisLabel: "T", pointLabel: "Tuesday"),
          LineChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday"),
-         LineChartDataPoint(value: 75,  xAxisLabel: "T", pointLabel: "Thursday"),
+         LineChartDataPoint(value: 175, xAxisLabel: "T", pointLabel: "Thursday"),
          LineChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"),
          LineChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday"),
-         LineChartDataPoint(value: 90,  xAxisLabel: "S", pointLabel: "Sunday")
+         LineChartDataPoint(value: 190, xAxisLabel: "S", pointLabel: "Sunday")
      ],
-     legendTitle: "Data",
-     pointStyle : PointStyle(),
-     style      : LineStyle())
-     
-     let metadata = ChartMetadata(title: "Some Data", subtitle: "A Week")
-     
-     let labels = ["Monday", "Thursday", "Sunday"]
-     
-     return LineChartData(dataSets      : data,
-                          metadata      : metadata,
-                          xAxisLabels   : labels,
-                          chartStyle    : LineChartStyle(),
-                          noDataText    : Text("No Data"))
+     legendTitle: "Test One",
+     pointStyle: PointStyle(),
+     style: LineStyle(colour: Color.red, lineType: .curvedLine))
+          
+     return LineChartData(dataSets       : data,
+                          metadata       : ChartMetadata(title: "Some Data", subtitle: "A Week"),
+                          xAxisLabels    : ["Monday", "Thursday", "Sunday"],
+                          chartStyle     : LineChartStyle(infoBoxPlacement    : .floating,
+                                                          markerType          : .indicator(style: DotStyle()),
+                                                          xAxisLabelPosition  : .bottom,
+                                                          xAxisLabelsFrom     : .chartData,
+                                                          yAxisLabelPosition  : .leading,
+                                                          yAxisNumberOfLabels : 7,
+                                                          baseline            : .minimumWithMaximum(of: 80),
+                                                          globalAnimation     : .easeOut(duration: 1)))
  }
  
  ```
- 
- ---
- 
- # Parts
- 
- ## LineDataSet
- ```
- LineDataSet(dataPoints: [LineChartDataPoint],
-                         legendTitle: String,
-                         pointStyle: PointStyle,
-                         style: LineStyle)
- ```
- ### LineChartDataPoint
- ```
- LineChartDataPoint(value: Double,
-                    xAxisLabel: String?,
-                    pointLabel: String?,
-                    date: Date?)
- ```
- 
- ### PointStyle
- ```
- PointStyle(pointSize: CGFloat,
-            borderColour: Color,
-            fillColour: Color,
-            lineWidth: CGFloat,
-            pointType: PointType,
-            pointShape: PointShape)
- ```
- 
- ### LineStyle
- ```
- LineStyle(colour: Color,
-           ...)
- 
- LineStyle(colours: [Color],
-           startPoint: UnitPoint,
-           endPoint: UnitPoint,
-           ...)
- 
- LineStyle(stops: [GradientStop],
-           startPoint: UnitPoint,
-           endPoint: UnitPoint,
-           ...)
- 
- LineStyle(...,
-           lineType: LineType,
-           strokeStyle: Stroke,
-           ignoreZero: Bool)
- ```
- 
- ## ChartMetadata
- ```
- ChartMetadata(title: String?, subtitle: String?)
- ```
- 
- ## LineChartStyle
- 
- ```
- LineChartStyle(infoBoxPlacement        : InfoBoxPlacement,
-                infoBoxValueColour      : Color,
-                infoBoxDescriptionColor : Color,
-                xAxisGridStyle          : GridStyle,
-                xAxisLabelPosition      : XAxisLabelPosistion,
-                xAxisLabelColour        : Color,
-                xAxisLabelsFrom         : LabelsFrom,
-                yAxisGridStyle          : GridStyle,
-                yAxisLabelPosition      : YAxisLabelPosistion,
-                yAxisLabelColour        : Color,
-                yAxisNumberOfLabels     : Int,
-                baseline                : Baseline,
-                globalAnimation         : Animation)
- ```
- 
- ### GridStyle
- ```
- GridStyle(numberOfLines: Int,
-           lineColour   : Color,
-           lineWidth    : CGFloat,
-           dash         : [CGFloat],
-           dashPhase    : CGFloat)
- ```
- 
- ---
- 
- # Also See
- - [LineDataSet](x-source-tag://LineDataSet)
-    - [LineChartDataPoint](x-source-tag://LineChartDataPoint)
-    - [PointStyle](x-source-tag://PointStyle)
-        - [PointType](x-source-tag://PointType)
-        - [PointShape](x-source-tag://PointShape)
-    - [LineStyle](x-source-tag://LineStyle)
-        - [ColourType](x-source-tag://ColourType)
-        - [LineType](x-source-tag://LineType)
-        - [GradientStop](x-source-tag://GradientStop)
- - [ChartMetadata](x-source-tag://ChartMetadata)
- - [LineChartStyle](x-source-tag://LineChartStyle)
-    - [InfoBoxPlacement](x-source-tag://InfoBoxPlacement)
-    - [GridStyle](x-source-tag://GridStyle)
-    - [XAxisLabelPosistion](x-source-tag://XAxisLabelPosistion)
-    - [LabelsFrom](x-source-tag://LabelsFrom)
-    - [YAxisLabelPosistion](x-source-tag://YAxisLabelPosistion)
-
- # Conforms to
- - ObservableObject
- - Identifiable
- - LineChartDataProtocol
- - LineAndBarChartData
- - ChartData
- 
- - Tag: LineChartData
  */
 public final class LineChartData: LineChartDataProtocol, LegendProtocol {
     

@@ -10,7 +10,7 @@ import SwiftUI
 /// Draw line in legend view
 internal struct LegendLine : Shape {
     
-    let width : CGFloat
+    private let width : CGFloat
     
     internal init(width : CGFloat) {
         self.width = width

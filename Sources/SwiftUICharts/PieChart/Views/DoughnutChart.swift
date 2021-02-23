@@ -7,10 +7,33 @@
 
 import SwiftUI
 
+/**
+ View for creating a doughnut chart.
+ 
+ Uses `DoughnutChartData` data model.
+ 
+ # Declaration
+ ```
+ DoughnutChart(chartData: data)
+ ```
+ 
+ # View Modifiers
+ The order of the view modifiers is some what important
+ as the modifiers are various types for stacks that wrap
+ around the previous views.
+ ```
+ .touchOverlay(chartData: data)
+ .infoBox(chartData: data)
+ .headerBox(chartData: data)
+ .legends(chartData: data)
+ ```
+ */
 public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData {
     
     @ObservedObject var chartData: ChartData
     
+    /// Initialises a bar chart view.
+    /// - Parameter chartData: Must be DoughnutChartData.
     public init(chartData : ChartData) {
         self.chartData = chartData
     }

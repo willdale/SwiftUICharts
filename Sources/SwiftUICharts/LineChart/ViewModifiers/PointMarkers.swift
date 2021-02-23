@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ ViewModifier for for laying out point markers.
+ */
 internal struct PointMarkers<T>: ViewModifier where T: LineChartDataProtocol {
         
     @ObservedObject var chartData: T
@@ -47,13 +50,14 @@ extension View {
      # Unavailable for:
      - Bar Chart
      - Grouped Bar Chart
+     - Stacked Bar Chart
      - Pie Chart
+     - Multi Layer Pie Chart
      - Doughnut Chart
      
      - Parameter chartData: Chart data model.
      - Returns: A  new view containing the chart with point markers.
-     
-     - Tag: PointMarkers
+
      */
     public func pointMarkers<T: LineChartDataProtocol>(chartData: T) -> some View {
         self.modifier(PointMarkers(chartData: chartData))

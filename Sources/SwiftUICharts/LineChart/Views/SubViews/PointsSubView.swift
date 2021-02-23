@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Sub view gets the point markers drawn, sets the styling and sets up the animations.
+ */
 internal struct PointsSubView: View {
     
     private let dataSets: LineDataSet

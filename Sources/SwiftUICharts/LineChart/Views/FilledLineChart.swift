@@ -7,6 +7,39 @@
 
 import SwiftUI
 
+/**
+ View for creating a filled line chart.
+ 
+ Uses `LineChartData` data model.
+ 
+ # Declaration
+ ```
+ FilledLineChart(chartData: data)
+ ```
+ 
+ # View Modifiers
+ The order of the view modifiers is some what important
+ as the modifiers are various types for stacks that wrap
+ around the previous views.
+ ```
+ .touchOverlay(chartData: data)
+ .pointMarkers(chartData: data)
+ .averageLine(chartData: data,
+              strokeStyle: StrokeStyle(lineWidth: 3,dash: [5,10]))
+ .yAxisPOI(chartData: data,
+           markerName: "50",
+           markerValue: 50,
+           lineColour: Color.blue,
+           strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
+ .xAxisGrid(chartData: data)
+ .yAxisGrid(chartData: data)
+ .xAxisLabels(chartData: data)
+ .yAxisLabels(chartData: data)
+ .infoBox(chartData: data)
+ .headerBox(chartData: data)
+ .legends(chartData: data)
+ ```
+ */
 public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
     
     @ObservedObject var chartData: ChartData
@@ -14,6 +47,8 @@ public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
     private let minValue : Double
     private let range    : Double
 
+    /// Initialises a filled line chart
+    /// - Parameter chartData: Must be LineChartData model.
     public init(chartData: ChartData) {
         self.chartData  = chartData
         self.minValue   = chartData.getMinValue()

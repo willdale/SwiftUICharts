@@ -7,23 +7,37 @@
 
 import SwiftUI
 
+/**
+ Data set for a pie chart.
+  
+ # Example
+ ```
+ PieDataSet(dataPoints: [
+        PieChartDataPoint(value: 7, pointDescription: "One", colour: .blue),
+        PieChartDataPoint(value: 2, pointDescription: "Two", colour: .red),
+        PieChartDataPoint(value: 9, pointDescription: "Three", colour: .purple),
+        PieChartDataPoint(value: 6, pointDescription: "Four", colour: .green),
+        PieChartDataPoint(value: 4, pointDescription: "Five", colour: .orange)],
+    legendTitle: "Data")
+ ```
+ */
 public struct PieDataSet: SingleDataSet {
 
     public var id           : UUID = UUID()
     public var dataPoints   : [PieChartDataPoint]
     public var legendTitle  : String
-    public var style        : PieSegmentStyle
     
+    /// Initialises a new data set for a standard pie chart.
+    /// - Parameters:
+    ///   - dataPoints: Array of elements.
+    ///   - legendTitle: Label for the data in legend.
     public init(dataPoints  : [PieChartDataPoint],
-                legendTitle : String,
-                style       : PieSegmentStyle
+                legendTitle : String//,
     ) {
         self.dataPoints     = dataPoints
         self.legendTitle    = legendTitle
-        self.style          = style
     }
 
-    public typealias Styling = PieSegmentStyle
     public typealias DataPoint = PieChartDataPoint
 }
 

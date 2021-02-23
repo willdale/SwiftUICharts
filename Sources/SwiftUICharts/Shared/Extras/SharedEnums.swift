@@ -14,8 +14,6 @@ import Foundation
  case single // Single data set - i.e LineDataSet
  case multi // Multi data set - i.e MultiLineDataSet
  ```
- 
- - Tag: DataSetType
  */
 public enum DataSetType {
     case single
@@ -29,8 +27,6 @@ public enum DataSetType {
  case bar // Bar Chart Type
  case pie // Pie Chart Type
  ```
- 
- - Tag: ChartType
  */
 public enum ChartType {
     /// Line Chart Type
@@ -49,8 +45,6 @@ public enum ChartType {
  case gradientColour // Colour Gradient
  case gradientStops // Colour Gradient with stop control
  ```
- 
- - Tag: ColourType
  */
 public enum ColourType {
     /// Single Colour
@@ -69,8 +63,6 @@ public enum ColourType {
  case fixed // Centered in view.
  case header // Fix in the Header box. Must have .headerBox().
  ```
- 
- - Tag: InfoBoxPlacement
  */
 public enum InfoBoxPlacement {
     /// Follows input across the chart.

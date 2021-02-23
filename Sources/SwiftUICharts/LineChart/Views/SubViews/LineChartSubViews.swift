@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+// MARK: - Single colour
+/**
+ Sub view gets the line drawn, sets the colour and sets up the animations.
+ 
+ Single colour
+ */
 internal struct LineChartColourSubView<CD>: View where CD: LineChartDataProtocol {
     
     private let chartData   : CD
@@ -15,9 +21,7 @@ internal struct LineChartColourSubView<CD>: View where CD: LineChartDataProtocol
     private let range       : Double
     private let colour      : Color
     private let isFilled    : Bool
-        
-    
-    
+           
     internal init(chartData : CD,
                   dataSet   : LineDataSet,
                   minValue  : Double,
@@ -47,7 +51,7 @@ internal struct LineChartColourSubView<CD>: View where CD: LineChartDataProtocol
                   .fill(colour)
             }, else: {
                 $0.trim(to: startAnimation ? 1 : 0)
-                .stroke(colour, style: Stroke.strokeToStrokeStyle(stroke: dataSet.style.strokeStyle))
+                    .stroke(colour, style: dataSet.style.strokeStyle.strokeToStrokeStyle())
             })
             .background(Color(.gray).opacity(0.01))
             .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
@@ -61,6 +65,12 @@ internal struct LineChartColourSubView<CD>: View where CD: LineChartDataProtocol
     }
 }
 
+// MARK: - Gradient colour
+/**
+ Sub view gets the line drawn, sets the colour and sets up the animations.
+ 
+ Gradient colour
+ */
 internal struct LineChartColoursSubView<CD>: View where CD: LineChartDataProtocol {
     
     private let chartData   : CD
@@ -114,7 +124,7 @@ internal struct LineChartColoursSubView<CD>: View where CD: LineChartDataProtoco
                     .stroke(LinearGradient(gradient: Gradient(colors: colours),
                                            startPoint: startPoint,
                                            endPoint: endPoint),
-                            style: Stroke.strokeToStrokeStyle(stroke: dataSet.style.strokeStyle))
+                            style: dataSet.style.strokeStyle.strokeToStrokeStyle())
             })
             
             
@@ -130,10 +140,14 @@ internal struct LineChartColoursSubView<CD>: View where CD: LineChartDataProtoco
     }
 }
 
+// MARK: - Gradient with stops
+/**
+ Sub view gets the line drawn, sets the colour and sets up the animations.
+ 
+ Gradient with stops
+ */
 internal struct LineChartStopsSubView<CD>: View where CD: LineChartDataProtocol {
 
-    
-    
     private let chartData   : CD
     private let dataSet     : LineDataSet
 
@@ -186,7 +200,7 @@ internal struct LineChartStopsSubView<CD>: View where CD: LineChartDataProtocol 
                     .stroke(LinearGradient(gradient: Gradient(stops: stops),
                                            startPoint: startPoint,
                                            endPoint: endPoint),
-                            style: Stroke.strokeToStrokeStyle(stroke: dataSet.style.strokeStyle))
+                            style: dataSet.style.strokeStyle.strokeToStrokeStyle())
             })
 
             .background(Color(.gray).opacity(0.01))

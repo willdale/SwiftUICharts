@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Displays legends under the chart.
+ */
 internal struct Legends<T>: ViewModifier where T: ChartData {
     
     @ObservedObject var chartData: T
@@ -38,10 +41,11 @@ extension View {
     /**
      Displays legends under the chart.
      
-     - Parameter chartData: Chart data model.
+     - Parameters:
+        - chartData: Chart data model.
+        - columns: How to layout the legends.
+        - textColor: Colour of the text.
      - Returns: A  new view containing the chart with chart legends under.
-     
-     - Tag: Legends
      */
     public func legends<T:ChartData>(chartData: T, columns: [GridItem] = [GridItem(.flexible())], textColor: Color = Color.primary) -> some View {
         self.modifier(Legends(chartData: chartData, columns: columns, textColor: textColor))

@@ -1,52 +1,19 @@
 //
-//  PieChartProtocols.swift
+//  PieChartProtocolExtentions.swift
 //  
 //
-//  Created by Will Dale on 02/02/2021.
+//  Created by Will Dale on 23/02/2021.
 //
 
 import SwiftUI
 
-// MARK: - Chart Data
-/**
- A protocol to extend functionality of `ChartData` specifically for Pie and Doughnut Charts.
- 
- # Reference
- [See ChartData](x-source-tag://ChartData)
-  
- - Tag: PieAndDoughnutChartDataProtocol
- */
-public protocol PieAndDoughnutChartDataProtocol: ChartData {}
-
-/**
- A protocol to extend functionality of `PieAndDoughnutChartDataProtocol` specifically for Pie Charts.
- 
- # Reference
- [See PieAndDoughnutChartDataProtocol](x-source-tag://PieAndDoughnutChartDataProtocol)
-  
- - Tag: PieChartDataProtocol
- */
-public protocol PieChartDataProtocol : PieAndDoughnutChartDataProtocol {}
-
-/**
- A protocol to extend functionality of `PieAndDoughnutChartDataProtocol` specifically for  Doughnut Charts.
- 
- # Reference
- [See DoughnutChartDataProtocol](x-source-tag://DoughnutChartDataProtocol)
-  
- - Tag: DoughnutChartDataProtocol
- */
-public protocol DoughnutChartDataProtocol : PieAndDoughnutChartDataProtocol {}
-
-public protocol MultiPieChartDataProtocol : PieAndDoughnutChartDataProtocol {}
-
-
-
-
-// MARK: - DataSet
-public protocol CTMultiPieDataSet: DataSet {}
-
+// MARK: - Extentions
 extension PieAndDoughnutChartDataProtocol where Set == MultiPieDataSet, DataPoint == MultiPieDataPoint {
+    /**
+     Sets up the data points in a way that can be sent to renderer for drawing.
+     
+     It configures each data point with startAngle and amount variables in radians.
+     */
     internal func makeDataPoints() {
         let total       = self.dataSets.dataPoints.reduce(0) { $0 + $1.value }
         var startAngle  = -Double.pi / 2
@@ -102,11 +69,13 @@ extension PieAndDoughnutChartDataProtocol where Set == MultiPieDataSet, DataPoin
     }
 }
 
-
-// * (180 / Double.pi)
-
 extension PieAndDoughnutChartDataProtocol where Set == PieDataSet, DataPoint == PieChartDataPoint {
 
+    /**
+     Sets up the data points in a way that can be sent to renderer for drawing.
+     
+     It configures each data point with startAngle and amount variables in radians.
+     */
     internal func makeDataPoints() {
         let total       = self.dataSets.dataPoints.reduce(0) { $0 + $1.value }
         var startAngle  = -Double.pi / 2
@@ -145,10 +114,20 @@ extension PieAndDoughnutChartDataProtocol where Set == PieDataSet, DataPoint == 
             }
         }
     }
-    
+    /**
+     Gets the number of degrees around the chart from 'north'.
+     
+     # Reference
+     [Atan2](http://www.cplusplus.com/reference/cmath/atan2/)
+        
+     [Rotate to north](https://stackoverflow.com/a/25398191)
+     
+     - Parameters:
+       - touchLocation: Current location of the touch.
+       - rect: The size of the chart view as the parent view.
+     - Returns: Degrees around the chart.
+     */
     func degree(from touchLocation: CGPoint, in rect: CGRect) -> CGFloat {
-        // http://www.cplusplus.com/reference/cmath/atan2/
-        // https://stackoverflow.com/a/25398191
         let center = CGPoint(x: rect.midX, y: rect.midY)
         let coordinates = CGPoint(x: touchLocation.x - center.x,
                                   y: touchLocation.y - center.y)
@@ -160,62 +139,4 @@ extension PieAndDoughnutChartDataProtocol where Set == PieDataSet, DataPoint == 
             return -90 - degrees
         }
     }
-}
-
-
-
-
-// MARK: - DataPoints
-
-/**
- A protocol to extend functionality of `CTChartDataPoint` specifically for Pie and Doughnut Charts.
- 
- Currently empty.
- 
- - Tag: CTPieDataPoint
- */
-public protocol CTPieDataPoint: CTChartDataPoint {
-    var startAngle  : Double { get set }
-    var amount      : Double { get set }
-}
-
-public protocol CTMultiPieChartDataPoint: CTChartDataPoint {
-    var layerDataPoints  : [MultiPieDataPoint]? { get set }
-}
-
-
-
-
-// MARK: - Style
-/**
- A protocol to extend functionality of `CTChartStyle` specifically for  Pie and Doughnut Charts.
- 
- Currently empty.
- 
- - Tag: CTPieAndDoughnutChartStyle
- */
-public protocol CTPieAndDoughnutChartStyle: CTChartStyle {}
-
-
-/**
- A protocol to extend functionality of `CTPieAndDoughnutChartStyle` specifically for  Pie Charts.
- 
- Currently empty.
- 
- - Tag: CTPieChartStyle
- */
-public protocol CTPieChartStyle: CTPieAndDoughnutChartStyle {}
-
-
-/**
- A protocol to extend functionality of `CTPieAndDoughnutChartStyle` specifically for Doughnut Charts.
-  
- - Tag: CTDoughnutChartStyle
- */
-public protocol CTDoughnutChartStyle: CTPieAndDoughnutChartStyle {
-    
-    /**
-     Width / Delta of the Doughnut Chart
-    */
-    var strokeWidth: CGFloat { get set }
 }

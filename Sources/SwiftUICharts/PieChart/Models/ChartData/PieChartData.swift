@@ -7,9 +7,31 @@
 
 import SwiftUI
 
+/**
+ Data for drawing and styling a pie chart.
+ 
+ This model contains the data and styling information for a pie chart.
+ 
+ # Example
+ ```
+ static func makeData() -> PieChartData {
+     let data = PieDataSet(dataPoints: [
+                             PieChartDataPoint(value: 7, pointDescription: "One", colour: .blue),
+                             PieChartDataPoint(value: 2, pointDescription: "Two", colour: .red),
+                             PieChartDataPoint(value: 9, pointDescription: "Three", colour: .purple),
+                             PieChartDataPoint(value: 6, pointDescription: "Four", colour: .green),
+                             PieChartDataPoint(value: 4, pointDescription: "Five", colour: .orange)],
+                           legendTitle: "Data")
+     
+     return PieChartData(dataSets: data,
+                         metadata: ChartMetadata(title: "Pie", subtitle: "mmm pie"),
+                         chartStyle: PieChartStyle(infoBoxPlacement: .header))
+ }
+ ```
+ */
 public final class PieChartData: PieChartDataProtocol, LegendProtocol {
     
-    @Published public var id            : UUID = UUID()
+    public var id : UUID = UUID()
     @Published public var dataSets      : PieDataSet
     @Published public var metadata      : ChartMetadata
     @Published public var chartStyle    : PieChartStyle
@@ -19,10 +41,18 @@ public final class PieChartData: PieChartDataProtocol, LegendProtocol {
     public var noDataText: Text
     public var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
+    // MARK: - Initializer
+    /// Initialises a Pie Chart.
+    ///
+    /// - Parameters:
+    ///   - dataSets: Data to draw and style the chart.
+    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
+    ///   - chartStyle : The style data for the aesthetic of the chart.
+    ///   - noDataText : Customisable Text to display when where is not enough data to draw the chart.
     public init(dataSets    : PieDataSet,
                 metadata    : ChartMetadata,
                 chartStyle  : PieChartStyle  = PieChartStyle(),
-                noDataText  : Text
+                noDataText  : Text = Text("No Data")
     ) {
         self.dataSets    = dataSets
         self.metadata    = metadata

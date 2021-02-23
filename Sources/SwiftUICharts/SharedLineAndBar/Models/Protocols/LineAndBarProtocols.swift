@@ -10,11 +10,6 @@ import SwiftUI
 // MARK: - Chart Data
 /**
  A protocol to extend functionality of `ChartData` specifically for Line and Bar Charts.
- 
- # Reference
- [See ChartData](x-source-tag://ChartData)
- 
- - Tag: LineAndBarChartData
  */
 public protocol LineAndBarChartData : ChartData {
 
@@ -53,44 +48,31 @@ public protocol LineAndBarChartData : ChartData {
      data set (or 0) and highest number in the data set.
      
      - Returns: Array of evenly spaced numbers.
-     
-     - Tag: getYLabels
      */
     func getYLabels() -> [Double]
     
     /**
      Returns the difference between the highest and lowest numbers in the data set or data sets.
-     - Tag: getRange
      */
     func getRange() -> Double
     
     /**
      Returns the lowest value in the data set or data sets.
-     - Tag: getMinValue
      */
     func getMinValue() -> Double
     
     /**
      Returns the highest value in the data set or data sets
-     - Tag: getMaxValue
      */
     func getMaxValue() -> Double
     
     /**
      Returns the average value from the data set or data sets.
-     - Tag: getAverage
      */
     func getAverage() -> Double
     
     /**
      Displays a view for the labels on the X Axis.
-     
-     Labels can come from either [CTChartDataPoint](x-source-tag://CTChartDataPoint)
-     or [ChartData](x-source-tag://ChartData)
-     
-     - Returns: An `HStack` of `Text` containin x axis labels.
-     
-     - Tag: getXAxidLabels
      */
     func getXAxisLabels() -> XLabels
 }
@@ -102,8 +84,6 @@ public protocol MarkerType {}
 
 /**
  A protocol to extend functionality of `CTChartStyle` specifically for  Line and Bar Charts.
- 
- - Tag: CTLineAndBarChartStyle
  */
 public protocol CTLineAndBarChartStyle: CTChartStyle {
     
@@ -172,8 +152,6 @@ public protocol CTLineAndBarChartStyle: CTChartStyle {
 // MARK: - DataPoints
 /**
  A protocol to extend functionality of `CTChartDataPoint` specifically for Line and Bar Charts.
-  
- - Tag: CTLineAndBarDataPoint
  */
 public protocol CTLineAndBarDataPoint: CTChartDataPoint {
     

@@ -12,23 +12,15 @@ import SwiftUI
  
  # Example
  ```
- LineChartDataPoint(value: 20,
-                    xAxisLabel: "M",
-                    pointLabel: "Monday",
-                    date: Date())
+ LineChartDataPoint(value      : 20,
+                    xAxisLabel : "M",
+                    pointLabel : "Monday",
+                    date       : Date())
  ```
- 
- # Conforms to
- - CTLineAndBarDataPoint
- - CTChartDataPoint
- - Hashable
- - Identifiable
- 
- - Tag: LineChartDataPoint
  */
 public struct LineChartDataPoint: CTLineAndBarDataPoint {
     
-    public let id = UUID()
+    public let id               : UUID = UUID()
 
     public var value            : Double
     public var xAxisLabel       : String?

@@ -7,12 +7,21 @@
 
 import SwiftUI
 
-/// Model for controlling the overall aesthetic of the chart.
+/**
+ Model for controlling the overall aesthetic of the chart.
+ 
+ ```
+ PieChartStyle(infoBoxPlacement: .fixed,
+               infoBoxValueColour: Color.primary,
+               infoBoxDescriptionColour: Color(.systemBackground),
+               globalAnimation: .linear(duration: 1))
+ ```
+ */
 public struct PieChartStyle: CTPieChartStyle {
         
     public var infoBoxPlacement         : InfoBoxPlacement
     public var infoBoxValueColour       : Color
-    public var infoBoxDescriptionColor  : Color
+    public var infoBoxDescriptionColour  : Color
     
     public var globalAnimation : Animation
     
@@ -20,17 +29,17 @@ public struct PieChartStyle: CTPieChartStyle {
     /// - Parameters:
     ///   - infoBoxPlacement: Placement of the information box that appears on touch input.
     ///   - infoBoxValueColour: Colour of the value part of the touch info.
-    ///   - infoBoxDescriptionColor: Colour of the description part of the touch info.
-    ///   - globalAnimation: Gobal control of animations.
+    ///   - infoBoxDescriptionColour: Colour of the description part of the touch info.
+    ///   - globalAnimation: Global control of animations.
     public init(infoBoxPlacement        : InfoBoxPlacement  = .floating,
                 infoBoxValueColour      : Color             = Color.primary,
-                infoBoxDescriptionColor : Color             = Color.primary,
+                infoBoxDescriptionColour: Color             = Color.primary,
                 globalAnimation         : Animation         = Animation.linear(duration: 1)
     ) {
-        self.infoBoxPlacement        = infoBoxPlacement
-        self.infoBoxValueColour      = infoBoxValueColour
-        self.infoBoxDescriptionColor = infoBoxDescriptionColor
-        self.globalAnimation         = globalAnimation
+        self.infoBoxPlacement         = infoBoxPlacement
+        self.infoBoxValueColour       = infoBoxValueColour
+        self.infoBoxDescriptionColour = infoBoxDescriptionColour
+        self.globalAnimation          = globalAnimation
     }
 }
 

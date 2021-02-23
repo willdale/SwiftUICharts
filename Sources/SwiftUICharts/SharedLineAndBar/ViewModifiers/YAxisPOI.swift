@@ -12,7 +12,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
         
     @ObservedObject var chartData: T
     
-    private let uuid = UUID()
+    private let uuid        : UUID = UUID()
     
     private let markerName  : String
     private var markerValue : Double
@@ -73,7 +73,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
                 chartData.legends.append(LegendData(id          : uuid,
                                                     legend      : markerName,
                                                     colour      : lineColour,
-                                                    strokeStyle : Stroke.strokeStyleToStroke(strokeStyle: strokeStyle),
+                                                    strokeStyle : strokeStyle.toStroke(),
                                                     prioity     : 2,
                                                     chartType   : .line))
             }

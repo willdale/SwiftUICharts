@@ -7,10 +7,33 @@
 
 import SwiftUI
 
+/**
+ View for creating a pie chart.
+ 
+ Uses `PieChartData` data model.
+ 
+ # Declaration
+ ```
+ PieChart(chartData: data)
+ ```
+ 
+ # View Modifiers
+ The order of the view modifiers is some what important
+ as the modifiers are various types for stacks that wrap
+ around the previous views.
+ ```
+ .touchOverlay(chartData: data)
+ .infoBox(chartData: data)
+ .headerBox(chartData: data)
+ .legends(chartData: data)
+ ```
+ */
 public struct PieChart<ChartData>: View where ChartData: PieChartData {
     
     @ObservedObject var chartData: ChartData
 
+    /// Initialises a bar chart view.
+    /// - Parameter chartData: Must be PieChartData.
     public init(chartData: ChartData) {
         self.chartData = chartData
     }
