@@ -7,19 +7,9 @@
 
 import SwiftUI
 
-
 // MARK: - Chart Data
 /**
  A protocol to extend functionality of `LineAndBarChartData` specifically for Bar Charts.
- 
- # Reference
- - [See LineAndBarChartData](x-source-tag://LineAndBarChartData)
- - [See LineAndBarChartData](x-source-tag://LineAndBarChartData)
- - [See ChartData](x-source-tag://ChartData)
- 
- `LineAndBarChartData` conforms to [ChartData](x-source-tag://ChartData)
- 
- - Tag: BarChartDataProtocol
  */
 public protocol BarChartDataProtocol: LineAndBarChartData {
         
@@ -30,21 +20,9 @@ public protocol BarChartDataProtocol: LineAndBarChartData {
 }
 
 /**
- A protocol to extend functionality of `LineAndBarChartData` specifically for Bar Charts.
- 
- # Reference
- - [See GroupedBarChartDataProtocol](x-source-tag://GroupedBarChartDataProtocol)
- - [See BarChartDataProtocol](x-source-tag://BarChartDataProtocol)
- - [See LineAndBarChartData](x-source-tag://LineAndBarChartData)
- - [See ChartData](x-source-tag://ChartData)
- 
- `GroupedBarChartDataProtocol` conforms to [BarChartDataProtocol](x-source-tag://ChartData)
- 
- `LineAndBarChartData` conforms to [ChartData](x-source-tag://ChartData)
- 
- - Tag: GroupedBarChartDataProtocol
+ A protocol to extend functionality of `BarChartDataProtocol` specifically for Multi Part Bar Charts.
  */
-public protocol GroupedBarChartDataProtocol: BarChartDataProtocol {
+public protocol MultiBarChartDataProtocol: BarChartDataProtocol {
     
     /**
      Grouping data to inform the chart about the relationship between the datapoints.
@@ -55,15 +33,13 @@ public protocol GroupedBarChartDataProtocol: BarChartDataProtocol {
 
 
 
+
 // MARK: - Style
 /**
  A protocol to extend functionality of `CTLineAndBarChartStyle` specifically for  Bar Charts.
- 
- Currently empty.
- 
- - Tag: CTBarChartStyle
  */
 public protocol CTBarChartStyle: CTLineAndBarChartStyle {}
+
 
 
 
@@ -74,11 +50,6 @@ public protocol CTBarChartStyle: CTLineAndBarChartStyle {}
 // MARK: - DataSet
 /**
  A protocol to extend functionality of `SingleDataSet` specifically for Standard Bar Charts.
- 
- # Reference
- [See SingleDataSet](x-source-tag://SingleDataSet)
- 
- - Tag: CTBarChartDataSet
  */
 public protocol CTStandardBarChartDataSet: SingleDataSet {
     /**
@@ -87,9 +58,12 @@ public protocol CTStandardBarChartDataSet: SingleDataSet {
     var legendTitle : String { get set }
 }
 
-public protocol CTGroupedBarChartDataSet: SingleDataSet  {}
+/**
+ A protocol to extend functionality of `SingleDataSet` specifically for Multi Part Bar Charts.
+ */
+public protocol CTMultiBarChartDataSet: SingleDataSet  {}
 
-public protocol CTSStackedBarChartDataSet: SingleDataSet {}
+
 
 
 
@@ -101,24 +75,19 @@ public protocol CTSStackedBarChartDataSet: SingleDataSet {}
 // MARK: - DataPoints
 /**
  A protocol to extend functionality of `CTLineAndBarDataPoint` specifically for standard Bar Charts.
-  
- - Tag: CTStandardBarDataPoint
  */
 public protocol CTBarDataPoint: CTLineAndBarDataPoint {}
 
 /**
  A protocol to extend functionality of `CTLineAndBarDataPoint` specifically for standard Bar Charts.
-  
- - Tag: CTStandardBarDataPoint
  */
 public protocol CTStandardBarDataPoint: CTBarDataPoint, CTColourStyle {}
+
 /**
  A protocol to extend functionality of `CTLineAndBarDataPoint` specifically for multi part Bar Charts.
  i.e: Grouped or Stacked
-  
- - Tag: CTMultiPartBarDataPoint
  */
-public protocol CTGroupedBarDataPoint: CTBarDataPoint {
+public protocol CTMultiBarDataPoint: CTBarDataPoint {
     
     var group : GroupingData { get set }
     

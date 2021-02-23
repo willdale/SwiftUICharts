@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 /**
  Control of the overall aesthetic of the bar chart.
  
@@ -14,59 +15,22 @@ import SwiftUI
  specific to the data set(s),
  
  # Example
+```
+ BarChartStyle(infoBoxPlacement   : .floating,
+               markerType         : .full,
+               xAxisLabelPosition : .bottom,
+               xAxisLabelsFrom    : .dataPoint,
+               yAxisLabelPosition : .leading,
+               yAxisNumberOfLabels: 5,
+               globalAnimation    : .linear(duration: 1))
  ```
- BarChartStyle(infoBoxPlacement: .header,
-               xAxisGridStyle  : GridStyle(numberOfLines: 7,
-                                           lineColour   : .gray,
-                                           lineWidth    : 1,
-                                           dash         : [8],
-                                           dashPhase    : 0),
-               yAxisGridStyle  : GridStyle(numberOfLines: 7,
-                                           lineColour   : .gray,
-                                           lineWidth    : 1,
-                                           dash         : [8],
-                                           dashPhase    : 0),
-               xAxisLabelPosition  : .bottom,
-               xAxisLabelsFrom     : .dataPoint,
-               yAxisLabelPosition  : .leading,
-               yAxisNumberOfLabels : 5,
-               baseline            : .minimumValue,
-               globalAnimation     : .linear(duration: 1))
- ```
-
- # Options
- ```
- BarChartStyle(infoBoxPlacement     : InfoBoxPlacement,
-               xAxisGridStyle       : GridStyle,
-               yAxisGridStyle       : GridStyle,
-               xAxisLabelPosition   : XAxisLabelPosistion,
-               xAxisLabelsFrom      : LabelsFrom,
-               yAxisLabelPosition   : YAxisLabelPosistion,
-               yAxisNumberOfLabels  : Int,
-               globalAnimation      : Animation)
- ```
- 
- ---
- 
- # Also See
- - [InfoBoxPlacement](x-source-tag://InfoBoxPlacement)
- - [GridStyle](x-source-tag://GridStyle)
- - [XAxisLabelPosistion](x-source-tag://XAxisLabelPosistion)
- - [LabelsFrom](x-source-tag://LabelsFrom)
- - [YAxisLabelPosistion](x-source-tag://YAxisLabelPosistion)
- 
- # Conforms to
- - CTBarChartStyle
- - CTLineAndBarChartStyle
- - CTChartStyle
- 
- - Tag: BarChartStyle
  */
 public struct BarChartStyle: CTBarChartStyle {
         
     public var infoBoxPlacement        : InfoBoxPlacement
     public var infoBoxValueColour      : Color
     public var infoBoxDescriptionColor : Color
+    
     public var markerType              : BarMarkerType
     
     public var xAxisGridStyle       : GridStyle
@@ -81,12 +45,13 @@ public struct BarChartStyle: CTBarChartStyle {
     
     public var globalAnimation      : Animation
     
-    /// Model for controlling the overall aesthetic of the chart.
+    /// Model for controlling the overall aesthetic of the Bar Chart.
+    ///
     /// - Parameters:
     ///   - infoBoxPlacement: Placement of the information box that appears on touch input.
     ///   - infoBoxValueColour: Colour of the value part of the touch info.
     ///   - infoBoxDescriptionColor: Colour of the description part of the touch info.
-    ///   
+    ///
     ///   - markerType: Where the marker lines come from to meet at a specified point.
     ///
     ///   - xAxisGridStyle: Style of the vertical lines breaking up the chart.
@@ -103,6 +68,7 @@ public struct BarChartStyle: CTBarChartStyle {
     public init(infoBoxPlacement        : InfoBoxPlacement  = .floating,
                 infoBoxValueColour      : Color             = Color.primary,
                 infoBoxDescriptionColor : Color             = Color.primary,
+                
                 markerType              : BarMarkerType     = .full,
                 
                 xAxisGridStyle      : GridStyle             = GridStyle(),
@@ -120,6 +86,7 @@ public struct BarChartStyle: CTBarChartStyle {
         self.infoBoxPlacement        = infoBoxPlacement
         self.infoBoxValueColour      = infoBoxValueColour
         self.infoBoxDescriptionColor = infoBoxDescriptionColor
+        
         self.markerType              = markerType
         
         self.xAxisGridStyle      = xAxisGridStyle

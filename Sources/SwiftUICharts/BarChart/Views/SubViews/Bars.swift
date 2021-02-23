@@ -8,6 +8,11 @@
 import SwiftUI
 
 // MARK: Standard
+/**
+ Sub view of a single bar using a single colour.
+ 
+ For Standard and Grouped Bar Charts.
+ */
 internal struct ColourBar<DP: CTBarDataPoint>: View {
     
     private let colour      : Color
@@ -25,10 +30,10 @@ internal struct ColourBar<DP: CTBarDataPoint>: View {
                   _ cornerRadius: CornerRadius,
                   _ barWidth    : CGFloat
     ) {
-        self.colour     = colour
-        self.dataPoint  = dataPoint
-        self.maxValue   = maxValue
-        self.chartStyle = chartStyle
+        self.colour       = colour
+        self.dataPoint    = dataPoint
+        self.maxValue     = maxValue
+        self.chartStyle   = chartStyle
         self.cornerRadius = cornerRadius
         self.barWidth     = barWidth
     }
@@ -52,6 +57,11 @@ internal struct ColourBar<DP: CTBarDataPoint>: View {
     }
 }
 
+/**
+ Sub view of a single bar using colour gradient.
+ 
+ For Standard and Grouped Bar Charts.
+ */
 internal struct GradientColoursBar<DP: CTBarDataPoint>: View {
     
     private let colours     : [Color]
@@ -104,6 +114,11 @@ internal struct GradientColoursBar<DP: CTBarDataPoint>: View {
     }
 }
 
+/**
+ Sub view of a single bar using colour gradient with stop control.
+ 
+ For Standard and Grouped Bar Charts.
+ */
 internal struct GradientStopsBar<DP: CTBarDataPoint>: View {
     
     private let stops       : [Gradient.Stop]
@@ -159,7 +174,12 @@ internal struct GradientStopsBar<DP: CTBarDataPoint>: View {
 
 
 
-// MARK: - Multi Part
+// MARK: - Grouped
+/**
+ Sub view of an element of a bar using a single colour.
+ 
+ For Stacked Bar Charts.
+ */
 internal struct ColourPartBar: View {
     
     private let colour  : Color
@@ -179,6 +199,11 @@ internal struct ColourPartBar: View {
     }
 }
 
+/**
+ Sub view of an element of a bar using colour gradient.
+ 
+ For Standard and Grouped Bar Charts.
+ */
 internal struct GradientColoursPartBar: View {
     
     private let colours     : [Color]
@@ -206,6 +231,11 @@ internal struct GradientColoursPartBar: View {
     }
 }
 
+/**
+ Sub view of an element of a bar using colour gradient with stop control.
+ 
+ For Standard and Grouped Bar Charts.
+ */
 internal struct GradientStopsPartBar: View {
     
     private let stops       : [Gradient.Stop]
@@ -232,3 +262,74 @@ internal struct GradientStopsPartBar: View {
             .frame(height: height)
     }
 }
+
+// MARK: - Stacked
+/**
+ Individual elements that make up a single bar.
+ */
+internal struct StackElementSubView: View {
+    
+    private let dataSet : MultiBarDataSet
+    
+    internal init(dataSet: MultiBarDataSet) {
+        self.dataSet = dataSet
+    }
+    
+    internal var body: some View {
+        GeometryReader { geo in
+            
+            VStack(spacing: 0) {
+                ForEach(dataSet.dataPoints.reversed()) { dataPoint in
+                    
+                    if dataPoint.group.colourType == .colour,
+                       let colour = dataPoint.group.colour
+                    {
+                        
+                        ColourPartBar(colour, getHeight(height    : geo.size.height,
+                                                        dataSet   : dataSet,
+                                                        dataPoint : dataPoint))
+                    
+                    } else if dataPoint.group.colourType == .gradientColour,
+                              let colours    = dataPoint.group.colours,
+                              let startPoint = dataPoint.group.startPoint,
+                              let endPoint   = dataPoint.group.endPoint
+                    {
+
+                        GradientColoursPartBar(colours, startPoint, endPoint, getHeight(height: geo.size.height,
+                                                                                        dataSet   : dataSet,
+                                                                                        dataPoint : dataPoint))
+
+                    } else if dataPoint.group.colourType == .gradientStops,
+                              let stops      = dataPoint.group.stops,
+                              let startPoint = dataPoint.group.startPoint,
+                              let endPoint   = dataPoint.group.endPoint
+                    {
+
+                        let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
+                        
+                        GradientStopsPartBar(safeStops, startPoint, endPoint, getHeight(height: geo.size.height,
+                                                                                    dataSet   : dataSet,
+                                                                                    dataPoint : dataPoint))
+                    }
+                    
+                }
+            }
+        }
+    }
+    
+    /// Sets the height of each element.
+    /// - Parameters:
+    ///   - height: Hiehgt of the whole bar.
+    ///   - dataSet: Which data set the bar comes from.
+    ///   - dataPoint: Data point to draw.
+    /// - Returns: Height of the element.
+    private func getHeight(height: CGFloat,
+                           dataSet: MultiBarDataSet,
+                           dataPoint: MultiBarChartDataPoint
+    ) -> CGFloat {
+        let value = dataPoint.value
+        let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }
+        return height * CGFloat(value / sum)
+    }
+}
+

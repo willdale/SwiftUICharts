@@ -7,16 +7,22 @@
 
 import SwiftUI
 
+// MARK: - Chart Data
 /**
  Bar segment where the colour information comes from chart style.
  */
 internal struct BarChartDataSetSubView<CD: BarChartData>: View {
+
+    private let chartData   : CD
+    private let dataPoint   : BarChartDataPoint
     
-    let chartData   : CD
-    let dataPoint   : BarChartDataPoint
-    
-    @State private var startAnimation : Bool = false
-    
+    internal init(chartData: CD,
+                  dataPoint: BarChartDataPoint
+    ) {
+        self.chartData = chartData
+        self.dataPoint = dataPoint
+    }
+        
     internal var body: some View {
         if chartData.barStyle.colourType == .colour,
            let colour = chartData.barStyle.colour
@@ -46,13 +52,21 @@ internal struct BarChartDataSetSubView<CD: BarChartData>: View {
     }
 }
 
+// MARK: - DataPoints
 /**
  Bar segment where the colour information comes from datapoints.
  */
 internal struct BarChartDataPointSubView<CD: BarChartData>: View {
 
-    let chartData   : CD
-    let dataPoint   : BarChartDataPoint
+    private let chartData   : CD
+    private let dataPoint   : BarChartDataPoint
+    
+    internal init(chartData: CD,
+                  dataPoint: BarChartDataPoint
+    ) {
+        self.chartData = chartData
+        self.dataPoint = dataPoint
+    }
     
     internal var body: some View {
         

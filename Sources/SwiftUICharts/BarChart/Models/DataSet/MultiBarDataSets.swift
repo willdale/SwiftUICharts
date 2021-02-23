@@ -7,31 +7,54 @@
 
 import SwiftUI
 
-public struct GroupedBarDataSets: MultiDataSet {
+/**
+ Main data set for a multi part bar charts.
+ 
+ # Example
+ ```
+ let data = MultiBarDataSets(dataSets: [
+     MultiBarDataSet(dataPoints: [
+         MultiBarChartDataPoint(value: 10, xAxisLabel: "1.1", pointLabel: "One One", group: GroupingData(title: "One", colour: .blue))
+    ]),
+     MultiBarDataSet(dataPoints: [
+         MultiBarChartDataPoint(value: 20, xAxisLabel: "2.1", pointLabel: "Two One", group: GroupingData(title: "One", colour: .blue))
+    ])
+ ])
+ ```
+ */
+public struct MultiBarDataSets: MultiDataSet {
     
-    public let id       : UUID
-    public var dataSets : [GroupedBarDataSet]
+    public let id       : UUID = UUID()
+    public var dataSets : [MultiBarDataSet]
     
     /// Initialises a new data set for Multiline Line Chart.
-    public init(dataSets: [GroupedBarDataSet]) {
-        self.id       = UUID()
+    public init(dataSets: [MultiBarDataSet]) {
         self.dataSets = dataSets
     }
 }
 
+/**
+ Individual data sets for multi part bars charts.
+ 
+ # Example
+ ```
+ MultiBarDataSet(dataPoints: [
+     MultiBarChartDataPoint(value: 10, xAxisLabel: "1.1", pointLabel: "One One", group: GroupingData(title: "One", colour: .blue)),
+     MultiBarChartDataPoint(value: 50, xAxisLabel: "1.2", pointLabel: "One Two", group: GroupingData(title: "Two", colour: .red))
+ ])
+ ```
+ */
+public struct MultiBarDataSet: CTMultiBarChartDataSet {
 
-public struct GroupedBarDataSet: CTGroupedBarChartDataSet {
-
-    public let id           : UUID
-    public var dataPoints   : [GroupedBarChartDataPoint]
+    public let id           : UUID = UUID()
+    public var dataPoints   : [MultiBarChartDataPoint]
         
     /// Initialises a new data set for a Bar Chart.
-    public init(dataPoints  : [GroupedBarChartDataPoint]) {
-        self.id             = UUID()
+    public init(dataPoints  : [MultiBarChartDataPoint]) {
         self.dataPoints     = dataPoints
     }
 
     public typealias ID        = UUID
-    public typealias DataPoint = GroupedBarChartDataPoint
+    public typealias DataPoint = MultiBarChartDataPoint
     public typealias Styling   = BarStyle
 }

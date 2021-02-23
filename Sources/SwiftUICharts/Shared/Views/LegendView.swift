@@ -56,7 +56,7 @@ internal struct LegendView<T>: View where T: ChartData {
                 return false
             }
         } else if chartData is GroupedBarChartData || chartData is StackedBarChartData {
-            if let datapoint = chartData.infoView.touchOverlayInfo.first as? GroupedBarChartDataPoint {
+            if let datapoint = chartData.infoView.touchOverlayInfo.first as? MultiBarChartDataPoint {
                 return chartData.infoView.isTouchCurrent && legend.colour == datapoint.group.colour
             } else {
                 return false

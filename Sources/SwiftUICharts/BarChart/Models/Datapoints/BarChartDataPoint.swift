@@ -8,59 +8,17 @@
 import SwiftUI
 
 /**
- Data for a single data point.
+ Data for a single bar chart data point.
+ 
+ Colour can be solid or gradient.
  
  # Example
  ```
- BarChartDataPoint(value: 20,
-                   xAxisLabel: "M",
-                   pointLabel: "Monday",
-                   date: Date())
+ BarChartDataPoint(value: 90,
+                   xAxisLabel: "T",
+                   pointLabel: "Tuesday",
+                   colour: .blue)
  ```
- 
- # Options
- Common to all.
- ```
- BarChartDataPoint(value: Double,
-                   xAxisLabel: String?,
-                   pointLabel: String?,
-                   date: Date?,
-                   ...)
- ```
- 
- Single Colour.
- ```
- BarChartDataPoint(...
-                   colour: Color?)
- ```
- 
- Gradient Colours.
- ```
- BarChartDataPoint(...
-                   colours: [Color]?,
-                   startPoint: UnitPoint?,
-                   endPoint: UnitPoint?)
- ```
- 
- Gradient Colours with stop control.
- ```
- BarChartDataPoint(...
-                   stops: [GradientStop]?,
-                   startPoint: UnitPoint?,
-                   endPoint: UnitPoint?)
- ```
- 
- # Also See
- - [GradientStopt](x-source-tag://GradientStop)
- 
- # Conforms to
- - CTLineAndBarDataPoint
- - CTChartDataPoint
- - Hashable
- - Identifiable
- - CTColourStyle
- 
- - Tag: BarChartDataPoint
  */
 public struct BarChartDataPoint: CTStandardBarDataPoint {
     
@@ -78,7 +36,7 @@ public struct BarChartDataPoint: CTStandardBarDataPoint {
     public var startPoint   : UnitPoint?
     public var endPoint     : UnitPoint?
     
-    // MARK: - init: single colour
+    // MARK: - Single colour
     /// Data model for a single data point with colour for use with a bar chart.
     /// - Parameters:
     ///   - value: Value of the data point
@@ -104,7 +62,7 @@ public struct BarChartDataPoint: CTStandardBarDataPoint {
         self.colourType = .colour
     }
     
-    // MARK: - init: gradient colour
+    // MARK: - Gradient colour
     /// Data model for a single data point with colour for use with a bar chart.
     /// - Parameters:
     ///   - value: Value of the data point
@@ -136,7 +94,7 @@ public struct BarChartDataPoint: CTStandardBarDataPoint {
         self.colourType  = .gradientColour
     }
     
-    // MARK: - init: gradient with stops
+    // MARK: - Gradient with stops
     /// Data model for a single data point with colour for use with a bar chart.
     /// - Parameters:
     ///   - value: Value of the data point

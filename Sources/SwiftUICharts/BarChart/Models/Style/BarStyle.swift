@@ -8,7 +8,7 @@
 import SwiftUI
 
 /**
- Model for controlling the  aesthetic of the line chart.
+ Model for controlling the aesthetic of the bars.
  
  # Example
  ```
@@ -17,43 +17,6 @@ import SwiftUI
           colourFrom    : .barStyle,
           colour        : .blue)
  ```
- 
- ---
- 
- # Options
- ```
- BarStyle(barWidth     : CGFloat,
-          cornerRadius : CornerRadius,
-          colourFrom   : ColourFrom,
-          ...)
- 
- BarStyle(...
-          colour: Color)
- 
- BarStyle(...
-          colours: [Color],
-          startPoint: UnitPoint,
-          endPoint: UnitPoint)
- 
- BarStyle(...
-          stops: [GradientStop],
-          startPoint: UnitPoint,
-          endPoint: UnitPoint)
- ```
- 
- ---
- 
- # Also See
- - [ColourType](x-source-tag://ColourType)
- - [CornerRadius](x-source-tag://CornerRadius)
- - [ColourFrom](x-source-tag://ColourFrom)
- - [GradientStop](x-source-tag://GradientStop)
- 
- # Conforms to
- - CTColourStyle
- - Hashable
- 
- - Tag: BarStyle
  */
 public struct BarStyle: CTColourStyle, Hashable {
    
@@ -128,7 +91,7 @@ public struct BarStyle: CTColourStyle, Hashable {
     ///   - stops: Colours and Stops for Gradient with stop control.
     ///   - startPoint: Start point for Gradient.
     ///   - endPoint: End point for Gradient.
-    public init(barWidth    : CGFloat = 1,
+    public init(barWidth    : CGFloat           = 1,
                 cornerRadius: CornerRadius      = CornerRadius(top: 5.0, bottom: 0.0),
                 colourFrom  : ColourFrom        = .barStyle,
                 stops       : [GradientStop]    = [GradientStop(color: Color(.red), location: 0.0)],

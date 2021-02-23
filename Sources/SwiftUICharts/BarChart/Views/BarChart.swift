@@ -7,10 +7,39 @@
 
 import SwiftUI
 
+/**
+ View for creating a bar chart.
+ 
+ Uses `BarChartData` data model.
+ 
+ # Declaration
+ ```
+ BarChart(chartData: data)
+ ```
+ 
+ # View Modifiers
+ The order of the view modifiers is some what important
+ as the modifiers are various types for stacks that wrap
+ around the previous views.
+ ```
+    .touchOverlay(chartData: data)
+    .averageLine(chartData: data)
+    .yAxisPOI(chartData: data)
+    .xAxisGrid(chartData: data)
+    .yAxisGrid(chartData: data)
+    .xAxisLabels(chartData: data)
+    .yAxisLabels(chartData: data)
+    .infoBox(chartData: data)
+    .headerBox(chartData: data)
+    .legends(chartData: data)
+ ```
+ */
 public struct BarChart<ChartData>: View where ChartData: BarChartData {
     
     @ObservedObject var chartData: ChartData
     
+    /// Initialises a bar chart view.
+    /// - Parameter chartData: Must be BarChartData model.
     public init(chartData: ChartData) {
         self.chartData = chartData
     }
@@ -23,13 +52,13 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
                     switch chartData.barStyle.colourFrom {
                     case .barStyle:
                         
-                        BarChartDataSetSubView(chartData    : chartData,
-                                               dataPoint    : dataPoint)
+                        BarChartDataSetSubView(chartData: chartData,
+                                               dataPoint: dataPoint)
                         
                     case .dataPoints:
                         
-                        BarChartDataPointSubView(chartData   : chartData,
-                                                 dataPoint   : dataPoint)
+                        BarChartDataPointSubView(chartData: chartData,
+                                                 dataPoint: dataPoint)
                         
                     }
                 }

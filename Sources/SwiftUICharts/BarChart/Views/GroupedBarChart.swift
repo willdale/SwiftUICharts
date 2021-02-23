@@ -7,12 +7,43 @@
 
 import SwiftUI
 
+/**
+ View for creating a grouped bar chart.
+  
+ Uses `GroupedBarChartData` data model.
+ 
+ # Declaration
+ ```
+ GroupedBarChart(chartData: data, groupSpacing: 25)
+ ```
+ 
+ # View Modifiers
+ The order of the view modifiers is some what important
+ as the modifiers are various types for stacks that wrap
+ around the previous views.
+ ```
+    .touchOverlay(chartData: data)
+    .averageLine(chartData: data)
+    .yAxisPOI(chartData: data)
+    .xAxisGrid(chartData: data)
+    .yAxisGrid(chartData: data)
+    .xAxisLabels(chartData: data)
+    .yAxisLabels(chartData: data)
+    .infoBox(chartData: data)
+    .headerBox(chartData: data)
+    .legends(chartData: data)
+ ```
+ */
 public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartData {
     
     @ObservedObject var chartData: ChartData
     
     private let groupSpacing : CGFloat
-        
+    
+    /// Initialises a grouped bar chart view.
+    /// - Parameters:
+    ///   - chartData: Must be GroupedBarChartData model.
+    ///   - groupSpacing: Spacing between groups of bars.
     public init(chartData: ChartData, groupSpacing: CGFloat) {
         self.chartData    = chartData
         self.groupSpacing = groupSpacing

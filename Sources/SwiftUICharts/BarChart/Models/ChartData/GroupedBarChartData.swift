@@ -8,186 +8,87 @@
 import SwiftUI
 
 /**
- Data for drawing and styling a multi line, line chart.
- 
- This model contains all the data and styling information for a single line, line chart.
+ Data model for drawing and styling a Grouped Bar Chart.
+  
+ The grouping data informs the model as to how the datapoints are linked.
  
  # Example
  ```
  static func makeData() -> GroupedBarChartData {
+
+     enum Group {
+         case one
+         case two
+         case three
+         case four
+         
+         var data : GroupingData {
+             switch self {
+             case .one:
+                 return GroupingData(title: "One"  , colour: .blue)
+             case .two:
+                 return GroupingData(title: "Two"  , colour: .red)
+             case .three:
+                 return GroupingData(title: "Three", colour: .yellow)
+             case .four:
+                 return GroupingData(title: "Four" , colour: .green)
+             }
+         }
+     }
      
-     let data = MultiBarDataSet(dataSets: [
-         BarDataSet(dataPoints: [
-                     BarChartDataPoint(value: 10, xAxisLabel: "1.1", pointLabel: "One One"  , colour: .blue),
-                     BarChartDataPoint(value: 20, xAxisLabel: "1.2", pointLabel: "One Two"  , colour: .yellow),
-                     BarChartDataPoint(value: 30, xAxisLabel: "1.3", pointLabel: "One Three", colour: .purple),
-                     BarChartDataPoint(value: 40, xAxisLabel: "1.4", pointLabel: "One Four" , colour: .green)],
-                    legendTitle: "One",
-                    style: BarStyle(barWidth: 1.0, colourFrom: .dataPoints)),
-         BarDataSet(dataPoints: [
-                     BarChartDataPoint(value: 50, xAxisLabel: "2.1", pointLabel: "Two One"  , colour: .blue),
-                     BarChartDataPoint(value: 10, xAxisLabel: "2.2", pointLabel: "Two Two"  , colour: .yellow),
-                     BarChartDataPoint(value: 40, xAxisLabel: "2.3", pointLabel: "Two Three", colour: .purple),
-                     BarChartDataPoint(value: 60, xAxisLabel: "2.3", pointLabel: "Two Three", colour: .green)],
-                    legendTitle: "Two",
-                    style: BarStyle(barWidth: 1.0, colourFrom: .dataPoints)),
-         BarDataSet(dataPoints: [
-                     BarChartDataPoint(value: 10, xAxisLabel: "3.1", pointLabel: "Three One"  , colour: .blue),
-                     BarChartDataPoint(value: 50, xAxisLabel: "3.2", pointLabel: "Three Two"  , colour: .yellow),
-                     BarChartDataPoint(value: 30, xAxisLabel: "3.3", pointLabel: "Three Three", colour: .purple),
-                     BarChartDataPoint(value: 99, xAxisLabel: "3.4", pointLabel: "Three Four" , colour: .green)],
-                    legendTitle: "Three",
-                    style: BarStyle(barWidth: 1.0, colourFrom: .dataPoints)),
-         BarDataSet(dataPoints: [
-                     BarChartDataPoint(value: 80, xAxisLabel: "4.1", pointLabel: "Four One"  , colour: .blue),
-                     BarChartDataPoint(value: 10, xAxisLabel: "4.2", pointLabel: "Four Two"  , colour: .yellow),
-                     BarChartDataPoint(value: 20, xAxisLabel: "4.3", pointLabel: "Four Three", colour: .purple),
-                     BarChartDataPoint(value: 50, xAxisLabel: "4.3", pointLabel: "Four Three", colour: .green)],
-                    legendTitle: "Four",
-                    style: BarStyle(barWidth: 1.0, colourFrom: .dataPoints))
+     let groups : [GroupingData] = [Group.one.data, Group.two.data, Group.three.data, Group.four.data]
+
+     let data = MultiBarDataSets(dataSets: [
+         MultiBarDataSet(dataPoints: [
+             MultiBarChartDataPoint(value: 10, xAxisLabel: "1.1", pointLabel: "One One"    , group: Group.one.data),
+             MultiBarChartDataPoint(value: 50, xAxisLabel: "1.2", pointLabel: "One Two"    , group: Group.two.data),
+             MultiBarChartDataPoint(value: 30, xAxisLabel: "1.3", pointLabel: "One Three"  , group: Group.three.data),
+             MultiBarChartDataPoint(value: 40, xAxisLabel: "1.4", pointLabel: "One Four"   , group: Group.four.data)
+         ]),
+         
+         MultiBarDataSet(dataPoints: [
+             MultiBarChartDataPoint(value: 20, xAxisLabel: "2.1", pointLabel: "Two One"    , group: Group.one.data),
+             MultiBarChartDataPoint(value: 60, xAxisLabel: "2.2", pointLabel: "Two Two"    , group: Group.two.data),
+             MultiBarChartDataPoint(value: 40, xAxisLabel: "2.3", pointLabel: "Two Three"  , group: Group.three.data),
+             MultiBarChartDataPoint(value: 60, xAxisLabel: "2.3", pointLabel: "Two Four"   , group: Group.four.data)
+         ]),
+         
+         MultiBarDataSet(dataPoints: [
+             MultiBarChartDataPoint(value: 30, xAxisLabel: "3.1", pointLabel: "Three One"  , group: Group.one.data),
+             MultiBarChartDataPoint(value: 70, xAxisLabel: "3.2", pointLabel: "Three Two"  , group: Group.two.data),
+             MultiBarChartDataPoint(value: 30, xAxisLabel: "3.3", pointLabel: "Three Three", group: Group.three.data),
+             MultiBarChartDataPoint(value: 90, xAxisLabel: "3.4", pointLabel: "Three Four" , group: Group.four.data)
+         ]),
+         
+         MultiBarDataSet(dataPoints: [
+             MultiBarChartDataPoint(value: 40, xAxisLabel: "4.1", pointLabel: "Four One"   , group: Group.one.data),
+             MultiBarChartDataPoint(value: 80, xAxisLabel: "4.2", pointLabel: "Four Two"   , group: Group.two.data),
+             MultiBarChartDataPoint(value: 20, xAxisLabel: "4.3", pointLabel: "Four Three" , group: Group.three.data),
+             MultiBarChartDataPoint(value: 50, xAxisLabel: "4.3", pointLabel: "Four Four"  , group: Group.four.data)
+         ])
      ])
      
      return GroupedBarChartData(dataSets    : data,
-                              metadata    : ChartMetadata(title: "Hello", subtitle: "Bob"),
-                              xAxisLabels : ["Hello"],
-                              chartStyle  : BarChartStyle(),
-                              noDataText  : Text("No Data"))
+                                groups      : groups,
+                                metadata    : ChartMetadata(title: "Hello", subtitle: "Bob"),
+                                chartStyle  : BarChartStyle(infoBoxPlacement: .floating,
+                                                            xAxisLabelsFrom : .dataPoint))
  }
  ```
-  
- ---
- 
- # Parts
- # BarDataSet
- ```
- BarDataSet(dataPoints: [BarChartDataPoint],
-            legendTitle: String,
-            style: BarStyle)
- ```
- ## BarChartDataPoint
- ### Options
- Common to all.
- ```
- BarChartDataPoint(value: Double,
-                   xAxisLabel: String?,
-                   pointLabel: String?,
-                   date: Date?,
-                   ...)
- ```
- 
- Single Colour.
- ```
- BarChartDataPoint(...
-                   colour: Color?)
- ```
- 
- Gradient Colours.
- ```
- BarChartDataPoint(...
-                   colours: [Color]?,
-                   startPoint: UnitPoint?,
-                   endPoint: UnitPoint?)
- ```
- 
- Gradient Colours with stop control.
- ```
- BarChartDataPoint(...
-                   stops: [GradientStop]?,
-                   startPoint: UnitPoint?,
-                   endPoint: UnitPoint?)
- ```
- ## BarStyle
- ### Options
- ```
- BarStyle(barWidth     : CGFloat,
-          cornerRadius : CornerRadius,
-          colourFrom   : ColourFrom,
-          ...)
- 
- BarStyle(...
-          colour: Color)
- 
- BarStyle(...
-          colours: [Color],
-          startPoint: UnitPoint,
-          endPoint: UnitPoint)
- 
- BarStyle(...
-          stops: [GradientStop],
-          startPoint: UnitPoint,
-          endPoint: UnitPoint)
- ```
- 
- ## ChartMetadata
- ```
- ChartMetadata(title: String?, subtitle: String?)
- ```
- 
- ## BarChartStyle
- ```
- BarChartStyle(infoBoxPlacement        : InfoBoxPlacement,
-               infoBoxValueColour      : Color,
-               infoBoxDescriptionColor : Color,
-               xAxisGridStyle          : GridStyle,
-               xAxisLabelPosition      : XAxisLabelPosistion,
-               xAxisLabelColour        : Color,
-               xAxisLabelsFrom         : LabelsFrom,
-               yAxisGridStyle          : GridStyle,
-               yAxisLabelPosition      : YAxisLabelPosistion,
-               yAxisLabelColour        : Color,
-               yAxisNumberOfLabels     : Int,
-               globalAnimation         : Animation)
- ```
- 
- ### GridStyle
- ```
- GridStyle(numberOfLines: Int,
-           lineColour   : Color,
-           lineWidth    : CGFloat,
-           dash         : [CGFloat],
-           dashPhase    : CGFloat)
- ```
- 
- ---
- 
- # Also See
- - [BarDataSet](x-source-tag://BarDataSet)
-    - [BarChartDataPoint](x-source-tag://BarChartDataPoint)
- - [BarStyle](x-source-tag://BarStyle)
-    - [ColourType](x-source-tag://ColourType)
-    - [CornerRadius](x-source-tag://CornerRadius)
-    - [ColourFrom](x-source-tag://ColourFrom)
-    - [GradientStop](x-source-tag://GradientStop)
- - [Chart Metadata](x-source-tag://ChartMetadata)
- - [BarChartStyle](x-source-tag://BarChartStyle)
-    - [InfoBoxPlacement](x-source-tag://InfoBoxPlacement)
-    - [GridStyle](x-source-tag://GridStyle)
-    - [XAxisLabelPosistion](x-source-tag://XAxisLabelPosistion)
-    - [LabelsFrom](x-source-tag://LabelsFrom)
-    - [YAxisLabelPosistion](x-source-tag://YAxisLabelPosistion)
-
- # Conforms to
- - ObservableObject
- - Identifiable
- - BarChartDataProtocol
- - LineAndBarChartData
- - ChartData
- 
- - Tag: GroupedBarChartData
  */
-public final class GroupedBarChartData: GroupedBarChartDataProtocol, LegendProtocol {
+public final class GroupedBarChartData: MultiBarChartDataProtocol, LegendProtocol {
     
     // MARK: - Properties
     public let id   : UUID  = UUID()
 
-    @Published public var dataSets     : GroupedBarDataSets
+    @Published public var dataSets     : MultiBarDataSets
     @Published public var metadata     : ChartMetadata
     @Published public var xAxisLabels  : [String]?
     @Published public var barStyle     : BarStyle
     @Published public var chartStyle   : BarChartStyle
     @Published public var legends      : [LegendData]
     @Published public var viewData     : ChartViewData
-    @Published public var infoView     : InfoViewData<GroupedBarChartDataPoint> = InfoViewData()
+    @Published public var infoView     : InfoViewData<MultiBarChartDataPoint> = InfoViewData()
     @Published public var groups       : [GroupingData]
     
     public var noDataText   : Text
@@ -195,17 +96,18 @@ public final class GroupedBarChartData: GroupedBarChartDataProtocol, LegendProto
     
     var groupSpacing : CGFloat = 0
     
-    // MARK: - Initializers
-    /// Initialises a multi part Bar Chart with optional calculation
+    // MARK: - Initializer
+    /// Initialises a Grouped Bar Chart.
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the bars.
-    ///   - groups: Data for how to group data points.
+    ///   - groups: Information for how to group the data points.
     ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
+    ///   - barStyle: Control for the aesthetic of the bar chart.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    public init(dataSets    : GroupedBarDataSets,
+    public init(dataSets    : MultiBarDataSets,
                 groups      : [GroupingData],
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
@@ -271,9 +173,9 @@ public final class GroupedBarChartData: GroupedBarChartDataProtocol, LegendProto
     }
     
     // MARK: - Touch
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [GroupedBarChartDataPoint] {
+    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [MultiBarChartDataPoint] {
         
-        var points : [GroupedBarChartDataPoint] = []
+        var points : [MultiBarChartDataPoint] = []
         
         // Divide the chart into equal sections.
         let superXSection   : CGFloat   = (chartSize.size.width / CGFloat(dataSets.dataSets.count))
@@ -407,7 +309,7 @@ public final class GroupedBarChartData: GroupedBarChartDataProtocol, LegendProto
         return legends.sorted { $0.prioity < $1.prioity}
     }
     
-    public typealias Set        = GroupedBarDataSets
-    public typealias DataPoint  = GroupedBarChartDataPoint
+    public typealias Set        = MultiBarDataSets
+    public typealias DataPoint  = MultiBarChartDataPoint
     public typealias CTStyle    = BarChartStyle
 }

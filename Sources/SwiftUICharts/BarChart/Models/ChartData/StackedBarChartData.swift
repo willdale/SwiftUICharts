@@ -7,25 +7,101 @@
 
 import SwiftUI
 
-public final class StackedBarChartData: GroupedBarChartDataProtocol, LegendProtocol {
+/**
+ Data model for drawing and styling a Stacked Bar Chart.
+ 
+ The grouping data informs the model as to how the datapoints are linked.
+ 
+ # Example
+ ```
+ static func makeData() -> StackedBarChartData {
+     
+     enum Group {
+         case one
+         case two
+         case three
+         case four
+         
+         var data : GroupingData {
+             switch self {
+             case .one:
+                 return GroupingData(title: "One"  , colour: .blue)
+             case .two:
+                 return GroupingData(title: "Two"  , colour: .red)
+             case .three:
+                 return GroupingData(title: "Three", colour: .yellow)
+             case .four:
+                 return GroupingData(title: "Four" , colour: .green)
+             }
+         }
+     }
+     
+     let groups : [GroupingData] = [Group.one.data, Group.two.data, Group.three.data, Group.four.data]
+
+     let data = MultiBarDataSets(dataSets: [
+         MultiBarDataSet(dataPoints: [
+             MultiBarChartDataPoint(value: 10,  xAxisLabel: "1.1", pointLabel: "One One"    , group: Group.one.data),
+             MultiBarChartDataPoint(value: 10,  xAxisLabel: "1.2", pointLabel: "One Two"    , group: Group.two.data),
+             MultiBarChartDataPoint(value: 30,  xAxisLabel: "1.3", pointLabel: "One Three"  , group: Group.three.data),
+             MultiBarChartDataPoint(value: 40,  xAxisLabel: "1.4", pointLabel: "One Four"   , group: Group.four.data)
+         ]),
+         MultiBarDataSet(dataPoints: [
+             MultiBarChartDataPoint(value: 50,  xAxisLabel: "2.1", pointLabel: "Two One"    , group: Group.one.data),
+             MultiBarChartDataPoint(value: 10,  xAxisLabel: "2.2", pointLabel: "Two Two"    , group: Group.two.data),
+             MultiBarChartDataPoint(value: 40,  xAxisLabel: "2.3", pointLabel: "Two Three"  , group: Group.three.data),
+             MultiBarChartDataPoint(value: 60,  xAxisLabel: "2.3", pointLabel: "Two Four"   , group: Group.four.data)
+         ]),
+         MultiBarDataSet(dataPoints: [
+             MultiBarChartDataPoint(value: 10,  xAxisLabel: "3.1", pointLabel: "Three One"  , group: Group.one.data),
+             MultiBarChartDataPoint(value: 50,  xAxisLabel: "3.2", pointLabel: "Three Two"  , group: Group.two.data),
+             MultiBarChartDataPoint(value: 30,  xAxisLabel: "3.3", pointLabel: "Three Three", group: Group.three.data),
+             MultiBarChartDataPoint(value: 100, xAxisLabel: "3.4", pointLabel: "Three Four" , group: Group.four.data)
+         ]),
+         MultiBarDataSet(dataPoints: [
+             MultiBarChartDataPoint(value: 80,  xAxisLabel: "4.1", pointLabel: "Four One"   , group: Group.one.data),
+             MultiBarChartDataPoint(value: 10,  xAxisLabel: "4.2", pointLabel: "Four Two"   , group: Group.two.data),
+             MultiBarChartDataPoint(value: 20,  xAxisLabel: "4.3", pointLabel: "Four Three" , group: Group.three.data),
+             MultiBarChartDataPoint(value: 50,  xAxisLabel: "4.3", pointLabel: "Four Four"  , group: Group.four.data)
+         ])
+     ])
+
+     
+     return StackedBarChartData(dataSets: data,
+                                groups: groups,
+                                metadata: ChartMetadata(title: "Hello", subtitle: "World"),
+                                chartStyle: BarChartStyle(xAxisLabelsFrom: .dataPoint))
+ ```
+ */
+public final class StackedBarChartData: MultiBarChartDataProtocol, LegendProtocol {
     
     // MARK: - Properties
     public let id   : UUID  = UUID()
     
-    @Published public var dataSets     : GroupedBarDataSets
+    @Published public var dataSets     : MultiBarDataSets
     @Published public var metadata     : ChartMetadata
     @Published public var xAxisLabels  : [String]?
     @Published public var barStyle     : BarStyle
     @Published public var chartStyle   : BarChartStyle
     @Published public var legends      : [LegendData]
     @Published public var viewData     : ChartViewData
-    @Published public var infoView     : InfoViewData<GroupedBarChartDataPoint> = InfoViewData()
+    @Published public var infoView     : InfoViewData<MultiBarChartDataPoint> = InfoViewData()
     @Published public var groups       : [GroupingData]
     
     public var noDataText   : Text
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
-    public init(dataSets    : GroupedBarDataSets,
+    // MARK: - Initializer
+    /// Initialises a Grouped Bar Chart.
+    ///
+    /// - Parameters:
+    ///   - dataSets: Data to draw and style the bars.
+    ///   - groups: Information for how to group the data points.
+    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
+    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
+    ///   - barStyle: Control for the aesthetic of the bar chart.
+    ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
+    public init(dataSets    : MultiBarDataSets,
                 groups      : [GroupingData],
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
@@ -83,9 +159,9 @@ public final class StackedBarChartData: GroupedBarChartDataProtocol, LegendProto
     }
     
     // MARK: - Touch
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [GroupedBarChartDataPoint] {
+    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [MultiBarChartDataPoint] {
 
-        var points : [GroupedBarChartDataPoint] = []
+        var points : [MultiBarChartDataPoint] = []
         
         // Filter to get the right dataset based on the x axis.
         let superXSection : CGFloat = chartSize.size.width / CGFloat(dataSets.dataSets.count)
@@ -252,8 +328,7 @@ public final class StackedBarChartData: GroupedBarChartDataProtocol, LegendProto
         return legends.sorted { $0.prioity < $1.prioity}
     }
 
-    
-    public typealias Set        = GroupedBarDataSets
-    public typealias DataPoint  = GroupedBarChartDataPoint
+    public typealias Set        = MultiBarDataSets
+    public typealias DataPoint  = MultiBarChartDataPoint
     public typealias CTStyle    = BarChartStyle
 }

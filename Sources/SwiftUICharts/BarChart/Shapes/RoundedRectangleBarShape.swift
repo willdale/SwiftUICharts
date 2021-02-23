@@ -7,14 +7,30 @@
 
 import SwiftUI
 
-// https://stackoverflow.com/a/56763282
-struct RoundedRectangleBarShape: Shape {
-    var tl: CGFloat = 0.0
-    var tr: CGFloat = 0.0
-    var bl: CGFloat = 0.0
-    var br: CGFloat = 0.0
+/**
+ Round rectange used for the bar shapes
+ 
+ [Reference](https://stackoverflow.com/a/56763282)
+ */
+internal struct RoundedRectangleBarShape: Shape {
+    
+    private let tl: CGFloat
+    private let tr: CGFloat
+    private let bl: CGFloat
+    private let br: CGFloat
 
-    func path(in rect: CGRect) -> Path {
+    internal init(tl: CGFloat,
+                  tr: CGFloat,
+                  bl: CGFloat,
+                  br: CGFloat
+    ) {
+        self.tl = tl
+        self.tr = tr
+        self.bl = bl
+        self.br = br
+    }
+    
+    internal func path(in rect: CGRect) -> Path {
         var path = Path()
 
         let w = rect.size.width

@@ -7,10 +7,40 @@
 
 import SwiftUI
 
+/**
+ View for creating a stacked bar chart.
+  
+ Uses `StackedBarChartData` data model.
+ 
+ # Declaration
+ ```
+ StackedBarChart(chartData: data)
+ ```
+ 
+ # View Modifiers
+ The order of the view modifiers is some what important
+ as the modifiers are various types for stacks that wrap
+ around the previous views.
+ ```
+    .touchOverlay(chartData: data)
+    .averageLine(chartData: data)
+    .yAxisPOI(chartData: data)
+    .xAxisGrid(chartData: data)
+    .yAxisGrid(chartData: data)
+    .xAxisLabels(chartData: data)
+    .yAxisLabels(chartData: data)
+    .infoBox(chartData: data)
+    .headerBox(chartData: data)
+    .legends(chartData: data)
+ ```
+ */
 public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartData {
     
     @ObservedObject var chartData: ChartData
-            
+          
+    /// Initialises a stacked bar chart view.
+    /// - Parameters:
+    ///   - chartData: Must be StackedBarChartData model.
     public init(chartData: ChartData) {
         self.chartData = chartData
     }
@@ -24,7 +54,7 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
             HStack(alignment: .bottom, spacing: 0) {
                 ForEach(chartData.dataSets.dataSets) { dataSet in
                     
-                    MultiPartBarSubView(dataSet: dataSet)
+                    StackElementSubView(dataSet: dataSet)
                         .scaleEffect(y: startAnimation ? CGFloat(DataFunctions.dataSetMaxValue(from: dataSet) / chartData.getMaxValue()) : 0, anchor: .bottom)
                         .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
@@ -37,66 +67,5 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
             }
 
         } else { CustomNoDataView(chartData: chartData) }
-    }
-}
-
-/**
- 
- */
-internal struct MultiPartBarSubView: View {
-    
-    private let dataSet : GroupedBarDataSet
-    
-    internal init(dataSet: GroupedBarDataSet) {
-        self.dataSet = dataSet
-    }
-    
-    internal var body: some View {
-        GeometryReader { geo in
-            
-            VStack(spacing: 0) {
-                ForEach(dataSet.dataPoints.reversed()) { dataPoint in
-                    
-                    if dataPoint.group.colourType == .colour,
-                       let colour = dataPoint.group.colour
-                    {
-                        
-                        ColourPartBar(colour, getHeight(height    : geo.size.height,
-                                                        dataSet   : dataSet,
-                                                        dataPoint : dataPoint))
-                    
-                    } else if dataPoint.group.colourType == .gradientColour,
-                              let colours    = dataPoint.group.colours,
-                              let startPoint = dataPoint.group.startPoint,
-                              let endPoint   = dataPoint.group.endPoint
-                    {
-
-                        GradientColoursPartBar(colours, startPoint, endPoint, getHeight(height: geo.size.height,
-                                                                                        dataSet   : dataSet,
-                                                                                        dataPoint : dataPoint))
-
-                    } else if dataPoint.group.colourType == .gradientStops,
-                              let stops      = dataPoint.group.stops,
-                              let startPoint = dataPoint.group.startPoint,
-                              let endPoint   = dataPoint.group.endPoint
-                    {
-
-                        let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
-                        
-                        GradientStopsPartBar(safeStops, startPoint, endPoint, getHeight(height: geo.size.height,
-                                                                                    dataSet   : dataSet,
-                                                                                    dataPoint : dataPoint))
-                    }
-                    
-                }
-            }
-        }
-    }
-    
-    
-    private func getHeight(height: CGFloat, dataSet: GroupedBarDataSet, dataPoint: GroupedBarChartDataPoint) -> CGFloat {
-        let value = dataPoint.value
-        let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }
-        return height * CGFloat(value / sum)
     }
 }

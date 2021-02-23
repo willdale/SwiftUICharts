@@ -13,8 +13,6 @@ import Foundation
  case barStyle // From BarStyle data model
  case dataPoints // From each data point
  ```
- 
- - Tag: ColourFrom
  */
 public enum ColourFrom {
     case barStyle
@@ -34,8 +32,6 @@ public enum ColourFrom {
  case topTrailing // From top and trailing edges meeting at touch location.
 
  ```
- 
- - Tag: BarMarkerType
  */
 public enum BarMarkerType: MarkerType {
     /// No overlay markers.

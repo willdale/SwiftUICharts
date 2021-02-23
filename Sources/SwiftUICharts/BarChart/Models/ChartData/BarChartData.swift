@@ -8,165 +8,38 @@
 import SwiftUI
 
 /**
- Data for drawing and styling a bar chart.
- 
- This model contains all the data and styling information for a single data set bar chart.
- 
+ Data for drawing and styling a standard Bar Chart.
+  
  # Example
  ```
  static func weekOfData() -> BarChartData {
              
      let data : BarDataSet =
          BarDataSet(dataPoints: [
-             BarChartDataPoint(value: 20,  xAxisLabel: "M", pointLabel: "Monday"),
-             BarChartDataPoint(value: 90,  xAxisLabel: "T", pointLabel: "Tuesday"),
-             BarChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday"),
-             BarChartDataPoint(value: 75,  xAxisLabel: "T", pointLabel: "Thursday"),
-             BarChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"),
-             BarChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday"),
-             BarChartDataPoint(value: 90,  xAxisLabel: "S", pointLabel: "Sunday")
+             BarChartDataPoint(value: 20,  xAxisLabel: "M", pointLabel: "Monday"   , colour: .purple),
+             BarChartDataPoint(value: 90,  xAxisLabel: "T", pointLabel: "Tuesday"  , colour: .blue),
+             BarChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday", colour: Color(.cyan)),
+             BarChartDataPoint(value: 75,  xAxisLabel: "T", pointLabel: "Thursday" , colour: .green),
+             BarChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"   , colour: .yellow),
+             BarChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday" , colour: .orange),
+             BarChartDataPoint(value: 90,  xAxisLabel: "S", pointLabel: "Sunday"   , colour: .red)
          ],
-         legendTitle: "Data",
-         style: BarStyle())
-     
-     let metadata   : ChartMetadata  = ChartMetadata(title       : "Test Data",
-                                                     subtitle    : "A weeks worth")
-     
-     let labels      : [String]      = ["Mon", "Thu", "Sun"]
-
-     let chartStyle  : BarChartStyle = BarChartStyle(infoBoxPlacement: .floating,
-                                                        xAxisGridStyle  : GridStyle(),
-                                                        yAxisGridStyle  : GridStyle(),
-                                                        xAxisLabelPosition: .bottom,
-                                                        xAxisLabelsFrom: .dataPoint,
-                                                        yAxisLabelPosition: .leading,
-                                                        yAxisNumberOfLabels: 5)
-     
-     return BarChartData(dataSets    : data,
-                         metadata    : metadata,
-                         xAxisLabels : labels,
-                         chartStyle  : chartStyle,
-                         noDataText  : Text("No Data"),
-                         calculations: .none)
+         legendTitle: "Data")
+          
+     return BarChartData(dataSets  : data,
+                         metadata  : ChartMetadata(title   : "Test Data",
+                                                   subtitle: "A weeks worth"),
+                         barStyle  : BarStyle(barWidth  : 0.5,
+                                              colourFrom: .dataPoints,
+                                              colour    : .blue),
+                         chartStyle: BarChartStyle(infoBoxPlacement   : .floating,
+                                                   xAxisLabelPosition : .bottom,
+                                                   xAxisLabelsFrom    : .dataPoint,
+                                                   yAxisLabelPosition : .leading,
+                                                   yAxisNumberOfLabels: 5))
  }
- 
  ```
- 
- ---
- 
- # Parts
- ## BarChartDataPoint
- ### Options
- Common to all.
- ```
- BarChartDataPoint(value: Double,
-                   xAxisLabel: String?,
-                   pointLabel: String?,
-                   date: Date?,
-                   ...)
- ```
- 
- Single Colour.
- ```
- BarChartDataPoint(...
-                   colour: Color?)
- ```
- 
- Gradient Colours.
- ```
- BarChartDataPoint(...
-                   colours: [Color]?,
-                   startPoint: UnitPoint?,
-                   endPoint: UnitPoint?)
- ```
- 
- Gradient Colours with stop control.
- ```
- BarChartDataPoint(...
-                   stops: [GradientStop]?,
-                   startPoint: UnitPoint?,
-                   endPoint: UnitPoint?)
- ```
- ## BarStyle
- ### Options
- ```
- BarStyle(barWidth     : CGFloat,
-          cornerRadius : CornerRadius,
-          colourFrom   : ColourFrom,
-          ...)
- 
- BarStyle(...
-          colour: Color)
- 
- BarStyle(...
-          colours: [Color],
-          startPoint: UnitPoint,
-          endPoint: UnitPoint)
- 
- BarStyle(...
-          stops: [GradientStop],
-          startPoint: UnitPoint,
-          endPoint: UnitPoint)
- ```
- 
- ## ChartMetadata
- ```
- ChartMetadata(title: String?, subtitle: String?)
- ```
- 
- ## BarChartStyle
- ```
- BarChartStyle(infoBoxPlacement        : InfoBoxPlacement,
-               infoBoxValueColour      : Color,
-               infoBoxDescriptionColor : Color,
-               xAxisGridStyle          : GridStyle,
-               xAxisLabelPosition      : XAxisLabelPosistion,
-               xAxisLabelColour        : Color,
-               xAxisLabelsFrom         : LabelsFrom,
-               yAxisGridStyle          : GridStyle,
-               yAxisLabelPosition      : YAxisLabelPosistion,
-               yAxisLabelColour        : Color,
-               yAxisNumberOfLabels     : Int,
-               globalAnimation         : Animation)
- ```
- 
- ### GridStyle
- ```
- GridStyle(numberOfLines: Int,
-           lineColour   : Color,
-           lineWidth    : CGFloat,
-           dash         : [CGFloat],
-           dashPhase    : CGFloat)
- ```
- 
- ---
- 
- # Also See
- - [BarDataSet](x-source-tag://BarDataSet)
-    - [BarChartDataPoint](x-source-tag://BarChartDataPoint)
- - [BarStyle](x-source-tag://BarStyle)
-    - [ColourType](x-source-tag://ColourType)
-    - [CornerRadius](x-source-tag://CornerRadius)
-    - [ColourFrom](x-source-tag://ColourFrom)
-    - [GradientStop](x-source-tag://GradientStop)
- - [Chart Metadata](x-source-tag://ChartMetadata)
- - [BarChartStyle](x-source-tag://BarChartStyle)
-    - [InfoBoxPlacement](x-source-tag://InfoBoxPlacement)
-    - [GridStyle](x-source-tag://GridStyle)
-    - [XAxisLabelPosistion](x-source-tag://XAxisLabelPosistion)
-    - [LabelsFrom](x-source-tag://LabelsFrom)
-    - [YAxisLabelPosistion](x-source-tag://YAxisLabelPosistion)
-
- # Conforms to
- - ObservableObject
- - Identifiable
- - BarChartDataProtocol
- - LineAndBarChartData
- - ChartData
- 
- - Tag: BarChartData
  */
-
 public final class BarChartData: BarChartDataProtocol, LegendProtocol {
     // MARK: - Properties
     public let id   : UUID  = UUID()
@@ -183,13 +56,14 @@ public final class BarChartData: BarChartDataProtocol, LegendProtocol {
     public var noDataText   : Text
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
-    // MARK: - Initializers
-    /// Initialises a standard Bar Chart with optional calculation
+    // MARK: - Initializer
+    /// Initialises a standard Bar Chart.
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the bars.
     ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
+    ///   - barStyle: Control for the aesthetic of the bar chart.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(dataSets    : BarDataSet,
@@ -205,6 +79,7 @@ public final class BarChartData: BarChartDataProtocol, LegendProtocol {
         self.barStyle       = barStyle
         self.chartStyle     = chartStyle
         self.noDataText     = noDataText
+        
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (.bar, .single)

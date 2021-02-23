@@ -9,18 +9,11 @@ import SwiftUI
 
 /**
  Corner radius of the bar shape.
- 
- ---
- 
- # Conforms to
- Hashable
- 
- - Tag: CornerRadius
  */
 public struct CornerRadius: Hashable {
-    
-    var top     : CGFloat
-    var bottom  : CGFloat
+
+    public let top     : CGFloat
+    public let bottom  : CGFloat
     
     /// Set the coner radius for the bar shapes
     public init(top: CGFloat = 15.0, bottom: CGFloat = 0.0) {

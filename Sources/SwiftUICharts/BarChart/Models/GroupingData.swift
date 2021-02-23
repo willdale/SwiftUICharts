@@ -1,40 +1,20 @@
 //
-//  GroupedBarChartDataPoint.swift
+//  GroupingData.swift
 //  
 //
-//  Created by Will Dale on 19/02/2021.
+//  Created by Will Dale on 23/02/2021.
 //
 
 import SwiftUI
 
-public struct GroupedBarChartDataPoint: CTGroupedBarDataPoint {
-    
-    public let id = UUID()
-
-    public var value            : Double
-    public var xAxisLabel       : String?
-    public var pointDescription : String?
-    public var date             : Date?
-
-    public var group     : GroupingData
-    
-    public init(value       : Double,
-                xAxisLabel  : String?   = nil,
-                pointLabel  : String?   = nil,
-                date        : Date?     = nil,
-                group: GroupingData
-    ) {
-        self.value            = value
-        self.xAxisLabel       = xAxisLabel
-        self.pointDescription = pointLabel
-        self.date             = date
-        
-        self.group            = group
-
-    }
-    public typealias ID = UUID
-}
-
+/**
+ Model for grouping data points together so they can be drawn in the correct groupings.
+ 
+ # Example
+ ```
+ GroupingData(title: "One", colour: .blue)
+ ```
+ */
 public struct GroupingData: CTColourStyle, Hashable, Identifiable {
     
     public let id        : UUID = UUID()
@@ -46,6 +26,11 @@ public struct GroupingData: CTColourStyle, Hashable, Identifiable {
     public var startPoint: UnitPoint?
     public var endPoint  : UnitPoint?
      
+    // MARK: - Single colour
+    /// Group with single colour
+    /// - Parameters:
+    ///   - title: Title for legends
+    ///   - colour: Colour drawing the bars and legends
     public init(title   : String,
                 colour  : Color
     ) {
@@ -58,6 +43,13 @@ public struct GroupingData: CTColourStyle, Hashable, Identifiable {
         self.endPoint   = nil
     }
     
+    // MARK: - Gradient colour
+    /// Group with gradient colours.
+    /// - Parameters:
+    ///   - title: Title for legends
+    ///   - colours: Colours drawing the bars and legends
+    ///   - startPoint: Start point for Gradient.
+    ///   - endPoint: End point for Gradient.
     public init(title       : String,
                 colours     : [Color],
                 startPoint  : UnitPoint,
@@ -72,6 +64,13 @@ public struct GroupingData: CTColourStyle, Hashable, Identifiable {
         self.endPoint   = endPoint
     }
     
+    // MARK: - Gradient with stops
+    /// Group with gradient colours and stops control.
+    /// - Parameters:
+    ///   - title: Title for legends
+    ///   - stops: Colours drawing the bars and legends
+    ///   - startPoint: Start point for Gradient.
+    ///   - endPoint: End point for Gradient.
     public init(title       : String,
                 stops       : [GradientStop],
                 startPoint  : UnitPoint,
