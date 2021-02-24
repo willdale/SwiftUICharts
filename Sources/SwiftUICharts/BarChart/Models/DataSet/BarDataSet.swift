@@ -35,7 +35,7 @@ public struct BarDataSet: CTStandardBarChartDataSet {
     ///   - dataPoints: Array of elements.
     ///   - legendTitle: label for the data in legend.
     public init(dataPoints  : [BarChartDataPoint],
-                legendTitle : String
+                legendTitle : String = ""
     ) {
         self.dataPoints     = dataPoints
         self.legendTitle    = legendTitle

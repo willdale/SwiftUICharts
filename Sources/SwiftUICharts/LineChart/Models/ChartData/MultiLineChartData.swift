@@ -141,8 +141,8 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
     
     public func getYLabels() -> [Double] {
         var labels      : [Double]  = [Double]()
-        let dataRange   : Double = self.minValue
-        let minValue    : Double = self.range
+        let dataRange   : Double = self.range
+        let minValue    : Double = self.minValue
         let range       : Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
 
         labels.append(minValue)
