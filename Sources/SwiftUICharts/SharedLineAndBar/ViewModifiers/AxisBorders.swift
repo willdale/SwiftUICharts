@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Dividing line drawn between the X axis labels and the chart.
+ */
 internal struct XAxisBorder<T>: ViewModifier where T: LineAndBarChartData {
     
     @ObservedObject var chartData: T
@@ -45,6 +48,9 @@ internal struct XAxisBorder<T>: ViewModifier where T: LineAndBarChartData {
     }
 }
 
+/**
+ Dividing line drawn between the Y axis labels and the chart.
+ */
 internal struct YAxisBorder<T>: ViewModifier where T: LineAndBarChartData {
     
     @ObservedObject var chartData: T

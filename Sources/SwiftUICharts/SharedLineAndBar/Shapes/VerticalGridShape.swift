@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Vertical line.
+ */
 internal struct VerticalGridShape: Shape {
     internal func path(in rect: CGRect) -> Path {
         var path  = Path()

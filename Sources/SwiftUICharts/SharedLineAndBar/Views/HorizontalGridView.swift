@@ -7,9 +7,16 @@
 
 import SwiftUI
 
+/**
+ Sub view of the Y axis grid view modifier.
+ */
 internal struct HorizontalGridView<T>: View where T: LineAndBarChartData {
     
-    var chartData : T
+    @ObservedObject private var chartData : T
+     
+     internal init(chartData: T) {
+         self.chartData = chartData
+     }
     
     @State private var startAnimation : Bool = false
     

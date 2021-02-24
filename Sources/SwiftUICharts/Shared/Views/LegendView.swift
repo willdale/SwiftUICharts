@@ -33,7 +33,7 @@ internal struct LegendView<T>: View where T: ChartData {
                 switch legend.chartType {
 
                 case .line:
-
+                    
                     line(legend)
 
                 case .bar:

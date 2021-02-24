@@ -8,7 +8,6 @@
 import Foundation
 
 /// Data model to pass view information internally so the layout can configure its self.
-/// - Tag: ChartViewData
 public struct ChartViewData {
 
     /// If the chart has labels on the X axis, the Y axis needs a different layout

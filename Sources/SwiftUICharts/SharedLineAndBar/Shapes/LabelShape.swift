@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Shape used in POI Markers when displaying value in the Y axid labels.
+ */
 public struct LabelShape: Shape {
     public func path(in rect: CGRect) -> Path {
         var path = Path()

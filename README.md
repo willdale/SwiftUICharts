@@ -526,7 +526,7 @@ ChartStyle(infoBoxPlacement    : InfoBoxPlacement,
 - xAxisLabelsFrom: Where the label data come from. DataPoint or xAxisLabels
 - yAxisLabelPosition: Location of the X axis labels - Leading or Trailing
 - yAxisNumberOfLabel: Number Of Labels on Y Axis
-- globalAnimation: Gobal control of animations.
+- globalAnimation: Global control of animations.
 
 
 ### GridStyle

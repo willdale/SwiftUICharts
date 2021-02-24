@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-/// Configurable Point of interest
+/**
+ Configurable Point of interest
+ */
 internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
         
     @ObservedObject var chartData: T
@@ -152,7 +154,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
 
 extension View {
     /**
-     Horizontal line marking a custom value
+     Horizontal line marking a custom value.
      
      Shows a marker line at a specified value.
      
@@ -181,10 +183,12 @@ extension View {
      - Multi Line Chart
      - Bar Chart
      - Grouped Bar Chart
+     - Stacked Bar Chart
      
      # Unavailable for:
      - Pie Chart
      - Doughnut Chart
+     - Multi Layer Pie Chart
      
      - Parameters:
         - chartData: Chart data model.
@@ -196,8 +200,6 @@ extension View {
         - lineColour: Line Colour.
         - strokeStyle: Style of Stroke.
      - Returns: A  new view containing the chart with a marker line at a specified value.
-     
-     - Tag: YAxisPOI
     */
     public func yAxisPOI<T:LineAndBarChartData>(chartData      : T,
                                                 markerName     : String,
@@ -250,10 +252,12 @@ extension View {
      - Multi Line Chart
      - Bar Chart
      - Grouped Bar Chart
+     - Stacked Bar Chart
      
      # Unavailable for:
      - Pie Chart
      - Doughnut Chart
+     - Multi Layer Pie Chart
      
      - Parameters:
         - chartData: Chart data model.

@@ -13,14 +13,13 @@ import SwiftUI
  */
 public protocol LineAndBarChartData : ChartData {
 
+    /// A type representing the chart style. -- `CTChartStyle`
     associatedtype CTLineAndBarCS : CTLineAndBarChartStyle
+    /// A type representing opaque View
     associatedtype XLabels  : View
     
     /**
      Array of strings for the labels on the X Axis instead of the labels in the data points.
-
-     To control where the labels should come from.
-     Set [LabelsFrom](x-source-tag://LabelsFrom) in [ChartStyle](x-source-tag://CTChartStyle).
     */
     var xAxisLabels: [String]? { get set }
     
@@ -35,9 +34,6 @@ public protocol LineAndBarChartData : ChartData {
     
     /**
      Data model conatining the style data for the chart.
-     
-     # Reference
-     [CTChartStyle](x-source-tag://CTChartStyle)
      */
     var chartStyle: CTLineAndBarCS { get set }
         
@@ -79,7 +75,9 @@ public protocol LineAndBarChartData : ChartData {
 
 
 // MARK: - Style
-
+/**
+ A protocol to get the correct touch overlay marker.
+ */
 public protocol MarkerType {}
 
 /**
@@ -87,6 +85,7 @@ public protocol MarkerType {}
  */
 public protocol CTLineAndBarChartStyle: CTChartStyle {
     
+    /// A type representing touch overlay marker type. -- `MarkerType`
     associatedtype Mark : MarkerType
     
     /**
@@ -95,50 +94,38 @@ public protocol CTLineAndBarChartStyle: CTChartStyle {
     var markerType : Mark { get set }
     
     /**
-     Style of the vertical lines breaking up the chart
-     
-     [See GridStyle](x-source-tag://GridStyle)
+     Style of the vertical lines breaking up the chart.
      */
     var xAxisGridStyle: GridStyle { get set }
     
     /**
-     Location of the X axis labels - Top or Bottom
-     
-     [See XAxisLabelPosistion](x-source-tag://XAxisLabelPosistion)
+     Location of the X axis labels - Top or Bottom.
      */
     var xAxisLabelPosition: XAxisLabelPosistion { get set }
     
     /**
      Text Colour for the labels on the X axis.
-     
      */
     var xAxisLabelColour: Color { get set }
     
     /**
-     Where the label data come from. DataPoint or ChartData
-     
-     [See LabelsFrom](x-source-tag://LabelsFrom)
+     Where the label data come from. DataPoint or ChartData.
      */
     var xAxisLabelsFrom: LabelsFrom { get set }
     
     
     /**
      Style of the horizontal lines breaking up the chart.
-     
-     [See GridStyle](x-source-tag://GridStyle)
      */
     var yAxisGridStyle: GridStyle { get set }
     
     /**
-     Location of the X axis labels - Leading or Trailing
-     
-     [See YAxisLabelPosistion](x-source-tag://YAxisLabelPosistion)
+     Location of the X axis labels - Leading or Trailing.
      */
     var yAxisLabelPosition: YAxisLabelPosistion { get set }
     
     /**
      Text Colour for the labels on the Y axis.
-     
      */
     var yAxisLabelColour: Color { get set }
     
@@ -158,5 +145,5 @@ public protocol CTLineAndBarDataPoint: CTChartDataPoint {
     /**
      Data points label for the X axis.
      */
-    var xAxisLabel       : String? { get set }
+    var xAxisLabel: String? { get set }
 }

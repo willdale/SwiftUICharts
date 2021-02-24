@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Sub view of the X axis grid view modifier.
+ */
 internal struct VerticalGridView<T>: View where T: LineAndBarChartData {
     
    @ObservedObject private var chartData : T

@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Automatically generated labels for the Y axis.
+ */
 internal struct YAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
     
     @ObservedObject var chartData: T
@@ -91,7 +94,7 @@ internal struct YAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
 
 extension View {
     /**
-     Automatically generated labels for the Y axis
+     Automatically generated labels for the Y axis.
      
      Controls are in ChartData --> ChartStyle
      
@@ -103,15 +106,16 @@ extension View {
      - Multi Line Chart
      - Bar Chart
      - Grouped Bar Chart
+     - Stacked Bar Chart
      
      # Unavailable for:
      - Pie Chart
      - Doughnut Chart
+     - Multi Layer Pie Chart
      
      - Parameters:
       - specifier: Decimal precision specifier
      - Returns: HStack of labels
-     - Tag: YAxisLabels
      */
     public func yAxisLabels<T: LineAndBarChartData>(chartData: T, specifier: String = "%.0f") -> some View {
         self.modifier(YAxisLabels(chartData: chartData, specifier: specifier))

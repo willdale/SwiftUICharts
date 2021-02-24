@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Adds vertical lines along the X axis.
+ */
 internal struct XAxisGrid<T>: ViewModifier where T: LineAndBarChartData {
     
     @ObservedObject var chartData : T
@@ -45,15 +48,15 @@ extension View {
      - Multi Line Chart
      - Bar Chart
      - Grouped Bar Chart
+     - Stacked Bar Chart
      
      # Unavailable for:
      - Pie Chart
      - Doughnut Chart
+     - Multi Layer Pie Chart
      
      - Parameter chartData: Chart data model.
      - Returns: A  new view containing the chart with vertical lines under it.
-     
-     - Tag: XAxisGrid
     */
     public func xAxisGrid<T: LineAndBarChartData>(chartData: T) -> some View {
         self.modifier(XAxisGrid(chartData: chartData))

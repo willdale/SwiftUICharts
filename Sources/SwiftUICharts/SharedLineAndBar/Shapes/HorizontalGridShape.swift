@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Horizontal line.
+ */
 internal struct HorizontalGridShape: Shape {
     internal func path(in rect: CGRect) -> Path {
         var path  = Path()

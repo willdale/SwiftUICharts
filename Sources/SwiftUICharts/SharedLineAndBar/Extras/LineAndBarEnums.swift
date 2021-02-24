@@ -14,13 +14,12 @@ Location of the X axis labels
  case top
  case bottom
  ```
- 
- - Tag: XAxisLabelPosistion
  */
 public enum XAxisLabelPosistion {
     case top
     case bottom
 }
+
 /**
  Where the label data come from.
  
@@ -31,8 +30,6 @@ public enum XAxisLabelPosistion {
  case dataPoint // ChartData --> DataPoint --> xAxisLabel
  case chartData // ChartData --> xAxisLabels
  ```
- 
- - Tag: LabelsFrom
  */
 public enum LabelsFrom {
     /// ChartData --> DataPoint --> xAxisLabel
@@ -48,8 +45,6 @@ Location of the Y axis labels
  case leading
  case trailing
  ```
- 
- - Tag: YAxisLabelPosistion
  */
 public enum YAxisLabelPosistion {
     case leading
@@ -64,8 +59,6 @@ public enum YAxisLabelPosistion {
  case yAxis(specifier: String) // Places the label in the yAxis labels.
  case center(specifier: String) // Places the label in the center of chart.
  ```
- 
- - Tag: DisplayValue
  */
 public enum DisplayValue {
     /// No label.

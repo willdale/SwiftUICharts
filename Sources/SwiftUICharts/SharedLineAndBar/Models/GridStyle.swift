@@ -18,17 +18,6 @@ import SwiftUI
            dash         : [8],
            dashPhase    : 0)
  ```
- 
- # Options
- ```
- GridStyle(numberOfLines: Int,
-           lineColour   : Color,
-           lineWidth    : CGFloat,
-           dash         : [CGFloat],
-           dashPhase    : CGFloat)
- ```
- 
- - Tag: GridStyle
  */
 public struct GridStyle {
     

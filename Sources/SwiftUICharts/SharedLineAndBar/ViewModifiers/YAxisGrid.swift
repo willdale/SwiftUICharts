@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Adds horizontal lines along the X axis.
+ */
 internal struct YAxisGrid<T>: ViewModifier where T: LineAndBarChartData {
     
     @ObservedObject var chartData : T
@@ -44,15 +47,15 @@ extension View {
      - Multi Line Chart
      - Bar Chart
      - Grouped Bar Chart
+     - Stacked Bar Chart
      
      # Unavailable for:
      - Pie Chart
      - Doughnut Chart
+     - Multi Layer Pie Chart
      
      - Parameter chartData: Chart data model.
      - Returns: A  new view containing the chart with horizontal lines under it.
-     
-     - Tag: YAxisGrid
     */
     public func yAxisGrid<T: LineAndBarChartData>(chartData: T) -> some View {
         self.modifier(YAxisGrid<T>(chartData: chartData))
