@@ -127,8 +127,8 @@ extension CTLineChartDataProtocol {
             case .line(to: let nextPoint):
                 if touchLocation.x < nextPoint.x {
                     total += distanceToTouch(from  : currentPoint,
-                                          to    : nextPoint,
-                                          touchX: touchLocation.x)
+                                             to    : nextPoint,
+                                             touchX: touchLocation.x)
                     isComplete = true
                     return
                 } else {
@@ -138,8 +138,8 @@ extension CTLineChartDataProtocol {
             case .curve(to: let nextPoint, control1: _, control2: _ ):
                 if touchLocation.x < nextPoint.x {
                     total += distanceToTouch(from  : currentPoint,
-                                          to    : nextPoint,
-                                          touchX: touchLocation.x)
+                                             to    : nextPoint,
+                                             touchX: touchLocation.x)
                     isComplete = true
                     return
                 } else {
@@ -149,8 +149,8 @@ extension CTLineChartDataProtocol {
             case .quadCurve(to: let nextPoint, control: _):
                 if touchLocation.x < nextPoint.x {
                     total += distanceToTouch(from  : currentPoint,
-                                          to    : nextPoint,
-                                          touchX: touchLocation.x)
+                                             to    : nextPoint,
+                                             touchX: touchLocation.x)
                     isComplete = true
                     return
                 } else {
