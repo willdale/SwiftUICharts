@@ -48,10 +48,11 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
         self.labelColour     = labelColour
         self.labelBackground = labelBackground
         
-        self.markerValue = isAverage ? chartData.getAverage() : markerValue
-        self.maxValue    = chartData.getMaxValue()
-        self.range       = chartData.getRange()
-        self.minValue    = chartData.getMinValue()
+        self.markerValue = isAverage ? chartData.average : markerValue
+        self.maxValue    = chartData.maxValue
+        self.range       = chartData.range
+        self.minValue    = chartData.minValue
+        
     }
     
     @State private var startAnimation : Bool = false

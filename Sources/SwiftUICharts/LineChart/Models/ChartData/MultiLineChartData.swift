@@ -51,9 +51,9 @@ import SwiftUI
   }
  ```
  */
-public final class MultiLineChartData: LineChartDataProtocol, LegendProtocol {
-    
-    // MARK: - Properties
+public final class MultiLineChartData: LineChartDataProtocol {
+
+    // MARK: Properties
     public let id   : UUID = UUID()
     
     @Published public var dataSets      : MultiLineDataSet
@@ -68,7 +68,7 @@ public final class MultiLineChartData: LineChartDataProtocol, LegendProtocol {
     public var noDataText   : Text
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
-    // MARK: - Initializers
+    // MARK: Initializers
     /// Initialises a Multi Line Chart.
     ///
     /// - Parameters:
@@ -94,7 +94,7 @@ public final class MultiLineChartData: LineChartDataProtocol, LegendProtocol {
         self.setupLegends()
     }
 
-    // MARK: - Labels
+    // MARK: Labels
     public func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
@@ -139,19 +139,42 @@ public final class MultiLineChartData: LineChartDataProtocol, LegendProtocol {
         }
     }
     
-    // MARK: - Points
+    // MARK: Points
     public func getPointMarker() -> some View {
         ForEach(self.dataSets.dataSets, id: \.self) { dataSet in
             PointsSubView(dataSets  : dataSet,
-                          minValue  : self.getMinValue(),
-                          range     : self.getRange(),
+                          minValue  : self.minValue,
+                          range     : self.range,
                           animation : self.chartStyle.globalAnimation,
                           isFilled  : self.isFilled)
         }
     }
     
-    // MARK: - Touch
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [LineChartDataPoint] {
+    // MARK: Touch
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) {
+        self.infoView.isTouchCurrent   = true
+        self.infoView.touchLocation    = touchLocation
+        self.infoView.chartSize        = chartSize.frame(in: .local)
+        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
+    }
+    
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View {
+       ZStack {
+            ForEach(self.dataSets.dataSets, id: \.self) { dataSet in
+                self.markerSubView(dataSet: dataSet, touchLocation: touchLocation, chartSize: chartSize)
+            }
+        }
+    }
+    
+    public typealias Set = MultiLineDataSet
+    public typealias DataPoint = LineChartDataPoint
+    public typealias CTStyle = LineChartStyle
+    
+}
+
+// MARK: - Touch
+extension MultiLineChartData: TouchProtocol {
+    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) {
         var points : [LineChartDataPoint] = []
         for dataSet in dataSets.dataSets {
             let xSection    : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count - 1)
@@ -160,36 +183,13 @@ public final class MultiLineChartData: LineChartDataProtocol, LegendProtocol {
                 points.append(dataSet.dataPoints[index])
             }
         }
-        return points
+        self.infoView.touchOverlayInfo = points
     }
-    public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
+}
 
-        var locations : [HashablePoint] = []
-        for dataSet in dataSets.dataSets {
-            
-            let minValue : Double = self.getMinValue()
-            let range    : Double = self.getRange()
-            
-            let xSection : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count - 1)
-            let ySection : CGFloat = chartSize.size.height / CGFloat(range)
-            let index    : Int     = Int((touchLocation.x + (xSection / 2)) / xSection)
-            if index >= 0 && index < dataSet.dataPoints.count {
-                locations.append(HashablePoint(x: CGFloat(index) * xSection,
-                                               y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.size.height))
-            }
-        }
-        return locations
-    }
-
-    public func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View {
-       ZStack {
-            ForEach(self.dataSets.dataSets, id: \.self) { dataSet in
-                self.markerSubView(dataSet: dataSet, touchLocation: touchLocation, chartSize: chartSize)
-            }
-        }
-    }
-
-    // MARK: - Legends
+// MARK: - Legends
+extension MultiLineChartData: LegendProtocol {
+    
     internal func setupLegends() {
         for dataSet in dataSets.dataSets {
             if dataSet.style.colourType == .colour,
@@ -229,34 +229,7 @@ public final class MultiLineChartData: LineChartDataProtocol, LegendProtocol {
         }
     }
     
-    // MARK: - Data Functions
-    public func getRange() -> Double {
-        switch self.chartStyle.baseline {
-        case .minimumValue:
-            return DataFunctions.multiDataSetRange(from: dataSets)
-        case .minimumWithMaximum(of: let value):
-            return DataFunctions.multiDataSetMaxValue(from: dataSets) - min(DataFunctions.multiDataSetMinValue(from: dataSets), value)
-        case .zero:
-            return DataFunctions.multiDataSetMaxValue(from: dataSets)
-        }
-    }
-    public func getMinValue() -> Double {
-        switch self.chartStyle.baseline {
-        case .minimumValue:
-            return DataFunctions.multiDataSetMinValue(from: dataSets)
-        case .minimumWithMaximum(of: let value):
-            return min(DataFunctions.multiDataSetMinValue(from: dataSets), value)
-        case .zero:
-            return 0
-        }
-    }
-    
     internal func legendOrder() -> [LegendData] {
         return legends.sorted { $0.prioity < $1.prioity}
     }
-
-    
-    public typealias Set = MultiLineDataSet
-    public typealias DataPoint = LineChartDataPoint
 }
-

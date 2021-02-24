@@ -23,19 +23,19 @@ internal struct XAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
         Group {
             switch chartData.chartStyle.xAxisLabelPosition {
             case .top:
-                if chartData.isGreaterThanTwo() {
+//                if chartData.isGreaterThanTwo() {
                     VStack {
                         chartData.getXAxisLabels()
                         content
                     }
-                } else { content }
+//                } else { content }
             case .bottom:
-                if chartData.isGreaterThanTwo() {
+//                if chartData.isGreaterThanTwo() {
                     VStack {
                         content
                         chartData.getXAxisLabels()
                     }
-                } else { content }
+//                } else { content }
             }
         }
     }

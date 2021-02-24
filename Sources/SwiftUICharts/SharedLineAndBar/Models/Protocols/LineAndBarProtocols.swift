@@ -19,6 +19,26 @@ public protocol LineAndBarChartData : ChartData {
     associatedtype XLabels  : View
     
     /**
+     Returns the difference between the highest and lowest numbers in the data set or data sets.
+     */
+    var range    : Double { get }
+    
+    /**
+     Returns the lowest value in the data set or data sets.
+     */
+    var minValue : Double { get }
+    
+    /**
+     Returns the highest value in the data set or data sets
+     */
+    var maxValue : Double { get }
+    
+    /**
+     Returns the average value from the data set or data sets.
+     */
+    var average  : Double { get }
+    
+    /**
      Array of strings for the labels on the X Axis instead of the labels in the data points.
     */
     var xAxisLabels: [String]? { get set }
@@ -48,30 +68,13 @@ public protocol LineAndBarChartData : ChartData {
     func getYLabels() -> [Double]
     
     /**
-     Returns the difference between the highest and lowest numbers in the data set or data sets.
-     */
-    func getRange() -> Double
-    
-    /**
-     Returns the lowest value in the data set or data sets.
-     */
-    func getMinValue() -> Double
-    
-    /**
-     Returns the highest value in the data set or data sets
-     */
-    func getMaxValue() -> Double
-    
-    /**
-     Returns the average value from the data set or data sets.
-     */
-    func getAverage() -> Double
-    
-    /**
      Displays a view for the labels on the X Axis.
      */
     func getXAxisLabels() -> XLabels
+
 }
+
+
 
 
 // MARK: - Style

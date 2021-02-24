@@ -29,10 +29,10 @@ import SwiftUI
  }
  ```
  */
-public final class DoughnutChartData: DoughnutChartDataProtocol, LegendProtocol {
+public final class DoughnutChartData: DoughnutChartDataProtocol {
 
+    // MARK: Properties
     public var id : UUID = UUID()
-    
     @Published public var dataSets   : PieDataSet
     @Published public var metadata   : ChartMetadata
     @Published public var chartStyle : DoughnutChartStyle
@@ -42,7 +42,7 @@ public final class DoughnutChartData: DoughnutChartDataProtocol, LegendProtocol 
     public var noDataText: Text
     public var chartType : (chartType: ChartType, dataSetType: DataSetType)
     
-    // MARK: - Initializer
+    // MARK: Initializer
     /// Initialises a Doughnut Chart.
     ///
     /// - Parameters:
@@ -67,13 +67,40 @@ public final class DoughnutChartData: DoughnutChartDataProtocol, LegendProtocol 
         self.makeDataPoints()
     }
     
-    public func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View { EmptyView() }
-
-    internal func legendOrder() -> [LegendData] {
-        return legends.sorted { $0.prioity < $1.prioity}
+    // MARK: Touch
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) {
+        self.infoView.isTouchCurrent   = true
+        self.infoView.touchLocation    = touchLocation
+        self.infoView.chartSize        = chartSize.frame(in: .local)
+        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
     }
     
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View { EmptyView() }
+
     public typealias Set        = PieDataSet
     public typealias DataPoint  = PieChartDataPoint
     public typealias CTStyle    = DoughnutChartStyle
+}
+
+// MARK: - Touch
+extension DoughnutChartData: TouchProtocol {
+    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) {
+        var points : [PieChartDataPoint] = []
+        let touchDegree = degree(from: touchLocation, in: chartSize.frame(in: .local))
+                
+        let dataPoint = self.dataSets.dataPoints.first(where: { $0.startAngle * Double(180 / Double.pi) <= Double(touchDegree) && ($0.startAngle * Double(180 / Double.pi)) + ($0.amount * Double(180 / Double.pi)) >= Double(touchDegree) } )
+        if let data = dataPoint {
+            points.append(data)
+        }
+        self.infoView.touchOverlayInfo = points
+    }
+}
+
+// MARK: - Legends
+extension DoughnutChartData: LegendProtocol {
+    func setupLegends() {}
+    
+    internal func legendOrder() -> [LegendData] {
+        return legends.sorted { $0.prioity < $1.prioity}
+    }
 }

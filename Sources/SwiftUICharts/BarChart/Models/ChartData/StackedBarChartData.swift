@@ -72,9 +72,9 @@ import SwiftUI
                                 chartStyle: BarChartStyle(xAxisLabelsFrom: .dataPoint))
  ```
  */
-public final class StackedBarChartData: MultiBarChartDataProtocol, LegendProtocol {
+public final class StackedBarChartData: MultiBarChartDataProtocol {
     
-    // MARK: - Properties
+    // MARK: Properties
     public let id   : UUID  = UUID()
     
     @Published public var dataSets     : MultiBarDataSets
@@ -90,7 +90,7 @@ public final class StackedBarChartData: MultiBarChartDataProtocol, LegendProtoco
     public var noDataText   : Text
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
-    // MARK: - Initializer
+    // MARK: Initializer
     /// Initialises a Grouped Bar Chart.
     ///
     /// - Parameters:
@@ -121,7 +121,7 @@ public final class StackedBarChartData: MultiBarChartDataProtocol, LegendProtoco
         self.chartType      = (chartType: .bar, dataSetType: .multi)
         self.setupLegends()
     }
-    // MARK: - Labels
+    // MARK: Labels
     @ViewBuilder
     public func getXAxisLabels() -> some View {
         switch self.chartStyle.xAxisLabelsFrom {
@@ -158,8 +158,57 @@ public final class StackedBarChartData: MultiBarChartDataProtocol, LegendProtoco
         }
     }
     
-    // MARK: - Touch
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [MultiBarChartDataPoint] {
+    // MARK: Touch
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) {
+        self.infoView.isTouchCurrent   = true
+        self.infoView.touchLocation    = touchLocation
+        self.infoView.chartSize        = chartSize.frame(in: .local)
+        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
+    }
+
+    @ViewBuilder
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View {
+        
+        if let position = self.getPointLocation(dataSet: dataSets,
+                                                touchLocation: touchLocation,
+                                                chartSize: chartSize) {
+            ZStack {
+                
+                switch self.chartStyle.markerType  {
+                case .none:
+                    EmptyView()
+                case .vertical:
+                    MarkerFull(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .full:
+                    MarkerFull(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .bottomLeading:
+                    MarkerBottomLeading(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .bottomTrailing:
+                    MarkerBottomTrailing(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .topLeading:
+                    MarkerTopLeading(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .topTrailing:
+                    MarkerTopTrailing(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                }
+            }
+        } else { EmptyView() }
+    }
+
+    public typealias Set        = MultiBarDataSets
+    public typealias DataPoint  = MultiBarChartDataPoint
+    public typealias CTStyle    = BarChartStyle
+}
+
+// MARK: - Touch
+extension StackedBarChartData: TouchProtocol {
+   
+    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) {
 
         var points : [MultiBarChartDataPoint] = []
         
@@ -174,7 +223,7 @@ public final class StackedBarChartData: MultiBarChartDataProtocol, LegendProtoco
             // Get the max value of the dataset relative to max value of all datasets.
             // This is used to set the height of the y axis filtering.
             let setMaxValue = dataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
-            let allMaxValue = self.getMaxValue()
+            let allMaxValue = self.maxValue
             let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
 
             // Gets the height of each datapoint
@@ -202,33 +251,31 @@ public final class StackedBarChartData: MultiBarChartDataProtocol, LegendProtoco
                 }
             }
         }
-        return points
+        self.infoView.touchOverlayInfo = points
     }
 
-    public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
-        var locations : [HashablePoint] = []
-        
+    public func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: GeometryProxy) -> CGPoint? {
         // Filter to get the right dataset based on the x axis.
-        let superXSection : CGFloat = chartSize.size.width / CGFloat(dataSets.dataSets.count)
+        let superXSection : CGFloat = chartSize.size.width / CGFloat(dataSet.dataSets.count)
         let superIndex    : Int     = Int((touchLocation.x) / superXSection)
-        
-        if superIndex >= 0 && superIndex < dataSets.dataSets.count {
-            
-            let dataSet = dataSets.dataSets[superIndex]
-            
+
+        if superIndex >= 0 && superIndex < dataSet.dataSets.count {
+
+            let subDataSet = dataSet.dataSets[superIndex]
+
             // Get the max value of the dataset relative to max value of all datasets.
             // This is used to set the height of the y axis filtering.
-            let setMaxValue = dataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
-            let allMaxValue = self.getMaxValue()
+            let setMaxValue = subDataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
+            let allMaxValue = self.maxValue
             let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
 
             // Gets the height of each datapoint
             var heightOfElements : [CGFloat] = []
-            let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }
-            dataSet.dataPoints.forEach { datapoint in
+            let sum = subDataSet.dataPoints.reduce(0) { $0 + $1.value }
+            subDataSet.dataPoints.forEach { datapoint in
                 heightOfElements.append((chartSize.size.height * fraction) * CGFloat(datapoint.value / sum))
             }
-        
+
             // Gets the highest point of each element.
             var endPointOfElements : [CGFloat] = []
             heightOfElements.enumerated().forEach { element in
@@ -239,52 +286,23 @@ public final class StackedBarChartData: MultiBarChartDataProtocol, LegendProtoco
                 endPointOfElements.append(returnValue)
             }
 
-            let yIndex = endPointOfElements.enumerated().first(where: { $0.element > abs(touchLocation.y - chartSize.size.height) })
-            
+            let yIndex = endPointOfElements.enumerated().first(where: {
+                $0.element > abs(touchLocation.y - chartSize.size.height)
+            })
+
             if let index = yIndex?.offset {
-                if index >= 0 && index < dataSet.dataPoints.count {
-                    
-                    locations.append(HashablePoint(x: (CGFloat(superIndex) * superXSection) + (superXSection / 2),
-                                                   y: (chartSize.size.height - endPointOfElements[index])))
+                if index >= 0 && index < subDataSet.dataPoints.count {
+
+                    return CGPoint(x: (CGFloat(superIndex) * superXSection) + (superXSection / 2),
+                                   y: (chartSize.size.height - endPointOfElements[index]))
                 }
             }
         }
-        
-        return locations
+        return nil
     }
-    
-    public func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View {
-        let positions = self.getPointLocation(touchLocation: touchLocation,
-                                              chartSize: chartSize)
-        return ZStack {
-            ForEach(positions, id: \.self) { position in
-                
-                switch self.chartStyle.markerType  {
-                case .none:
-                    EmptyView()
-                case .vertical:
-                    MarkerFull(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .full:
-                    MarkerFull(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .bottomLeading:
-                    MarkerBottomLeading(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .bottomTrailing:
-                    MarkerBottomTrailing(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .topLeading:
-                    MarkerTopLeading(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .topTrailing:
-                    MarkerTopTrailing(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                }
-            }
-        }
-    }
-    
+}
+
+extension StackedBarChartData: LegendProtocol {
     // MARK: - Legends
     internal func setupLegends() {
         for group in self.groups {
@@ -327,8 +345,4 @@ public final class StackedBarChartData: MultiBarChartDataProtocol, LegendProtoco
     internal func legendOrder() -> [LegendData] {
         return legends.sorted { $0.prioity < $1.prioity}
     }
-
-    public typealias Set        = MultiBarDataSets
-    public typealias DataPoint  = MultiBarChartDataPoint
-    public typealias CTStyle    = BarChartStyle
 }

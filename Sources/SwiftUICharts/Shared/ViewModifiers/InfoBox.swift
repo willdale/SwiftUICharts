@@ -37,9 +37,9 @@ internal struct InfoBox<T>: ViewModifier where T: ChartData {
                         valueColour      : chartData.chartStyle.infoBoxValueColour,
                         descriptionColour: chartData.chartStyle.infoBoxDescriptionColour,
                         boxFrame         : $boxFrame)
-            .position(x: setBoxLocationation(touchLocation: chartData.infoView.positionX,
+            .position(x: setBoxLocationation(touchLocation: chartData.infoView.touchLocation.x,
                                              boxFrame     : boxFrame,
-                                             chartSize    : chartData.infoView.frame),
+                                             chartSize    : chartData.infoView.chartSize),
                       y: 15)
             .frame(height: 40)
     }

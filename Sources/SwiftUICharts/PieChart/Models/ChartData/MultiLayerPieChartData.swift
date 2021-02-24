@@ -84,6 +84,7 @@ import SwiftUI
  */
 public final class MultiLayerPieChartData: MultiPieChartDataProtocol {
     
+    // MARK: Properties
     public var id : UUID = UUID()
     @Published public var dataSets      : MultiPieDataSet
     @Published public var metadata      : ChartMetadata
@@ -94,7 +95,7 @@ public final class MultiLayerPieChartData: MultiPieChartDataProtocol {
     public var noDataText: Text
     public var chartType : (chartType: ChartType, dataSetType: DataSetType)
     
-    // MARK: - Initializer
+    // MARK: Initializer
     /// Initialises a multi layered pie chart.
     ///
     /// - Parameters:
@@ -115,31 +116,38 @@ public final class MultiLayerPieChartData: MultiPieChartDataProtocol {
         self.noDataText  = noDataText
         self.chartType   = (chartType: .pie, dataSetType: .single)
         
-//        self.setupLegends()
-
+        self.setupLegends()
         self.makeDataPoints()
     }
     
-    public func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View { EmptyView() }
+    // MARK: Touch
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) {
+        self.infoView.isTouchCurrent   = true
+        self.infoView.touchLocation    = touchLocation
+        self.infoView.chartSize        = chartSize.frame(in: .local)
+        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
+    }
     
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View { EmptyView() }
     
-    
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [MultiPieDataPoint] {
+    public typealias Set       = MultiPieDataSet
+    public typealias DataPoint = MultiPieDataPoint
+    public typealias CTStyle   = PieChartStyle
+}
+
+// MARK: - Touch
+extension MultiLayerPieChartData: TouchProtocol {
+    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) {
         let points : [MultiPieDataPoint] = []
-        return points
+        self.infoView.touchOverlayInfo = points
     }
-    
-    public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
-        return [HashablePoint(x: touchLocation.x, y: touchLocation.y)]
-    }
-    
+}
+
+// MARK: - Legends
+extension MultiLayerPieChartData: LegendProtocol {
     internal func setupLegends() {}
     
     internal func legendOrder() -> [LegendData] {
         return legends.sorted { $0.prioity < $1.prioity}
     }
-
-    public typealias Set       = MultiPieDataSet
-    public typealias DataPoint = MultiPieDataPoint
-    public typealias CTStyle   = PieChartStyle
 }

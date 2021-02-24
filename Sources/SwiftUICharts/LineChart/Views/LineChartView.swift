@@ -54,8 +54,8 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
     /// - Parameter chartData: Must be LineChartData model.
     public init(chartData: ChartData) {
         self.chartData  = chartData
-        self.minValue   = chartData.getMinValue()
-        self.range      = chartData.getRange()
+        self.minValue   = chartData.minValue
+        self.range      = chartData.range
     }
      
     public var body: some View {

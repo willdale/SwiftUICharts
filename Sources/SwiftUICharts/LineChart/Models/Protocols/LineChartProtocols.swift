@@ -35,17 +35,7 @@ public protocol LineChartDataProtocol: LineAndBarChartData {
      - Returns: The position to place the indicator.
      */
     func getIndicatorLocation(rect: CGRect, dataPoints: [LineChartDataPoint], touchLocation: CGPoint, lineType: LineType) -> CGPoint
-    
-    /**
-     Gets the location of a data point within the view.
-     - Parameters:
-       - touchLocation: Current location of the touch.
-       - chartSize: The size of the chart view as the parent view.
-       - dataSet: The data set to search in.
-     - Returns: The location on screen of data points.
-     */
-    func getSinglePoint(touchLocation: CGPoint, chartSize: GeometryProxy, dataSet: LineDataSet) -> CGPoint
-    
+
     /// Displays a view contatining touch markers.
     /// - Parameters:
     ///   - dataSet: The data set to search in.

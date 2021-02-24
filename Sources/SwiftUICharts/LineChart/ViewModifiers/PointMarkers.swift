@@ -19,8 +19,8 @@ internal struct PointMarkers<T>: ViewModifier where T: LineChartDataProtocol {
         
     internal init(chartData : T) {
         self.chartData  = chartData
-        self.minValue   = chartData.getMinValue()
-        self.range      = chartData.getRange()
+        self.minValue   = chartData.minValue
+        self.range      = chartData.range
     }
     internal func body(content: Content) -> some View {
         ZStack {

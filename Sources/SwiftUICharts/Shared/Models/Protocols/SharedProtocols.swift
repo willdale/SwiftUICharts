@@ -18,10 +18,13 @@ public protocol ChartData: ObservableObject, Identifiable {
     
     /// A type representing a  data set. -- `DataSet`
     associatedtype Set      : DataSet
+    
     /// A type representing a data point. -- `CTChartDataPoint`
     associatedtype DataPoint: CTChartDataPoint
+    
     /// A type representing the chart style. -- `CTChartStyle`
     associatedtype CTStyle  : CTChartStyle
+    
     /// A type representing opaque View
     associatedtype Touch    : View
     
@@ -74,27 +77,9 @@ public protocol ChartData: ObservableObject, Identifiable {
      Returns whether there are two or more data points.
      */
     func isGreaterThanTwo() -> Bool
-    
-    
+
     // MARK: Touch
-    /**
-    Gets the nearest data points to the touch location.
-    - Parameters:
-      - touchLocation: Current location of the touch.
-      - chartSize: The size of the chart view as the parent view.
-    - Returns: Array of data points.
-    */
-    func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [DataPoint]
-    
-    /**
-    Gets the location of the data point in the view.
-    - Parameters:
-      - touchLocation: Current location of the touch.
-      - chartSize: The size of the chart view as the parent view.
-    - Returns: Array of points with the location on screen of data points.
-    */
-    func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint]
-    
+    func setTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy)
     /**
      Takes touch location and return a view based on the chart type and configuration.
      
@@ -103,10 +88,37 @@ public protocol ChartData: ObservableObject, Identifiable {
        - chartSize: The size of the chart view as the parent view.
      - Returns: The relevent view for the chart type and options.
      */
-    func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> Touch
+    func getTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> Touch
     
-  
 }
+
+
+
+// MARK: - Touch Protocol
+internal protocol TouchProtocol {
+    /// A type representing a  data set. -- `DataSet`
+    associatedtype SetPoint : DataSet
+    /**
+    Gets the nearest data points to the touch location.
+    - Parameters:
+      - touchLocation: Current location of the touch.
+      - chartSize: The size of the chart view as the parent view.
+    - Returns: Array of data points.
+    */
+    func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy)
+    
+    /**
+    Gets the location of the data point in the view.
+    - Parameters:
+      - touchLocation: Current location of the touch.
+      - chartSize: The size of the chart view as the parent view.
+    - Returns: Array of points with the location on screen of data points.
+    */
+    func getPointLocation(dataSet: SetPoint, touchLocation: CGPoint, chartSize: GeometryProxy) -> CGPoint?
+}
+
+
+// MARK: - Legend Protocol
 /**
  Protocol for dealing with legend data internally.
  */

@@ -51,8 +51,8 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
     /// - Parameter chartData: Must be MultiLineChartData model.
     public init(chartData: ChartData) {
         self.chartData  = chartData
-        self.minValue   = chartData.getMinValue()
-        self.range      = chartData.getRange()
+        self.minValue   = chartData.minValue
+        self.range      = chartData.range
     }
     
     @State private var startAnimation : Bool = false
