@@ -29,7 +29,7 @@ import SwiftUI
  }
  ```
  */
-public final class PieChartData: PieChartDataProtocol {
+public final class PieChartData: CTPieChartDataProtocol {
     
     // MARK: Properties
     public var id : UUID = UUID()

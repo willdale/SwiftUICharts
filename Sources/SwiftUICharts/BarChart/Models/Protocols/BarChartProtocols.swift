@@ -9,9 +9,9 @@ import SwiftUI
 
 // MARK: - Chart Data
 /**
- A protocol to extend functionality of `LineAndBarChartData` specifically for Bar Charts.
+ A protocol to extend functionality of `CTLineBarChartDataProtocol` specifically for Bar Charts.
  */
-public protocol BarChartDataProtocol: LineAndBarChartData {
+public protocol CTBarChartDataProtocol: CTLineBarChartDataProtocol {
         
     /**
      Overall styling for the bars
@@ -20,9 +20,9 @@ public protocol BarChartDataProtocol: LineAndBarChartData {
 }
 
 /**
- A protocol to extend functionality of `BarChartDataProtocol` specifically for Multi Part Bar Charts.
+ A protocol to extend functionality of `CTBarChartDataProtocol` specifically for Multi Part Bar Charts.
  */
-public protocol MultiBarChartDataProtocol: BarChartDataProtocol {
+public protocol CTMultiBarChartDataProtocol: CTBarChartDataProtocol {
     
     /**
      Grouping data to inform the chart about the relationship between the datapoints.
@@ -36,9 +36,9 @@ public protocol MultiBarChartDataProtocol: BarChartDataProtocol {
 
 // MARK: - Style
 /**
- A protocol to extend functionality of `CTLineAndBarChartStyle` specifically for  Bar Charts.
+ A protocol to extend functionality of `CTLineBarChartStyle` specifically for  Bar Charts.
  */
-public protocol CTBarChartStyle: CTLineAndBarChartStyle {}
+public protocol CTBarChartStyle: CTLineBarChartStyle {}
 
 
 
@@ -49,9 +49,9 @@ public protocol CTBarChartStyle: CTLineAndBarChartStyle {}
 
 // MARK: - DataSet
 /**
- A protocol to extend functionality of `SingleDataSet` specifically for Standard Bar Charts.
+ A protocol to extend functionality of `CTSingleDataSetProtocol` specifically for Standard Bar Charts.
  */
-public protocol CTStandardBarChartDataSet: SingleDataSet {
+public protocol CTStandardBarChartDataSet: CTSingleDataSetProtocol {
     /**
      Label to display in the legend.
      */
@@ -59,9 +59,9 @@ public protocol CTStandardBarChartDataSet: SingleDataSet {
 }
 
 /**
- A protocol to extend functionality of `SingleDataSet` specifically for Multi Part Bar Charts.
+ A protocol to extend functionality of `CTSingleDataSetProtocol` specifically for Multi Part Bar Charts.
  */
-public protocol CTMultiBarChartDataSet: SingleDataSet  {}
+public protocol CTMultiBarChartDataSet: CTSingleDataSetProtocol  {}
 
 
 
@@ -74,21 +74,24 @@ public protocol CTMultiBarChartDataSet: SingleDataSet  {}
 
 // MARK: - DataPoints
 /**
- A protocol to extend functionality of `CTLineAndBarDataPoint` specifically for standard Bar Charts.
+ A protocol to extend functionality of `CTLineBarDataPoint` specifically for standard Bar Charts.
  */
-public protocol CTBarDataPoint: CTLineAndBarDataPoint {}
+public protocol CTBarDataPoint: CTLineBarDataPoint {}
 
 /**
- A protocol to extend functionality of `CTLineAndBarDataPoint` specifically for standard Bar Charts.
+ A protocol to extend functionality of `CTLineBarDataPoint` specifically for standard Bar Charts.
  */
 public protocol CTStandardBarDataPoint: CTBarDataPoint, CTColourStyle {}
 
 /**
- A protocol to extend functionality of `CTLineAndBarDataPoint` specifically for multi part Bar Charts.
+ A protocol to extend functionality of `CTLineBarDataPoint` specifically for multi part Bar Charts.
  i.e: Grouped or Stacked
  */
 public protocol CTMultiBarDataPoint: CTBarDataPoint {
     
+    /**
+     For grouping data points together so they can be drawn in the correct groupings.
+     */
     var group : GroupingData { get set }
     
 }

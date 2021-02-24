@@ -44,7 +44,7 @@ import SwiftUI
  
  ```
  */
-public final class LineChartData: LineChartDataProtocol {
+public final class LineChartData: CTLineChartDataProtocol {
     
     // MARK: Properties
     public let id   : UUID  = UUID()
@@ -130,6 +130,19 @@ public final class LineChartData: LineChartDataProtocol {
                 }
             }
         }
+    }
+    
+    public func getYLabels() -> [Double] {
+        var labels      : [Double]  = [Double]()
+        let dataRange   : Double = self.minValue
+        let minValue    : Double = self.range
+        let range       : Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
+
+        labels.append(minValue)
+        for index in 1...self.chartStyle.yAxisNumberOfLabels {
+            labels.append(minValue + range * Double(index))
+        }
+        return labels
     }
 
     // MARK: Points

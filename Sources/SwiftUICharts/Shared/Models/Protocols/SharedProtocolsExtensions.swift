@@ -7,13 +7,13 @@
 
 import Foundation
 
-extension ChartData where Set: SingleDataSet {
+extension CTChartData where Set: CTSingleDataSetProtocol {
     public func isGreaterThanTwo() -> Bool {
         return dataSets.dataPoints.count > 2
     }
 }
 
-extension ChartData where Set: MultiDataSet {
+extension CTChartData where Set: CTMultiDataSetProtocol {
     public func isGreaterThanTwo() -> Bool {
         var returnValue: Bool = true
         dataSets.dataSets.forEach { dataSet in

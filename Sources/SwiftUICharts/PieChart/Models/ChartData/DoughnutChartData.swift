@@ -29,7 +29,7 @@ import SwiftUI
  }
  ```
  */
-public final class DoughnutChartData: DoughnutChartDataProtocol {
+public final class DoughnutChartData: CTDoughnutChartDataProtocol {
 
     // MARK: Properties
     public var id : UUID = UUID()

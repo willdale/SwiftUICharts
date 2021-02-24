@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension LineAndBarChartData where Set: SingleDataSet {
+extension CTLineBarChartDataProtocol where Set: CTSingleDataSetProtocol {
     public var range : Double {
         return DataFunctions.dataSetRange(from: dataSets)
     }
@@ -22,7 +22,7 @@ extension LineAndBarChartData where Set: SingleDataSet {
     }
 }
 
-extension LineAndBarChartData where Set: MultiDataSet {
+extension CTLineBarChartDataProtocol where Set: CTMultiDataSetProtocol {
     public var range : Double {
         return DataFunctions.multiDataSetRange(from: dataSets)
     }
@@ -37,7 +37,7 @@ extension LineAndBarChartData where Set: MultiDataSet {
     }
 }
 
-extension LineAndBarChartData where Self: LineChartData {
+extension CTLineBarChartDataProtocol where Self: LineChartData {
     public var range : Double {
         switch self.chartStyle.baseline {
         case .minimumValue:
@@ -59,7 +59,7 @@ extension LineAndBarChartData where Self: LineChartData {
         }
     }
 }
-extension LineAndBarChartData where Self: MultiLineChartData {
+extension CTLineBarChartDataProtocol where Self: MultiLineChartData {
     public var range : Double {
         switch self.chartStyle.baseline {
         case .minimumValue:

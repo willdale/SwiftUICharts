@@ -9,30 +9,30 @@ import SwiftUI
 
 // MARK: - Chart Data
 /**
- A protocol to extend functionality of `ChartData` specifically for Pie and Doughnut Charts.
+ A protocol to extend functionality of `CTChartData` specifically for Pie and Doughnut Charts.
  */
-public protocol PieAndDoughnutChartDataProtocol: ChartData {}
+public protocol CTPieDoughnutChartDataProtocol: CTChartData {}
 
 /**
- A protocol to extend functionality of `PieAndDoughnutChartDataProtocol` specifically for Pie Charts.
+ A protocol to extend functionality of `CTPieDoughnutChartDataProtocol` specifically for Pie Charts.
  */
-public protocol PieChartDataProtocol : PieAndDoughnutChartDataProtocol {}
+public protocol CTPieChartDataProtocol : CTPieDoughnutChartDataProtocol {}
 
 /**
- A protocol to extend functionality of `PieAndDoughnutChartDataProtocol` specifically for  Doughnut Charts.
+ A protocol to extend functionality of `CTPieDoughnutChartDataProtocol` specifically for  Doughnut Charts.
  */
-public protocol DoughnutChartDataProtocol : PieAndDoughnutChartDataProtocol {}
+public protocol CTDoughnutChartDataProtocol : CTPieDoughnutChartDataProtocol {}
 
 /**
- A protocol to extend functionality of `PieAndDoughnutChartDataProtocol` specifically for multi layer Pie Charts.
+ A protocol to extend functionality of `CTPieDoughnutChartDataProtocol` specifically for multi layer Pie Charts.
  */
-public protocol MultiPieChartDataProtocol : PieAndDoughnutChartDataProtocol {}
+public protocol CTMultiPieChartDataProtocol : CTPieDoughnutChartDataProtocol {}
 
 
 
 
 // MARK: - DataSet
-public protocol CTMultiPieDataSet: DataSet {}
+public protocol CTMultiPieDataSet: CTDataSetProtocol {}
 
 
 

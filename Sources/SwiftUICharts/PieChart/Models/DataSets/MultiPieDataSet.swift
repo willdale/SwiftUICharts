@@ -24,7 +24,7 @@ import SwiftUI
  ])
  ```
  */
-public struct MultiPieDataSet: SingleDataSet {
+public struct MultiPieDataSet: CTSingleDataSetProtocol {
     
     public var id: UUID = UUID()
     public var dataPoints  : [MultiPieDataPoint]

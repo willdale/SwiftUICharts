@@ -8,7 +8,7 @@
 import SwiftUI
 
 // MARK: - Extentions
-extension PieAndDoughnutChartDataProtocol where Set == MultiPieDataSet, DataPoint == MultiPieDataPoint {
+extension CTPieDoughnutChartDataProtocol where Set == MultiPieDataSet, DataPoint == MultiPieDataPoint {
     /**
      Sets up the data points in a way that can be sent to renderer for drawing.
      
@@ -69,13 +69,13 @@ extension PieAndDoughnutChartDataProtocol where Set == MultiPieDataSet, DataPoin
     }
 }
 
-extension PieAndDoughnutChartDataProtocol {
+extension CTPieDoughnutChartDataProtocol {
     public func getPointLocation(dataSet: PieDataSet, touchLocation: CGPoint, chartSize: GeometryProxy) -> CGPoint? {
         return nil
     }
 }
 
-extension PieAndDoughnutChartDataProtocol where Set == PieDataSet, DataPoint == PieChartDataPoint {
+extension CTPieDoughnutChartDataProtocol where Set == PieDataSet, DataPoint == PieChartDataPoint {
 
     /**
      Sets up the data points in a way that can be sent to renderer for drawing.

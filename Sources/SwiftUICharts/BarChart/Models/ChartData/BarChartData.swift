@@ -40,7 +40,7 @@ import SwiftUI
  }
  ```
  */
-public final class BarChartData: BarChartDataProtocol {
+public final class BarChartData: CTBarChartDataProtocol {
     // MARK: Properties
     public let id   : UUID  = UUID()
 
@@ -54,7 +54,7 @@ public final class BarChartData: BarChartDataProtocol {
     @Published public var infoView     : InfoViewData<BarChartDataPoint> = InfoViewData()
         
     public var noDataText   : Text
-    public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
+    public let chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
     // MARK: Initializer
     /// Initialises a standard Bar Chart.
@@ -125,6 +125,14 @@ public final class BarChartData: BarChartDataProtocol {
                 }
             }
         }
+    }
+    public func getYLabels() -> [Double] {
+        var labels  : [Double]  = [Double]()
+        let maxValue: Double    = self.maxValue
+        for index in 0...self.chartStyle.yAxisNumberOfLabels {
+            labels.append(maxValue / Double(self.chartStyle.yAxisNumberOfLabels) * Double(index))
+        }
+        return labels
     }
     
     // MARK: Touch

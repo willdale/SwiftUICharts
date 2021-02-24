@@ -22,7 +22,7 @@ import SwiftUI
  ])
  ```
  */
-public struct MultiBarDataSets: MultiDataSet {
+public struct MultiBarDataSets: CTMultiDataSetProtocol {
     
     public let id       : UUID = UUID()
     public var dataSets : [MultiBarDataSet]

@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Displays legends under the chart.
  */
-internal struct Legends<T>: ViewModifier where T: ChartData {
+internal struct Legends<T>: ViewModifier where T: CTChartData {
     
     @ObservedObject var chartData: T
     private let columns     : [GridItem]
@@ -47,7 +47,7 @@ extension View {
         - textColor: Colour of the text.
      - Returns: A  new view containing the chart with chart legends under.
      */
-    public func legends<T:ChartData>(chartData: T, columns: [GridItem] = [GridItem(.flexible())], textColor: Color = Color.primary) -> some View {
+    public func legends<T:CTChartData>(chartData: T, columns: [GridItem] = [GridItem(.flexible())], textColor: Color = Color.primary) -> some View {
         self.modifier(Legends(chartData: chartData, columns: columns, textColor: textColor))
     }
 }

@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Adds horizontal lines along the X axis.
  */
-internal struct YAxisGrid<T>: ViewModifier where T: LineAndBarChartData {
+internal struct YAxisGrid<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
     @ObservedObject var chartData : T
     
@@ -40,7 +40,7 @@ extension View {
      The style is set in ChartData --> LineChartStyle --> yAxisGridStyle
      
      - Requires:
-     Chart Data to conform to LineAndBarChartData.
+     Chart Data to conform to CTLineBarChartDataProtocol.
           
      # Available for:
      - Line Chart
@@ -57,7 +57,7 @@ extension View {
      - Parameter chartData: Chart data model.
      - Returns: A  new view containing the chart with horizontal lines under it.
     */
-    public func yAxisGrid<T: LineAndBarChartData>(chartData: T) -> some View {
+    public func yAxisGrid<T: CTLineBarChartDataProtocol>(chartData: T) -> some View {
         self.modifier(YAxisGrid<T>(chartData: chartData))
     }
 }

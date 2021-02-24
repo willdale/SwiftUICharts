@@ -82,7 +82,7 @@ import SwiftUI
  }
  ```
  */
-public final class MultiLayerPieChartData: MultiPieChartDataProtocol {
+public final class MultiLayerPieChartData: CTMultiPieChartDataProtocol {
     
     // MARK: Properties
     public var id : UUID = UUID()

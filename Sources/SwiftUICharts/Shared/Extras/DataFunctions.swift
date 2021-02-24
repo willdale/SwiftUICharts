@@ -18,7 +18,7 @@ import Foundation
      - Parameter dataSet: Target data set.
      - Returns: Highest value in data set.
      */
-    static func dataSetMaxValue<T:SingleDataSet>(from dataSet: T) -> Double {
+    static func dataSetMaxValue<T:CTSingleDataSetProtocol>(from dataSet: T) -> Double {
         return dataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
     }
     
@@ -27,7 +27,7 @@ import Foundation
      - Parameter dataSet: Target data set.
      - Returns: Lowest value in data set.
      */
-    static func dataSetMinValue<T:SingleDataSet>(from dataSet: T) -> Double {
+    static func dataSetMinValue<T:CTSingleDataSetProtocol>(from dataSet: T) -> Double {
         return dataSet.dataPoints.min { $0.value < $1.value }?.value ?? 0
     }
     
@@ -36,7 +36,7 @@ import Foundation
      - Parameter dataSet: Target data set.
      - Returns: Average of values in data set.
      */
-    static func dataSetAverage<T:SingleDataSet>(from dataSet: T) -> Double {
+    static func dataSetAverage<T:CTSingleDataSetProtocol>(from dataSet: T) -> Double {
         let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }
         return sum / Double(dataSet.dataPoints.count)
     }
@@ -46,7 +46,7 @@ import Foundation
      - Parameter dataSet: Target data set.
      - Returns: Difference between the highest and lowest values in data set.
      */
-    static func dataSetRange<T:SingleDataSet>(from dataSet: T) -> Double {
+    static func dataSetRange<T:CTSingleDataSetProtocol>(from dataSet: T) -> Double {
         let maxValue = dataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
         let minValue = dataSet.dataPoints.min { $0.value < $1.value }?.value ?? 0
         
@@ -64,7 +64,7 @@ import Foundation
      - Parameter dataSet: Target data sets.
      - Returns: Highest value in data sets.
      */
-    static func multiDataSetMaxValue<T:MultiDataSet>(from dataSets: T) -> Double {
+    static func multiDataSetMaxValue<T:CTMultiDataSetProtocol>(from dataSets: T) -> Double {
         var setHolder : [Double] = []
         for set in dataSets.dataSets {
             setHolder.append(set.dataPoints.max { $0.value < $1.value }?.value ?? 0)
@@ -77,7 +77,7 @@ import Foundation
      - Parameter dataSet: Target data sets.
      - Returns: Lowest value in data sets.
      */
-    static func multiDataSetMinValue<T:MultiDataSet>(from dataSets: T) -> Double {
+    static func multiDataSetMinValue<T:CTMultiDataSetProtocol>(from dataSets: T) -> Double {
         var setHolder : [Double] = []
         for set in dataSets.dataSets {
             setHolder.append(set.dataPoints.min { $0.value < $1.value }?.value ?? 0)
@@ -90,7 +90,7 @@ import Foundation
      - Parameter dataSet: Target data sets.
      - Returns: Average of values in data sets.
      */
-    static func multiDataSetAverage<T:MultiDataSet>(from dataSets: T) -> Double {
+    static func multiDataSetAverage<T:CTMultiDataSetProtocol>(from dataSets: T) -> Double {
         var setHolder : [Double] = []
         for set in dataSets.dataSets {
             let sum = set.dataPoints.reduce(0) { $0 + $1.value }
@@ -105,7 +105,7 @@ import Foundation
      - Parameter dataSet: Target data sets.
      - Returns: Difference between the highest and lowest values in data sets.
      */
-    static func multiDataSetRange<T:MultiDataSet>(from dataSets: T) -> Double {
+    static func multiDataSetRange<T:CTMultiDataSetProtocol>(from dataSets: T) -> Double {
         var setMaxHolder : [Double] = []
         for set in dataSets.dataSets {
             setMaxHolder.append(set.dataPoints.max { $0.value < $1.value }?.value ?? 0)

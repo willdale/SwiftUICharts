@@ -14,10 +14,10 @@ import SwiftUI
  
  All Chart Data models ultimately conform to this.
  */
-public protocol ChartData: ObservableObject, Identifiable {
+public protocol CTChartData: ObservableObject, Identifiable {
     
-    /// A type representing a  data set. -- `DataSet`
-    associatedtype Set      : DataSet
+    /// A type representing a  data set. -- `CTDataSetProtocol`
+    associatedtype Set      : CTDataSetProtocol
     
     /// A type representing a data point. -- `CTChartDataPoint`
     associatedtype DataPoint: CTChartDataPoint
@@ -96,8 +96,10 @@ public protocol ChartData: ObservableObject, Identifiable {
 
 // MARK: - Touch Protocol
 internal protocol TouchProtocol {
-    /// A type representing a  data set. -- `DataSet`
-    associatedtype SetPoint : DataSet
+    
+    /// A type representing a  data set. -- `CTDataSetProtocol`
+    associatedtype SetPoint : CTDataSetProtocol
+    
     /**
     Gets the nearest data points to the touch location.
     - Parameters:
@@ -143,14 +145,14 @@ internal protocol LegendProtocol {
 /**
  Main protocol to set conformace for types of Data Sets.
  */
-public protocol DataSet: Hashable, Identifiable {
+public protocol CTDataSetProtocol: Hashable, Identifiable {
     var id : ID { get }
 }
 
 /**
  Protocol for data sets that only require a single set of data .
  */
-public protocol SingleDataSet: DataSet {
+public protocol CTSingleDataSetProtocol: CTDataSetProtocol {
     /// A type representing a data point. -- `CTChartDataPoint`
     associatedtype DataPoint : CTChartDataPoint
     
@@ -164,9 +166,9 @@ public protocol SingleDataSet: DataSet {
 /**
  Protocol for data sets that require a multiple sets of data .
  */
-public protocol MultiDataSet: DataSet {
+public protocol CTMultiDataSetProtocol: CTDataSetProtocol {
     /// A type representing a single data set -- `SingleDataSet`
-    associatedtype DataSet : SingleDataSet
+    associatedtype DataSet : CTSingleDataSetProtocol
     
     /**
      Array of single data sets.

@@ -76,7 +76,7 @@ import SwiftUI
  }
  ```
  */
-public final class GroupedBarChartData: MultiBarChartDataProtocol {
+public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     
     // MARK: Properties
     public let id   : UUID  = UUID()
@@ -170,6 +170,15 @@ public final class GroupedBarChartData: MultiBarChartDataProtocol {
                 }
             }
         }
+    }
+    
+    public func getYLabels() -> [Double] {
+        var labels  : [Double]  = [Double]()
+        let maxValue: Double    = self.maxValue
+        for index in 0...self.chartStyle.yAxisNumberOfLabels {
+            labels.append(maxValue / Double(self.chartStyle.yAxisNumberOfLabels) * Double(index))
+        }
+        return labels
     }
     
     // MARK: Touch

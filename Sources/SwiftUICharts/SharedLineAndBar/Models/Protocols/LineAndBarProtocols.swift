@@ -9,12 +9,10 @@ import SwiftUI
 
 // MARK: - Chart Data
 /**
- A protocol to extend functionality of `ChartData` specifically for Line and Bar Charts.
+ A protocol to extend functionality of `CTChartData` specifically for Line and Bar Charts.
  */
-public protocol LineAndBarChartData : ChartData {
+public protocol CTLineBarChartDataProtocol : CTChartData where CTStyle: CTLineBarChartStyle {
 
-    /// A type representing the chart style. -- `CTChartStyle`
-    associatedtype CTLineAndBarCS : CTLineAndBarChartStyle
     /// A type representing opaque View
     associatedtype XLabels  : View
     
@@ -53,11 +51,6 @@ public protocol LineAndBarChartData : ChartData {
     
     
     /**
-     Data model conatining the style data for the chart.
-     */
-    var chartStyle: CTLineAndBarCS { get set }
-        
-    /**
      Labels to display on the Y axis
      
      The labels are generated based on the range between the lowest number in the
@@ -75,8 +68,6 @@ public protocol LineAndBarChartData : ChartData {
 }
 
 
-
-
 // MARK: - Style
 /**
  A protocol to get the correct touch overlay marker.
@@ -86,7 +77,7 @@ public protocol MarkerType {}
 /**
  A protocol to extend functionality of `CTChartStyle` specifically for  Line and Bar Charts.
  */
-public protocol CTLineAndBarChartStyle: CTChartStyle {
+public protocol CTLineBarChartStyle: CTChartStyle {
     
     /// A type representing touch overlay marker type. -- `MarkerType`
     associatedtype Mark : MarkerType
@@ -143,7 +134,7 @@ public protocol CTLineAndBarChartStyle: CTChartStyle {
 /**
  A protocol to extend functionality of `CTChartDataPoint` specifically for Line and Bar Charts.
  */
-public protocol CTLineAndBarDataPoint: CTChartDataPoint {
+public protocol CTLineBarDataPoint: CTChartDataPoint {
     
     /**
      Data points label for the X axis.

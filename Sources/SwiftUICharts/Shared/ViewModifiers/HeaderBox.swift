@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Displays the metadata about the chart as well as optionally touch overlay information.
  */
-internal struct HeaderBox<T>: ViewModifier where T: ChartData {
+internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
     
     @ObservedObject var chartData: T
     
@@ -111,7 +111,7 @@ extension View {
      
      - Tag: HeaderBox
      */
-    public func headerBox<T:ChartData>(chartData: T) -> some View {
+    public func headerBox<T:CTChartData>(chartData: T) -> some View {
         self.modifier(HeaderBox(chartData: chartData))
     }
 }

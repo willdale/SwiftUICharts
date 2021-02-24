@@ -7,24 +7,8 @@
 
 import SwiftUI
 
-// Standard / Multi
-extension LineAndBarChartData where Self: LineChartDataProtocol {
-    public func getYLabels() -> [Double] {
-        var labels      : [Double]  = [Double]()
-        let dataRange   : Double = self.minValue
-        let minValue    : Double = self.range
-        let range       : Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
-
-        labels.append(minValue)
-        for index in 1...self.chartStyle.yAxisNumberOfLabels {
-            labels.append(minValue + range * Double(index))
-        }
-        return labels
-    }
-}
-
 // MARK: - Position Indicator
-extension LineChartDataProtocol {
+extension CTLineChartDataProtocol {
     public func getIndicatorLocation(rect: CGRect,
                                      dataPoints: [LineChartDataPoint],
                                      touchLocation: CGPoint,
@@ -90,7 +74,7 @@ extension LineChartDataProtocol {
      The total length of the path.
      
      # Reference
-     https://developer.apple.com/documentation/swiftui/path/element
+     [Apple](https://developer.apple.com/documentation/swiftui/path/element)
      
      - Parameter path: Path to measure.
      - Returns: Total length of the path.
@@ -227,7 +211,7 @@ extension LineChartDataProtocol {
      Returns a point on the path based on the X axis of the users touch input.
      
      # Reference
-     https://swiftui-lab.com/swiftui-animations-part2/
+     [SwiftUI Lab](https://swiftui-lab.com/swiftui-animations-part2/)
      
      - Parameters:
        - percent: The distance along the path as a percentage.
@@ -252,7 +236,7 @@ extension LineChartDataProtocol {
 }
 
 // MARK: - Markers
-extension LineChartDataProtocol {
+extension CTLineChartDataProtocol {
     
     public func getPointLocation(dataSet: LineDataSet, touchLocation: CGPoint, chartSize: GeometryProxy) -> CGPoint? {
         
@@ -270,7 +254,7 @@ extension LineChartDataProtocol {
     }
 
 }
-extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType {
+extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
     @ViewBuilder public func markerSubView(dataSet         : LineDataSet,
                                            touchLocation   : CGPoint,
                                            chartSize       : GeometryProxy
@@ -281,7 +265,9 @@ extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType
             EmptyView()
         case .indicator(let style):
             
-            PosistionIndicator(fillColour: style.fillColour, lineColour: style.lineColour, lineWidth: style.lineWidth)
+            PosistionIndicator(fillColour: style.fillColour,
+                               lineColour: style.lineColour,
+                               lineWidth: style.lineWidth)
                 .frame(width: style.size, height: style.size)
                 .position(self.getIndicatorLocation(rect: chartSize.frame(in: .global),
                                                     dataPoints: dataSet.dataPoints,

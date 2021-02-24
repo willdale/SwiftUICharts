@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Sub view to setup and display the legends.
  */
-internal struct LegendView<T>: View where T: ChartData {
+internal struct LegendView<T>: View where T: CTChartData {
     
     @ObservedObject var chartData : T
     private let columns     : [GridItem]

@@ -11,7 +11,7 @@ import SwiftUI
 /**
  Finds the nearest data point and displays the relevent information.
  */
-internal struct TouchOverlay<T>: ViewModifier where T: ChartData {
+internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
 
     @ObservedObject var chartData: T
         
@@ -75,7 +75,7 @@ extension View {
         - specifier: Decimal precision for labels.
      - Returns: A  new view containing the chart with a touch overlay.
      */
-    public func touchOverlay<T: ChartData>(chartData: T,
+    public func touchOverlay<T: CTChartData>(chartData: T,
                                            specifier: String = "%.0f"
     ) -> some View {
         self.modifier(TouchOverlay(chartData: chartData,
@@ -88,7 +88,7 @@ extension View {
      - Attention:
      Unavailable in tvOS
      */
-    public func touchOverlay<T: ChartData>(chartData: T,
+    public func touchOverlay<T: CTChartData>(chartData: T,
                                            specifier: String = "%.0f"
     ) -> some View {
         self.modifier(EmptyModifier())
