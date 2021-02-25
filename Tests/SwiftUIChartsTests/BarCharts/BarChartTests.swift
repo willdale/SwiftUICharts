@@ -66,10 +66,10 @@ final class BarChartTests: XCTestCase {
         // Data
         ("testBarMaxValue", testBarMaxValue),
         ("testBarMinValue", testBarMinValue),
-        ("testBarAverage", testBarAverage),
-        ("testBarRange", testBarRange),
+        ("testBarAverage",  testBarAverage),
+        ("testBarRange",    testBarRange),
         // Greater
-        ("testBarIsGreaterThanTwoTrue", testBarIsGreaterThanTwoTrue),
+        ("testBarIsGreaterThanTwoTrue",  testBarIsGreaterThanTwoTrue),
         ("testBarIsGreaterThanTwoFalse", testBarIsGreaterThanTwoFalse),
         // Labels
         ("testBarGetYLabels", testBarGetYLabels),

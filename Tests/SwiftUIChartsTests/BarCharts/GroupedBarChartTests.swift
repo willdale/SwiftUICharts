@@ -119,10 +119,10 @@ final class GroupedBarChartTests: XCTestCase {
         // Data
         ("testGroupedBarMaxValue", testGroupedBarMaxValue),
         ("testGroupedBarMinValue", testGroupedBarMinValue),
-        ("testGroupedBarAverage", testGroupedBarAverage),
-        ("testGroupedBarRange", testGroupedBarRange),
+        ("testGroupedBarAverage",  testGroupedBarAverage),
+        ("testGroupedBarRange",    testGroupedBarRange),
         // Greater
-        ("testGroupedBarIsGreaterThanTwoTrue", testGroupedBarIsGreaterThanTwoTrue),
+        ("testGroupedBarIsGreaterThanTwoTrue",  testGroupedBarIsGreaterThanTwoTrue),
         ("testGroupedBarIsGreaterThanTwoFalse", testGroupedBarIsGreaterThanTwoFalse),
         // Labels
         ("testGroupedBarGetYLabels", testGroupedBarGetYLabels),

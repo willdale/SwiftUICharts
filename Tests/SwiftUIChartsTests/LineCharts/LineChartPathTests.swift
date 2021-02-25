@@ -77,6 +77,40 @@ final class LineChartPathTests: XCTestCase {
         XCTAssertEqual(test.y, 25, accuracy: 0.01)
     }
     
+    func testDistanceToTouch() {
+        
+        let pointOne = CGPoint(x: 0.0, y: 0.0)
+        let pointTwo = CGPoint(x: 100, y: 100)
+        
+        let test = chartData.distanceToTouch(from: pointOne, to: pointTwo, touchX: touchLocation.x)
+        
+        XCTAssertEqual(test, 35.355, accuracy: 0.01)
+    }
+    
+    func testDistance() {
+        
+        let pointOne = CGPoint(x: 0.0, y: 0.0)
+        let pointTwo = CGPoint(x: 100, y: 100)
+        
+        let test = chartData.distance(from: pointOne, to: pointTwo)
+        
+        XCTAssertEqual(test, 141.421356237309, accuracy: 0.01)
+    }
+    
+    func testGetLocationOnPath() {
+        
+        let path = Path.straightLine(rect       : rect,
+                                     dataPoints : chartData.dataSets.dataPoints,
+                                     minValue   : chartData.minValue,
+                                     range      : chartData.range,
+                                     isFilled   : false)
+
+        
+        let test = chartData.locationOnPath(0.5, path)
+        
+        XCTAssertEqual(test.x, 50, accuracy: 0.1)
+        XCTAssertEqual(test.y, 50, accuracy: 0.1)
+    }
     
     static var allTests = [
         ("testGetIndicatorLocation", testGetIndicatorLocation),
@@ -84,5 +118,8 @@ final class LineChartPathTests: XCTestCase {
         ("testGetTotalLength", testGetTotalLength),
         ("testGetLengthToTouch", testGetLengthToTouch),
         ("testRelativePoint", testRelativePoint),
+        ("testDistanceToTouch", testDistanceToTouch),
+        ("testDistance", testDistance),
+        ("testGetLocationOnPath", testGetLocationOnPath)
     ]
 }

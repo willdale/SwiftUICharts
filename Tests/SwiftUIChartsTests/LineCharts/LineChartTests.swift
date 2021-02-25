@@ -5,15 +5,15 @@ final class LineChartTests: XCTestCase {
     
     let dataPoints = [
         LineChartDataPoint(value: 10),
+        LineChartDataPoint(value: 50),
         LineChartDataPoint(value: 40),
-        LineChartDataPoint(value: 30),
-        LineChartDataPoint(value: 60)
+        LineChartDataPoint(value: 80)
     ]
     
     // MARK: - Data
     func testLineMaxValue() {
         let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints))
-        XCTAssertEqual(chartData.maxValue, 60)
+        XCTAssertEqual(chartData.maxValue, 80)
     }
     func testLineMinValue() {
         let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints))
@@ -21,11 +21,11 @@ final class LineChartTests: XCTestCase {
     }
     func testLineAverage() {
         let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints))
-        XCTAssertEqual(chartData.average, 35)
+        XCTAssertEqual(chartData.average, 45)
     }
     func testLineRange() {
         let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints))
-        XCTAssertEqual(chartData.range, 50.001)
+        XCTAssertEqual(chartData.range, 70.001)
     }
     
     // MARK: Greater
@@ -45,13 +45,7 @@ final class LineChartTests: XCTestCase {
     
     
     // MARK: - Labels
-    func testLineGetYLabels() {
-        let dataPoints = [
-            LineChartDataPoint(value: 10),
-            LineChartDataPoint(value: 50),
-            LineChartDataPoint(value: 40),
-            LineChartDataPoint(value: 80)
-        ]
+    func testLineGetYLabelsMinimumValue() {
         let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints),
                                       chartStyle: LineChartStyle(yAxisNumberOfLabels: 3,
                                                                  baseline: .minimumValue))
@@ -59,6 +53,30 @@ final class LineChartTests: XCTestCase {
         XCTAssertEqual(chartData.getYLabels()[0], 10.0000, accuracy: 0.01)
         XCTAssertEqual(chartData.getYLabels()[1], 33.3333, accuracy: 0.01)
         XCTAssertEqual(chartData.getYLabels()[2], 56.6666, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[3], 80.0000, accuracy: 0.01)
+        
+    }
+    
+    func testLineGetYLabelsMinimumWithMax() {
+        let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints),
+                                      chartStyle: LineChartStyle(yAxisNumberOfLabels: 3,
+                                                                 baseline: .minimumWithMaximum(of: 5)))
+
+        XCTAssertEqual(chartData.getYLabels()[0], 5.0000, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 30.000, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 55.000, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[3], 80.0000, accuracy: 0.01)
+        
+    }
+    
+    func testLineGetYLabelsZero() {
+        let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints),
+                                      chartStyle: LineChartStyle(yAxisNumberOfLabels: 3,
+                                                                 baseline: .zero))
+
+        XCTAssertEqual(chartData.getYLabels()[0], 0.0000, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 26.666, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 53.333, accuracy: 0.01)
         XCTAssertEqual(chartData.getYLabels()[3], 80.0000, accuracy: 0.01)
         
     }
@@ -74,6 +92,9 @@ final class LineChartTests: XCTestCase {
         ("testLineIsGreaterThanTwoTrue", testLineIsGreaterThanTwoTrue),
         ("testLineIsGreaterThanTwoFalse", testLineIsGreaterThanTwoFalse),
         // Labels
-        ("testLineGetYLabels", testLineGetYLabels),
+        ("testLineGetYLabelsMinimumValue",   testLineGetYLabelsMinimumValue),
+        ("testLineGetYLabelsMinimumWithMax", testLineGetYLabelsMinimumWithMax),
+        ("testLineGetYLabelsZero",           testLineGetYLabelsZero),
     ]
 }
+//5+(80-5)/3*3

@@ -119,10 +119,10 @@ final class StackedBarChartTests: XCTestCase {
         // Data
         ("testStackedBarMaxValue", testStackedBarMaxValue),
         ("testStackedBarMinValue", testStackedBarMinValue),
-        ("testStackedBarAverage", testStackedBarAverage),
-        ("testStackedBarRange", testStackedBarRange),
+        ("testStackedBarAverage",  testStackedBarAverage),
+        ("testStackedBarRange",    testStackedBarRange),
         // Greater
-        ("testStackedBarIsGreaterThanTwoTrue", testStackedBarIsGreaterThanTwoTrue),
+        ("testStackedBarIsGreaterThanTwoTrue",  testStackedBarIsGreaterThanTwoTrue),
         ("testStackedBarIsGreaterThanTwoFalse", testStackedBarIsGreaterThanTwoFalse),
         // Labels
         ("testStackedBarGetYLabels", testStackedBarGetYLabels),
