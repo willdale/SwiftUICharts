@@ -103,7 +103,7 @@ final class GroupedBarChartTests: XCTestCase {
         XCTAssertFalse(chartData.isGreaterThanTwo())
     }
 
-    // MARK: Labels
+    // MARK: - Labels
     func testGroupedBarGetYLabels() {
         let chartData = GroupedBarChartData(dataSets: data, groups: groups,
                                                             chartStyle: BarChartStyle(yAxisNumberOfLabels: 3))
@@ -114,7 +114,51 @@ final class GroupedBarChartTests: XCTestCase {
         XCTAssertEqual(chartData.getYLabels()[3], 90.0000, accuracy: 0.01)
         
     }
-
+    // MARK: - Touch
+    func testGroupedBarGetDataPoint() {
+        let rect: CGRect  = CGRect(x: 0, y: 0, width: 100, height: 100)
+        let chartData = GroupedBarChartData(dataSets: data, groups: groups)
+        chartData.groupSpacing = 10
+        
+        // Group 1
+        let touchLocationOne: CGPoint = CGPoint(x: 0, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationOne, chartSize: rect)
+        let testOutputOne  = chartData.infoView.touchOverlayInfo
+        let testAgainstOne = chartData.dataSets.dataSets[0].dataPoints
+        XCTAssertEqual(testOutputOne[0], testAgainstOne[0])
+        
+        // Group 2
+        let touchLocationTwo: CGPoint = CGPoint(x: 30, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationTwo, chartSize: rect)
+        let testOutputTwo  = chartData.infoView.touchOverlayInfo
+        let testAgainstTwo = chartData.dataSets.dataSets[1].dataPoints
+        XCTAssertEqual(testOutputTwo[0], testAgainstTwo[0])
+        
+        // None
+        let touchLocationThree: CGPoint = CGPoint(x: 50, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationThree, chartSize: rect)
+        let testOutputThree  = chartData.infoView.touchOverlayInfo
+        XCTAssertEqual(testOutputThree, [])
+        
+        // Group 3
+        let touchLocationFour: CGPoint = CGPoint(x: 55, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationFour, chartSize: rect)
+        let testOutputFour  = chartData.infoView.touchOverlayInfo
+        let testAgainstFour = chartData.dataSets.dataSets[2].dataPoints
+        XCTAssertEqual(testOutputFour[0], testAgainstFour[0])
+        
+        // Group 4
+        let touchLocationFive: CGPoint = CGPoint(x: 83, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationFive, chartSize: rect)
+        let testOutputFive  = chartData.infoView.touchOverlayInfo
+        let testAgainstFive = chartData.dataSets.dataSets[3].dataPoints
+        XCTAssertEqual(testOutputFive[0], testAgainstFive[0])
+    }
     static var allTests = [
         // Data
         ("testGroupedBarMaxValue", testGroupedBarMaxValue),
@@ -126,6 +170,8 @@ final class GroupedBarChartTests: XCTestCase {
         ("testGroupedBarIsGreaterThanTwoFalse", testGroupedBarIsGreaterThanTwoFalse),
         // Labels
         ("testGroupedBarGetYLabels", testGroupedBarGetYLabels),
+        // Touch
+        ("testMultiLineGetDataPoint", testGroupedBarGetDataPoint),
         
         
     ]

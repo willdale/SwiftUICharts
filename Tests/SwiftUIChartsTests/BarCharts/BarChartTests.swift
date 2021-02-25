@@ -10,7 +10,7 @@ final class BarChartTests: XCTestCase {
         BarChartDataPoint(value: 60)
     ]
     
-    // MARK: Data
+    // MARK: - Data
     func testBarMaxValue() {
         let chartData = BarChartData(dataSets: BarDataSet(dataPoints: dataPoints))
         XCTAssertEqual(chartData.maxValue, 60)
@@ -27,8 +27,6 @@ final class BarChartTests: XCTestCase {
         let chartData = BarChartData(dataSets: BarDataSet(dataPoints: dataPoints))
         XCTAssertEqual(chartData.range, 50.001)
     }
-    
-    // MARK: Greater
     func testBarIsGreaterThanTwoTrue() {
         let chartData = BarChartData(dataSets: BarDataSet(dataPoints: dataPoints))
         XCTAssertTrue(chartData.isGreaterThanTwo())
@@ -43,7 +41,7 @@ final class BarChartTests: XCTestCase {
         XCTAssertFalse(chartData.isGreaterThanTwo())
     }
 
-    // MARK: Labels
+    // MARK: - Labels
     func testBarGetYLabels() {
         let dataPoints = [
             BarChartDataPoint(value: 10),
@@ -60,6 +58,39 @@ final class BarChartTests: XCTestCase {
         XCTAssertEqual(chartData.getYLabels()[3], 80.0000, accuracy: 0.01)
     }
     
+    // MARK: - Touch
+    func testBarGetDataPoint() {
+        let rect: CGRect  = CGRect(x: 0, y: 0, width: 100, height: 100)
+        let chartData = BarChartData(dataSets: BarDataSet(dataPoints: dataPoints))
+        
+        let touchLocationOne: CGPoint = CGPoint(x: 5, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationOne, chartSize: rect)
+        let testOutputOne  = chartData.infoView.touchOverlayInfo
+        let testAgainstOne = chartData.dataSets.dataPoints
+        XCTAssertEqual(testOutputOne[0], testAgainstOne[0])
+        
+        let touchLocationTwo: CGPoint = CGPoint(x: 25, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationTwo, chartSize: rect)
+        let testOutputTwo  = chartData.infoView.touchOverlayInfo
+        let testAgainstTwo = chartData.dataSets.dataPoints
+        XCTAssertEqual(testOutputTwo[0], testAgainstTwo[1])
+        
+        let touchLocationThree: CGPoint = CGPoint(x: 50, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationThree, chartSize: rect)
+        let testOutputThree  = chartData.infoView.touchOverlayInfo
+        let testAgainstThree = chartData.dataSets.dataPoints
+        XCTAssertEqual(testOutputThree[0], testAgainstThree[2])
+        
+        let touchLocationFour: CGPoint = CGPoint(x: 85, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationFour, chartSize: rect)
+        let testOutputFour  = chartData.infoView.touchOverlayInfo
+        let testAgainstFour = chartData.dataSets.dataPoints
+        XCTAssertEqual(testOutputFour[0], testAgainstFour[3])
+    }
     
 
     static var allTests = [
@@ -73,7 +104,8 @@ final class BarChartTests: XCTestCase {
         ("testBarIsGreaterThanTwoFalse", testBarIsGreaterThanTwoFalse),
         // Labels
         ("testBarGetYLabels", testBarGetYLabels),
-        
+        // Touch
+        ("testBarGetDataPoint", testBarGetDataPoint),
         
     ]
 }

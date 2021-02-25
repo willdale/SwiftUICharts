@@ -27,13 +27,10 @@ final class LineChartTests: XCTestCase {
         let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints))
         XCTAssertEqual(chartData.range, 70.001)
     }
-    
-    // MARK: Greater
     func testLineIsGreaterThanTwoTrue() {
         let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints))
         XCTAssertTrue(chartData.isGreaterThanTwo())
     }
-    
     func testLineIsGreaterThanTwoFalse() {
         let dataPoints = [
             LineChartDataPoint(value: 10),
@@ -43,13 +40,11 @@ final class LineChartTests: XCTestCase {
         XCTAssertFalse(chartData.isGreaterThanTwo())
     }
     
-    
     // MARK: - Labels
     func testLineGetYLabelsMinimumValue() {
         let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints),
                                       chartStyle: LineChartStyle(yAxisNumberOfLabels: 3,
                                                                  baseline: .minimumValue))
-
         XCTAssertEqual(chartData.getYLabels()[0], 10.0000, accuracy: 0.01)
         XCTAssertEqual(chartData.getYLabels()[1], 33.3333, accuracy: 0.01)
         XCTAssertEqual(chartData.getYLabels()[2], 56.6666, accuracy: 0.01)
@@ -61,7 +56,6 @@ final class LineChartTests: XCTestCase {
         let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints),
                                       chartStyle: LineChartStyle(yAxisNumberOfLabels: 3,
                                                                  baseline: .minimumWithMaximum(of: 5)))
-
         XCTAssertEqual(chartData.getYLabels()[0], 5.0000, accuracy: 0.01)
         XCTAssertEqual(chartData.getYLabels()[1], 30.000, accuracy: 0.01)
         XCTAssertEqual(chartData.getYLabels()[2], 55.000, accuracy: 0.01)
@@ -73,7 +67,6 @@ final class LineChartTests: XCTestCase {
         let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints),
                                       chartStyle: LineChartStyle(yAxisNumberOfLabels: 3,
                                                                  baseline: .zero))
-
         XCTAssertEqual(chartData.getYLabels()[0], 0.0000, accuracy: 0.01)
         XCTAssertEqual(chartData.getYLabels()[1], 26.666, accuracy: 0.01)
         XCTAssertEqual(chartData.getYLabels()[2], 53.333, accuracy: 0.01)
@@ -81,6 +74,39 @@ final class LineChartTests: XCTestCase {
         
     }
     
+    // MARK: - Touch
+    func testLineGetDataPoint() {
+        let rect: CGRect  = CGRect(x: 0, y: 0, width: 100, height: 100)
+        let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints))
+        
+        let touchLocationOne: CGPoint = CGPoint(x: 5, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationOne, chartSize: rect)
+        let testOutputOne  = chartData.infoView.touchOverlayInfo
+        let testAgainstOne = chartData.dataSets.dataPoints
+        XCTAssertEqual(testOutputOne[0], testAgainstOne[0])
+        
+        let touchLocationTwo: CGPoint = CGPoint(x: 25, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationTwo, chartSize: rect)
+        let testOutputTwo  = chartData.infoView.touchOverlayInfo
+        let testAgainstTwo = chartData.dataSets.dataPoints
+        XCTAssertEqual(testOutputTwo[0], testAgainstTwo[1])
+        
+        let touchLocationThree: CGPoint = CGPoint(x: 50, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationThree, chartSize: rect)
+        let testOutputThree  = chartData.infoView.touchOverlayInfo
+        let testAgainstThree = chartData.dataSets.dataPoints
+        XCTAssertEqual(testOutputThree[0], testAgainstThree[2])
+        
+        let touchLocationFour: CGPoint = CGPoint(x: 85, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationFour, chartSize: rect)
+        let testOutputFour  = chartData.infoView.touchOverlayInfo
+        let testAgainstFour = chartData.dataSets.dataPoints
+        XCTAssertEqual(testOutputFour[0], testAgainstFour[3])
+    }
 
     static var allTests = [
         // Data
@@ -88,13 +114,14 @@ final class LineChartTests: XCTestCase {
         ("testLineMinValue", testLineMinValue),
         ("testLineAverage",  testLineAverage),
         ("testLineRange",    testLineRange),
-        // Greater
-        ("testLineIsGreaterThanTwoTrue", testLineIsGreaterThanTwoTrue),
+        ("testLineIsGreaterThanTwoTrue",  testLineIsGreaterThanTwoTrue),
         ("testLineIsGreaterThanTwoFalse", testLineIsGreaterThanTwoFalse),
         // Labels
         ("testLineGetYLabelsMinimumValue",   testLineGetYLabelsMinimumValue),
         ("testLineGetYLabelsMinimumWithMax", testLineGetYLabelsMinimumWithMax),
         ("testLineGetYLabelsZero",           testLineGetYLabelsZero),
+        // Touch
+        ("testLineGetDataPoint", testLineGetDataPoint),
     ]
 }
 //5+(80-5)/3*3

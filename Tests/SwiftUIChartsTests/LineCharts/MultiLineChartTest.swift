@@ -91,6 +91,47 @@ final class MultiLineChartTest: XCTestCase {
         XCTAssertEqual(chartData.getYLabels()[3], 100.0000, accuracy: 0.01)
         
     }
+    // MARK: - Touch
+    func testMultiLineGetDataPoint() {
+        let rect: CGRect  = CGRect(x: 0, y: 0, width: 100, height: 100)
+        let chartData = MultiLineChartData(dataSets: dataSet)
+        
+        let touchLocationOne: CGPoint = CGPoint(x: 5, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationOne, chartSize: rect)
+        let testOutputOne  = chartData.infoView.touchOverlayInfo
+        let testAgainstOneOne = chartData.dataSets.dataSets[0].dataPoints
+        let testAgainstOneTwo = chartData.dataSets.dataSets[1].dataPoints
+        XCTAssertEqual(testOutputOne[0], testAgainstOneOne[0])
+        XCTAssertEqual(testOutputOne[1], testAgainstOneTwo[0])
+        
+        let touchLocationTwo: CGPoint = CGPoint(x: 25, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationTwo, chartSize: rect)
+        let testOutputTwo  = chartData.infoView.touchOverlayInfo
+        let testAgainstTwoOne = chartData.dataSets.dataSets[0].dataPoints
+        let testAgainstTwoTwo = chartData.dataSets.dataSets[1].dataPoints
+        XCTAssertEqual(testOutputTwo[0], testAgainstTwoOne[1])
+        XCTAssertEqual(testOutputTwo[1], testAgainstTwoTwo[1])
+        
+        let touchLocationThree: CGPoint = CGPoint(x: 50, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationThree, chartSize: rect)
+        let testOutputThree  = chartData.infoView.touchOverlayInfo
+        let testAgainstThreeOne = chartData.dataSets.dataSets[0].dataPoints
+        let testAgainstThreeTwo = chartData.dataSets.dataSets[1].dataPoints
+        XCTAssertEqual(testOutputThree[0], testAgainstThreeOne[2])
+        XCTAssertEqual(testOutputThree[1], testAgainstThreeTwo[2])
+        
+        let touchLocationFour: CGPoint = CGPoint(x: 85, y: 25)
+        chartData.infoView.touchOverlayInfo = []
+        chartData.getDataPoint(touchLocation: touchLocationFour, chartSize: rect)
+        let testOutputFour  = chartData.infoView.touchOverlayInfo
+        let testAgainstFourOne = chartData.dataSets.dataSets[0].dataPoints
+        let testAgainstFourTwo = chartData.dataSets.dataSets[1].dataPoints
+        XCTAssertEqual(testOutputFour[0], testAgainstFourOne[3])
+        XCTAssertEqual(testOutputFour[1], testAgainstFourTwo[3])
+    }
     
     static var allTests = [
         // Data
@@ -105,5 +146,7 @@ final class MultiLineChartTest: XCTestCase {
         ("testMultiLineGetYLabelsMinimumValue"  , testMultiLineGetYLabelsMinimumValue),
         ("testMultiLineGetYLabelsMinimumWithMax", testMultiLineGetYLabelsMinimumWithMax),
         ("testMultiLineGetYLabelsZero"          , testMultiLineGetYLabelsZero),
+        // Touch
+        ("testMultiLineGetDataPoint", testMultiLineGetDataPoint),
     ]
 }
