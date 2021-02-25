@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Round rectange used for the bar shapes
  
- [Reference](https://stackoverflow.com/a/56763282)
+ [SO](https://stackoverflow.com/a/56763282)
  */
 internal struct RoundedRectangleBarShape: Shape {
     

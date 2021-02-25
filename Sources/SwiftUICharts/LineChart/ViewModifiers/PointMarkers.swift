@@ -10,7 +10,7 @@ import SwiftUI
 /**
  ViewModifier for for laying out point markers.
  */
-internal struct PointMarkers<T>: ViewModifier where T: LineChartDataProtocol {
+internal struct PointMarkers<T>: ViewModifier where T: CTLineChartDataProtocol {
         
     @ObservedObject var chartData: T
         
@@ -19,8 +19,8 @@ internal struct PointMarkers<T>: ViewModifier where T: LineChartDataProtocol {
         
     internal init(chartData : T) {
         self.chartData  = chartData
-        self.minValue   = chartData.getMinValue()
-        self.range      = chartData.getRange()
+        self.minValue   = chartData.minValue
+        self.range      = chartData.range
     }
     internal func body(content: Content) -> some View {
         ZStack {
@@ -36,10 +36,10 @@ extension View {
     /**
      Lays out markers over each of the data point.
      
-     The style of the markers is set in the PointStyle data model as parameter in ChartData
+     The style of the markers is set in the PointStyle data model as parameter in CTChartData
      
      - Requires:
-     Chart Data to conform to LineChartDataProtocol.
+     Chart Data to conform to CTLineChartDataProtocol.
      - LineChartData
      - MultiLineChartData
      
@@ -59,7 +59,7 @@ extension View {
      - Returns: A  new view containing the chart with point markers.
 
      */
-    public func pointMarkers<T: LineChartDataProtocol>(chartData: T) -> some View {
+    public func pointMarkers<T: CTLineChartDataProtocol>(chartData: T) -> some View {
         self.modifier(PointMarkers(chartData: chartData))
     }
 }

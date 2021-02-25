@@ -11,10 +11,6 @@ import SwiftUI
 internal struct Vertical: Shape {
     
     private var position : CGPoint
-
-    @inlinable internal init(position : HashablePoint) {
-        self.position   = CGPoint(x: position.x, y: position.y)
-    }
     
     @inlinable internal init(position : CGPoint) {
         self.position   = position
@@ -35,10 +31,6 @@ internal struct Vertical: Shape {
 internal struct MarkerFull: Shape {
     
     private var position : CGPoint
-
-    @inlinable internal init(position : HashablePoint) {
-        self.position = CGPoint(x: position.x, y: position.y)
-    }
     
     @inlinable internal init(position : CGPoint) {
         self.position = position
@@ -65,10 +57,6 @@ internal struct MarkerBottomLeading: Shape {
     
     private var position : CGPoint
 
-    @inlinable internal init(position : HashablePoint) {
-        self.position = CGPoint(x: position.x, y: position.y)
-    }
-    
     @inlinable internal init(position : CGPoint) {
         self.position = position
     }
@@ -94,10 +82,6 @@ internal struct MarkerBottomTrailing: Shape {
     
     private var position : CGPoint
 
-    @inlinable internal init(position : HashablePoint) {
-        self.position = CGPoint(x: position.x, y: position.y)
-    }
-    
     @inlinable internal init(position : CGPoint) {
         self.position = position
     }
@@ -123,10 +107,6 @@ internal struct MarkerTopLeading: Shape {
     
     private var position : CGPoint
 
-    @inlinable internal init(position : HashablePoint) {
-        self.position = CGPoint(x: position.x, y: position.y)
-    }
-    
     @inlinable internal init(position : CGPoint) {
         self.position = position
     }
@@ -151,10 +131,6 @@ internal struct MarkerTopLeading: Shape {
 internal struct MarkerTopTrailing: Shape {
     
     private var position : CGPoint
-
-    @inlinable internal init(position : HashablePoint) {
-        self.position = CGPoint(x: position.x, y: position.y)
-    }
     
     @inlinable internal init(position : CGPoint) {
         self.position = position

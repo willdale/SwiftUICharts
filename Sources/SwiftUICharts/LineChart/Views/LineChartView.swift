@@ -54,8 +54,8 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
     /// - Parameter chartData: Must be LineChartData model.
     public init(chartData: ChartData) {
         self.chartData  = chartData
-        self.minValue   = chartData.getMinValue()
-        self.range      = chartData.getRange()
+        self.minValue   = chartData.minValue
+        self.range      = chartData.range
     }
      
     public var body: some View {
@@ -71,6 +71,7 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
                                        range    : range,
                                        colour   : colour,
                                        isFilled : false)
+                    .accessibility(label: Text("Line Chart"))
                 
             } else if chartData.dataSets.style.colourType == .gradientColour,
                       let colours     = chartData.dataSets.style.colours,
@@ -86,6 +87,7 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
                                         startPoint  : startPoint,
                                         endPoint    : endPoint,
                                         isFilled    : false)
+                    .accessibility(label: Text("Line Chart"))
                 
             } else if chartData.dataSets.style.colourType == .gradientStops,
                       let stops      = chartData.dataSets.style.stops,
@@ -102,7 +104,7 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
                                       startPoint: startPoint,
                                       endPoint  : endPoint,
                                       isFilled  : false)
-                
+                    .accessibility(label: Text("Line Chart"))
             }
         } else { CustomNoDataView(chartData: chartData) }
     }

@@ -11,7 +11,6 @@ extension View {
     /**
      View modifier to conditionally add a view modifier.
      
-     # Reference
      [SO](https://stackoverflow.com/a/62962375)
      */
     @ViewBuilder func `if`<Transform: View>(_ condition: Bool, transform: (Self) -> Transform) -> some View {

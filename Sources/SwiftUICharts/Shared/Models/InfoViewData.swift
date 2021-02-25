@@ -48,10 +48,10 @@ public struct InfoViewData<DP: CTChartDataPoint> {
      
      Used by `HeaderBox` and `InfoBox`.
      */
-    var positionX           : CGFloat = 0
+    var touchLocation           : CGPoint = .zero
     
     /**
-     Current width of the `Info Box`.
+     Size of the chart.
      
      Used to set the location of the data point readout View.
      
@@ -59,7 +59,7 @@ public struct InfoViewData<DP: CTChartDataPoint> {
      
      Used by `HeaderBox` and `InfoBox`.
      */
-    var frame               : CGRect  = .zero
+    var chartSize               : CGRect  = .zero
     
     /**
      Current width of the `YAxisLabels`

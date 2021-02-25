@@ -8,7 +8,7 @@
 import SwiftUI
 
 // MARK: - Extentions
-extension PieAndDoughnutChartDataProtocol where Set == MultiPieDataSet, DataPoint == MultiPieDataPoint {
+extension CTPieDoughnutChartDataProtocol where Set == MultiPieDataSet, DataPoint == MultiPieDataPoint {
     /**
      Sets up the data points in a way that can be sent to renderer for drawing.
      
@@ -69,7 +69,13 @@ extension PieAndDoughnutChartDataProtocol where Set == MultiPieDataSet, DataPoin
     }
 }
 
-extension PieAndDoughnutChartDataProtocol where Set == PieDataSet, DataPoint == PieChartDataPoint {
+extension CTPieDoughnutChartDataProtocol {
+    internal func getPointLocation(dataSet: PieDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+        return nil
+    }
+}
+
+extension CTPieDoughnutChartDataProtocol where Set == PieDataSet, DataPoint == PieChartDataPoint {
 
     /**
      Sets up the data points in a way that can be sent to renderer for drawing.
@@ -87,33 +93,6 @@ extension PieAndDoughnutChartDataProtocol where Set == PieDataSet, DataPoint == 
         }
     }
     
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [PieChartDataPoint] {
-        var points : [PieChartDataPoint] = []
-        let touchDegree = degree(from: touchLocation, in: chartSize.frame(in: .local))
-                
-        let dataPoint = self.dataSets.dataPoints.first(where: { $0.startAngle * Double(180 / Double.pi) <= Double(touchDegree) && ($0.startAngle * Double(180 / Double.pi)) + ($0.amount * Double(180 / Double.pi)) >= Double(touchDegree) } )
-        if let data = dataPoint {
-            points.append(data)
-        }
-        return points
-    }
-    
-    public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
-        return [HashablePoint(x: touchLocation.x, y: touchLocation.y)]
-    }
-    
-    internal func setupLegends() {
-        for data in dataSets.dataPoints {
-            if let legend = data.pointDescription {
-                self.legends.append(LegendData(id         : data.id,
-                                               legend     : legend,
-                                               colour     : data.colour,
-                                               strokeStyle: nil,
-                                               prioity    : 1,
-                                               chartType  : .pie))
-            }
-        }
-    }
     /**
      Gets the number of degrees around the chart from 'north'.
      

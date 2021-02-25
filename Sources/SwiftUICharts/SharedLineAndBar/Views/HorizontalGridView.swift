@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Sub view of the Y axis grid view modifier.
  */
-internal struct HorizontalGridView<T>: View where T: LineAndBarChartData {
+internal struct HorizontalGridView<T>: View where T: CTLineBarChartDataProtocol {
     
     @ObservedObject private var chartData : T
      

@@ -9,14 +9,32 @@ import SwiftUI
 
 // MARK: - Chart Data
 /**
- A protocol to extend functionality of `ChartData` specifically for Line and Bar Charts.
+ A protocol to extend functionality of `CTChartData` specifically for Line and Bar Charts.
  */
-public protocol LineAndBarChartData : ChartData {
+public protocol CTLineBarChartDataProtocol : CTChartData where CTStyle: CTLineBarChartStyle {
 
-    /// A type representing the chart style. -- `CTChartStyle`
-    associatedtype CTLineAndBarCS : CTLineAndBarChartStyle
     /// A type representing opaque View
     associatedtype XLabels  : View
+    
+    /**
+     Returns the difference between the highest and lowest numbers in the data set or data sets.
+     */
+    var range    : Double { get }
+    
+    /**
+     Returns the lowest value in the data set or data sets.
+     */
+    var minValue : Double { get }
+    
+    /**
+     Returns the highest value in the data set or data sets
+     */
+    var maxValue : Double { get }
+    
+    /**
+     Returns the average value from the data set or data sets.
+     */
+    var average  : Double { get }
     
     /**
      Array of strings for the labels on the X Axis instead of the labels in the data points.
@@ -33,11 +51,6 @@ public protocol LineAndBarChartData : ChartData {
     
     
     /**
-     Data model conatining the style data for the chart.
-     */
-    var chartStyle: CTLineAndBarCS { get set }
-        
-    /**
      Labels to display on the Y axis
      
      The labels are generated based on the range between the lowest number in the
@@ -48,29 +61,10 @@ public protocol LineAndBarChartData : ChartData {
     func getYLabels() -> [Double]
     
     /**
-     Returns the difference between the highest and lowest numbers in the data set or data sets.
-     */
-    func getRange() -> Double
-    
-    /**
-     Returns the lowest value in the data set or data sets.
-     */
-    func getMinValue() -> Double
-    
-    /**
-     Returns the highest value in the data set or data sets
-     */
-    func getMaxValue() -> Double
-    
-    /**
-     Returns the average value from the data set or data sets.
-     */
-    func getAverage() -> Double
-    
-    /**
      Displays a view for the labels on the X Axis.
      */
     func getXAxisLabels() -> XLabels
+
 }
 
 
@@ -83,7 +77,7 @@ public protocol MarkerType {}
 /**
  A protocol to extend functionality of `CTChartStyle` specifically for  Line and Bar Charts.
  */
-public protocol CTLineAndBarChartStyle: CTChartStyle {
+public protocol CTLineBarChartStyle: CTChartStyle {
     
     /// A type representing touch overlay marker type. -- `MarkerType`
     associatedtype Mark : MarkerType
@@ -140,7 +134,7 @@ public protocol CTLineAndBarChartStyle: CTChartStyle {
 /**
  A protocol to extend functionality of `CTChartDataPoint` specifically for Line and Bar Charts.
  */
-public protocol CTLineAndBarDataPoint: CTChartDataPoint {
+public protocol CTLineBarDataPoint: CTChartDataPoint {
     
     /**
      Data points label for the X axis.

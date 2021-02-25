@@ -76,9 +76,9 @@ import SwiftUI
  }
  ```
  */
-public final class GroupedBarChartData: MultiBarChartDataProtocol, LegendProtocol {
+public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     
-    // MARK: - Properties
+    // MARK: Properties
     public let id   : UUID  = UUID()
 
     @Published public var dataSets     : MultiBarDataSets
@@ -95,8 +95,8 @@ public final class GroupedBarChartData: MultiBarChartDataProtocol, LegendProtoco
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
     var groupSpacing : CGFloat = 0
-    
-    // MARK: - Initializer
+        
+    // MARK: Initializer
     /// Initialises a Grouped Bar Chart.
     ///
     /// - Parameters:
@@ -128,7 +128,7 @@ public final class GroupedBarChartData: MultiBarChartDataProtocol, LegendProtoco
         self.setupLegends()
     }
     
-    // MARK: - Labels
+    // MARK: Labels
     @ViewBuilder
     public func getXAxisLabels() -> some View {
         switch self.chartStyle.xAxisLabelsFrom {
@@ -172,72 +172,30 @@ public final class GroupedBarChartData: MultiBarChartDataProtocol, LegendProtoco
         }
     }
     
-    // MARK: - Touch
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [MultiBarChartDataPoint] {
-        
-        var points : [MultiBarChartDataPoint] = []
-        
-        // Divide the chart into equal sections.
-        let superXSection   : CGFloat   = (chartSize.size.width / CGFloat(dataSets.dataSets.count))
-        let superIndex      : Int       = Int((touchLocation.x) / superXSection)
-        
-        // Work out how much to remove from xSection due to groupSpacing.
-        let compensation : CGFloat = ((groupSpacing * CGFloat(dataSets.dataSets.count - 1)) / CGFloat(dataSets.dataSets.count))
-        
-        // Make those sections take account of spacing between groups.
-        let xSection : CGFloat  = (chartSize.size.width / CGFloat(dataSets.dataSets.count)) - compensation
-        let index    : Int      = Int((touchLocation.x - CGFloat((groupSpacing * CGFloat(superIndex)))) / xSection)
-
-        if index >= 0 && index < dataSets.dataSets.count && superIndex == index {
-            let dataSet = dataSets.dataSets[index]
-            let xSubSection : CGFloat   = (xSection / CGFloat(dataSet.dataPoints.count))
-            let subIndex    : Int       = Int((touchLocation.x - CGFloat((groupSpacing * CGFloat(superIndex)))) / xSubSection) - (dataSet.dataPoints.count * index)
-            if subIndex >= 0 && subIndex < dataSet.dataPoints.count {
-                points.append(dataSet.dataPoints[subIndex])
-            }
+    public func getYLabels() -> [Double] {
+        var labels  : [Double]  = [Double]()
+        let maxValue: Double    = self.maxValue
+        for index in 0...self.chartStyle.yAxisNumberOfLabels {
+            labels.append(maxValue / Double(self.chartStyle.yAxisNumberOfLabels) * Double(index))
         }
-        return points
-    }
-
-    public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
-        var locations : [HashablePoint] = []
-        
-        // Divide the chart into equal sections.
-        let superXSection   : CGFloat   = (chartSize.size.width / CGFloat(dataSets.dataSets.count))
-        let superIndex      : Int       = Int((touchLocation.x) / superXSection)
-        
-        // Work out how much to remove from xSection due to groupSpacing.
-        let compensation : CGFloat = ((groupSpacing * CGFloat(dataSets.dataSets.count - 1)) / CGFloat(dataSets.dataSets.count))
-        
-        // Make those sections take account of spacing between groups.
-        let xSection : CGFloat  = (chartSize.size.width / CGFloat(dataSets.dataSets.count)) - compensation
-        let ySection : CGFloat  = chartSize.size.height / CGFloat(self.getMaxValue())
-        
-        let index    : Int      = Int((touchLocation.x - CGFloat(groupSpacing * CGFloat(superIndex))) / xSection)
-
-        if index >= 0 && index < dataSets.dataSets.count && superIndex == index {
-            
-            let dataSet = dataSets.dataSets[index]
-            let xSubSection : CGFloat   = (xSection / CGFloat(dataSet.dataPoints.count))
-            let subIndex    : Int       = Int((touchLocation.x - CGFloat(groupSpacing * CGFloat(index))) / xSubSection) - (dataSet.dataPoints.count * index)
-            
-            if subIndex >= 0 && subIndex < dataSet.dataPoints.count {
-                let element : CGFloat = (CGFloat(subIndex) * xSubSection) + (xSubSection / 2)
-                let section : CGFloat = (superXSection * CGFloat(superIndex))
-                let spacing : CGFloat = ((groupSpacing / CGFloat(dataSets.dataSets.count)) * CGFloat(superIndex))
-                locations.append(HashablePoint(x: element + section + spacing,
-                                               y: (chartSize.size.height - CGFloat(dataSet.dataPoints[subIndex].value) * ySection)))
-                
-            }
-        }
-        return locations
+        return labels
     }
     
-    public func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View {
-        let positions = self.getPointLocation(touchLocation: touchLocation,
-                                              chartSize: chartSize)
-        return ZStack {
-            ForEach(positions, id: \.self) { position in
+    // MARK: Touch
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+        self.infoView.isTouchCurrent   = true
+        self.infoView.touchLocation    = touchLocation
+        self.infoView.chartSize        = chartSize
+        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
+    }
+
+    @ViewBuilder
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
+        
+        if let position = self.getPointLocation(dataSet: dataSets,
+                                                touchLocation: touchLocation,
+                                                chartSize: chartSize) {
+            ZStack {
                 
                 switch self.chartStyle.markerType  {
                 case .none:
@@ -262,54 +220,120 @@ public final class GroupedBarChartData: MultiBarChartDataProtocol, LegendProtoco
                         .stroke(Color.primary, lineWidth: 2)
                 }
             }
-        }
+        } else { EmptyView() }
     }
     
-    // MARK: - Legends
-    internal func setupLegends() {
-            
-        for group in self.groups {
-                
-                if group.colourType == .colour,
-                   let colour = group.colour
-                {
-                    self.legends.append(LegendData(id         : group.id,
-                                                   legend     : group.title,
-                                                   colour     : colour,
-                                                   strokeStyle: nil,
-                                                   prioity    : 1,
-                                                   chartType  : .bar))
-                } else if group.colourType == .gradientColour,
-                          let colours = group.colours
-                {
-                    self.legends.append(LegendData(id         : group.id,
-                                                   legend     : group.title,
-                                                   colours    : colours,
-                                                   startPoint : .leading,
-                                                   endPoint   : .trailing,
-                                                   strokeStyle: nil,
-                                                   prioity    : 1,
-                                                   chartType  : .bar))
-                } else if group.colourType == .gradientStops,
-                          let stops  = group.stops
-                {
-                    self.legends.append(LegendData(id         : group.id,
-                                                   legend     : group.title,
-                                                   stops      : stops,
-                                                   startPoint : .leading,
-                                                   endPoint   : .trailing,
-                                                   strokeStyle: nil,
-                                                   prioity    : 1,
-                                                   chartType  : .bar))
-                }
+    
+    public typealias Set        = MultiBarDataSets
+    public typealias DataPoint  = MultiBarChartDataPoint
+    public typealias CTStyle    = BarChartStyle
+}
+
+// MARK: - Touch
+extension GroupedBarChartData: TouchProtocol {
+    
+    internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+        
+        var points : [MultiBarChartDataPoint] = []
+        
+        // Divide the chart into equal sections.
+        let superXSection   : CGFloat   = (chartSize.width / CGFloat(dataSets.dataSets.count))
+        let superIndex      : Int       = Int((touchLocation.x) / superXSection)
+        
+        // Work out how much to remove from xSection due to groupSpacing.
+        let compensation : CGFloat = ((groupSpacing * CGFloat(dataSets.dataSets.count - 1)) / CGFloat(dataSets.dataSets.count))
+        
+        // Make those sections take account of spacing between groups.
+        let xSection : CGFloat  = (chartSize.width / CGFloat(dataSets.dataSets.count)) - compensation
+        let index    : Int      = Int((touchLocation.x - CGFloat((groupSpacing * CGFloat(superIndex)))) / xSection)
+
+        if index >= 0 && index < dataSets.dataSets.count && superIndex == index {
+            let dataSet = dataSets.dataSets[index]
+            let xSubSection : CGFloat   = (xSection / CGFloat(dataSet.dataPoints.count))
+            let subIndex    : Int       = Int((touchLocation.x - CGFloat((groupSpacing * CGFloat(superIndex)))) / xSubSection) - (dataSet.dataPoints.count * index)
+            if subIndex >= 0 && subIndex < dataSet.dataPoints.count {
+                points.append(dataSet.dataPoints[subIndex])
             }
+        }
+        self.infoView.touchOverlayInfo = points
+    }
+
+    internal func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+        
+        // Divide the chart into equal sections.
+        let superXSection   : CGFloat   = (chartSize.width / CGFloat(dataSet.dataSets.count))
+        let superIndex      : Int       = Int((touchLocation.x) / superXSection)
+
+        // Work out how much to remove from xSection due to groupSpacing.
+        let compensation : CGFloat = ((groupSpacing * CGFloat(dataSet.dataSets.count - 1)) / CGFloat(dataSet.dataSets.count))
+
+        // Make those sections take account of spacing between groups.
+        let xSection : CGFloat  = (chartSize.width / CGFloat(dataSet.dataSets.count)) - compensation
+        let ySection : CGFloat  = chartSize.height / CGFloat(self.maxValue)
+
+        let index    : Int      = Int((touchLocation.x - CGFloat(groupSpacing * CGFloat(superIndex))) / xSection)
+
+        if index >= 0 && index < dataSet.dataSets.count && superIndex == index {
+
+            let subDataSet = dataSet.dataSets[index]
+            let xSubSection : CGFloat   = (xSection / CGFloat(subDataSet.dataPoints.count))
+            let subIndex    : Int       = Int((touchLocation.x - CGFloat(groupSpacing * CGFloat(index))) / xSubSection) - (subDataSet.dataPoints.count * index)
+
+            if subIndex >= 0 && subIndex < subDataSet.dataPoints.count {
+                let element : CGFloat = (CGFloat(subIndex) * xSubSection) + (xSubSection / 2)
+                let section : CGFloat = (superXSection * CGFloat(superIndex))
+                let spacing : CGFloat = ((groupSpacing / CGFloat(dataSets.dataSets.count)) * CGFloat(superIndex))
+                return CGPoint(x: element + section + spacing,
+                               y: (chartSize.height - CGFloat(subDataSet.dataPoints[subIndex].value) * ySection))
+            }
+        }
+        return nil
+    }
+}
+
+// MARK: - Legends
+extension GroupedBarChartData: LegendProtocol {
+
+    internal func setupLegends() {
+        
+        for group in self.groups {
+            
+            if group.colourType == .colour,
+               let colour = group.colour
+            {
+                self.legends.append(LegendData(id         : group.id,
+                                               legend     : group.title,
+                                               colour     : colour,
+                                               strokeStyle: nil,
+                                               prioity    : 1,
+                                               chartType  : .bar))
+            } else if group.colourType == .gradientColour,
+                      let colours = group.colours
+            {
+                self.legends.append(LegendData(id         : group.id,
+                                               legend     : group.title,
+                                               colours    : colours,
+                                               startPoint : .leading,
+                                               endPoint   : .trailing,
+                                               strokeStyle: nil,
+                                               prioity    : 1,
+                                               chartType  : .bar))
+            } else if group.colourType == .gradientStops,
+                      let stops  = group.stops
+            {
+                self.legends.append(LegendData(id         : group.id,
+                                               legend     : group.title,
+                                               stops      : stops,
+                                               startPoint : .leading,
+                                               endPoint   : .trailing,
+                                               strokeStyle: nil,
+                                               prioity    : 1,
+                                               chartType  : .bar))
+            }
+        }
     }
     
     internal func legendOrder() -> [LegendData] {
         return legends.sorted { $0.prioity < $1.prioity}
     }
-    
-    public typealias Set        = MultiBarDataSets
-    public typealias DataPoint  = MultiBarChartDataPoint
-    public typealias CTStyle    = BarChartStyle
 }

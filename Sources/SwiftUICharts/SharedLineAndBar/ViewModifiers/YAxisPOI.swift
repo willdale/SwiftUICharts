@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Configurable Point of interest
  */
-internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
+internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
         
     @ObservedObject var chartData: T
     
@@ -48,10 +48,11 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
         self.labelColour     = labelColour
         self.labelBackground = labelBackground
         
-        self.markerValue = isAverage ? chartData.getAverage() : markerValue
-        self.maxValue    = chartData.getMaxValue()
-        self.range       = chartData.getRange()
-        self.minValue    = chartData.getMinValue()
+        self.markerValue = isAverage ? chartData.average : markerValue
+        self.maxValue    = chartData.maxValue
+        self.range       = chartData.range
+        self.minValue    = chartData.minValue
+        
     }
     
     @State private var startAnimation : Bool = false
@@ -113,10 +114,10 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
                     )
                     .ifElse(self.chartData.chartStyle.yAxisLabelPosition == .leading, if: {
                         $0.position(x: -18,
-                                    y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo))
+                                    y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo.frame(in: .local)))
                     }, else: {
                         $0.position(x: geo.size.width + 18,
-                                    y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo))
+                                    y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo.frame(in: .local)))
                     })
                     
                 
@@ -132,20 +133,20 @@ internal struct YAxisPOI<T>: ViewModifier where T: LineAndBarChartData {
                                 .stroke(lineColour, style: strokeStyle)
                     )
                     .position(x: geo.size.width / 2,
-                              y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo))
+                              y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo.frame(in: .local)))
                     .opacity(startAnimation ? 1 : 0)
             }
         }
     }
     
-    func getYPoint(chartType: ChartType, chartSize: GeometryProxy) -> CGFloat {
+    func getYPoint(chartType: ChartType, chartSize: CGRect) -> CGFloat {
         switch chartData.chartType.chartType {
         case .line:
-            let y = chartSize.size.height / CGFloat(range)
+            let y = chartSize.height / CGFloat(range)
            return (CGFloat(markerValue - minValue) * -y) + chartSize.size.height
         case .bar:
-            let y = chartSize.size.height / CGFloat(maxValue)
-            return  chartSize.size.height - CGFloat(markerValue) * y
+            let y = chartSize.height / CGFloat(maxValue)
+            return  chartSize.height - CGFloat(markerValue) * y
         case .pie:
             return 0
         }
@@ -176,7 +177,7 @@ extension View {
      ```
      
      - Requires:
-     Chart Data to conform to LineAndBarChartData.
+     Chart Data to conform to CTLineBarChartDataProtocol.
      
      # Available for:
      - Line Chart
@@ -201,7 +202,7 @@ extension View {
         - strokeStyle: Style of Stroke.
      - Returns: A  new view containing the chart with a marker line at a specified value.
     */
-    public func yAxisPOI<T:LineAndBarChartData>(chartData      : T,
+    public func yAxisPOI<T:CTLineBarChartDataProtocol>(chartData      : T,
                                                 markerName     : String,
                                                 markerValue    : Double,
                                                 labelPosition  : DisplayValue = .center(specifier: "%.0f"),
@@ -245,7 +246,7 @@ extension View {
      ```
      
      - Requires:
-     Chart Data to conform to LineAndBarChartData.
+     Chart Data to conform to CTLineBarChartDataProtocol.
      
      # Available for:
      - Line Chart
@@ -271,7 +272,7 @@ extension View {
      
     - Tag: AverageLine
     */
-    public func averageLine<T:LineAndBarChartData>(chartData      : T,
+    public func averageLine<T:CTLineBarChartDataProtocol>(chartData      : T,
                                                    markerName     : String        = "Average",
                                                    labelPosition  : DisplayValue  = .yAxis(specifier: "%.0f"),
                                                    labelColour    : Color         = Color.primary,

@@ -40,8 +40,8 @@ import SwiftUI
  }
  ```
  */
-public final class BarChartData: BarChartDataProtocol, LegendProtocol {
-    // MARK: - Properties
+public final class BarChartData: CTBarChartDataProtocol {
+    // MARK: Properties
     public let id   : UUID  = UUID()
 
     @Published public var dataSets     : BarDataSet
@@ -54,9 +54,9 @@ public final class BarChartData: BarChartDataProtocol, LegendProtocol {
     @Published public var infoView     : InfoViewData<BarChartDataPoint> = InfoViewData()
         
     public var noDataText   : Text
-    public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
+    public let chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
-    // MARK: - Initializer
+    // MARK: Initializer
     /// Initialises a standard Bar Chart.
     ///
     /// - Parameters:
@@ -86,7 +86,7 @@ public final class BarChartData: BarChartDataProtocol, LegendProtocol {
         self.setupLegends()
     }
 
-    // MARK: - Labels
+    // MARK: Labels
     public func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
@@ -126,36 +126,31 @@ public final class BarChartData: BarChartDataProtocol, LegendProtocol {
             }
         }
     }
-    
-    // MARK: - Touch
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [BarChartDataPoint] {
-        var points      : [BarChartDataPoint] = []
-        let xSection    : CGFloat   = chartSize.size.width / CGFloat(dataSets.dataPoints.count)
-        let index       : Int       = Int((touchLocation.x) / xSection)
-        if index >= 0 && index < dataSets.dataPoints.count {
-            points.append(dataSets.dataPoints[index])
+    public func getYLabels() -> [Double] {
+        var labels  : [Double]  = [Double]()
+        let maxValue: Double    = self.maxValue
+        for index in 0...self.chartStyle.yAxisNumberOfLabels {
+            labels.append(maxValue / Double(self.chartStyle.yAxisNumberOfLabels) * Double(index))
         }
-        return points
+        return labels
     }
+    
+    // MARK: Touch
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+        self.infoView.isTouchCurrent   = true
+        self.infoView.touchLocation    = touchLocation
+        self.infoView.chartSize        = chartSize
+        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
+    }
+    
+    @ViewBuilder
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
 
-    public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
-        var locations : [HashablePoint] = []
-        let xSection : CGFloat = chartSize.size.width / CGFloat(dataSets.dataPoints.count)
-        let ySection : CGFloat = chartSize.size.height / CGFloat(self.getMaxValue())
-        let index    : Int     = Int((touchLocation.x) / xSection)
-        if index >= 0 && index < dataSets.dataPoints.count {
-            locations.append(HashablePoint(x: (CGFloat(index) * xSection) + (xSection / 2),
-                                           y: (chartSize.size.height - CGFloat(dataSets.dataPoints[index].value) * ySection)))
-        }
-        return locations
-    }
-    
-    public func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View {
-        let positions = self.getPointLocation(touchLocation: touchLocation,
-                                              chartSize: chartSize)
-        return ZStack {
-            ForEach(positions, id: \.self) { position in
-                
+        if let position = self.getPointLocation(dataSet: dataSets,
+                                                touchLocation: touchLocation,
+                                                chartSize: chartSize) {
+            
+            ZStack {
                 switch self.chartStyle.markerType {
                 case .none:
                     EmptyView()
@@ -179,10 +174,45 @@ public final class BarChartData: BarChartDataProtocol, LegendProtocol {
                         .stroke(Color.primary, lineWidth: 2)
                 }
             }
+        } else { EmptyView() }
+    }
+
+    public typealias Set            = BarDataSet
+    public typealias DataPoint      = BarChartDataPoint
+    public typealias CTStyle        = BarChartStyle
+}
+
+// MARK: - Touch
+extension BarChartData: TouchProtocol {
+   
+    internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+        var points      : [BarChartDataPoint] = []
+        let xSection    : CGFloat   = chartSize.width / CGFloat(dataSets.dataPoints.count)
+        let index       : Int       = Int((touchLocation.x) / xSection)
+        if index >= 0 && index < dataSets.dataPoints.count {
+            points.append(dataSets.dataPoints[index])
         }
+        self.infoView.touchOverlayInfo = points
+    }
+
+    internal func getPointLocation(dataSet: BarDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+        let xSection : CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count)
+        let ySection : CGFloat = chartSize.height / CGFloat(self.maxValue)
+        let index    : Int     = Int((touchLocation.x) / xSection)
+        if index >= 0 && index < dataSet.dataPoints.count {
+            return CGPoint(x: (CGFloat(index) * xSection) + (xSection / 2),
+                           y: (chartSize.size.height - CGFloat(dataSet.dataPoints[index].value) * ySection))
+        }
+        return nil
+    }
+}
+
+// MARK: - Legends
+extension BarChartData: LegendProtocol {
+    internal func legendOrder() -> [LegendData] {
+        return legends.sorted { $0.prioity < $1.prioity}
     }
     
-    // MARK: - Legends
     internal func setupLegends() {
         
         switch self.barStyle.colourFrom {
@@ -261,12 +291,4 @@ public final class BarChartData: BarChartDataProtocol, LegendProtocol {
             }
         }
     }
-    
-    internal func legendOrder() -> [LegendData] {
-        return legends.sorted { $0.prioity < $1.prioity}
-    }
-    
-    public typealias Set            = BarDataSet
-    public typealias DataPoint      = BarChartDataPoint
-    public typealias CTStyle        = BarChartStyle
 }

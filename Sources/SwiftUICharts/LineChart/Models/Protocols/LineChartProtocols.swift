@@ -9,9 +9,9 @@ import SwiftUI
 
 // MARK: - Chart Data
 /**
- A protocol to extend functionality of `LineAndBarChartData` specifically for Line Charts.
+ A protocol to extend functionality of `CTLineBarChartDataProtocol` specifically for Line Charts.
  */
-public protocol LineChartDataProtocol: LineAndBarChartData {
+public protocol CTLineChartDataProtocol: CTLineBarChartDataProtocol {
 
     /// A type representing opaque View
     associatedtype Marker : View
@@ -35,24 +35,14 @@ public protocol LineChartDataProtocol: LineAndBarChartData {
      - Returns: The position to place the indicator.
      */
     func getIndicatorLocation(rect: CGRect, dataPoints: [LineChartDataPoint], touchLocation: CGPoint, lineType: LineType) -> CGPoint
-    
-    /**
-     Gets the location of a data point within the view.
-     - Parameters:
-       - touchLocation: Current location of the touch.
-       - chartSize: The size of the chart view as the parent view.
-       - dataSet: The data set to search in.
-     - Returns: The location on screen of data points.
-     */
-    func getSinglePoint(touchLocation: CGPoint, chartSize: GeometryProxy, dataSet: LineDataSet) -> CGPoint
-    
+
     /// Displays a view contatining touch markers.
     /// - Parameters:
     ///   - dataSet: The data set to search in.
     ///   - touchLocation: Current location of the touch.
     ///   - chartSize: The size of the chart view as the parent view.
     /// - Returns: Relevent touch marker based the chosen parameters.
-    func markerSubView(dataSet: LineDataSet, touchLocation: CGPoint, chartSize: GeometryProxy) -> Marker
+    func markerSubView(dataSet: LineDataSet, touchLocation: CGPoint, chartSize: CGRect) -> Marker
     
     /// Displays Shapes over the data points.
     /// - Returns: Relevent view containing point markers based the chosen parameters.
@@ -62,9 +52,9 @@ public protocol LineChartDataProtocol: LineAndBarChartData {
 
 // MARK: - Style
 /**
- A protocol to extend functionality of `CTLineAndBarChartStyle` specifically for  Line Charts.
+ A protocol to extend functionality of `CTLineBarChartStyle` specifically for  Line Charts.
  */
-public protocol CTLineChartStyle : CTLineAndBarChartStyle {
+public protocol CTLineChartStyle : CTLineBarChartStyle {
     /**
      Where to start drawing the line chart from. Zero or data set minium.
      */
@@ -77,7 +67,7 @@ public protocol CTLineChartStyle : CTLineAndBarChartStyle {
 /**
  A protocol to extend functionality of `SingleDataSet` specifically for Line Charts.
  */
-public protocol CTLineChartDataSet: SingleDataSet {
+public protocol CTLineChartDataSet: CTSingleDataSetProtocol {
     
     /// A type representing colour styling
     associatedtype Styling   : CTColourStyle
@@ -90,7 +80,7 @@ public protocol CTLineChartDataSet: SingleDataSet {
     /**
      Sets the style for the Data Set (as opposed to Chart Data Style).
      */
-    var style       : Styling { get set }
+    var style : Styling { get set }
     
     /**
      Sets the look of the markers over the data points.
@@ -98,5 +88,5 @@ public protocol CTLineChartDataSet: SingleDataSet {
      The markers are layed out when the ViewModifier `PointMarkers`
      is applied.
      */
-    var pointStyle  : PointStyle { get set }
+    var pointStyle : PointStyle { get set }
 }

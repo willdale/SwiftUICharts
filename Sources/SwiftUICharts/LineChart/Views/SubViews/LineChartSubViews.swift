@@ -13,7 +13,7 @@ import SwiftUI
  
  Single colour
  */
-internal struct LineChartColourSubView<CD>: View where CD: LineChartDataProtocol {
+internal struct LineChartColourSubView<CD>: View where CD: CTLineChartDataProtocol {
     
     private let chartData   : CD
     private let dataSet     : LineDataSet
@@ -71,7 +71,7 @@ internal struct LineChartColourSubView<CD>: View where CD: LineChartDataProtocol
  
  Gradient colour
  */
-internal struct LineChartColoursSubView<CD>: View where CD: LineChartDataProtocol {
+internal struct LineChartColoursSubView<CD>: View where CD: CTLineChartDataProtocol {
     
     private let chartData   : CD
     private let dataSet     : LineDataSet
@@ -146,7 +146,7 @@ internal struct LineChartColoursSubView<CD>: View where CD: LineChartDataProtoco
  
  Gradient with stops
  */
-internal struct LineChartStopsSubView<CD>: View where CD: LineChartDataProtocol {
+internal struct LineChartStopsSubView<CD>: View where CD: CTLineChartDataProtocol {
 
     private let chartData   : CD
     private let dataSet     : LineDataSet

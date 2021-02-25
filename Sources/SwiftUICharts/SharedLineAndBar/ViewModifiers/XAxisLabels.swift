@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Labels for the X axis.
  */
-internal struct XAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
+internal struct XAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
     @ObservedObject var chartData: T
     
@@ -23,19 +23,19 @@ internal struct XAxisLabels<T>: ViewModifier where T: LineAndBarChartData {
         Group {
             switch chartData.chartStyle.xAxisLabelPosition {
             case .top:
-                if chartData.isGreaterThanTwo() {
+//                if chartData.isGreaterThanTwo() {
                     VStack {
                         chartData.getXAxisLabels()
                         content
                     }
-                } else { content }
+//                } else { content }
             case .bottom:
-                if chartData.isGreaterThanTwo() {
+//                if chartData.isGreaterThanTwo() {
                     VStack {
                         content
                         chartData.getXAxisLabels()
                     }
-                } else { content }
+//                } else { content }
             }
         }
     }
@@ -49,7 +49,7 @@ extension View {
      or ChartData --> DataSets --> DataPoints
      
      - Requires:
-     Chart Data to conform to LineAndBarChartData.
+     Chart Data to conform to CTLineBarChartDataProtocol.
           
      # Available for:
      - Line Chart
@@ -66,7 +66,7 @@ extension View {
      - Parameter chartData: Chart data model.
      - Returns: A  new view containing the chart with labels marking the x axis.
      */
-    public func xAxisLabels<T: LineAndBarChartData>(chartData: T) -> some View {
+    public func xAxisLabels<T: CTLineBarChartDataProtocol>(chartData: T) -> some View {
         self.modifier(XAxisLabels(chartData: chartData))
     }
 }

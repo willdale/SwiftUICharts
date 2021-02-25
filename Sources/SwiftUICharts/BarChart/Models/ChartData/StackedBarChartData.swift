@@ -72,9 +72,9 @@ import SwiftUI
                                 chartStyle: BarChartStyle(xAxisLabelsFrom: .dataPoint))
  ```
  */
-public final class StackedBarChartData: MultiBarChartDataProtocol, LegendProtocol {
+public final class StackedBarChartData: CTMultiBarChartDataProtocol {
     
-    // MARK: - Properties
+    // MARK: Properties
     public let id   : UUID  = UUID()
     
     @Published public var dataSets     : MultiBarDataSets
@@ -90,7 +90,7 @@ public final class StackedBarChartData: MultiBarChartDataProtocol, LegendProtoco
     public var noDataText   : Text
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
-    // MARK: - Initializer
+    // MARK: Initializer
     /// Initialises a Grouped Bar Chart.
     ///
     /// - Parameters:
@@ -121,7 +121,7 @@ public final class StackedBarChartData: MultiBarChartDataProtocol, LegendProtoco
         self.chartType      = (chartType: .bar, dataSetType: .multi)
         self.setupLegends()
     }
-    // MARK: - Labels
+    // MARK: Labels
     @ViewBuilder
     public func getXAxisLabels() -> some View {
         switch self.chartStyle.xAxisLabelsFrom {
@@ -158,106 +158,30 @@ public final class StackedBarChartData: MultiBarChartDataProtocol, LegendProtoco
         }
     }
     
-    // MARK: - Touch
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [MultiBarChartDataPoint] {
-
-        var points : [MultiBarChartDataPoint] = []
-        
-        // Filter to get the right dataset based on the x axis.
-        let superXSection : CGFloat = chartSize.size.width / CGFloat(dataSets.dataSets.count)
-        let superIndex    : Int     = Int((touchLocation.x) / superXSection)
-        
-        if superIndex >= 0 && superIndex < dataSets.dataSets.count {
-            
-            let dataSet = dataSets.dataSets[superIndex]
-            
-            // Get the max value of the dataset relative to max value of all datasets.
-            // This is used to set the height of the y axis filtering.
-            let setMaxValue = dataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
-            let allMaxValue = self.getMaxValue()
-            let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
-
-            // Gets the height of each datapoint
-            var heightOfElements : [CGFloat] = []
-            let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }
-            dataSet.dataPoints.forEach { datapoint in
-                heightOfElements.append((chartSize.size.height * fraction) * CGFloat(datapoint.value / sum))
-            }
-        
-            // Gets the highest point of each element.
-            var endPointOfElements : [CGFloat] = []
-            heightOfElements.enumerated().forEach { element in
-                var returnValue : CGFloat = 0
-                for index in 0...element.offset {
-                    returnValue += heightOfElements[index]
-                }
-                endPointOfElements.append(returnValue)
-            }
-            
-            let yIndex = endPointOfElements.enumerated().first(where: { $0.element > abs(touchLocation.y - chartSize.size.height) })
-            
-            if let index = yIndex?.offset {
-                if index >= 0 && index < dataSet.dataPoints.count {
-                    points.append(dataSet.dataPoints[index])
-                }
-            }
+    public func getYLabels() -> [Double] {
+        var labels  : [Double]  = [Double]()
+        let maxValue: Double    = self.maxValue
+        for index in 0...self.chartStyle.yAxisNumberOfLabels {
+            labels.append(maxValue / Double(self.chartStyle.yAxisNumberOfLabels) * Double(index))
         }
-        return points
-    }
-
-    public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
-        var locations : [HashablePoint] = []
-        
-        // Filter to get the right dataset based on the x axis.
-        let superXSection : CGFloat = chartSize.size.width / CGFloat(dataSets.dataSets.count)
-        let superIndex    : Int     = Int((touchLocation.x) / superXSection)
-        
-        if superIndex >= 0 && superIndex < dataSets.dataSets.count {
-            
-            let dataSet = dataSets.dataSets[superIndex]
-            
-            // Get the max value of the dataset relative to max value of all datasets.
-            // This is used to set the height of the y axis filtering.
-            let setMaxValue = dataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
-            let allMaxValue = self.getMaxValue()
-            let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
-
-            // Gets the height of each datapoint
-            var heightOfElements : [CGFloat] = []
-            let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }
-            dataSet.dataPoints.forEach { datapoint in
-                heightOfElements.append((chartSize.size.height * fraction) * CGFloat(datapoint.value / sum))
-            }
-        
-            // Gets the highest point of each element.
-            var endPointOfElements : [CGFloat] = []
-            heightOfElements.enumerated().forEach { element in
-                var returnValue : CGFloat = 0
-                for index in 0...element.offset {
-                    returnValue += heightOfElements[index]
-                }
-                endPointOfElements.append(returnValue)
-            }
-
-            let yIndex = endPointOfElements.enumerated().first(where: { $0.element > abs(touchLocation.y - chartSize.size.height) })
-            
-            if let index = yIndex?.offset {
-                if index >= 0 && index < dataSet.dataPoints.count {
-                    
-                    locations.append(HashablePoint(x: (CGFloat(superIndex) * superXSection) + (superXSection / 2),
-                                                   y: (chartSize.size.height - endPointOfElements[index])))
-                }
-            }
-        }
-        
-        return locations
+        return labels
     }
     
-    public func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View {
-        let positions = self.getPointLocation(touchLocation: touchLocation,
-                                              chartSize: chartSize)
-        return ZStack {
-            ForEach(positions, id: \.self) { position in
+    // MARK: Touch
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+        self.infoView.isTouchCurrent   = true
+        self.infoView.touchLocation    = touchLocation
+        self.infoView.chartSize        = chartSize
+        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
+    }
+
+    @ViewBuilder
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
+        
+        if let position = self.getPointLocation(dataSet: dataSets,
+                                                touchLocation: touchLocation,
+                                                chartSize: chartSize) {
+            ZStack {
                 
                 switch self.chartStyle.markerType  {
                 case .none:
@@ -282,9 +206,112 @@ public final class StackedBarChartData: MultiBarChartDataProtocol, LegendProtoco
                         .stroke(Color.primary, lineWidth: 2)
                 }
             }
-        }
+        } else { EmptyView() }
     }
-    
+
+    public typealias Set        = MultiBarDataSets
+    public typealias DataPoint  = MultiBarChartDataPoint
+    public typealias CTStyle    = BarChartStyle
+}
+
+// MARK: - Touch
+extension StackedBarChartData: TouchProtocol {
+   
+    internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+
+        var points : [MultiBarChartDataPoint] = []
+        
+        // Filter to get the right dataset based on the x axis.
+        let superXSection : CGFloat = chartSize.width / CGFloat(dataSets.dataSets.count)
+        let superIndex    : Int     = Int((touchLocation.x) / superXSection)
+        
+        if superIndex >= 0 && superIndex < dataSets.dataSets.count {
+            
+            let dataSet = dataSets.dataSets[superIndex]
+            
+            // Get the max value of the dataset relative to max value of all datasets.
+            // This is used to set the height of the y axis filtering.
+            let setMaxValue = dataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
+            let allMaxValue = self.maxValue
+            let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
+
+            // Gets the height of each datapoint
+            var heightOfElements : [CGFloat] = []
+            let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }
+            dataSet.dataPoints.forEach { datapoint in
+                heightOfElements.append((chartSize.height * fraction) * CGFloat(datapoint.value / sum))
+            }
+        
+            // Gets the highest point of each element.
+            var endPointOfElements : [CGFloat] = []
+            heightOfElements.enumerated().forEach { element in
+                var returnValue : CGFloat = 0
+                for index in 0...element.offset {
+                    returnValue += heightOfElements[index]
+                }
+                endPointOfElements.append(returnValue)
+            }
+            
+            let yIndex = endPointOfElements.enumerated().first(where: { $0.element > abs(touchLocation.y - chartSize.height) })
+            
+            if let index = yIndex?.offset {
+                if index >= 0 && index < dataSet.dataPoints.count {
+                    points.append(dataSet.dataPoints[index])
+                }
+            }
+        }
+        self.infoView.touchOverlayInfo = points
+    }
+
+    internal func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+        // Filter to get the right dataset based on the x axis.
+        let superXSection : CGFloat = chartSize.width / CGFloat(dataSet.dataSets.count)
+        let superIndex    : Int     = Int((touchLocation.x) / superXSection)
+
+        if superIndex >= 0 && superIndex < dataSet.dataSets.count {
+
+            let subDataSet = dataSet.dataSets[superIndex]
+
+            // Get the max value of the dataset relative to max value of all datasets.
+            // This is used to set the height of the y axis filtering.
+            let setMaxValue = subDataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
+            let allMaxValue = self.maxValue
+            let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
+
+            // Gets the height of each datapoint
+            var heightOfElements : [CGFloat] = []
+            let sum = subDataSet.dataPoints.reduce(0) { $0 + $1.value }
+            subDataSet.dataPoints.forEach { datapoint in
+                heightOfElements.append((chartSize.height * fraction) * CGFloat(datapoint.value / sum))
+            }
+
+            // Gets the highest point of each element.
+            var endPointOfElements : [CGFloat] = []
+            heightOfElements.enumerated().forEach { element in
+                var returnValue : CGFloat = 0
+                for index in 0...element.offset {
+                    returnValue += heightOfElements[index]
+                }
+                endPointOfElements.append(returnValue)
+            }
+
+            let yIndex = endPointOfElements.enumerated().first(where: {
+                $0.element > abs(touchLocation.y - chartSize.height)
+            })
+
+            if let index = yIndex?.offset {
+                if index >= 0 && index < subDataSet.dataPoints.count {
+
+                    return CGPoint(x: (CGFloat(superIndex) * superXSection) + (superXSection / 2),
+                                   y: (chartSize.height - endPointOfElements[index]))
+                }
+            }
+        }
+        return nil
+    }
+}
+
+extension StackedBarChartData: LegendProtocol {
     // MARK: - Legends
     internal func setupLegends() {
         for group in self.groups {
@@ -327,8 +354,4 @@ public final class StackedBarChartData: MultiBarChartDataProtocol, LegendProtoco
     internal func legendOrder() -> [LegendData] {
         return legends.sorted { $0.prioity < $1.prioity}
     }
-
-    public typealias Set        = MultiBarDataSets
-    public typealias DataPoint  = MultiBarChartDataPoint
-    public typealias CTStyle    = BarChartStyle
 }

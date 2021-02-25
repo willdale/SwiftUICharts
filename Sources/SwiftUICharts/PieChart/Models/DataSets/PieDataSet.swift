@@ -21,7 +21,7 @@ import SwiftUI
     legendTitle: "Data")
  ```
  */
-public struct PieDataSet: SingleDataSet {
+public struct PieDataSet: CTSingleDataSetProtocol {
 
     public var id           : UUID = UUID()
     public var dataPoints   : [PieChartDataPoint]

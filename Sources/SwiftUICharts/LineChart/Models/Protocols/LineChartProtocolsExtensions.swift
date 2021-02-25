@@ -7,24 +7,8 @@
 
 import SwiftUI
 
-// Standard / Multi
-extension LineAndBarChartData where Self: LineChartDataProtocol {
-    public func getYLabels() -> [Double] {
-        var labels      : [Double]  = [Double]()
-        let dataRange   : Double = self.getRange()
-        let minValue    : Double = self.getMinValue()
-        let range       : Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
-
-        labels.append(minValue)
-        for index in 1...self.chartStyle.yAxisNumberOfLabels {
-            labels.append(minValue + range * Double(index))
-        }
-        return labels
-    }
-}
-
 // MARK: - Position Indicator
-extension LineChartDataProtocol {
+extension CTLineChartDataProtocol {
     public func getIndicatorLocation(rect: CGRect,
                                      dataPoints: [LineChartDataPoint],
                                      touchLocation: CGPoint,
@@ -34,8 +18,8 @@ extension LineChartDataProtocol {
         let path = getPath(lineType     : lineType,
                            rect         : rect,
                            dataPoints   : dataPoints,
-                           minValue     : self.getMinValue(),
-                           range        : self.getRange(),
+                           minValue     : self.minValue,
+                           range        : self.range,
                            touchLocation: touchLocation,
                            isFilled     : false)
         
@@ -90,7 +74,7 @@ extension LineChartDataProtocol {
      The total length of the path.
      
      # Reference
-     https://developer.apple.com/documentation/swiftui/path/element
+     [Apple](https://developer.apple.com/documentation/swiftui/path/element)
      
      - Parameter path: Path to measure.
      - Returns: Total length of the path.
@@ -143,8 +127,8 @@ extension LineChartDataProtocol {
             case .line(to: let nextPoint):
                 if touchLocation.x < nextPoint.x {
                     total += distanceToTouch(from  : currentPoint,
-                                          to    : nextPoint,
-                                          touchX: touchLocation.x)
+                                             to    : nextPoint,
+                                             touchX: touchLocation.x)
                     isComplete = true
                     return
                 } else {
@@ -154,8 +138,8 @@ extension LineChartDataProtocol {
             case .curve(to: let nextPoint, control1: _, control2: _ ):
                 if touchLocation.x < nextPoint.x {
                     total += distanceToTouch(from  : currentPoint,
-                                          to    : nextPoint,
-                                          touchX: touchLocation.x)
+                                             to    : nextPoint,
+                                             touchX: touchLocation.x)
                     isComplete = true
                     return
                 } else {
@@ -165,8 +149,8 @@ extension LineChartDataProtocol {
             case .quadCurve(to: let nextPoint, control: _):
                 if touchLocation.x < nextPoint.x {
                     total += distanceToTouch(from  : currentPoint,
-                                          to    : nextPoint,
-                                          touchX: touchLocation.x)
+                                             to    : nextPoint,
+                                             touchX: touchLocation.x)
                     isComplete = true
                     return
                 } else {
@@ -227,7 +211,7 @@ extension LineChartDataProtocol {
      Returns a point on the path based on the X axis of the users touch input.
      
      # Reference
-     https://swiftui-lab.com/swiftui-animations-part2/
+     [SwiftUI Lab](https://swiftui-lab.com/swiftui-animations-part2/)
      
      - Parameters:
        - percent: The distance along the path as a percentage.
@@ -252,36 +236,42 @@ extension LineChartDataProtocol {
 }
 
 // MARK: - Markers
-extension LineChartDataProtocol {
+extension CTLineChartDataProtocol {
     
-    public func getSinglePoint(touchLocation: CGPoint, chartSize: GeometryProxy, dataSet: LineDataSet) -> CGPoint {
-        let minValue : Double = self.getMinValue()
-        let range    : Double = self.getRange()
+    public func getPointLocation(dataSet: LineDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
         
-        let xSection : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count - 1)
-        let ySection : CGFloat = chartSize.size.height / CGFloat(range)
+        let minValue : Double = self.minValue
+        let range    : Double = self.range
+        
+        let xSection : CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
+        let ySection : CGFloat = chartSize.height / CGFloat(range)
+        
         let index    : Int     = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSet.dataPoints.count {
             return CGPoint(x: CGFloat(index) * xSection,
-                           y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.size.height)
+                           y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
         }
-        return .zero
+        return nil
     }
+
 }
-extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType {
-    @ViewBuilder public func markerSubView(dataSet         : LineDataSet,
-                                           touchLocation   : CGPoint,
-                                           chartSize       : GeometryProxy
+extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
+    @ViewBuilder
+    public func markerSubView(dataSet         : LineDataSet,
+                              touchLocation   : CGPoint,
+                              chartSize       : CGRect
     ) -> some View {
         
         switch self.chartStyle.markerType {
         case .none:
             EmptyView()
         case .indicator(let style):
-
-            PosistionIndicator(fillColour: style.fillColour, lineColour: style.lineColour, lineWidth: style.lineWidth)
+            
+            PosistionIndicator(fillColour: style.fillColour,
+                               lineColour: style.lineColour,
+                               lineWidth: style.lineWidth)
                 .frame(width: style.size, height: style.size)
-                .position(self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                .position(self.getIndicatorLocation(rect: chartSize,
                                                     dataPoints: dataSet.dataPoints,
                                                     touchLocation: touchLocation,
                                                     lineType: dataSet.style.lineType))
@@ -291,7 +281,7 @@ extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType
             switch attach {
             case .line(dot: let indicator):
                 
-                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                let position = self.getIndicatorLocation(rect: chartSize,
                                                          dataPoints: dataSet.dataPoints,
                                                          touchLocation: touchLocation,
                                                          lineType: dataSet.style.lineType)
@@ -302,10 +292,12 @@ extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType
                 IndicatorSwitch(indicator: indicator, location: position)
                 
             case .point:
-                Vertical(position: self.getSinglePoint(touchLocation: touchLocation,
-                                                       chartSize: chartSize,
-                                                       dataSet: dataSet))
-                    .stroke(Color.primary, lineWidth: 2)
+                if let position = self.getPointLocation(dataSet: dataSet,
+                                                        touchLocation: touchLocation,
+                                                        chartSize: chartSize) {
+                    Vertical(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                }
             }
             
         case .full(attachment: let attach):
@@ -313,7 +305,7 @@ extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType
             switch attach {
             case .line(dot: let indicator):
                 
-                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                let position = self.getIndicatorLocation(rect: chartSize,
                                                          dataPoints: dataSet.dataPoints,
                                                          touchLocation: touchLocation,
                                                          lineType: dataSet.style.lineType)
@@ -322,12 +314,16 @@ extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType
                     .stroke(Color.primary, lineWidth: 2)
                 
                 IndicatorSwitch(indicator: indicator, location: position)
-
+                
             case .point:
-                MarkerFull(position: self.getSinglePoint(touchLocation: touchLocation,
-                                                         chartSize: chartSize,
-                                                         dataSet: dataSet))
-                    .stroke(Color.primary, lineWidth: 2)
+                
+                if let position = self.getPointLocation(dataSet: dataSet,
+                                                        touchLocation: touchLocation,
+                                                        chartSize: chartSize) {
+                    
+                    MarkerFull(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                }
             }
             
         case .bottomLeading(attachment: let attach):
@@ -335,7 +331,7 @@ extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType
             switch attach {
             case .line(dot: let indicator):
                 
-                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                let position = self.getIndicatorLocation(rect: chartSize,
                                                          dataPoints: dataSet.dataPoints,
                                                          touchLocation: touchLocation,
                                                          lineType: dataSet.style.lineType)
@@ -346,10 +342,14 @@ extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType
                 IndicatorSwitch(indicator: indicator, location: position)
                 
             case .point:
-                MarkerBottomLeading(position: self.getSinglePoint(touchLocation: touchLocation,
-                                                                  chartSize: chartSize,
-                                                                  dataSet: dataSet))
-                    .stroke(Color.primary, lineWidth: 2)
+                
+                if let position = self.getPointLocation(dataSet: dataSet,
+                                                        touchLocation: touchLocation,
+                                                        chartSize: chartSize) {
+                    
+                    MarkerBottomLeading(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                }
             }
             
         case .bottomTrailing(attachment: let attach):
@@ -357,7 +357,7 @@ extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType
             switch attach {
             case .line(dot: let indicator):
                 
-                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                let position = self.getIndicatorLocation(rect: chartSize,
                                                          dataPoints: dataSet.dataPoints,
                                                          touchLocation: touchLocation,
                                                          lineType: dataSet.style.lineType)
@@ -368,10 +368,14 @@ extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType
                 IndicatorSwitch(indicator: indicator, location: position)
                 
             case .point:
-                MarkerBottomTrailing(position: self.getSinglePoint(touchLocation: touchLocation,
-                                                                   chartSize: chartSize,
-                                                                   dataSet: dataSet))
-                    .stroke(Color.primary, lineWidth: 2)
+                
+                if let position = self.getPointLocation(dataSet: dataSet,
+                                                        touchLocation: touchLocation,
+                                                        chartSize: chartSize) {
+                    
+                    MarkerBottomTrailing(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                }
             }
             
         case .topLeading(attachment: let attach):
@@ -379,7 +383,7 @@ extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType
             switch attach {
             case .line(dot: let indicator):
                 
-                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                let position = self.getIndicatorLocation(rect: chartSize,
                                                          dataPoints: dataSet.dataPoints,
                                                          touchLocation: touchLocation,
                                                          lineType: dataSet.style.lineType)
@@ -390,10 +394,14 @@ extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType
                 IndicatorSwitch(indicator: indicator, location: position)
                 
             case .point:
-                MarkerTopLeading(position: self.getSinglePoint(touchLocation: touchLocation,
-                                                               chartSize: chartSize,
-                                                               dataSet: dataSet))
-                    .stroke(Color.primary, lineWidth: 2)
+                
+                if let position = self.getPointLocation(dataSet: dataSet,
+                                                        touchLocation: touchLocation,
+                                                        chartSize: chartSize) {
+                    
+                    MarkerTopLeading(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                }
             }
             
         case .topTrailing(attachment: let attach):
@@ -401,7 +409,7 @@ extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType
             switch attach {
             case .line(dot: let indicator):
                 
-                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                let position = self.getIndicatorLocation(rect: chartSize,
                                                          dataPoints: dataSet.dataPoints,
                                                          touchLocation: touchLocation,
                                                          lineType: dataSet.style.lineType)
@@ -412,10 +420,14 @@ extension LineChartDataProtocol where Self.CTLineAndBarCS.Mark == LineMarkerType
                 IndicatorSwitch(indicator: indicator, location: position)
                 
             case .point:
-                MarkerTopTrailing(position: self.getSinglePoint(touchLocation: touchLocation,
-                                                                chartSize: chartSize,
-                                                                dataSet: dataSet))
-                    .stroke(Color.primary, lineWidth: 2)
+                
+                if let position = self.getPointLocation(dataSet: dataSet,
+                                                        touchLocation: touchLocation,
+                                                        chartSize: chartSize) {
+                    
+                    MarkerTopTrailing(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                }
             }
         }
     }

@@ -14,14 +14,17 @@ import SwiftUI
  
  All Chart Data models ultimately conform to this.
  */
-public protocol ChartData: ObservableObject, Identifiable {
+public protocol CTChartData: ObservableObject, Identifiable {
     
-    /// A type representing a  data set. -- `DataSet`
-    associatedtype Set      : DataSet
+    /// A type representing a  data set. -- `CTDataSetProtocol`
+    associatedtype Set      : CTDataSetProtocol
+    
     /// A type representing a data point. -- `CTChartDataPoint`
     associatedtype DataPoint: CTChartDataPoint
+    
     /// A type representing the chart style. -- `CTChartStyle`
     associatedtype CTStyle  : CTChartStyle
+    
     /// A type representing opaque View
     associatedtype Touch    : View
     
@@ -74,27 +77,9 @@ public protocol ChartData: ObservableObject, Identifiable {
      Returns whether there are two or more data points.
      */
     func isGreaterThanTwo() -> Bool
-    
-    
+
     // MARK: Touch
-    /**
-    Gets the nearest data points to the touch location.
-    - Parameters:
-      - touchLocation: Current location of the touch.
-      - chartSize: The size of the chart view as the parent view.
-    - Returns: Array of data points.
-    */
-    func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [DataPoint]
-    
-    /**
-    Gets the location of the data point in the view.
-    - Parameters:
-      - touchLocation: Current location of the touch.
-      - chartSize: The size of the chart view as the parent view.
-    - Returns: Array of points with the location on screen of data points.
-    */
-    func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint]
-    
+    func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect)
     /**
      Takes touch location and return a view based on the chart type and configuration.
      
@@ -103,10 +88,40 @@ public protocol ChartData: ObservableObject, Identifiable {
        - chartSize: The size of the chart view as the parent view.
      - Returns: The relevent view for the chart type and options.
      */
-    func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> Touch
+    func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> Touch
     
-  
 }
+
+
+
+// MARK: - Touch Protocol
+internal protocol TouchProtocol {
+    
+    /// A type representing a  data set. -- `CTDataSetProtocol`
+    associatedtype SetPoint : CTDataSetProtocol
+    
+    /**
+    Gets the nearest data points to the touch location.
+    - Parameters:
+      - touchLocation: Current location of the touch.
+      - chartSize: The size of the chart view as the parent view.
+    - Returns: Array of data points.
+    */
+    func getDataPoint(touchLocation: CGPoint, chartSize: CGRect)
+    
+    /**
+    Gets the location of the data point in the view.
+    - Parameters:
+      - dataSet: Data set to work with.
+      - touchLocation: Current location of the touch.
+      - chartSize: The size of the chart view as the parent view.
+    - Returns: Array of points with the location on screen of data points.
+    */
+    func getPointLocation(dataSet: SetPoint, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint?
+}
+
+
+// MARK: - Legend Protocol
 /**
  Protocol for dealing with legend data internally.
  */
@@ -131,14 +146,14 @@ internal protocol LegendProtocol {
 /**
  Main protocol to set conformace for types of Data Sets.
  */
-public protocol DataSet: Hashable, Identifiable {
+public protocol CTDataSetProtocol: Hashable, Identifiable {
     var id : ID { get }
 }
 
 /**
  Protocol for data sets that only require a single set of data .
  */
-public protocol SingleDataSet: DataSet {
+public protocol CTSingleDataSetProtocol: CTDataSetProtocol {
     /// A type representing a data point. -- `CTChartDataPoint`
     associatedtype DataPoint : CTChartDataPoint
     
@@ -152,9 +167,9 @@ public protocol SingleDataSet: DataSet {
 /**
  Protocol for data sets that require a multiple sets of data .
  */
-public protocol MultiDataSet: DataSet {
+public protocol CTMultiDataSetProtocol: CTDataSetProtocol {
     /// A type representing a single data set -- `SingleDataSet`
-    associatedtype DataSet : SingleDataSet
+    associatedtype DataSet : CTSingleDataSetProtocol
     
     /**
      Array of single data sets.

@@ -44,9 +44,9 @@ import SwiftUI
  
  ```
  */
-public final class LineChartData: LineChartDataProtocol, LegendProtocol {
+public final class LineChartData: CTLineChartDataProtocol {
     
-    // MARK: - Properties
+    // MARK: Properties
     public let id   : UUID  = UUID()
     
     @Published public var dataSets      : LineDataSet
@@ -61,7 +61,7 @@ public final class LineChartData: LineChartDataProtocol, LegendProtocol {
     public var noDataText   : Text
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
         
-    // MARK: - Initializer
+    // MARK: Initializer
     /// Initialises a Single Line Chart.
     ///
     /// - Parameters:
@@ -88,7 +88,7 @@ public final class LineChartData: LineChartDataProtocol, LegendProtocol {
     }
     // , calc        : @escaping (LineDataSet) -> LineDataSet
     
-    // MARK: - Labels
+    // MARK: Labels
     public func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
@@ -111,7 +111,6 @@ public final class LineChartData: LineChartDataProtocol, LegendProtocol {
                 }
                 .padding(.horizontal, -4)
                 
-                
             case .chartData:
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
@@ -133,49 +132,62 @@ public final class LineChartData: LineChartDataProtocol, LegendProtocol {
         }
     }
     
+    public func getYLabels() -> [Double] {
+        var labels      : [Double]  = [Double]()
+        let dataRange   : Double = self.range
+        let minValue    : Double = self.minValue
+        let range       : Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
+        labels.append(minValue)
+        for index in 1...self.chartStyle.yAxisNumberOfLabels {
+            labels.append(minValue + range * Double(index))
+        }
+        return labels
+    }
 
-    // MARK: - Points
+    // MARK: Points
     public func getPointMarker() -> some View {
         PointsSubView(dataSets  : dataSets,
-                      minValue  : self.getMinValue(),
-                      range     : self.getRange(),
+                      minValue  : self.minValue,
+                      range     : self.range,
                       animation : self.chartStyle.globalAnimation,
                       isFilled  : self.isFilled)
     }
     
-    // MARK: - Touch
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) -> [LineChartDataPoint] {
+    // MARK: Touch
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+        self.infoView.isTouchCurrent   = true
+        self.infoView.touchLocation    = touchLocation
+        self.infoView.chartSize        = chartSize
+        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
+    }
+    
+    
+
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
+        self.markerSubView(dataSet: self.dataSets, touchLocation: touchLocation, chartSize: chartSize)
+            .accessibility(label: Text("Touch Box"))
+    }
+
+    public typealias Set       = LineDataSet
+    public typealias DataPoint = LineChartDataPoint
+}
+
+// MARK: - Touch
+extension LineChartData: TouchProtocol {
+    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points      : [LineChartDataPoint] = []
-        let xSection    : CGFloat = chartSize.size.width / CGFloat(dataSets.dataPoints.count - 1)
+        let xSection    : CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
         let index       = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
             points.append(dataSets.dataPoints[index])
         }
-        return points
+        self.infoView.touchOverlayInfo = points
     }
+}
 
-    public func getPointLocation(touchLocation: CGPoint, chartSize: GeometryProxy) -> [HashablePoint] {
-        var locations : [HashablePoint] = []
-        
-        let minValue : Double = self.getMinValue()
-        let range    : Double = self.getRange()
-            
-        let ySection : CGFloat = chartSize.size.height / CGFloat(range)
-        let xSection : CGFloat = chartSize.size.width / CGFloat(dataSets.dataPoints.count - 1)
-        
-        let index    : Int     = Int((touchLocation.x + (xSection / 2)) / xSection)
-        if index >= 0 && index < dataSets.dataPoints.count {
-            locations.append(HashablePoint(x: CGFloat(index) * xSection,
-                                           y: (CGFloat(dataSets.dataPoints[index].value - minValue) * -ySection) + chartSize.size.height))
-        }
-        return locations
-    }
-    
-    public func touchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View {
-        self.markerSubView(dataSet: self.dataSets, touchLocation: touchLocation, chartSize: chartSize)
-    }
-    
-    // MARK: - Legends
+// MARK: - Legends
+extension LineChartData: LegendProtocol {
+   
     internal func setupLegends() {
         
         if dataSets.style.colourType == .colour,
@@ -214,32 +226,7 @@ public final class LineChartData: LineChartDataProtocol, LegendProtocol {
         }
     }
 
-    // MARK: - Data Functions
-    public func getRange() -> Double {
-        switch self.chartStyle.baseline {
-        case .minimumValue:
-            return DataFunctions.dataSetRange(from: dataSets)
-        case .minimumWithMaximum(of: let value):
-            return DataFunctions.dataSetMaxValue(from: dataSets) - min(DataFunctions.dataSetMinValue(from: dataSets), value)
-        case .zero:
-            return DataFunctions.dataSetMaxValue(from: dataSets)
-        }
-    }
-    public func getMinValue() -> Double {
-        switch self.chartStyle.baseline {
-        case .minimumValue:
-            return DataFunctions.dataSetMinValue(from: dataSets)
-        case .minimumWithMaximum(of: let value):
-            return min(DataFunctions.dataSetMinValue(from: dataSets), value)
-        case .zero:
-            return 0
-        }
-    }
-    
     internal func legendOrder() -> [LegendData] {
         return legends.sorted { $0.prioity < $1.prioity}
     }
-    
-    public typealias Set       = LineDataSet
-    public typealias DataPoint = LineChartDataPoint
 }
