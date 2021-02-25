@@ -42,7 +42,7 @@ public protocol CTLineChartDataProtocol: CTLineBarChartDataProtocol {
     ///   - touchLocation: Current location of the touch.
     ///   - chartSize: The size of the chart view as the parent view.
     /// - Returns: Relevent touch marker based the chosen parameters.
-    func markerSubView(dataSet: LineDataSet, touchLocation: CGPoint, chartSize: GeometryProxy) -> Marker
+    func markerSubView(dataSet: LineDataSet, touchLocation: CGPoint, chartSize: CGRect) -> Marker
     
     /// Displays Shapes over the data points.
     /// - Returns: Relevent view containing point markers based the chosen parameters.

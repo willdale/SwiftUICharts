@@ -238,17 +238,17 @@ extension CTLineChartDataProtocol {
 // MARK: - Markers
 extension CTLineChartDataProtocol {
     
-    public func getPointLocation(dataSet: LineDataSet, touchLocation: CGPoint, chartSize: GeometryProxy) -> CGPoint? {
+    public func getPointLocation(dataSet: LineDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
         
         let minValue : Double = self.minValue
         let range    : Double = self.range
         
-        let xSection : CGFloat = chartSize.size.width / CGFloat(dataSet.dataPoints.count - 1)
-        let ySection : CGFloat = chartSize.size.height / CGFloat(range)
+        let xSection : CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
+        let ySection : CGFloat = chartSize.height / CGFloat(range)
         let index    : Int     = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSet.dataPoints.count {
             return CGPoint(x: CGFloat(index) * xSection,
-                           y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.size.height)
+                           y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
         }
         return nil
     }
@@ -257,7 +257,7 @@ extension CTLineChartDataProtocol {
 extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
     @ViewBuilder public func markerSubView(dataSet         : LineDataSet,
                                            touchLocation   : CGPoint,
-                                           chartSize       : GeometryProxy
+                                           chartSize       : CGRect
     ) -> some View {
         
         switch self.chartStyle.markerType {
@@ -269,7 +269,7 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
                                lineColour: style.lineColour,
                                lineWidth: style.lineWidth)
                 .frame(width: style.size, height: style.size)
-                .position(self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                .position(self.getIndicatorLocation(rect: chartSize,
                                                     dataPoints: dataSet.dataPoints,
                                                     touchLocation: touchLocation,
                                                     lineType: dataSet.style.lineType))
@@ -279,7 +279,7 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
             switch attach {
             case .line(dot: let indicator):
                 
-                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                let position = self.getIndicatorLocation(rect: chartSize,
                                                          dataPoints: dataSet.dataPoints,
                                                          touchLocation: touchLocation,
                                                          lineType: dataSet.style.lineType)
@@ -303,7 +303,7 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
             switch attach {
             case .line(dot: let indicator):
                 
-                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                let position = self.getIndicatorLocation(rect: chartSize,
                                                          dataPoints: dataSet.dataPoints,
                                                          touchLocation: touchLocation,
                                                          lineType: dataSet.style.lineType)
@@ -329,7 +329,7 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
             switch attach {
             case .line(dot: let indicator):
                 
-                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                let position = self.getIndicatorLocation(rect: chartSize,
                                                          dataPoints: dataSet.dataPoints,
                                                          touchLocation: touchLocation,
                                                          lineType: dataSet.style.lineType)
@@ -355,7 +355,7 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
             switch attach {
             case .line(dot: let indicator):
                 
-                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                let position = self.getIndicatorLocation(rect: chartSize,
                                                          dataPoints: dataSet.dataPoints,
                                                          touchLocation: touchLocation,
                                                          lineType: dataSet.style.lineType)
@@ -381,7 +381,7 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
             switch attach {
             case .line(dot: let indicator):
                 
-                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                let position = self.getIndicatorLocation(rect: chartSize,
                                                          dataPoints: dataSet.dataPoints,
                                                          touchLocation: touchLocation,
                                                          lineType: dataSet.style.lineType)
@@ -407,7 +407,7 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
             switch attach {
             case .line(dot: let indicator):
                 
-                let position = self.getIndicatorLocation(rect: chartSize.frame(in: .global),
+                let position = self.getIndicatorLocation(rect: chartSize,
                                                          dataPoints: dataSet.dataPoints,
                                                          touchLocation: touchLocation,
                                                          lineType: dataSet.style.lineType)

@@ -70,7 +70,7 @@ extension CTPieDoughnutChartDataProtocol where Set == MultiPieDataSet, DataPoint
 }
 
 extension CTPieDoughnutChartDataProtocol {
-    public func getPointLocation(dataSet: PieDataSet, touchLocation: CGPoint, chartSize: GeometryProxy) -> CGPoint? {
+    public func getPointLocation(dataSet: PieDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
         return nil
     }
 }

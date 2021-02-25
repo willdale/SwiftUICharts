@@ -182,15 +182,15 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     }
     
     // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) {
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         self.infoView.isTouchCurrent   = true
         self.infoView.touchLocation    = touchLocation
-        self.infoView.chartSize        = chartSize.frame(in: .local)
+        self.infoView.chartSize        = chartSize
         self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
     }
 
     @ViewBuilder
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View {
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         
         if let position = self.getPointLocation(dataSet: dataSets,
                                                 touchLocation: touchLocation,
@@ -232,19 +232,19 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
 // MARK: - Touch
 extension GroupedBarChartData: TouchProtocol {
     
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) {
+    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         
         var points : [MultiBarChartDataPoint] = []
         
         // Divide the chart into equal sections.
-        let superXSection   : CGFloat   = (chartSize.size.width / CGFloat(dataSets.dataSets.count))
+        let superXSection   : CGFloat   = (chartSize.width / CGFloat(dataSets.dataSets.count))
         let superIndex      : Int       = Int((touchLocation.x) / superXSection)
         
         // Work out how much to remove from xSection due to groupSpacing.
         let compensation : CGFloat = ((groupSpacing * CGFloat(dataSets.dataSets.count - 1)) / CGFloat(dataSets.dataSets.count))
         
         // Make those sections take account of spacing between groups.
-        let xSection : CGFloat  = (chartSize.size.width / CGFloat(dataSets.dataSets.count)) - compensation
+        let xSection : CGFloat  = (chartSize.width / CGFloat(dataSets.dataSets.count)) - compensation
         let index    : Int      = Int((touchLocation.x - CGFloat((groupSpacing * CGFloat(superIndex)))) / xSection)
 
         if index >= 0 && index < dataSets.dataSets.count && superIndex == index {
@@ -258,18 +258,18 @@ extension GroupedBarChartData: TouchProtocol {
         self.infoView.touchOverlayInfo = points
     }
 
-    public func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: GeometryProxy) -> CGPoint? {
+    public func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
         
         // Divide the chart into equal sections.
-        let superXSection   : CGFloat   = (chartSize.size.width / CGFloat(dataSet.dataSets.count))
+        let superXSection   : CGFloat   = (chartSize.width / CGFloat(dataSet.dataSets.count))
         let superIndex      : Int       = Int((touchLocation.x) / superXSection)
 
         // Work out how much to remove from xSection due to groupSpacing.
         let compensation : CGFloat = ((groupSpacing * CGFloat(dataSet.dataSets.count - 1)) / CGFloat(dataSet.dataSets.count))
 
         // Make those sections take account of spacing between groups.
-        let xSection : CGFloat  = (chartSize.size.width / CGFloat(dataSet.dataSets.count)) - compensation
-        let ySection : CGFloat  = chartSize.size.height / CGFloat(self.maxValue)
+        let xSection : CGFloat  = (chartSize.width / CGFloat(dataSet.dataSets.count)) - compensation
+        let ySection : CGFloat  = chartSize.height / CGFloat(self.maxValue)
 
         let index    : Int      = Int((touchLocation.x - CGFloat(groupSpacing * CGFloat(superIndex))) / xSection)
 
@@ -284,7 +284,7 @@ extension GroupedBarChartData: TouchProtocol {
                 let section : CGFloat = (superXSection * CGFloat(superIndex))
                 let spacing : CGFloat = ((groupSpacing / CGFloat(dataSets.dataSets.count)) * CGFloat(superIndex))
                 return CGPoint(x: element + section + spacing,
-                               y: (chartSize.size.height - CGFloat(subDataSet.dataPoints[subIndex].value) * ySection))
+                               y: (chartSize.height - CGFloat(subDataSet.dataPoints[subIndex].value) * ySection))
 
             }
         }

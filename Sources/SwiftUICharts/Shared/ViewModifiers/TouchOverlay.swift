@@ -33,7 +33,7 @@ internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
                                     .onChanged { (value) in
                                         
                                         chartData.setTouchInteraction(touchLocation: value.location,
-                                                                      chartSize: geo)
+                                                                      chartSize: geo.frame(in: .local))
 
                                     }
                                     .onEnded { _ in
@@ -43,7 +43,7 @@ internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
                             )
                         if chartData.infoView.isTouchCurrent {
                             chartData.getTouchInteraction(touchLocation: chartData.infoView.touchLocation,
-                                                       chartSize: geo)
+                                                          chartSize: geo.frame(in: .local))
                         }
                     }
                 }

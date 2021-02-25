@@ -121,14 +121,14 @@ public final class MultiLayerPieChartData: CTMultiPieChartDataProtocol {
     }
     
     // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) {
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         self.infoView.isTouchCurrent   = true
         self.infoView.touchLocation    = touchLocation
-        self.infoView.chartSize        = chartSize.frame(in: .local)
+        self.infoView.chartSize        = chartSize
         self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
     }
     
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View { EmptyView() }
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View { EmptyView() }
     
     public typealias Set       = MultiPieDataSet
     public typealias DataPoint = MultiPieDataPoint
@@ -137,7 +137,7 @@ public final class MultiLayerPieChartData: CTMultiPieChartDataProtocol {
 
 // MARK: - Touch
 extension MultiLayerPieChartData: TouchProtocol {
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) {
+    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         let points : [MultiPieDataPoint] = []
         self.infoView.touchOverlayInfo = points
     }

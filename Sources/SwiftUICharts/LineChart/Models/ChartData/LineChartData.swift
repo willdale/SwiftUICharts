@@ -154,16 +154,16 @@ public final class LineChartData: CTLineChartDataProtocol {
     }
     
     // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) {
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         self.infoView.isTouchCurrent   = true
         self.infoView.touchLocation    = touchLocation
-        self.infoView.chartSize        = chartSize.frame(in: .local)
+        self.infoView.chartSize        = chartSize
         self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
     }
     
     
 
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View {
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         self.markerSubView(dataSet: self.dataSets, touchLocation: touchLocation, chartSize: chartSize)
     }
 
@@ -173,9 +173,9 @@ public final class LineChartData: CTLineChartDataProtocol {
 
 // MARK: - Touch
 extension LineChartData: TouchProtocol {
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) {
+    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points      : [LineChartDataPoint] = []
-        let xSection    : CGFloat = chartSize.size.width / CGFloat(dataSets.dataPoints.count - 1)
+        let xSection    : CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
         let index       = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
             points.append(dataSets.dataPoints[index])

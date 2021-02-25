@@ -168,15 +168,15 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
     }
     
     // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) {
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         self.infoView.isTouchCurrent   = true
         self.infoView.touchLocation    = touchLocation
-        self.infoView.chartSize        = chartSize.frame(in: .local)
+        self.infoView.chartSize        = chartSize
         self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
     }
 
     @ViewBuilder
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View {
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         
         if let position = self.getPointLocation(dataSet: dataSets,
                                                 touchLocation: touchLocation,
@@ -217,12 +217,12 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
 // MARK: - Touch
 extension StackedBarChartData: TouchProtocol {
    
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) {
+    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
 
         var points : [MultiBarChartDataPoint] = []
         
         // Filter to get the right dataset based on the x axis.
-        let superXSection : CGFloat = chartSize.size.width / CGFloat(dataSets.dataSets.count)
+        let superXSection : CGFloat = chartSize.width / CGFloat(dataSets.dataSets.count)
         let superIndex    : Int     = Int((touchLocation.x) / superXSection)
         
         if superIndex >= 0 && superIndex < dataSets.dataSets.count {
@@ -239,7 +239,7 @@ extension StackedBarChartData: TouchProtocol {
             var heightOfElements : [CGFloat] = []
             let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }
             dataSet.dataPoints.forEach { datapoint in
-                heightOfElements.append((chartSize.size.height * fraction) * CGFloat(datapoint.value / sum))
+                heightOfElements.append((chartSize.height * fraction) * CGFloat(datapoint.value / sum))
             }
         
             // Gets the highest point of each element.
@@ -252,7 +252,7 @@ extension StackedBarChartData: TouchProtocol {
                 endPointOfElements.append(returnValue)
             }
             
-            let yIndex = endPointOfElements.enumerated().first(where: { $0.element > abs(touchLocation.y - chartSize.size.height) })
+            let yIndex = endPointOfElements.enumerated().first(where: { $0.element > abs(touchLocation.y - chartSize.height) })
             
             if let index = yIndex?.offset {
                 if index >= 0 && index < dataSet.dataPoints.count {
@@ -263,9 +263,9 @@ extension StackedBarChartData: TouchProtocol {
         self.infoView.touchOverlayInfo = points
     }
 
-    public func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: GeometryProxy) -> CGPoint? {
+    public func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
         // Filter to get the right dataset based on the x axis.
-        let superXSection : CGFloat = chartSize.size.width / CGFloat(dataSet.dataSets.count)
+        let superXSection : CGFloat = chartSize.width / CGFloat(dataSet.dataSets.count)
         let superIndex    : Int     = Int((touchLocation.x) / superXSection)
 
         if superIndex >= 0 && superIndex < dataSet.dataSets.count {
@@ -282,7 +282,7 @@ extension StackedBarChartData: TouchProtocol {
             var heightOfElements : [CGFloat] = []
             let sum = subDataSet.dataPoints.reduce(0) { $0 + $1.value }
             subDataSet.dataPoints.forEach { datapoint in
-                heightOfElements.append((chartSize.size.height * fraction) * CGFloat(datapoint.value / sum))
+                heightOfElements.append((chartSize.height * fraction) * CGFloat(datapoint.value / sum))
             }
 
             // Gets the highest point of each element.
@@ -296,14 +296,14 @@ extension StackedBarChartData: TouchProtocol {
             }
 
             let yIndex = endPointOfElements.enumerated().first(where: {
-                $0.element > abs(touchLocation.y - chartSize.size.height)
+                $0.element > abs(touchLocation.y - chartSize.height)
             })
 
             if let index = yIndex?.offset {
                 if index >= 0 && index < subDataSet.dataPoints.count {
 
                     return CGPoint(x: (CGFloat(superIndex) * superXSection) + (superXSection / 2),
-                                   y: (chartSize.size.height - endPointOfElements[index]))
+                                   y: (chartSize.height - endPointOfElements[index]))
                 }
             }
         }

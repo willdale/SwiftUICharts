@@ -79,7 +79,7 @@ public protocol CTChartData: ObservableObject, Identifiable {
     func isGreaterThanTwo() -> Bool
 
     // MARK: Touch
-    func setTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy)
+    func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect)
     /**
      Takes touch location and return a view based on the chart type and configuration.
      
@@ -88,7 +88,7 @@ public protocol CTChartData: ObservableObject, Identifiable {
        - chartSize: The size of the chart view as the parent view.
      - Returns: The relevent view for the chart type and options.
      */
-    func getTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> Touch
+    func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> Touch
     
 }
 
@@ -107,7 +107,7 @@ internal protocol TouchProtocol {
       - chartSize: The size of the chart view as the parent view.
     - Returns: Array of data points.
     */
-    func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy)
+    func getDataPoint(touchLocation: CGPoint, chartSize: CGRect)
     
     /**
     Gets the location of the data point in the view.
@@ -116,7 +116,7 @@ internal protocol TouchProtocol {
       - chartSize: The size of the chart view as the parent view.
     - Returns: Array of points with the location on screen of data points.
     */
-    func getPointLocation(dataSet: SetPoint, touchLocation: CGPoint, chartSize: GeometryProxy) -> CGPoint?
+    func getPointLocation(dataSet: SetPoint, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint?
 }
 
 

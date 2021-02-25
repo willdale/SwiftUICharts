@@ -114,10 +114,10 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                     )
                     .ifElse(self.chartData.chartStyle.yAxisLabelPosition == .leading, if: {
                         $0.position(x: -18,
-                                    y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo))
+                                    y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo.frame(in: .local)))
                     }, else: {
                         $0.position(x: geo.size.width + 18,
-                                    y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo))
+                                    y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo.frame(in: .local)))
                     })
                     
                 
@@ -133,20 +133,20 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                                 .stroke(lineColour, style: strokeStyle)
                     )
                     .position(x: geo.size.width / 2,
-                              y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo))
+                              y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo.frame(in: .local)))
                     .opacity(startAnimation ? 1 : 0)
             }
         }
     }
     
-    func getYPoint(chartType: ChartType, chartSize: GeometryProxy) -> CGFloat {
+    func getYPoint(chartType: ChartType, chartSize: CGRect) -> CGFloat {
         switch chartData.chartType.chartType {
         case .line:
-            let y = chartSize.size.height / CGFloat(range)
+            let y = chartSize.height / CGFloat(range)
            return (CGFloat(markerValue - minValue) * -y) + chartSize.size.height
         case .bar:
-            let y = chartSize.size.height / CGFloat(maxValue)
-            return  chartSize.size.height - CGFloat(markerValue) * y
+            let y = chartSize.height / CGFloat(maxValue)
+            return  chartSize.height - CGFloat(markerValue) * y
         case .pie:
             return 0
         }

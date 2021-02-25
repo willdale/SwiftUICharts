@@ -68,14 +68,14 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol {
     }
     
     // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) {
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         self.infoView.isTouchCurrent   = true
         self.infoView.touchLocation    = touchLocation
-        self.infoView.chartSize        = chartSize.frame(in: .local)
+        self.infoView.chartSize        = chartSize
         self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
     }
     
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View { EmptyView() }
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View { EmptyView() }
 
     public typealias Set        = PieDataSet
     public typealias DataPoint  = PieChartDataPoint
@@ -84,9 +84,9 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol {
 
 // MARK: - Touch
 extension DoughnutChartData: TouchProtocol {
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) {
+    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points : [PieChartDataPoint] = []
-        let touchDegree = degree(from: touchLocation, in: chartSize.frame(in: .local))
+        let touchDegree = degree(from: touchLocation, in: chartSize)
                 
         let dataPoint = self.dataSets.dataPoints.first(where: { $0.startAngle * Double(180 / Double.pi) <= Double(touchDegree) && ($0.startAngle * Double(180 / Double.pi)) + ($0.amount * Double(180 / Double.pi)) >= Double(touchDegree) } )
         if let data = dataPoint {

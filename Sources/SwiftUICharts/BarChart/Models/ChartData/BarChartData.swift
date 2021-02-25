@@ -136,15 +136,15 @@ public final class BarChartData: CTBarChartDataProtocol {
     }
     
     // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) {
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         self.infoView.isTouchCurrent   = true
         self.infoView.touchLocation    = touchLocation
-        self.infoView.chartSize        = chartSize.frame(in: .local)
+        self.infoView.chartSize        = chartSize
         self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
     }
     
     @ViewBuilder
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: GeometryProxy) -> some View {
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
 
         if let position = self.getPointLocation(dataSet: dataSets,
                                                 touchLocation: touchLocation,
@@ -185,9 +185,9 @@ public final class BarChartData: CTBarChartDataProtocol {
 // MARK: - Touch
 extension BarChartData: TouchProtocol {
    
-    public func getDataPoint(touchLocation: CGPoint, chartSize: GeometryProxy) {
+    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points      : [BarChartDataPoint] = []
-        let xSection    : CGFloat   = chartSize.size.width / CGFloat(dataSets.dataPoints.count)
+        let xSection    : CGFloat   = chartSize.width / CGFloat(dataSets.dataPoints.count)
         let index       : Int       = Int((touchLocation.x) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
             points.append(dataSets.dataPoints[index])
@@ -195,9 +195,9 @@ extension BarChartData: TouchProtocol {
         self.infoView.touchOverlayInfo = points
     }
 
-    public func getPointLocation(dataSet: BarDataSet, touchLocation: CGPoint, chartSize: GeometryProxy) -> CGPoint? {
-        let xSection : CGFloat = chartSize.size.width / CGFloat(dataSets.dataPoints.count)
-        let ySection : CGFloat = chartSize.size.height / CGFloat(self.maxValue)
+    public func getPointLocation(dataSet: BarDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+        let xSection : CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count)
+        let ySection : CGFloat = chartSize.height / CGFloat(self.maxValue)
         let index    : Int     = Int((touchLocation.x) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
             return CGPoint(x: (CGFloat(index) * xSection) + (xSection / 2),
