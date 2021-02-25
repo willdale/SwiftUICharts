@@ -3,6 +3,7 @@ import XCTest
 
 final class StackedBarChartTests: XCTestCase {
     
+    // MARK: - Set Up
     enum Group {
         case one
         case two
@@ -184,7 +185,84 @@ final class StackedBarChartTests: XCTestCase {
         XCTAssertEqual(testOutputFourThree[0], testAgainstFourThree[2])
     }
     
-
+    func testStackedBarGetPointLocation() {
+        let rect: CGRect  = CGRect(x: 0, y: 0, width: 100, height: 100)
+        let chartData = StackedBarChartData(dataSets: data, groups: groups)
+        
+        // Stack 1 - Point 2
+        let touchLocationOneTwo: CGPoint = CGPoint(x: 5, y: 95)
+        let testOneTwo: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets,
+                                                             touchLocation: touchLocationOneTwo,
+                                                             chartSize: rect)!
+        let testAgainstOneTwo = CGPoint(x: 12.50, y: 74.35)
+        XCTAssertEqual(testOneTwo.x, testAgainstOneTwo.x, accuracy: 0.01)
+        XCTAssertEqual(testOneTwo.y, testAgainstOneTwo.y, accuracy: 0.01)
+        
+        // Stack 1 - Point 4
+        let touchLocationOneFour: CGPoint = CGPoint(x: 5, y: 60)
+        let testOneFour: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets,
+                                                              touchLocation: touchLocationOneFour,
+                                                              chartSize: rect)!
+        let testAgainstOneFour = CGPoint(x: 12.50, y: 44.44)
+        XCTAssertEqual(testOneFour.x, testAgainstOneFour.x, accuracy: 0.01)
+        XCTAssertEqual(testOneFour.y, testAgainstOneFour.y, accuracy: 0.01)
+        
+        // Stack 2 - Point 1
+        let touchLocationTwoOne: CGPoint = CGPoint(x: 30, y: 95)
+        let testTwoOne: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets,
+                                                             touchLocation: touchLocationTwoOne,
+                                                             chartSize: rect)!
+        let testAgainstTwoOne = CGPoint(x: 37.50, y: 92.59)
+        XCTAssertEqual(testTwoOne.x, testAgainstTwoOne.x, accuracy: 0.01)
+        XCTAssertEqual(testTwoOne.y, testAgainstTwoOne.y, accuracy: 0.01)
+        
+        // Stack 2 - Point 3
+        let touchLocationTwoThree: CGPoint = CGPoint(x: 30, y: 66)
+        let testTwoThree: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets,
+                                                               touchLocation: touchLocationTwoThree,
+                                                               chartSize: rect)!
+        let testAgainstTwoThree = CGPoint(x: 37.50, y: 55.55)
+        XCTAssertEqual(testTwoThree.x, testAgainstTwoThree.x, accuracy: 0.01)
+        XCTAssertEqual(testTwoThree.y, testAgainstTwoThree.y, accuracy: 0.01)
+        
+        // Stack 3 - Point 1
+        let touchLocationThreeOne: CGPoint = CGPoint(x: 55, y: 95)
+        let testThreeOne: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets,
+                                                               touchLocation: touchLocationThreeOne,
+                                                               chartSize: rect)!
+        let testAgainstThreeOne = CGPoint(x: 62.50, y: 86.36)
+        XCTAssertEqual(testThreeOne.x, testAgainstThreeOne.x, accuracy: 0.01)
+        XCTAssertEqual(testThreeOne.y, testAgainstThreeOne.y, accuracy: 0.01)
+        
+        // Stack 3 - Point 4
+        let touchLocationThreeFour: CGPoint = CGPoint(x: 55, y: 10)
+        let testThreeFour: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets,
+                                                               touchLocation: touchLocationThreeFour,
+                                                               chartSize: rect)!
+        let testAgainstThreeFour = CGPoint(x: 62.50, y: 0.00)
+        XCTAssertEqual(testThreeFour.x, testAgainstThreeFour.x, accuracy: 0.01)
+        XCTAssertEqual(testThreeFour.y, testAgainstThreeFour.y, accuracy: 0.01)
+        
+        // Stack 4 - Point 2
+        let touchLocationFourTwo: CGPoint = CGPoint(x: 83, y: 50)
+        let testFourTwo: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets,
+                                                               touchLocation: touchLocationFourTwo,
+                                                               chartSize: rect)!
+        let testAgainstFourTwo = CGPoint(x: 87.50, y: 43.85)
+        XCTAssertEqual(testFourTwo.x, testAgainstFourTwo.x, accuracy: 0.01)
+        XCTAssertEqual(testFourTwo.y, testAgainstFourTwo.y, accuracy: 0.01)
+        
+        // Stack 4 - Point 3
+        let touchLocationFourThree: CGPoint = CGPoint(x: 83, y: 40)
+        let testFourThree: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets,
+                                                               touchLocation: touchLocationFourThree,
+                                                               chartSize: rect)!
+        let testAgainstFourThree = CGPoint(x: 87.50, y: 34.50)
+        XCTAssertEqual(testFourThree.x, testAgainstFourThree.x, accuracy: 0.01)
+        XCTAssertEqual(testFourThree.y, testAgainstFourThree.y, accuracy: 0.01)
+    }
+    
+    // MARK: - All Tests
     static var allTests = [
         // Data
         ("testStackedBarMaxValue", testStackedBarMaxValue),
@@ -197,6 +275,7 @@ final class StackedBarChartTests: XCTestCase {
         // Labels
         ("testStackedBarGetYLabels", testStackedBarGetYLabels),
         // Touch
-        ("testStackedBarGetDataPoint", testStackedBarGetDataPoint),
+        ("testStackedBarGetDataPoint",     testStackedBarGetDataPoint),
+        ("testStackedBarGetPointLocation", testStackedBarGetPointLocation),
     ]
 }

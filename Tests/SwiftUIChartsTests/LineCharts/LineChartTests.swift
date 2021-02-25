@@ -3,6 +3,7 @@ import XCTest
 
 final class LineChartTests: XCTestCase {
     
+    // MARK: - Set Up
     let dataPoints = [
         LineChartDataPoint(value: 10),
         LineChartDataPoint(value: 50),
@@ -107,7 +108,31 @@ final class LineChartTests: XCTestCase {
         let testAgainstFour = chartData.dataSets.dataPoints
         XCTAssertEqual(testOutputFour[0], testAgainstFour[3])
     }
-
+    
+    func testLineGetPointLocation() {
+        let rect: CGRect  = CGRect(x: 0, y: 0, width: 100, height: 100)
+        let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints))
+        
+        // Data point 1
+        let touchLocationOne: CGPoint = CGPoint(x: 5, y: 25)
+        let testOne: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets,
+                                                          touchLocation: touchLocationOne,
+                                                          chartSize: rect)!
+        let testAgainstOne = CGPoint(x: 0, y: 100)
+        XCTAssertEqual(testOne.x, testAgainstOne.x)
+        XCTAssertEqual(testOne.y, testAgainstOne.y)
+        
+        // Data point 3
+        let touchLocationTwo: CGPoint = CGPoint(x: 66, y: 25)
+        let testTwo: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets,
+                                                          touchLocation: touchLocationTwo,
+                                                          chartSize: rect)!
+        let testAgainstTwo = CGPoint(x: 66.66, y: 57.14)
+        XCTAssertEqual(testTwo.x, testAgainstTwo.x, accuracy: 0.01)
+        XCTAssertEqual(testTwo.y, testAgainstTwo.y, accuracy: 0.01)
+    }
+    
+    // MARK: - All Tests
     static var allTests = [
         // Data
         ("testLineMaxValue", testLineMaxValue),
@@ -121,7 +146,7 @@ final class LineChartTests: XCTestCase {
         ("testLineGetYLabelsMinimumWithMax", testLineGetYLabelsMinimumWithMax),
         ("testLineGetYLabelsZero",           testLineGetYLabelsZero),
         // Touch
-        ("testLineGetDataPoint", testLineGetDataPoint),
+        ("testLineGetDataPoint",     testLineGetDataPoint),
+        ("testLineGetPointLocation", testLineGetPointLocation),
     ]
 }
-//5+(80-5)/3*3
