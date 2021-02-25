@@ -165,6 +165,7 @@ public final class LineChartData: CTLineChartDataProtocol {
 
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         self.markerSubView(dataSet: self.dataSets, touchLocation: touchLocation, chartSize: chartSize)
+            .accessibility(label: Text("Touch Box"))
     }
 
     public typealias Set       = LineDataSet
