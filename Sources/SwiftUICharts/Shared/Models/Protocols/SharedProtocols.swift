@@ -112,6 +112,7 @@ internal protocol TouchProtocol {
     /**
     Gets the location of the data point in the view.
     - Parameters:
+      - dataSet: Data set to work with.
       - touchLocation: Current location of the touch.
       - chartSize: The size of the chart view as the parent view.
     - Returns: Array of points with the location on screen of data points.
