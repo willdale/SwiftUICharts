@@ -185,7 +185,7 @@ public final class BarChartData: CTBarChartDataProtocol {
 // MARK: - Touch
 extension BarChartData: TouchProtocol {
    
-    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+    internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points      : [BarChartDataPoint] = []
         let xSection    : CGFloat   = chartSize.width / CGFloat(dataSets.dataPoints.count)
         let index       : Int       = Int((touchLocation.x) / xSection)
@@ -195,13 +195,13 @@ extension BarChartData: TouchProtocol {
         self.infoView.touchOverlayInfo = points
     }
 
-    public func getPointLocation(dataSet: BarDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
-        let xSection : CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count)
+    internal func getPointLocation(dataSet: BarDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+        let xSection : CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count)
         let ySection : CGFloat = chartSize.height / CGFloat(self.maxValue)
         let index    : Int     = Int((touchLocation.x) / xSection)
-        if index >= 0 && index < dataSets.dataPoints.count {
+        if index >= 0 && index < dataSet.dataPoints.count {
             return CGPoint(x: (CGFloat(index) * xSection) + (xSection / 2),
-                           y: (chartSize.size.height - CGFloat(dataSets.dataPoints[index].value) * ySection))
+                           y: (chartSize.size.height - CGFloat(dataSet.dataPoints[index].value) * ySection))
         }
         return nil
     }

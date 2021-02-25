@@ -85,7 +85,7 @@ public final class PieChartData: CTPieChartDataProtocol {
 
 // MARK: - Touch
 extension PieChartData: TouchProtocol {
-    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+    internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points : [PieChartDataPoint] = []
         let touchDegree = degree(from: touchLocation, in: chartSize)
                 

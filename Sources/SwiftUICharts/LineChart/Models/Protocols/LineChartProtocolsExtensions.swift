@@ -245,6 +245,7 @@ extension CTLineChartDataProtocol {
         
         let xSection : CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
         let ySection : CGFloat = chartSize.height / CGFloat(range)
+        
         let index    : Int     = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSet.dataPoints.count {
             return CGPoint(x: CGFloat(index) * xSection,
@@ -255,9 +256,10 @@ extension CTLineChartDataProtocol {
 
 }
 extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
-    @ViewBuilder public func markerSubView(dataSet         : LineDataSet,
-                                           touchLocation   : CGPoint,
-                                           chartSize       : CGRect
+    @ViewBuilder
+    public func markerSubView(dataSet         : LineDataSet,
+                              touchLocation   : CGPoint,
+                              chartSize       : CGRect
     ) -> some View {
         
         switch self.chartStyle.markerType {

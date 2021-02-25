@@ -232,7 +232,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
 // MARK: - Touch
 extension GroupedBarChartData: TouchProtocol {
     
-    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+    internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         
         var points : [MultiBarChartDataPoint] = []
         
@@ -258,7 +258,7 @@ extension GroupedBarChartData: TouchProtocol {
         self.infoView.touchOverlayInfo = points
     }
 
-    public func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+    internal func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
         
         // Divide the chart into equal sections.
         let superXSection   : CGFloat   = (chartSize.width / CGFloat(dataSet.dataSets.count))
@@ -285,10 +285,8 @@ extension GroupedBarChartData: TouchProtocol {
                 let spacing : CGFloat = ((groupSpacing / CGFloat(dataSets.dataSets.count)) * CGFloat(superIndex))
                 return CGPoint(x: element + section + spacing,
                                y: (chartSize.height - CGFloat(subDataSet.dataPoints[subIndex].value) * ySection))
-
             }
         }
-        
         return nil
     }
 }

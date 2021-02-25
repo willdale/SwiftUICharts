@@ -187,7 +187,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
 
 // MARK: - Touch
 extension MultiLineChartData: TouchProtocol {
-    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+    internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points : [LineChartDataPoint] = []
         for dataSet in dataSets.dataSets {
             let xSection    : CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
