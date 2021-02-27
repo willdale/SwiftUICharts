@@ -35,23 +35,23 @@ internal struct LegendView<T>: View where T: CTChartData {
                 case .line:
                     
                     line(legend)
-                        .accessibility(label: Text(accessibilityLegendLabel(legend: legend)))
-                        .accessibility(value: Text("\(legend.legend)"))
+                        .accessibilityLabel( Text(accessibilityLegendLabel(legend: legend)))
+                        .accessibilityValue(Text("\(legend.legend)"))
 
                 case .bar:
 
                     bar(legend)
                         .if(scaleLegendBar(legend: legend)) { $0.scaleEffect(1.2, anchor: .leading) }
-                        .accessibility(label: Text(accessibilityLegendLabel(legend: legend)))
-                        .accessibility(value: Text("\(legend.legend)"))
+                        .accessibilityLabel( Text(accessibilityLegendLabel(legend: legend)))
+                        .accessibilityValue(Text("\(legend.legend)"))
                 case .pie:
 
                     pie(legend)
                         .if(scaleLegendPie(legend: legend)) {
                             $0.scaleEffect(1.2, anchor: .leading)
                         }
-                        .accessibility(label: Text(accessibilityLegendLabel(legend: legend)))
-                        .accessibility(value: Text("\(legend.legend)"))
+                        .accessibilityLabel( Text(accessibilityLegendLabel(legend: legend)))
+                        .accessibilityValue(Text("\(legend.legend)"))
                 }
             }
         }.id(UUID())

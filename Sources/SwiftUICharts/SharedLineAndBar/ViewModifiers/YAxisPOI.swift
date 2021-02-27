@@ -119,8 +119,8 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                         $0.position(x: geo.size.width + 18,
                                     y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo.frame(in: .local)))
                     })
-                    .accessibility(label: Text("P O I Marker"))
-                    .accessibility(value: Text("\(markerName), \(markerValue, specifier: specifier)"))
+                    .accessibilityLabel( Text("P O I Marker"))
+                    .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
                 
             case .center(specifier: let specifier):
                 
@@ -136,8 +136,8 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                     .position(x: geo.size.width / 2,
                               y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo.frame(in: .local)))
                     .opacity(startAnimation ? 1 : 0)
-                    .accessibility(label: Text("P O I Marker"))
-                    .accessibility(value: Text("\(markerName), \(markerValue, specifier: specifier)"))
+                    .accessibilityLabel( Text("P O I Marker"))
+                    .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
             }
         }
     }

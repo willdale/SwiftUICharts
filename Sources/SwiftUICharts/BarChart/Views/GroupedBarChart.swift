@@ -64,7 +64,7 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                             {
                                 
                                 ColourBar(colour, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth, chartData.infoView.touchSpecifier)
-                                    .accessibility(label: Text("\(chartData.metadata.title)"))
+                                    .accessibilityLabel( Text("\(chartData.metadata.title)"))
                                 
                             } else if dataPoint.group.colourType == .gradientColour,
                                       let colours    = dataPoint.group.colours,
@@ -73,7 +73,7 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                             {
 
                                 GradientColoursBar(colours, startPoint, endPoint, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth, chartData.infoView.touchSpecifier)
-                                    .accessibility(label: Text("\(chartData.metadata.title)"))
+                                    .accessibilityLabel( Text("\(chartData.metadata.title)"))
 
                             } else if dataPoint.group.colourType == .gradientStops,
                                       let stops      = dataPoint.group.stops,
@@ -84,7 +84,7 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                                 let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
 
                                 GradientStopsBar(safeStops, startPoint, endPoint, dataPoint, chartData.maxValue, chartData.chartStyle,  chartData.barStyle.cornerRadius, chartData.barStyle.barWidth, chartData.infoView.touchSpecifier)
-                                    .accessibility(label: Text("\(chartData.metadata.title)"))
+                                    .accessibilityLabel( Text("\(chartData.metadata.title)"))
 
                             }
                         }

@@ -46,7 +46,7 @@ public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData 
                 DoughnutSegmentShape(id:         chartData.dataSets.dataPoints[data].id,
                                      startAngle: chartData.dataSets.dataPoints[data].startAngle,
                                      amount:     chartData.dataSets.dataPoints[data].amount)
-                    .stroke/*Border*/(chartData.dataSets.dataPoints[data].colour, lineWidth: chartData.chartStyle.strokeWidth)
+                    .stroke(chartData.dataSets.dataPoints[data].colour, lineWidth: chartData.chartStyle.strokeWidth)
                     .scaleEffect(startAnimation ? 1 : 0)
                     .opacity(startAnimation ? 1 : 0)
                     .animation(Animation.spring().delay(Double(data) * 0.06))
@@ -56,6 +56,8 @@ public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData 
                             .zIndex(1)
                             .shadow(color: Color.primary, radius: 10)
                     }
+                    .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                    .accessibilityValue(Text(String(format: chartData.infoView.touchSpecifier, chartData.dataSets.dataPoints[data].value) + "\(chartData.dataSets.dataPoints[data].pointDescription ?? "")"))
             }
         }
         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {

@@ -144,8 +144,8 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
-                                .accessibility(label: Text("XAxisLabel"))
-                                .accessibility(value: Text("\(data.xAxisLabel ?? "")"))
+                                .accessibilityLabel( Text("XAxisLabel"))
+                                .accessibilityValue(Text("\(data.xAxisLabel ?? "")"))
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
                         }
@@ -166,8 +166,8 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
                             .foregroundColor(self.chartStyle.xAxisLabelColour)
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
-                            .accessibility(label: Text("XAxisLabel"))
-                            .accessibility(value: Text("\(data)"))
+                            .accessibilityLabel( Text("XAxisLabel"))
+                            .accessibilityValue(Text("\(data)"))
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
                     }

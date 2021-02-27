@@ -56,6 +56,8 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
                             .zIndex(1)
                             .shadow(color: Color.primary, radius: 10)
                     }
+                    .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                    .accessibilityValue(Text(String(format: chartData.infoView.touchSpecifier, chartData.dataSets.dataPoints[data].value) + "\(chartData.dataSets.dataPoints[data].pointDescription ?? "")"))
             }
         }
         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {

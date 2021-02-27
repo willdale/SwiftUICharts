@@ -60,7 +60,7 @@ internal struct ColourBar<DP: CTBarDataPoint>: View {
                 self.startAnimation = false
             }
             
-            .accessibility(value: Text("\(data.value, specifier: specifier), \(data.pointDescription ?? "")"))
+            .accessibilityValue(Text("\(data.value, specifier: specifier), \(data.pointDescription ?? "")"))
     }
 }
 
@@ -123,7 +123,7 @@ internal struct GradientColoursBar<DP: CTBarDataPoint>: View {
             .animateOnDisappear(using: chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibility(value: Text("\(data.value, specifier: "%.f") \(data.pointDescription ?? "")"))
+            .accessibilityValue(Text("\(data.value, specifier: "%.f") \(data.pointDescription ?? "")"))
     }
 }
 
@@ -186,7 +186,7 @@ internal struct GradientStopsBar<DP: CTBarDataPoint>: View {
             .animateOnDisappear(using: chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibility(value: Text("\(data.value, specifier: "%.f") \(data.pointDescription ?? "")"))
+            .accessibilityValue(Text("\(data.value, specifier: "%.f") \(data.pointDescription ?? "")"))
     }
 }
 
@@ -307,7 +307,7 @@ internal struct StackElementSubView: View {
                         ColourPartBar(colour, getHeight(height    : geo.size.height,
                                                         dataSet   : dataSet,
                                                         dataPoint : dataPoint))
-                            .accessibility(value: Text("\(dataPoint.value, specifier: "%.f"), \(dataPoint.pointDescription ?? "")"))
+                            .accessibilityValue(Text("\(dataPoint.value, specifier: "%.f"), \(dataPoint.pointDescription ?? "")"))
                         
                     } else if dataPoint.group.colourType == .gradientColour,
                               let colours    = dataPoint.group.colours,
@@ -318,7 +318,7 @@ internal struct StackElementSubView: View {
                         GradientColoursPartBar(colours, startPoint, endPoint, getHeight(height: geo.size.height,
                                                                                         dataSet   : dataSet,
                                                                                         dataPoint : dataPoint))
-                            .accessibility(value: Text("\(dataPoint.value, specifier: "%.f") \(dataPoint.pointDescription ?? "")"))
+                            .accessibilityValue(Text("\(dataPoint.value, specifier: "%.f") \(dataPoint.pointDescription ?? "")"))
                         
                     } else if dataPoint.group.colourType == .gradientStops,
                               let stops      = dataPoint.group.stops,
@@ -331,7 +331,7 @@ internal struct StackElementSubView: View {
                         GradientStopsPartBar(safeStops, startPoint, endPoint, getHeight(height: geo.size.height,
                                                                                     dataSet   : dataSet,
                                                                                     dataPoint : dataPoint))
-                            .accessibility(value: Text("\(dataPoint.value, specifier: "%.f") \(dataPoint.pointDescription ?? "")"))
+                            .accessibilityValue(Text("\(dataPoint.value, specifier: "%.f") \(dataPoint.pointDescription ?? "")"))
                     }
                     
                 }

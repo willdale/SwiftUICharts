@@ -48,6 +48,8 @@ public struct MultiLayerPieChart<ChartData>: View where ChartData: MultiLayerPie
                                 startAngle: data.startAngle,
                                 amount:     data.amount)
                     .fill(data.colour)
+                    .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                    .accessibilityValue(Text(String(format: chartData.infoView.touchSpecifier, data.value) + "\(data.pointDescription ?? "")"))
                 
                 if let points = data.layerDataPoints {
                     ForEach(points, id: \.self) { point in
@@ -55,8 +57,8 @@ public struct MultiLayerPieChart<ChartData>: View where ChartData: MultiLayerPie
                                              startAngle: point.startAngle,
                                              amount:     point.amount)
                             .strokeBorder(point.colour, lineWidth: 120)
-                        
-                        
+                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                            .accessibilityValue(Text(String(format: chartData.infoView.touchSpecifier, point.value) + "\(point.pointDescription ?? "")"))
                         
                         if let pointsTwo = point.layerDataPoints {
                             ForEach(pointsTwo, id: \.self) { pointTwo in
@@ -64,7 +66,8 @@ public struct MultiLayerPieChart<ChartData>: View where ChartData: MultiLayerPie
                                                      startAngle: pointTwo.startAngle,
                                                      amount:     pointTwo.amount)
                                     .strokeBorder(pointTwo.colour, lineWidth: 80)
-                                
+                                    .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                                    .accessibilityValue(Text(String(format: chartData.infoView.touchSpecifier, pointTwo.value) + "\(pointTwo.pointDescription ?? "")"))
                                 
                                 if let pointsThree = pointTwo.layerDataPoints {
                                     ForEach(pointsThree, id: \.self) { pointThree in
@@ -72,6 +75,8 @@ public struct MultiLayerPieChart<ChartData>: View where ChartData: MultiLayerPie
                                                              startAngle: pointThree.startAngle,
                                                              amount:     pointThree.amount)
                                             .strokeBorder(pointThree.colour, lineWidth: 40)
+                                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                                            .accessibilityValue(Text(String(format: chartData.infoView.touchSpecifier, pointThree.value) + "\(pointThree.pointDescription ?? "")"))
                                     }
                                 }
                             }

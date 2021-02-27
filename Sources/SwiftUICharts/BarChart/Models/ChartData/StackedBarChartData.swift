@@ -135,8 +135,8 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
                         .foregroundColor(self.chartStyle.xAxisLabelColour)
                         .lineLimit(1)
                         .minimumScaleFactor(0.5)
-                        .accessibility(label: Text("X Axis Label"))
-                        .accessibility(value: Text("\(group.title)"))
+                        .accessibilityLabel( Text("X Axis Label"))
+                        .accessibilityValue(Text("\(group.title)"))
                     
                     Spacer()
                         .frame(minWidth: 0, maxWidth: 500)
@@ -153,8 +153,8 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
                             .foregroundColor(self.chartStyle.xAxisLabelColour)
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
-                            .accessibility(label: Text("X Axis Label"))
-                            .accessibility(value: Text("\(data)"))
+                            .accessibilityLabel( Text("X Axis Label"))
+                            .accessibilityValue(Text("\(data)"))
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
                     }
