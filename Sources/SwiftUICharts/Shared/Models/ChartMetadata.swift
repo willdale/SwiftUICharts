@@ -44,3 +44,19 @@ public struct ChartMetadata {
         self.subtitleColour = subtitleColour
     }
 }
+struct Accessibility {
+    #if os(iOS)
+   static func read(this value: String) {
+        if UIAccessibility.isVoiceOverRunning {
+            UIAccessibility.post(notification: .announcement, argument: "\(value)")
+        }
+    }
+    
+    #else
+    
+    static func read(this value: String) {
+        
+    }
+    
+    #endif
+}

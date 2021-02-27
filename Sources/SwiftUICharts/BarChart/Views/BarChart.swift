@@ -54,12 +54,13 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
                         
                         BarChartDataSetSubView(chartData: chartData,
                                                dataPoint: dataPoint)
+                            .accessibility(label: Text("\(chartData.metadata.title)"))
                         
                     case .dataPoints:
                         
                         BarChartDataPointSubView(chartData: chartData,
                                                  dataPoint: dataPoint)
-                        
+                            .accessibility(label: Text("\(chartData.metadata.title)"))
                     }
                 }
             }

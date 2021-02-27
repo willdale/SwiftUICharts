@@ -82,6 +82,9 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
                             .frame(minWidth: 0, maxWidth: .infinity)
                         }
                         content
+//                            .onChange(of: chartData.infoView.accessibilityLabels) { (value) in
+//                                Accessibility.read(this: value)
+//                            }
                     }
                 }
             } else { content }

@@ -27,6 +27,9 @@ internal struct InfoBox<T>: ViewModifier where T: CTChartData {
                 EmptyView()
             }
             content
+//                .onChange(of: chartData.infoView.accessibilityLabels) { (value) in
+//                    Accessibility.read(this: value)
+//                }
         }
     }
     
@@ -46,35 +49,16 @@ internal struct InfoBox<T>: ViewModifier where T: CTChartData {
 
     
     var fixed: some View {
-        LazyHGrid(rows: [GridItem(.flexible())]) {
-            ForEach(chartData.infoView.touchOverlayInfo, id: \.self) { point in
-                HStack {
-                    Text("\(point.value, specifier: chartData.infoView.touchSpecifier)")
-                        .font(.subheadline)
-                        .foregroundColor(chartData.chartStyle.infoBoxValueColour)
-                    if let label = point.pointDescription {
-                        Text(label)
-                            .font(.subheadline)
-                            .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
-                    }
-                }
-            }
-        }.frame(height: 40)
+        
+        TouchOverlayBox(isTouchCurrent   : chartData.infoView.isTouchCurrent,
+                        selectedPoints   : chartData.infoView.touchOverlayInfo,
+                        specifier        : chartData.infoView.touchSpecifier,
+                        valueColour      : chartData.chartStyle.infoBoxValueColour,
+                        descriptionColour: chartData.chartStyle.infoBoxDescriptionColour,
+                        boxFrame         : $boxFrame)
+        .frame(height: 40)
         .padding(.horizontal, 6)
-        .background(
-            Group {
-                if chartData.infoView.isTouchCurrent {
-                    RoundedRectangle(cornerRadius: 5.0, style: .continuous)
-                        .fill(Color.systemsBackground)
-                        .overlay(
-                            Group {
-                                RoundedRectangle(cornerRadius: 5.0)
-                                    .stroke(Color.primary, lineWidth: 1)
-                            }
-                        )
-                }
-            }
-        )
+        
     }
     
     

@@ -49,6 +49,8 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                     .foregroundColor(chartData.chartStyle.yAxisLabelColour)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
+                    .accessibility(label: Text("Y Axis Label"))
+                    .accessibility(value: Text("\(labelsArray[i], specifier: specifier)"))
                 if i != 0 {
                     Spacer()
                         .frame(minHeight: 0, maxHeight: 500)

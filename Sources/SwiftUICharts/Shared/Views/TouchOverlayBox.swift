@@ -39,20 +39,14 @@ internal struct TouchOverlayBox<D: CTChartDataPoint>: View {
         self._boxFrame          = boxFrame
         self.ignoreZero         = ignoreZero
     }
-    
+        
     internal var body: some View {
         
         HStack {
             ForEach(selectedPoints, id: \.self) { point in
-                if ignoreZero && point.value != 0 {
-                    Text("\(point.value, specifier: specifier)")
-                        .font(.subheadline)
-                        .foregroundColor(valueColour)
-                } else if !ignoreZero {
-                    Text("\(point.value, specifier: specifier)")
-                        .font(.subheadline)
-                        .foregroundColor(valueColour)
-                }
+                Text("\(point.value, specifier: specifier)")
+                    .font(.subheadline)
+                    .foregroundColor(valueColour)
                 if let label = point.pointDescription {
                     Text(label)
                         .font(.subheadline)
@@ -60,6 +54,7 @@ internal struct TouchOverlayBox<D: CTChartDataPoint>: View {
                 }
             }
         }
+
         .padding(.all, 8)
         .background(
             GeometryReader { geo in

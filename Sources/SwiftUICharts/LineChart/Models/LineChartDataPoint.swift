@@ -27,6 +27,8 @@ public struct LineChartDataPoint: CTLineBarDataPoint {
     public var pointDescription : String?
     public var date             : Date?
     
+    var testlabel : String
+    
     /// Data model for a single data point with colour for use with a line chart.
     /// - Parameters:
     ///   - value: Value of the data point
@@ -36,11 +38,15 @@ public struct LineChartDataPoint: CTLineBarDataPoint {
     public init(value       : Double,
                 xAxisLabel  : String?   = nil,
                 pointLabel  : String?   = nil,
-                date        : Date?     = nil
+                date        : Date?     = nil,
+                
+                testlabel : String = ""
     ) {
         self.value            = value
         self.xAxisLabel       = xAxisLabel
         self.pointDescription = pointLabel
         self.date             = date
+        
+        self.testlabel = testlabel
     }
 }

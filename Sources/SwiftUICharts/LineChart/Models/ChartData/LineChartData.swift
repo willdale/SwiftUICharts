@@ -102,6 +102,8 @@ public final class LineChartData: CTLineChartDataProtocol {
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
+                                .accessibility(label: Text("X Axis Label"))
+                                .accessibility(value: Text("\(data.xAxisLabel ?? "")"))
                         }
                         if data != self.dataSets.dataPoints[self.dataSets.dataPoints.count - 1] {
                             Spacer()
@@ -120,6 +122,8 @@ public final class LineChartData: CTLineChartDataProtocol {
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
+                                .accessibility(label: Text("X Axis Label"))
+                                .accessibility(value: Text("\(data)"))
                             if data != labelArray[labelArray.count - 1] {
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)
@@ -165,7 +169,21 @@ public final class LineChartData: CTLineChartDataProtocol {
 
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         self.markerSubView(dataSet: self.dataSets, touchLocation: touchLocation, chartSize: chartSize)
-            .accessibility(label: Text("Touch Box"))
+    }
+    
+    // MARK: Accessibility
+    public func getAccessibility() -> some View {
+        ForEach(dataSets.dataPoints.indices, id: \.self) { point in
+
+            AccessibilityRectangle(dataPointCount : self.dataSets.dataPoints.count,
+                                   dataPointNo    : point)
+
+                .foregroundColor(Color(.gray).opacity(0.000000001))
+                .accessibility(label: Text("\(self.metadata.title)"))
+                .accessibility(value: Text(String(format: self.infoView.touchSpecifier,
+                                             self.dataSets.dataPoints[point].value) +
+                                ", \(self.dataSets.dataPoints[point].pointDescription ?? "")"))
+        }
     }
 
     public typealias Set       = LineDataSet

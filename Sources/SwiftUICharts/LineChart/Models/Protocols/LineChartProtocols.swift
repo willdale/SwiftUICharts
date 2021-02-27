@@ -18,6 +18,8 @@ public protocol CTLineChartDataProtocol: CTLineBarChartDataProtocol {
     /// A type representing opaque View
     associatedtype Points : View
     
+    associatedtype Access : View
+        
     /**
      Whether it is a normal or filled line.
      */
@@ -47,6 +49,8 @@ public protocol CTLineChartDataProtocol: CTLineBarChartDataProtocol {
     /// Displays Shapes over the data points.
     /// - Returns: Relevent view containing point markers based the chosen parameters.
     func getPointMarker() -> Points
+    
+    func getAccessibility() -> Access
 }
 
 

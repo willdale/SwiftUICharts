@@ -7,6 +7,28 @@
 
 import SwiftUI
 
+struct AccessibilityRectangle: Shape {
+    
+    let dataPointCount : Int
+    let dataPointNo    : Int
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        
+        let x = rect.width / CGFloat(dataPointCount-1)
+        let pointX : CGFloat = (CGFloat(dataPointNo) * x) - x / CGFloat(2)
+        
+        let point  : CGRect  = CGRect(x     : pointX,
+                                      y     : 0,
+                                      width :  x,
+                                      height:  rect.height)
+        
+        path.addRoundedRect(in: point, cornerSize: CGSize(width: 10, height: 10))
+        
+        return path
+    }
+}
+
 // MARK: - Single colour
 /**
  Sub view gets the line drawn, sets the colour and sets up the animations.
@@ -48,12 +70,12 @@ internal struct LineChartColourSubView<CD>: View where CD: CTLineChartDataProtoc
                   range     : range)
             .ifElse(isFilled, if: {
                 $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                  .fill(colour)
+                    .fill(colour)
             }, else: {
                 $0.trim(to: startAnimation ? 1 : 0)
                     .stroke(colour, style: dataSet.style.strokeStyle.strokeToStrokeStyle())
             })
-            .background(Color(.gray).opacity(0.01))
+            .background(Color(.gray).opacity(0.000000001))
             .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
             .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
@@ -65,6 +87,7 @@ internal struct LineChartColourSubView<CD>: View where CD: CTLineChartDataProtoc
     }
 }
 
+
 // MARK: - Gradient colour
 /**
  Sub view gets the line drawn, sets the colour and sets up the animations.
@@ -75,13 +98,13 @@ internal struct LineChartColoursSubView<CD>: View where CD: CTLineChartDataProto
     
     private let chartData   : CD
     private let dataSet     : LineDataSet
-
+    
     private let minValue    : Double
     private let range       : Double
     private let colours     : [Color]
     private let startPoint  : UnitPoint
     private let endPoint    : UnitPoint
-
+    
     private let isFilled    : Bool
     
     internal init(chartData : CD,
@@ -107,36 +130,41 @@ internal struct LineChartColoursSubView<CD>: View where CD: CTLineChartDataProto
     
     internal var body: some View {
         
-        LineShape(dataPoints: dataSet.dataPoints,
-                  lineType: dataSet.style.lineType,
-                  isFilled: isFilled,
-                  minValue: minValue,
-                  range: range)
-            .ifElse(isFilled, if: {
-                $0
-                    .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                    .fill(LinearGradient(gradient: Gradient(colors: colours),
-                                         startPoint: startPoint,
-                                         endPoint: endPoint))
-            }, else: {
-                $0
-                    .trim(to: startAnimation ? 1 : 0)
-                    .stroke(LinearGradient(gradient: Gradient(colors: colours),
-                                           startPoint: startPoint,
-                                           endPoint: endPoint),
-                            style: dataSet.style.strokeStyle.strokeToStrokeStyle())
-            })
+        ZStack {
             
+            chartData.getAccessibility()
             
-            .background(Color(.gray).opacity(0.01))
-            .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
-            .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = true
-            }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = false
-            }
+            LineShape(dataPoints: dataSet.dataPoints,
+                      lineType: dataSet.style.lineType,
+                      isFilled: isFilled,
+                      minValue: minValue,
+                      range: range)
+                .ifElse(isFilled, if: {
+                    $0
+                        .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                        .fill(LinearGradient(gradient: Gradient(colors: colours),
+                                             startPoint: startPoint,
+                                             endPoint: endPoint))
+                }, else: {
+                    $0
+                        .trim(to: startAnimation ? 1 : 0)
+                        .stroke(LinearGradient(gradient: Gradient(colors: colours),
+                                               startPoint: startPoint,
+                                               endPoint: endPoint),
+                                style: dataSet.style.strokeStyle.strokeToStrokeStyle())
+                })
+                
+                
+                .background(Color(.gray).opacity(0.000000001))
+                .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
+                .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }
+                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = true
+                }
+                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = false
+                }
+        }
     }
 }
 
@@ -182,36 +210,41 @@ internal struct LineChartStopsSubView<CD>: View where CD: CTLineChartDataProtoco
     
     internal var body: some View {
         
-        LineShape(dataPoints: dataSet.dataPoints,
-                  lineType: dataSet.style.lineType,
-                  isFilled: isFilled,
-                  minValue: minValue,
-                  range: range)
+        ZStack {
             
-            .ifElse(isFilled, if: {
-                $0
-                    .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                    .fill(LinearGradient(gradient: Gradient(stops: stops),
-                                           startPoint: startPoint,
-                                           endPoint: endPoint))
-            }, else: {
-                $0
-                    .trim(to: startAnimation ? 1 : 0)
-                    .stroke(LinearGradient(gradient: Gradient(stops: stops),
-                                           startPoint: startPoint,
-                                           endPoint: endPoint),
-                            style: dataSet.style.strokeStyle.strokeToStrokeStyle())
-            })
-
-            .background(Color(.gray).opacity(0.01))
-            .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
-            .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = true
-            }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = false
-            }
+            chartData.getAccessibility()
+            
+            LineShape(dataPoints: dataSet.dataPoints,
+                      lineType: dataSet.style.lineType,
+                      isFilled: isFilled,
+                      minValue: minValue,
+                      range: range)
+                
+                .ifElse(isFilled, if: {
+                    $0
+                        .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                        .fill(LinearGradient(gradient: Gradient(stops: stops),
+                                             startPoint: startPoint,
+                                             endPoint: endPoint))
+                }, else: {
+                    $0
+                        .trim(to: startAnimation ? 1 : 0)
+                        .stroke(LinearGradient(gradient: Gradient(stops: stops),
+                                               startPoint: startPoint,
+                                               endPoint: endPoint),
+                                style: dataSet.style.strokeStyle.strokeToStrokeStyle())
+                })
+                
+                .background(Color(.gray).opacity(0.000000001))
+                .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
+                .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }
+                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = true
+                }
+                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = false
+                }
+        }
     }
 }
 
