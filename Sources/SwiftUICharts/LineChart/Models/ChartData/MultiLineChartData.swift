@@ -153,15 +153,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
                           isFilled  : self.isFilled)
         }
     }
-    
-    // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent   = true
-        self.infoView.touchLocation    = touchLocation
-        self.infoView.chartSize        = chartSize
-        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
-    }
-    
+
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
        ZStack {
             ForEach(self.dataSets.dataSets, id: \.self) { dataSet in
@@ -199,7 +191,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
 // MARK: - Touch
 extension MultiLineChartData: TouchProtocol {
     
-    internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points : [LineChartDataPoint] = []
         for dataSet in dataSets.dataSets {
             let xSection    : CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)

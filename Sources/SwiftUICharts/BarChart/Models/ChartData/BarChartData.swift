@@ -131,13 +131,7 @@ public final class BarChartData: CTBarChartDataProtocol {
         }
     }
 
-    // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent   = true
-        self.infoView.touchLocation    = touchLocation
-        self.infoView.chartSize        = chartSize
-        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
-    }
+
     
     @ViewBuilder
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
@@ -181,7 +175,7 @@ public final class BarChartData: CTBarChartDataProtocol {
 // MARK: - Touch
 extension BarChartData: TouchProtocol {
    
-    internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points      : [BarChartDataPoint] = []
         let xSection    : CGFloat   = chartSize.width / CGFloat(dataSets.dataPoints.count)
         let index       : Int       = Int((touchLocation.x) / xSection)
@@ -191,7 +185,7 @@ extension BarChartData: TouchProtocol {
         self.infoView.touchOverlayInfo = points
     }
 
-    internal func getPointLocation(dataSet: BarDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+    public func getPointLocation(dataSet: BarDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
         let xSection : CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count)
         let ySection : CGFloat = chartSize.height / CGFloat(self.maxValue)
         let index    : Int     = Int((touchLocation.x) / xSection)

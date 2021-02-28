@@ -5,7 +5,7 @@
 //  Created by Will Dale on 13/02/2021.
 //
 
-import Foundation
+import SwiftUI
 
 extension CTChartData where Set: CTSingleDataSetProtocol {
     public func isGreaterThanTwo() -> Bool {
@@ -20,5 +20,14 @@ extension CTChartData where Set: CTMultiDataSetProtocol {
             returnValue = dataSet.dataPoints.count > 2
         }
         return returnValue
+    }
+}
+// MARK: Touch
+extension CTChartData where Self: TouchProtocol {
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+        self.infoView.isTouchCurrent   = true
+        self.infoView.touchLocation    = touchLocation
+        self.infoView.chartSize        = chartSize
+        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
     }
 }

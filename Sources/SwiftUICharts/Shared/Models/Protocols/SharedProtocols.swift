@@ -79,9 +79,21 @@ public protocol CTChartData: ObservableObject, Identifiable {
     func isGreaterThanTwo() -> Bool
 
     // MARK: Touch
+    /**
+     Takes in the required data to set up all the touch interactions.
+     
+     Output via `getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> Touch`
+     
+     - Parameters:
+       - touchLocation: Current location of the touch
+       - chartSize: The size of the chart view as the parent view.
+     */
     func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect)
+    
     /**
      Takes touch location and return a view based on the chart type and configuration.
+     
+     Inputs from `setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect)`
      
      - Parameters:
        - touchLocation: Current location of the touch
@@ -95,7 +107,7 @@ public protocol CTChartData: ObservableObject, Identifiable {
 
 
 // MARK: - Touch Protocol
-internal protocol TouchProtocol {
+public protocol TouchProtocol {
     
     /// A type representing a  data set. -- `CTDataSetProtocol`
     associatedtype SetPoint : CTDataSetProtocol

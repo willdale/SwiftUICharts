@@ -144,16 +144,6 @@ public final class LineChartData: CTLineChartDataProtocol {
                       animation : self.chartStyle.globalAnimation,
                       isFilled  : self.isFilled)
     }
-    
-    // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent   = true
-        self.infoView.touchLocation    = touchLocation
-        self.infoView.chartSize        = chartSize
-        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
-    }
-    
-    
 
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         self.markerSubView(dataSet: self.dataSets, touchLocation: touchLocation, chartSize: chartSize)

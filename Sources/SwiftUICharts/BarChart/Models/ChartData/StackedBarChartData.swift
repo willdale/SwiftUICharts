@@ -162,14 +162,6 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
             }
         }
     }
-    
-    // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent   = true
-        self.infoView.touchLocation    = touchLocation
-        self.infoView.chartSize        = chartSize
-        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
-    }
 
     @ViewBuilder
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
@@ -213,7 +205,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
 // MARK: - Touch
 extension StackedBarChartData: TouchProtocol {
    
-    internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
 
         var points : [MultiBarChartDataPoint] = []
         
@@ -259,7 +251,7 @@ extension StackedBarChartData: TouchProtocol {
         self.infoView.touchOverlayInfo = points
     }
 
-    internal func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+    public func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
         // Filter to get the right dataset based on the x axis.
         let superXSection : CGFloat = chartSize.width / CGFloat(dataSet.dataSets.count)
         let superIndex    : Int     = Int((touchLocation.x) / superXSection)
