@@ -10,11 +10,11 @@ import Foundation
 /// Data model for the chart's metadata
 public struct ChartMetadata {
     /// The charts Title
-    var title       : String?
+    public var title       : String?
     /// The charts subtitle
-    var subtitle    : String?
+    public var subtitle    : String?
     /// The title for the legend
-    var lineLegend  : String?
+    public var lineLegend  : String?
     
     /// Model to hold the metadata for the chart.
     /// - Parameters:
