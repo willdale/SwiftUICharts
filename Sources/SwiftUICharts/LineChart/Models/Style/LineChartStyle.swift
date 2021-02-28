@@ -48,6 +48,8 @@ public struct LineChartStyle: CTLineChartStyle {
     public var yAxisNumberOfLabels  : Int
     
     public var baseline             : Baseline
+    public var topLine              : Topline
+    
     public var globalAnimation      : Animation
     
     /// Model for controlling the overall aesthetic of the chart.
@@ -69,6 +71,8 @@ public struct LineChartStyle: CTLineChartStyle {
     ///   - yAxisNumberOfLabel: Number Of Labels on Y Axis.
     ///
     ///   - baseline: Whether the chart is drawn from baseline of zero or the minimum datapoint value.
+    ///   - topLine: Where to finish drawing the chart from. Data set maximum or custom.
+    ///
     ///   - globalAnimation: Global control of animations.
     public init(infoBoxPlacement        : InfoBoxPlacement  = .floating,
                 infoBoxValueColour      : Color             = Color.primary,
@@ -87,6 +91,8 @@ public struct LineChartStyle: CTLineChartStyle {
                 yAxisNumberOfLabels : Int                   = 10,
 
                 baseline            : Baseline              = .minimumValue,
+                topLine             : Topline               = .maximumValue,
+                
                 globalAnimation     : Animation             = Animation.linear(duration: 1)
     ) {
         self.infoBoxPlacement         = infoBoxPlacement
@@ -106,6 +112,8 @@ public struct LineChartStyle: CTLineChartStyle {
         self.yAxisLabelColour    = yAxisLabelColour
         
         self.baseline            = baseline
+        self.topLine             = topLine
+        
         self.globalAnimation     = globalAnimation
     }
 }

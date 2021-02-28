@@ -43,6 +43,9 @@ public struct BarChartStyle: CTBarChartStyle {
     public var yAxisLabelColour     : Color
     public var yAxisNumberOfLabels  : Int
     
+    public var baseline             : Baseline
+    public var topLine              : Topline
+    
     public var globalAnimation      : Animation
     
     /// Model for controlling the overall aesthetic of the Bar Chart.
@@ -64,12 +67,15 @@ public struct BarChartStyle: CTBarChartStyle {
     ///   - yAxisNumberOfLabel: Number Of Labels on Y Axis.
     ///   - yAxisLabelColour: Text Colour for the labels on the Y axis.
     ///
+    ///   - baseline: Whether the chart is drawn from baseline of zero or the minimum datapoint value.
+    ///   - topLine: Where to finish drawing the chart from. Data set maximum or custom.
+    ///
     ///   - globalAnimation: Global control of animations.
     public init(infoBoxPlacement        : InfoBoxPlacement  = .floating,
                 infoBoxValueColour      : Color             = Color.primary,
                 infoBoxDescriptionColour: Color             = Color.primary,
                 
-                markerType              : BarMarkerType     = .full,
+                markerType          : BarMarkerType         = .full,
                 
                 xAxisGridStyle      : GridStyle             = GridStyle(),
                 xAxisLabelPosition  : XAxisLabelPosistion   = .bottom,
@@ -81,13 +87,16 @@ public struct BarChartStyle: CTBarChartStyle {
                 yAxisLabelColour    : Color                 = Color.primary,
                 yAxisNumberOfLabels : Int                   = 10,
                 
+                baseline            : Baseline              = .minimumValue,
+                topLine             : Topline               = .maximumValue,
+                
                 globalAnimation     : Animation             = Animation.linear(duration: 1)
     ) {
         self.infoBoxPlacement         = infoBoxPlacement
         self.infoBoxValueColour       = infoBoxValueColour
         self.infoBoxDescriptionColour = infoBoxDescriptionColour
         
-        self.markerType              = markerType
+        self.markerType          = markerType
         
         self.xAxisGridStyle      = xAxisGridStyle
         self.xAxisLabelPosition  = xAxisLabelPosition
@@ -98,6 +107,9 @@ public struct BarChartStyle: CTBarChartStyle {
         self.yAxisLabelPosition  = yAxisLabelPosition
         self.yAxisNumberOfLabels = yAxisNumberOfLabels
         self.yAxisLabelColour    = yAxisLabelColour
+        
+        self.baseline            = baseline
+        self.topLine             = topLine
         
         self.globalAnimation     = globalAnimation
     }

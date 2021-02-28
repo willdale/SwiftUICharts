@@ -128,6 +128,16 @@ public protocol CTLineBarChartStyle: CTChartStyle {
      */
     var yAxisNumberOfLabels: Int { get set }
     
+    /**
+     Where to start drawing the line chart from. Zero, data set minium or custom.
+     */
+    var baseline: Baseline { get set }
+    
+    /**
+     Where to finish drawing the chart from. Data set maximum or custom.
+     */
+    var topLine : Topline { get set }
+    
 }
 
 // MARK: - DataPoints

@@ -58,12 +58,7 @@ public protocol CTLineChartDataProtocol: CTLineBarChartDataProtocol {
 /**
  A protocol to extend functionality of `CTLineBarChartStyle` specifically for  Line Charts.
  */
-public protocol CTLineChartStyle : CTLineBarChartStyle {
-    /**
-     Where to start drawing the line chart from. Zero or data set minium.
-     */
-    var baseline: Baseline { get set }
-}
+public protocol CTLineChartStyle : CTLineBarChartStyle {}
 
 
 
