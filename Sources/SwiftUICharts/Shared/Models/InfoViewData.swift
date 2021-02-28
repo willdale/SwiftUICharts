@@ -30,16 +30,6 @@ public struct InfoViewData<DP: CTChartDataPoint> {
      */
     var touchOverlayInfo    : [DP] = []
     
-//    var accessibilityLabels : String {
-//        get {
-//            var _returnData = ""
-//            for info in touchOverlayInfo {
-//                _returnData += String(format: touchSpecifier, info.value) + "\(info.pointDescription ?? ""),"
-//            }
-//            return _returnData
-//        }
-//    }
-    
     /**
      Set specifier of data point readout.
      

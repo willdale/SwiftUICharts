@@ -59,7 +59,6 @@ internal struct ColourBar<DP: CTBarDataPoint>: View {
             .animateOnDisappear(using: chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            
             .accessibilityValue(Text("\(data.value, specifier: specifier), \(data.pointDescription ?? "")"))
     }
 }
@@ -123,7 +122,7 @@ internal struct GradientColoursBar<DP: CTBarDataPoint>: View {
             .animateOnDisappear(using: chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(Text("\(data.value, specifier: "%.f") \(data.pointDescription ?? "")"))
+            .accessibilityValue(Text("\(data.value, specifier: specifier) \(data.pointDescription ?? "")"))
     }
 }
 
@@ -186,7 +185,7 @@ internal struct GradientStopsBar<DP: CTBarDataPoint>: View {
             .animateOnDisappear(using: chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(Text("\(data.value, specifier: "%.f") \(data.pointDescription ?? "")"))
+            .accessibilityValue(Text("\(data.value, specifier: specifier) \(data.pointDescription ?? "")"))
     }
 }
 
