@@ -135,18 +135,6 @@ public final class LineChartData: CTLineChartDataProtocol {
             }
         }
     }
-    
-    public func getYLabels() -> [Double] {
-        var labels      : [Double]  = [Double]()
-        let dataRange   : Double = self.range
-        let minValue    : Double = self.minValue
-        let range       : Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
-        labels.append(minValue)
-        for index in 1...self.chartStyle.yAxisNumberOfLabels {
-            labels.append(minValue + range * Double(index))
-        }
-        return labels
-    }
 
     // MARK: Points
     public func getPointMarker() -> some View {
