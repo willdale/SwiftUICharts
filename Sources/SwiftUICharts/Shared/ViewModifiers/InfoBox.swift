@@ -27,9 +27,6 @@ internal struct InfoBox<T>: ViewModifier where T: CTChartData {
                 EmptyView()
             }
             content
-//                .onChange(of: chartData.infoView.accessibilityLabels) { (value) in
-//                    Accessibility.read(this: value)
-//                }
         }
     }
     
@@ -37,6 +34,7 @@ internal struct InfoBox<T>: ViewModifier where T: CTChartData {
         TouchOverlayBox(isTouchCurrent   : chartData.infoView.isTouchCurrent,
                         selectedPoints   : chartData.infoView.touchOverlayInfo,
                         specifier        : chartData.infoView.touchSpecifier,
+                        unit             : chartData.infoView.touchUnit,
                         valueColour      : chartData.chartStyle.infoBoxValueColour,
                         descriptionColour: chartData.chartStyle.infoBoxDescriptionColour,
                         boxFrame         : $boxFrame)
@@ -53,6 +51,7 @@ internal struct InfoBox<T>: ViewModifier where T: CTChartData {
         TouchOverlayBox(isTouchCurrent   : chartData.infoView.isTouchCurrent,
                         selectedPoints   : chartData.infoView.touchOverlayInfo,
                         specifier        : chartData.infoView.touchSpecifier,
+                        unit             : chartData.infoView.touchUnit,
                         valueColour      : chartData.chartStyle.infoBoxValueColour,
                         descriptionColour: chartData.chartStyle.infoBoxDescriptionColour,
                         boxFrame         : $boxFrame)

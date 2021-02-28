@@ -72,3 +72,21 @@ public enum InfoBoxPlacement {
     /// Fix in the Header box. Must have .headerBox().
     case header
 }
+
+/**
+ Option to display units before or after values.
+ 
+ ```
+ case none // No unit
+ case prefix(of: String) // Before value
+ case suffix(of: String) // After value
+ ```
+ */
+public enum Unit {
+    /// No units
+    case none
+    /// Before value
+    case prefix(of: String)
+    /// After value
+    case suffix(of: String)
+}

@@ -15,6 +15,7 @@ internal struct TouchOverlayBox<D: CTChartDataPoint>: View {
     private var isTouchCurrent      : Bool
     private var selectedPoints      : [D]
     private var specifier           : String
+    private var unit                : Unit
     
     private var valueColour         : Color
     private var descriptionColour   : Color
@@ -26,6 +27,7 @@ internal struct TouchOverlayBox<D: CTChartDataPoint>: View {
     internal init(isTouchCurrent    : Bool,
                   selectedPoints    : [D],
                   specifier         : String   = "%.0f",
+                  unit              : Unit,
                   valueColour       : Color,
                   descriptionColour : Color,
                   boxFrame          : Binding<CGRect>,
@@ -34,6 +36,7 @@ internal struct TouchOverlayBox<D: CTChartDataPoint>: View {
         self.isTouchCurrent     = isTouchCurrent
         self.selectedPoints     = selectedPoints
         self.specifier          = specifier
+        self.unit               = unit
         self.valueColour        = valueColour
         self.descriptionColour  = descriptionColour
         self._boxFrame          = boxFrame
@@ -44,14 +47,39 @@ internal struct TouchOverlayBox<D: CTChartDataPoint>: View {
         
         HStack {
             ForEach(selectedPoints, id: \.self) { point in
-                Text("\(point.value, specifier: specifier)")
-                    .font(.subheadline)
-                    .foregroundColor(valueColour)
-                if let label = point.pointDescription {
-                    Text(label)
+                
+                switch unit {
+                case .none:
+                    Text("\(point.value, specifier: specifier)")
                         .font(.subheadline)
-                        .foregroundColor(descriptionColour)
+                        .foregroundColor(valueColour)
+                    if let label = point.pointDescription {
+                        Text(label)
+                            .font(.subheadline)
+                            .foregroundColor(descriptionColour)
+                    }
+                case .prefix(of: let unit):
+                    Text("\(unit) \(point.value, specifier: specifier)")
+                        .font(.subheadline)
+                        .foregroundColor(valueColour)
+                    if let label = point.pointDescription {
+                        Text(label)
+                            .font(.subheadline)
+                            .foregroundColor(descriptionColour)
+                    }
+                case .suffix(of: let unit):
+                    Text("\(point.value, specifier: specifier) \(unit)")
+                        .font(.subheadline)
+                        .foregroundColor(valueColour)
+                    if let label = point.pointDescription {
+                        Text(label)
+                            .font(.subheadline)
+                            .foregroundColor(descriptionColour)
+                    }
                 }
+                
+                
+                
             }
         }
 

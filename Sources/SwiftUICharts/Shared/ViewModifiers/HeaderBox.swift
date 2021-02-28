@@ -34,12 +34,30 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
         VStack(alignment: .trailing) {
             if chartData.infoView.isTouchCurrent {
                 ForEach(chartData.infoView.touchOverlayInfo, id: \.self) { info in
-                    Text("\(info.value, specifier: chartData.infoView.touchSpecifier)")
-                        .font(.title3)
-                        .foregroundColor(chartData.chartStyle.infoBoxValueColour)
-                    Text("\(info.pointDescription ?? "")")
-                        .font(.subheadline)
-                        .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                    switch chartData.infoView.touchUnit {
+                    case .none:
+                        Text("\(info.value, specifier: chartData.infoView.touchSpecifier)")
+                            .font(.title3)
+                            .foregroundColor(chartData.chartStyle.infoBoxValueColour)
+                        Text("\(info.pointDescription ?? "")")
+                            .font(.subheadline)
+                            .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                    case .prefix(of: let unit):
+                        Text("\(unit) \(info.value, specifier: chartData.infoView.touchSpecifier)")
+                            .font(.title3)
+                            .foregroundColor(chartData.chartStyle.infoBoxValueColour)
+                        Text("\(info.pointDescription ?? "")")
+                            .font(.subheadline)
+                            .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                    case .suffix(of: let unit):
+                        Text("\(info.value, specifier: chartData.infoView.touchSpecifier) \(unit)")
+                            .font(.title3)
+                            .foregroundColor(chartData.chartStyle.infoBoxValueColour)
+                        Text("\(info.pointDescription ?? "")")
+                            .font(.subheadline)
+                            .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                    }
+                    
                 }
             } else {
                 Text("")
@@ -82,9 +100,6 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
                             .frame(minWidth: 0, maxWidth: .infinity)
                         }
                         content
-//                            .onChange(of: chartData.infoView.accessibilityLabels) { (value) in
-//                                Accessibility.read(this: value)
-//                            }
                     }
                 }
             } else { content }

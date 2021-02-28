@@ -19,7 +19,7 @@ public struct InfoViewData<DP: CTChartDataPoint> {
     
     Used by `HeaderBox` and `InfoBox`.
      */
-    var isTouchCurrent      : Bool = false
+    var isTouchCurrent: Bool = false
     
     /**
      Closest data points to input.
@@ -28,7 +28,7 @@ public struct InfoViewData<DP: CTChartDataPoint> {
      
      Used by `HeaderBox` and `InfoBox`.
      */
-    var touchOverlayInfo    : [DP] = []
+    var touchOverlayInfo: [DP] = []
     
     /**
      Set specifier of data point readout.
@@ -37,7 +37,7 @@ public struct InfoViewData<DP: CTChartDataPoint> {
      
      Used by `HeaderBox` and `InfoBox`.
      */
-    var touchSpecifier      : String = "%.0f"
+    var touchSpecifier: String = "%.0f"
 
     /**
      X axis posistion of the overlay box.
@@ -48,7 +48,7 @@ public struct InfoViewData<DP: CTChartDataPoint> {
      
      Used by `HeaderBox` and `InfoBox`.
      */
-    var touchLocation           : CGPoint = .zero
+    var touchLocation: CGPoint = .zero
     
     /**
      Size of the chart.
@@ -59,7 +59,7 @@ public struct InfoViewData<DP: CTChartDataPoint> {
      
      Used by `HeaderBox` and `InfoBox`.
      */
-    var chartSize               : CGRect  = .zero
+    var chartSize: CGRect  = .zero
     
     /**
      Current width of the `YAxisLabels`
@@ -67,5 +67,10 @@ public struct InfoViewData<DP: CTChartDataPoint> {
      Needed line up the touch overlay to compensate for
      the loss of width.
      */
-    var yAxisLabelWidth     : CGFloat = 0
+    var yAxisLabelWidth: CGFloat = 0
+    
+    /**
+     Option to display units before or after values.
+     */
+    var touchUnit: Unit = .none
 }

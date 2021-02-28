@@ -15,11 +15,13 @@ internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
 
     @ObservedObject var chartData: T
         
-    internal init(chartData         : T,
-                  specifier         : String
+    internal init(chartData : T,
+                  specifier : String,
+                  unit      : Unit
     ) {
         self.chartData = chartData
         self.chartData.infoView.touchSpecifier = specifier
+        self.chartData.infoView.touchUnit = unit
     }
     
     internal func body(content: Content) -> some View {
@@ -31,10 +33,8 @@ internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
                             .gesture(
                                 DragGesture(minimumDistance: 0)
                                     .onChanged { (value) in
-                                        
                                         chartData.setTouchInteraction(touchLocation: value.location,
                                                                       chartSize: geo.frame(in: .local))
-
                                     }
                                     .onEnded { _ in
                                         chartData.infoView.isTouchCurrent   = false
@@ -76,10 +76,12 @@ extension View {
      - Returns: A  new view containing the chart with a touch overlay.
      */
     public func touchOverlay<T: CTChartData>(chartData: T,
-                                           specifier: String = "%.0f"
+                                             specifier: String = "%.0f",
+                                             unit     : Unit = .none
     ) -> some View {
         self.modifier(TouchOverlay(chartData: chartData,
-                                   specifier: specifier))
+                                   specifier: specifier,
+                                   unit     : unit))
     }
     #elseif os(tvOS)
     /**
@@ -89,7 +91,8 @@ extension View {
      Unavailable in tvOS
      */
     public func touchOverlay<T: CTChartData>(chartData: T,
-                                           specifier: String = "%.0f"
+                                             specifier: String = "%.0f",
+                                             unit     : Unit
     ) -> some View {
         self.modifier(EmptyModifier())
     }
