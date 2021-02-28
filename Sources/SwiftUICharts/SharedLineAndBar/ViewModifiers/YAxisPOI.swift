@@ -103,46 +103,33 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                 
             case .yAxis(specifier: let specifier):
                 
-                Text("\(markerValue, specifier: specifier)")
-                    .font(.caption)
-                    .foregroundColor(labelColour)
-                    .padding(4)
-                    .background(Color.blue)
-                    .clipShape(LabelShape())
-                    .overlay(LabelShape()
-                                .stroke(lineColour)
-                    )
-                    .ifElse(self.chartData.chartStyle.yAxisLabelPosition == .leading, if: {
-                        $0.position(x: -18,
-                                    y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo.frame(in: .local)))
-                    }, else: {
-                        $0.position(x: geo.size.width + 18,
-                                    y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo.frame(in: .local)))
-                    })
+                ValueLabelYAxisSubView(chartData      : chartData,
+                                       markerValue    : markerValue,
+                                       specifier      : specifier,
+                                       labelColour    : labelColour,
+                                       labelBackground: labelBackground,
+                                       lineColour     : lineColour,
+                                       chartSize      : geo.frame(in: .local))
                     .accessibilityLabel( Text("P O I Marker"))
                     .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
                 
             case .center(specifier: let specifier):
                 
-                Text("\(markerValue, specifier: specifier)")
-                    .font(.caption)
-                    .foregroundColor(labelColour)
-                    .padding()
-                    .background(labelBackground)
-                    .clipShape(DiamondShape())
-                    .overlay(DiamondShape()
-                                .stroke(lineColour, style: strokeStyle)
-                    )
-                    .position(x: geo.size.width / 2,
-                              y: getYPoint(chartType: chartData.chartType.chartType, chartSize: geo.frame(in: .local)))
-                    .opacity(startAnimation ? 1 : 0)
-                    .accessibilityLabel( Text("P O I Marker"))
+                ValueLabelCenterSubView(chartData       : chartData,
+                                        markerValue     : markerValue,
+                                        specifier       : specifier,
+                                        labelColour     : labelColour,
+                                        labelBackground : labelBackground,
+                                        lineColour      : lineColour,
+                                        strokeStyle     : strokeStyle,
+                                        chartSize       : geo.frame(in: .local))
+                    .accessibilityLabel(Text("P O I Marker"))
                     .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
             }
         }
     }
     
-    func getYPoint(chartType: ChartType, chartSize: CGRect) -> CGFloat {
+   private func getYPoint(chartType: ChartType, chartSize: CGRect) -> CGFloat {
         switch chartData.chartType.chartType {
         case .line:
             let y = chartSize.height / CGFloat(range)
