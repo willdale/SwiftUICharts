@@ -15,6 +15,7 @@ internal struct TouchOverlay: ViewModifier {
     
     /// Decimal precision for labels
     private let specifier               : String
+    private var units                   : Units
     private let touchMarkerLineWidth    : CGFloat = 1 // API?
     
     /// Boolean that indicates whether touch is currently being detected
@@ -36,8 +37,9 @@ internal struct TouchOverlay: ViewModifier {
     /// - Parameters:
     ///   - specifier: Decimal precision for labels
     ///   - infoBoxPlacement: Placement of the data point information panel when touch overlay modifier is applied.
-    internal init(specifier: String) {
+    internal init(specifier: String, units: Units) {
         self.specifier = specifier
+        self.units = units
     }
     
     @ViewBuilder internal func body(content: Content) -> some View {
@@ -68,6 +70,7 @@ internal struct TouchOverlay: ViewModifier {
                                         chartData.chartStyle.infoBoxPlacement = .header
                                         chartData.viewData.isTouchCurrent   = true
                                         chartData.viewData.touchOverlayInfo = selectedPoint
+                                        chartData.viewData.units = units
                                     }
                                 }
                                 .onEnded { _ in
@@ -79,7 +82,7 @@ internal struct TouchOverlay: ViewModifier {
                         TouchOverlayMarker(position: pointLocation)
                             .stroke(Color(.gray), lineWidth: touchMarkerLineWidth)
                         if chartData.chartStyle.infoBoxPlacement == .floating, let lineChartStyle = chartData.lineStyle {
-                            TouchOverlayBox(selectedPoint: selectedPoint, specifier: specifier, boxFrame: $boxFrame, ignoreZero: lineChartStyle.ignoreZero)
+                            TouchOverlayBox(selectedPoint: selectedPoint, specifier: specifier, units: units, boxFrame: $boxFrame, ignoreZero: lineChartStyle.ignoreZero)
                                 .position(x: boxLocation.x, y: 0 + (boxFrame.height / 2))
                         }
                     }
@@ -226,11 +229,11 @@ extension View {
     #if !os(tvOS)
     /// Adds an overlay to detect touch and display the relivent information from the nearest data point.
     /// - Parameter specifier: Decimal precision for labels
-    public func touchOverlay(specifier: String = "%.0f") -> some View {
-        self.modifier(TouchOverlay(specifier: specifier))
+    public func touchOverlay(specifier: String = "%.0f", units: Units = .none) -> some View {
+        self.modifier(TouchOverlay(specifier: specifier, units: units))
     }
     #elseif os(tvOS)
-    public func touchOverlay(specifier: String = "%.0f") -> some View {
+    public func touchOverlay(specifier: String = "%.0f", units: Units = .none) -> some View {
         self.modifier(EmptyModifier())
     }
     #endif

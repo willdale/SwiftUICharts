@@ -224,3 +224,21 @@ public enum DisplayValue {
     /// Places the label in the center of chart.
     case center(specifier: String)
 }
+
+/**
+ Option to display units before or after values.
+ 
+ ```
+ case none // No units
+ case prefix(of: String) // Before value
+ case suffix(of: String) // After value
+ ```
+ */
+public enum Units {
+    /// No units
+    case none
+    /// Before value
+    case prefix(of: String)
+    /// After value
+    case suffix(of: String)
+}

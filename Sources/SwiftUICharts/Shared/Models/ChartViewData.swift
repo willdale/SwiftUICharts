@@ -43,4 +43,6 @@ internal struct ChartViewData {
      Used by TitleBox
      */
     var touchSpecifier      : String = "%.0f"
+    
+    var units               : Units  = .none
 }
