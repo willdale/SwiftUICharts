@@ -101,6 +101,8 @@ public final class BarChartData: CTBarChartDataProtocol {
                             .foregroundColor(self.chartStyle.xAxisLabelColour)
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
+                            .accessibilityLabel( Text("X Axis Label"))
+                            .accessibilityValue(Text("\(data.xAxisLabel ?? "")"))
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
                     }
@@ -118,6 +120,8 @@ public final class BarChartData: CTBarChartDataProtocol {
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
+                                .accessibilityLabel( Text("X Axis Label"))
+                                .accessibilityValue(Text("\(data)"))
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
                         }
@@ -126,15 +130,7 @@ public final class BarChartData: CTBarChartDataProtocol {
             }
         }
     }
-    public func getYLabels() -> [Double] {
-        var labels  : [Double]  = [Double]()
-        let maxValue: Double    = self.maxValue
-        for index in 0...self.chartStyle.yAxisNumberOfLabels {
-            labels.append(maxValue / Double(self.chartStyle.yAxisNumberOfLabels) * Double(index))
-        }
-        return labels
-    }
-    
+
     // MARK: Touch
     public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         self.infoView.isTouchCurrent   = true

@@ -68,3 +68,18 @@ public enum DisplayValue {
     /// Places the label in the center of chart.
     case center(specifier: String)
 }
+
+
+/**
+ Where to end drawing the chart.
+ ```
+ case maximumValue // Highest value in the data set(s)
+ case maximum(of: Double) // Set a custom topline
+ ```
+ */
+public enum Topline {
+    /// Highest value in the data set(s)
+    case maximumValue
+    /// Set a custom topline
+    case maximum(of: Double)
+}

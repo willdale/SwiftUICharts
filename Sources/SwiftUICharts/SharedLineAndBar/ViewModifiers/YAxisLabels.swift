@@ -13,12 +13,12 @@ import SwiftUI
 internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
     @ObservedObject var chartData: T
-
-   private let specifier       : String
-   private var labelsArray     : [Double] { chartData.getYLabels() }
-
-   private let labelsAndTop    : Bool
-   private let labelsAndBottom : Bool
+    
+    private let specifier       : String
+    private var labelsArray     : [Double] { chartData.getYLabels() }
+    
+    private let labelsAndTop    : Bool
+    private let labelsAndBottom : Bool
     
     internal init(chartData: T,
                   specifier: String
@@ -43,12 +43,14 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
             if labelsAndTop {
                 textAsSpacer
             }
-            ForEach((0...chartData.chartStyle.yAxisNumberOfLabels).reversed(), id: \.self) { i in
+            ForEach((0...chartData.chartStyle.yAxisNumberOfLabels-1).reversed(), id: \.self) { i in
                 Text("\(labelsArray[i], specifier: specifier)")
                     .font(.caption)
                     .foregroundColor(chartData.chartStyle.yAxisLabelColour)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
+                    .accessibilityLabel(Text("Y Axis Label"))
+                    .accessibilityValue(Text("\(labelsArray[i], specifier: specifier)"))
                 if i != 0 {
                     Spacer()
                         .frame(minHeight: 0, maxHeight: 500)
@@ -72,7 +74,7 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
         )
     }
     
-    internal  func body(content: Content) -> some View {
+    internal func body(content: Content) -> some View {
         Group {
             if chartData.isGreaterThanTwo() {
                 switch chartData.chartStyle.yAxisLabelPosition {

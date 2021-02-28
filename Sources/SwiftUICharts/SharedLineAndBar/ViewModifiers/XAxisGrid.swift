@@ -18,7 +18,7 @@ internal struct XAxisGrid<T>: ViewModifier where T: CTLineBarChartDataProtocol {
         ZStack {
             if chartData.isGreaterThanTwo() {
                 HStack {
-                    ForEach((0...chartData.chartStyle.xAxisGridStyle.numberOfLines), id: \.self) { index in
+                    ForEach((0...chartData.chartStyle.xAxisGridStyle.numberOfLines-1), id: \.self) { index in
                         if index != 0 {
                             VerticalGridView(chartData: chartData)
                             Spacer()

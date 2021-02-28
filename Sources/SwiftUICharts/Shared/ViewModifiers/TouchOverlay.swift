@@ -28,7 +28,6 @@ internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
                 GeometryReader { geo in
                     ZStack {
                         content
-                            .accessibility(label: Text("DragGesture"))
                             .gesture(
                                 DragGesture(minimumDistance: 0)
                                     .onChanged { (value) in

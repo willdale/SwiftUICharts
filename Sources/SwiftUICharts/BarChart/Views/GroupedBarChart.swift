@@ -63,7 +63,8 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                                let colour = dataPoint.group.colour
                             {
                                 
-                                ColourBar(colour, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
+                                ColourBar(colour, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth, chartData.infoView.touchSpecifier)
+                                    .accessibilityLabel( Text("\(chartData.metadata.title)"))
                                 
                             } else if dataPoint.group.colourType == .gradientColour,
                                       let colours    = dataPoint.group.colours,
@@ -71,7 +72,8 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                                       let endPoint   = dataPoint.group.endPoint
                             {
 
-                                GradientColoursBar(colours, startPoint, endPoint, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
+                                GradientColoursBar(colours, startPoint, endPoint, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth, chartData.infoView.touchSpecifier)
+                                    .accessibilityLabel( Text("\(chartData.metadata.title)"))
 
                             } else if dataPoint.group.colourType == .gradientStops,
                                       let stops      = dataPoint.group.stops,
@@ -81,7 +83,8 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
 
                                 let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
 
-                                GradientStopsBar(safeStops, startPoint, endPoint, dataPoint, chartData.maxValue, chartData.chartStyle,  chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
+                                GradientStopsBar(safeStops, startPoint, endPoint, dataPoint, chartData.maxValue, chartData.chartStyle,  chartData.barStyle.cornerRadius, chartData.barStyle.barWidth, chartData.infoView.touchSpecifier)
+                                    .accessibilityLabel( Text("\(chartData.metadata.title)"))
 
                             }
                         }

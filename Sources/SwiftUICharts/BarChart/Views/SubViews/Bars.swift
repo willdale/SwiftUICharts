@@ -16,26 +16,30 @@ import SwiftUI
 internal struct ColourBar<DP: CTBarDataPoint>: View {
     
     private let colour      : Color
-    private let dataPoint   : DP
+    private let data        : DP
     private let maxValue    : Double
     private let chartStyle  : BarChartStyle
     
     private let cornerRadius: CornerRadius
     private let barWidth    : CGFloat
     
+    private let specifier   : String
+    
     internal init(_ colour      : Color,
                   _ dataPoint   : DP,
                   _ maxValue    : Double,
                   _ chartStyle  : BarChartStyle,
                   _ cornerRadius: CornerRadius,
-                  _ barWidth    : CGFloat
+                  _ barWidth    : CGFloat,
+                  _ specifier   : String
     ) {
         self.colour       = colour
-        self.dataPoint    = dataPoint
+        self.data         = dataPoint
         self.maxValue     = maxValue
         self.chartStyle   = chartStyle
         self.cornerRadius = cornerRadius
         self.barWidth     = barWidth
+        self.specifier    = specifier
     }
     
     @State private var startAnimation : Bool = false
@@ -46,14 +50,16 @@ internal struct ColourBar<DP: CTBarDataPoint>: View {
                                  bl: cornerRadius.bottom,
                                  br: cornerRadius.bottom)
             .fill(colour)
-            .scaleEffect(y: startAnimation ? CGFloat(dataPoint.value / maxValue) : 0, anchor: .bottom)
+            .scaleEffect(y: startAnimation ? CGFloat(data.value / maxValue) : 0, anchor: .bottom)
             .scaleEffect(x: barWidth, anchor: .center)
+            .background(Color(.gray).opacity(0.000000001))
             .animateOnAppear(using: chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
             .animateOnDisappear(using: chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
+            .accessibilityValue(Text("\(data.value, specifier: specifier), \(data.pointDescription ?? "")"))
     }
 }
 
@@ -74,6 +80,8 @@ internal struct GradientColoursBar<DP: CTBarDataPoint>: View {
     private let cornerRadius: CornerRadius
     private let barWidth    : CGFloat
     
+    private let specifier   : String
+    
     internal init(_ colours     : [Color],
                   _ startPoint  : UnitPoint,
                   _ endPoint    : UnitPoint,
@@ -81,7 +89,8 @@ internal struct GradientColoursBar<DP: CTBarDataPoint>: View {
                   _ maxValue    : Double,
                   _ chartStyle  : BarChartStyle,
                   _ cornerRadius: CornerRadius,
-                  _ barWidth    : CGFloat
+                  _ barWidth    : CGFloat,
+                  _ specifier   : String
     ) {
         self.colours    = colours
         self.startPoint = startPoint
@@ -91,6 +100,7 @@ internal struct GradientColoursBar<DP: CTBarDataPoint>: View {
         self.chartStyle = chartStyle
         self.cornerRadius = cornerRadius
         self.barWidth     = barWidth
+        self.specifier    = specifier
     }
     
     @State private var startAnimation : Bool = false
@@ -105,12 +115,14 @@ internal struct GradientColoursBar<DP: CTBarDataPoint>: View {
                                  endPoint: endPoint))
             .scaleEffect(y: startAnimation ? CGFloat(data.value / maxValue) : 0, anchor: .bottom)
             .scaleEffect(x: barWidth, anchor: .center)
+            .background(Color(.gray).opacity(0.000000001))
             .animateOnAppear(using: chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
             .animateOnDisappear(using: chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
+            .accessibilityValue(Text("\(data.value, specifier: specifier) \(data.pointDescription ?? "")"))
     }
 }
 
@@ -131,6 +143,8 @@ internal struct GradientStopsBar<DP: CTBarDataPoint>: View {
     private let cornerRadius: CornerRadius
     private let barWidth    : CGFloat
     
+    private let specifier   : String
+    
     internal init(_ stops       : [Gradient.Stop],
                   _ startPoint  : UnitPoint,
                   _ endPoint    : UnitPoint,
@@ -138,7 +152,8 @@ internal struct GradientStopsBar<DP: CTBarDataPoint>: View {
                   _ maxValue    : Double,
                   _ chartStyle  : BarChartStyle,
                   _ cornerRadius: CornerRadius,
-                  _ barWidth    : CGFloat
+                  _ barWidth    : CGFloat,
+                  _ specifier   : String
     ) {
         self.stops      = stops
         self.startPoint = startPoint
@@ -148,6 +163,7 @@ internal struct GradientStopsBar<DP: CTBarDataPoint>: View {
         self.chartStyle = chartStyle
         self.cornerRadius = cornerRadius
         self.barWidth     = barWidth
+        self.specifier    = specifier
     }
     
     @State private var startAnimation : Bool = false
@@ -162,12 +178,14 @@ internal struct GradientStopsBar<DP: CTBarDataPoint>: View {
                                  endPoint: endPoint))
             .scaleEffect(y: startAnimation ? CGFloat(data.value / maxValue) : 0, anchor: .bottom)
             .scaleEffect(x: barWidth, anchor: .center)
+            .background(Color(.gray).opacity(0.000000001))
             .animateOnAppear(using: chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
             .animateOnDisappear(using: chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
+            .accessibilityValue(Text("\(data.value, specifier: specifier) \(data.pointDescription ?? "")"))
     }
 }
 
@@ -288,7 +306,8 @@ internal struct StackElementSubView: View {
                         ColourPartBar(colour, getHeight(height    : geo.size.height,
                                                         dataSet   : dataSet,
                                                         dataPoint : dataPoint))
-                    
+                            .accessibilityValue(Text("\(dataPoint.value, specifier: "%.f"), \(dataPoint.pointDescription ?? "")"))
+                        
                     } else if dataPoint.group.colourType == .gradientColour,
                               let colours    = dataPoint.group.colours,
                               let startPoint = dataPoint.group.startPoint,
@@ -298,7 +317,8 @@ internal struct StackElementSubView: View {
                         GradientColoursPartBar(colours, startPoint, endPoint, getHeight(height: geo.size.height,
                                                                                         dataSet   : dataSet,
                                                                                         dataPoint : dataPoint))
-
+                            .accessibilityValue(Text("\(dataPoint.value, specifier: "%.f") \(dataPoint.pointDescription ?? "")"))
+                        
                     } else if dataPoint.group.colourType == .gradientStops,
                               let stops      = dataPoint.group.stops,
                               let startPoint = dataPoint.group.startPoint,
@@ -310,6 +330,7 @@ internal struct StackElementSubView: View {
                         GradientStopsPartBar(safeStops, startPoint, endPoint, getHeight(height: geo.size.height,
                                                                                     dataSet   : dataSet,
                                                                                     dataPoint : dataPoint))
+                            .accessibilityValue(Text("\(dataPoint.value, specifier: "%.f") \(dataPoint.pointDescription ?? "")"))
                     }
                     
                 }

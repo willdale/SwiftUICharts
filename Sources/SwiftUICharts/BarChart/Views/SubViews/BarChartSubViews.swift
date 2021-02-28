@@ -28,7 +28,7 @@ internal struct BarChartDataSetSubView<CD: BarChartData>: View {
            let colour = chartData.barStyle.colour
         {
             
-            ColourBar(colour, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
+            ColourBar(colour, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth, chartData.infoView.touchSpecifier)
             
         } else if chartData.barStyle.colourType == .gradientColour,
                   let colours    = chartData.barStyle.colours,
@@ -36,7 +36,7 @@ internal struct BarChartDataSetSubView<CD: BarChartData>: View {
                   let endPoint   = chartData.barStyle.endPoint
         {
             
-            GradientColoursBar(colours, startPoint, endPoint, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
+            GradientColoursBar(colours, startPoint, endPoint, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth, chartData.infoView.touchSpecifier)
 
         } else if chartData.barStyle.colourType == .gradientStops,
                   let stops      = chartData.barStyle.stops,
@@ -46,7 +46,7 @@ internal struct BarChartDataSetSubView<CD: BarChartData>: View {
 
             let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
             
-            GradientStopsBar(safeStops, startPoint, endPoint, dataPoint, chartData.maxValue, chartData.chartStyle,  chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
+            GradientStopsBar(safeStops, startPoint, endPoint, dataPoint, chartData.maxValue, chartData.chartStyle,  chartData.barStyle.cornerRadius, chartData.barStyle.barWidth, chartData.infoView.touchSpecifier)
 
         }
     }
@@ -74,7 +74,7 @@ internal struct BarChartDataPointSubView<CD: BarChartData>: View {
            let colour = dataPoint.colour
         {
             
-            ColourBar(colour, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
+            ColourBar(colour, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth, chartData.infoView.touchSpecifier)
         
         } else if dataPoint.colourType == .gradientColour,
                   let colours    = dataPoint.colours,
@@ -82,7 +82,7 @@ internal struct BarChartDataPointSubView<CD: BarChartData>: View {
                   let endPoint   = dataPoint.endPoint
         {
 
-            GradientColoursBar(colours, startPoint, endPoint, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
+            GradientColoursBar(colours, startPoint, endPoint, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth, chartData.infoView.touchSpecifier)
 
         } else if dataPoint.colourType == .gradientStops,
                   let stops      = dataPoint.stops,
@@ -92,9 +92,9 @@ internal struct BarChartDataPointSubView<CD: BarChartData>: View {
 
             let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
 
-            GradientStopsBar(safeStops, startPoint, endPoint, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
+            GradientStopsBar(safeStops, startPoint, endPoint, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth, chartData.infoView.touchSpecifier)
         } else {
-            ColourBar(.blue, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth)
+            ColourBar(.blue, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth, chartData.infoView.touchSpecifier)
         }
         
     }

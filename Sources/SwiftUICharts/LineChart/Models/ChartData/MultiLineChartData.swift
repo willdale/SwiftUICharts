@@ -108,6 +108,8 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
+                                .accessibilityLabel( Text("X Axis Label"))
+                                .accessibilityValue(Text("\(data.xAxisLabel ?? "")"))
                         }
                         if data != self.dataSets.dataSets[0].dataPoints[self.dataSets.dataSets[0].dataPoints.count - 1] {
                             Spacer()
@@ -127,6 +129,8 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
+                                .accessibilityLabel( Text("X Axis Label"))
+                                .accessibilityValue(Text("\(data)"))
                             if data != labelArray[labelArray.count - 1] {
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)
@@ -137,19 +141,6 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
                 }
             }
         }
-    }
-    
-    public func getYLabels() -> [Double] {
-        var labels      : [Double]  = [Double]()
-        let dataRange   : Double = self.range
-        let minValue    : Double = self.minValue
-        let range       : Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels)
-
-        labels.append(minValue)
-        for index in 1...self.chartStyle.yAxisNumberOfLabels {
-            labels.append(minValue + range * Double(index))
-        }
-        return labels
     }
     
     // MARK: Points
@@ -179,14 +170,35 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
         }
     }
     
+    // MARK: Accessibility
+    public func getAccessibility() -> some View {
+
+      ForEach(self.dataSets.dataSets, id: \.self) { dataSet in
+
+            ForEach(dataSet.dataPoints.indices, id: \.self) { point in
+
+                AccessibilityRectangle(dataPointCount : dataSet.dataPoints.count,
+                                       dataPointNo    : point)
+
+                    .foregroundColor(Color(.gray).opacity(0.000000001))
+                    .accessibilityLabel( Text("\(self.metadata.title)"))
+                    .accessibilityValue(Text(String(format: self.infoView.touchSpecifier,
+                                                      dataSet.dataPoints[point].value) +
+                                    ", \(dataSet.dataPoints[point].pointDescription ?? "")"))
+            }
+        }
+    }
+    
     public typealias Set = MultiLineDataSet
     public typealias DataPoint = LineChartDataPoint
     public typealias CTStyle = LineChartStyle
     
 }
 
+
 // MARK: - Touch
 extension MultiLineChartData: TouchProtocol {
+    
     internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points : [LineChartDataPoint] = []
         for dataSet in dataSets.dataSets {

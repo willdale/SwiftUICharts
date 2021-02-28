@@ -18,7 +18,7 @@ internal struct YAxisGrid<T>: ViewModifier where T: CTLineBarChartDataProtocol {
         ZStack {
             if chartData.isGreaterThanTwo() {
                 VStack {
-                    ForEach((0...chartData.chartStyle.yAxisGridStyle.numberOfLines), id: \.self) { index in
+                    ForEach((0...chartData.chartStyle.yAxisGridStyle.numberOfLines-1), id: \.self) { index in
                         if index != 0 {
                             HorizontalGridView(chartData: chartData)
                             Spacer()

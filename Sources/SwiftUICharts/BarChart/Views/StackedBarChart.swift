@@ -57,15 +57,16 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
                     StackElementSubView(dataSet: dataSet)
                         .scaleEffect(y: startAnimation ? CGFloat(DataFunctions.dataSetMaxValue(from: dataSet) / chartData.maxValue) : 0, anchor: .bottom)
                         .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
+                        .background(Color(.gray).opacity(0.000000001))
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
                         .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = false
                         }
+                        .accessibilityLabel( Text("\(chartData.metadata.title)"))
                 }
             }
-
         } else { CustomNoDataView(chartData: chartData) }
     }
 }

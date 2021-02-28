@@ -31,6 +31,7 @@ internal struct Legends<T>: ViewModifier where T: CTChartData {
                 VStack {
                     content
                     LegendView(chartData: chartData, columns: columns, textColor: textColor)
+                        
                 }
             } else { content }
         }

@@ -35,20 +35,49 @@ internal struct LegendView<T>: View where T: CTChartData {
                 case .line:
                     
                     line(legend)
+                        .accessibilityLabel( Text(accessibilityLegendLabel(legend: legend)))
+                        .accessibilityValue(Text("\(legend.legend)"))
 
                 case .bar:
 
                     bar(legend)
                         .if(scaleLegendBar(legend: legend)) { $0.scaleEffect(1.2, anchor: .leading) }
+                        .accessibilityLabel( Text(accessibilityLegendLabel(legend: legend)))
+                        .accessibilityValue(Text("\(legend.legend)"))
                 case .pie:
 
                     pie(legend)
                         .if(scaleLegendPie(legend: legend)) {
                             $0.scaleEffect(1.2, anchor: .leading)
                         }
+                        .accessibilityLabel( Text(accessibilityLegendLabel(legend: legend)))
+                        .accessibilityValue(Text("\(legend.legend)"))
                 }
             }
         }.id(UUID())
+    }
+    
+    private func accessibilityLegendLabel(legend: LegendData) -> String {
+        switch legend.chartType {
+        case .line:
+            if legend.prioity == 1 {
+                return "Line Chart Legend"
+            } else {
+                return "P O I Marker Legend"
+            }
+        case .bar:
+            if legend.prioity == 1 {
+                return "Bar Chart Legend"
+            } else {
+                return "P O I Marker Legend"
+            }
+        case .pie:
+            if legend.prioity == 1 {
+                return "Pie Chart Legend"
+            } else {
+                return "P O I Marker Legend"
+            }
+        }
     }
     
     /// Detects whether to run the scale effect on the legend.

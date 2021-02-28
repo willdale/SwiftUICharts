@@ -62,6 +62,9 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
         if chartData.isGreaterThanTwo() {
             
             ZStack {
+                
+                chartData.getAccessibility()
+                
                 ForEach(chartData.dataSets.dataSets, id: \.id) { dataSet in
                     
                     if dataSet.style.colourType == .colour,
