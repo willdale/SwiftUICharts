@@ -94,7 +94,7 @@ extension PieChartData: TouchProtocol {
 
 // MARK: - Legends
 extension PieChartData: LegendProtocol {
-    internal func setupLegends() {
+    public func setupLegends() {
         for data in dataSets.dataPoints {
             if let legend = data.pointDescription {
                 self.legends.append(LegendData(id         : data.id,
@@ -107,7 +107,7 @@ extension PieChartData: LegendProtocol {
         }
     }
     
-    internal func legendOrder() -> [LegendData] {
+    public func legendOrder() -> [LegendData] {
         return legends.sorted { $0.prioity < $1.prioity}
     }
 }

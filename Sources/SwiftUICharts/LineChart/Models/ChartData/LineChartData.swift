@@ -60,7 +60,7 @@ public final class LineChartData: CTLineChartDataProtocol {
     
     public var noDataText   : Text
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
-        
+    
     // MARK: Initializer
     /// Initialises a Single Line Chart.
     ///
@@ -184,7 +184,7 @@ extension LineChartData: TouchProtocol {
 // MARK: - Legends
 extension LineChartData: LegendProtocol {
    
-    internal func setupLegends() {
+    public func setupLegends() {
         
         if dataSets.style.colourType == .colour,
            let colour = dataSets.style.colour
@@ -222,7 +222,7 @@ extension LineChartData: LegendProtocol {
         }
     }
 
-    internal func legendOrder() -> [LegendData] {
+    public func legendOrder() -> [LegendData] {
         return legends.sorted { $0.prioity < $1.prioity}
     }
 }

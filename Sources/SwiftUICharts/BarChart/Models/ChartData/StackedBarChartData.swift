@@ -301,7 +301,7 @@ extension StackedBarChartData: TouchProtocol {
 
 extension StackedBarChartData: LegendProtocol {
     // MARK: - Legends
-    internal func setupLegends() {
+    public func setupLegends() {
         for group in self.groups {
                 
                 if group.colourType == .colour,
@@ -339,7 +339,7 @@ extension StackedBarChartData: LegendProtocol {
             }
     }
     
-    internal func legendOrder() -> [LegendData] {
+    public func legendOrder() -> [LegendData] {
         return legends.sorted { $0.prioity < $1.prioity}
     }
 }

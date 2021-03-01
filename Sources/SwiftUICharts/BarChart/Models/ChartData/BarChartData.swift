@@ -199,11 +199,11 @@ extension BarChartData: TouchProtocol {
 
 // MARK: - Legends
 extension BarChartData: LegendProtocol {
-    internal func legendOrder() -> [LegendData] {
+    public func legendOrder() -> [LegendData] {
         return legends.sorted { $0.prioity < $1.prioity}
     }
     
-    internal func setupLegends() {
+    public func setupLegends() {
         
         switch self.barStyle.colourFrom {
         case .barStyle:

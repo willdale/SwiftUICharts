@@ -207,7 +207,7 @@ extension MultiLineChartData: TouchProtocol {
 // MARK: - Legends
 extension MultiLineChartData: LegendProtocol {
     
-    internal func setupLegends() {
+    public func setupLegends() {
         for dataSet in dataSets.dataSets {
             if dataSet.style.colourType == .colour,
                let colour = dataSet.style.colour
@@ -246,7 +246,7 @@ extension MultiLineChartData: LegendProtocol {
         }
     }
     
-    internal func legendOrder() -> [LegendData] {
+    public func legendOrder() -> [LegendData] {
         return legends.sorted { $0.prioity < $1.prioity}
     }
 }

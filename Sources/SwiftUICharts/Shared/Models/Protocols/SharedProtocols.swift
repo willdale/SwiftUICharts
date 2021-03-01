@@ -137,7 +137,7 @@ public protocol TouchProtocol {
 /**
  Protocol for dealing with legend data internally.
  */
-internal protocol LegendProtocol {
+public protocol LegendProtocol {
     
     /**
     Sets the order the Legends are layed out in.

@@ -140,9 +140,9 @@ extension MultiLayerPieChartData: TouchProtocol {
 
 // MARK: - Legends
 extension MultiLayerPieChartData: LegendProtocol {
-    internal func setupLegends() {}
+    public func setupLegends() {}
     
-    internal func legendOrder() -> [LegendData] {
+    public func legendOrder() -> [LegendData] {
         return legends.sorted { $0.prioity < $1.prioity}
     }
 }

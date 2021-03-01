@@ -32,6 +32,7 @@ extension CTLineBarChartDataProtocol where Set: CTSingleDataSetProtocol {
 
         return _highestValue - _lowestValue
     }
+    
     public var minValue : Double {
         switch self.chartStyle.baseline {
         case .minimumValue:

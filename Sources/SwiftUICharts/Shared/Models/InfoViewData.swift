@@ -48,7 +48,7 @@ public struct InfoViewData<DP: CTChartDataPoint> {
      
      Used by `HeaderBox` and `InfoBox`.
      */
-    var touchLocation: CGPoint = .zero
+   var touchLocation: CGPoint = .zero
     
     /**
      Size of the chart.

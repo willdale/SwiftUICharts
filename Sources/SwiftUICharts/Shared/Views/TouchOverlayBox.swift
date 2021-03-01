@@ -77,9 +77,7 @@ internal struct TouchOverlayBox<D: CTChartDataPoint>: View {
                             .foregroundColor(descriptionColour)
                     }
                 }
-                
-                
-                
+                                
             }
         }
 

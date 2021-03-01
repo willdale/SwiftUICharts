@@ -281,7 +281,7 @@ extension GroupedBarChartData: TouchProtocol {
 // MARK: - Legends
 extension GroupedBarChartData: LegendProtocol {
 
-    internal func setupLegends() {
+    public func setupLegends() {
         
         for group in self.groups {
             
@@ -320,7 +320,7 @@ extension GroupedBarChartData: LegendProtocol {
         }
     }
     
-    internal func legendOrder() -> [LegendData] {
+    public func legendOrder() -> [LegendData] {
         return legends.sorted { $0.prioity < $1.prioity}
     }
 }
