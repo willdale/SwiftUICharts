@@ -20,13 +20,16 @@ public protocol CTChartData: ObservableObject, Identifiable {
     associatedtype Set      : CTDataSetProtocol
     
     /// A type representing a data point. -- `CTChartDataPoint`
-    associatedtype DataPoint: CTChartDataPoint
+    associatedtype DataPoint: CTChartDataPointProtocol
     
     /// A type representing the chart style. -- `CTChartStyle`
     associatedtype CTStyle  : CTChartStyle
     
     /// A type representing opaque View
     associatedtype Touch    : View
+    
+    /// A type representing a  data set. -- `CTDataSetProtocol`
+    associatedtype SetPoint : CTDataSetProtocol
     
     var id: ID { get }
     
@@ -102,16 +105,6 @@ public protocol CTChartData: ObservableObject, Identifiable {
      */
     func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> Touch
     
-}
-
-
-
-// MARK: - Touch Protocol
-public protocol TouchProtocol {
-    
-    /// A type representing a  data set. -- `CTDataSetProtocol`
-    associatedtype SetPoint : CTDataSetProtocol
-    
     /**
     Gets the nearest data points to the touch location.
     - Parameters:
@@ -131,6 +124,9 @@ public protocol TouchProtocol {
     */
     func getPointLocation(dataSet: SetPoint, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint?
 }
+
+
+
 
 
 // MARK: - Legend Protocol
@@ -167,7 +163,7 @@ public protocol CTDataSetProtocol: Hashable, Identifiable {
  */
 public protocol CTSingleDataSetProtocol: CTDataSetProtocol {
     /// A type representing a data point. -- `CTChartDataPoint`
-    associatedtype DataPoint : CTChartDataPoint
+    associatedtype DataPoint : CTChartDataPointProtocol
     
     /**
      Array of data points.
@@ -193,7 +189,7 @@ public protocol CTMultiDataSetProtocol: CTDataSetProtocol {
 /**
  Protocol to set base configuration for data points.
  */
-public protocol CTChartDataPoint: Hashable, Identifiable {
+public protocol CTChartDataPointProtocol: Hashable, Identifiable {
     
     var id               : ID { get }
     

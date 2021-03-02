@@ -23,7 +23,7 @@ extension CTChartData where Set: CTMultiDataSetProtocol {
     }
 }
 // MARK: Touch
-extension CTChartData where Self: TouchProtocol {
+extension CTChartData {
     public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         self.infoView.isTouchCurrent   = true
         self.infoView.touchLocation    = touchLocation

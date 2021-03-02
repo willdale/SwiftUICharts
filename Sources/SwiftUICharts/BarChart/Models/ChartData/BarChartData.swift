@@ -173,7 +173,7 @@ public final class BarChartData: CTBarChartDataProtocol {
 }
 
 // MARK: - Touch
-extension BarChartData: TouchProtocol {
+extension BarChartData {
    
     public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points      : [BarChartDataPoint] = []
@@ -207,34 +207,34 @@ extension BarChartData: LegendProtocol {
         
         switch self.barStyle.colourFrom {
         case .barStyle:
-            if self.barStyle.colourType == .colour,
-               let colour = self.barStyle.colour
+            if self.barStyle.fillColour.colourType == .colour,
+               let colour = self.barStyle.fillColour.colour
             {
                 self.legends.append(LegendData(id         : dataSets.id,
                                                legend     : dataSets.legendTitle,
-                                               colour     : colour,
+                                               colour     : ColourStyle(colour: colour),
                                                strokeStyle: nil,
                                                prioity    : 1,
                                                chartType  : .bar))
-            } else if self.barStyle.colourType == .gradientColour,
-                      let colours = self.barStyle.colours
+            } else if self.barStyle.fillColour.colourType == .gradientColour,
+                      let colours = self.barStyle.fillColour.colours
             {
                 self.legends.append(LegendData(id         : dataSets.id,
                                                legend     : dataSets.legendTitle,
-                                               colours    : colours,
-                                               startPoint : .leading,
-                                               endPoint   : .trailing,
+                                               colour     : ColourStyle(colours: colours,
+                                                                       startPoint: .leading,
+                                                                       endPoint: .trailing),
                                                strokeStyle: nil,
                                                prioity    : 1,
                                                chartType  : .bar))
-            } else if self.barStyle.colourType == .gradientStops,
-                      let stops = self.barStyle.stops
+            } else if self.barStyle.fillColour.colourType == .gradientStops,
+                      let stops = self.barStyle.fillColour.stops
             {
                 self.legends.append(LegendData(id         : dataSets.id,
                                                legend     : dataSets.legendTitle,
-                                               stops      : stops,
-                                               startPoint : .leading,
-                                               endPoint   : .trailing,
+                                               colour     : ColourStyle(stops: stops,
+                                                                       startPoint: .leading,
+                                                                       endPoint: .trailing),
                                                strokeStyle: nil,
                                                prioity    : 1,
                                                chartType  : .bar))
@@ -243,37 +243,37 @@ extension BarChartData: LegendProtocol {
 
             for data in dataSets.dataPoints {
 
-                if data.colourType == .colour,
-                   let colour = data.colour,
+                if data.fillColour.colourType == .colour,
+                   let colour = data.fillColour.colour,
                    let legend = data.pointDescription
                 {
                     self.legends.append(LegendData(id         : data.id,
                                                    legend     : legend,
-                                                   colour     : colour,
+                                                   colour     : ColourStyle(colour: colour),
                                                    strokeStyle: nil,
                                                    prioity    : 1,
                                                    chartType  : .bar))
-                } else if data.colourType == .gradientColour,
-                          let colours = data.colours,
+                } else if data.fillColour.colourType == .gradientColour,
+                          let colours = data.fillColour.colours,
                           let legend = data.pointDescription
                 {
                     self.legends.append(LegendData(id         : data.id,
                                                    legend     : legend,
-                                                   colours    : colours,
-                                                   startPoint : .leading,
-                                                   endPoint   : .trailing,
+                                                   colour     : ColourStyle(colours: colours,
+                                                                           startPoint: .leading,
+                                                                           endPoint: .trailing),
                                                    strokeStyle: nil,
                                                    prioity    : 1,
                                                    chartType  : .bar))
-                } else if data.colourType == .gradientStops,
-                          let stops = data.stops,
+                } else if data.fillColour.colourType == .gradientStops,
+                          let stops = data.fillColour.stops,
                           let legend = data.pointDescription
                 {
                     self.legends.append(LegendData(id         : data.id,
                                                    legend     : legend,
-                                                   stops      : stops,
-                                                   startPoint : .leading,
-                                                   endPoint   : .trailing,
+                                                   colour     : ColourStyle(stops: stops,
+                                                                           startPoint: .leading,
+                                                                           endPoint: .trailing),
                                                    strokeStyle: nil,
                                                    prioity    : 1,
                                                    chartType  : .bar))

@@ -203,7 +203,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
 }
 
 // MARK: - Touch
-extension StackedBarChartData: TouchProtocol {
+extension StackedBarChartData {
    
     public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
 
@@ -304,34 +304,34 @@ extension StackedBarChartData: LegendProtocol {
     public func setupLegends() {
         for group in self.groups {
                 
-                if group.colourType == .colour,
-                   let colour = group.colour
+            if group.fillColour.colourType == .colour,
+               let colour = group.fillColour.colour
                 {
                     self.legends.append(LegendData(id         : group.id,
                                                    legend     : group.title,
-                                                   colour     : colour,
+                                                   colour     : ColourStyle(colour: colour),
                                                    strokeStyle: nil,
                                                    prioity    : 1,
                                                    chartType  : .bar))
-                } else if group.colourType == .gradientColour,
-                          let colours = group.colours
+            } else if group.fillColour.colourType == .gradientColour,
+                      let colours = group.fillColour.colours
                 {
                     self.legends.append(LegendData(id         : group.id,
                                                    legend     : group.title,
-                                                   colours    : colours,
-                                                   startPoint : .leading,
-                                                   endPoint   : .trailing,
+                                                   colour     : ColourStyle(colours: colours,
+                                                                           startPoint: .leading,
+                                                                           endPoint: .trailing),
                                                    strokeStyle: nil,
                                                    prioity    : 1,
                                                    chartType  : .bar))
-                } else if group.colourType == .gradientStops,
-                          let stops  = group.stops
+            } else if group.fillColour.colourType == .gradientStops,
+                      let stops  = group.fillColour.stops
                 {
                     self.legends.append(LegendData(id         : group.id,
                                                    legend     : group.title,
-                                                   stops      : stops,
-                                                   startPoint : .leading,
-                                                   endPoint   : .trailing,
+                                                   colour     : ColourStyle(stops: stops,
+                                                                           startPoint: .leading,
+                                                                           endPoint: .trailing),
                                                    strokeStyle: nil,
                                                    prioity    : 1,
                                                    chartType  : .bar))

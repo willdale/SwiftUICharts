@@ -75,7 +75,7 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol {
 }
 
 // MARK: - Touch
-extension DoughnutChartData: TouchProtocol {
+extension DoughnutChartData {
     public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points : [PieChartDataPoint] = []
         let touchDegree = degree(from: touchLocation, in: chartSize)

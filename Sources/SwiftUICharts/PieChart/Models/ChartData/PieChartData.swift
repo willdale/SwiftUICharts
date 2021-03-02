@@ -76,7 +76,7 @@ public final class PieChartData: CTPieChartDataProtocol {
 }
 
 // MARK: - Touch
-extension PieChartData: TouchProtocol {
+extension PieChartData {
     public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points : [PieChartDataPoint] = []
         let touchDegree = degree(from: touchLocation, in: chartSize)
@@ -99,7 +99,7 @@ extension PieChartData: LegendProtocol {
             if let legend = data.pointDescription {
                 self.legends.append(LegendData(id         : data.id,
                                                legend     : legend,
-                                               colour     : data.colour,
+                                               colour     : ColourStyle(colour: data.colour),
                                                strokeStyle: nil,
                                                prioity    : 1,
                                                chartType  : .pie))

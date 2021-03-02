@@ -75,7 +75,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
             if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
                 chartData.legends.append(LegendData(id          : uuid,
                                                     legend      : markerName,
-                                                    colour      : lineColour,
+                                                    colour      : ColourStyle(colour: lineColour),
                                                     strokeStyle : strokeStyle.toStroke(),
                                                     prioity     : 2,
                                                     chartType   : .line))
@@ -110,7 +110,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                                        labelBackground: labelBackground,
                                        lineColour     : lineColour,
                                        chartSize      : geo.frame(in: .local))
-                    .accessibilityLabel( Text("P O I Marker"))
+                    .accessibilityLabel(Text("P O I Marker"))
                     .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
                 
             case .center(specifier: let specifier):

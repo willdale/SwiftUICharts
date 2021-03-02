@@ -10,16 +10,16 @@ import SwiftUI
 /**
  Main line shape
  */
-internal struct LineShape: Shape {
+internal struct LineShape<DP>: Shape where DP: CTLineDataPointProtocol {
            
-    private let dataPoints  : [LineChartDataPoint]
+    private let dataPoints  : [DP]
     private let lineType    : LineType
     private let isFilled    : Bool
     
     private let minValue : Double
     private let range    : Double
     
-    internal init(dataPoints: [LineChartDataPoint],
+    internal init(dataPoints: [DP],
                   lineType  : LineType,
                   isFilled  : Bool,
                   minValue  : Double,
@@ -41,3 +41,39 @@ internal struct LineShape: Shape {
         }
     }
 }
+
+/**
+ Background fill based on the upper and lower values
+ for a Ranged Line Chart.
+ */
+internal struct RangedLineFillShape<DP>: Shape where DP: CTRangedLineDataPoint {
+           
+    private let dataPoints  : [DP]
+    private let lineType    : LineType
+    
+    private var minValue : Double
+    private let range    : Double
+    
+    internal init(dataPoints: [DP],
+                  lineType  : LineType,
+                  minValue  : Double,
+                  range     : Double
+    ) {
+        self.dataPoints = dataPoints
+        self.lineType   = lineType
+        self.minValue   = minValue
+        self.range      = range
+    }
+  
+    internal func path(in rect: CGRect) -> Path {
+        
+        switch lineType {
+        case .curvedLine:
+            return  Path.curvedLineBox(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+        case .line:
+            return  Path.straightLineBox(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+        }
+        
+    }
+}
+

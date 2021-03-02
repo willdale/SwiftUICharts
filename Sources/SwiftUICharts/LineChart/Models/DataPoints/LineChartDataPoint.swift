@@ -18,7 +18,7 @@ import SwiftUI
                     date       : Date())
  ```
  */
-public struct LineChartDataPoint: CTLineBarDataPoint {
+public struct LineChartDataPoint: CTLineDataPointProtocol {
     
     public let id               : UUID = UUID()
 

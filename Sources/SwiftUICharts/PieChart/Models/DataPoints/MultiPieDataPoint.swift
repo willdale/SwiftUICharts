@@ -25,7 +25,7 @@ public struct MultiPieDataPoint: CTMultiPieChartDataPoint {
     // CTPieDataPoint
     public var startAngle   : Double = 0
     public var amount       : Double = 0
-    // CTChartDataPoint
+    // CTChartDataPointProtocol
     public var value            : Double
     public var pointDescription : String?
     public var date             : Date?

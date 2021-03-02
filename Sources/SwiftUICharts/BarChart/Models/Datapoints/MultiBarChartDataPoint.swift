@@ -33,7 +33,7 @@ public struct MultiBarChartDataPoint: CTMultiBarDataPoint {
                 xAxisLabel  : String?   = nil,
                 pointLabel  : String?   = nil,
                 date        : Date?     = nil,
-                group: GroupingData
+                group       : GroupingData
     ) {
         self.value            = value
         self.xAxisLabel       = xAxisLabel

@@ -44,9 +44,9 @@ public protocol CTMultiPieDataSet: CTDataSetProtocol {}
 // MARK: - DataPoints
 
 /**
- A protocol to extend functionality of `CTChartDataPoint` specifically for Pie and Doughnut Charts.
+ A protocol to extend functionality of `CTChartDataPointProtocol` specifically for Pie and Doughnut Charts.
  */
-public protocol CTPieDataPoint: CTChartDataPoint {
+public protocol CTPieDataPoint: CTChartDataPointProtocol {
     
     /**
      Where the data point should start drawing from
@@ -62,7 +62,7 @@ public protocol CTPieDataPoint: CTChartDataPoint {
     var amount      : Double { get set }
 }
 
-public protocol CTMultiPieChartDataPoint: CTChartDataPoint {
+public protocol CTMultiPieChartDataPoint: CTChartDataPointProtocol {
   
     /**
      Second layer of data points.

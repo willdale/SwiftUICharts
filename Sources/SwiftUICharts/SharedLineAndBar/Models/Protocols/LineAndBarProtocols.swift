@@ -142,9 +142,9 @@ public protocol CTLineBarChartStyle: CTChartStyle {
 
 // MARK: - DataPoints
 /**
- A protocol to extend functionality of `CTChartDataPoint` specifically for Line and Bar Charts.
+ A protocol to extend functionality of `CTChartDataPointProtocol` specifically for Line and Bar Charts.
  */
-public protocol CTLineBarDataPoint: CTChartDataPoint {
+public protocol CTLineBarDataPointProtocol: CTChartDataPointProtocol {
     
     /**
      Data points label for the X axis.

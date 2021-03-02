@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - Paths
 extension Path {
     /// Draws straight lines between data points.
-    static func straightLine(rect: CGRect, dataPoints: [LineChartDataPoint], minValue: Double, range: Double, isFilled: Bool) -> Path {
+    static func straightLine<DP:CTLineDataPointProtocol>(rect: CGRect, dataPoints: [DP], minValue: Double, range: Double, isFilled: Bool) -> Path {
         let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
         let y : CGFloat = rect.height / CGFloat(range)
         var path = Path()
@@ -31,7 +31,7 @@ extension Path {
     }
     
     /// Draws cubic Bézier curved lines between data points.
-    static func curvedLine(rect: CGRect, dataPoints: [LineChartDataPoint], minValue: Double, range: Double, isFilled: Bool) -> Path {
+    static func curvedLine<DP:CTLineDataPointProtocol>(rect: CGRect, dataPoints: [DP], minValue: Double, range: Double, isFilled: Bool) -> Path {
         let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
         let y : CGFloat = rect.height / CGFloat(range)
         var path = Path()
@@ -61,5 +61,79 @@ extension Path {
             path.closeSubpath()
         }
         return path
+    }
+    
+    
+    /// Draws straight lines between data points.
+    static func straightLineBox<DP:CTRangedLineDataPoint>(rect: CGRect, dataPoints: [DP], minValue: Double, range: Double) -> Path {
+        let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
+        let y : CGFloat = rect.height / CGFloat(range)
+        
+        var path = Path()
+        
+        // Upper Path
+        let firstPointUpper = CGPoint(x: 0,
+                                 y: (CGFloat(dataPoints[0].upperValue - minValue) * -y) + rect.height)
+        path.move(to: firstPointUpper)
+        for indexUpper in 1 ..< dataPoints.count {
+            let nextPointUpper = CGPoint(x: CGFloat(indexUpper) * x,
+                                    y: (CGFloat(dataPoints[indexUpper].upperValue - minValue) * -y) + rect.height)
+            path.addLine(to: nextPointUpper)
+        }
+
+        // Lower Path
+        for indexLower in (0 ..< dataPoints.count).reversed() {
+            let nextPointLower = CGPoint(x: CGFloat(indexLower) * x,
+                                    y: (CGFloat(dataPoints[indexLower].lowerValue - minValue) * -y) + rect.height)
+            path.addLine(to: nextPointLower)
+        }
+
+        path.addLine(to: firstPointUpper)
+
+        return path
+    }
+    
+    /// Draws straight lines between data points.
+    static func curvedLineBox<DP:CTRangedLineDataPoint>(rect: CGRect, dataPoints: [DP], minValue: Double, range: Double) -> Path {
+        let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
+        let y : CGFloat = rect.height / CGFloat(range)
+
+        var path = Path()
+        
+        // Upper Path
+        let firstPointUpper = CGPoint(x: 0,
+                                      y: (CGFloat(dataPoints[0].upperValue - minValue) * -y) + rect.height)
+        path.move(to: firstPointUpper)
+        
+        var previousPoint = firstPointUpper
+        
+        for indexUpper in 1 ..< dataPoints.count {
+            
+            let nextPoint = CGPoint(x: CGFloat(indexUpper) * x,
+                                    y: (CGFloat(dataPoints[indexUpper].upperValue - minValue) * -y) + rect.height)
+            path.addCurve(to: nextPoint,
+                          control1: CGPoint(x: previousPoint.x + (nextPoint.x - previousPoint.x) / 2,
+                                            y: previousPoint.y),
+                          control2: CGPoint(x: nextPoint.x - (nextPoint.x - previousPoint.x) / 2,
+                                            y: nextPoint.y))
+            previousPoint = nextPoint
+        }
+        
+        // Lower Path
+        for indexLower in (0 ..< dataPoints.count).reversed() {
+            let nextPoint = CGPoint(x: CGFloat(indexLower) * x,
+                                    y: (CGFloat(dataPoints[indexLower].lowerValue - minValue) * -y) + rect.height)
+            path.addCurve(to: nextPoint,
+                          control1: CGPoint(x: previousPoint.x + (nextPoint.x - previousPoint.x) / 2,
+                                            y: previousPoint.y),
+                          control2: CGPoint(x: nextPoint.x - (nextPoint.x - previousPoint.x) / 2,
+                                            y: nextPoint.y))
+            previousPoint = nextPoint
+        }
+        
+        path.addLine(to: firstPointUpper)
+        
+        return path
+        
     }
 }

@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Data model to pass view information internally for the `InfoBox` and `HeaderBox`.
  */
-public struct InfoViewData<DP: CTChartDataPoint> {
+public struct InfoViewData<DP: CTChartDataPointProtocol> {
     
     /**
     Is there currently input (touch or click) on the chart.

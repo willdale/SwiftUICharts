@@ -67,47 +67,47 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
                 
                 ForEach(chartData.dataSets.dataSets, id: \.id) { dataSet in
                     
-                    if dataSet.style.colourType == .colour,
-                       let colour = dataSet.style.colour
+                    if dataSet.style.lineColour.colourType == .colour,
+                       let colour = dataSet.style.lineColour.colour
                     {
                         
                         LineChartColourSubView(chartData: chartData,
-                                               dataSet: dataSet,
-                                               minValue: minValue,
-                                               range: range,
-                                               colour: colour,
-                                               isFilled: false)
+                                               dataSet  : dataSet,
+                                               minValue : minValue,
+                                               range    : range,
+                                               colour   : colour,
+                                               isFilled : false)
                         
-                    } else if dataSet.style.colourType == .gradientColour,
-                              let colours     = dataSet.style.colours,
-                              let startPoint  = dataSet.style.startPoint,
-                              let endPoint    = dataSet.style.endPoint
+                    } else if dataSet.style.lineColour.colourType == .gradientColour,
+                              let colours     = dataSet.style.lineColour.colours,
+                              let startPoint  = dataSet.style.lineColour.startPoint,
+                              let endPoint    = dataSet.style.lineColour.endPoint
                     {
                         
-                        LineChartColoursSubView(chartData: chartData,
-                                                dataSet: dataSet,
-                                                minValue: minValue,
-                                                range: range,
-                                                colours: colours,
+                        LineChartColoursSubView(chartData : chartData,
+                                                dataSet   : dataSet,
+                                                minValue  : minValue,
+                                                range     : range,
+                                                colours   : colours,
                                                 startPoint: startPoint,
-                                                endPoint: endPoint,
-                                                isFilled: false)
+                                                endPoint  : endPoint,
+                                                isFilled  : false)
                         
-                    } else if dataSet.style.colourType == .gradientStops,
-                              let stops      = dataSet.style.stops,
-                              let startPoint = dataSet.style.startPoint,
-                              let endPoint   = dataSet.style.endPoint
+                    } else if dataSet.style.lineColour.colourType == .gradientStops,
+                              let stops      = dataSet.style.lineColour.stops,
+                              let startPoint = dataSet.style.lineColour.startPoint,
+                              let endPoint   = dataSet.style.lineColour.endPoint
                     {
                         let stops = GradientStop.convertToGradientStopsArray(stops: stops)
                         
-                        LineChartStopsSubView(chartData: chartData,
-                                              dataSet: dataSet,
-                                              minValue: minValue,
-                                              range: range,
-                                              stops: stops,
+                        LineChartStopsSubView(chartData : chartData,
+                                              dataSet   : dataSet,
+                                              minValue  : minValue,
+                                              range     : range,
+                                              stops     : stops,
                                               startPoint: startPoint,
-                                              endPoint: endPoint,
-                                              isFilled: false)
+                                              endPoint  : endPoint,
+                                              isFilled  : false)
                         
                     }
                 }

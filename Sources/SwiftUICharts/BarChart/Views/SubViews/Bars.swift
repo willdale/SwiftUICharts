@@ -299,8 +299,8 @@ internal struct StackElementSubView: View {
             VStack(spacing: 0) {
                 ForEach(dataSet.dataPoints.reversed()) { dataPoint in
                     
-                    if dataPoint.group.colourType == .colour,
-                       let colour = dataPoint.group.colour
+                    if dataPoint.group.fillColour.colourType == .colour,
+                       let colour = dataPoint.group.fillColour.colour
                     {
                         
                         ColourPartBar(colour, getHeight(height    : geo.size.height,
@@ -308,10 +308,10 @@ internal struct StackElementSubView: View {
                                                         dataPoint : dataPoint))
                             .accessibilityValue(Text("\(dataPoint.value, specifier: "%.f"), \(dataPoint.pointDescription ?? "")"))
                         
-                    } else if dataPoint.group.colourType == .gradientColour,
-                              let colours    = dataPoint.group.colours,
-                              let startPoint = dataPoint.group.startPoint,
-                              let endPoint   = dataPoint.group.endPoint
+                    } else if dataPoint.group.fillColour.colourType == .gradientColour,
+                              let colours    = dataPoint.group.fillColour.colours,
+                              let startPoint = dataPoint.group.fillColour.startPoint,
+                              let endPoint   = dataPoint.group.fillColour.endPoint
                     {
 
                         GradientColoursPartBar(colours, startPoint, endPoint, getHeight(height: geo.size.height,
@@ -319,10 +319,10 @@ internal struct StackElementSubView: View {
                                                                                         dataPoint : dataPoint))
                             .accessibilityValue(Text("\(dataPoint.value, specifier: "%.f") \(dataPoint.pointDescription ?? "")"))
                         
-                    } else if dataPoint.group.colourType == .gradientStops,
-                              let stops      = dataPoint.group.stops,
-                              let startPoint = dataPoint.group.startPoint,
-                              let endPoint   = dataPoint.group.endPoint
+                    } else if dataPoint.group.fillColour.colourType == .gradientStops,
+                              let stops      = dataPoint.group.fillColour.stops,
+                              let startPoint = dataPoint.group.fillColour.startPoint,
+                              let endPoint   = dataPoint.group.fillColour.endPoint
                     {
 
                         let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)

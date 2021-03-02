@@ -10,15 +10,15 @@ import SwiftUI
 /**
  Sub view gets the point markers drawn, sets the styling and sets up the animations.
  */
-internal struct PointsSubView: View {
+internal struct PointsSubView<DS>: View where DS: CTLineChartDataSet {
     
-    private let dataSets: LineDataSet
+    private let dataSets : DS
     private let minValue : Double
     private let range    : Double
     private let animation: Animation
     private let isFilled : Bool
 
-    internal init(dataSets  : LineDataSet,
+    internal init(dataSets  : DS,
                   minValue  : Double,
                   range     : Double,
                   animation : Animation,

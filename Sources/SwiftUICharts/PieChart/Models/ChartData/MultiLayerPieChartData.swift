@@ -128,7 +128,7 @@ public final class MultiLayerPieChartData: CTMultiPieChartDataProtocol {
 }
 
 // MARK: - Touch
-extension MultiLayerPieChartData: TouchProtocol {
+extension MultiLayerPieChartData {
     public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         let points : [MultiPieDataPoint] = []
         self.infoView.touchOverlayInfo = points

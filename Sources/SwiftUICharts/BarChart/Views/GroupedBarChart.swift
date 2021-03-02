@@ -59,26 +59,26 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                     HStack(spacing: 0) {
                         ForEach(dataSet.dataPoints) { dataPoint in
                             
-                            if dataPoint.group.colourType == .colour,
-                               let colour = dataPoint.group.colour
+                            if dataPoint.group.fillColour.colourType == .colour,
+                               let colour = dataPoint.group.fillColour.colour
                             {
                                 
                                 ColourBar(colour, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth, chartData.infoView.touchSpecifier)
-                                    .accessibilityLabel( Text("\(chartData.metadata.title)"))
+                                    .accessibilityLabel(Text("\(chartData.metadata.title)"))
                                 
-                            } else if dataPoint.group.colourType == .gradientColour,
-                                      let colours    = dataPoint.group.colours,
-                                      let startPoint = dataPoint.group.startPoint,
-                                      let endPoint   = dataPoint.group.endPoint
+                            } else if dataPoint.group.fillColour.colourType == .gradientColour,
+                                      let colours    = dataPoint.group.fillColour.colours,
+                                      let startPoint = dataPoint.group.fillColour.startPoint,
+                                      let endPoint   = dataPoint.group.fillColour.endPoint
                             {
 
                                 GradientColoursBar(colours, startPoint, endPoint, dataPoint, chartData.maxValue, chartData.chartStyle, chartData.barStyle.cornerRadius, chartData.barStyle.barWidth, chartData.infoView.touchSpecifier)
                                     .accessibilityLabel( Text("\(chartData.metadata.title)"))
 
-                            } else if dataPoint.group.colourType == .gradientStops,
-                                      let stops      = dataPoint.group.stops,
-                                      let startPoint = dataPoint.group.startPoint,
-                                      let endPoint   = dataPoint.group.endPoint
+                            } else if dataPoint.group.fillColour.colourType == .gradientStops,
+                                      let stops      = dataPoint.group.fillColour.stops,
+                                      let startPoint = dataPoint.group.fillColour.startPoint,
+                                      let endPoint   = dataPoint.group.fillColour.endPoint
                             {
 
                                 let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)

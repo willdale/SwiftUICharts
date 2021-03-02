@@ -10,7 +10,7 @@ import SwiftUI
 /**
 View that displays information from the touch events.
  */
-internal struct TouchOverlayBox<D: CTChartDataPoint>: View {
+internal struct TouchOverlayBox<D: CTChartDataPointProtocol>: View {
     
     private var isTouchCurrent      : Bool
     private var selectedPoints      : [D]

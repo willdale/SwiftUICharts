@@ -62,11 +62,12 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
     @Published public var chartStyle    : LineChartStyle
     @Published public var legends       : [LegendData]
     @Published public var viewData      : ChartViewData
-    @Published public var isFilled      : Bool = false
     @Published public var infoView      : InfoViewData<LineChartDataPoint> = InfoViewData()
     
     public var noDataText   : Text
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
+    
+    internal var isFilled      : Bool = false
     
     // MARK: Initializers
     /// Initialises a Multi Line Chart.
@@ -157,7 +158,12 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
        ZStack {
             ForEach(self.dataSets.dataSets, id: \.self) { dataSet in
-                self.markerSubView(dataSet: dataSet, touchLocation: touchLocation, chartSize: chartSize)
+                self.markerSubView(markerType: self.chartStyle.markerType,
+                                   dataSet: dataSet,
+                                   dataPoints: dataSet.dataPoints,
+                                   lineType: dataSet.style.lineType,
+                                   touchLocation: touchLocation,
+                                   chartSize: chartSize)
             }
         }
     }
@@ -189,8 +195,24 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
 
 
 // MARK: - Touch
-extension MultiLineChartData: TouchProtocol {
+extension MultiLineChartData {
     
+
+    public func getPointLocation(dataSet: LineDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+        
+        let minValue : Double = self.minValue
+        let range    : Double = self.range
+        
+        let xSection : CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
+        let ySection : CGFloat = chartSize.height / CGFloat(range)
+        
+        let index    : Int     = Int((touchLocation.x + (xSection / 2)) / xSection)
+        if index >= 0 && index < dataSet.dataPoints.count {
+            return CGPoint(x: CGFloat(index) * xSection,
+                           y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
+        }
+        return nil
+    }
     public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points : [LineChartDataPoint] = []
         for dataSet in dataSets.dataSets {
@@ -209,36 +231,36 @@ extension MultiLineChartData: LegendProtocol {
     
     public func setupLegends() {
         for dataSet in dataSets.dataSets {
-            if dataSet.style.colourType == .colour,
-               let colour = dataSet.style.colour
+            if dataSet.style.lineColour.colourType == .colour,
+               let colour = dataSet.style.lineColour.colour
             {
                 self.legends.append(LegendData(id         : dataSet.id,
                                                legend     : dataSet.legendTitle,
-                                               colour     : colour,
+                                               colour     : ColourStyle(colour: colour),
                                                strokeStyle: dataSet.style.strokeStyle,
                                                prioity    : 1,
                                                chartType  : .line))
                 
-            } else if dataSet.style.colourType == .gradientColour,
-                      let colours = dataSet.style.colours
+            } else if dataSet.style.lineColour.colourType == .gradientColour,
+                      let colours = dataSet.style.lineColour.colours
             {
                 self.legends.append(LegendData(id         : dataSet.id,
                                                legend     : dataSet.legendTitle,
-                                               colours    : colours,
-                                               startPoint : .leading,
-                                               endPoint   : .trailing,
+                                               colour     : ColourStyle(colours: colours,
+                                                                       startPoint: .leading,
+                                                                       endPoint: .trailing),
                                                strokeStyle: dataSet.style.strokeStyle,
                                                prioity    : 1,
                                                chartType  : .line))
                 
-            } else if dataSet.style.colourType == .gradientStops,
-                      let stops = dataSet.style.stops
+            } else if dataSet.style.lineColour.colourType == .gradientStops,
+                      let stops = dataSet.style.lineColour.stops
             {
                 self.legends.append(LegendData(id         : dataSet.id,
                                                legend     : dataSet.legendTitle,
-                                               stops      : stops,
-                                               startPoint : .leading,
-                                               endPoint   : .trailing,
+                                               colour     : ColourStyle(stops: stops,
+                                                                       startPoint: .leading,
+                                                                       endPoint: .trailing),
                                                strokeStyle: dataSet.style.strokeStyle,
                                                prioity    : 1,
                                                chartType  : .line))
