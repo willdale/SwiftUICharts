@@ -13,13 +13,13 @@ final class GroupedBarChartTests: XCTestCase {
         var data : GroupingData {
             switch self {
             case .one:
-                return GroupingData(title: "One"  , colour: .blue)
+                return GroupingData(title: "One"  , fillColour: ColourStyle(colour: .blue))
             case .two:
-                return GroupingData(title: "Two"  , colour: .red)
+                return GroupingData(title: "Two"  , fillColour: ColourStyle(colour: .red))
             case .three:
-                return GroupingData(title: "Three", colour: .yellow)
+                return GroupingData(title: "Three", fillColour: ColourStyle(colour: .yellow))
             case .four:
-                return GroupingData(title: "Four" , colour: .green)
+                return GroupingData(title: "Four" , fillColour: ColourStyle(colour: .green))
             }
         }
     }

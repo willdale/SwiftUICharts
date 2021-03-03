@@ -125,31 +125,6 @@ public protocol CTChartData: ObservableObject, Identifiable {
     func getPointLocation(dataSet: SetPoint, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint?
 }
 
-
-
-
-
-// MARK: - Legend Protocol
-/**
- Protocol for dealing with legend data internally.
- */
-public protocol LegendProtocol {
-    
-    /**
-    Sets the order the Legends are layed out in.
-     - Returns: Ordered array of Legends.
-    */
-    func legendOrder() -> [LegendData]
-    
-    /**
-     Configures the legends based on the type of chart.
-     */
-    func setupLegends()
-}
-
-
-
-
 // MARK: - Data Sets
 /**
  Main protocol to set conformace for types of Data Sets.

@@ -137,12 +137,3 @@ extension MultiLayerPieChartData {
         return nil
     }
 }
-
-// MARK: - Legends
-extension MultiLayerPieChartData: LegendProtocol {
-    public func setupLegends() {}
-    
-    public func legendOrder() -> [LegendData] {
-        return legends.sorted { $0.prioity < $1.prioity}
-    }
-}

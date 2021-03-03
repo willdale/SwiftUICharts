@@ -28,6 +28,7 @@ import SwiftUI
  .legends(chartData: data)
  ```
  */
+// .stroke -- REMOVE FORCE UNWRAP
 public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData {
     
     @ObservedObject var chartData: ChartData

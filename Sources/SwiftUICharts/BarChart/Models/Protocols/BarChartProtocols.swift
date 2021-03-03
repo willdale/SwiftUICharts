@@ -20,6 +20,90 @@ public protocol CTBarChartDataProtocol: CTLineBarChartDataProtocol {
     var barStyle : BarStyle { get set }
 }
 
+extension CTBarChartDataProtocol where Self.Set.ID == UUID,
+                                       Self.Set.DataPoint.ID == UUID,
+                                       Self.Set: CTStandardBarChartDataSet,
+                                       Self.Set.DataPoint: CTStandardBarDataPoint {
+    internal func setupLegends() {
+        
+        switch self.barStyle.colourFrom {
+        case .barStyle:
+            if self.barStyle.fillColour.colourType == .colour,
+               let colour = self.barStyle.fillColour.colour
+            {
+                self.legends.append(LegendData(id         : dataSets.id,
+                                               legend     : dataSets.legendTitle,
+                                               colour     : ColourStyle(colour: colour),
+                                               strokeStyle: nil,
+                                               prioity    : 1,
+                                               chartType  : .bar))
+            } else if self.barStyle.fillColour.colourType == .gradientColour,
+                      let colours = self.barStyle.fillColour.colours
+            {
+                self.legends.append(LegendData(id         : dataSets.id,
+                                               legend     : dataSets.legendTitle,
+                                               colour     : ColourStyle(colours: colours,
+                                                                       startPoint: .leading,
+                                                                       endPoint: .trailing),
+                                               strokeStyle: nil,
+                                               prioity    : 1,
+                                               chartType  : .bar))
+            } else if self.barStyle.fillColour.colourType == .gradientStops,
+                      let stops = self.barStyle.fillColour.stops
+            {
+                self.legends.append(LegendData(id         : dataSets.id,
+                                               legend     : dataSets.legendTitle,
+                                               colour     : ColourStyle(stops: stops,
+                                                                       startPoint: .leading,
+                                                                       endPoint: .trailing),
+                                               strokeStyle: nil,
+                                               prioity    : 1,
+                                               chartType  : .bar))
+            }
+        case .dataPoints:
+
+            for data in dataSets.dataPoints {
+
+                if data.fillColour.colourType == .colour,
+                   let colour = data.fillColour.colour,
+                   let legend = data.pointDescription
+                {
+                    self.legends.append(LegendData(id         : data.id,
+                                                   legend     : legend,
+                                                   colour     : ColourStyle(colour: colour),
+                                                   strokeStyle: nil,
+                                                   prioity    : 1,
+                                                   chartType  : .bar))
+                } else if data.fillColour.colourType == .gradientColour,
+                          let colours = data.fillColour.colours,
+                          let legend = data.pointDescription
+                {
+                    self.legends.append(LegendData(id         : data.id,
+                                                   legend     : legend,
+                                                   colour     : ColourStyle(colours: colours,
+                                                                           startPoint: .leading,
+                                                                           endPoint: .trailing),
+                                                   strokeStyle: nil,
+                                                   prioity    : 1,
+                                                   chartType  : .bar))
+                } else if data.fillColour.colourType == .gradientStops,
+                          let stops = data.fillColour.stops,
+                          let legend = data.pointDescription
+                {
+                    self.legends.append(LegendData(id         : data.id,
+                                                   legend     : legend,
+                                                   colour     : ColourStyle(stops: stops,
+                                                                           startPoint: .leading,
+                                                                           endPoint: .trailing),
+                                                   strokeStyle: nil,
+                                                   prioity    : 1,
+                                                   chartType  : .bar))
+                }
+            }
+        }
+    }
+}
+
 /**
  A protocol to extend functionality of `CTBarChartDataProtocol` specifically for Multi Part Bar Charts.
  */
@@ -31,6 +115,46 @@ public protocol CTMultiBarChartDataProtocol: CTBarChartDataProtocol {
     var groups : [GroupingData] { get set }
 }
 
+extension CTMultiBarChartDataProtocol {
+    internal func setupLegends() {
+        
+        for group in self.groups {
+            
+            if group.fillColour.colourType == .colour,
+               let colour = group.fillColour.colour
+            {
+                self.legends.append(LegendData(id         : group.id,
+                                               legend     : group.title,
+                                               colour     : ColourStyle(colour: colour),
+                                               strokeStyle: nil,
+                                               prioity    : 1,
+                                               chartType  : .bar))
+            } else if group.fillColour.colourType == .gradientColour,
+                      let colours = group.fillColour.colours
+            {
+                self.legends.append(LegendData(id         : group.id,
+                                               legend     : group.title,
+                                               colour     : ColourStyle(colours: colours,
+                                                                       startPoint: .leading,
+                                                                       endPoint: .trailing),
+                                               strokeStyle: nil,
+                                               prioity    : 1,
+                                               chartType  : .bar))
+            } else if group.fillColour.colourType == .gradientStops,
+                      let stops  = group.fillColour.stops
+            {
+                self.legends.append(LegendData(id         : group.id,
+                                               legend     : group.title,
+                                               colour     : ColourStyle(stops: stops,
+                                                                       startPoint: .leading,
+                                                                       endPoint: .trailing),
+                                               strokeStyle: nil,
+                                               prioity    : 1,
+                                               chartType  : .bar))
+            }
+        }
+    }
+}
 
 
 

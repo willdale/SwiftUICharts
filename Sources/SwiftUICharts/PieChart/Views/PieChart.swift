@@ -41,6 +41,7 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
     @State private var startAnimation : Bool = false
     
     public var body: some View {
+        
         ZStack {
             ForEach(chartData.dataSets.dataPoints.indices, id: \.self) { data in
                 PieSegmentShape(id:         chartData.dataSets.dataPoints[data].id,
@@ -60,6 +61,7 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
                     .accessibilityValue(Text(String(format: chartData.infoView.touchSpecifier, chartData.dataSets.dataPoints[data].value) + "\(chartData.dataSets.dataPoints[data].pointDescription ?? "")"))
             }
         }
+
         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
             self.startAnimation = true
         }

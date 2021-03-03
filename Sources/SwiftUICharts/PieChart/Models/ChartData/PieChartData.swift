@@ -91,23 +91,3 @@ extension PieChartData {
         return nil
     }
 }
-
-// MARK: - Legends
-extension PieChartData: LegendProtocol {
-    public func setupLegends() {
-        for data in dataSets.dataPoints {
-            if let legend = data.pointDescription {
-                self.legends.append(LegendData(id         : data.id,
-                                               legend     : legend,
-                                               colour     : ColourStyle(colour: data.colour),
-                                               strokeStyle: nil,
-                                               prioity    : 1,
-                                               chartType  : .pie))
-            }
-        }
-    }
-    
-    public func legendOrder() -> [LegendData] {
-        return legends.sorted { $0.prioity < $1.prioity}
-    }
-}

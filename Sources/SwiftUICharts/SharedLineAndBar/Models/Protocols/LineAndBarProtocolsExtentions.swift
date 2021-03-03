@@ -30,7 +30,7 @@ extension CTLineBarChartDataProtocol where Set: CTSingleDataSetProtocol {
             _highestValue = max(DataFunctions.dataSetMaxValue(from: dataSets), value)
         }
 
-        return _highestValue - _lowestValue
+        return (_highestValue - _lowestValue) + 0.001
     }
     
     public var minValue : Double {
@@ -82,7 +82,7 @@ extension CTLineBarChartDataProtocol where Set: CTMultiDataSetProtocol {
             _highestValue = max(DataFunctions.multiDataSetMaxValue(from: dataSets), value)
         }
 
-        return _highestValue - _lowestValue
+        return (_highestValue - _lowestValue) + 0.001
     }
     public var minValue : Double {
         switch self.chartStyle.baseline {

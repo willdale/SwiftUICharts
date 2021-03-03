@@ -37,7 +37,8 @@ public struct PieDataSet: CTSingleDataSetProtocol {
         self.dataPoints     = dataPoints
         self.legendTitle    = legendTitle
     }
-
+    
+    public typealias ID = UUID
     public typealias DataPoint = PieChartDataPoint
 }
 

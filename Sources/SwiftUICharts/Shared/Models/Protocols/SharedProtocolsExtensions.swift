@@ -31,3 +31,8 @@ extension CTChartData {
         self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
     }
 }
+extension CTChartData {
+    public func legendOrder() -> [LegendData] {
+        return legends.sorted { $0.prioity < $1.prioity}
+    }
+}

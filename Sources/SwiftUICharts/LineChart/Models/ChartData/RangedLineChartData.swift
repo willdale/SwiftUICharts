@@ -49,7 +49,8 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
         self.viewData       = ChartViewData()
         self.chartType      = (chartType: .line, dataSetType: .single)
         
-//        self.setupLegends()
+        self.setupLegends()
+        self.setupRangeLegends()
     }
     // MARK: Data
     public var range : Double {
@@ -73,7 +74,7 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
             _highestValue = max(dataSets.dataPoints.max(by: { $0.upperValue < $1.upperValue })?.upperValue ?? 0, value)
         }
 
-        return _highestValue - _lowestValue
+        return (_highestValue - _lowestValue) + 0.001
     }
     
     public var minValue : Double {

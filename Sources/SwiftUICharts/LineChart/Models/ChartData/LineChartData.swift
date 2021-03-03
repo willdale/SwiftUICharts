@@ -205,47 +205,7 @@ extension LineChartData {
 }
 
 // MARK: - Legends
-extension LineChartData: LegendProtocol {
+extension LineChartData {
    
-    public func setupLegends() {
-        
-        if dataSets.style.lineColour.colourType == .colour,
-           let colour = dataSets.style.lineColour.colour
-        {
-            self.legends.append(LegendData(id         : dataSets.id,
-                                           legend     : dataSets.legendTitle,
-                                           colour     : ColourStyle(colour: colour),
-                                           strokeStyle: dataSets.style.strokeStyle,
-                                           prioity    : 1,
-                                           chartType  : .line))
-
-        } else if dataSets.style.lineColour.colourType == .gradientColour,
-                  let colours = dataSets.style.lineColour.colours
-        {
-            self.legends.append(LegendData(id         : dataSets.id,
-                                           legend     : dataSets.legendTitle,
-                                           colour     : ColourStyle(colours: colours,
-                                                                   startPoint: .leading,
-                                                                   endPoint: .trailing),
-                                           strokeStyle: dataSets.style.strokeStyle,
-                                           prioity    : 1,
-                                           chartType  : .line))
-
-        } else if dataSets.style.lineColour.colourType == .gradientStops,
-                  let stops = dataSets.style.lineColour.stops
-        {
-            self.legends.append(LegendData(id         : dataSets.id,
-                                           legend     : dataSets.legendTitle,
-                                           colour     : ColourStyle(stops: stops,
-                                                                   startPoint: .leading,
-                                                                   endPoint: .trailing),
-                                           strokeStyle: dataSets.style.strokeStyle,
-                                           prioity    : 1,
-                                           chartType  : .line))
-        }
-    }
-
-    public func legendOrder() -> [LegendData] {
-        return legends.sorted { $0.prioity < $1.prioity}
-    }
+    
 }

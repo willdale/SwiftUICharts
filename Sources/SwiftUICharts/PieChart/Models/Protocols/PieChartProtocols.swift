@@ -17,6 +17,22 @@ public protocol CTPieDoughnutChartDataProtocol: CTChartData {}
  A protocol to extend functionality of `CTPieDoughnutChartDataProtocol` specifically for Pie Charts.
  */
 public protocol CTPieChartDataProtocol : CTPieDoughnutChartDataProtocol {}
+extension CTPieDoughnutChartDataProtocol where Self.Set.DataPoint.ID == UUID,
+                                               Self.Set: CTSingleDataSetProtocol,
+                                               Self.Set.DataPoint: CTPieDataPoint {
+    internal func setupLegends() {
+        for data in dataSets.dataPoints {
+            if let legend = data.pointDescription {
+                self.legends.append(LegendData(id         : data.id,
+                                               legend     : legend,
+                                               colour     : ColourStyle(colour: data.colour),
+                                               strokeStyle: nil,
+                                               prioity    : 1,
+                                               chartType  : .pie))
+            }
+        }
+    }
+}
 
 /**
  A protocol to extend functionality of `CTPieDoughnutChartDataProtocol` specifically for  Doughnut Charts.
@@ -27,7 +43,9 @@ public protocol CTDoughnutChartDataProtocol : CTPieDoughnutChartDataProtocol {}
  A protocol to extend functionality of `CTPieDoughnutChartDataProtocol` specifically for multi layer Pie Charts.
  */
 public protocol CTMultiPieChartDataProtocol : CTPieDoughnutChartDataProtocol {}
-
+extension CTMultiPieChartDataProtocol {
+    internal func setupLegends() {}
+}
 
 
 
@@ -60,9 +78,11 @@ public protocol CTPieDataPoint: CTChartDataPointProtocol {
      The data points value in radians.
      */
     var amount      : Double { get set }
+    
+    var colour      : Color { get set }
 }
 
-public protocol CTMultiPieChartDataPoint: CTChartDataPointProtocol {
+public protocol CTMultiPieChartDataPoint: CTPieDataPoint {
   
     /**
      Second layer of data points.
