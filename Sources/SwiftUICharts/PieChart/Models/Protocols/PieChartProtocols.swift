@@ -17,50 +17,14 @@ public protocol CTPieDoughnutChartDataProtocol: CTChartData {}
  A protocol to extend functionality of `CTPieDoughnutChartDataProtocol` specifically for Pie Charts.
  */
 public protocol CTPieChartDataProtocol : CTPieDoughnutChartDataProtocol {}
-extension CTPieDoughnutChartDataProtocol where Self.Set.DataPoint.ID == UUID,
-                                               Self.Set: CTSingleDataSetProtocol,
-                                               Self.Set.DataPoint: CTPieDataPoint {
-    internal func setupLegends() {
-        for data in dataSets.dataPoints {
-            if let legend = data.pointDescription {
-                self.legends.append(LegendData(id         : data.id,
-                                               legend     : legend,
-                                               colour     : ColourStyle(colour: data.colour),
-                                               strokeStyle: nil,
-                                               prioity    : 1,
-                                               chartType  : .pie))
-            }
-        }
-    }
-}
 
 /**
  A protocol to extend functionality of `CTPieDoughnutChartDataProtocol` specifically for  Doughnut Charts.
  */
 public protocol CTDoughnutChartDataProtocol : CTPieDoughnutChartDataProtocol {}
 
-/**
- A protocol to extend functionality of `CTPieDoughnutChartDataProtocol` specifically for multi layer Pie Charts.
- */
-public protocol CTMultiPieChartDataProtocol : CTPieDoughnutChartDataProtocol {}
-extension CTMultiPieChartDataProtocol {
-    internal func setupLegends() {}
-}
-
-
-
-// MARK: - DataSet
-public protocol CTMultiPieDataSet: CTDataSetProtocol {}
-
-
-
-
-
-
-
 
 // MARK: - DataPoints
-
 /**
  A protocol to extend functionality of `CTChartDataPointProtocol` specifically for Pie and Doughnut Charts.
  */
@@ -82,13 +46,7 @@ public protocol CTPieDataPoint: CTChartDataPointProtocol {
     var colour      : Color { get set }
 }
 
-public protocol CTMultiPieChartDataPoint: CTPieDataPoint {
-  
-    /**
-     Second layer of data points.
-     */
-    var layerDataPoints  : [MultiPieDataPoint]? { get set }
-}
+
 
 
 
