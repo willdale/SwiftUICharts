@@ -176,19 +176,10 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
             }
         }
     }
-
+    // MARK: Touch
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         self.markerSubView(dataSet: dataSets, touchLocation: touchLocation, chartSize: chartSize)
     }
-    
-    public typealias Set        = MultiBarDataSets
-    public typealias DataPoint  = MultiBarChartDataPoint
-    public typealias CTStyle    = BarChartStyle
-}
-
-// MARK: - Touch
-extension GroupedBarChartData {
-    
     public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         
         var points : [MultiBarChartDataPoint] = []
@@ -214,7 +205,6 @@ extension GroupedBarChartData {
         }
         self.infoView.touchOverlayInfo = points
     }
-
     public func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
         
         // Divide the chart into equal sections.
@@ -246,4 +236,8 @@ extension GroupedBarChartData {
         }
         return nil
     }
+    
+    public typealias Set        = MultiBarDataSets
+    public typealias DataPoint  = MultiBarChartDataPoint
+    public typealias CTStyle    = BarChartStyle
 }

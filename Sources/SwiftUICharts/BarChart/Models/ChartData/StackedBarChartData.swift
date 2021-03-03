@@ -163,109 +163,105 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
             }
         }
     }
-    
+    // MARK:  Touch
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         self.markerSubView(dataSet: dataSets, touchLocation: touchLocation, chartSize: chartSize)
     }
+    
+     public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+
+         var points : [MultiBarChartDataPoint] = []
+         
+         // Filter to get the right dataset based on the x axis.
+         let superXSection : CGFloat = chartSize.width / CGFloat(dataSets.dataSets.count)
+         let superIndex    : Int     = Int((touchLocation.x) / superXSection)
+         
+         if superIndex >= 0 && superIndex < dataSets.dataSets.count {
+             
+             let dataSet = dataSets.dataSets[superIndex]
+             
+             // Get the max value of the dataset relative to max value of all datasets.
+             // This is used to set the height of the y axis filtering.
+             let setMaxValue = dataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
+             let allMaxValue = self.maxValue
+             let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
+
+             // Gets the height of each datapoint
+             var heightOfElements : [CGFloat] = []
+             let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }
+             dataSet.dataPoints.forEach { datapoint in
+                 heightOfElements.append((chartSize.height * fraction) * CGFloat(datapoint.value / sum))
+             }
+         
+             // Gets the highest point of each element.
+             var endPointOfElements : [CGFloat] = []
+             heightOfElements.enumerated().forEach { element in
+                 var returnValue : CGFloat = 0
+                 for index in 0...element.offset {
+                     returnValue += heightOfElements[index]
+                 }
+                 endPointOfElements.append(returnValue)
+             }
+             
+             let yIndex = endPointOfElements.enumerated().first(where: { $0.element > abs(touchLocation.y - chartSize.height) })
+             
+             if let index = yIndex?.offset {
+                 if index >= 0 && index < dataSet.dataPoints.count {
+                     points.append(dataSet.dataPoints[index])
+                 }
+             }
+         }
+         self.infoView.touchOverlayInfo = points
+     }
+
+     public func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+         // Filter to get the right dataset based on the x axis.
+         let superXSection : CGFloat = chartSize.width / CGFloat(dataSet.dataSets.count)
+         let superIndex    : Int     = Int((touchLocation.x) / superXSection)
+
+         if superIndex >= 0 && superIndex < dataSet.dataSets.count {
+
+             let subDataSet = dataSet.dataSets[superIndex]
+
+             // Get the max value of the dataset relative to max value of all datasets.
+             // This is used to set the height of the y axis filtering.
+             let setMaxValue = subDataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
+             let allMaxValue = self.maxValue
+             let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
+
+             // Gets the height of each datapoint
+             var heightOfElements : [CGFloat] = []
+             let sum = subDataSet.dataPoints.reduce(0) { $0 + $1.value }
+             subDataSet.dataPoints.forEach { datapoint in
+                 heightOfElements.append((chartSize.height * fraction) * CGFloat(datapoint.value / sum))
+             }
+
+             // Gets the highest point of each element.
+             var endPointOfElements : [CGFloat] = []
+             heightOfElements.enumerated().forEach { element in
+                 var returnValue : CGFloat = 0
+                 for index in 0...element.offset {
+                     returnValue += heightOfElements[index]
+                 }
+                 endPointOfElements.append(returnValue)
+             }
+
+             let yIndex = endPointOfElements.enumerated().first(where: {
+                 $0.element > abs(touchLocation.y - chartSize.height)
+             })
+
+             if let index = yIndex?.offset {
+                 if index >= 0 && index < subDataSet.dataPoints.count {
+
+                     return CGPoint(x: (CGFloat(superIndex) * superXSection) + (superXSection / 2),
+                                    y: (chartSize.height - endPointOfElements[index]))
+                 }
+             }
+         }
+         return nil
+     }
 
     public typealias Set        = MultiBarDataSets
     public typealias DataPoint  = MultiBarChartDataPoint
     public typealias CTStyle    = BarChartStyle
-}
-
-// MARK: - Touch
-extension StackedBarChartData {
-   
-    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
-
-        var points : [MultiBarChartDataPoint] = []
-        
-        // Filter to get the right dataset based on the x axis.
-        let superXSection : CGFloat = chartSize.width / CGFloat(dataSets.dataSets.count)
-        let superIndex    : Int     = Int((touchLocation.x) / superXSection)
-        
-        if superIndex >= 0 && superIndex < dataSets.dataSets.count {
-            
-            let dataSet = dataSets.dataSets[superIndex]
-            
-            // Get the max value of the dataset relative to max value of all datasets.
-            // This is used to set the height of the y axis filtering.
-            let setMaxValue = dataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
-            let allMaxValue = self.maxValue
-            let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
-
-            // Gets the height of each datapoint
-            var heightOfElements : [CGFloat] = []
-            let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }
-            dataSet.dataPoints.forEach { datapoint in
-                heightOfElements.append((chartSize.height * fraction) * CGFloat(datapoint.value / sum))
-            }
-        
-            // Gets the highest point of each element.
-            var endPointOfElements : [CGFloat] = []
-            heightOfElements.enumerated().forEach { element in
-                var returnValue : CGFloat = 0
-                for index in 0...element.offset {
-                    returnValue += heightOfElements[index]
-                }
-                endPointOfElements.append(returnValue)
-            }
-            
-            let yIndex = endPointOfElements.enumerated().first(where: { $0.element > abs(touchLocation.y - chartSize.height) })
-            
-            if let index = yIndex?.offset {
-                if index >= 0 && index < dataSet.dataPoints.count {
-                    points.append(dataSet.dataPoints[index])
-                }
-            }
-        }
-        self.infoView.touchOverlayInfo = points
-    }
-
-    public func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
-        // Filter to get the right dataset based on the x axis.
-        let superXSection : CGFloat = chartSize.width / CGFloat(dataSet.dataSets.count)
-        let superIndex    : Int     = Int((touchLocation.x) / superXSection)
-
-        if superIndex >= 0 && superIndex < dataSet.dataSets.count {
-
-            let subDataSet = dataSet.dataSets[superIndex]
-
-            // Get the max value of the dataset relative to max value of all datasets.
-            // This is used to set the height of the y axis filtering.
-            let setMaxValue = subDataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
-            let allMaxValue = self.maxValue
-            let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
-
-            // Gets the height of each datapoint
-            var heightOfElements : [CGFloat] = []
-            let sum = subDataSet.dataPoints.reduce(0) { $0 + $1.value }
-            subDataSet.dataPoints.forEach { datapoint in
-                heightOfElements.append((chartSize.height * fraction) * CGFloat(datapoint.value / sum))
-            }
-
-            // Gets the highest point of each element.
-            var endPointOfElements : [CGFloat] = []
-            heightOfElements.enumerated().forEach { element in
-                var returnValue : CGFloat = 0
-                for index in 0...element.offset {
-                    returnValue += heightOfElements[index]
-                }
-                endPointOfElements.append(returnValue)
-            }
-
-            let yIndex = endPointOfElements.enumerated().first(where: {
-                $0.element > abs(touchLocation.y - chartSize.height)
-            })
-
-            if let index = yIndex?.offset {
-                if index >= 0 && index < subDataSet.dataPoints.count {
-
-                    return CGPoint(x: (CGFloat(superIndex) * superXSection) + (superXSection / 2),
-                                   y: (chartSize.height - endPointOfElements[index]))
-                }
-            }
-        }
-        return nil
-    }
 }

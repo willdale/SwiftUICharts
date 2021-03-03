@@ -130,19 +130,11 @@ public final class BarChartData: CTBarChartDataProtocol {
             }
         }
     }
-
+    
+    // MARK: - Touch
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         self.markerSubView(dataSet: dataSets, touchLocation: touchLocation, chartSize: chartSize)
     }
-    
-    public typealias Set            = BarDataSet
-    public typealias DataPoint      = BarChartDataPoint
-    public typealias CTStyle        = BarChartStyle
-}
-
-// MARK: - Touch
-extension BarChartData {
-   
     public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points      : [BarChartDataPoint] = []
         let xSection    : CGFloat   = chartSize.width / CGFloat(dataSets.dataPoints.count)
@@ -152,7 +144,6 @@ extension BarChartData {
         }
         self.infoView.touchOverlayInfo = points
     }
-
     public func getPointLocation(dataSet: BarDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
         let xSection : CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count)
         let ySection : CGFloat = chartSize.height / CGFloat(self.maxValue)
@@ -163,4 +154,10 @@ extension BarChartData {
         }
         return nil
     }
+    
+    public typealias Set            = BarDataSet
+    public typealias DataPoint      = BarChartDataPoint
+    public typealias CTStyle        = BarChartStyle
 }
+
+
