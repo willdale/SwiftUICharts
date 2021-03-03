@@ -131,42 +131,10 @@ public final class BarChartData: CTBarChartDataProtocol {
         }
     }
 
-
-    
-    @ViewBuilder
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-
-        if let position = self.getPointLocation(dataSet: dataSets,
-                                                touchLocation: touchLocation,
-                                                chartSize: chartSize) {
-            
-            ZStack {
-                switch self.chartStyle.markerType {
-                case .none:
-                    EmptyView()
-                case .vertical:
-                    MarkerFull(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .full:
-                    MarkerFull(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .bottomLeading:
-                    MarkerBottomLeading(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .bottomTrailing:
-                    MarkerBottomTrailing(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .topLeading:
-                    MarkerTopLeading(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .topTrailing:
-                    MarkerTopTrailing(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                }
-            }
-        } else { EmptyView() }
+        self.markerSubView(dataSet: dataSets, touchLocation: touchLocation, chartSize: chartSize)
     }
-
+    
     public typealias Set            = BarDataSet
     public typealias DataPoint      = BarChartDataPoint
     public typealias CTStyle        = BarChartStyle

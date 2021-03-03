@@ -20,6 +20,52 @@ public protocol CTBarChartDataProtocol: CTLineBarChartDataProtocol {
     var barStyle : BarStyle { get set }
 }
 
+extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType {
+    internal func markerSubView<DS: CTDataSetProtocol>
+    (dataSet         : DS,
+     touchLocation   : CGPoint,
+     chartSize       : CGRect) -> some View {
+        Group {
+            if let position = self.getPointLocation(dataSet: dataSets as! Self.SetPoint,
+                                                    touchLocation: touchLocation,
+                                                    chartSize: chartSize) {
+                switch self.chartStyle.markerType {
+                case .none:
+                    EmptyView()
+                case .vertical:
+                    
+                    MarkerFull(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .full:
+                    
+                    MarkerFull(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                case .bottomLeading:
+                    
+                    MarkerBottomLeading(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                    
+                case .bottomTrailing:
+                    
+                    MarkerBottomTrailing(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                    
+                case .topLeading:
+                    
+                    MarkerTopLeading(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                    
+                case .topTrailing:
+                    
+                    MarkerTopTrailing(position: position)
+                        .stroke(Color.primary, lineWidth: 2)
+                }
+            }
+        }
+    }
+}
+
+
 extension CTBarChartDataProtocol where Self.Set.ID == UUID,
                                        Self.Set.DataPoint.ID == UUID,
                                        Self.Set: CTStandardBarChartDataSet,
@@ -196,8 +242,6 @@ public protocol CTStandardBarChartDataSet: CTSingleDataSetProtocol {
  A protocol to extend functionality of `CTSingleDataSetProtocol` specifically for Multi Part Bar Charts.
  */
 public protocol CTMultiBarChartDataSet: CTSingleDataSetProtocol  {}
-
-
 
 
 

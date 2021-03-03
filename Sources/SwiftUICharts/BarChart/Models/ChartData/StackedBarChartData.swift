@@ -122,79 +122,50 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
         self.setupLegends()
     }
     // MARK: Labels
-    @ViewBuilder
     public func getXAxisLabels() -> some View {
-        switch self.chartStyle.xAxisLabelsFrom {
-        case .dataPoint:
-            HStack(spacing: 0) {
-                ForEach(groups) { group in
-                    Spacer()
-                        .frame(minWidth: 0, maxWidth: 500)
-                    Text(group.title)
-                        .font(.caption)
-                        .foregroundColor(self.chartStyle.xAxisLabelColour)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.5)
-                        .accessibilityLabel( Text("X Axis Label"))
-                        .accessibilityValue(Text("\(group.title)"))
-                    
-                    Spacer()
-                        .frame(minWidth: 0, maxWidth: 500)
-                }
-            }
-        case .chartData:
-            if let labelArray = self.xAxisLabels {
+        Group {
+            switch self.chartStyle.xAxisLabelsFrom {
+            case .dataPoint:
                 HStack(spacing: 0) {
-                    ForEach(labelArray, id: \.self) { data in
+                    ForEach(groups) { group in
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
-                        Text(data)
+                        Text(group.title)
                             .font(.caption)
                             .foregroundColor(self.chartStyle.xAxisLabelColour)
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
                             .accessibilityLabel( Text("X Axis Label"))
-                            .accessibilityValue(Text("\(data)"))
+                            .accessibilityValue(Text("\(group.title)"))
+                        
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
+                    }
+                }
+            case .chartData:
+                if let labelArray = self.xAxisLabels {
+                    HStack(spacing: 0) {
+                        ForEach(labelArray, id: \.self) { data in
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                            Text(data)
+                                .font(.caption)
+                                .foregroundColor(self.chartStyle.xAxisLabelColour)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                                .accessibilityLabel( Text("X Axis Label"))
+                                .accessibilityValue(Text("\(data)"))
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                        }
                     }
                 }
             }
         }
     }
-
-    @ViewBuilder
+    
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        
-        if let position = self.getPointLocation(dataSet: dataSets,
-                                                touchLocation: touchLocation,
-                                                chartSize: chartSize) {
-            ZStack {
-                
-                switch self.chartStyle.markerType  {
-                case .none:
-                    EmptyView()
-                case .vertical:
-                    MarkerFull(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .full:
-                    MarkerFull(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .bottomLeading:
-                    MarkerBottomLeading(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .bottomTrailing:
-                    MarkerBottomTrailing(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .topLeading:
-                    MarkerTopLeading(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .topTrailing:
-                    MarkerTopTrailing(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                }
-            }
-        } else { EmptyView() }
+        self.markerSubView(dataSet: dataSets, touchLocation: touchLocation, chartSize: chartSize)
     }
 
     public typealias Set        = MultiBarDataSets

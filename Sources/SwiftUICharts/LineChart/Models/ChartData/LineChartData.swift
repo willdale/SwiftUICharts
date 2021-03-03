@@ -147,8 +147,7 @@ public final class LineChartData: CTLineChartDataProtocol {
     }
 
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        self.markerSubView(markerType: self.chartStyle.markerType,
-                           dataSet: dataSets,
+        self.markerSubView(dataSet: dataSets,
                            dataPoints: dataSets.dataPoints,
                            lineType: dataSets.style.lineType,
                            touchLocation: touchLocation,

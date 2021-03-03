@@ -70,8 +70,6 @@ public protocol CTChartData: ObservableObject, Identifiable {
      Holds data about the charts type.
      
      Allows for internal logic based on the type of chart.
-     
-     This might get removed in favour of a more protocol based approach.
     */
     var chartType: (chartType: ChartType, dataSetType: DataSetType) { get }
     

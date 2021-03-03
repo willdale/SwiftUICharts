@@ -158,8 +158,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
        ZStack {
             ForEach(self.dataSets.dataSets, id: \.self) { dataSet in
-                self.markerSubView(markerType: self.chartStyle.markerType,
-                                   dataSet: dataSet,
+                self.markerSubView(dataSet: dataSet,
                                    dataPoints: dataSet.dataPoints,
                                    lineType: dataSet.style.lineType,
                                    touchLocation: touchLocation,

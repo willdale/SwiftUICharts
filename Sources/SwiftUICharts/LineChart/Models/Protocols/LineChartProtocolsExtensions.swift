@@ -242,18 +242,17 @@ extension CTLineChartDataProtocol {
 }
 
 // MARK: - Markers
-extension CTLineChartDataProtocol {
+extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
 
-    public func markerSubView<DS: CTDataSetProtocol,
-                              DP: CTLineDataPointProtocol>
-    (markerType      : LineMarkerType,
-     dataSet         : DS,
+    internal func markerSubView<DS: CTDataSetProtocol,
+                                DP: CTLineDataPointProtocol>
+    (dataSet         : DS,
      dataPoints      : [DP],
      lineType        : LineType,
      touchLocation   : CGPoint,
      chartSize       : CGRect) -> some View {
         Group {
-            switch markerType {
+            switch self.chartStyle.markerType {
             case .none:
                 EmptyView()
             case .indicator(let style):
@@ -312,7 +311,7 @@ extension CTLineChartDataProtocol {
                     
                     IndicatorSwitch(indicator: indicator, location: position)
                     
-                case .point:  EmptyView()
+                case .point:
                     
                     if let position = self.getPointLocation(dataSet: dataSet as! Self.SetPoint,
                                                             touchLocation: touchLocation,
@@ -340,7 +339,7 @@ extension CTLineChartDataProtocol {
                     
                     IndicatorSwitch(indicator: indicator, location: position)
                     
-                case .point: EmptyView()
+                case .point:
                     
                     if let position = self.getPointLocation(dataSet: dataSet as! Self.SetPoint,
                                                             touchLocation: touchLocation,
@@ -368,7 +367,7 @@ extension CTLineChartDataProtocol {
                     
                     IndicatorSwitch(indicator: indicator, location: position)
                     
-                case .point:  EmptyView()
+                case .point:
                     
                     if let position = self.getPointLocation(dataSet: dataSet as! Self.SetPoint,
                                                             touchLocation: touchLocation,
@@ -396,7 +395,7 @@ extension CTLineChartDataProtocol {
                     
                     IndicatorSwitch(indicator: indicator, location: position)
                     
-                case .point:  EmptyView()
+                case .point:
                     
                     if let position = self.getPointLocation(dataSet: dataSet as! Self.SetPoint,
                                                             touchLocation: touchLocation,
