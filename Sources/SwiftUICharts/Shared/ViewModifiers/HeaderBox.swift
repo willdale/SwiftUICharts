@@ -29,35 +29,13 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
                 .foregroundColor(chartData.metadata.subtitleColour)
         }
     }
-    
     var touchOverlay: some View {
+
         VStack(alignment: .trailing) {
             if chartData.infoView.isTouchCurrent {
                 ForEach(chartData.infoView.touchOverlayInfo, id: \.self) { info in
-                    switch chartData.infoView.touchUnit {
-                    case .none:
-                        Text("\(info.value, specifier: chartData.infoView.touchSpecifier)")
-                            .font(.title3)
-                            .foregroundColor(chartData.chartStyle.infoBoxValueColour)
-                        Text("\(info.pointDescription ?? "")")
-                            .font(.subheadline)
-                            .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
-                    case .prefix(of: let unit):
-                        Text("\(unit) \(info.value, specifier: chartData.infoView.touchSpecifier)")
-                            .font(.title3)
-                            .foregroundColor(chartData.chartStyle.infoBoxValueColour)
-                        Text("\(info.pointDescription ?? "")")
-                            .font(.subheadline)
-                            .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
-                    case .suffix(of: let unit):
-                        Text("\(info.value, specifier: chartData.infoView.touchSpecifier) \(unit)")
-                            .font(.title3)
-                            .foregroundColor(chartData.chartStyle.infoBoxValueColour)
-                        Text("\(info.pointDescription ?? "")")
-                            .font(.subheadline)
-                            .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
-                    }
                     
+                    chartData.headerTouchOverlaySubView(info: info)
                 }
             } else {
                 Text("")

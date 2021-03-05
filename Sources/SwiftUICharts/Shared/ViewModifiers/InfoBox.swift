@@ -31,13 +31,8 @@ internal struct InfoBox<T>: ViewModifier where T: CTChartData {
     }
     
     var floating: some View {
-        TouchOverlayBox(isTouchCurrent   : chartData.infoView.isTouchCurrent,
-                        selectedPoints   : chartData.infoView.touchOverlayInfo,
-                        specifier        : chartData.infoView.touchSpecifier,
-                        unit             : chartData.infoView.touchUnit,
-                        valueColour      : chartData.chartStyle.infoBoxValueColour,
-                        descriptionColour: chartData.chartStyle.infoBoxDescriptionColour,
-                        boxFrame         : $boxFrame)
+        TouchOverlayBox(chartData: chartData,
+                        boxFrame : $boxFrame)
             .position(x: setBoxLocationation(touchLocation: chartData.infoView.touchLocation.x,
                                              boxFrame     : boxFrame,
                                              chartSize    : chartData.infoView.chartSize),
@@ -48,13 +43,8 @@ internal struct InfoBox<T>: ViewModifier where T: CTChartData {
     
     var fixed: some View {
         
-        TouchOverlayBox(isTouchCurrent   : chartData.infoView.isTouchCurrent,
-                        selectedPoints   : chartData.infoView.touchOverlayInfo,
-                        specifier        : chartData.infoView.touchSpecifier,
-                        unit             : chartData.infoView.touchUnit,
-                        valueColour      : chartData.chartStyle.infoBoxValueColour,
-                        descriptionColour: chartData.chartStyle.infoBoxDescriptionColour,
-                        boxFrame         : $boxFrame)
+        TouchOverlayBox(chartData: chartData,
+                        boxFrame : $boxFrame)
         .frame(height: 40)
         .padding(.horizontal, 6)
         
