@@ -8,7 +8,8 @@
 import Foundation
 
 // MARK: - Single Data Set
-extension CTLineBarChartDataProtocol where Set: CTSingleDataSetProtocol {
+extension CTLineBarChartDataProtocol where Set: CTSingleDataSetProtocol,
+                                           Set.DataPoint: CTStandardDataPointProtocol & CTnotRanged {
     public var range : Double {
         
         var _lowestValue  : Double
@@ -16,18 +17,18 @@ extension CTLineBarChartDataProtocol where Set: CTSingleDataSetProtocol {
         
         switch self.chartStyle.baseline {
         case .minimumValue:
-            _lowestValue = DataFunctions.dataSetMinValue(from: dataSets)
+            _lowestValue = self.dataSets.minValue()
         case .minimumWithMaximum(of: let value):
-            _lowestValue = min(DataFunctions.dataSetMinValue(from: dataSets), value)
+            _lowestValue = min(self.dataSets.minValue(), value)
         case .zero:
             _lowestValue = 0
         }
         
         switch self.chartStyle.topLine {
         case .maximumValue:
-            _highestValue = DataFunctions.dataSetMaxValue(from: dataSets)
+            _highestValue = self.dataSets.maxValue()
         case .maximum(of: let value):
-            _highestValue = max(DataFunctions.dataSetMaxValue(from: dataSets), value)
+            _highestValue = max(self.dataSets.maxValue(), value)
         }
 
         return (_highestValue - _lowestValue) + 0.001
@@ -36,9 +37,9 @@ extension CTLineBarChartDataProtocol where Set: CTSingleDataSetProtocol {
     public var minValue : Double {
         switch self.chartStyle.baseline {
         case .minimumValue:
-            return DataFunctions.dataSetMinValue(from: dataSets)
+            return self.dataSets.minValue()
         case .minimumWithMaximum(of: let value):
-            return min(DataFunctions.dataSetMinValue(from: dataSets), value)
+            return min(self.dataSets.minValue(), value)
         case .zero:
             return 0
         }
@@ -47,20 +48,66 @@ extension CTLineBarChartDataProtocol where Set: CTSingleDataSetProtocol {
     public var maxValue : Double {
         switch self.chartStyle.topLine {
         case .maximumValue:
-            return DataFunctions.dataSetMaxValue(from: dataSets)
+            return self.dataSets.maxValue()
         case .maximum(of: let value):
-            return max(DataFunctions.dataSetMaxValue(from: dataSets), value)
+            return max(self.dataSets.maxValue(), value)
         }
     }
     
     public var average  : Double {
-        return DataFunctions.dataSetAverage(from: dataSets)
+        return self.dataSets.average()
+    }
+}
+extension CTLineBarChartDataProtocol where Set: CTSingleDataSetProtocol,
+                                           Set.DataPoint: CTRangeDataPointProtocol & CTisRanged {
+    public var range : Double {
+        
+        var _lowestValue  : Double
+        var _highestValue : Double
+        
+        switch self.chartStyle.baseline {
+        case .minimumValue:
+            _lowestValue = dataSets.dataPoints.min(by: { $0.lowerValue < $1.lowerValue })?.lowerValue ?? 0
+        case .minimumWithMaximum(of: let value):
+            _lowestValue = min(dataSets.dataPoints.min(by: { $0.lowerValue < $1.lowerValue })?.lowerValue ?? 0, value)
+        case .zero:
+            _lowestValue = 0
+        }
+        
+        switch self.chartStyle.topLine {
+        case .maximumValue:
+            _highestValue = dataSets.dataPoints.max(by: { $0.upperValue < $1.upperValue })?.upperValue ?? 0
+        case .maximum(of: let value):
+            _highestValue = max(dataSets.dataPoints.max(by: { $0.upperValue < $1.upperValue })?.upperValue ?? 0, value)
+        }
+                
+        return (_highestValue - _lowestValue) + 0.001
+    }
+    
+    public var minValue : Double {
+        switch self.chartStyle.baseline {
+        case .minimumValue:
+            return dataSets.dataPoints.min(by: { $0.lowerValue < $1.lowerValue })?.lowerValue ?? 0
+        case .minimumWithMaximum(of: let value):
+            return min(dataSets.dataPoints.min(by: { $0.lowerValue < $1.lowerValue })?.lowerValue ?? 0, value)
+        case .zero:
+            return 0
+        }
+    }
+    
+    public var maxValue : Double {
+        switch self.chartStyle.topLine {
+        case .maximumValue:
+            return dataSets.dataPoints.max(by: { $0.upperValue < $1.upperValue })?.upperValue ?? 0
+        case .maximum(of: let value):
+            return max(dataSets.dataPoints.max(by: { $0.upperValue < $1.upperValue })?.upperValue ?? 0, value)
+        }
     }
 }
 
-
 // MARK: - Multi Data Set
-extension CTLineBarChartDataProtocol where Set: CTMultiDataSetProtocol {
+extension CTLineBarChartDataProtocol where Set: CTMultiDataSetProtocol,
+                                           Self.Set.DataSet.DataPoint: CTStandardDataPointProtocol {
     public var range : Double {
         
         var _lowestValue  : Double
@@ -68,28 +115,29 @@ extension CTLineBarChartDataProtocol where Set: CTMultiDataSetProtocol {
         
         switch self.chartStyle.baseline {
         case .minimumValue:
-            _lowestValue = DataFunctions.multiDataSetMinValue(from: dataSets)
+            _lowestValue = self.dataSets.minValue()
         case .minimumWithMaximum(of: let value):
-            _lowestValue = min(DataFunctions.multiDataSetMinValue(from: dataSets), value)
+            _lowestValue = min(self.dataSets.minValue(), value)
         case .zero:
             _lowestValue = 0
         }
         
         switch self.chartStyle.topLine {
         case .maximumValue:
-            _highestValue = DataFunctions.multiDataSetMaxValue(from: dataSets)
+            _highestValue = self.dataSets.maxValue()
         case .maximum(of: let value):
-            _highestValue = max(DataFunctions.multiDataSetMaxValue(from: dataSets), value)
+            _highestValue = max(self.dataSets.maxValue(), value)
         }
 
         return (_highestValue - _lowestValue) + 0.001
     }
+    
     public var minValue : Double {
         switch self.chartStyle.baseline {
         case .minimumValue:
-            return DataFunctions.multiDataSetMinValue(from: dataSets)
+            return self.dataSets.minValue()
         case .minimumWithMaximum(of: let value):
-            return min(DataFunctions.multiDataSetMinValue(from: dataSets), value)
+            return min(self.dataSets.minValue(), value)
         case .zero:
             return 0
         }
@@ -98,19 +146,18 @@ extension CTLineBarChartDataProtocol where Set: CTMultiDataSetProtocol {
     public var maxValue : Double {
         switch self.chartStyle.topLine {
         case .maximumValue:
-            return DataFunctions.multiDataSetMaxValue(from: dataSets)
+            return self.dataSets.maxValue()
         case .maximum(of: let value):
-            return max(DataFunctions.multiDataSetMaxValue(from: dataSets), value)
+            return max(self.dataSets.maxValue(), value)
         }
     }
     
     public var average  : Double {
-        return DataFunctions.multiDataSetAverage(from: dataSets)
+        return self.dataSets.average()
     }
 }
 
 // MARK: - Y Labels
-
 extension CTLineBarChartDataProtocol {
     public func getYLabels() -> [Double] {
         var labels      : [Double]  = [Double]()
