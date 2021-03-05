@@ -52,42 +52,11 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
         self.setupLegends()
         self.setupRangeLegends()
     }
-    // MARK: Data
-    public var range : Double {
-        
-        var _lowestValue  : Double
-        var _highestValue : Double
-        
-        switch self.chartStyle.baseline {
-        case .minimumValue:
-            _lowestValue = dataSets.dataPoints.min(by: { $0.lowerValue < $1.lowerValue })?.lowerValue ?? 0
-        case .minimumWithMaximum(of: let value):
-            _lowestValue = min(dataSets.dataPoints.min(by: { $0.lowerValue < $1.lowerValue })?.lowerValue ?? 0, value)
-        case .zero:
-            _lowestValue = 0
-        }
-        
-        switch self.chartStyle.topLine {
-        case .maximumValue:
-            _highestValue = dataSets.dataPoints.max(by: { $0.upperValue < $1.upperValue })?.upperValue ?? 0
-        case .maximum(of: let value):
-            _highestValue = max(dataSets.dataPoints.max(by: { $0.upperValue < $1.upperValue })?.upperValue ?? 0, value)
-        }
-
-        return (_highestValue - _lowestValue) + 0.001
-    }
     
-    public var minValue : Double {
-        switch self.chartStyle.baseline {
-        case .minimumValue:
-            return dataSets.dataPoints.min(by: { $0.lowerValue < $1.lowerValue })?.lowerValue ?? 0
-        case .minimumWithMaximum(of: let value):
-            return min(dataSets.dataPoints.min(by: { $0.lowerValue < $1.lowerValue })?.lowerValue ?? 0, value)
-        case .zero:
-            return 0
-        }
+    public var average  : Double {
+        let sum = dataSets.dataPoints.reduce(0) { $0 + $1.value }
+        return sum / Double(dataSets.dataPoints.count)
     }
-    
     
     // MARK: Labels
     public func getXAxisLabels() -> some View {
@@ -179,6 +148,34 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
             points.append(dataSets.dataPoints[index])
         }
         self.infoView.touchOverlayInfo = points
+    }
+    
+    public func headerTouchOverlaySubView(info: RangedLineChartDataPoint) -> some View {
+        Group {
+            switch self.infoView.touchUnit {
+            case .none:
+                Text("\(info.upperValue, specifier: self.infoView.touchSpecifier)")
+                    .font(.title3)
+                    .foregroundColor(self.chartStyle.infoBoxValueColour)
+                Text("\(info.pointDescription ?? "")")
+                    .font(.subheadline)
+                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
+            case .prefix(of: let unit):
+                Text("\(unit) \(info.upperValue, specifier: self.infoView.touchSpecifier)")
+                    .font(.title3)
+                    .foregroundColor(self.chartStyle.infoBoxValueColour)
+                Text("\(info.pointDescription ?? "")")
+                    .font(.subheadline)
+                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
+            case .suffix(of: let unit):
+                Text("\(info.upperValue, specifier: self.infoView.touchSpecifier) \(unit)")
+                    .font(.title3)
+                    .foregroundColor(self.chartStyle.infoBoxValueColour)
+                Text("\(info.pointDescription ?? "")")
+                    .font(.subheadline)
+                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
+            }
+        }
     }
 
     // MARK: Accessibility
