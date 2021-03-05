@@ -33,7 +33,10 @@ public protocol CTMultiBarChartDataProtocol: CTBarChartDataProtocol {
     var groups : [GroupingData] { get set }
 }
 
-
+/**
+ A protocol to extend functionality of `CTBarChartDataProtocol` specifically for Multi Part Bar Charts.
+ */
+public protocol CTRangedBarChartDataProtocol: CTBarChartDataProtocol {}
 
 
 
@@ -77,7 +80,7 @@ public protocol CTStandardBarChartDataSet: CTSingleDataSetProtocol {
 public protocol CTMultiBarChartDataSet: CTSingleDataSetProtocol  {}
 
 
-
+public protocol CTRangedBarChartDataSet: CTSingleDataSetProtocol  {}
 
 
 
@@ -92,7 +95,7 @@ public protocol CTBarDataPoint: CTLineBarDataPointProtocol {}
 /**
  A protocol to extend functionality of `CTLineBarDataPointProtocol` specifically for standard Bar Charts.
  */
-public protocol CTStandardBarDataPoint: CTBarDataPoint {
+public protocol CTStandardBarDataPoint: CTBarDataPoint, CTStandardDataPointProtocol, CTnotRanged {
     /// Drawing style of the range fill.
     var fillColour : ColourStyle { get set }
 }
@@ -101,7 +104,7 @@ public protocol CTStandardBarDataPoint: CTBarDataPoint {
  A protocol to extend functionality of `CTLineBarDataPointProtocol` specifically for multi part Bar Charts.
  i.e: Grouped or Stacked
  */
-public protocol CTMultiBarDataPoint: CTBarDataPoint {
+public protocol CTMultiBarDataPoint: CTBarDataPoint, CTStandardDataPointProtocol, CTnotRanged {
     
     /**
      For grouping data points together so they can be drawn in the correct groupings.
@@ -109,3 +112,6 @@ public protocol CTMultiBarDataPoint: CTBarDataPoint {
     var group : GroupingData { get set }
     
 }
+
+public protocol CTRangedBarDataPoint: CTBarDataPoint, CTRangeDataPointProtocol, CTisRanged {}
+
