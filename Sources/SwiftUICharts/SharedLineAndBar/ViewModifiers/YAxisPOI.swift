@@ -110,6 +110,9 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                                        labelBackground: labelBackground,
                                        lineColour     : lineColour,
                                        chartSize      : geo.frame(in: .local))
+                    .position(x: -(chartData.infoView.yAxisLabelWidth / 2) - 6,
+                              y: getYPoint(chartType: chartData.chartType.chartType,
+                                           height: geo.size.height))
                     .accessibilityLabel(Text("P O I Marker"))
                     .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
                 
@@ -123,24 +126,27 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                                         lineColour      : lineColour,
                                         strokeStyle     : strokeStyle,
                                         chartSize       : geo.frame(in: .local))
+                    .position(x: geo.frame(in: .local).width / 2,
+                               y: getYPoint(chartType: chartData.chartType.chartType, height: geo.size.height))
+                    
                     .accessibilityLabel(Text("P O I Marker"))
                     .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
             }
         }
     }
-    
-   private func getYPoint(chartType: ChartType, chartSize: CGRect) -> CGFloat {
-        switch chartData.chartType.chartType {
-        case .line:
-            let y = chartSize.height / CGFloat(range)
-           return (CGFloat(markerValue - minValue) * -y) + chartSize.size.height
-        case .bar:
-            let y = chartSize.height / CGFloat(maxValue)
-            return  chartSize.height - CGFloat(markerValue) * y
-        case .pie:
-            return 0
-        }
-    }
+    private func getYPoint(chartType: ChartType, height: CGFloat) -> CGFloat {
+         switch chartData.chartType.chartType {
+         case .line:
+            let y = height / CGFloat(chartData.range)
+            return (CGFloat(markerValue - chartData.minValue) * -y) + height
+         case .bar:
+            let value = CGFloat(markerValue) - CGFloat(chartData.minValue)
+            return (height - (value / CGFloat(chartData.range)) * height)
+         
+         case .pie:
+             return 0
+         }
+     }
 }
 
 extension View {
