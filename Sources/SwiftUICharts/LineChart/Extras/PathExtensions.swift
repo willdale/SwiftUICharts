@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - Paths
 extension Path {
     /// Draws straight lines between data points.
-    static func straightLine<DP:CTLineDataPointProtocol>(rect: CGRect, dataPoints: [DP], minValue: Double, range: Double, isFilled: Bool) -> Path {
+    static func straightLine<DP:CTStandardDataPointProtocol>(rect: CGRect, dataPoints: [DP], minValue: Double, range: Double, isFilled: Bool) -> Path {
         let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
         let y : CGFloat = rect.height / CGFloat(range)
         var path = Path()
@@ -31,7 +31,7 @@ extension Path {
     }
     
     /// Draws cubic Bézier curved lines between data points.
-    static func curvedLine<DP:CTLineDataPointProtocol>(rect: CGRect, dataPoints: [DP], minValue: Double, range: Double, isFilled: Bool) -> Path {
+    static func curvedLine<DP:CTStandardDataPointProtocol>(rect: CGRect, dataPoints: [DP], minValue: Double, range: Double, isFilled: Bool) -> Path {
         let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
         let y : CGFloat = rect.height / CGFloat(range)
         var path = Path()

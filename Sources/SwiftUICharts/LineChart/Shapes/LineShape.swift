@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Main line shape
  */
-internal struct LineShape<DP>: Shape where DP: CTLineDataPointProtocol {
+internal struct LineShape<DP>: Shape where DP: CTStandardDataPointProtocol {
            
     private let dataPoints  : [DP]
     private let lineType    : LineType

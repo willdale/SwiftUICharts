@@ -37,7 +37,7 @@ struct AccessibilityRectangle: Shape {
  */
 internal struct LineChartColourSubView<CD, DS>: View where CD: CTLineChartDataProtocol,
                                                            DS: CTLineChartDataSet,
-                                                           DS.DataPoint: CTLineDataPointProtocol {
+                                                           DS.DataPoint: CTStandardDataPointProtocol {
     
     private let chartData   : CD
     private let dataSet     : DS
@@ -98,7 +98,7 @@ internal struct LineChartColourSubView<CD, DS>: View where CD: CTLineChartDataPr
  */
 internal struct LineChartColoursSubView<CD, DS>: View where CD: CTLineChartDataProtocol,
                                                             DS: CTLineChartDataSet,
-                                                            DS.DataPoint: CTLineDataPointProtocol {
+                                                            DS.DataPoint: CTStandardDataPointProtocol {
     
     private let chartData   : CD
     private let dataSet     : DS
@@ -180,7 +180,7 @@ internal struct LineChartColoursSubView<CD, DS>: View where CD: CTLineChartDataP
  */
 internal struct LineChartStopsSubView<CD, DS>: View where CD: CTLineChartDataProtocol,
                                                           DS: CTLineChartDataSet,
-                                                          DS.DataPoint: CTLineDataPointProtocol {
+                                                          DS.DataPoint: CTStandardDataPointProtocol {
 
     private let chartData   : CD
     private let dataSet     : DS

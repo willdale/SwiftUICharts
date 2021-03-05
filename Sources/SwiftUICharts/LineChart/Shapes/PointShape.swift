@@ -10,7 +10,8 @@ import SwiftUI
 /**
  Draws point markers over the data point locations.
  */
-internal struct Point<T>: Shape where T: CTLineChartDataSet {
+internal struct Point<T>: Shape where T: CTLineChartDataSet,
+                                      T.DataPoint: CTStandardDataPointProtocol  {
     
     private let dataSet     : T
     

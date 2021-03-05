@@ -26,9 +26,9 @@ public protocol CTDoughnutChartDataProtocol : CTPieDoughnutChartDataProtocol {}
 
 // MARK: - DataPoints
 /**
- A protocol to extend functionality of `CTChartDataPointProtocol` specifically for Pie and Doughnut Charts.
+ A protocol to extend functionality of `CTStandardDataPointProtocol` specifically for Pie and Doughnut Charts.
  */
-public protocol CTPieDataPoint: CTChartDataPointProtocol {
+public protocol CTPieDataPoint: CTStandardDataPointProtocol, CTnotRanged {
     
     /**
      Where the data point should start drawing from

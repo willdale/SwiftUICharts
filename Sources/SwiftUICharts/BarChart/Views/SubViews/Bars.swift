@@ -13,7 +13,7 @@ import SwiftUI
  
  For Standard and Grouped Bar Charts.
  */
-internal struct ColourBar<DP: CTBarDataPoint>: View {
+internal struct ColourBar<DP: CTStandardDataPointProtocol & CTBarDataPoint>: View {
     
     private let colour      : Color
     private let data        : DP
@@ -68,7 +68,7 @@ internal struct ColourBar<DP: CTBarDataPoint>: View {
  
  For Standard and Grouped Bar Charts.
  */
-internal struct GradientColoursBar<DP: CTBarDataPoint>: View {
+internal struct GradientColoursBar<DP: CTStandardDataPointProtocol & CTBarDataPoint>: View {
     
     private let colours     : [Color]
     private let startPoint  : UnitPoint
@@ -131,7 +131,7 @@ internal struct GradientColoursBar<DP: CTBarDataPoint>: View {
  
  For Standard and Grouped Bar Charts.
  */
-internal struct GradientStopsBar<DP: CTBarDataPoint>: View {
+internal struct GradientStopsBar<DP: CTStandardDataPointProtocol & CTBarDataPoint>: View {
     
     private let stops       : [Gradient.Stop]
     private let startPoint  : UnitPoint
