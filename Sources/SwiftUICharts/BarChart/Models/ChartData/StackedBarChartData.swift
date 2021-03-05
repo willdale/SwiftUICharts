@@ -77,18 +77,18 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
     // MARK: Properties
     public let id   : UUID  = UUID()
     
-    @Published public var dataSets     : MultiBarDataSets
-    @Published public var metadata     : ChartMetadata
-    @Published public var xAxisLabels  : [String]?
-    @Published public var barStyle     : BarStyle
-    @Published public var chartStyle   : BarChartStyle
-    @Published public var legends      : [LegendData]
-    @Published public var viewData     : ChartViewData
-    @Published public var infoView     : InfoViewData<MultiBarChartDataPoint> = InfoViewData()
-    @Published public var groups       : [GroupingData]
+    @Published public final var dataSets     : MultiBarDataSets
+    @Published public final var metadata     : ChartMetadata
+    @Published public final var xAxisLabels  : [String]?
+    @Published public final var barStyle     : BarStyle
+    @Published public final var chartStyle   : BarChartStyle
+    @Published public final var legends      : [LegendData]
+    @Published public final var viewData     : ChartViewData
+    @Published public final var infoView     : InfoViewData<MultiBarChartDataPoint> = InfoViewData()
+    @Published public final var groups       : [GroupingData]
     
-    public var noDataText   : Text
-    public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
+    public final var noDataText   : Text
+    public final var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
     // MARK: Initializer
     /// Initialises a Grouped Bar Chart.
@@ -122,7 +122,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
         self.setupLegends()
     }
     // MARK: Labels
-    public func getXAxisLabels() -> some View {
+    public final func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
             case .dataPoint:
@@ -164,11 +164,11 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
         }
     }
     // MARK:  Touch
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
+    public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         self.markerSubView(dataSet: dataSets, touchLocation: touchLocation, chartSize: chartSize)
     }
     
-     public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+     public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
 
          var points : [MultiBarChartDataPoint] = []
          
@@ -214,7 +214,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
          self.infoView.touchOverlayInfo = points
      }
 
-     public func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+     public final func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
          // Filter to get the right dataset based on the x axis.
          let superXSection : CGFloat = chartSize.width / CGFloat(dataSet.dataSets.count)
          let superIndex    : Int     = Int((touchLocation.x) / superXSection)

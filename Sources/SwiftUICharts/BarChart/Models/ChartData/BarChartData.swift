@@ -44,17 +44,17 @@ public final class BarChartData: CTBarChartDataProtocol {
     // MARK: Properties
     public let id   : UUID  = UUID()
 
-    @Published public var dataSets     : BarDataSet
-    @Published public var metadata     : ChartMetadata
-    @Published public var xAxisLabels  : [String]?
-    @Published public var barStyle     : BarStyle
-    @Published public var chartStyle   : BarChartStyle
-    @Published public var legends      : [LegendData]
-    @Published public var viewData     : ChartViewData
-    @Published public var infoView     : InfoViewData<BarChartDataPoint> = InfoViewData()
+    @Published public final var dataSets     : BarDataSet
+    @Published public final var metadata     : ChartMetadata
+    @Published public final var xAxisLabels  : [String]?
+    @Published public final var barStyle     : BarStyle
+    @Published public final var chartStyle   : BarChartStyle
+    @Published public final var legends      : [LegendData]
+    @Published public final var viewData     : ChartViewData
+    @Published public final var infoView     : InfoViewData<BarChartDataPoint> = InfoViewData()
         
-    public var noDataText   : Text
-    public let chartType    : (chartType: ChartType, dataSetType: DataSetType)
+    public final var noDataText   : Text
+    public final let chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
     // MARK: Initializer
     /// Initialises a standard Bar Chart.
@@ -87,7 +87,7 @@ public final class BarChartData: CTBarChartDataProtocol {
     }
 
     // MARK: Labels
-    public func getXAxisLabels() -> some View {
+    public final func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
             case .dataPoint:
@@ -132,10 +132,10 @@ public final class BarChartData: CTBarChartDataProtocol {
     }
     
     // MARK: - Touch
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
+    public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         self.markerSubView(dataSet: dataSets, touchLocation: touchLocation, chartSize: chartSize)
     }
-    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+    public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points      : [BarChartDataPoint] = []
         let xSection    : CGFloat   = chartSize.width / CGFloat(dataSets.dataPoints.count)
         let index       : Int       = Int((touchLocation.x) / xSection)
@@ -144,7 +144,7 @@ public final class BarChartData: CTBarChartDataProtocol {
         }
         self.infoView.touchOverlayInfo = points
     }
-    public func getPointLocation(dataSet: BarDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+    public final func getPointLocation(dataSet: BarDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
         let xSection : CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count)
         let ySection : CGFloat = chartSize.height / CGFloat(self.maxValue)
         let index    : Int     = Int((touchLocation.x) / xSection)
@@ -154,10 +154,8 @@ public final class BarChartData: CTBarChartDataProtocol {
         }
         return nil
     }
-    
+
     public typealias Set            = BarDataSet
     public typealias DataPoint      = BarChartDataPoint
     public typealias CTStyle        = BarChartStyle
 }
-
-

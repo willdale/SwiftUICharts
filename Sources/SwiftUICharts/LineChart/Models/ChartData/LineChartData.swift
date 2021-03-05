@@ -47,20 +47,20 @@ import SwiftUI
 public final class LineChartData: CTLineChartDataProtocol {
     
     // MARK: Properties
-    public let id   : UUID  = UUID()
+    public final let id   : UUID  = UUID()
     
-    @Published public var dataSets      : LineDataSet
-    @Published public var metadata      : ChartMetadata
-    @Published public var xAxisLabels   : [String]?
-    @Published public var chartStyle    : LineChartStyle
-    @Published public var legends       : [LegendData]
-    @Published public var viewData      : ChartViewData
-    @Published public var infoView      : InfoViewData<LineChartDataPoint> = InfoViewData()
+    @Published public final var dataSets      : LineDataSet
+    @Published public final var metadata      : ChartMetadata
+    @Published public final var xAxisLabels   : [String]?
+    @Published public final var chartStyle    : LineChartStyle
+    @Published public final var legends       : [LegendData]
+    @Published public final var viewData      : ChartViewData
+    @Published public final var infoView      : InfoViewData<LineChartDataPoint> = InfoViewData()
     
-    public var noDataText   : Text
-    public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
+    public final var noDataText   : Text
+    public final var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
-    internal var isFilled      : Bool = false
+    internal final var isFilled      : Bool = false
     
     // MARK: Initializer
     /// Initialises a Single Line Chart.
@@ -90,7 +90,7 @@ public final class LineChartData: CTLineChartDataProtocol {
     // , calc        : @escaping (LineDataSet) -> LineDataSet
     
     // MARK: Labels
-    public func getXAxisLabels() -> some View {
+    public final func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
             case .dataPoint:
@@ -138,7 +138,7 @@ public final class LineChartData: CTLineChartDataProtocol {
     }
 
     // MARK: Points
-    public func getPointMarker() -> some View {
+    public final func getPointMarker() -> some View {
         PointsSubView(dataSets  : dataSets,
                       minValue  : self.minValue,
                       range     : self.range,
@@ -146,7 +146,7 @@ public final class LineChartData: CTLineChartDataProtocol {
                       isFilled  : self.isFilled)
     }
 
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
+    public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         self.markerSubView(dataSet: dataSets,
                            dataPoints: dataSets.dataPoints,
                            lineType: dataSets.style.lineType,
@@ -155,7 +155,7 @@ public final class LineChartData: CTLineChartDataProtocol {
     }
     
     // MARK: Accessibility
-    public func getAccessibility() -> some View {
+    public final func getAccessibility() -> some View {
         ForEach(dataSets.dataPoints.indices, id: \.self) { point in
 
             AccessibilityRectangle(dataPointCount : self.dataSets.dataPoints.count,
@@ -176,7 +176,7 @@ public final class LineChartData: CTLineChartDataProtocol {
 // MARK: - Touch
 extension LineChartData {
     
-    public func getPointLocation(dataSet: LineDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+    public final func getPointLocation(dataSet: LineDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
         
         let minValue : Double = self.minValue
         let range    : Double = self.range
@@ -192,7 +192,7 @@ extension LineChartData {
         return nil
     }
 
-    public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+    public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points      : [LineChartDataPoint] = []
         let xSection    : CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
         let index       = Int((touchLocation.x + (xSection / 2)) / xSection)
@@ -201,10 +201,4 @@ extension LineChartData {
         }
         self.infoView.touchOverlayInfo = points
     }
-}
-
-// MARK: - Legends
-extension LineChartData {
-   
-    
 }
