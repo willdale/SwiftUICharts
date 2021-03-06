@@ -178,7 +178,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     }
     // MARK: Touch
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        self.markerSubView(dataSet: dataSets, touchLocation: touchLocation, chartSize: chartSize)
+        self.markerSubView()
     }
     public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         

@@ -8,14 +8,11 @@
 import SwiftUI
 
 extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType {
-    internal func markerSubView<DS: CTDataSetProtocol>
-    (dataSet         : DS,
-     touchLocation   : CGPoint,
-     chartSize       : CGRect) -> some View {
+    internal func markerSubView() -> some View {
         Group {
             if let position = self.getPointLocation(dataSet: dataSets as! Self.SetPoint,
-                                                    touchLocation: touchLocation,
-                                                    chartSize: chartSize) {
+                                                    touchLocation: self.infoView.touchLocation,
+                                                    chartSize: self.infoView.chartSize) {
                 switch self.chartStyle.markerType {
                 case .none:
                     EmptyView()
