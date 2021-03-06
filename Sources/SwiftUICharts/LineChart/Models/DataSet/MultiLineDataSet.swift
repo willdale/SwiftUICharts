@@ -42,7 +42,7 @@ MultiLineDataSet(dataSets: [
  ])
  ```
  */
-public struct MultiLineDataSet: CTMultiDataSetProtocol {
+public struct MultiLineDataSet: CTMultiLineChartDataSet {
     
     public let id       : UUID = UUID()
     public var dataSets : [LineDataSet]

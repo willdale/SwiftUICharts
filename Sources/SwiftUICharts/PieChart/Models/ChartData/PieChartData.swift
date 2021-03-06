@@ -33,14 +33,14 @@ public final class PieChartData: CTPieChartDataProtocol {
     
     // MARK: Properties
     public var id : UUID = UUID()
-    @Published public var dataSets      : PieDataSet
-    @Published public var metadata      : ChartMetadata
-    @Published public var chartStyle    : PieChartStyle
-    @Published public var legends       : [LegendData]
-    @Published public var infoView      : InfoViewData<PieChartDataPoint>
+    @Published public final var dataSets      : PieDataSet
+    @Published public final var metadata      : ChartMetadata
+    @Published public final var chartStyle    : PieChartStyle
+    @Published public final var legends       : [LegendData]
+    @Published public final var infoView      : InfoViewData<PieChartDataPoint>
             
-    public var noDataText: Text
-    public var chartType: (chartType: ChartType, dataSetType: DataSetType)
+    public final var noDataText: Text
+    public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
     // MARK: Initializer
     /// Initialises a Pie Chart.
@@ -68,15 +68,7 @@ public final class PieChartData: CTPieChartDataProtocol {
         self.makeDataPoints()
     }
     
-    // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent   = true
-        self.infoView.touchLocation    = touchLocation
-        self.infoView.chartSize        = chartSize
-        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
-    }
-    
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View { EmptyView() }
+    public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View { EmptyView() }
 
     public typealias Set       = PieDataSet
     public typealias DataPoint = PieChartDataPoint
@@ -84,8 +76,8 @@ public final class PieChartData: CTPieChartDataProtocol {
 }
 
 // MARK: - Touch
-extension PieChartData: TouchProtocol {
-    internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+extension PieChartData {
+    public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points : [PieChartDataPoint] = []
         let touchDegree = degree(from: touchLocation, in: chartSize)
                 
@@ -95,24 +87,7 @@ extension PieChartData: TouchProtocol {
         }
         self.infoView.touchOverlayInfo = points
     }
-}
-
-// MARK: - Legends
-extension PieChartData: LegendProtocol {
-    internal func setupLegends() {
-        for data in dataSets.dataPoints {
-            if let legend = data.pointDescription {
-                self.legends.append(LegendData(id         : data.id,
-                                               legend     : legend,
-                                               colour     : data.colour,
-                                               strokeStyle: nil,
-                                               prioity    : 1,
-                                               chartType  : .pie))
-            }
-        }
-    }
-    
-    internal func legendOrder() -> [LegendData] {
-        return legends.sorted { $0.prioity < $1.prioity}
+    public final func getPointLocation(dataSet: PieDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+        return nil
     }
 }

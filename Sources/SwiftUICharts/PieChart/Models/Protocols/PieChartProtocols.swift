@@ -23,30 +23,12 @@ public protocol CTPieChartDataProtocol : CTPieDoughnutChartDataProtocol {}
  */
 public protocol CTDoughnutChartDataProtocol : CTPieDoughnutChartDataProtocol {}
 
-/**
- A protocol to extend functionality of `CTPieDoughnutChartDataProtocol` specifically for multi layer Pie Charts.
- */
-public protocol CTMultiPieChartDataProtocol : CTPieDoughnutChartDataProtocol {}
-
-
-
-
-// MARK: - DataSet
-public protocol CTMultiPieDataSet: CTDataSetProtocol {}
-
-
-
-
-
-
-
 
 // MARK: - DataPoints
-
 /**
- A protocol to extend functionality of `CTChartDataPoint` specifically for Pie and Doughnut Charts.
+ A protocol to extend functionality of `CTStandardDataPointProtocol` specifically for Pie and Doughnut Charts.
  */
-public protocol CTPieDataPoint: CTChartDataPoint {
+public protocol CTPieDataPoint: CTStandardDataPointProtocol, CTnotRanged {
     
     /**
      Where the data point should start drawing from
@@ -60,15 +42,11 @@ public protocol CTPieDataPoint: CTChartDataPoint {
      The data points value in radians.
      */
     var amount      : Double { get set }
+    
+    var colour      : Color { get set }
 }
 
-public protocol CTMultiPieChartDataPoint: CTChartDataPoint {
-  
-    /**
-     Second layer of data points.
-     */
-    var layerDataPoints  : [MultiPieDataPoint]? { get set }
-}
+
 
 
 

@@ -53,6 +53,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
         self.range       = chartData.range
         self.minValue    = chartData.minValue
         
+        self.setupPOILegends()
     }
     
     @State private var startAnimation : Bool = false
@@ -70,16 +71,6 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
         }
         .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
             self.startAnimation = false
-        }
-        .onAppear {
-            if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
-                chartData.legends.append(LegendData(id          : uuid,
-                                                    legend      : markerName,
-                                                    colour      : lineColour,
-                                                    strokeStyle : strokeStyle.toStroke(),
-                                                    prioity     : 2,
-                                                    chartType   : .line))
-            }
         }
     }
     
@@ -108,9 +99,11 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                                        specifier      : specifier,
                                        labelColour    : labelColour,
                                        labelBackground: labelBackground,
-                                       lineColour     : lineColour,
-                                       chartSize      : geo.frame(in: .local))
-                    .accessibilityLabel( Text("P O I Marker"))
+                                       lineColour     : lineColour)
+                    .position(x: -(chartData.infoView.yAxisLabelWidth / 2) - 6,
+                              y: getYPoint(chartType: chartData.chartType.chartType,
+                                           height: geo.size.height))
+                    .accessibilityLabel(Text("P O I Marker"))
                     .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
                 
             case .center(specifier: let specifier):
@@ -121,24 +114,36 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                                         labelColour     : labelColour,
                                         labelBackground : labelBackground,
                                         lineColour      : lineColour,
-                                        strokeStyle     : strokeStyle,
-                                        chartSize       : geo.frame(in: .local))
+                                        strokeStyle     : strokeStyle)
+                    .position(x: geo.frame(in: .local).width / 2,
+                              y: getYPoint(chartType: chartData.chartType.chartType, height: geo.size.height))
+                    
                     .accessibilityLabel(Text("P O I Marker"))
                     .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
             }
         }
     }
-    
-   private func getYPoint(chartType: ChartType, chartSize: CGRect) -> CGFloat {
-        switch chartData.chartType.chartType {
-        case .line:
-            let y = chartSize.height / CGFloat(range)
-           return (CGFloat(markerValue - minValue) * -y) + chartSize.size.height
-        case .bar:
-            let y = chartSize.height / CGFloat(maxValue)
-            return  chartSize.height - CGFloat(markerValue) * y
-        case .pie:
-            return 0
+    private func getYPoint(chartType: ChartType, height: CGFloat) -> CGFloat {
+         switch chartData.chartType.chartType {
+         case .line:
+            let y = height / CGFloat(chartData.range)
+            return (CGFloat(markerValue - chartData.minValue) * -y) + height
+         case .bar:
+            let value = CGFloat(markerValue) - CGFloat(chartData.minValue)
+            return (height - (value / CGFloat(chartData.range)) * height)
+         
+         case .pie:
+             return 0
+         }
+     }
+    private func setupPOILegends() {
+        if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
+            chartData.legends.append(LegendData(id          : uuid,
+                                                legend      : markerName,
+                                                colour      : ColourStyle(colour: lineColour),
+                                                strokeStyle : strokeStyle.toStroke(),
+                                                prioity     : 2,
+                                                chartType   : .line))
         }
     }
 }

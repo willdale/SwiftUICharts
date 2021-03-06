@@ -77,18 +77,18 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
     // MARK: Properties
     public let id   : UUID  = UUID()
     
-    @Published public var dataSets     : MultiBarDataSets
-    @Published public var metadata     : ChartMetadata
-    @Published public var xAxisLabels  : [String]?
-    @Published public var barStyle     : BarStyle
-    @Published public var chartStyle   : BarChartStyle
-    @Published public var legends      : [LegendData]
-    @Published public var viewData     : ChartViewData
-    @Published public var infoView     : InfoViewData<MultiBarChartDataPoint> = InfoViewData()
-    @Published public var groups       : [GroupingData]
+    @Published public final var dataSets     : MultiBarDataSets
+    @Published public final var metadata     : ChartMetadata
+    @Published public final var xAxisLabels  : [String]?
+    @Published public final var barStyle     : BarStyle
+    @Published public final var chartStyle   : BarChartStyle
+    @Published public final var legends      : [LegendData]
+    @Published public final var viewData     : ChartViewData
+    @Published public final var infoView     : InfoViewData<MultiBarChartDataPoint> = InfoViewData()
+    @Published public final var groups       : [GroupingData]
     
-    public var noDataText   : Text
-    public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
+    public final var noDataText   : Text
+    public final var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
     // MARK: Initializer
     /// Initialises a Grouped Bar Chart.
@@ -122,232 +122,146 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
         self.setupLegends()
     }
     // MARK: Labels
-    @ViewBuilder
-    public func getXAxisLabels() -> some View {
-        switch self.chartStyle.xAxisLabelsFrom {
-        case .dataPoint:
-            HStack(spacing: 0) {
-                ForEach(groups) { group in
-                    Spacer()
-                        .frame(minWidth: 0, maxWidth: 500)
-                    Text(group.title)
-                        .font(.caption)
-                        .foregroundColor(self.chartStyle.xAxisLabelColour)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.5)
-                        .accessibilityLabel( Text("X Axis Label"))
-                        .accessibilityValue(Text("\(group.title)"))
-                    
-                    Spacer()
-                        .frame(minWidth: 0, maxWidth: 500)
-                }
-            }
-        case .chartData:
-            if let labelArray = self.xAxisLabels {
+    public final func getXAxisLabels() -> some View {
+        Group {
+            switch self.chartStyle.xAxisLabelsFrom {
+            case .dataPoint:
                 HStack(spacing: 0) {
-                    ForEach(labelArray, id: \.self) { data in
+                    ForEach(groups) { group in
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
-                        Text(data)
+                        Text(group.title)
                             .font(.caption)
                             .foregroundColor(self.chartStyle.xAxisLabelColour)
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
                             .accessibilityLabel( Text("X Axis Label"))
-                            .accessibilityValue(Text("\(data)"))
+                            .accessibilityValue(Text("\(group.title)"))
+                        
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
+                    }
+                }
+            case .chartData:
+                if let labelArray = self.xAxisLabels {
+                    HStack(spacing: 0) {
+                        ForEach(labelArray, id: \.self) { data in
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                            Text(data)
+                                .font(.caption)
+                                .foregroundColor(self.chartStyle.xAxisLabelColour)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                                .accessibilityLabel( Text("X Axis Label"))
+                                .accessibilityValue(Text("\(data)"))
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                        }
                     }
                 }
             }
         }
     }
+    // MARK:  Touch
+    public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
+        self.markerSubView()
+    }
     
-    // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent   = true
-        self.infoView.touchLocation    = touchLocation
-        self.infoView.chartSize        = chartSize
-        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
-    }
+     public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
 
-    @ViewBuilder
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        
-        if let position = self.getPointLocation(dataSet: dataSets,
-                                                touchLocation: touchLocation,
-                                                chartSize: chartSize) {
-            ZStack {
-                
-                switch self.chartStyle.markerType  {
-                case .none:
-                    EmptyView()
-                case .vertical:
-                    MarkerFull(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .full:
-                    MarkerFull(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .bottomLeading:
-                    MarkerBottomLeading(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .bottomTrailing:
-                    MarkerBottomTrailing(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .topLeading:
-                    MarkerTopLeading(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .topTrailing:
-                    MarkerTopTrailing(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                }
-            }
-        } else { EmptyView() }
-    }
+         var points : [MultiBarChartDataPoint] = []
+         
+         // Filter to get the right dataset based on the x axis.
+         let superXSection : CGFloat = chartSize.width / CGFloat(dataSets.dataSets.count)
+         let superIndex    : Int     = Int((touchLocation.x) / superXSection)
+         
+         if superIndex >= 0 && superIndex < dataSets.dataSets.count {
+             
+             let dataSet = dataSets.dataSets[superIndex]
+             
+             // Get the max value of the dataset relative to max value of all datasets.
+             // This is used to set the height of the y axis filtering.
+             let setMaxValue = dataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
+             let allMaxValue = self.maxValue
+             let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
+
+             // Gets the height of each datapoint
+             var heightOfElements : [CGFloat] = []
+             let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }
+             dataSet.dataPoints.forEach { datapoint in
+                 heightOfElements.append((chartSize.height * fraction) * CGFloat(datapoint.value / sum))
+             }
+         
+             // Gets the highest point of each element.
+             var endPointOfElements : [CGFloat] = []
+             heightOfElements.enumerated().forEach { element in
+                 var returnValue : CGFloat = 0
+                 for index in 0...element.offset {
+                     returnValue += heightOfElements[index]
+                 }
+                 endPointOfElements.append(returnValue)
+             }
+             
+             let yIndex = endPointOfElements.enumerated().first(where: { $0.element > abs(touchLocation.y - chartSize.height) })
+             
+             if let index = yIndex?.offset {
+                 if index >= 0 && index < dataSet.dataPoints.count {
+                     points.append(dataSet.dataPoints[index])
+                 }
+             }
+         }
+         self.infoView.touchOverlayInfo = points
+     }
+
+     public final func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+         // Filter to get the right dataset based on the x axis.
+         let superXSection : CGFloat = chartSize.width / CGFloat(dataSet.dataSets.count)
+         let superIndex    : Int     = Int((touchLocation.x) / superXSection)
+
+         if superIndex >= 0 && superIndex < dataSet.dataSets.count {
+
+             let subDataSet = dataSet.dataSets[superIndex]
+
+             // Get the max value of the dataset relative to max value of all datasets.
+             // This is used to set the height of the y axis filtering.
+             let setMaxValue = subDataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
+             let allMaxValue = self.maxValue
+             let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
+
+             // Gets the height of each datapoint
+             var heightOfElements : [CGFloat] = []
+             let sum = subDataSet.dataPoints.reduce(0) { $0 + $1.value }
+             subDataSet.dataPoints.forEach { datapoint in
+                 heightOfElements.append((chartSize.height * fraction) * CGFloat(datapoint.value / sum))
+             }
+
+             // Gets the highest point of each element.
+             var endPointOfElements : [CGFloat] = []
+             heightOfElements.enumerated().forEach { element in
+                 var returnValue : CGFloat = 0
+                 for index in 0...element.offset {
+                     returnValue += heightOfElements[index]
+                 }
+                 endPointOfElements.append(returnValue)
+             }
+
+             let yIndex = endPointOfElements.enumerated().first(where: {
+                 $0.element > abs(touchLocation.y - chartSize.height)
+             })
+
+             if let index = yIndex?.offset {
+                 if index >= 0 && index < subDataSet.dataPoints.count {
+
+                     return CGPoint(x: (CGFloat(superIndex) * superXSection) + (superXSection / 2),
+                                    y: (chartSize.height - endPointOfElements[index]))
+                 }
+             }
+         }
+         return nil
+     }
 
     public typealias Set        = MultiBarDataSets
     public typealias DataPoint  = MultiBarChartDataPoint
     public typealias CTStyle    = BarChartStyle
-}
-
-// MARK: - Touch
-extension StackedBarChartData: TouchProtocol {
-   
-    internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
-
-        var points : [MultiBarChartDataPoint] = []
-        
-        // Filter to get the right dataset based on the x axis.
-        let superXSection : CGFloat = chartSize.width / CGFloat(dataSets.dataSets.count)
-        let superIndex    : Int     = Int((touchLocation.x) / superXSection)
-        
-        if superIndex >= 0 && superIndex < dataSets.dataSets.count {
-            
-            let dataSet = dataSets.dataSets[superIndex]
-            
-            // Get the max value of the dataset relative to max value of all datasets.
-            // This is used to set the height of the y axis filtering.
-            let setMaxValue = dataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
-            let allMaxValue = self.maxValue
-            let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
-
-            // Gets the height of each datapoint
-            var heightOfElements : [CGFloat] = []
-            let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }
-            dataSet.dataPoints.forEach { datapoint in
-                heightOfElements.append((chartSize.height * fraction) * CGFloat(datapoint.value / sum))
-            }
-        
-            // Gets the highest point of each element.
-            var endPointOfElements : [CGFloat] = []
-            heightOfElements.enumerated().forEach { element in
-                var returnValue : CGFloat = 0
-                for index in 0...element.offset {
-                    returnValue += heightOfElements[index]
-                }
-                endPointOfElements.append(returnValue)
-            }
-            
-            let yIndex = endPointOfElements.enumerated().first(where: { $0.element > abs(touchLocation.y - chartSize.height) })
-            
-            if let index = yIndex?.offset {
-                if index >= 0 && index < dataSet.dataPoints.count {
-                    points.append(dataSet.dataPoints[index])
-                }
-            }
-        }
-        self.infoView.touchOverlayInfo = points
-    }
-
-    internal func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
-        // Filter to get the right dataset based on the x axis.
-        let superXSection : CGFloat = chartSize.width / CGFloat(dataSet.dataSets.count)
-        let superIndex    : Int     = Int((touchLocation.x) / superXSection)
-
-        if superIndex >= 0 && superIndex < dataSet.dataSets.count {
-
-            let subDataSet = dataSet.dataSets[superIndex]
-
-            // Get the max value of the dataset relative to max value of all datasets.
-            // This is used to set the height of the y axis filtering.
-            let setMaxValue = subDataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
-            let allMaxValue = self.maxValue
-            let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
-
-            // Gets the height of each datapoint
-            var heightOfElements : [CGFloat] = []
-            let sum = subDataSet.dataPoints.reduce(0) { $0 + $1.value }
-            subDataSet.dataPoints.forEach { datapoint in
-                heightOfElements.append((chartSize.height * fraction) * CGFloat(datapoint.value / sum))
-            }
-
-            // Gets the highest point of each element.
-            var endPointOfElements : [CGFloat] = []
-            heightOfElements.enumerated().forEach { element in
-                var returnValue : CGFloat = 0
-                for index in 0...element.offset {
-                    returnValue += heightOfElements[index]
-                }
-                endPointOfElements.append(returnValue)
-            }
-
-            let yIndex = endPointOfElements.enumerated().first(where: {
-                $0.element > abs(touchLocation.y - chartSize.height)
-            })
-
-            if let index = yIndex?.offset {
-                if index >= 0 && index < subDataSet.dataPoints.count {
-
-                    return CGPoint(x: (CGFloat(superIndex) * superXSection) + (superXSection / 2),
-                                   y: (chartSize.height - endPointOfElements[index]))
-                }
-            }
-        }
-        return nil
-    }
-}
-
-extension StackedBarChartData: LegendProtocol {
-    // MARK: - Legends
-    internal func setupLegends() {
-        for group in self.groups {
-                
-                if group.colourType == .colour,
-                   let colour = group.colour
-                {
-                    self.legends.append(LegendData(id         : group.id,
-                                                   legend     : group.title,
-                                                   colour     : colour,
-                                                   strokeStyle: nil,
-                                                   prioity    : 1,
-                                                   chartType  : .bar))
-                } else if group.colourType == .gradientColour,
-                          let colours = group.colours
-                {
-                    self.legends.append(LegendData(id         : group.id,
-                                                   legend     : group.title,
-                                                   colours    : colours,
-                                                   startPoint : .leading,
-                                                   endPoint   : .trailing,
-                                                   strokeStyle: nil,
-                                                   prioity    : 1,
-                                                   chartType  : .bar))
-                } else if group.colourType == .gradientStops,
-                          let stops  = group.stops
-                {
-                    self.legends.append(LegendData(id         : group.id,
-                                                   legend     : group.title,
-                                                   stops      : stops,
-                                                   startPoint : .leading,
-                                                   endPoint   : .trailing,
-                                                   strokeStyle: nil,
-                                                   prioity    : 1,
-                                                   chartType  : .bar))
-                }
-            }
-    }
-    
-    internal func legendOrder() -> [LegendData] {
-        return legends.sorted { $0.prioity < $1.prioity}
-    }
 }

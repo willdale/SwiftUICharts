@@ -16,7 +16,6 @@ internal struct ValueLabelCenterSubView<T>: View where T: CTLineBarChartDataProt
     private let labelBackground : Color
     private let lineColour      : Color
     private let strokeStyle     : StrokeStyle
-    private let chartSize       : CGRect
     
     internal init(chartData       : T,
                   markerValue     : Double,
@@ -24,8 +23,7 @@ internal struct ValueLabelCenterSubView<T>: View where T: CTLineBarChartDataProt
                   labelColour     : Color,
                   labelBackground : Color,
                   lineColour      : Color,
-                  strokeStyle     : StrokeStyle,
-                  chartSize       : CGRect
+                  strokeStyle     : StrokeStyle
     ) {
         self.chartData       = chartData
         self.markerValue     = markerValue
@@ -34,7 +32,6 @@ internal struct ValueLabelCenterSubView<T>: View where T: CTLineBarChartDataProt
         self.labelBackground = labelBackground
         self.lineColour      = lineColour
         self.strokeStyle     = strokeStyle
-        self.chartSize       = chartSize
     }
     
     @State private var startAnimation : Bool = false
@@ -49,8 +46,6 @@ internal struct ValueLabelCenterSubView<T>: View where T: CTLineBarChartDataProt
             .overlay(DiamondShape()
                         .stroke(lineColour, style: strokeStyle)
             )
-            .position(x: chartSize.width / 2,
-                      y: getYPoint(chartType: chartData.chartType.chartType, chartSize: chartSize))
             .opacity(startAnimation ? 1 : 0)
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
@@ -60,18 +55,5 @@ internal struct ValueLabelCenterSubView<T>: View where T: CTLineBarChartDataProt
             }
             
     }
-    
-    private func getYPoint(chartType: ChartType, chartSize: CGRect) -> CGFloat {
-         switch chartData.chartType.chartType {
-         case .line:
-            let y = chartSize.height / CGFloat(chartData.range)
-            return (CGFloat(markerValue - chartData.minValue) * -y) + chartSize.height
-         case .bar:
-            let y = chartSize.height / CGFloat(chartData.maxValue)
-             return  chartSize.height - CGFloat(markerValue) * y
-         case .pie:
-             return 0
-         }
-     }
 }
 

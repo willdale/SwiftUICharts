@@ -1,25 +1,26 @@
 //
-//  LineStyle.swift
-//  LineChart
+//  RangedLineStyle.swift
+//  
 //
-//  Created by Will Dale on 31/12/2020.
+//  Created by Will Dale on 02/03/2021.
 //
 
 import SwiftUI
-
 /**
- Model for controlling the aesthetic of the line chart.
+ Model for controlling the aesthetic of the ranged line chart.
  
  # Example
  ```
- LineStyle(colour     : .red,
-           lineType   : .curvedLine,
-           strokeStyle: Stroke(lineWidth: 2))
+ RangedLineStyle(lineColour: ColourStyle(colour: .red),
+                 fillColour: ColourStyle(colour: Color(.blue).opacity(0.25)),
+                 lineType  : .curvedLine))
  ```
  */
-public struct LineStyle: CTLineStyle, Hashable {
-        
-    public var lineColour  : ColourStyle
+public struct RangedLineStyle: CTRangedLineStyle, Hashable {
+    
+    public var lineColour : ColourStyle
+    public var fillColour : ColourStyle
+    
     public var lineType    : LineType
     public var strokeStyle : Stroke
 
@@ -32,14 +33,16 @@ public struct LineStyle: CTLineStyle, Hashable {
     */
     public var ignoreZero  : Bool
         
-    // MARK: - Single colour
-    /// Single Colour
+    // MARK: Initializer
+    /// Initialize the styling for ranged line chart.
+    ///
     /// - Parameters:
-    ///   - lineColour: Colour styling of the line.
+    ///   - colour: Single Colour
     ///   - lineType: Drawing style of the line
     ///   - strokeStyle: Stroke Style
     ///   - ignoreZero: Whether the chart should skip data points who's value is 0.
-    public init(lineColour  : ColourStyle = ColourStyle(colour: .red),
+    public init(lineColour  : ColourStyle = ColourStyle(),
+                fillColour  : ColourStyle = ColourStyle(),
                 lineType    : LineType   = .curvedLine,
                 strokeStyle : Stroke = Stroke(lineWidth : 3,
                                               lineCap   : .round,
@@ -50,6 +53,7 @@ public struct LineStyle: CTLineStyle, Hashable {
                 ignoreZero  : Bool       = false
     ) {
         self.lineColour  = lineColour
+        self.fillColour  = fillColour
         self.lineType    = lineType
         self.strokeStyle = strokeStyle
         self.ignoreZero  = ignoreZero

@@ -81,20 +81,20 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     // MARK: Properties
     public let id   : UUID  = UUID()
 
-    @Published public var dataSets     : MultiBarDataSets
-    @Published public var metadata     : ChartMetadata
-    @Published public var xAxisLabels  : [String]?
-    @Published public var barStyle     : BarStyle
-    @Published public var chartStyle   : BarChartStyle
-    @Published public var legends      : [LegendData]
-    @Published public var viewData     : ChartViewData
-    @Published public var infoView     : InfoViewData<MultiBarChartDataPoint> = InfoViewData()
-    @Published public var groups       : [GroupingData]
+    @Published public final var dataSets     : MultiBarDataSets
+    @Published public final var metadata     : ChartMetadata
+    @Published public final var xAxisLabels  : [String]?
+    @Published public final var barStyle     : BarStyle
+    @Published public final var chartStyle   : BarChartStyle
+    @Published public final var legends      : [LegendData]
+    @Published public final var viewData     : ChartViewData
+    @Published public final var infoView     : InfoViewData<MultiBarChartDataPoint> = InfoViewData()
+    @Published public final var groups       : [GroupingData]
     
-    public var noDataText   : Text
-    public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
+    public final var noDataText   : Text
+    public final var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
-    var groupSpacing : CGFloat = 0
+    final var groupSpacing : CGFloat = 0
         
     // MARK: Initializer
     /// Initialises a Grouped Bar Chart.
@@ -129,105 +129,58 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     }
     
     // MARK: Labels
-    @ViewBuilder
-    public func getXAxisLabels() -> some View {
-        switch self.chartStyle.xAxisLabelsFrom {
-        case .dataPoint:
-            HStack(spacing: self.groupSpacing) {
-                ForEach(dataSets.dataSets) { dataSet in
+    public final func getXAxisLabels() -> some View {
+        Group {
+            switch self.chartStyle.xAxisLabelsFrom {
+            case .dataPoint:
+                HStack(spacing: self.groupSpacing) {
+                    ForEach(dataSets.dataSets) { dataSet in
+                        HStack(spacing: 0) {
+                            ForEach(dataSet.dataPoints) { data in
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
+                                Text(data.xAxisLabel ?? "")
+                                    .font(.caption)
+                                    .foregroundColor(self.chartStyle.xAxisLabelColour)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.5)
+                                    .accessibilityLabel( Text("XAxisLabel"))
+                                    .accessibilityValue(Text("\(data.xAxisLabel ?? "")"))
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
+                            }
+                        }
+                    }
+                }
+                .padding(.horizontal, -4)
+                
+            case .chartData:
+                
+                if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
-                        ForEach(dataSet.dataPoints) { data in
+                        ForEach(labelArray, id: \.self) { data in
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
-                            Text(data.xAxisLabel ?? "")
+                            Text(data)
                                 .font(.caption)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
                                 .accessibilityLabel( Text("XAxisLabel"))
-                                .accessibilityValue(Text("\(data.xAxisLabel ?? "")"))
+                                .accessibilityValue(Text("\(data)"))
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
                         }
                     }
                 }
             }
-            .padding(.horizontal, -4)
-            
-        case .chartData:
-            
-            if let labelArray = self.xAxisLabels {
-                HStack(spacing: 0) {
-                    ForEach(labelArray, id: \.self) { data in
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
-                        Text(data)
-                            .font(.caption)
-                            .foregroundColor(self.chartStyle.xAxisLabelColour)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.5)
-                            .accessibilityLabel( Text("XAxisLabel"))
-                            .accessibilityValue(Text("\(data)"))
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
-                    }
-                }
-            }
         }
     }
-    
     // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent   = true
-        self.infoView.touchLocation    = touchLocation
-        self.infoView.chartSize        = chartSize
-        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
+    public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
+        self.markerSubView()
     }
-
-    @ViewBuilder
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        
-        if let position = self.getPointLocation(dataSet: dataSets,
-                                                touchLocation: touchLocation,
-                                                chartSize: chartSize) {
-            ZStack {
-                
-                switch self.chartStyle.markerType  {
-                case .none:
-                    EmptyView()
-                case .vertical:
-                    MarkerFull(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .full:
-                    MarkerFull(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .bottomLeading:
-                    MarkerBottomLeading(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .bottomTrailing:
-                    MarkerBottomTrailing(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .topLeading:
-                    MarkerTopLeading(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .topTrailing:
-                    MarkerTopTrailing(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                }
-            }
-        } else { EmptyView() }
-    }
-    
-    
-    public typealias Set        = MultiBarDataSets
-    public typealias DataPoint  = MultiBarChartDataPoint
-    public typealias CTStyle    = BarChartStyle
-}
-
-// MARK: - Touch
-extension GroupedBarChartData: TouchProtocol {
-    
-    internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+    public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         
         var points : [MultiBarChartDataPoint] = []
         
@@ -252,8 +205,7 @@ extension GroupedBarChartData: TouchProtocol {
         }
         self.infoView.touchOverlayInfo = points
     }
-
-    internal func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+    public final func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
         
         // Divide the chart into equal sections.
         let superXSection   : CGFloat   = (chartSize.width / CGFloat(dataSet.dataSets.count))
@@ -284,51 +236,8 @@ extension GroupedBarChartData: TouchProtocol {
         }
         return nil
     }
-}
-
-// MARK: - Legends
-extension GroupedBarChartData: LegendProtocol {
-
-    internal func setupLegends() {
-        
-        for group in self.groups {
-            
-            if group.colourType == .colour,
-               let colour = group.colour
-            {
-                self.legends.append(LegendData(id         : group.id,
-                                               legend     : group.title,
-                                               colour     : colour,
-                                               strokeStyle: nil,
-                                               prioity    : 1,
-                                               chartType  : .bar))
-            } else if group.colourType == .gradientColour,
-                      let colours = group.colours
-            {
-                self.legends.append(LegendData(id         : group.id,
-                                               legend     : group.title,
-                                               colours    : colours,
-                                               startPoint : .leading,
-                                               endPoint   : .trailing,
-                                               strokeStyle: nil,
-                                               prioity    : 1,
-                                               chartType  : .bar))
-            } else if group.colourType == .gradientStops,
-                      let stops  = group.stops
-            {
-                self.legends.append(LegendData(id         : group.id,
-                                               legend     : group.title,
-                                               stops      : stops,
-                                               startPoint : .leading,
-                                               endPoint   : .trailing,
-                                               strokeStyle: nil,
-                                               prioity    : 1,
-                                               chartType  : .bar))
-            }
-        }
-    }
     
-    internal func legendOrder() -> [LegendData] {
-        return legends.sorted { $0.prioity < $1.prioity}
-    }
+    public typealias Set        = MultiBarDataSets
+    public typealias DataPoint  = MultiBarChartDataPoint
+    public typealias CTStyle    = BarChartStyle
 }

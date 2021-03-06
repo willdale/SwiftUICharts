@@ -12,12 +12,15 @@ import SwiftUI
  A protocol to extend functionality of `CTLineBarChartDataProtocol` specifically for Bar Charts.
  */
 public protocol CTBarChartDataProtocol: CTLineBarChartDataProtocol {
-        
+    
+    associatedtype BarStyle : CTBarStyle
     /**
      Overall styling for the bars
      */
     var barStyle : BarStyle { get set }
 }
+
+
 
 /**
  A protocol to extend functionality of `CTBarChartDataProtocol` specifically for Multi Part Bar Charts.
@@ -30,6 +33,10 @@ public protocol CTMultiBarChartDataProtocol: CTBarChartDataProtocol {
     var groups : [GroupingData] { get set }
 }
 
+/**
+ A protocol to extend functionality of `CTBarChartDataProtocol` specifically for Multi Part Bar Charts.
+ */
+public protocol CTRangedBarChartDataProtocol: CTBarChartDataProtocol {}
 
 
 
@@ -40,7 +47,16 @@ public protocol CTMultiBarChartDataProtocol: CTBarChartDataProtocol {
  */
 public protocol CTBarChartStyle: CTLineBarChartStyle {}
 
-
+public protocol CTBarStyle: Hashable {
+    /// How much of the available width to use. 0...1
+    var barWidth    : CGFloat { get set }
+    /// Corner radius of the bar shape.
+    var cornerRadius: CornerRadius { get set }
+    /// Where to get the colour data from.
+    var colourFrom  : ColourFrom { get set }
+    /// Drawing style of the fill.
+    var fillColour : ColourStyle { get set }
+}
 
 
 
@@ -64,9 +80,7 @@ public protocol CTStandardBarChartDataSet: CTSingleDataSetProtocol {
 public protocol CTMultiBarChartDataSet: CTSingleDataSetProtocol  {}
 
 
-
-
-
+public protocol CTRangedBarChartDataSet: CTSingleDataSetProtocol  {}
 
 
 
@@ -74,20 +88,23 @@ public protocol CTMultiBarChartDataSet: CTSingleDataSetProtocol  {}
 
 // MARK: - DataPoints
 /**
- A protocol to extend functionality of `CTLineBarDataPoint` specifically for standard Bar Charts.
+ A protocol to extend functionality of `CTLineBarDataPointProtocol` specifically for standard Bar Charts.
  */
-public protocol CTBarDataPoint: CTLineBarDataPoint {}
+public protocol CTBarDataPoint: CTLineBarDataPointProtocol {}
 
 /**
- A protocol to extend functionality of `CTLineBarDataPoint` specifically for standard Bar Charts.
+ A protocol to extend functionality of `CTLineBarDataPointProtocol` specifically for standard Bar Charts.
  */
-public protocol CTStandardBarDataPoint: CTBarDataPoint, CTColourStyle {}
+public protocol CTStandardBarDataPoint: CTBarDataPoint, CTStandardDataPointProtocol, CTnotRanged {
+    /// Drawing style of the range fill.
+    var fillColour : ColourStyle { get set }
+}
 
 /**
- A protocol to extend functionality of `CTLineBarDataPoint` specifically for multi part Bar Charts.
+ A protocol to extend functionality of `CTLineBarDataPointProtocol` specifically for multi part Bar Charts.
  i.e: Grouped or Stacked
  */
-public protocol CTMultiBarDataPoint: CTBarDataPoint {
+public protocol CTMultiBarDataPoint: CTBarDataPoint, CTStandardDataPointProtocol, CTnotRanged {
     
     /**
      For grouping data points together so they can be drawn in the correct groupings.
@@ -95,3 +112,6 @@ public protocol CTMultiBarDataPoint: CTBarDataPoint {
     var group : GroupingData { get set }
     
 }
+
+public protocol CTRangedBarDataPoint: CTBarDataPoint, CTRangeDataPointProtocol, CTisRanged {}
+

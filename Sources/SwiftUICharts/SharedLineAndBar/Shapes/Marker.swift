@@ -40,8 +40,8 @@ internal struct Marker: Shape {
             let y = rect.height / CGFloat(range)
             pointY = (CGFloat(value - minValue) * -y) + rect.height
         case .bar:
-            let y = rect.height / CGFloat(maxValue)
-            pointY = rect.height - CGFloat(value) * y
+            let y = CGFloat(value - minValue)
+            pointY = (rect.height - (y / CGFloat(range)) * rect.height)
         case .pie:
             pointY = 0
         }

@@ -19,13 +19,13 @@ import SwiftUI
  */
 public struct ChartMetadata {
     /// The charts title
-    var title         : String
+    public var title         : String
     /// The charts subtitle
-    var subtitle      : String
+    public var subtitle      : String
     /// Color of the title
-    var titleColour   : Color
+    public var titleColour   : Color
     /// Color of the subtitle
-    var subtitleColour: Color
+    public var subtitleColour: Color
     
     /// Model to hold the metadata for the chart.
     /// - Parameters:
@@ -43,20 +43,4 @@ public struct ChartMetadata {
         self.titleColour    = titleColour
         self.subtitleColour = subtitleColour
     }
-}
-struct Accessibility {
-    #if os(iOS)
-   static func read(this value: String) {
-        if UIAccessibility.isVoiceOverRunning {
-            UIAccessibility.post(notification: .announcement, argument: "\(value)")
-        }
-    }
-    
-    #else
-    
-    static func read(this value: String) {
-        
-    }
-    
-    #endif
 }

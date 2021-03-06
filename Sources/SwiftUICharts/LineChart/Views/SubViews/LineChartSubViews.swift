@@ -35,17 +35,19 @@ struct AccessibilityRectangle: Shape {
  
  Single colour
  */
-internal struct LineChartColourSubView<CD>: View where CD: CTLineChartDataProtocol {
+internal struct LineChartColourSubView<CD, DS>: View where CD: CTLineChartDataProtocol,
+                                                           DS: CTLineChartDataSet,
+                                                           DS.DataPoint: CTStandardDataPointProtocol {
     
     private let chartData   : CD
-    private let dataSet     : LineDataSet
+    private let dataSet     : DS
     private let minValue    : Double
     private let range       : Double
     private let colour      : Color
     private let isFilled    : Bool
            
     internal init(chartData : CD,
-                  dataSet   : LineDataSet,
+                  dataSet   : DS,
                   minValue  : Double,
                   range     : Double,
                   colour    : Color,
@@ -94,10 +96,12 @@ internal struct LineChartColourSubView<CD>: View where CD: CTLineChartDataProtoc
  
  Gradient colour
  */
-internal struct LineChartColoursSubView<CD>: View where CD: CTLineChartDataProtocol {
+internal struct LineChartColoursSubView<CD, DS>: View where CD: CTLineChartDataProtocol,
+                                                            DS: CTLineChartDataSet,
+                                                            DS.DataPoint: CTStandardDataPointProtocol {
     
     private let chartData   : CD
-    private let dataSet     : LineDataSet
+    private let dataSet     : DS
     
     private let minValue    : Double
     private let range       : Double
@@ -108,7 +112,7 @@ internal struct LineChartColoursSubView<CD>: View where CD: CTLineChartDataProto
     private let isFilled    : Bool
     
     internal init(chartData : CD,
-                  dataSet   : LineDataSet,
+                  dataSet   : DS,
                   minValue  : Double,
                   range     : Double,
                   colours   : [Color],
@@ -174,10 +178,12 @@ internal struct LineChartColoursSubView<CD>: View where CD: CTLineChartDataProto
  
  Gradient with stops
  */
-internal struct LineChartStopsSubView<CD>: View where CD: CTLineChartDataProtocol {
+internal struct LineChartStopsSubView<CD, DS>: View where CD: CTLineChartDataProtocol,
+                                                          DS: CTLineChartDataSet,
+                                                          DS.DataPoint: CTStandardDataPointProtocol {
 
     private let chartData   : CD
-    private let dataSet     : LineDataSet
+    private let dataSet     : DS
 
     private let minValue    : Double
     private let range       : Double
@@ -188,7 +194,7 @@ internal struct LineChartStopsSubView<CD>: View where CD: CTLineChartDataProtoco
     private let isFilled    : Bool
     
     internal init(chartData : CD,
-                  dataSet   : LineDataSet,
+                  dataSet   : DS,
                   minValue  : Double,
                   range     : Double,
                   stops     : [Gradient.Stop],

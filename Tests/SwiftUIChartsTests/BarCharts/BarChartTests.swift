@@ -43,21 +43,33 @@ final class BarChartTests: XCTestCase {
 
     // MARK: - Labels
     func testBarGetYLabels() {
-        let dataPoints = [
-            BarChartDataPoint(value: 10),
-            BarChartDataPoint(value: 50),
-            BarChartDataPoint(value: 40),
-            BarChartDataPoint(value: 80)
-        ]
-        let chartData = BarChartData(dataSets: BarDataSet(dataPoints: dataPoints),
-                                      chartStyle: BarChartStyle(yAxisNumberOfLabels: 3))
 
-        XCTAssertEqual(chartData.getYLabels()[0], 0.00000, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[1], 26.6666, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[2], 53.3333, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[3], 80.0000, accuracy: 0.01)
+        let chartData = BarChartData(dataSets: BarDataSet(dataPoints: dataPoints),
+                                     chartStyle: BarChartStyle(yAxisNumberOfLabels: 3))
+        
+        chartData.chartStyle.topLine  = .maximumValue
+        chartData.chartStyle.baseline = .zero
+        XCTAssertEqual(chartData.getYLabels()[0], 0.000, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 30.00, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 60.00, accuracy: 0.01)
+        
+        chartData.chartStyle.baseline = .minimumValue
+        XCTAssertEqual(chartData.getYLabels()[0], 10.00, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 35.00, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 60.00, accuracy: 0.01)
+        
+        chartData.chartStyle.baseline = .minimumWithMaximum(of: 5)
+        XCTAssertEqual(chartData.getYLabels()[0], 5.00,   accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 32.50,  accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 60.00,  accuracy: 0.01)
+        
+        chartData.chartStyle.topLine  = .maximum(of: 100)
+        chartData.chartStyle.baseline = .zero
+        XCTAssertEqual(chartData.getYLabels()[0], 0.00,   accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 50.00,  accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 100.00, accuracy: 0.01)
     }
-    
+        
     // MARK: - Touch
     func testBarGetDataPoint() {
         let rect: CGRect  = CGRect(x: 0, y: 0, width: 100, height: 100)

@@ -22,23 +22,6 @@ public enum LineType {
 }
 
 /**
- Where to start drawing the line chart from.
- ```
- case minimumValue // Lowest value in the data set(s)
- case minimumWithMaximum(of: Double) // Set a custom baseline
- case zero // Set 0 as the lowest value
- ```
- */
-public enum Baseline {
-    /// Lowest value in the data set(s)
-    case minimumValue
-    /// Set a custom baseline
-    case minimumWithMaximum(of: Double)
-    /// Set 0 as the lowest value
-    case zero
-}
-
-/**
  Style of the point marks
  ```
  case filled // Just fill

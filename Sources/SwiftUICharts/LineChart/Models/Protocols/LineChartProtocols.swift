@@ -14,44 +14,26 @@ import SwiftUI
 public protocol CTLineChartDataProtocol: CTLineBarChartDataProtocol {
 
     /// A type representing opaque View
-    associatedtype Marker : View
-    /// A type representing opaque View
     associatedtype Points : View
-    
+    /// A type representing opaque View
     associatedtype Access : View
-        
-    /**
-     Whether it is a normal or filled line.
-     */
-    var isFilled    : Bool { get set}
     
     /**
-     Returns the position to place the indicator on the line
-     based on the users touch or pointer input.
+     Displays Shapes over the data points.
      
-     - Parameters:
-        - rect: Frame of the path.
-        - dataPoints: Data points used to draw the chart.
-        - touchLocation: Location of the touch or pointer input.
-        - lineType: Drawing style of the line.
-     - Returns: The position to place the indicator.
+     - Returns: Relevent view containing point markers based the chosen parameters.
      */
-    func getIndicatorLocation(rect: CGRect, dataPoints: [LineChartDataPoint], touchLocation: CGPoint, lineType: LineType) -> CGPoint
-
-    /// Displays a view contatining touch markers.
-    /// - Parameters:
-    ///   - dataSet: The data set to search in.
-    ///   - touchLocation: Current location of the touch.
-    ///   - chartSize: The size of the chart view as the parent view.
-    /// - Returns: Relevent touch marker based the chosen parameters.
-    func markerSubView(dataSet: LineDataSet, touchLocation: CGPoint, chartSize: CGRect) -> Marker
-    
-    /// Displays Shapes over the data points.
-    /// - Returns: Relevent view containing point markers based the chosen parameters.
     func getPointMarker() -> Points
     
+    /**
+     Ensures that line charts have an accessibility layer.
+     
+     - Returns: A view with invisible rectangles over the data point.
+     */
     func getAccessibility() -> Access
 }
+
+
 
 
 // MARK: - Style
@@ -59,6 +41,29 @@ public protocol CTLineChartDataProtocol: CTLineBarChartDataProtocol {
  A protocol to extend functionality of `CTLineBarChartStyle` specifically for  Line Charts.
  */
 public protocol CTLineChartStyle : CTLineBarChartStyle {}
+
+public protocol CTLineStyle {
+    /// Drawing style of the line.
+    var lineType   : LineType { get set }
+    
+    /// Colour styling of the line.
+    var lineColour : ColourStyle { get set }
+    
+    /**
+     Styling for stroke
+     
+     Replica of Apple’s StrokeStyle that conforms to Hashable
+     */
+    var strokeStyle : Stroke { get set }
+}
+
+/**
+ A protocol to extend functionality of `CTLineStyle` specifically for Ranged Line Charts.
+ */
+public protocol CTRangedLineStyle: CTLineStyle {
+    /// Drawing style of the range fill.
+    var fillColour : ColourStyle { get set }
+}
 
 
 
@@ -69,7 +74,7 @@ public protocol CTLineChartStyle : CTLineBarChartStyle {}
 public protocol CTLineChartDataSet: CTSingleDataSetProtocol {
     
     /// A type representing colour styling
-    associatedtype Styling   : CTColourStyle
+    associatedtype Styling   : CTLineStyle
     
     /**
      Label to display in the legend.
@@ -89,3 +94,27 @@ public protocol CTLineChartDataSet: CTSingleDataSetProtocol {
      */
     var pointStyle : PointStyle { get set }
 }
+public protocol CTRangedLineChartDataSet: CTLineChartDataSet {
+    var legendFillTitle : String { get set }
+}
+
+public protocol CTMultiLineChartDataSet: CTMultiDataSetProtocol {}
+
+
+
+// MARK: - Data Point
+/**
+ A protocol to extend functionality of `CTLineBarDataPointProtocol` specifically for Line and Bar Charts.
+ */
+public protocol CTLineDataPointProtocol: CTLineBarDataPointProtocol {}
+
+/**
+ A protocol to extend functionality of `CTStandardDataPointProtocol` specifically for Ranged Line Charts.
+ */
+public protocol CTStandardLineDataPoint: CTLineDataPointProtocol, CTStandardDataPointProtocol, CTnotRanged {}
+
+/**
+ A protocol to extend functionality of `CTStandardDataPointProtocol` specifically for Ranged Line Charts.
+ */
+public protocol CTRangedLineDataPoint: CTLineDataPointProtocol, CTStandardDataPointProtocol, CTRangeDataPointProtocol, CTisRanged {}
+

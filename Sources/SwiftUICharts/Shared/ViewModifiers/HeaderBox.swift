@@ -29,17 +29,13 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
                 .foregroundColor(chartData.metadata.subtitleColour)
         }
     }
-    
     var touchOverlay: some View {
+
         VStack(alignment: .trailing) {
             if chartData.infoView.isTouchCurrent {
                 ForEach(chartData.infoView.touchOverlayInfo, id: \.self) { info in
-                    Text("\(info.value, specifier: chartData.infoView.touchSpecifier)")
-                        .font(.title3)
-                        .foregroundColor(chartData.chartStyle.infoBoxValueColour)
-                    Text("\(info.pointDescription ?? "")")
-                        .font(.subheadline)
-                        .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                    
+                    chartData.headerTouchOverlaySubView(info: info)
                 }
             } else {
                 Text("")
@@ -82,9 +78,6 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
                             .frame(minWidth: 0, maxWidth: .infinity)
                         }
                         content
-//                            .onChange(of: chartData.infoView.accessibilityLabels) { (value) in
-//                                Accessibility.read(this: value)
-//                            }
                     }
                 }
             } else { content }

@@ -10,55 +10,33 @@ import SwiftUI
 /**
 View that displays information from the touch events.
  */
-internal struct TouchOverlayBox<D: CTChartDataPoint>: View {
+internal struct TouchOverlayBox<T: CTChartData>: View {
     
-    private var isTouchCurrent      : Bool
-    private var selectedPoints      : [D]
-    private var specifier           : String
-    
-    private var valueColour         : Color
-    private var descriptionColour   : Color
-    
-    private var ignoreZero          : Bool
+    @ObservedObject var chartData: T
     
     @Binding private var boxFrame   :  CGRect
     
-    internal init(isTouchCurrent    : Bool,
-                  selectedPoints    : [D],
-                  specifier         : String   = "%.0f",
-                  valueColour       : Color,
-                  descriptionColour : Color,
-                  boxFrame          : Binding<CGRect>,
-                  ignoreZero        : Bool     = false
+    internal init(chartData         : T,
+                  boxFrame          : Binding<CGRect>
     ) {
-        self.isTouchCurrent     = isTouchCurrent
-        self.selectedPoints     = selectedPoints
-        self.specifier          = specifier
-        self.valueColour        = valueColour
-        self.descriptionColour  = descriptionColour
+        self.chartData          = chartData
         self._boxFrame          = boxFrame
-        self.ignoreZero         = ignoreZero
     }
         
     internal var body: some View {
         
         HStack {
-            ForEach(selectedPoints, id: \.self) { point in
-                Text("\(point.value, specifier: specifier)")
-                    .font(.subheadline)
-                    .foregroundColor(valueColour)
-                if let label = point.pointDescription {
-                    Text(label)
-                        .font(.subheadline)
-                        .foregroundColor(descriptionColour)
-                }
+            ForEach(chartData.infoView.touchOverlayInfo, id: \.self) { point in
+                
+                chartData.headerTouchOverlaySubView(info: point)
+             
             }
         }
 
         .padding(.all, 8)
         .background(
             GeometryReader { geo in
-                if isTouchCurrent {
+                if chartData.infoView.isTouchCurrent {
                     Group {
                         RoundedRectangle(cornerRadius: 5.0, style: .continuous)
                             .fill(Color.systemsBackground)

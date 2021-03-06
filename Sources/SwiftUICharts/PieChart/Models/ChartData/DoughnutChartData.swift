@@ -33,14 +33,14 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol {
 
     // MARK: Properties
     public var id : UUID = UUID()
-    @Published public var dataSets   : PieDataSet
-    @Published public var metadata   : ChartMetadata
-    @Published public var chartStyle : DoughnutChartStyle
-    @Published public var legends    : [LegendData]
-    @Published public var infoView   : InfoViewData<PieChartDataPoint>
+    @Published public final var dataSets   : PieDataSet
+    @Published public final var metadata   : ChartMetadata
+    @Published public final var chartStyle : DoughnutChartStyle
+    @Published public final var legends    : [LegendData]
+    @Published public final var infoView   : InfoViewData<PieChartDataPoint>
          
-    public var noDataText: Text
-    public var chartType : (chartType: ChartType, dataSetType: DataSetType)
+    public final var noDataText: Text
+    public final var chartType : (chartType: ChartType, dataSetType: DataSetType)
     
     // MARK: Initializer
     /// Initialises a Doughnut Chart.
@@ -67,15 +67,7 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol {
         self.makeDataPoints()
     }
     
-    // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent   = true
-        self.infoView.touchLocation    = touchLocation
-        self.infoView.chartSize        = chartSize
-        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
-    }
-    
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View { EmptyView() }
+    public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View { EmptyView() }
 
     public typealias Set        = PieDataSet
     public typealias DataPoint  = PieChartDataPoint
@@ -83,8 +75,8 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol {
 }
 
 // MARK: - Touch
-extension DoughnutChartData: TouchProtocol {
-    internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+extension DoughnutChartData {
+    public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points : [PieChartDataPoint] = []
         let touchDegree = degree(from: touchLocation, in: chartSize)
                 
@@ -94,13 +86,7 @@ extension DoughnutChartData: TouchProtocol {
         }
         self.infoView.touchOverlayInfo = points
     }
-}
-
-// MARK: - Legends
-extension DoughnutChartData: LegendProtocol {
-    func setupLegends() {}
-    
-    internal func legendOrder() -> [LegendData] {
-        return legends.sorted { $0.prioity < $1.prioity}
+    public func getPointLocation(dataSet: PieDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+        return nil
     }
 }

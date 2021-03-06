@@ -11,7 +11,7 @@ import SwiftUI
 /**
  A protocol to extend functionality of `CTChartData` specifically for Line and Bar Charts.
  */
-public protocol CTLineBarChartDataProtocol : CTChartData where CTStyle: CTLineBarChartStyle {
+public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBarChartStyle {
 
     /// A type representing opaque View
     associatedtype XLabels  : View
@@ -142,9 +142,9 @@ public protocol CTLineBarChartStyle: CTChartStyle {
 
 // MARK: - DataPoints
 /**
- A protocol to extend functionality of `CTChartDataPoint` specifically for Line and Bar Charts.
+ A protocol to extend functionality of `CTStandardDataPointProtocol` specifically for Line and Bar Charts.
  */
-public protocol CTLineBarDataPoint: CTChartDataPoint {
+public protocol CTLineBarDataPointProtocol: CTDataPointBaseProtocol {
     
     /**
      Data points label for the X axis.

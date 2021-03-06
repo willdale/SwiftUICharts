@@ -91,7 +91,7 @@ internal struct LegendView<T>: View where T: CTChartData {
             }
         } else if chartData is GroupedBarChartData || chartData is StackedBarChartData {
             if let datapoint = chartData.infoView.touchOverlayInfo.first as? MultiBarChartDataPoint {
-                return chartData.infoView.isTouchCurrent && legend.colour == datapoint.group.colour
+                return chartData.infoView.isTouchCurrent && legend.colour == datapoint.group.fillColour
             } else {
                 return false
             }
@@ -114,11 +114,11 @@ internal struct LegendView<T>: View where T: CTChartData {
     }
     
     /// Returns a Line legend.
-    func line(_ legend: LegendData) -> some View {
+    private func line(_ legend: LegendData) -> some View {
         Group {
             if let stroke = legend.strokeStyle {
                 let strokeStyle = stroke.strokeToStrokeStyle()
-                if let colour = legend.colour {
+                if let colour = legend.colour.colour {
                     HStack {
                         LegendLine(width: 40)
                             .stroke(colour, style: strokeStyle)
@@ -128,7 +128,7 @@ internal struct LegendView<T>: View where T: CTChartData {
                             .foregroundColor(textColor)
                     }
                     
-                } else if let colours = legend.colours  {
+                } else if let colours = legend.colour.colours  {
                     HStack {
                         LegendLine(width: 40)
                             .stroke(LinearGradient(gradient: Gradient(colors: colours),
@@ -140,7 +140,7 @@ internal struct LegendView<T>: View where T: CTChartData {
                             .font(.caption)
                             .foregroundColor(textColor)
                     }
-                } else if let stops = legend.stops {
+                } else if let stops = legend.colour.stops {
                     let stops = GradientStop.convertToGradientStopsArray(stops: stops)
                     HStack {
                         LegendLine(width: 40)
@@ -159,9 +159,9 @@ internal struct LegendView<T>: View where T: CTChartData {
     }
     
     /// Returns a Bar legend.
-    func bar(_ legend: LegendData) -> some View {
+    private func bar(_ legend: LegendData) -> some View {
         Group {
-            if let colour = legend.colour
+            if let colour = legend.colour.colour
             {
                 HStack {
                     Rectangle()
@@ -170,9 +170,9 @@ internal struct LegendView<T>: View where T: CTChartData {
                     Text(legend.legend)
                         .font(.caption)
                 }
-            } else if let colours = legend.colours,
-                      let startPoint = legend.startPoint,
-                      let endPoint = legend.endPoint
+            } else if let colours    = legend.colour.colours,
+                      let startPoint = legend.colour.startPoint,
+                      let endPoint   = legend.colour.endPoint
             {
                 HStack {
                     Rectangle()
@@ -183,9 +183,9 @@ internal struct LegendView<T>: View where T: CTChartData {
                     Text(legend.legend)
                         .font(.caption)
                 }
-            } else if let stops = legend.stops,
-                      let startPoint = legend.startPoint,
-                      let endPoint = legend.endPoint
+            } else if let stops      = legend.colour.stops,
+                      let startPoint = legend.colour.startPoint,
+                      let endPoint   = legend.colour.endPoint
             {
                 let stops = GradientStop.convertToGradientStopsArray(stops: stops)
                 HStack {
@@ -202,9 +202,9 @@ internal struct LegendView<T>: View where T: CTChartData {
     }
     
     /// Returns a Pie legend.
-    func pie(_ legend: LegendData) -> some View {
+    private func pie(_ legend: LegendData) -> some View {
         Group {
-            if let colour = legend.colour {
+            if let colour = legend.colour.colour {
                 HStack {
                     Circle()
                         .fill(colour)
@@ -213,9 +213,9 @@ internal struct LegendView<T>: View where T: CTChartData {
                         .font(.caption)
                 }
                 
-            } else if let colours = legend.colours,
-                      let startPoint = legend.startPoint,
-                      let endPoint = legend.endPoint
+            } else if let colours    = legend.colour.colours,
+                      let startPoint = legend.colour.startPoint,
+                      let endPoint   = legend.colour.endPoint
             {
                 HStack {
                     Circle()
@@ -227,9 +227,9 @@ internal struct LegendView<T>: View where T: CTChartData {
                         .font(.caption)
                 }
                 
-            } else if let stops = legend.stops,
-                      let startPoint = legend.startPoint,
-                      let endPoint = legend.endPoint
+            } else if let stops      = legend.colour.stops,
+                      let startPoint = legend.colour.startPoint,
+                      let endPoint   = legend.colour.endPoint
             {
                 let stops = GradientStop.convertToGradientStopsArray(stops: stops)
                 HStack {

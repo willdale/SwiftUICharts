@@ -17,16 +17,20 @@ import SwiftUI
 public protocol CTChartData: ObservableObject, Identifiable {
     
     /// A type representing a  data set. -- `CTDataSetProtocol`
-    associatedtype Set      : CTDataSetProtocol
+    associatedtype Set: CTDataSetProtocol
+    
+    /// A type representing a  data set. -- `CTDataSetProtocol`
+    associatedtype SetPoint: CTDataSetProtocol
     
     /// A type representing a data point. -- `CTChartDataPoint`
-    associatedtype DataPoint: CTChartDataPoint
+    associatedtype DataPoint: CTDataPointBaseProtocol
     
     /// A type representing the chart style. -- `CTChartStyle`
-    associatedtype CTStyle  : CTChartStyle
+    associatedtype CTStyle: CTChartStyle
     
     /// A type representing opaque View
-    associatedtype Touch    : View
+    associatedtype Touch: View
+    
     
     var id: ID { get }
     
@@ -67,8 +71,6 @@ public protocol CTChartData: ObservableObject, Identifiable {
      Holds data about the charts type.
      
      Allows for internal logic based on the type of chart.
-     
-     This might get removed in favour of a more protocol based approach.
     */
     var chartType: (chartType: ChartType, dataSetType: DataSetType) { get }
     
@@ -79,9 +81,21 @@ public protocol CTChartData: ObservableObject, Identifiable {
     func isGreaterThanTwo() -> Bool
 
     // MARK: Touch
+    /**
+     Takes in the required data to set up all the touch interactions.
+     
+     Output via `getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> Touch`
+     
+     - Parameters:
+       - touchLocation: Current location of the touch
+       - chartSize: The size of the chart view as the parent view.
+     */
     func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect)
+    
     /**
      Takes touch location and return a view based on the chart type and configuration.
+     
+     Inputs from `setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect)`
      
      - Parameters:
        - touchLocation: Current location of the touch
@@ -89,16 +103,6 @@ public protocol CTChartData: ObservableObject, Identifiable {
      - Returns: The relevent view for the chart type and options.
      */
     func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> Touch
-    
-}
-
-
-
-// MARK: - Touch Protocol
-internal protocol TouchProtocol {
-    
-    /// A type representing a  data set. -- `CTDataSetProtocol`
-    associatedtype SetPoint : CTDataSetProtocol
     
     /**
     Gets the nearest data points to the touch location.
@@ -118,25 +122,40 @@ internal protocol TouchProtocol {
     - Returns: Array of points with the location on screen of data points.
     */
     func getPointLocation(dataSet: SetPoint, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint?
+    
+    associatedtype TouchInformation: View
+    
+    func headerTouchOverlaySubView(info: DataPoint) -> TouchInformation
 }
 
-
-// MARK: - Legend Protocol
-/**
- Protocol for dealing with legend data internally.
- */
-internal protocol LegendProtocol {
-    
-    /**
-    Sets the order the Legends are layed out in.
-     - Returns: Ordered array of Legends.
-    */
-    func legendOrder() -> [LegendData]
-    
-    /**
-     Configures the legends based on the type of chart.
-     */
-    func setupLegends()
+extension CTChartData where Self.DataPoint : CTStandardDataPointProtocol {
+    public func headerTouchOverlaySubView(info: Self.DataPoint) -> some View {
+        Group {
+            switch self.infoView.touchUnit {
+            case .none:
+                Text("\(info.value, specifier: self.infoView.touchSpecifier)")
+                    .font(.title3)
+                    .foregroundColor(self.chartStyle.infoBoxValueColour)
+                Text("\(info.pointDescription ?? "")")
+                    .font(.subheadline)
+                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
+            case .prefix(of: let unit):
+                Text("\(unit) \(info.value, specifier: self.infoView.touchSpecifier)")
+                    .font(.title3)
+                    .foregroundColor(self.chartStyle.infoBoxValueColour)
+                Text("\(info.pointDescription ?? "")")
+                    .font(.subheadline)
+                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
+            case .suffix(of: let unit):
+                Text("\(info.value, specifier: self.infoView.touchSpecifier) \(unit)")
+                    .font(.title3)
+                    .foregroundColor(self.chartStyle.infoBoxValueColour)
+                Text("\(info.pointDescription ?? "")")
+                    .font(.subheadline)
+                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
+            }
+        }
+    }
 }
 
 
@@ -155,7 +174,7 @@ public protocol CTDataSetProtocol: Hashable, Identifiable {
  */
 public protocol CTSingleDataSetProtocol: CTDataSetProtocol {
     /// A type representing a data point. -- `CTChartDataPoint`
-    associatedtype DataPoint : CTChartDataPoint
+    associatedtype DataPoint : CTDataPointBaseProtocol
     
     /**
      Array of data points.
@@ -177,23 +196,21 @@ public protocol CTMultiDataSetProtocol: CTDataSetProtocol {
     var dataSets : [DataSet] { get set }
 }
 
+
+
+
+
 // MARK: - Data Points
 /**
  Protocol to set base configuration for data points.
  */
-public protocol CTChartDataPoint: Hashable, Identifiable {
-    
+public protocol CTDataPointBaseProtocol: Hashable, Identifiable {
     var id               : ID { get }
-    
-    /**
-     Value of the data point
-     */
-    var value            : Double { get set }
     
     /**
      A label that can be displayed on touch input
     
-     It can eight be displayed in a floating box that tracks the users input location
+     It can be displayed in a floating box that tracks the users input location
      or placed in the header.
     */
     var pointDescription : String? { get set }
@@ -202,8 +219,34 @@ public protocol CTChartDataPoint: Hashable, Identifiable {
      Date can be used for optionally performing additional calculations.
      */
     var date             : Date? { get set }
-    
 }
+
+/**
+ A protocol to extend functionality of `CTDataPointBaseProtocol` for any chart
+ type that needs a value.
+ */
+public protocol CTStandardDataPointProtocol: CTDataPointBaseProtocol {
+    /**
+     Value of the data point
+     */
+    var value            : Double { get set }
+}
+
+/**
+ A protocol to extend functionality of `CTDataPointBaseProtocol` for any chart
+ type that needs a upper and lower values.
+ */
+public protocol CTRangeDataPointProtocol: CTDataPointBaseProtocol {
+    /// Value of the upper range of the data point.
+    var upperValue : Double { get set }
+    
+    /// Value of the lower range of the data point.
+    var lowerValue : Double { get set }
+}
+
+
+
+
 
 // MARK: - Styles
 /**
@@ -268,3 +311,6 @@ public protocol CTColourStyle {
     /// End point for the gradient
     var endPoint: UnitPoint? { get set }
 }
+
+public protocol CTisRanged {}
+public protocol CTnotRanged {}
