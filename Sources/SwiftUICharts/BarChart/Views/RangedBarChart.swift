@@ -17,102 +17,270 @@ public struct RangedBarChart<ChartData>: View where ChartData: RangedBarChartDat
         self.chartData = chartData
     }
     
-    @State private var startAnimation : Bool = false
-    
     public var body: some View {
-        
-        HStack(spacing: 0) {
-            ForEach(chartData.dataSets.dataPoints) { dataPoint in
+        if chartData.isGreaterThanTwo() {
+            HStack(spacing: 0) {
                 GeometryReader { geo in
                     
-                    if chartData.barStyle.fillColour.colourType == .colour,
-                       let colour = chartData.barStyle.fillColour.colour {
+                    switch chartData.barStyle.colourFrom {
+                    case .barStyle:
                         
-                        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
-                                                 tr: chartData.barStyle.cornerRadius.top,
-                                                 bl: chartData.barStyle.cornerRadius.bottom,
-                                                 br: chartData.barStyle.cornerRadius.bottom)
-                            .fill(colour)
-                            
-                            .scaleEffect(y: startAnimation ? CGFloat((dataPoint.upperValue - dataPoint.lowerValue) / chartData.range) : 0, anchor: .center)
-                            .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
-                            .position(x: geo.frame(in: .local).midX,
-                                      y: getBarPositionX(dataPoint: dataPoint, height: geo.size.height))
-                            
-                            .background(Color(.gray).opacity(0.000000001))
-                            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                                self.startAnimation = true
-                            }
-                            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
-                                self.startAnimation = false
-                            }
-                            .accessibilityValue(Text("\(dataPoint.upperValue, specifier: chartData.infoView.touchSpecifier), \(dataPoint.pointDescription ?? "")"))
-                    
-                    } else if chartData.barStyle.fillColour.colourType == .gradientColour,
-                              let colours    = chartData.barStyle.fillColour.colours,
-                              let startPoint = chartData.barStyle.fillColour.startPoint,
-                              let endPoint   = chartData.barStyle.fillColour.endPoint {
+                        RangedBarChartBarStyleSubView(chartData: chartData, barSize: geo.frame(in: .local))
+                            .accessibilityLabel( Text("\(chartData.metadata.title)"))
+                    case .dataPoints:
                         
-                        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
-                                                 tr: chartData.barStyle.cornerRadius.top,
-                                                 bl: chartData.barStyle.cornerRadius.bottom,
-                                                 br: chartData.barStyle.cornerRadius.bottom)
-                            .fill(LinearGradient(gradient   : Gradient(colors: colours),
-                                                 startPoint : startPoint,
-                                                 endPoint   : endPoint))
-                            
-                            .scaleEffect(y: startAnimation ? CGFloat((dataPoint.upperValue - dataPoint.lowerValue) / chartData.range) : 0, anchor: .center)
-                            .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
-                            .position(x: geo.frame(in: .local).midX,
-                                      y: getBarPositionX(dataPoint: dataPoint, height: geo.size.height))
-                            
-                            .background(Color(.gray).opacity(0.000000001))
-                            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                                self.startAnimation = true
-                            }
-                            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
-                                self.startAnimation = false
-                            }
-                            .accessibilityValue(Text("\(dataPoint.upperValue, specifier: chartData.infoView.touchSpecifier), \(dataPoint.pointDescription ?? "")"))
-                        
-                    } else if chartData.barStyle.fillColour.colourType == .gradientStops,
-                              let stops      = chartData.barStyle.fillColour.stops,
-                              let startPoint = chartData.barStyle.fillColour.startPoint,
-                              let endPoint   = chartData.barStyle.fillColour.endPoint {
-                        
-                        let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
-                        
-                        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
-                                                 tr: chartData.barStyle.cornerRadius.top,
-                                                 bl: chartData.barStyle.cornerRadius.bottom,
-                                                 br: chartData.barStyle.cornerRadius.bottom)
-                            .fill(LinearGradient(gradient   : Gradient(stops: safeStops),
-                                                 startPoint : startPoint,
-                                                 endPoint   : endPoint))
-                            
-                            .scaleEffect(y: startAnimation ? CGFloat((dataPoint.upperValue - dataPoint.lowerValue) / chartData.range) : 0, anchor: .center)
-                            .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
-                            .position(x: geo.frame(in: .local).midX,
-                                      y: getBarPositionX(dataPoint: dataPoint, height: geo.size.height))
-                            
-                            .background(Color(.gray).opacity(0.000000001))
-                            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                                self.startAnimation = true
-                            }
-                            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
-                                self.startAnimation = false
-                            }
-                            .accessibilityValue(Text("\(dataPoint.upperValue, specifier: chartData.infoView.touchSpecifier), \(dataPoint.pointDescription ?? "")"))
-                    
+                        RangedBarChartDataPointSubView(chartData: chartData, barSize: geo.frame(in: .local))
+                            .accessibilityLabel( Text("\(chartData.metadata.title)"))
                     }
-                    
                 }
+            }
+        } else { CustomNoDataView(chartData: chartData) }
+    }
+}
+
+internal struct RangedBarChartBarStyleSubView<CD:RangedBarChartData>: View {
+
+   private let chartData : CD
+   private let barSize   : CGRect
+    
+    internal init(chartData: CD, barSize: CGRect) {
+        self.chartData = chartData
+        self.barSize   = barSize
+    }
+    
+    var body: some View {
+        
+        if chartData.barStyle.fillColour.colourType == .colour,
+           let colour = chartData.barStyle.fillColour.colour {
+            ForEach(chartData.dataSets.dataPoints) { dataPoint in
+                RangedBarChartColourCell(chartData : chartData,
+                                         dataPoint : dataPoint,
+                                         colour    : colour,
+                                         barSize   : barSize)
+            }
+        } else if chartData.barStyle.fillColour.colourType == .gradientColour,
+                  let colours    = chartData.barStyle.fillColour.colours,
+                  let startPoint = chartData.barStyle.fillColour.startPoint,
+                  let endPoint   = chartData.barStyle.fillColour.endPoint {
+            ForEach(chartData.dataSets.dataPoints) { dataPoint in
+                RangedBarChartColoursCell(chartData : chartData,
+                                          dataPoint : dataPoint,
+                                          colours   : colours,
+                                          startPoint: startPoint,
+                                          endPoint  : endPoint,
+                                          barSize   : barSize)
+            }
+        } else if chartData.barStyle.fillColour.colourType == .gradientStops,
+                  let stops      = chartData.barStyle.fillColour.stops,
+                  let startPoint = chartData.barStyle.fillColour.startPoint,
+                  let endPoint   = chartData.barStyle.fillColour.endPoint {
+            
+            let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
+            
+            ForEach(chartData.dataSets.dataPoints) { dataPoint in
+                RangedBarChartStopsCell(chartData : chartData,
+                                        dataPoint : dataPoint,
+                                        stops     : safeStops,
+                                        startPoint: startPoint,
+                                        endPoint  : endPoint,
+                                        barSize   : barSize)
             }
         }
     }
+}
+
+internal struct RangedBarChartDataPointSubView<CD:RangedBarChartData>: View {
+
+    private let chartData : CD
+    private let barSize   : CGRect
     
-   private func getBarPositionX(dataPoint: RangedBarDataPoint, height: CGFloat) -> CGFloat {
-        let value = CGFloat((dataPoint.upperValue + dataPoint.lowerValue) / 2) - CGFloat(chartData.minValue)
-        return (height - (value / CGFloat(chartData.range)) * height)
+    internal init(chartData: CD, barSize: CGRect) {
+        self.chartData = chartData
+        self.barSize   = barSize
+    }
+    
+    internal var body: some View {
+        
+        ForEach(chartData.dataSets.dataPoints) { dataPoint in
+            if dataPoint.fillColour.colourType == .colour,
+               let colour = dataPoint.fillColour.colour {
+                
+                RangedBarChartColourCell(chartData : chartData,
+                                         dataPoint : dataPoint,
+                                         colour    : colour,
+                                         barSize   : barSize)
+                
+            } else if dataPoint.fillColour.colourType == .gradientColour,
+                      let colours    = dataPoint.fillColour.colours,
+                      let startPoint = dataPoint.fillColour.startPoint,
+                      let endPoint   = dataPoint.fillColour.endPoint {
+                
+                RangedBarChartColoursCell(chartData : chartData,
+                                          dataPoint : dataPoint,
+                                          colours   : colours,
+                                          startPoint: startPoint,
+                                          endPoint  : endPoint,
+                                          barSize   : barSize)
+            } else if dataPoint.fillColour.colourType == .gradientStops,
+                      let stops      = dataPoint.fillColour.stops,
+                      let startPoint = dataPoint.fillColour.startPoint,
+                      let endPoint   = dataPoint.fillColour.endPoint {
+                let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
+                
+                RangedBarChartStopsCell(chartData : chartData,
+                                        dataPoint : dataPoint,
+                                        stops     : safeStops,
+                                        startPoint: startPoint,
+                                        endPoint  : endPoint,
+                                        barSize   : barSize)
+            }
+        }
+    }
+}
+
+internal struct RangedBarChartColourCell<CD:RangedBarChartData>: View {
+     
+    private let chartData: CD
+    private let dataPoint: CD.Set.DataPoint
+    private let colour   : Color
+    private let barSize  : CGRect
+    
+    internal init(chartData : CD,
+                  dataPoint : CD.Set.DataPoint,
+                  colour    : Color,
+                  barSize   : CGRect
+    ) {
+        self.chartData = chartData
+        self.dataPoint = dataPoint
+        self.colour    = colour
+        self.barSize   = barSize
+    }
+    
+    @State private var startAnimation : Bool = false
+    
+    internal var body: some View {
+        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
+                                 tr: chartData.barStyle.cornerRadius.top,
+                                 bl: chartData.barStyle.cornerRadius.bottom,
+                                 br: chartData.barStyle.cornerRadius.bottom)
+            .fill(colour)
+            
+            .scaleEffect(y: startAnimation ? CGFloat((dataPoint.upperValue - dataPoint.lowerValue) / chartData.range) : 0, anchor: .center)
+            .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
+            .position(x: barSize.midX,
+                      y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
+            
+            .background(Color(.gray).opacity(0.000000001))
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
+            }
+            .accessibilityValue(chartData.getCellAccessibilityValue(dataPoint: dataPoint))
+    }
+    
+}
+
+
+internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
+     
+    private let chartData  : CD
+    private let dataPoint  : CD.Set.DataPoint
+    private let colours    : [Color]
+    private let startPoint : UnitPoint
+    private let endPoint   : UnitPoint
+    private let barSize    : CGRect
+    
+    internal init(chartData : CD,
+                  dataPoint : CD.Set.DataPoint,
+                  colours   : [Color],
+                  startPoint: UnitPoint,
+                  endPoint  : UnitPoint,
+                  barSize   : CGRect
+    ) {
+        self.chartData  = chartData
+        self.dataPoint  = dataPoint
+        self.colours    = colours
+        self.startPoint = startPoint
+        self.endPoint   = endPoint
+        self.barSize    = barSize
+    }
+    
+    @State private var startAnimation : Bool = false
+    
+    internal var body: some View {
+        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
+                                 tr: chartData.barStyle.cornerRadius.top,
+                                 bl: chartData.barStyle.cornerRadius.bottom,
+                                 br: chartData.barStyle.cornerRadius.bottom)
+            .fill(LinearGradient(gradient   : Gradient(colors: colours),
+                                 startPoint : startPoint,
+                                 endPoint   : endPoint))
+
+            .scaleEffect(y: startAnimation ? CGFloat((dataPoint.upperValue - dataPoint.lowerValue) / chartData.range) : 0, anchor: .center)
+            .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
+            .position(x: barSize.midX,
+                      y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
+
+            .background(Color(.gray).opacity(0.000000001))
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
+            }
+            .accessibilityValue(chartData.getCellAccessibilityValue(dataPoint: dataPoint))
+    }
+}
+
+internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
+     
+    private let chartData  : CD
+    private let dataPoint  : CD.Set.DataPoint
+    private let stops      : [Gradient.Stop]
+    private let startPoint : UnitPoint
+    private let endPoint   : UnitPoint
+    private let barSize    : CGRect
+    
+    internal init(chartData : CD,
+                  dataPoint : CD.Set.DataPoint,
+                  stops     : [Gradient.Stop],
+                  startPoint: UnitPoint,
+                  endPoint  : UnitPoint,
+                  barSize   : CGRect
+    ) {
+        self.chartData  = chartData
+        self.dataPoint  = dataPoint
+        self.stops      = stops
+        self.startPoint = startPoint
+        self.endPoint   = endPoint
+        self.barSize    = barSize
+    }
+    
+    @State private var startAnimation : Bool = false
+    
+    internal var body: some View {
+        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
+                                 tr: chartData.barStyle.cornerRadius.top,
+                                 bl: chartData.barStyle.cornerRadius.bottom,
+                                 br: chartData.barStyle.cornerRadius.bottom)
+            .fill(LinearGradient(gradient   : Gradient(stops: stops),
+                                 startPoint : startPoint,
+                                 endPoint   : endPoint))
+            
+            .scaleEffect(y: startAnimation ? CGFloat((dataPoint.upperValue - dataPoint.lowerValue) / chartData.range) : 0, anchor: .center)
+            .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
+            .position(x: barSize.midX,
+                      y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
+            
+            .background(Color(.gray).opacity(0.000000001))
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
+            }
+            .accessibilityValue(chartData.getCellAccessibilityValue(dataPoint: dataPoint))
     }
 }

@@ -115,7 +115,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
 
     // MARK: - Touch
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        self.markerSubView(dataSet: dataSets, touchLocation: touchLocation, chartSize: chartSize)
+        self.markerSubView()
     }
     public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points      : [RangedBarDataPoint] = []
@@ -128,15 +128,13 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
     }
     public final func getPointLocation(dataSet: RangedBarDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
         let xSection : CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count)
-        let ySection : CGFloat = chartSize.height / CGFloat(self.maxValue)
         let index    : Int     = Int((touchLocation.x) / xSection)
         if index >= 0 && index < dataSet.dataPoints.count {
-            
-            let upperY = (chartSize.size.height - CGFloat(dataSet.dataPoints[index].upperValue) * ySection)
-            let lowerY = (chartSize.size.height - CGFloat(dataSet.dataPoints[index].lowerValue) * ySection)
+
+            let value = CGFloat((dataSet.dataPoints[index].upperValue + dataSet.dataPoints[index].lowerValue) / 2) - CGFloat(self.minValue)
             
             return CGPoint(x: (CGFloat(index) * xSection) + (xSection / 2),
-                           y: upperY - lowerY)
+                                      y: (chartSize.size.height - (value / CGFloat(self.range)) * chartSize.size.height))
         }
         return nil
     }
@@ -144,22 +142,22 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
         Group {
             switch self.infoView.touchUnit {
             case .none:
-                Text("\(info.upperValue, specifier: self.infoView.touchSpecifier)")
-                    .font(.title3)
+                Text("\(info.lowerValue, specifier: self.infoView.touchSpecifier) - \(info.upperValue, specifier: self.infoView.touchSpecifier)")
+                    .font(.subheadline)
                     .foregroundColor(self.chartStyle.infoBoxValueColour)
                 Text("\(info.pointDescription ?? "")")
                     .font(.subheadline)
                     .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
             case .prefix(of: let unit):
-                Text("\(unit) \(info.upperValue, specifier: self.infoView.touchSpecifier)")
-                    .font(.title3)
+                Text("\(unit) \(info.lowerValue, specifier: self.infoView.touchSpecifier) - \(info.upperValue, specifier: self.infoView.touchSpecifier)")
+                    .font(.subheadline)
                     .foregroundColor(self.chartStyle.infoBoxValueColour)
                 Text("\(info.pointDescription ?? "")")
                     .font(.subheadline)
                     .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
             case .suffix(of: let unit):
-                Text("\(info.upperValue, specifier: self.infoView.touchSpecifier) \(unit)")
-                    .font(.title3)
+                Text("\(info.lowerValue, specifier: self.infoView.touchSpecifier) - \(info.upperValue, specifier: self.infoView.touchSpecifier) \(unit)")
+                    .font(.subheadline)
                     .foregroundColor(self.chartStyle.infoBoxValueColour)
                 Text("\(info.pointDescription ?? "")")
                     .font(.subheadline)
@@ -171,4 +169,16 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
     public typealias Set            = RangedBarDataSet
     public typealias DataPoint      = RangedBarDataPoint
     public typealias CTStyle        = BarChartStyle
+}
+
+
+extension RangedBarChartData {
+   final func getBarPositionX(dataPoint: RangedBarDataPoint, height: CGFloat) -> CGFloat {
+        let value = CGFloat((dataPoint.upperValue + dataPoint.lowerValue) / 2) - CGFloat(self.minValue)
+        return (height - (value / CGFloat(self.range)) * height)
+     }
+    
+    final func getCellAccessibilityValue(dataPoint: RangedBarDataPoint) -> Text {
+        Text("\(dataPoint.lowerValue, specifier: self.infoView.touchSpecifier) - \(dataPoint.upperValue, specifier: self.infoView.touchSpecifier), \(dataPoint.pointDescription ?? "")")
+    }
 }
