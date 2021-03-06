@@ -15,15 +15,13 @@ internal struct ValueLabelYAxisSubView<T>: View where T: CTLineBarChartDataProto
    private let labelColour     : Color
    private let labelBackground : Color
    private let lineColour      : Color
-   private let chartSize       : CGRect
     
     internal init(chartData       : T,
                   markerValue     : Double,
                   specifier       : String,
                   labelColour     : Color,
                   labelBackground : Color,
-                  lineColour      : Color,
-                  chartSize       : CGRect
+                  lineColour      : Color
     ) {
         self.chartData       = chartData
         self.markerValue     = markerValue
@@ -31,7 +29,6 @@ internal struct ValueLabelYAxisSubView<T>: View where T: CTLineBarChartDataProto
         self.labelColour     = labelColour
         self.labelBackground = labelBackground
         self.lineColour      = lineColour
-        self.chartSize       = chartSize
     }
     
     var body: some View {

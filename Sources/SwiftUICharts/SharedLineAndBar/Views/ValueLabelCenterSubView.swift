@@ -16,7 +16,6 @@ internal struct ValueLabelCenterSubView<T>: View where T: CTLineBarChartDataProt
     private let labelBackground : Color
     private let lineColour      : Color
     private let strokeStyle     : StrokeStyle
-    private let chartSize       : CGRect
     
     internal init(chartData       : T,
                   markerValue     : Double,
@@ -24,8 +23,7 @@ internal struct ValueLabelCenterSubView<T>: View where T: CTLineBarChartDataProt
                   labelColour     : Color,
                   labelBackground : Color,
                   lineColour      : Color,
-                  strokeStyle     : StrokeStyle,
-                  chartSize       : CGRect
+                  strokeStyle     : StrokeStyle
     ) {
         self.chartData       = chartData
         self.markerValue     = markerValue
@@ -34,7 +32,6 @@ internal struct ValueLabelCenterSubView<T>: View where T: CTLineBarChartDataProt
         self.labelBackground = labelBackground
         self.lineColour      = lineColour
         self.strokeStyle     = strokeStyle
-        self.chartSize       = chartSize
     }
     
     @State private var startAnimation : Bool = false

@@ -47,22 +47,18 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
     public var body: some View {
         if chartData.isGreaterThanTwo() {
             HStack(spacing: 0) {
-                ForEach(chartData.dataSets.dataPoints) { dataPoint in
-                    
+                
                     switch chartData.barStyle.colourFrom {
                     case .barStyle:
                         
-                        BarChartDataSetSubView(chartData: chartData,
-                                               dataPoint: dataPoint)
+                        BarChartBarStyleSubView(chartData: chartData)
                             .accessibilityLabel( Text("\(chartData.metadata.title)"))
                         
                     case .dataPoints:
                         
-                        BarChartDataPointSubView(chartData: chartData,
-                                                 dataPoint: dataPoint)
+                        BarChartDataPointSubView(chartData: chartData)
                             .accessibilityLabel( Text("\(chartData.metadata.title)"))
                     }
-                }
             }
         } else { CustomNoDataView(chartData: chartData) }
     }

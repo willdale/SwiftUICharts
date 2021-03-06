@@ -53,6 +53,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
         self.range       = chartData.range
         self.minValue    = chartData.minValue
         
+        self.setupPOILegends()
     }
     
     @State private var startAnimation : Bool = false
@@ -70,16 +71,6 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
         }
         .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
             self.startAnimation = false
-        }
-        .onAppear {
-            if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
-                chartData.legends.append(LegendData(id          : uuid,
-                                                    legend      : markerName,
-                                                    colour      : ColourStyle(colour: lineColour),
-                                                    strokeStyle : strokeStyle.toStroke(),
-                                                    prioity     : 2,
-                                                    chartType   : .line))
-            }
         }
     }
     
@@ -108,8 +99,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                                        specifier      : specifier,
                                        labelColour    : labelColour,
                                        labelBackground: labelBackground,
-                                       lineColour     : lineColour,
-                                       chartSize      : geo.frame(in: .local))
+                                       lineColour     : lineColour)
                     .position(x: -(chartData.infoView.yAxisLabelWidth / 2) - 6,
                               y: getYPoint(chartType: chartData.chartType.chartType,
                                            height: geo.size.height))
@@ -124,10 +114,9 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                                         labelColour     : labelColour,
                                         labelBackground : labelBackground,
                                         lineColour      : lineColour,
-                                        strokeStyle     : strokeStyle,
-                                        chartSize       : geo.frame(in: .local))
+                                        strokeStyle     : strokeStyle)
                     .position(x: geo.frame(in: .local).width / 2,
-                               y: getYPoint(chartType: chartData.chartType.chartType, height: geo.size.height))
+                              y: getYPoint(chartType: chartData.chartType.chartType, height: geo.size.height))
                     
                     .accessibilityLabel(Text("P O I Marker"))
                     .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
@@ -147,6 +136,16 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
              return 0
          }
      }
+    private func setupPOILegends() {
+        if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
+            chartData.legends.append(LegendData(id          : uuid,
+                                                legend      : markerName,
+                                                colour      : ColourStyle(colour: lineColour),
+                                                strokeStyle : strokeStyle.toStroke(),
+                                                prioity     : 2,
+                                                chartType   : .line))
+        }
+    }
 }
 
 extension View {

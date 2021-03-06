@@ -174,3 +174,9 @@ extension CTMultiBarChartDataProtocol {
         }
     }
 }
+
+extension CTBarChartDataProtocol  {
+    func getCellAccessibilityValue<DP: CTStandardDataPointProtocol>(dataPoint: DP) -> Text {
+        Text("\(dataPoint.value, specifier: self.infoView.touchSpecifier), \(dataPoint.pointDescription ?? "")")
+    }
+}
