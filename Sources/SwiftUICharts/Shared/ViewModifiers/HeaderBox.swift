@@ -33,9 +33,16 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
 
         VStack(alignment: .trailing) {
             if chartData.infoView.isTouchCurrent {
-                ForEach(chartData.infoView.touchOverlayInfo, id: \.self) { info in
+                ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
                     
-                    chartData.headerTouchOverlaySubView(info: info)
+                    chartData.infoValue(info: point)
+                        .font(.title3)
+                        .foregroundColor(chartData.chartStyle.infoBoxValueColour)
+                    
+                    chartData.infoDescription(info: point)
+                        .font(.subheadline)
+                        .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                    
                 }
             } else {
                 Text("")

@@ -72,8 +72,8 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
-                                .accessibilityLabel( Text("X Axis Label"))
-                                .accessibilityValue(Text("\(data.xAxisLabel ?? "")"))
+                                .accessibilityLabel(Text("X Axis Label"))
+                                .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
                         }
                         if data != self.dataSets.dataPoints[self.dataSets.dataPoints.count - 1] {
                             Spacer()
@@ -92,7 +92,7 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
-                                .accessibilityLabel( Text("X Axis Label"))
+                                .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
                             if data != labelArray[labelArray.count - 1] {
                                 Spacer()
@@ -157,32 +157,26 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
                 Text("\(info.upperValue, specifier: self.infoView.touchSpecifier)")
                     .font(.title3)
                     .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.pointDescription ?? "")")
+                Text("\(info.wrappedDescription)")
                     .font(.subheadline)
                     .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
             case .prefix(of: let unit):
                 Text("\(unit) \(info.upperValue, specifier: self.infoView.touchSpecifier)")
                     .font(.title3)
                     .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.pointDescription ?? "")")
+                Text("\(info.wrappedDescription)")
                     .font(.subheadline)
                     .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
             case .suffix(of: let unit):
                 Text("\(info.upperValue, specifier: self.infoView.touchSpecifier) \(unit)")
                     .font(.title3)
                     .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.pointDescription ?? "")")
+                Text("\(info.wrappedDescription)")
                     .font(.subheadline)
                     .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
             }
         }
     }
-
-    // MARK: Accessibility
-    public func getAccessibility() -> some View {
-        EmptyView()
-    }
- 
     
     public typealias Set       = RangedLineDataSet
     public typealias DataPoint = RangedLineChartDataPoint

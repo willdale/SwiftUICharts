@@ -11,20 +11,20 @@ import SwiftUI
 extension CTLineChartDataProtocol {
     
     public static func getIndicatorLocation<DP:CTStandardDataPointProtocol>(rect: CGRect,
-                                                                        dataPoints: [DP],
-                                                                        touchLocation: CGPoint,
-                                                                        lineType: LineType,
-                                                                        minValue: Double,
-                                                                        range: Double
+                                                                            dataPoints: [DP],
+                                                                            touchLocation: CGPoint,
+                                                                            lineType: LineType,
+                                                                            minValue: Double,
+                                                                            range: Double
     ) -> CGPoint {
         
         let path = Self.getPath(lineType     : lineType,
-                           rect         : rect,
-                           dataPoints   : dataPoints,
-                           minValue     : minValue,
-                           range        : range,
-                           touchLocation: touchLocation,
-                           isFilled     : false)
+                                rect         : rect,
+                                dataPoints   : dataPoints,
+                                minValue     : minValue,
+                                range        : range,
+                                touchLocation: touchLocation,
+                                isFilled     : false)
         return Self.locationOnPath(Self.getPercentageOfPath(path: path, touchLocation: touchLocation), path)
     }
 }
@@ -465,40 +465,52 @@ internal struct IndicatorSwitch: View {
 
 // MARK: - Legends
 extension CTLineChartDataProtocol where Self.Set.ID == UUID,
-                                        Self.Set: CTLineChartDataSet {
-   internal func setupLegends() {
-        
-        if dataSets.style.lineColour.colourType == .colour,
-           let colour = dataSets.style.lineColour.colour
+                                        Self.Set : CTLineChartDataSet {
+    internal func setupLegends() {
+        lineLegendSetup(dataSet: dataSets)
+    }
+}
+
+extension CTLineChartDataProtocol where Self.Set == MultiLineDataSet {
+    internal func setupLegends() {
+        for dataSet in dataSets.dataSets {
+            lineLegendSetup(dataSet: dataSet)
+        }
+    }
+}
+extension CTLineChartDataProtocol {
+    internal func lineLegendSetup<DS: CTLineChartDataSet>(dataSet: DS) where DS.ID == UUID {
+        if dataSet.style.lineColour.colourType == .colour,
+           let colour = dataSet.style.lineColour.colour
         {
-            self.legends.append(LegendData(id         : dataSets.id,
-                                           legend     : dataSets.legendTitle,
+            self.legends.append(LegendData(id         : dataSet.id,
+                                           legend     : dataSet.legendTitle,
                                            colour     : ColourStyle(colour: colour),
-                                           strokeStyle: dataSets.style.strokeStyle,
+                                           strokeStyle: dataSet.style.strokeStyle,
                                            prioity    : 1,
                                            chartType  : .line))
-
-        } else if dataSets.style.lineColour.colourType == .gradientColour,
-                  let colours = dataSets.style.lineColour.colours
+            
+        } else if dataSet.style.lineColour.colourType == .gradientColour,
+                  let colours = dataSet.style.lineColour.colours
         {
-            self.legends.append(LegendData(id         : dataSets.id,
-                                           legend     : dataSets.legendTitle,
+            self.legends.append(LegendData(id         : dataSet.id,
+                                           legend     : dataSet.legendTitle,
                                            colour     : ColourStyle(colours: colours,
-                                                                   startPoint: .leading,
-                                                                   endPoint: .trailing),
-                                           strokeStyle: dataSets.style.strokeStyle,
+                                                                    startPoint: .leading,
+                                                                    endPoint: .trailing),
+                                           strokeStyle: dataSet.style.strokeStyle,
                                            prioity    : 1,
                                            chartType  : .line))
-
-        } else if dataSets.style.lineColour.colourType == .gradientStops,
-                  let stops = dataSets.style.lineColour.stops
+            
+        } else if dataSet.style.lineColour.colourType == .gradientStops,
+                  let stops = dataSet.style.lineColour.stops
         {
-            self.legends.append(LegendData(id         : dataSets.id,
-                                           legend     : dataSets.legendTitle,
+            self.legends.append(LegendData(id         : dataSet.id,
+                                           legend     : dataSet.legendTitle,
                                            colour     : ColourStyle(stops: stops,
-                                                                   startPoint: .leading,
-                                                                   endPoint: .trailing),
-                                           strokeStyle: dataSets.style.strokeStyle,
+                                                                    startPoint: .leading,
+                                                                    endPoint: .trailing),
+                                           strokeStyle: dataSet.style.strokeStyle,
                                            prioity    : 1,
                                            chartType  : .line))
         }
@@ -517,70 +529,45 @@ extension CTLineChartDataProtocol where Self.Set.ID == UUID,
                                            strokeStyle: dataSets.style.strokeStyle,
                                            prioity    : 1,
                                            chartType  : .bar))
-
+            
         } else if dataSets.style.fillColour.colourType == .gradientColour,
                   let colours = dataSets.style.fillColour.colours
         {
             self.legends.append(LegendData(id         : UUID(),
                                            legend     : dataSets.legendFillTitle,
                                            colour     : ColourStyle(colours: colours,
-                                                                   startPoint: .leading,
-                                                                   endPoint: .trailing),
+                                                                    startPoint: .leading,
+                                                                    endPoint: .trailing),
                                            strokeStyle: dataSets.style.strokeStyle,
                                            prioity    : 1,
-                                           chartType  : .line))
-
+                                           chartType  : .bar))
+            
         } else if dataSets.style.fillColour.colourType == .gradientStops,
                   let stops = dataSets.style.fillColour.stops
         {
             self.legends.append(LegendData(id         : UUID(),
                                            legend     : dataSets.legendFillTitle,
                                            colour     : ColourStyle(stops: stops,
-                                                                   startPoint: .leading,
-                                                                   endPoint: .trailing),
+                                                                    startPoint: .leading,
+                                                                    endPoint: .trailing),
                                            strokeStyle: dataSets.style.strokeStyle,
                                            prioity    : 1,
-                                           chartType  : .line))
+                                           chartType  : .bar))
         }
     }
 }
-extension CTLineChartDataProtocol where Self.Set == MultiLineDataSet {
-   internal func setupLegends() {
-        for dataSet in dataSets.dataSets {
-            if dataSet.style.lineColour.colourType == .colour,
-               let colour = dataSet.style.lineColour.colour
-            {
-                self.legends.append(LegendData(id         : dataSet.id,
-                                               legend     : dataSet.legendTitle,
-                                               colour     : ColourStyle(colour: colour),
-                                               strokeStyle: dataSet.style.strokeStyle,
-                                               prioity    : 1,
-                                               chartType  : .line))
+
+// MARK: - Accessibility
+extension CTLineChartDataProtocol where Set: CTLineChartDataSet {
+    public func getAccessibility() -> some View {
+        ForEach(dataSets.dataPoints.indices, id: \.self) { point in
+            
+            AccessibilityRectangle(dataPointCount : self.dataSets.dataPoints.count,
+                                   dataPointNo    : point)
                 
-            } else if dataSet.style.lineColour.colourType == .gradientColour,
-                      let colours = dataSet.style.lineColour.colours
-            {
-                self.legends.append(LegendData(id         : dataSet.id,
-                                               legend     : dataSet.legendTitle,
-                                               colour     : ColourStyle(colours: colours,
-                                                                       startPoint: .leading,
-                                                                       endPoint: .trailing),
-                                               strokeStyle: dataSet.style.strokeStyle,
-                                               prioity    : 1,
-                                               chartType  : .line))
-                
-            } else if dataSet.style.lineColour.colourType == .gradientStops,
-                      let stops = dataSet.style.lineColour.stops
-            {
-                self.legends.append(LegendData(id         : dataSet.id,
-                                               legend     : dataSet.legendTitle,
-                                               colour     : ColourStyle(stops: stops,
-                                                                       startPoint: .leading,
-                                                                       endPoint: .trailing),
-                                               strokeStyle: dataSet.style.strokeStyle,
-                                               prioity    : 1,
-                                               chartType  : .line))
-            }
+                .foregroundColor(Color(.gray).opacity(0.000000001))
+                .accessibilityLabel(Text("\(self.metadata.title)"))
+                .accessibilityValue(self.dataSets.dataPoints[point].getCellAccessibilityValue(specifier: self.infoView.touchSpecifier))
         }
     }
 }

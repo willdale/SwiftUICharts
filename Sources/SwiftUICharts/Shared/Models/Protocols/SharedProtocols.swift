@@ -123,43 +123,13 @@ public protocol CTChartData: ObservableObject, Identifiable {
     */
     func getPointLocation(dataSet: SetPoint, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint?
     
-    associatedtype TouchInformation: View
     
-    func headerTouchOverlaySubView(info: DataPoint) -> TouchInformation
+    associatedtype InfoValue : View
+    associatedtype InfoDesc  : View
+    
+    func infoValue(info: DataPoint) -> InfoValue
+    func infoDescription(info: DataPoint) -> InfoDesc
 }
-
-extension CTChartData where Self.DataPoint : CTStandardDataPointProtocol {
-    public func headerTouchOverlaySubView(info: Self.DataPoint) -> some View {
-        Group {
-            switch self.infoView.touchUnit {
-            case .none:
-                Text("\(info.value, specifier: self.infoView.touchSpecifier)")
-                    .font(.title3)
-                    .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.pointDescription ?? "")")
-                    .font(.subheadline)
-                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
-            case .prefix(of: let unit):
-                Text("\(unit) \(info.value, specifier: self.infoView.touchSpecifier)")
-                    .font(.title3)
-                    .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.pointDescription ?? "")")
-                    .font(.subheadline)
-                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
-            case .suffix(of: let unit):
-                Text("\(info.value, specifier: self.infoView.touchSpecifier) \(unit)")
-                    .font(.title3)
-                    .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.pointDescription ?? "")")
-                    .font(.subheadline)
-                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
-            }
-        }
-    }
-}
-
-
-
 
 // MARK: - Data Sets
 /**
@@ -219,6 +189,8 @@ public protocol CTDataPointBaseProtocol: Hashable, Identifiable {
      Date can be used for optionally performing additional calculations.
      */
     var date             : Date? { get set }
+    
+    func valueAsString(specifier: String) -> String
 }
 
 /**

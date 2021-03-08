@@ -52,12 +52,12 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
                     case .barStyle:
                         
                         BarChartBarStyleSubView(chartData: chartData)
-                            .accessibilityLabel( Text("\(chartData.metadata.title)"))
+                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
                         
                     case .dataPoints:
                         
                         BarChartDataPointSubView(chartData: chartData)
-                            .accessibilityLabel( Text("\(chartData.metadata.title)"))
+                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
                     }
             }
         } else { CustomNoDataView(chartData: chartData) }

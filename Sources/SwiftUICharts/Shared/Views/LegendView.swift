@@ -28,54 +28,14 @@ internal struct LegendView<T>: View where T: CTChartData {
     internal var body: some View {
         
         LazyVGrid(columns: columns, alignment: .leading) {
-            ForEach(chartData.legends) { legend in
+            ForEach(chartData.legends, id: \.id) { legend in
                 
-                switch legend.chartType {
-
-                case .line:
+                legend.getLegend(textColor: textColor)
+                    .if(scaleLegendBar(legend: legend)) { $0.scaleEffect(1.2, anchor: .leading) }
+                    .if(scaleLegendPie(legend: legend)) {$0.scaleEffect(1.2, anchor: .leading) }
                     
-                    line(legend)
-                        .accessibilityLabel( Text(accessibilityLegendLabel(legend: legend)))
-                        .accessibilityValue(Text("\(legend.legend)"))
-
-                case .bar:
-
-                    bar(legend)
-                        .if(scaleLegendBar(legend: legend)) { $0.scaleEffect(1.2, anchor: .leading) }
-                        .accessibilityLabel( Text(accessibilityLegendLabel(legend: legend)))
-                        .accessibilityValue(Text("\(legend.legend)"))
-                case .pie:
-
-                    pie(legend)
-                        .if(scaleLegendPie(legend: legend)) {
-                            $0.scaleEffect(1.2, anchor: .leading)
-                        }
-                        .accessibilityLabel( Text(accessibilityLegendLabel(legend: legend)))
-                        .accessibilityValue(Text("\(legend.legend)"))
-                }
-            }
-        }.id(UUID())
-    }
-    
-    private func accessibilityLegendLabel(legend: LegendData) -> String {
-        switch legend.chartType {
-        case .line:
-            if legend.prioity == 1 {
-                return "Line Chart Legend"
-            } else {
-                return "P O I Marker Legend"
-            }
-        case .bar:
-            if legend.prioity == 1 {
-                return "Bar Chart Legend"
-            } else {
-                return "P O I Marker Legend"
-            }
-        case .pie:
-            if legend.prioity == 1 {
-                return "Pie Chart Legend"
-            } else {
-                return "P O I Marker Legend"
+                    .accessibilityLabel(Text(legend.accessibilityLegendLabel()))
+                    .accessibilityValue(Text("\(legend.legend)"))
             }
         }
     }
@@ -111,137 +71,5 @@ internal struct LegendView<T>: View where T: CTChartData {
         } else {
            return false
        }
-    }
-    
-    /// Returns a Line legend.
-    private func line(_ legend: LegendData) -> some View {
-        Group {
-            if let stroke = legend.strokeStyle {
-                let strokeStyle = stroke.strokeToStrokeStyle()
-                if let colour = legend.colour.colour {
-                    HStack {
-                        LegendLine(width: 40)
-                            .stroke(colour, style: strokeStyle)
-                            .frame(width: 40, height: 3)
-                        Text(legend.legend)
-                            .font(.caption)
-                            .foregroundColor(textColor)
-                    }
-                    
-                } else if let colours = legend.colour.colours  {
-                    HStack {
-                        LegendLine(width: 40)
-                            .stroke(LinearGradient(gradient: Gradient(colors: colours),
-                                                   startPoint: .leading,
-                                                   endPoint: .trailing),
-                                    style: strokeStyle)
-                            .frame(width: 40, height: 3)
-                        Text(legend.legend)
-                            .font(.caption)
-                            .foregroundColor(textColor)
-                    }
-                } else if let stops = legend.colour.stops {
-                    let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-                    HStack {
-                        LegendLine(width: 40)
-                            .stroke(LinearGradient(gradient: Gradient(stops: stops),
-                                                   startPoint: .leading,
-                                                   endPoint: .trailing),
-                                    style: strokeStyle)
-                            .frame(width: 40, height: 3)
-                        Text(legend.legend)
-                            .font(.caption)
-                            .foregroundColor(textColor)
-                    }
-                }
-            }
-        }
-    }
-    
-    /// Returns a Bar legend.
-    private func bar(_ legend: LegendData) -> some View {
-        Group {
-            if let colour = legend.colour.colour
-            {
-                HStack {
-                    Rectangle()
-                        .fill(colour)
-                        .frame(width: 20, height: 20)
-                    Text(legend.legend)
-                        .font(.caption)
-                }
-            } else if let colours    = legend.colour.colours,
-                      let startPoint = legend.colour.startPoint,
-                      let endPoint   = legend.colour.endPoint
-            {
-                HStack {
-                    Rectangle()
-                        .fill(LinearGradient(gradient: Gradient(colors: colours),
-                                             startPoint: startPoint,
-                                             endPoint: endPoint))
-                        .frame(width: 20, height: 20)
-                    Text(legend.legend)
-                        .font(.caption)
-                }
-            } else if let stops      = legend.colour.stops,
-                      let startPoint = legend.colour.startPoint,
-                      let endPoint   = legend.colour.endPoint
-            {
-                let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-                HStack {
-                    Rectangle()
-                        .fill(LinearGradient(gradient: Gradient(stops: stops),
-                                             startPoint: startPoint,
-                                             endPoint: endPoint))
-                        .frame(width: 20, height: 20)
-                    Text(legend.legend)
-                        .font(.caption)
-                }
-            }
-        }
-    }
-    
-    /// Returns a Pie legend.
-    private func pie(_ legend: LegendData) -> some View {
-        Group {
-            if let colour = legend.colour.colour {
-                HStack {
-                    Circle()
-                        .fill(colour)
-                        .frame(width: 20, height: 20)
-                    Text(legend.legend)
-                        .font(.caption)
-                }
-                
-            } else if let colours    = legend.colour.colours,
-                      let startPoint = legend.colour.startPoint,
-                      let endPoint   = legend.colour.endPoint
-            {
-                HStack {
-                    Circle()
-                        .fill(LinearGradient(gradient: Gradient(colors: colours),
-                                             startPoint: startPoint,
-                                             endPoint: endPoint))
-                        .frame(width: 20, height: 20)
-                    Text(legend.legend)
-                        .font(.caption)
-                }
-                
-            } else if let stops      = legend.colour.stops,
-                      let startPoint = legend.colour.startPoint,
-                      let endPoint   = legend.colour.endPoint
-            {
-                let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-                HStack {
-                    Circle()
-                        .fill(LinearGradient(gradient: Gradient(stops: stops),
-                                             startPoint: startPoint,
-                                             endPoint: endPoint))
-                        .frame(width: 20, height: 20)
-                    Text(legend.legend)
-                        .font(.caption)
-                }
-            }
-        }
     }
 }

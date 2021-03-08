@@ -15,7 +15,7 @@ import SwiftUI
  GroupingData(title: "One", fillColour: ColourStyle(colour: .blue))
  ```
  */
-public struct GroupingData: Hashable, Identifiable {
+public struct GroupingData: CTBarColourProtocol, Hashable, Identifiable {
     
     public let id        : UUID = UUID()
     public var title     : String

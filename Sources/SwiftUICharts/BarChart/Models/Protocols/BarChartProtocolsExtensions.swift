@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - Markers
 extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType {
     internal func markerSubView() -> some View {
         Group {
@@ -49,13 +50,13 @@ extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType {
     }
 }
 
-
+// MARK: - Legends
+// MARK: Standard / Ranged
 extension CTBarChartDataProtocol where Self.Set.ID == UUID,
                                        Self.Set.DataPoint.ID == UUID,
                                        Self.Set: CTStandardBarChartDataSet,
-                                       Self.Set.DataPoint: CTStandardBarDataPoint {
+                                       Self.Set.DataPoint: CTBarColourProtocol {
     internal func setupLegends() {
-        
         switch self.barStyle.colourFrom {
         case .barStyle:
             if self.barStyle.fillColour.colourType == .colour,
@@ -73,8 +74,8 @@ extension CTBarChartDataProtocol where Self.Set.ID == UUID,
                 self.legends.append(LegendData(id         : dataSets.id,
                                                legend     : dataSets.legendTitle,
                                                colour     : ColourStyle(colours: colours,
-                                                                       startPoint: .leading,
-                                                                       endPoint: .trailing),
+                                                                        startPoint: .leading,
+                                                                        endPoint: .trailing),
                                                strokeStyle: nil,
                                                prioity    : 1,
                                                chartType  : .bar))
@@ -84,16 +85,16 @@ extension CTBarChartDataProtocol where Self.Set.ID == UUID,
                 self.legends.append(LegendData(id         : dataSets.id,
                                                legend     : dataSets.legendTitle,
                                                colour     : ColourStyle(stops: stops,
-                                                                       startPoint: .leading,
-                                                                       endPoint: .trailing),
+                                                                        startPoint: .leading,
+                                                                        endPoint: .trailing),
                                                strokeStyle: nil,
                                                prioity    : 1,
                                                chartType  : .bar))
             }
         case .dataPoints:
-
+            
             for data in dataSets.dataPoints {
-
+                
                 if data.fillColour.colourType == .colour,
                    let colour = data.fillColour.colour,
                    let legend = data.pointDescription
@@ -111,8 +112,8 @@ extension CTBarChartDataProtocol where Self.Set.ID == UUID,
                     self.legends.append(LegendData(id         : data.id,
                                                    legend     : legend,
                                                    colour     : ColourStyle(colours: colours,
-                                                                           startPoint: .leading,
-                                                                           endPoint: .trailing),
+                                                                            startPoint: .leading,
+                                                                            endPoint: .trailing),
                                                    strokeStyle: nil,
                                                    prioity    : 1,
                                                    chartType  : .bar))
@@ -123,8 +124,8 @@ extension CTBarChartDataProtocol where Self.Set.ID == UUID,
                     self.legends.append(LegendData(id         : data.id,
                                                    legend     : legend,
                                                    colour     : ColourStyle(stops: stops,
-                                                                           startPoint: .leading,
-                                                                           endPoint: .trailing),
+                                                                            startPoint: .leading,
+                                                                            endPoint: .trailing),
                                                    strokeStyle: nil,
                                                    prioity    : 1,
                                                    chartType  : .bar))
@@ -134,6 +135,7 @@ extension CTBarChartDataProtocol where Self.Set.ID == UUID,
     }
 }
 
+// MARK: Multi Bar
 extension CTMultiBarChartDataProtocol {
     internal func setupLegends() {
         
@@ -172,11 +174,5 @@ extension CTMultiBarChartDataProtocol {
                                                chartType  : .bar))
             }
         }
-    }
-}
-
-extension CTBarChartDataProtocol  {
-    func getCellAccessibilityValue<DP: CTStandardDataPointProtocol>(dataPoint: DP) -> Text {
-        Text("\(dataPoint.value, specifier: self.infoView.touchSpecifier), \(dataPoint.pointDescription ?? "")")
     }
 }

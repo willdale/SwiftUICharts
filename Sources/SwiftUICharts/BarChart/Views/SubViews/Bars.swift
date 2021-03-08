@@ -14,7 +14,7 @@ import SwiftUI
  For Standard and Grouped Bar Charts.
  */
 internal struct ColourBar<CD: CTBarChartDataProtocol,
-                          DP: CTStandardDataPointProtocol & CTBarDataPoint>: View {
+                          DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
     private let chartData   : CD
     private let colour      : Color
@@ -46,7 +46,7 @@ internal struct ColourBar<CD: CTBarChartDataProtocol,
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(chartData.getCellAccessibilityValue(dataPoint: dataPoint))
+            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }
 
@@ -58,7 +58,7 @@ internal struct ColourBar<CD: CTBarChartDataProtocol,
  For Standard and Grouped Bar Charts.
  */
 internal struct GradientColoursBar<CD: CTBarChartDataProtocol,
-                                   DP: CTStandardDataPointProtocol & CTBarDataPoint>: View {
+                                   DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
     private let chartData   : CD
     private let dataPoint   : DP
@@ -98,7 +98,7 @@ internal struct GradientColoursBar<CD: CTBarChartDataProtocol,
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(chartData.getCellAccessibilityValue(dataPoint: dataPoint))
+            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }
 
@@ -108,7 +108,7 @@ internal struct GradientColoursBar<CD: CTBarChartDataProtocol,
  For Standard and Grouped Bar Charts.
  */
 internal struct GradientStopsBar<CD: CTBarChartDataProtocol,
-                                 DP: CTStandardDataPointProtocol & CTBarDataPoint>: View {
+                                 DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
     private let chartData   : CD
     private let dataPoint   : DP
@@ -148,7 +148,7 @@ internal struct GradientStopsBar<CD: CTBarChartDataProtocol,
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(chartData.getCellAccessibilityValue(dataPoint: dataPoint))
+            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }
 
@@ -159,9 +159,11 @@ internal struct GradientStopsBar<CD: CTBarChartDataProtocol,
 internal struct StackElementSubView: View {
     
     private let dataSet : MultiBarDataSet
+    private let specifier : String
     
-    internal init(dataSet: MultiBarDataSet) {
+    internal init(dataSet: MultiBarDataSet, specifier: String) {
         self.dataSet = dataSet
+        self.specifier = specifier
     }
     
     internal var body: some View {
@@ -177,7 +179,7 @@ internal struct StackElementSubView: View {
                         ColourPartBar(colour, getHeight(height    : geo.size.height,
                                                         dataSet   : dataSet,
                                                         dataPoint : dataPoint))
-                            .accessibilityValue(Text("\(dataPoint.value, specifier: "%.f"), \(dataPoint.pointDescription ?? "")"))
+                            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: specifier))
                         
                     } else if dataPoint.group.fillColour.colourType == .gradientColour,
                               let colours    = dataPoint.group.fillColour.colours,
@@ -188,7 +190,7 @@ internal struct StackElementSubView: View {
                         GradientColoursPartBar(colours, startPoint, endPoint, getHeight(height: geo.size.height,
                                                                                         dataSet   : dataSet,
                                                                                         dataPoint : dataPoint))
-                            .accessibilityValue(Text("\(dataPoint.value, specifier: "%.f") \(dataPoint.pointDescription ?? "")"))
+                            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: specifier))
                         
                     } else if dataPoint.group.fillColour.colourType == .gradientStops,
                               let stops      = dataPoint.group.fillColour.stops,
@@ -201,7 +203,7 @@ internal struct StackElementSubView: View {
                         GradientStopsPartBar(safeStops, startPoint, endPoint, getHeight(height: geo.size.height,
                                                                                     dataSet   : dataSet,
                                                                                     dataPoint : dataPoint))
-                            .accessibilityValue(Text("\(dataPoint.value, specifier: "%.f") \(dataPoint.pointDescription ?? "")"))
+                            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: specifier))
                     }
                     
                 }

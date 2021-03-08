@@ -33,9 +33,6 @@ public protocol CTLineChartDataProtocol: CTLineBarChartDataProtocol {
     func getAccessibility() -> Access
 }
 
-
-
-
 // MARK: - Style
 /**
  A protocol to extend functionality of `CTLineBarChartStyle` specifically for  Line Charts.

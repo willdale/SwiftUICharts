@@ -179,7 +179,7 @@ internal struct RangedBarChartColourCell<CD:RangedBarChartData>: View {
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(chartData.getCellAccessibilityValue(dataPoint: dataPoint))
+            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }
 
@@ -231,7 +231,7 @@ internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(chartData.getCellAccessibilityValue(dataPoint: dataPoint))
+            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }
 
@@ -282,6 +282,6 @@ internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(chartData.getCellAccessibilityValue(dataPoint: dataPoint))
+            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }

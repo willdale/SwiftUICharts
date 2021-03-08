@@ -151,3 +151,9 @@ public protocol CTLineBarDataPointProtocol: CTDataPointBaseProtocol {
      */
     var xAxisLabel: String? { get set }
 }
+
+extension CTLineBarDataPointProtocol {
+    var wrappedXAxisLabel : String {
+        self.xAxisLabel ?? ""
+    }
+}

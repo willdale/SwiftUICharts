@@ -24,7 +24,7 @@ public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartD
             ZStack {
 
                 chartData.getAccessibility()
-                
+                // MARK: Ranged Box
                 if chartData.dataSets.style.fillColour.colourType == .colour,
                    let colour = chartData.dataSets.style.fillColour.colour
                 {
@@ -66,7 +66,7 @@ public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartD
                                              endPoint: endPoint))
                     
                 }
-                
+                // MARK: Main Line
                 if chartData.dataSets.style.lineColour.colourType == .colour,
                    let colour = chartData.dataSets.style.lineColour.colour
                 {
@@ -114,21 +114,3 @@ public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartD
         } else { CustomNoDataView(chartData: chartData) }
     }
 }
-
-
-/*
- 
- ZStack {
-     RangedLineFillShape(dataPoints: chartData.dataSets.dataPoints,
-                     lineType: chartData.dataSets.style.lineType,
-                     minValue: chartData.minValue,
-                     range: chartData.range)
-         .fill(Color.red.opacity(0.25))
-   LineShape(dataPoints: chartData.dataSets.dataPoints,
-             lineType: chartData.dataSets.style.lineType,
-             isFilled: false,
-             minValue: chartData.minValue,
-             range: chartData.range)
-       .stroke(Color.blue, lineWidth: 3)
- }
- */

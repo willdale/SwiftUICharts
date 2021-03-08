@@ -26,10 +26,16 @@ internal struct TouchOverlayBox<T: CTChartData>: View {
     internal var body: some View {
         
         HStack {
-            ForEach(chartData.infoView.touchOverlayInfo, id: \.self) { point in
+            ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
+    
+                chartData.infoValue(info: point)
+                    .font(.subheadline)
+                    .foregroundColor(chartData.chartStyle.infoBoxValueColour)
                 
-                chartData.headerTouchOverlaySubView(info: point)
-             
+                chartData.infoDescription(info: point)
+                    .font(.subheadline)
+                    .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                
             }
         }
 

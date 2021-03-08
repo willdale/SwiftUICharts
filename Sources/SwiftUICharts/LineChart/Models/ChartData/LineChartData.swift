@@ -56,7 +56,7 @@ public final class LineChartData: CTLineChartDataProtocol {
     @Published public final var legends       : [LegendData]
     @Published public final var viewData      : ChartViewData
     @Published public final var infoView      : InfoViewData<LineChartDataPoint> = InfoViewData()
-    
+        
     public final var noDataText   : Text
     public final var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
@@ -103,8 +103,8 @@ public final class LineChartData: CTLineChartDataProtocol {
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
-                                .accessibilityLabel( Text("X Axis Label"))
-                                .accessibilityValue(Text("\(data.xAxisLabel ?? "")"))
+                                .accessibilityLabel(Text("X Axis Label"))
+                                .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
                         }
                         if data != self.dataSets.dataPoints[self.dataSets.dataPoints.count - 1] {
                             Spacer()
@@ -123,7 +123,7 @@ public final class LineChartData: CTLineChartDataProtocol {
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
-                                .accessibilityLabel( Text("X Axis Label"))
+                                .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
                             if data != labelArray[labelArray.count - 1] {
                                 Spacer()
@@ -153,21 +153,6 @@ public final class LineChartData: CTLineChartDataProtocol {
                            touchLocation: touchLocation,
                            chartSize: chartSize)
     }
-    
-    // MARK: Accessibility
-    public final func getAccessibility() -> some View {
-        ForEach(dataSets.dataPoints.indices, id: \.self) { point in
-
-            AccessibilityRectangle(dataPointCount : self.dataSets.dataPoints.count,
-                                   dataPointNo    : point)
-
-                .foregroundColor(Color(.gray).opacity(0.000000001))
-                .accessibilityLabel( Text("\(self.metadata.title)"))
-                .accessibilityValue(Text(String(format: self.infoView.touchSpecifier,
-                                             self.dataSets.dataPoints[point].value) +
-                                ", \(self.dataSets.dataPoints[point].pointDescription ?? "")"))
-        }
-    }
 
     public typealias Set       = LineDataSet
     public typealias DataPoint = LineChartDataPoint
@@ -193,6 +178,7 @@ extension LineChartData {
     }
 
     public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+                
         var points      : [LineChartDataPoint] = []
         let xSection    : CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
         let index       = Int((touchLocation.x + (xSection / 2)) / xSection)

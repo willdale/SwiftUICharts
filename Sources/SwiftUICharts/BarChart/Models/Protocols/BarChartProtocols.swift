@@ -80,7 +80,7 @@ public protocol CTStandardBarChartDataSet: CTSingleDataSetProtocol {
 public protocol CTMultiBarChartDataSet: CTSingleDataSetProtocol  {}
 
 
-public protocol CTRangedBarChartDataSet: CTSingleDataSetProtocol  {}
+public protocol CTRangedBarChartDataSet: CTStandardBarChartDataSet  {}
 
 
 
@@ -89,22 +89,34 @@ public protocol CTRangedBarChartDataSet: CTSingleDataSetProtocol  {}
 // MARK: - DataPoints
 /**
  A protocol to extend functionality of `CTLineBarDataPointProtocol` specifically for standard Bar Charts.
+ 
+ This is base to specify conformance for generics.
  */
-public protocol CTBarDataPoint: CTLineBarDataPointProtocol {}
+public protocol CTBarDataPointBaseProtocol: CTLineBarDataPointProtocol {}
 
 /**
- A protocol to extend functionality of `CTLineBarDataPointProtocol` specifically for standard Bar Charts.
+ A protocol to a standard colour scheme for bar charts.
  */
-public protocol CTStandardBarDataPoint: CTBarDataPoint, CTStandardDataPointProtocol, CTnotRanged {
+public protocol CTBarColourProtocol {
     /// Drawing style of the range fill.
     var fillColour : ColourStyle { get set }
 }
 
 /**
- A protocol to extend functionality of `CTLineBarDataPointProtocol` specifically for multi part Bar Charts.
+ A protocol to extend functionality of `CTBarDataPointBaseProtocol` specifically for standard Bar Charts.
+ */
+public protocol CTStandardBarDataPoint: CTBarDataPointBaseProtocol, CTStandardDataPointProtocol, CTBarColourProtocol, CTnotRanged {}
+
+/**
+ A protocol to extend functionality of `CTBarDataPointBaseProtocol` specifically for standard Bar Charts.
+ */
+public protocol CTRangedBarDataPoint: CTBarDataPointBaseProtocol, CTRangeDataPointProtocol, CTBarColourProtocol, CTisRanged {}
+
+/**
+ A protocol to extend functionality of `CTBarDataPointBaseProtocol` specifically for multi part Bar Charts.
  i.e: Grouped or Stacked
  */
-public protocol CTMultiBarDataPoint: CTBarDataPoint, CTStandardDataPointProtocol, CTnotRanged {
+public protocol CTMultiBarDataPoint: CTBarDataPointBaseProtocol, CTStandardDataPointProtocol, CTnotRanged {
     
     /**
      For grouping data points together so they can be drawn in the correct groupings.
@@ -113,5 +125,4 @@ public protocol CTMultiBarDataPoint: CTBarDataPoint, CTStandardDataPointProtocol
     
 }
 
-public protocol CTRangedBarDataPoint: CTBarDataPoint, CTRangeDataPointProtocol, CTisRanged {}
 

@@ -14,7 +14,7 @@ internal struct InfoBox<T>: ViewModifier where T: CTChartData {
     
     @ObservedObject var chartData: T
     
-    @State private var boxFrame   : CGRect    = CGRect(x: 0, y: 0, width: 0, height: 50)
+    @State private var boxFrame: CGRect = CGRect(x: 0, y: 0, width: 0, height: 50)
     
     internal func body(content: Content) -> some View {
         VStack {

@@ -31,9 +31,20 @@ extension CTChartData {
         self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
     }
 }
+
 extension CTChartData {
-    public func legendOrder() -> [LegendData] {
-        return legends.sorted { $0.prioity < $1.prioity}
+    public func infoValue(info: DataPoint) -> some View {
+        switch self.infoView.touchUnit {
+        case .none:
+            return Text("\(info.valueAsString(specifier: self.infoView.touchSpecifier))")
+        case .prefix(of: let unit):
+            return Text("\(unit) \(info.valueAsString(specifier: self.infoView.touchSpecifier))")
+        case .suffix(of: let unit):
+            return Text("\(info.valueAsString(specifier: self.infoView.touchSpecifier)) \(unit)")
+        }
+    }
+    public func infoDescription(info: DataPoint) -> some View {
+        Text("\(info.wrappedDescription)")
     }
 }
 
@@ -109,5 +120,33 @@ extension CTMultiDataSetProtocol where Self.DataSet.DataPoint: CTStandardDataPoi
         }
         let sum = setHolder.reduce(0) { $0 + $1 }
         return sum / Double(setHolder.count)
+    }
+}
+
+// MARK: - Data Point
+extension CTDataPointBaseProtocol  {
+    func getCellAccessibilityValue(specifier: String) -> Text {
+        Text(self.valueAsString(specifier: specifier) + ", " + self.wrappedDescription)
+    }
+}
+
+extension CTDataPointBaseProtocol {
+    public var wrappedDescription : String {
+        self.pointDescription ?? ""
+    }
+}
+extension CTStandardDataPointProtocol {
+    public func valueAsString(specifier: String) -> String {
+        String(format: specifier, self.value)
+    }
+}
+extension CTRangeDataPointProtocol {
+    public func valueAsString(specifier: String) -> String {
+        String(format: specifier, self.lowerValue) + "-" + String(format: specifier, self.upperValue)
+    }
+}
+extension CTRangedLineDataPoint {
+    public func valueAsString(specifier: String) -> String {
+        String(format: specifier, self.lowerValue) + "-" + String(format: specifier, self.upperValue)
     }
 }
