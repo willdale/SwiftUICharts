@@ -25,12 +25,11 @@ public enum ColourFrom {
  ```
  case none // No overlay markers.
  case vertical // Vertical line from top to bottom.
- case full // Full width and height of view intersecting at touch location.
- case bottomLeading // From bottom and leading edges meeting at touch location.
- case bottomTrailing // From bottom and trailing edges meeting at touch location.
- case topLeading // From top and leading edges meeting at touch location.
- case topTrailing // From top and trailing edges meeting at touch location.
-
+ case full // Full width and height of view intersecting at a specified point.
+ case bottomLeading // From bottom and leading edges meeting at a specified point.
+ case bottomTrailing // From bottom and trailing edges meeting at a specified point.
+ case topLeading // From top and leading edges meeting at a specified point.
+ case topTrailing // From top and trailing edges meeting at a specified point.
  ```
  */
 public enum BarMarkerType: MarkerType {

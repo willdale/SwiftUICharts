@@ -42,38 +42,33 @@ final class LineChartTests: XCTestCase {
     }
     
     // MARK: - Labels
-    func testLineGetYLabelsMinimumValue() {
+    func testLineGetYLabels() {
         let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints),
-                                      chartStyle: LineChartStyle(yAxisNumberOfLabels: 3,
-                                                                 baseline: .minimumValue))
-        XCTAssertEqual(chartData.getYLabels()[0], 10.0000, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[1], 33.3333, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[2], 56.6666, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[3], 80.0000, accuracy: 0.01)
+                                      chartStyle: LineChartStyle(yAxisNumberOfLabels: 3))
         
-    }
-    
-    func testLineGetYLabelsMinimumWithMax() {
-        let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints),
-                                      chartStyle: LineChartStyle(yAxisNumberOfLabels: 3,
-                                                                 baseline: .minimumWithMaximum(of: 5)))
-        XCTAssertEqual(chartData.getYLabels()[0], 5.0000, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[1], 30.000, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[2], 55.000, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[3], 80.0000, accuracy: 0.01)
+        chartData.chartStyle.topLine  = .maximumValue
+        chartData.chartStyle.baseline = .zero
+        XCTAssertEqual(chartData.getYLabels()[0], 0.000, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 40.00, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 80.00, accuracy: 0.01)
         
-    }
-    
-    func testLineGetYLabelsZero() {
-        let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints),
-                                      chartStyle: LineChartStyle(yAxisNumberOfLabels: 3,
-                                                                 baseline: .zero))
-        XCTAssertEqual(chartData.getYLabels()[0], 0.0000, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[1], 26.666, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[2], 53.333, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[3], 80.0000, accuracy: 0.01)
+        chartData.chartStyle.baseline = .minimumValue
+        XCTAssertEqual(chartData.getYLabels()[0], 10.00, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 45.00, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 80.00, accuracy: 0.01)
         
+        chartData.chartStyle.baseline = .minimumWithMaximum(of: 5)
+        XCTAssertEqual(chartData.getYLabels()[0], 5.00,   accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 42.50,  accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 80.00,  accuracy: 0.01)
+        
+        chartData.chartStyle.topLine  = .maximum(of: 100)
+        chartData.chartStyle.baseline = .zero
+        XCTAssertEqual(chartData.getYLabels()[0], 0.00,   accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 50.00,  accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 100.00, accuracy: 0.01)
     }
+
     
     // MARK: - Touch
     func testLineGetDataPoint() {
@@ -142,9 +137,7 @@ final class LineChartTests: XCTestCase {
         ("testLineIsGreaterThanTwoTrue",  testLineIsGreaterThanTwoTrue),
         ("testLineIsGreaterThanTwoFalse", testLineIsGreaterThanTwoFalse),
         // Labels
-        ("testLineGetYLabelsMinimumValue",   testLineGetYLabelsMinimumValue),
-        ("testLineGetYLabelsMinimumWithMax", testLineGetYLabelsMinimumWithMax),
-        ("testLineGetYLabelsZero",           testLineGetYLabelsZero),
+        ("testLineGetYLabels", testLineGetYLabels),
         // Touch
         ("testLineGetDataPoint",     testLineGetDataPoint),
         ("testLineGetPointLocation", testLineGetPointLocation),

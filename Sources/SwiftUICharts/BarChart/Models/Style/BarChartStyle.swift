@@ -37,11 +37,13 @@ public struct BarChartStyle: CTBarChartStyle {
     public var xAxisLabelPosition   : XAxisLabelPosistion
     public var xAxisLabelColour     : Color
     public var xAxisLabelsFrom      : LabelsFrom
+    public var xAxisTitle           : String?
     
     public var yAxisGridStyle       : GridStyle
     public var yAxisLabelPosition   : YAxisLabelPosistion
     public var yAxisLabelColour     : Color
     public var yAxisNumberOfLabels  : Int
+    public var yAxisTitle           : String?
     
     public var baseline             : Baseline
     public var topLine              : Topline
@@ -80,12 +82,14 @@ public struct BarChartStyle: CTBarChartStyle {
                 xAxisGridStyle      : GridStyle             = GridStyle(),
                 xAxisLabelPosition  : XAxisLabelPosistion   = .bottom,
                 xAxisLabelColour    : Color                 = Color.primary,
-                xAxisLabelsFrom     : LabelsFrom            = .dataPoint,
+                xAxisLabelsFrom     : LabelsFrom            = .dataPoint(rotation: .degrees(0)),
+                xAxisTitle          : String?               = nil,
                 
                 yAxisGridStyle      : GridStyle             = GridStyle(),
                 yAxisLabelPosition  : YAxisLabelPosistion   = .leading,
                 yAxisLabelColour    : Color                 = Color.primary,
                 yAxisNumberOfLabels : Int                   = 10,
+                yAxisTitle          : String?               = nil,
                 
                 baseline            : Baseline              = .minimumValue,
                 topLine             : Topline               = .maximumValue,
@@ -102,11 +106,13 @@ public struct BarChartStyle: CTBarChartStyle {
         self.xAxisLabelPosition  = xAxisLabelPosition
         self.xAxisLabelColour    = xAxisLabelColour
         self.xAxisLabelsFrom     = xAxisLabelsFrom
+        self.xAxisTitle          = xAxisTitle
         
         self.yAxisGridStyle      = yAxisGridStyle
         self.yAxisLabelPosition  = yAxisLabelPosition
         self.yAxisNumberOfLabels = yAxisNumberOfLabels
         self.yAxisLabelColour    = yAxisLabelColour
+        self.yAxisTitle          = yAxisTitle
         
         self.baseline            = baseline
         self.topLine             = topLine

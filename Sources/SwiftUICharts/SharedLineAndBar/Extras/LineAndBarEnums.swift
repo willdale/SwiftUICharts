@@ -5,7 +5,7 @@
 //  Created by Will Dale on 08/02/2021.
 //
 
-import Foundation
+import SwiftUI
 
 // MARK: - XAxisLabels
 /**
@@ -33,7 +33,7 @@ public enum XAxisLabelPosistion {
  */
 public enum LabelsFrom {
     /// ChartData --> DataPoint --> xAxisLabel
-    case dataPoint
+    case dataPoint(rotation: Angle)
     /// ChartData --> xAxisLabels
     case chartData
 }

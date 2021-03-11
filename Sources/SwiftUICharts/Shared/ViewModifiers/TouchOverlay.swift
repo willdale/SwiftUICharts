@@ -17,7 +17,7 @@ internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
         
     internal init(chartData : T,
                   specifier : String,
-                  unit      : Unit
+                  unit      : TouchUnit
     ) {
         self.chartData = chartData
         self.chartData.infoView.touchSpecifier = specifier
@@ -77,7 +77,7 @@ extension View {
      */
     public func touchOverlay<T: CTChartData>(chartData: T,
                                              specifier: String = "%.0f",
-                                             unit     : Unit = .none
+                                             unit     : TouchUnit = .none
     ) -> some View {
         self.modifier(TouchOverlay(chartData: chartData,
                                    specifier: specifier,
@@ -92,7 +92,7 @@ extension View {
      */
     public func touchOverlay<T: CTChartData>(chartData: T,
                                              specifier: String = "%.0f",
-                                             unit     : Unit
+                                             unit     : TouchUnit
     ) -> some View {
         self.modifier(EmptyModifier())
     }

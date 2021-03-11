@@ -13,13 +13,13 @@ final class StackedBarChartTests: XCTestCase {
         var data : GroupingData {
             switch self {
             case .one:
-                return GroupingData(title: "One"  , fillColour: ColourStyle(colour: .blue))
+                return GroupingData(title: "One"  , colour: ColourStyle(colour: .blue))
             case .two:
-                return GroupingData(title: "Two"  , fillColour: ColourStyle(colour: .red))
+                return GroupingData(title: "Two"  , colour: ColourStyle(colour: .red))
             case .three:
-                return GroupingData(title: "Three", fillColour: ColourStyle(colour: .yellow))
+                return GroupingData(title: "Three", colour: ColourStyle(colour: .yellow))
             case .four:
-                return GroupingData(title: "Four" , fillColour: ColourStyle(colour: .green))
+                return GroupingData(title: "Four" , colour: ColourStyle(colour: .green))
             }
         }
     }
@@ -28,31 +28,31 @@ final class StackedBarChartTests: XCTestCase {
     
     let data = MultiBarDataSets(dataSets: [
         MultiBarDataSet(dataPoints: [
-            MultiBarChartDataPoint(value: 10, xAxisLabel: "1.1", pointLabel: "One One"    , group: Group.one.data),
-            MultiBarChartDataPoint(value: 50, xAxisLabel: "1.2", pointLabel: "One Two"    , group: Group.two.data),
-            MultiBarChartDataPoint(value: 30, xAxisLabel: "1.3", pointLabel: "One Three"  , group: Group.three.data),
-            MultiBarChartDataPoint(value: 40, xAxisLabel: "1.4", pointLabel: "One Four"   , group: Group.four.data)
+            MultiBarChartDataPoint(value: 10, xAxisLabel: "1.1", description: "One One"    , group: Group.one.data),
+            MultiBarChartDataPoint(value: 50, xAxisLabel: "1.2", description: "One Two"    , group: Group.two.data),
+            MultiBarChartDataPoint(value: 30, xAxisLabel: "1.3", description: "One Three"  , group: Group.three.data),
+            MultiBarChartDataPoint(value: 40, xAxisLabel: "1.4", description: "One Four"   , group: Group.four.data)
         ]),
         
         MultiBarDataSet(dataPoints: [
-            MultiBarChartDataPoint(value: 20, xAxisLabel: "2.1", pointLabel: "Two One"    , group: Group.one.data),
-            MultiBarChartDataPoint(value: 60, xAxisLabel: "2.2", pointLabel: "Two Two"    , group: Group.two.data),
-            MultiBarChartDataPoint(value: 40, xAxisLabel: "2.3", pointLabel: "Two Three"  , group: Group.three.data),
-            MultiBarChartDataPoint(value: 60, xAxisLabel: "2.3", pointLabel: "Two Four"   , group: Group.four.data)
+            MultiBarChartDataPoint(value: 20, xAxisLabel: "2.1", description: "Two One"    , group: Group.one.data),
+            MultiBarChartDataPoint(value: 60, xAxisLabel: "2.2", description: "Two Two"    , group: Group.two.data),
+            MultiBarChartDataPoint(value: 40, xAxisLabel: "2.3", description: "Two Three"  , group: Group.three.data),
+            MultiBarChartDataPoint(value: 60, xAxisLabel: "2.3", description: "Two Four"   , group: Group.four.data)
         ]),
         
         MultiBarDataSet(dataPoints: [
-            MultiBarChartDataPoint(value: 30, xAxisLabel: "3.1", pointLabel: "Three One"  , group: Group.one.data),
-            MultiBarChartDataPoint(value: 70, xAxisLabel: "3.2", pointLabel: "Three Two"  , group: Group.two.data),
-            MultiBarChartDataPoint(value: 30, xAxisLabel: "3.3", pointLabel: "Three Three", group: Group.three.data),
-            MultiBarChartDataPoint(value: 90, xAxisLabel: "3.4", pointLabel: "Three Four" , group: Group.four.data)
+            MultiBarChartDataPoint(value: 30, xAxisLabel: "3.1", description: "Three One"  , group: Group.one.data),
+            MultiBarChartDataPoint(value: 70, xAxisLabel: "3.2", description: "Three Two"  , group: Group.two.data),
+            MultiBarChartDataPoint(value: 30, xAxisLabel: "3.3", description: "Three Three", group: Group.three.data),
+            MultiBarChartDataPoint(value: 90, xAxisLabel: "3.4", description: "Three Four" , group: Group.four.data)
         ]),
         
         MultiBarDataSet(dataPoints: [
-            MultiBarChartDataPoint(value: 40, xAxisLabel: "4.1", pointLabel: "Four One"   , group: Group.one.data),
-            MultiBarChartDataPoint(value: 80, xAxisLabel: "4.2", pointLabel: "Four Two"   , group: Group.two.data),
-            MultiBarChartDataPoint(value: 20, xAxisLabel: "4.3", pointLabel: "Four Three" , group: Group.three.data),
-            MultiBarChartDataPoint(value: 50, xAxisLabel: "4.4", pointLabel: "Four Four"  , group: Group.four.data)
+            MultiBarChartDataPoint(value: 40, xAxisLabel: "4.1", description: "Four One"   , group: Group.one.data),
+            MultiBarChartDataPoint(value: 80, xAxisLabel: "4.2", description: "Four Two"   , group: Group.two.data),
+            MultiBarChartDataPoint(value: 20, xAxisLabel: "4.3", description: "Four Three" , group: Group.three.data),
+            MultiBarChartDataPoint(value: 50, xAxisLabel: "4.4", description: "Four Four"  , group: Group.four.data)
         ])
     ])
         
@@ -84,20 +84,19 @@ final class StackedBarChartTests: XCTestCase {
     func testStackedBarIsGreaterThanTwoFalse() {
        let data = MultiBarDataSets(dataSets: [
             MultiBarDataSet(dataPoints: [
-                MultiBarChartDataPoint(value: 10, xAxisLabel: "1.1", pointLabel: "One One"  , group: Group.one.data)
+                MultiBarChartDataPoint(value: 10, xAxisLabel: "1.1", description: "One One"  , group: Group.one.data)
             ]),
             
             MultiBarDataSet(dataPoints: [
-                MultiBarChartDataPoint(value: 20, xAxisLabel: "2.1", pointLabel: "Two One"  , group: Group.one.data)
+                MultiBarChartDataPoint(value: 20, xAxisLabel: "2.1", description: "Two One"  , group: Group.one.data)
             ]),
             
             MultiBarDataSet(dataPoints: [
-                MultiBarChartDataPoint(value: 30, xAxisLabel: "3.1", pointLabel: "Three One", group: Group.one.data)
-
+                MultiBarChartDataPoint(value: 30, xAxisLabel: "3.1", description: "Three One", group: Group.one.data)
             ]),
             
             MultiBarDataSet(dataPoints: [
-                MultiBarChartDataPoint(value: 40, xAxisLabel: "4.1", pointLabel: "Four One" , group: Group.one.data)
+                MultiBarChartDataPoint(value: 40, xAxisLabel: "4.1", description: "Four One" , group: Group.one.data)
             ])
         ])
         let chartData = StackedBarChartData(dataSets: data, groups: groups)
@@ -109,10 +108,27 @@ final class StackedBarChartTests: XCTestCase {
         let chartData = StackedBarChartData(dataSets: data, groups: groups,
                                                             chartStyle: BarChartStyle(yAxisNumberOfLabels: 3))
 
-        XCTAssertEqual(chartData.getYLabels()[0], 0.00000, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[1], 30.0000, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[2], 60.0000, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[3], 90.0000, accuracy: 0.01)
+        chartData.chartStyle.topLine  = .maximumValue
+        chartData.chartStyle.baseline = .zero
+        XCTAssertEqual(chartData.getYLabels()[0], 0.000, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 45.00, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 90.00, accuracy: 0.01)
+        
+        chartData.chartStyle.baseline = .minimumValue
+        XCTAssertEqual(chartData.getYLabels()[0], 10.00, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 50.00, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 90.00, accuracy: 0.01)
+        
+        chartData.chartStyle.baseline = .minimumWithMaximum(of: 5)
+        XCTAssertEqual(chartData.getYLabels()[0], 5.00,   accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 47.50,  accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 90.00,  accuracy: 0.01)
+        
+        chartData.chartStyle.topLine  = .maximum(of: 100)
+        chartData.chartStyle.baseline = .zero
+        XCTAssertEqual(chartData.getYLabels()[0], 0.00,   accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 50.00,  accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 100.00, accuracy: 0.01)
         
     }
     // MARK: - Touch

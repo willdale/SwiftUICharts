@@ -14,10 +14,10 @@ import SwiftUI
  ```
  let data = MultiBarDataSets(dataSets: [
      MultiBarDataSet(dataPoints: [
-         MultiBarChartDataPoint(value: 10, xAxisLabel: "1.1", pointLabel: "One One", group: GroupingData(title: "One", colour: .blue))
+         MultiBarChartDataPoint(value: 10, group: GroupingData(title: "One", colour: .blue))
     ]),
      MultiBarDataSet(dataPoints: [
-         MultiBarChartDataPoint(value: 20, xAxisLabel: "2.1", pointLabel: "Two One", group: GroupingData(title: "One", colour: .blue))
+         MultiBarChartDataPoint(value: 20, group: GroupingData(title: "One", colour: .blue))
     ])
  ])
  ```
@@ -39,19 +39,23 @@ public struct MultiBarDataSets: CTMultiDataSetProtocol {
  # Example
  ```
  MultiBarDataSet(dataPoints: [
-     MultiBarChartDataPoint(value: 10, xAxisLabel: "1.1", pointLabel: "One One", group: GroupingData(title: "One", colour: .blue)),
-     MultiBarChartDataPoint(value: 50, xAxisLabel: "1.2", pointLabel: "One Two", group: GroupingData(title: "Two", colour: .red))
+     MultiBarChartDataPoint(value: 10, group: GroupingData(title: "One", colour: .blue)),
+     MultiBarChartDataPoint(value: 50, group: GroupingData(title: "Two", colour: .red))
  ])
  ```
  */
 public struct MultiBarDataSet: CTMultiBarChartDataSet {
 
-    public let id           : UUID = UUID()
-    public var dataPoints   : [MultiBarChartDataPoint]
+    public let id         : UUID = UUID()
+    public var dataPoints : [MultiBarChartDataPoint]
+    public var setTitle   : String
         
     /// Initialises a new data set for a Bar Chart.
-    public init(dataPoints  : [MultiBarChartDataPoint]) {
-        self.dataPoints     = dataPoints
+    public init(dataPoints: [MultiBarChartDataPoint],
+                setTitle  : String = ""
+    ) {
+        self.dataPoints = dataPoints
+        self.setTitle   = setTitle
     }
 
     public typealias ID        = UUID

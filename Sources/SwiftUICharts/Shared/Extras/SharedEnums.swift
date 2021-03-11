@@ -82,7 +82,7 @@ public enum InfoBoxPlacement {
  case suffix(of: String) // After value
  ```
  */
-public enum Unit {
+public enum TouchUnit {
     /// No units
     case none
     /// Before value

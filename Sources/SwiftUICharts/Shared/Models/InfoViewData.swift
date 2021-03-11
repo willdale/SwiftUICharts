@@ -72,5 +72,5 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
     /**
      Option to display units before or after values.
      */
-    var touchUnit: Unit = .none
+    var touchUnit: TouchUnit = .none
 }

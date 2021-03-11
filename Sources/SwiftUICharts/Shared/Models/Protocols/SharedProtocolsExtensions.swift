@@ -49,13 +49,13 @@ extension CTChartData {
 }
 
 // MARK: - Data Set
-extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProtocol {
+extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProtocol & CTnotRanged {
     /**
      Returns the highest value in the data set.
      - Parameter dataSet: Target data set.
      - Returns: Highest value in data set.
      */
-    func maxValue() -> Double  {
+    public func maxValue() -> Double  {
         return self.dataPoints.max { $0.value < $1.value }?.value ?? 0
     }
     
@@ -64,7 +64,7 @@ extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProto
      - Parameter dataSet: Target data set.
      - Returns: Lowest value in data set.
      */
-    func minValue() -> Double  {
+    public func minValue() -> Double  {
         return self.dataPoints.min { $0.value < $1.value }?.value ?? 0
     }
     
@@ -73,8 +73,38 @@ extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProto
      - Parameter dataSet: Target data set.
      - Returns: Average of values in data set.
      */
-    func average() -> Double {
+    public func average() -> Double {
         let sum = self.dataPoints.reduce(0) { $0 + $1.value }
+        return sum / Double(self.dataPoints.count)
+    }
+    
+}
+extension CTSingleDataSetProtocol where Self.DataPoint: CTRangeDataPointProtocol & CTisRanged {
+    /**
+     Returns the highest value in the data set.
+     - Parameter dataSet: Target data set.
+     - Returns: Highest value in data set.
+     */
+    public func maxValue() -> Double  {
+        return self.dataPoints.max { $0.upperValue < $1.upperValue }?.upperValue ?? 0
+    }
+    
+    /**
+     Returns the lowest value in the data set.
+     - Parameter dataSet: Target data set.
+     - Returns: Lowest value in data set.
+     */
+    public func minValue() -> Double  {
+        return self.dataPoints.min { $0.lowerValue < $1.lowerValue }?.lowerValue ?? 0
+    }
+    
+    /**
+     Returns the average value from the data set.
+     - Parameter dataSet: Target data set.
+     - Returns: Average of values in data set.
+     */
+    public func average() -> Double {
+        let sum = self.dataPoints.reduce(0) { $0 + ($1.upperValue - $1.lowerValue) }
         return sum / Double(self.dataPoints.count)
     }
     
@@ -86,7 +116,7 @@ extension CTMultiDataSetProtocol where Self.DataSet.DataPoint: CTStandardDataPoi
      - Parameter dataSet: Target data sets.
      - Returns: Highest value in data sets.
      */
-    func maxValue() -> Double {
+    public func maxValue() -> Double {
         var setHolder : [Double] = []
         for set in self.dataSets {
             setHolder.append(set.dataPoints.max { $0.value < $1.value }?.value ?? 0)
@@ -99,7 +129,7 @@ extension CTMultiDataSetProtocol where Self.DataSet.DataPoint: CTStandardDataPoi
      - Parameter dataSet: Target data sets.
      - Returns: Lowest value in data sets.
      */
-    func minValue() -> Double {
+    public func minValue() -> Double {
         var setHolder : [Double] = []
         for set in dataSets {
             setHolder.append(set.dataPoints.min { $0.value < $1.value }?.value ?? 0)
@@ -112,7 +142,7 @@ extension CTMultiDataSetProtocol where Self.DataSet.DataPoint: CTStandardDataPoi
      - Parameter dataSet: Target data sets.
      - Returns: Average of values in data sets.
      */
-    func average() -> Double {
+    public func average() -> Double {
         var setHolder : [Double] = []
         for set in dataSets {
             let sum = set.dataPoints.reduce(0) { $0 + $1.value }
@@ -132,7 +162,7 @@ extension CTDataPointBaseProtocol  {
 
 extension CTDataPointBaseProtocol {
     public var wrappedDescription : String {
-        self.pointDescription ?? ""
+        self.description ?? ""
     }
 }
 extension CTStandardDataPointProtocol {

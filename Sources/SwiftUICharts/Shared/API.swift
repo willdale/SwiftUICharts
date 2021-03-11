@@ -37,6 +37,26 @@ public struct InfoDescription<T> : View where T: CTChartData {
     }
 }
 
+public struct InfoExtra<T>: View where T: CTChartData {
+    
+    @ObservedObject var chartData: T
+    
+    private let text: String
+    
+    public init(chartData: T, text: String) {
+        self.chartData = chartData
+        self.text = text
+    }
+
+    public var body: some View {
+        if chartData.infoView.isTouchCurrent {
+            Text(text)
+        } else {
+            EmptyView()
+        }
+    }
+}
+
 extension LegendData {
     public func getLegend(textColor: Color) -> some View {
         Group {

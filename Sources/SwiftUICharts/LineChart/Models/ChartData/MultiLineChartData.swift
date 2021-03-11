@@ -66,9 +66,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
     
     public final var noDataText   : Text
     public final var chartType    : (chartType: ChartType, dataSetType: DataSetType)
-    
-    internal final var isFilled      : Bool = false
-    
+        
     // MARK: Initializers
     /// Initialises a Multi Line Chart.
     ///
@@ -99,19 +97,14 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
     public final func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint:
+            case .dataPoint(let angle):
                 
                 HStack(spacing: 0) {
                     ForEach(dataSets.dataSets[0].dataPoints) { data in
-                        if let label = data.xAxisLabel {
-                            Text(label)
-                                .font(.caption)
-                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
-                                .accessibilityLabel(Text("X Axis Label"))
-                                .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
-                        }
+                        YAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
+                            .foregroundColor(self.chartStyle.xAxisLabelColour)
+                            .accessibilityLabel(Text("X Axis Label"))
+                            .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
                         if data != self.dataSets.dataSets[0].dataPoints[self.dataSets.dataSets[0].dataPoints.count - 1] {
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
@@ -129,7 +122,6 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
                                 .font(.caption)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
-                                .minimumScaleFactor(0.5)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
                             if data != labelArray[labelArray.count - 1] {
@@ -151,7 +143,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
                           minValue  : self.minValue,
                           range     : self.range,
                           animation : self.chartStyle.globalAnimation,
-                          isFilled  : self.isFilled)
+                          isFilled  : false)
         }
     }
 

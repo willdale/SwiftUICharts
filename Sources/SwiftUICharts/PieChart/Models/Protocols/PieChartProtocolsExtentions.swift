@@ -59,7 +59,7 @@ extension CTPieDoughnutChartDataProtocol where Self.Set.DataPoint.ID == UUID,
                                                Self.Set.DataPoint: CTPieDataPoint {
     internal func setupLegends() {
         for data in dataSets.dataPoints {
-            if let legend = data.pointDescription {
+            if let legend = data.description {
                 self.legends.append(LegendData(id         : data.id,
                                                legend     : legend,
                                                colour     : ColourStyle(colour: data.colour),

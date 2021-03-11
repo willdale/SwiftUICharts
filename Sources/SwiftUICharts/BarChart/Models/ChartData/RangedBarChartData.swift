@@ -68,17 +68,14 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
     public final func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint:
+            case .dataPoint(let angle):
 
                 HStack(spacing: 0) {
                     ForEach(dataSets.dataPoints) { data in
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
-                        Text(data.wrappedXAxisLabel)
-                            .font(.caption)
+                        YAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
                             .foregroundColor(self.chartStyle.xAxisLabelColour)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.5)
                             .accessibilityLabel(Text("X Axis Label"))
                             .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
                         Spacer()
@@ -99,7 +96,6 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
                                 .font(.caption)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
-                                .minimumScaleFactor(0.5)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
                             if data != labelArray[labelArray.count-1] {

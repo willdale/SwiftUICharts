@@ -14,20 +14,20 @@ internal struct TouchOverlayBox<T: CTChartData>: View {
     
     @ObservedObject var chartData: T
     
-    @Binding private var boxFrame   :  CGRect
+    @Binding private var boxFrame:  CGRect
     
-    internal init(chartData         : T,
-                  boxFrame          : Binding<CGRect>
+    internal init(chartData: T,
+                  boxFrame : Binding<CGRect>
     ) {
-        self.chartData          = chartData
-        self._boxFrame          = boxFrame
+        self.chartData = chartData
+        self._boxFrame = boxFrame
     }
-        
+    
     internal var body: some View {
         
         HStack {
             ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
-    
+                
                 chartData.infoValue(info: point)
                     .font(.subheadline)
                     .foregroundColor(chartData.chartStyle.infoBoxValueColour)
@@ -38,7 +38,7 @@ internal struct TouchOverlayBox<T: CTChartData>: View {
                 
             }
         }
-
+        
         .padding(.all, 8)
         .background(
             GeometryReader { geo in

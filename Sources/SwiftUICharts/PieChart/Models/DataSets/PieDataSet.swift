@@ -13,11 +13,11 @@ import SwiftUI
  # Example
  ```
  PieDataSet(dataPoints: [
-        PieChartDataPoint(value: 7, pointDescription: "One", colour: .blue),
-        PieChartDataPoint(value: 2, pointDescription: "Two", colour: .red),
-        PieChartDataPoint(value: 9, pointDescription: "Three", colour: .purple),
-        PieChartDataPoint(value: 6, pointDescription: "Four", colour: .green),
-        PieChartDataPoint(value: 4, pointDescription: "Five", colour: .orange)],
+        PieChartDataPoint(value: 7, description: "One", colour: .blue),
+        PieChartDataPoint(value: 2, description: "Two", colour: .red),
+        PieChartDataPoint(value: 9, description: "Three", colour: .purple),
+        PieChartDataPoint(value: 6, description: "Four", colour: .green),
+        PieChartDataPoint(value: 4, description: "Five", colour: .orange)],
     legendTitle: "Data")
  ```
  */

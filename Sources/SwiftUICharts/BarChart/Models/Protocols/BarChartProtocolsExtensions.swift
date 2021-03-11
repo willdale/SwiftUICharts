@@ -59,8 +59,8 @@ extension CTBarChartDataProtocol where Self.Set.ID == UUID,
     internal func setupLegends() {
         switch self.barStyle.colourFrom {
         case .barStyle:
-            if self.barStyle.fillColour.colourType == .colour,
-               let colour = self.barStyle.fillColour.colour
+            if self.barStyle.colour.colourType == .colour,
+               let colour = self.barStyle.colour.colour
             {
                 self.legends.append(LegendData(id         : dataSets.id,
                                                legend     : dataSets.legendTitle,
@@ -68,8 +68,8 @@ extension CTBarChartDataProtocol where Self.Set.ID == UUID,
                                                strokeStyle: nil,
                                                prioity    : 1,
                                                chartType  : .bar))
-            } else if self.barStyle.fillColour.colourType == .gradientColour,
-                      let colours = self.barStyle.fillColour.colours
+            } else if self.barStyle.colour.colourType == .gradientColour,
+                      let colours = self.barStyle.colour.colours
             {
                 self.legends.append(LegendData(id         : dataSets.id,
                                                legend     : dataSets.legendTitle,
@@ -79,8 +79,8 @@ extension CTBarChartDataProtocol where Self.Set.ID == UUID,
                                                strokeStyle: nil,
                                                prioity    : 1,
                                                chartType  : .bar))
-            } else if self.barStyle.fillColour.colourType == .gradientStops,
-                      let stops = self.barStyle.fillColour.stops
+            } else if self.barStyle.colour.colourType == .gradientStops,
+                      let stops = self.barStyle.colour.stops
             {
                 self.legends.append(LegendData(id         : dataSets.id,
                                                legend     : dataSets.legendTitle,
@@ -95,9 +95,9 @@ extension CTBarChartDataProtocol where Self.Set.ID == UUID,
             
             for data in dataSets.dataPoints {
                 
-                if data.fillColour.colourType == .colour,
-                   let colour = data.fillColour.colour,
-                   let legend = data.pointDescription
+                if data.colour.colourType == .colour,
+                   let colour = data.colour.colour,
+                   let legend = data.description
                 {
                     self.legends.append(LegendData(id         : data.id,
                                                    legend     : legend,
@@ -105,9 +105,9 @@ extension CTBarChartDataProtocol where Self.Set.ID == UUID,
                                                    strokeStyle: nil,
                                                    prioity    : 1,
                                                    chartType  : .bar))
-                } else if data.fillColour.colourType == .gradientColour,
-                          let colours = data.fillColour.colours,
-                          let legend = data.pointDescription
+                } else if data.colour.colourType == .gradientColour,
+                          let colours = data.colour.colours,
+                          let legend = data.description
                 {
                     self.legends.append(LegendData(id         : data.id,
                                                    legend     : legend,
@@ -117,9 +117,9 @@ extension CTBarChartDataProtocol where Self.Set.ID == UUID,
                                                    strokeStyle: nil,
                                                    prioity    : 1,
                                                    chartType  : .bar))
-                } else if data.fillColour.colourType == .gradientStops,
-                          let stops = data.fillColour.stops,
-                          let legend = data.pointDescription
+                } else if data.colour.colourType == .gradientStops,
+                          let stops = data.colour.stops,
+                          let legend = data.description
                 {
                     self.legends.append(LegendData(id         : data.id,
                                                    legend     : legend,
@@ -141,8 +141,8 @@ extension CTMultiBarChartDataProtocol {
         
         for group in self.groups {
             
-            if group.fillColour.colourType == .colour,
-               let colour = group.fillColour.colour
+            if group.colour.colourType == .colour,
+               let colour = group.colour.colour
             {
                 self.legends.append(LegendData(id         : group.id,
                                                legend     : group.title,
@@ -150,8 +150,8 @@ extension CTMultiBarChartDataProtocol {
                                                strokeStyle: nil,
                                                prioity    : 1,
                                                chartType  : .bar))
-            } else if group.fillColour.colourType == .gradientColour,
-                      let colours = group.fillColour.colours
+            } else if group.colour.colourType == .gradientColour,
+                      let colours = group.colour.colours
             {
                 self.legends.append(LegendData(id         : group.id,
                                                legend     : group.title,
@@ -161,8 +161,8 @@ extension CTMultiBarChartDataProtocol {
                                                strokeStyle: nil,
                                                prioity    : 1,
                                                chartType  : .bar))
-            } else if group.fillColour.colourType == .gradientStops,
-                      let stops  = group.fillColour.stops
+            } else if group.colour.colourType == .gradientStops,
+                      let stops  = group.colour.stops
             {
                 self.legends.append(LegendData(id         : group.id,
                                                legend     : group.title,

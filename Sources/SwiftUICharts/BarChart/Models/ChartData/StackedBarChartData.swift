@@ -125,16 +125,14 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
     public final func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint:
+            case .dataPoint(let angle):
                 HStack(spacing: 0) {
                     ForEach(groups) { group in
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
-                        Text(group.title)
-                            .font(.caption)
+                        YAxisDataPointCell(chartData: self, label: group.title, rotationAngle: angle)
                             .foregroundColor(self.chartStyle.xAxisLabelColour)
                             .lineLimit(1)
-                            .minimumScaleFactor(0.5)
                             .accessibilityLabel(Text("X Axis Label"))
                             .accessibilityValue(Text("\(group.title)"))
                         
@@ -152,7 +150,6 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
                                 .font(.caption)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
-                                .minimumScaleFactor(0.5)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
                             Spacer()

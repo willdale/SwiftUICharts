@@ -10,35 +10,7 @@ import SwiftUI
 /**
  Data for drawing and styling a standard Bar Chart.
   
- # Example
- ```
- static func weekOfData() -> BarChartData {
-             
-     let data : BarDataSet =
-         BarDataSet(dataPoints: [
-             BarChartDataPoint(value: 20,  xAxisLabel: "M", pointLabel: "Monday"   , colour: .purple),
-             BarChartDataPoint(value: 90,  xAxisLabel: "T", pointLabel: "Tuesday"  , colour: .blue),
-             BarChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday", colour: Color(.cyan)),
-             BarChartDataPoint(value: 75,  xAxisLabel: "T", pointLabel: "Thursday" , colour: .green),
-             BarChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"   , colour: .yellow),
-             BarChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday" , colour: .orange),
-             BarChartDataPoint(value: 90,  xAxisLabel: "S", pointLabel: "Sunday"   , colour: .red)
-         ],
-         legendTitle: "Data")
-          
-     return BarChartData(dataSets  : data,
-                         metadata  : ChartMetadata(title   : "Test Data",
-                                                   subtitle: "A weeks worth"),
-                         barStyle  : BarStyle(barWidth  : 0.5,
-                                              colourFrom: .dataPoints,
-                                              colour    : .blue),
-                         chartStyle: BarChartStyle(infoBoxPlacement   : .floating,
-                                                   xAxisLabelPosition : .bottom,
-                                                   xAxisLabelsFrom    : .dataPoint,
-                                                   yAxisLabelPosition : .leading,
-                                                   yAxisNumberOfLabels: 5))
- }
- ```
+
  */
 public final class BarChartData: CTBarChartDataProtocol {
     // MARK: Properties
@@ -90,23 +62,21 @@ public final class BarChartData: CTBarChartDataProtocol {
     public final func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint:
-          
-                HStack(spacing: 0) {
+            case .dataPoint(let angle):
+
+                HStack(alignment: .top, spacing: 0) {
                     ForEach(dataSets.dataPoints) { data in
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
-                        Text(data.wrappedXAxisLabel)
-                            .font(.caption)
+                        YAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
                             .foregroundColor(self.chartStyle.xAxisLabelColour)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.5)
                             .accessibilityLabel(Text("X Axis Label"))
                             .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
                     }
                 }
+                
                 
             case .chartData:
                 
@@ -119,7 +89,6 @@ public final class BarChartData: CTBarChartDataProtocol {
                                 .font(.caption)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .lineLimit(1)
-                                .minimumScaleFactor(0.5)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
                             Spacer()
@@ -155,7 +124,45 @@ public final class BarChartData: CTBarChartDataProtocol {
         return nil
     }
 
-    public typealias Set            = BarDataSet
-    public typealias DataPoint      = BarChartDataPoint
-    public typealias CTStyle        = BarChartStyle
+    public typealias Set       = BarDataSet
+    public typealias DataPoint = BarChartDataPoint
+    public typealias CTStyle   = BarChartStyle
+}
+
+struct YAxisDataPointCell<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
+    
+    @ObservedObject var chartData : ChartData
+    
+    private let label : String
+    private let rotationAngle : Angle
+    
+    init(chartData: ChartData, label: String, rotationAngle : Angle) {
+        self.chartData     = chartData
+        self.label         = label
+        self.rotationAngle = rotationAngle
+    }
+    
+    @State private var width: CGFloat = 0
+ 
+    var body: some View {
+
+        Text(label)
+            .font(.caption)
+            .lineLimit(1)
+            .overlay(
+                GeometryReader { geo in
+                    Color.clear
+                        .onAppear {
+                            self.width = geo.frame(in: .local).width
+                        }
+                }
+            )
+            .fixedSize(horizontal: true, vertical: false)
+            .rotationEffect(rotationAngle, anchor: .center)
+            .frame(width: 10, height: width)
+            .onAppear {
+                chartData.viewData.xAxisLabelHeights.append(width)
+            }
+
+    }
 }

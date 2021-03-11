@@ -31,24 +31,33 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
         labelsAndBottom = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .bottom
     }
     
-    internal var textAsSpacer: some View {
-        Text("")
-            .font(.caption)
-            .lineLimit(1)
-            .minimumScaleFactor(0.5)
+    @State private var height : CGFloat = 0
+    @State private var axisLabelWidth : CGFloat = 0
+    
+    @ViewBuilder private var axisTitle: some View {
+        if let title = chartData.chartStyle.yAxisTitle {
+            VStack {
+                Text(title)
+                    .font(.caption)
+                    .rotationEffect(Angle.init(degrees: -90), anchor: .center)
+                    .fixedSize()
+                    .frame(width: axisLabelWidth)
+                Spacer()
+                    .frame(height: (self.chartData.viewData.xAxisLabelHeights.max(by: { $0 < $1 }) ?? 0) + axisLabelWidth)
+            }
+            .onAppear {
+                axisLabelWidth = 20
+            }
+        }
     }
     
-    internal var labels: some View {
+    private var labels: some View {
         VStack {
-            if labelsAndTop {
-                textAsSpacer
-            }
             ForEach((0...chartData.chartStyle.yAxisNumberOfLabels-1).reversed(), id: \.self) { i in
                 Text("\(labelsArray[i], specifier: specifier)")
                     .font(.caption)
                     .foregroundColor(chartData.chartStyle.yAxisLabelColour)
                     .lineLimit(1)
-                    .minimumScaleFactor(0.5)
                     .accessibilityLabel(Text("Y Axis Label"))
                     .accessibilityValue(Text("\(labelsArray[i], specifier: specifier)"))
                 if i != 0 {
@@ -56,9 +65,8 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                         .frame(minHeight: 0, maxHeight: 500)
                 }
             }
-            if labelsAndBottom {
-                textAsSpacer
-            }
+            Spacer()
+                .frame(height: (chartData.viewData.xAxisLabelHeights.max(by: { $0 < $1 }) ?? 0) + chartData.viewData.xAxisTitleHeight)
         }
         .if(labelsAndBottom) { $0.padding(.top, -8) }
         .if(labelsAndTop) { $0.padding(.bottom, -8) }
@@ -69,10 +77,8 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                     .foregroundColor(Color.clear)
                     .onAppear {
                         chartData.infoView.yAxisLabelWidth = geo.frame(in: .local).size.width
+                        self.height = geo.frame(in: .local).height
                     }
-//                    .onChange(of:  geo.frame(in: .local).size.width) { value in
-//                        chartData.infoView.yAxisLabelWidth = value
-//                    }
             }
         )
     }
@@ -83,6 +89,7 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                 switch chartData.chartStyle.yAxisLabelPosition {
                 case .leading:
                     HStack(spacing: 0) {
+                        axisTitle
                         labels
                         content
                     }
@@ -90,6 +97,7 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                     HStack(spacing: 0) {
                         content
                         labels
+                        axisTitle
                     }
                 }
             } else { content }

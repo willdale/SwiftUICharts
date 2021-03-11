@@ -22,21 +22,34 @@ internal struct XAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
     internal func body(content: Content) -> some View {
         Group {
             switch chartData.chartStyle.xAxisLabelPosition {
-            case .top:
-                if chartData.isGreaterThanTwo() {
-                    VStack {
-                        chartData.getXAxisLabels()
-                        content
-                    }
-                } else { content }
             case .bottom:
                 if chartData.isGreaterThanTwo() {
                     VStack {
                         content
                         chartData.getXAxisLabels()
+                        axisTitle
+                    }
+                } else { content }
+            case .top:
+                if chartData.isGreaterThanTwo() {
+                    VStack {
+                        axisTitle
+                        chartData.getXAxisLabels()
+                        content
                     }
                 } else { content }
             }
+        }
+    }
+    
+    @ViewBuilder private var axisTitle: some View {
+        if let title = chartData.chartStyle.xAxisTitle {
+            Text(title)
+                .font(.caption)
+                .frame(height: 20)
+                .onAppear {
+                    chartData.viewData.xAxisTitleHeight = 20
+                }
         }
     }
 }

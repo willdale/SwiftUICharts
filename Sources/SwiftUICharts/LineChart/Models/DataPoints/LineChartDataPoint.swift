@@ -14,39 +14,32 @@ import SwiftUI
  ```
  LineChartDataPoint(value      : 20,
                     xAxisLabel : "M",
-                    pointLabel : "Monday",
+                    description: "Monday",
                     date       : Date())
  ```
  */
 public struct LineChartDataPoint: CTStandardLineDataPoint {
     
-    public let id               : UUID = UUID()
-
-    public var value            : Double
-    public var xAxisLabel       : String?
-    public var pointDescription : String?
-    public var date             : Date?
-    
-    var testlabel : String
-    
+    public let id          : UUID = UUID()
+    public var value       : Double
+    public var xAxisLabel  : String?
+    public var description : String?
+    public var date        : Date?
+        
     /// Data model for a single data point with colour for use with a line chart.
     /// - Parameters:
     ///   - value: Value of the data point
     ///   - xAxisLabel: Label that can be shown on the X axis.
-    ///   - pointLabel: A longer label that can be shown on touch input.
+    ///   - description: A longer label that can be shown on touch input.
     ///   - date: Date of the data point if any data based calculations are required.
     public init(value       : Double,
-                xAxisLabel  : String?   = nil,
-                pointLabel  : String?   = nil,
-                date        : Date?     = nil,
-                
-                testlabel : String = ""
+                xAxisLabel  : String? = nil,
+                description : String? = nil,
+                date        : Date?   = nil
     ) {
-        self.value            = value
-        self.xAxisLabel       = xAxisLabel
-        self.pointDescription = pointLabel
-        self.date             = date
-        
-        self.testlabel = testlabel
+        self.value       = value
+        self.xAxisLabel  = xAxisLabel
+        self.description = description
+        self.date        = date
     }
 }

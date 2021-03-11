@@ -57,41 +57,33 @@ final class MultiLineChartTest: XCTestCase {
     }
     
     // MARK: - Labels
-    func testMultiLineGetYLabelsMinimumValue() {
+    func testMultiLineGetYLabels() {
         let chartData = MultiLineChartData(dataSets: dataSet,
-                                      chartStyle: LineChartStyle(yAxisNumberOfLabels: 3,
-                                                                 baseline: .minimumValue))
-
-        XCTAssertEqual(chartData.getYLabels()[0], 10.0000, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[1], 40.0000, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[2], 70.0000, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[3], 100.0000, accuracy: 0.01)
+                                           chartStyle: LineChartStyle(yAxisNumberOfLabels: 3))
         
+        chartData.chartStyle.topLine  = .maximumValue
+        chartData.chartStyle.baseline = .zero
+        XCTAssertEqual(chartData.getYLabels()[0], 0.000, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 50.00, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 100.00, accuracy: 0.01)
+        
+        chartData.chartStyle.baseline = .minimumValue
+        XCTAssertEqual(chartData.getYLabels()[0], 10.00, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 55.00, accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 100.00, accuracy: 0.01)
+        
+        chartData.chartStyle.baseline = .minimumWithMaximum(of: 5)
+        XCTAssertEqual(chartData.getYLabels()[0], 5.00,   accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 52.50,  accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 100.00,  accuracy: 0.01)
+        
+        chartData.chartStyle.topLine  = .maximum(of: 100)
+        chartData.chartStyle.baseline = .zero
+        XCTAssertEqual(chartData.getYLabels()[0], 0.00,   accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[1], 50.00,  accuracy: 0.01)
+        XCTAssertEqual(chartData.getYLabels()[2], 100.00, accuracy: 0.01)
     }
     
-    func testMultiLineGetYLabelsMinimumWithMax() {
-        let chartData = MultiLineChartData(dataSets: dataSet,
-                                      chartStyle: LineChartStyle(yAxisNumberOfLabels: 3,
-                                                                 baseline: .minimumWithMaximum(of: 5)))
-
-        XCTAssertEqual(chartData.getYLabels()[0], 5.0000, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[1], 36.6666, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[2], 68.3333, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[3], 100.0000, accuracy: 0.01)
-        
-    }
-    
-    func testMultiLineGetYLabelsZero() {
-        let chartData = MultiLineChartData(dataSets: dataSet,
-                                      chartStyle: LineChartStyle(yAxisNumberOfLabels: 3,
-                                                                 baseline: .zero))
-
-        XCTAssertEqual(chartData.getYLabels()[0], 0.0000, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[1], 33.3333, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[2], 66.6666, accuracy: 0.01)
-        XCTAssertEqual(chartData.getYLabels()[3], 100.0000, accuracy: 0.01)
-        
-    }
     // MARK: - Touch
     func testMultiLineGetDataPoint() {
         let rect: CGRect  = CGRect(x: 0, y: 0, width: 100, height: 100)
@@ -189,9 +181,7 @@ final class MultiLineChartTest: XCTestCase {
         ("testMultiLineIsGreaterThanTwoTrue" , testMultiIsGreaterThanTwoTrue),
         ("testMultiLineIsGreaterThanTwoFalse", testMultiIsGreaterThanTwoFalse),
         // Labels
-        ("testMultiLineGetYLabelsMinimumValue"  , testMultiLineGetYLabelsMinimumValue),
-        ("testMultiLineGetYLabelsMinimumWithMax", testMultiLineGetYLabelsMinimumWithMax),
-        ("testMultiLineGetYLabelsZero"          , testMultiLineGetYLabelsZero),
+        ("testMultiLineGetYLabels"  , testMultiLineGetYLabels),
         // Touch
         ("testMultiLineGetDataPoint", testMultiLineGetDataPoint),
         ("testMultiLineGetPointLocation", testMultiLineGetPointLocation),
