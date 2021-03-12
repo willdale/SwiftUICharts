@@ -45,7 +45,8 @@ A charts / plotting library for SwiftUI. Works on macOS, iOS,  watchOS, and tvOS
 ![Example of Line Chart](Resources/images/PieCharts/DoughnutChart.png)
 
 
-## Installation
+## Documentation
+### Installation
 
 Swift Package Manager
 
@@ -56,37 +57,127 @@ File > Swift Packages > Add Package Dependency...
 import SwiftUICharts
 ```
 
-## Documentation
 
-## Chart Types
+---
 
-### LineChart
+
+### Chart Types
+
+#### Line Chart
 
 Uses `LineChartData` data model.
 
+```swift
+LineChart(chartData: LineChartData)
 ```
-LineChart(chartData: data)
-    .pointMarkers(chartData: data)
-    .touchOverlay(chartData: data, specifier: "%.0f")
-    .yAxisPOI(chartData: data,
-              markerName: "Something",
-              markerValue: 110,
-              labelPosition: .center(specifier: "%.0f"),
-              labelColour: Color.white,
-              labelBackground: Color.blue,
-              lineColour: Color.blue,
-              strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
-    .averageLine(chartData: data,
-                 strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
-    .xAxisGrid(chartData: data)
-    .yAxisGrid(chartData: data)
-    .xAxisLabels(chartData: data)
-    .yAxisLabels(chartData: data)
-    .infoBox(chartData: data)
-    .floatingInfoBox(chartData: data)
-    .headerBox(chartData: data)
-    .legends(chartData: data, columns: [GridItem(.flexible()), GridItem(.flexible())])
+
+
+---
+
+
+#### Filled Line Chart
+
+Uses `LineChartData` data model.
+
+```swift
+FilledLineChart(chartData: LineChartData)
 ```
+
+
+---
+
+
+#### Multi Line Chart
+
+Uses `MultiLineChartData` data model.
+
+```swift
+MultiLineChart(chartData: MultiLineChartData)
+```
+
+
+---
+
+
+#### Ranged Line Chart
+
+Uses `RangedLineChart` data model.
+
+```swift
+RangedLineChart(chartData: RangedLineChartData)
+```
+
+
+---
+
+
+#### Bar Chart
+
+Uses `BarChartData` data model.
+
+```swift
+BarChart(chartData: BarChartData)
+```
+
+
+---
+
+
+#### Ranged Bar Chart
+
+Uses `RangedBarChartData` data model.
+
+```swift
+RangedBarChart(chartData: RangedBarChartData)
+```
+
+
+---
+
+
+#### Grouped Bar Chart
+
+Uses `GroupedBarChartData` data model.
+
+```swift
+GroupedBarChart(chartData: GroupedBarChartData)
+```
+
+
+---
+
+
+#### Stacked Bar Chart
+
+Uses `StackedBarChartData` data model.
+
+```swift
+StackedBarChart(chartData: StackedBarChartData)
+```
+
+---
+
+
+#### Pie Chart
+
+Uses `PieChartData` data model.
+
+```swift
+PieChart(chartData: PieChartData)
+```
+
+
+---
+
+
+#### Doughnut Chart
+
+Uses `DoughnutChartData` data model.
+
+```swift
+DoughnutChart(chartData: DoughnutChartData)
+```
+
 
 ---
 
@@ -109,7 +200,7 @@ LineChart(chartData: data)
 
 - [Point Markers](#Point-Markers) 
 
-The order of the view modifiers is some what important as the modifiers are various types for stacks that wrap around the previous views.
+The order of the view modifiers is some what important as the modifiers are various types of stacks that wrap around the previous views.
 
 ### All Chart Types
 
