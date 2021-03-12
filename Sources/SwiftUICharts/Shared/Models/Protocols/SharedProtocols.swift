@@ -31,13 +31,6 @@ public protocol CTChartData: ObservableObject, Identifiable {
     /// A type representing a view for the results of the touch interaction.
     associatedtype Touch: View
     
-    /// A type representing a View to get the touch value.
-    associatedtype InfoValue: View
-    
-    /// A type representing a View to get the touch description.
-    associatedtype InfoDesc: View
-    
-    
     var id: ID { get }
     
     /**
@@ -129,17 +122,6 @@ public protocol CTChartData: ObservableObject, Identifiable {
     */
     func getPointLocation(dataSet: SetPoint, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint?
     
-    
-
-    /**
-     Returns a Text View containing the data points value.
-     */
-    func infoValue(info: DataPoint) -> InfoValue
-  
-    /**
-     Returns a Text View containing the data points description.
-     */
-    func infoDescription(info: DataPoint) -> InfoDesc
 }
 
 // MARK: - Data Sets
@@ -223,6 +205,8 @@ public protocol CTDataPointBaseProtocol: Hashable, Identifiable {
      */
     var date: Date? { get set }
     
+    var legendTag : String { get set }
+    
     /**
      Gets the relevant value(s) from the data point.
 
@@ -279,6 +263,8 @@ public protocol CTChartStyle {
      Colour of the description part of the touch info.
      */
     var infoBoxDescriptionColour: Color { get set }
+    
+    var infoBoxBackgroundColour : Color { get set }
     
     /**
      Global control of animations.

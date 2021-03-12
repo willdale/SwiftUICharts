@@ -16,6 +16,8 @@ public struct RangedBarDataPoint : CTRangedBarDataPoint {
     public var description : String?
     public var date        : Date?
     public var colour      : ColourStyle
+    
+    public var legendTag : String = ""
 
     /// Data model for a single data point with colour for use with a bar chart.
     /// - Parameters:

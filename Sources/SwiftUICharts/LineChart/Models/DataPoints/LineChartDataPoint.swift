@@ -25,6 +25,8 @@ public struct LineChartDataPoint: CTStandardLineDataPoint {
     public var xAxisLabel  : String?
     public var description : String?
     public var date        : Date?
+    
+    public var legendTag : String = ""
         
     /// Data model for a single data point with colour for use with a line chart.
     /// - Parameters:

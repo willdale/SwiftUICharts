@@ -30,6 +30,8 @@ public struct BarChartDataPoint: CTStandardBarDataPoint {
     public var date       : Date?
     public var colour     : ColourStyle
     
+    public var legendTag : String = ""
+    
     // MARK: - Single colour
     /// Data model for a single data point with colour for use with a bar chart.
     /// - Parameters:

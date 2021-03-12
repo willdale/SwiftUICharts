@@ -27,6 +27,8 @@ public struct MultiBarChartDataPoint: CTMultiBarDataPoint {
     public var date        : Date?
     public var group       : GroupingData
     
+    public var legendTag : String = ""
+    
     public init(value       : Double,
                 description : String?   = nil,
                 date        : Date?     = nil,
