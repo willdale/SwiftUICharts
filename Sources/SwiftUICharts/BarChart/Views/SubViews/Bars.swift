@@ -315,3 +315,150 @@ internal struct GradientStopsPartBar: View {
             .frame(height: height)
     }
 }
+
+// MARK: - Ranged
+internal struct RangedBarChartColourCell<CD:RangedBarChartData>: View {
+     
+    private let chartData: CD
+    private let dataPoint: CD.Set.DataPoint
+    private let colour   : Color
+    private let barSize  : CGRect
+    
+    internal init(chartData : CD,
+                  dataPoint : CD.Set.DataPoint,
+                  colour    : Color,
+                  barSize   : CGRect
+    ) {
+        self.chartData = chartData
+        self.dataPoint = dataPoint
+        self.colour    = colour
+        self.barSize   = barSize
+    }
+    
+    @State private var startAnimation : Bool = false
+    
+    internal var body: some View {
+        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
+                                 tr: chartData.barStyle.cornerRadius.top,
+                                 bl: chartData.barStyle.cornerRadius.bottom,
+                                 br: chartData.barStyle.cornerRadius.bottom)
+            .fill(colour)
+            
+            .scaleEffect(y: startAnimation ? CGFloat((dataPoint.upperValue - dataPoint.lowerValue) / chartData.range) : 0, anchor: .center)
+            .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
+            .position(x: barSize.midX,
+                      y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
+            
+            .background(Color(.gray).opacity(0.000000001))
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
+            }
+            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+    }
+}
+
+
+internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
+     
+    private let chartData  : CD
+    private let dataPoint  : CD.Set.DataPoint
+    private let colours    : [Color]
+    private let startPoint : UnitPoint
+    private let endPoint   : UnitPoint
+    private let barSize    : CGRect
+    
+    internal init(chartData : CD,
+                  dataPoint : CD.Set.DataPoint,
+                  colours   : [Color],
+                  startPoint: UnitPoint,
+                  endPoint  : UnitPoint,
+                  barSize   : CGRect
+    ) {
+        self.chartData  = chartData
+        self.dataPoint  = dataPoint
+        self.colours    = colours
+        self.startPoint = startPoint
+        self.endPoint   = endPoint
+        self.barSize    = barSize
+    }
+    
+    @State private var startAnimation : Bool = false
+    
+    internal var body: some View {
+        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
+                                 tr: chartData.barStyle.cornerRadius.top,
+                                 bl: chartData.barStyle.cornerRadius.bottom,
+                                 br: chartData.barStyle.cornerRadius.bottom)
+            .fill(LinearGradient(gradient   : Gradient(colors: colours),
+                                 startPoint : startPoint,
+                                 endPoint   : endPoint))
+
+            .scaleEffect(y: startAnimation ? CGFloat((dataPoint.upperValue - dataPoint.lowerValue) / chartData.range) : 0, anchor: .center)
+            .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
+            .position(x: barSize.midX,
+                      y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
+
+            .background(Color(.gray).opacity(0.000000001))
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
+            }
+            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+    }
+}
+
+internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
+     
+    private let chartData  : CD
+    private let dataPoint  : CD.Set.DataPoint
+    private let stops      : [Gradient.Stop]
+    private let startPoint : UnitPoint
+    private let endPoint   : UnitPoint
+    private let barSize    : CGRect
+    
+    internal init(chartData : CD,
+                  dataPoint : CD.Set.DataPoint,
+                  stops     : [Gradient.Stop],
+                  startPoint: UnitPoint,
+                  endPoint  : UnitPoint,
+                  barSize   : CGRect
+    ) {
+        self.chartData  = chartData
+        self.dataPoint  = dataPoint
+        self.stops      = stops
+        self.startPoint = startPoint
+        self.endPoint   = endPoint
+        self.barSize    = barSize
+    }
+    
+    @State private var startAnimation : Bool = false
+    
+    internal var body: some View {
+        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
+                                 tr: chartData.barStyle.cornerRadius.top,
+                                 bl: chartData.barStyle.cornerRadius.bottom,
+                                 br: chartData.barStyle.cornerRadius.bottom)
+            .fill(LinearGradient(gradient   : Gradient(stops: stops),
+                                 startPoint : startPoint,
+                                 endPoint   : endPoint))
+            
+            .scaleEffect(y: startAnimation ? CGFloat((dataPoint.upperValue - dataPoint.lowerValue) / chartData.range) : 0, anchor: .center)
+            .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
+            .position(x: barSize.midX,
+                      y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
+            
+            .background(Color(.gray).opacity(0.000000001))
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
+            }
+            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+    }
+}
