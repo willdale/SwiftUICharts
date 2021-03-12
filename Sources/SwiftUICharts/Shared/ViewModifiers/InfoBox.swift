@@ -14,40 +14,49 @@ internal struct InfoBox<T>: ViewModifier where T: CTChartData {
     
     @ObservedObject var chartData: T
     
-    @State private var boxFrame: CGRect = CGRect(x: 0, y: 0, width: 0, height: 50)
+    internal init(chartData: T) {
+        self.chartData = chartData
+    }
+    
+    @State private var boxFrame: CGRect = CGRect(x: 0, y: 0, width: 0, height: 70)
     
     internal func body(content: Content) -> some View {
-        VStack {
+        Group {
             switch chartData.chartStyle.infoBoxPlacement {
             case .floating:
-                floating
+                ZStack {
+                    floating
+                    content
+                }
             case .fixed:
-                fixed
+                VStack {
+                    fixed
+                    content
+                }
             case .header:
                 EmptyView()
             }
-            content
         }
     }
     
-    var floating: some View {
+    private var floating: some View {
         TouchOverlayBox(chartData: chartData,
                         boxFrame : $boxFrame)
             .position(x: setBoxLocationation(touchLocation: chartData.infoView.touchLocation.x,
                                              boxFrame     : boxFrame,
-                                             chartSize    : chartData.infoView.chartSize),
-                      y: 15)
-            .frame(height: 40)
+                                             chartSize    : chartData.infoView.chartSize) )//,
+                      //y: 35)
+            .frame(height: 70)
+            .zIndex(1)
     }
 
     
-    var fixed: some View {
-        
+    private var fixed: some View {
         TouchOverlayBox(chartData: chartData,
                         boxFrame : $boxFrame)
-        .frame(height: 40)
-        .padding(.horizontal, 6)
-        
+            .frame(height: 70)
+            .padding(.horizontal, 6)
+            .zIndex(1)
     }
     
     
@@ -55,7 +64,7 @@ internal struct InfoBox<T>: ViewModifier where T: CTChartData {
     /// - Parameters:
     ///   - boxFrame: The size of the point info box.
     ///   - chartSize: The size of the chart view as the parent view.
-    internal func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
+    private func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
 
         var returnPoint : CGFloat = .zero
 

@@ -25,17 +25,21 @@ internal struct TouchOverlayBox<T: CTChartData>: View {
     
     internal var body: some View {
         
-        HStack {
+        VStack(alignment: .leading, spacing: 0) {
             ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
-                
-                chartData.infoValue(info: point)
-                    .font(.subheadline)
-                    .foregroundColor(chartData.chartStyle.infoBoxValueColour)
                 
                 chartData.infoDescription(info: point)
                     .font(.subheadline)
                     .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
                 
+                chartData.infoValueUnit(info: point)
+                    .font(.title3)
+                    .foregroundColor(chartData.chartStyle.infoBoxValueColour)
+
+                chartData.infoLegend(info: point)
+                    .font(.subheadline)
+                    .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                Spacer()
             }
         }
         
@@ -43,19 +47,14 @@ internal struct TouchOverlayBox<T: CTChartData>: View {
         .background(
             GeometryReader { geo in
                 if chartData.infoView.isTouchCurrent {
-                    Group {
-                        RoundedRectangle(cornerRadius: 5.0, style: .continuous)
-                            .fill(Color.systemsBackground)
-                    }
-                    .overlay(
-                        Group {
-                            RoundedRectangle(cornerRadius: 5.0)
-                                .stroke(Color.primary, lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 5.0, style: .continuous)
+                        .fill(chartData.chartStyle.infoBoxBackgroundColour)
+                        .onAppear {
+                            self.boxFrame = geo.frame(in: .local)
                         }
-                    )
-                    .onChange(of: geo.frame(in: .local)) { frame in
-                        self.boxFrame = frame
-                    }
+                        .onChange(of: geo.frame(in: .local)) { frame in
+                            self.boxFrame = frame
+                        }
                 }
             }
         )

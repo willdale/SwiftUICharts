@@ -35,7 +35,7 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
             if chartData.infoView.isTouchCurrent {
                 ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
                     
-                    chartData.infoValue(info: point)
+                    chartData.infoValueUnit(info: point)
                         .font(.title3)
                         .foregroundColor(chartData.chartStyle.infoBoxValueColour)
                     

@@ -33,7 +33,7 @@ extension CTChartData {
 }
 
 extension CTChartData {
-    public func infoValue(info: DataPoint) -> some View {
+    public func infoValueUnit(info: DataPoint) -> some View {
         switch self.infoView.touchUnit {
         case .none:
             return Text("\(info.valueAsString(specifier: self.infoView.touchSpecifier))")
@@ -43,8 +43,31 @@ extension CTChartData {
             return Text("\(info.valueAsString(specifier: self.infoView.touchSpecifier)) \(unit)")
         }
     }
+    public func infoValue(info: DataPoint) -> some View {
+        Text("\(info.valueAsString(specifier: self.infoView.touchSpecifier))")
+    }
+    public func infoUnit(info: DataPoint) -> some View {
+        switch self.infoView.touchUnit {
+        case .none:
+            return Text("")
+        case .prefix(of: let unit):
+            return Text("\(unit)")
+        case .suffix(of: let unit):
+            return Text("\(unit)")
+        }
+    }
     public func infoDescription(info: DataPoint) -> some View {
         Text("\(info.wrappedDescription)")
+    }
+    @ViewBuilder public func infoLegend(info: DataPoint) -> some View {
+        if let legend = self.legends.first(where: {
+            $0.prioity == 1 &&
+            $0.legend == info.legendTag
+        }) {
+            legend.getLegendAsCircle(textColor: .primary)
+        } else {
+            EmptyView()
+        }
     }
 }
 

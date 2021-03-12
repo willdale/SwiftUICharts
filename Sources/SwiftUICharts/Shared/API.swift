@@ -17,7 +17,7 @@ public struct InfoValue<T> : View where T: CTChartData {
     
     public var body: some View {
         ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
-            chartData.infoValue(info: point)
+            chartData.infoValueUnit(info: point)
         }
     }
 }
@@ -184,6 +184,45 @@ extension LegendData {
             }
         }
     }
+    public func getLegendAsCircle(textColor: Color) -> some View {
+        Group {
+            if let colour = self.colour.colour {
+                HStack {
+                    Circle()
+                        .fill(colour)
+                        .frame(width: 12, height: 12)
+                    Text(self.legend)
+                        .font(.caption)
+                        .foregroundColor(textColor)
+                }
+                
+            } else if let colours = self.colour.colours  {
+                HStack {
+                    Circle()
+                        .fill(LinearGradient(gradient: Gradient(colors: colours),
+                                             startPoint: .leading,
+                                             endPoint: .trailing))
+                        .frame(width: 12, height: 12)
+                    Text(self.legend)
+                        .font(.caption)
+                        .foregroundColor(textColor)
+                }
+            } else if let stops = self.colour.stops {
+                let stops = GradientStop.convertToGradientStopsArray(stops: stops)
+                HStack {
+                    Circle()
+                        .fill(LinearGradient(gradient: Gradient(stops: stops),
+                                             startPoint: .leading,
+                                             endPoint: .trailing))
+                        .frame(width: 12, height: 12)
+                    Text(self.legend)
+                        .font(.caption)
+                        .foregroundColor(textColor)
+                }
+            } else { EmptyView() }
+        }
+    }
+                
     internal func accessibilityLegendLabel() -> String {
         switch self.chartType {
         case .line:
