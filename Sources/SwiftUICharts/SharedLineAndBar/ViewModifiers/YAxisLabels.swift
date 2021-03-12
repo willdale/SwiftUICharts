@@ -79,6 +79,9 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                         chartData.infoView.yAxisLabelWidth = geo.frame(in: .local).size.width
                         self.height = geo.frame(in: .local).height
                     }
+                    .onChange(of: axisLabelWidth) { width in
+                        chartData.infoView.yAxisLabelWidth = geo.frame(in: .local).size.width + width
+                    }
             }
         )
     }
