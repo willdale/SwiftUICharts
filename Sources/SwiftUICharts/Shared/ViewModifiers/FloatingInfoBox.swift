@@ -1,16 +1,13 @@
 //
-//  InfoBox.swift
+//  FloatingInfoBox.swift
 //  
 //
-//  Created by Will Dale on 15/02/2021.
+//  Created by Will Dale on 12/03/2021.
 //
 
 import SwiftUI
 
-/**
- A view that displays information from `TouchOverlay`.
- */
-internal struct InfoBox<T>: ViewModifier where T: CTChartData {
+internal struct FloatingInfoBox<T>: ViewModifier where T: CTChartData {
     
     @ObservedObject var chartData: T
     
@@ -24,20 +21,12 @@ internal struct InfoBox<T>: ViewModifier where T: CTChartData {
         Group {
             switch chartData.chartStyle.infoBoxPlacement {
             case .floating:
-                content
-            case .infoBox(let isStatic):
-                switch isStatic {
-                case true:
-                    VStack {
-                        fixed
-                        content
-                    }
-                case false:
-                    VStack {
-                        floating
-                        content
-                    }
+                ZStack {
+                    floating
+                    content
                 }
+            case .infoBox:
+                content
             case .header:
                 content
             }
@@ -55,18 +44,6 @@ internal struct InfoBox<T>: ViewModifier where T: CTChartData {
             .padding(.horizontal, 6)
             .zIndex(1)
     }
-
-    
-    private var fixed: some View {
-        TouchOverlayBox(chartData: chartData,
-                        boxFrame : $boxFrame)
-            .frame(height: 70)
-            .padding(.horizontal, 6)
-            .zIndex(1)
-    }
-    
-    
-    
 }
 
 extension View {
@@ -77,7 +54,8 @@ extension View {
      - Returns: A  new view containing the chart with a view to
      display touch overlay information.
      */
-    public func infoBox<T: CTChartData>(chartData: T) -> some View {
-        self.modifier(InfoBox(chartData: chartData))
+    public func floatingInfoBox<T: CTChartData>(chartData: T) -> some View {
+        self.modifier(FloatingInfoBox(chartData: chartData))
     }
 }
+

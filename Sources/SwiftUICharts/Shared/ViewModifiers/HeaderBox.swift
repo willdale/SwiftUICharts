@@ -64,7 +64,7 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
                         titleBox
                         content
                     }
-                case .fixed:
+                case .infoBox:
                     VStack(alignment: .leading) {
                         titleBox
                         content

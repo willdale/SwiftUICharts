@@ -23,7 +23,7 @@ internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
         self.chartData.infoView.touchSpecifier = specifier
         self.chartData.infoView.touchUnit = unit
     }
-    
+        
     internal func body(content: Content) -> some View {
         Group {
             if chartData.isGreaterThanTwo() {

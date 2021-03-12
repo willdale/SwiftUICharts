@@ -60,16 +60,16 @@ public enum ColourType {
  Placement of the data point information panel when touch overlay modifier is applied.
  ```
  case floating // Follows input across the chart.
- case fixed // Centered in view.
+ case infoBox(isStatic: Bool)  // Display in the InfoBox. Must have .infoBox()
  case header // Fix in the Header box. Must have .headerBox().
  ```
  */
 public enum InfoBoxPlacement {
     /// Follows input across the chart.
     case floating
-    /// Centered in view.
-    case fixed
-    /// Fix in the Header box. Must have .headerBox().
+    /// Display in the InfoBox. Must have .infoBox()
+    case infoBox(isStatic: Bool = false)
+    /// Display in the Header box. Must have .headerBox().
     case header
 }
 

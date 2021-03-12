@@ -5,7 +5,7 @@
 //  Created by Will Dale on 13/02/2021.
 //
 
-import Foundation
+import SwiftUI
 
 // MARK: - Data Set
 extension CTLineBarChartDataProtocol {
@@ -71,5 +71,25 @@ extension CTLineBarChartDataProtocol {
             labels.append(minValue + range * Double(index))
         }
         return labels
+    }
+}
+
+extension CTChartData {
+    /// Sets the point info box location while keeping it within the parent view.
+    /// - Parameters:
+    ///   - boxFrame: The size of the point info box.
+    ///   - chartSize: The size of the chart view as the parent view.
+    internal func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
+
+        var returnPoint : CGFloat = .zero
+
+        if touchLocation < chartSize.minX + (boxFrame.width / 2) {
+            returnPoint = chartSize.minX + (boxFrame.width / 2)
+        } else if touchLocation > chartSize.maxX - (boxFrame.width / 2) {
+            returnPoint = chartSize.maxX - (boxFrame.width / 2)
+        } else {
+            returnPoint = touchLocation
+        }
+        return returnPoint + self.infoView.yAxisLabelWidth
     }
 }
