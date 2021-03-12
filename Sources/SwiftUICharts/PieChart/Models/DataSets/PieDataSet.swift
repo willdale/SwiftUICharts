@@ -9,17 +9,6 @@ import SwiftUI
 
 /**
  Data set for a pie chart.
-  
- # Example
- ```
- PieDataSet(dataPoints: [
-        PieChartDataPoint(value: 7, description: "One", colour: .blue),
-        PieChartDataPoint(value: 2, description: "Two", colour: .red),
-        PieChartDataPoint(value: 9, description: "Three", colour: .purple),
-        PieChartDataPoint(value: 6, description: "Four", colour: .green),
-        PieChartDataPoint(value: 4, description: "Five", colour: .orange)],
-    legendTitle: "Data")
- ```
  */
 public struct PieDataSet: CTSingleDataSetProtocol {
 

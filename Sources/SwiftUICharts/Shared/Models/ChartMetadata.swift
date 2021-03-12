@@ -11,11 +11,6 @@ import SwiftUI
  Data model for the chart's metadata
  
  Contains the Title, Subtitle and colour information for them.
- 
- # Example
- ```
- ChartMetadata(title: "Some Data", subtitle: "A weeks worth")
- ```
  */
 public struct ChartMetadata {
     /// The charts title

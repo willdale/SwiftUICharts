@@ -11,45 +11,6 @@ import SwiftUI
  Data for drawing and styling a multi line, line chart.
  
  This model contains all the data and styling information for a single line, line chart.
- 
- # Example
- ```
- static func weekOfData() -> MultiLineChartData {
-  
-      let data = MultiLineDataSet(dataSets: [
-                       LineDataSet(dataPoints: [
-                           LineChartDataPoint(value: 60,  xAxisLabel: "M", pointLabel: "Monday"),
-                           LineChartDataPoint(value: 90,  xAxisLabel: "T", pointLabel: "Tuesday"),
-                           LineChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday"),
-                           LineChartDataPoint(value: 75,  xAxisLabel: "T", pointLabel: "Thursday"),
-                           LineChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"),
-                           LineChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday"),
-                           LineChartDataPoint(value: 90,  xAxisLabel: "S", pointLabel: "Sunday")
-                       ],
-                       legendTitle: "Test One",
-                       pointStyle: PointStyle(),
-                       style: LineStyle(colour: Color.red)),
-                       LineDataSet(dataPoints: [
-                           LineChartDataPoint(value: 90,  xAxisLabel: "M", pointLabel: "Monday"),
-                           LineChartDataPoint(value: 60,  xAxisLabel: "T", pointLabel: "Tuesday"),
-                           LineChartDataPoint(value: 120, xAxisLabel: "W", pointLabel: "Wednesday"),
-                           LineChartDataPoint(value: 85,  xAxisLabel: "T", pointLabel: "Thursday"),
-                           LineChartDataPoint(value: 140, xAxisLabel: "F", pointLabel: "Friday"),
-                           LineChartDataPoint(value: 80,  xAxisLabel: "S", pointLabel: "Saturday"),
-                           LineChartDataPoint(value: 50,  xAxisLabel: "S", pointLabel: "Sunday")
-                       ],
-                       legendTitle: "Test Two",
-                       pointStyle: PointStyle(),
-                       style: LineStyle(colour: Color.blue))])
-      
-      return MultiLineChartData(dataSets: data,
-                                metadata: ChartMetadata(title: "Some Data", subtitle: "A Week"),
-                                xAxisLabels: ["Monday", "Thursday", "Sunday"],
-                                chartStyle: LineChartStyle(infoBoxPlacement: .fixed,
-                                                           markerType: .full(attachment: .line(dot: .style(DotStyle()))),
-                                                           baseline: .minimumWithMaximum(of: 40)))
-  }
- ```
  */
 public final class MultiLineChartData: CTLineChartDataProtocol {
 

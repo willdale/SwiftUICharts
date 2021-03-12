@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Displays the data points value with the unit.
+ */
 public struct InfoValue<T> : View where T: CTChartData {
     
     @ObservedObject var chartData: T
@@ -22,6 +25,9 @@ public struct InfoValue<T> : View where T: CTChartData {
     }
 }
 
+/**
+ Displays the data points description.
+ */
 public struct InfoDescription<T> : View where T: CTChartData {
     
     @ObservedObject var chartData: T
@@ -37,6 +43,9 @@ public struct InfoDescription<T> : View where T: CTChartData {
     }
 }
 
+/**
+ Option the as a String between the Value and the Description.
+ */
 public struct InfoExtra<T>: View where T: CTChartData {
     
     @ObservedObject var chartData: T
@@ -58,6 +67,12 @@ public struct InfoExtra<T>: View where T: CTChartData {
 }
 
 extension LegendData {
+    /**
+     Get the legend as a view.
+     
+     - Parameter textColor: Colour of the text
+     - Returns: The relevent legend as a view.
+     */
     public func getLegend(textColor: Color) -> some View {
         Group {
             switch self.chartType {
@@ -184,6 +199,12 @@ extension LegendData {
             }
         }
     }
+    /**
+     Get the legend as a view where the colour is indicated by a Circle.
+     
+     - Parameter textColor: Colour of the text
+     - Returns: The relevent legend as a view.
+     */
     public func getLegendAsCircle(textColor: Color) -> some View {
         Group {
             if let colour = self.colour.colour {

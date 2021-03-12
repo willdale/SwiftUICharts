@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+/**
+ Data for drawing and styling ranged line chart.
+ 
+ This model contains the data and styling information for a ranged line chart.
+ */
 public final class RangedLineChartData: CTLineChartDataProtocol {
     
     // MARK: Properties
@@ -24,7 +29,7 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
         
     // MARK: Initializer
-    /// Initialises a Single Line Chart.
+    /// Initialises a ranged line chart.
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style a line.

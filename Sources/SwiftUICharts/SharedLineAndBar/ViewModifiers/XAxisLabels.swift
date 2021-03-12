@@ -64,17 +64,22 @@ extension View {
      - Requires:
      Chart Data to conform to CTLineBarChartDataProtocol.
           
+     - Requires:
+     Chart Data to conform to CTLineBarChartDataProtocol.
+     
      # Available for:
      - Line Chart
      - Multi Line Chart
+     - Filled Line Chart
+     - Ranged Line Chart
      - Bar Chart
      - Grouped Bar Chart
      - Stacked Bar Chart
+     - Ranged Bar Chart
      
      # Unavailable for:
      - Pie Chart
      - Doughnut Chart
-     - Multi Layer Pie Chart
      
      - Parameter chartData: Chart data model.
      - Returns: A  new view containing the chart with labels marking the x axis.

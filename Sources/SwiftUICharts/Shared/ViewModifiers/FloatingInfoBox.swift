@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ A view that displays information from `TouchOverlay`.
+ */
 internal struct FloatingInfoBox<T>: ViewModifier where T: CTChartData {
     
     @ObservedObject var chartData: T
@@ -49,6 +52,8 @@ internal struct FloatingInfoBox<T>: ViewModifier where T: CTChartData {
 extension View {
     /**
      A view that displays information from `TouchOverlay`.
+     
+     Places the info box on top of the chart.
      
      - Parameter chartData: Chart data model.
      - Returns: A  new view containing the chart with a view to

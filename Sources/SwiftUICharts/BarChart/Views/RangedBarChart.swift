@@ -10,11 +10,11 @@ import SwiftUI
 /**
  View for creating a grouped bar chart.
   
- Uses `GroupedBarChartData` data model.
+ Uses `RangedBarChartData` data model.
  
  # Declaration
  ```
- GroupedBarChart(chartData: data, groupSpacing: 25)
+ RangedBarChart(chartData: data)
  ```
  
  # View Modifiers
@@ -23,8 +23,13 @@ import SwiftUI
  around the previous views.
  ```
  .touchOverlay(chartData: data)
- .averageLine(chartData: data)
- .yAxisPOI(chartData: data)
+ .averageLine(chartData: data,
+              strokeStyle: StrokeStyle(lineWidth: 3,dash: [5,10]))
+ .yAxisPOI(chartData: data,
+           markerName: "50",
+           markerValue: 50,
+           lineColour: Color.blue,
+           strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
  .xAxisGrid(chartData: data)
  .yAxisGrid(chartData: data)
  .xAxisLabels(chartData: data)

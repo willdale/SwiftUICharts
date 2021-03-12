@@ -7,6 +7,43 @@
 
 import SwiftUI
 
+/**
+ View for drawing a line chart with upper and lower range values .
+ 
+ Uses `RangedLineChartData` data model.
+ 
+ # Declaration
+ ```
+ RangedLineChart(chartData: data)
+ ```
+ 
+ # View Modifiers
+ The order of the view modifiers is some what important
+ as the modifiers are various types for stacks that wrap
+ around the previous views.
+ ```
+ .pointMarkers(chartData: data)
+ .touchOverlay(chartData: data, specifier: "%.0f")
+ .yAxisPOI(chartData: data,
+           markerName: "Something",
+           markerValue: 110,
+           labelPosition: .center(specifier: "%.0f"),
+           labelColour: Color.white,
+           labelBackground: Color.blue,
+           lineColour: Color.blue,
+           strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
+ .averageLine(chartData: data,
+              strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
+ .xAxisGrid(chartData: data)
+ .yAxisGrid(chartData: data)
+ .xAxisLabels(chartData: data)
+ .yAxisLabels(chartData: data)
+ .infoBox(chartData: data)
+ .floatingInfoBox(chartData: data)
+ .headerBox(chartData: data)
+ .legends(chartData: data, columns: [GridItem(.flexible()), GridItem(.flexible())])
+ ```
+ */
 public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartData {
     
     @ObservedObject var chartData: ChartData

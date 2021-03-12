@@ -177,14 +177,16 @@ extension View {
      # Available for:
      - Line Chart
      - Multi Line Chart
+     - Filled Line Chart
+     - Ranged Line Chart
      - Bar Chart
      - Grouped Bar Chart
      - Stacked Bar Chart
+     - Ranged Bar Chart
      
      # Unavailable for:
      - Pie Chart
      - Doughnut Chart
-     - Multi Layer Pie Chart
      
      - Parameters:
         - chartData: Chart data model.
@@ -196,15 +198,16 @@ extension View {
         - lineColour: Line Colour.
         - strokeStyle: Style of Stroke.
      - Returns: A  new view containing the chart with a marker line at a specified value.
-    */
-    public func yAxisPOI<T:CTLineBarChartDataProtocol>(chartData      : T,
-                                                markerName     : String,
-                                                markerValue    : Double,
-                                                labelPosition  : DisplayValue = .center(specifier: "%.0f"),
-                                                labelColour    : Color        = Color.primary,
-                                                labelBackground: Color        = Color.systemsBackground,
-                                                lineColour     : Color        = Color(.blue),
-                                                strokeStyle    : StrokeStyle  = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
+     */
+    public func yAxisPOI<T:CTLineBarChartDataProtocol>(
+        chartData      : T,
+        markerName     : String,
+        markerValue    : Double,
+        labelPosition  : DisplayValue = .center(specifier: "%.0f"),
+        labelColour    : Color        = Color.primary,
+        labelBackground: Color        = Color.systemsBackground,
+        lineColour     : Color        = Color(.blue),
+        strokeStyle    : StrokeStyle  = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
     ) -> some View {
         self.modifier(YAxisPOI(chartData      : chartData,
                                markerName     : markerName,
@@ -246,14 +249,16 @@ extension View {
      # Available for:
      - Line Chart
      - Multi Line Chart
+     - Filled Line Chart
+     - Ranged Line Chart
      - Bar Chart
      - Grouped Bar Chart
      - Stacked Bar Chart
+     - Ranged Bar Chart
      
      # Unavailable for:
      - Pie Chart
      - Doughnut Chart
-     - Multi Layer Pie Chart
      
      - Parameters:
         - chartData: Chart data model.
@@ -267,13 +272,14 @@ extension View {
      
     - Tag: AverageLine
     */
-    public func averageLine<T:CTLineBarChartDataProtocol>(chartData      : T,
-                                                   markerName     : String        = "Average",
-                                                   labelPosition  : DisplayValue  = .yAxis(specifier: "%.0f"),
-                                                   labelColour    : Color         = Color.primary,
-                                                   labelBackground: Color         = Color.systemsBackground,
-                                                   lineColour     : Color         = Color.primary,
-                                                   strokeStyle    : StrokeStyle   = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
+    public func averageLine<T:CTLineBarChartDataProtocol>(
+        chartData      : T,
+        markerName     : String        = "Average",
+        labelPosition  : DisplayValue  = .yAxis(specifier: "%.0f"),
+        labelColour    : Color         = Color.primary,
+        labelBackground: Color         = Color.systemsBackground,
+        lineColour     : Color         = Color.primary,
+        strokeStyle    : StrokeStyle   = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
     ) -> some View {
         self.modifier(YAxisPOI(chartData      : chartData,
                                markerName     : markerName,

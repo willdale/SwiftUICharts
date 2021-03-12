@@ -9,7 +9,9 @@ import SwiftUI
 
 // MARK: - Position Indicator
 extension CTLineChartDataProtocol {
-    
+    /**
+     Gets the position on a line relative to where the location of the touch or pointer interaction.
+     */
     public static func getIndicatorLocation<DP:CTStandardDataPointProtocol>(rect: CGRect,
                                                                             dataPoints: [DP],
                                                                             touchLocation: CGPoint,

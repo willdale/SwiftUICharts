@@ -9,18 +9,6 @@ import SwiftUI
 
 /**
  Main data set for a multi part bar charts.
- 
- # Example
- ```
- let data = MultiBarDataSets(dataSets: [
-     MultiBarDataSet(dataPoints: [
-         MultiBarChartDataPoint(value: 10, group: GroupingData(title: "One", colour: .blue))
-    ]),
-     MultiBarDataSet(dataPoints: [
-         MultiBarChartDataPoint(value: 20, group: GroupingData(title: "One", colour: .blue))
-    ])
- ])
- ```
  */
 public struct MultiBarDataSets: CTMultiDataSetProtocol {
     

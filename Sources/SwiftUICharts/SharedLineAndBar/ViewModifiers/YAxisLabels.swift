@@ -120,14 +120,16 @@ extension View {
      # Available for:
      - Line Chart
      - Multi Line Chart
+     - Filled Line Chart
+     - Ranged Line Chart
      - Bar Chart
      - Grouped Bar Chart
      - Stacked Bar Chart
+     - Ranged Bar Chart
      
      # Unavailable for:
      - Pie Chart
      - Doughnut Chart
-     - Multi Layer Pie Chart
      
      - Parameters:
       - specifier: Decimal precision specifier

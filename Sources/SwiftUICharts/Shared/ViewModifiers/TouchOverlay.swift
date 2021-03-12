@@ -61,11 +61,14 @@ extension View {
      Adds an overlay to detect touch and display the relivent information from the nearest data point.
      
      - Requires:
-     If  LineChartStyle --> infoBoxPlacement is set to .header
+     If  ChartStyle --> infoBoxPlacement is set to .header
      then `.headerBox` is required.
      
-     If  LineChartStyle --> infoBoxPlacement is set to .fixed or . floating
+     If  ChartStyle --> infoBoxPlacement is set to .infoBox
      then `.infoBox` is required.
+     
+     If  ChartStyle --> infoBoxPlacement is set to .floating
+     then `.floatingInfoBox` is required.
      
      - Attention:
      Unavailable in tvOS

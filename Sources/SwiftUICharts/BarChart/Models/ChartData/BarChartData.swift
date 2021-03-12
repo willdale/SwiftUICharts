@@ -9,8 +9,6 @@ import SwiftUI
 
 /**
  Data for drawing and styling a standard Bar Chart.
-  
-
  */
 public final class BarChartData: CTBarChartDataProtocol {
     // MARK: Properties

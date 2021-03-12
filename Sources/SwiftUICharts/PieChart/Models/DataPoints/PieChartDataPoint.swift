@@ -9,13 +9,6 @@ import SwiftUI
 
 /**
  Data for a single segement of a pie chart.
- 
- # Example
- ```
- PieChartDataPoint(value: 7,
-                   description: "One",
-                   colour: .blue),
- ```
  */
 public struct PieChartDataPoint: CTPieDataPoint {
     

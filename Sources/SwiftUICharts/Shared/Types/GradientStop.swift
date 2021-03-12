@@ -8,7 +8,7 @@
 import SwiftUI
 
 /**
- A mediator for `Gradient.Stop`. to allow it to be stored in `LegendData`.
+ A mediator for `Gradient.Stop` to allow it to be stored in `LegendData`.
  
  Gradient.Stop doesn't conform to Hashable.
  */

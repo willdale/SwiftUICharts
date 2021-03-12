@@ -12,23 +12,6 @@ import SwiftUI
  
  Controls the look of the chart as a whole, not including any styling
  specific to the data set(s),
- 
- # Example
- ```
- LineChartStyle(infoBoxPlacement    : .floating,
-                markerType          : .indicator(style: DotStyle()),
-                xAxisGridStyle      : GridStyle(),
-                xAxisLabelPosition  : .bottom,
-                xAxisLabelColour    : Color.primary,
-                xAxisLabelsFrom     : .chartData,
-                yAxisGridStyle      : GridStyle(),
-                yAxisLabelPosition  : .leading,
-                yAxisLabelColour    : Color.primary,
-                yAxisNumberOfLabels : 7,
-                baseline            : .minimumWithMaximum(of: 80),
-                globalAnimation     : .easeOut(duration: 1))
- ```
-
  */
 public struct LineChartStyle: CTLineChartStyle {
     
@@ -69,11 +52,13 @@ public struct LineChartStyle: CTLineChartStyle {
     ///   - xAxisLabelPosition: Location of the X axis labels - Top or Bottom.
     ///   - xAxisLabelColour: Text Colour for the labels on the X axis.
     ///   - xAxisLabelsFrom: Where the label data come from. DataPoint or xAxisLabels.
+    ///   - xAxisTitle: Label to display next to the chart giving info about the axis.
     ///
     ///   - yAxisGridStyle: Style of the horizontal lines breaking up the chart.
     ///   - yAxisLabelPosition: Location of the X axis labels - Leading or Trailing.
     ///   - yAxisLabelColour: Text Colour for the labels on the Y axis.
     ///   - yAxisNumberOfLabel: Number Of Labels on Y Axis.
+    ///   - yAxisTitle: Label to display next to the chart giving info about the axis.
     ///
     ///   - baseline: Whether the chart is drawn from baseline of zero or the minimum datapoint value.
     ///   - topLine: Where to finish drawing the chart from. Data set maximum or custom.

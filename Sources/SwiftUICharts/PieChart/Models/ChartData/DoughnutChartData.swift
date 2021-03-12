@@ -11,23 +11,6 @@ import SwiftUI
  Data for drawing and styling a doughnut chart.
  
  This model contains the data and styling information for a doughnut chart.
- 
- # Example
- ```
- static func makeData() -> DoughnutChartData {
-     let data = PieDataSet(dataPoints: [PieChartDataPoint(value: 7, description: "One",   colour: .blue),
-                                        PieChartDataPoint(value: 2, description: "Two",   colour: .red),
-                                        PieChartDataPoint(value: 9, description: "Three", colour: .purple),
-                                        PieChartDataPoint(value: 6, description: "Four",  colour: .green),
-                                        PieChartDataPoint(value: 4, description: "Five",  colour: .orange)],
-                           legendTitle: "Data")
- 
-     return DoughnutChartData(dataSets: data,
-                              metadata: ChartMetadata(title: "Pie", subtitle: "mmm doughnuts"),
-                              chartStyle: DoughnutChartStyle(infoBoxPlacement: .header),
-                              noDataText: Text("No Data"))
- }
- ```
  */
 public final class DoughnutChartData: CTDoughnutChartDataProtocol {
 
@@ -43,7 +26,7 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol {
     public final var chartType : (chartType: ChartType, dataSetType: DataSetType)
     
     // MARK: Initializer
-    /// Initialises a Doughnut Chart.
+    /// Initialises Doughnut Chart data.
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the chart.

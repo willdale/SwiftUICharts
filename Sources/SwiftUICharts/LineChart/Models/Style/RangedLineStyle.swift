@@ -8,13 +8,6 @@
 import SwiftUI
 /**
  Model for controlling the aesthetic of the ranged line chart.
- 
- # Example
- ```
- RangedLineStyle(lineColour: ColourStyle(colour: .red),
-                 fillColour: ColourStyle(colour: Color(.blue).opacity(0.25)),
-                 lineType  : .curvedLine))
- ```
  */
 public struct RangedLineStyle: CTRangedLineStyle, Hashable {
     

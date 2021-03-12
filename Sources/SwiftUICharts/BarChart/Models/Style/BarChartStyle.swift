@@ -13,17 +13,6 @@ import SwiftUI
  
  Controls the look of the chart as a whole, not including any styling
  specific to the data set(s),
- 
- # Example
-```
- BarChartStyle(infoBoxPlacement   : .floating,
-               markerType         : .full,
-               xAxisLabelPosition : .bottom,
-               xAxisLabelsFrom    : .dataPoint,
-               yAxisLabelPosition : .leading,
-               yAxisNumberOfLabels: 5,
-               globalAnimation    : .linear(duration: 1))
- ```
  */
 public struct BarChartStyle: CTBarChartStyle {
         
@@ -65,11 +54,13 @@ public struct BarChartStyle: CTBarChartStyle {
     ///   - xAxisLabelPosition: Location of the X axis labels - Top or Bottom.
     ///   - xAxisLabelsFrom: Where the label data come from. DataPoint or xAxisLabels.
     ///   - xAxisLabelColour: Text Colour for the labels on the X axis.
+    ///   - xAxisTitle: Label to display next to the chart giving info about the axis.
     ///
     ///   - yAxisGridStyle: Style of the horizontal lines breaking up the chart.
     ///   - yAxisLabelPosition: Location of the X axis labels - Leading or Trailing.
     ///   - yAxisNumberOfLabel: Number Of Labels on Y Axis.
     ///   - yAxisLabelColour: Text Colour for the labels on the Y axis.
+    ///   - yAxisTitle: Label to display next to the chart giving info about the axis.
     ///
     ///   - baseline: Whether the chart is drawn from baseline of zero or the minimum datapoint value.
     ///   - topLine: Where to finish drawing the chart from. Data set maximum or custom.

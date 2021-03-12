@@ -38,7 +38,7 @@ extension View {
     /**
      Adds vertical lines along the X axis.
      
-     The style is set in ChartData --> LineChartStyle --> xAxisGridStyle
+     The style is set in ChartData --> ChartStyle --> xAxisGridStyle
      
      - Requires:
      Chart Data to conform to CTLineBarChartDataProtocol.
@@ -46,14 +46,16 @@ extension View {
      # Available for:
      - Line Chart
      - Multi Line Chart
+     - Filled Line Chart
+     - Ranged Line Chart
      - Bar Chart
      - Grouped Bar Chart
      - Stacked Bar Chart
+     - Ranged Bar Chart
      
      # Unavailable for:
      - Pie Chart
      - Doughnut Chart
-     - Multi Layer Pie Chart
      
      - Parameter chartData: Chart data model.
      - Returns: A  new view containing the chart with vertical lines under it.

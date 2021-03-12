@@ -11,23 +11,6 @@ import SwiftUI
  Data for drawing and styling a pie chart.
  
  This model contains the data and styling information for a pie chart.
- 
- # Example
- ```
- static func makeData() -> PieChartData {
-     let data = PieDataSet(dataPoints: [
-                             PieChartDataPoint(value: 7, description: "One", colour: .blue),
-                             PieChartDataPoint(value: 2, description: "Two", colour: .red),
-                             PieChartDataPoint(value: 9, description: "Three", colour: .purple),
-                             PieChartDataPoint(value: 6, description: "Four", colour: .green),
-                             PieChartDataPoint(value: 4, description: "Five", colour: .orange)],
-                           legendTitle: "Data")
-     
-     return PieChartData(dataSets: data,
-                         metadata: ChartMetadata(title: "Pie", subtitle: "mmm pie"),
-                         chartStyle: PieChartStyle(infoBoxPlacement: .header))
- }
- ```
  */
 public final class PieChartData: CTPieChartDataProtocol {
     
@@ -43,7 +26,7 @@ public final class PieChartData: CTPieChartDataProtocol {
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
     // MARK: Initializer
-    /// Initialises a Pie Chart.
+    /// Initialises Pie Chart data.
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the chart.

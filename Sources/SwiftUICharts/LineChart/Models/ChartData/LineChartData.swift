@@ -11,38 +11,6 @@ import SwiftUI
  Data for drawing and styling a single line, line chart.
  
  This model contains the data and styling information for a single line, line chart.
- 
- # Example
- ```
- static func weekOfData() -> LineChartData {
-     
-     let data = LineDataSet(dataPoints: [
-         LineChartDataPoint(value: 120, xAxisLabel: "M", pointLabel: "Monday"),
-         LineChartDataPoint(value: 190, xAxisLabel: "T", pointLabel: "Tuesday"),
-         LineChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday"),
-         LineChartDataPoint(value: 175, xAxisLabel: "T", pointLabel: "Thursday"),
-         LineChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"),
-         LineChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday"),
-         LineChartDataPoint(value: 190, xAxisLabel: "S", pointLabel: "Sunday")
-     ],
-     legendTitle: "Test One",
-     pointStyle: PointStyle(),
-     style: LineStyle(colour: Color.red, lineType: .curvedLine))
-          
-     return LineChartData(dataSets       : data,
-                          metadata       : ChartMetadata(title: "Some Data", subtitle: "A Week"),
-                          xAxisLabels    : ["Monday", "Thursday", "Sunday"],
-                          chartStyle     : LineChartStyle(infoBoxPlacement    : .floating,
-                                                          markerType          : .indicator(style: DotStyle()),
-                                                          xAxisLabelPosition  : .bottom,
-                                                          xAxisLabelsFrom     : .chartData,
-                                                          yAxisLabelPosition  : .leading,
-                                                          yAxisNumberOfLabels : 7,
-                                                          baseline            : .minimumWithMaximum(of: 80),
-                                                          globalAnimation     : .easeOut(duration: 1)))
- }
- 
- ```
  */
 public final class LineChartData: CTLineChartDataProtocol {
     

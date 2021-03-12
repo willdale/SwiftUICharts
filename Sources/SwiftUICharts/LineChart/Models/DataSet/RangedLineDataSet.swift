@@ -11,24 +11,6 @@ import SwiftUI
  Data set for a ranged line.
  
  Contains information specific to the line and range fill.
- 
- # Example
- ```
- RangedLineDataSet(dataPoints: [
-     RangedLineChartDataPoint(value: 10, upperValue: 20, lowerValue: 0 , xAxisLabel: "M", pointLabel: "Monday"),
-     RangedLineChartDataPoint(value: 25, upperValue: 35, lowerValue: 15, xAxisLabel: "T", pointLabel: "Tuesday"),
-     RangedLineChartDataPoint(value: 13, upperValue: 23, lowerValue: 3 , xAxisLabel: "W", pointLabel: "Wednesday"),
-     RangedLineChartDataPoint(value: 24, upperValue: 34, lowerValue: 14, xAxisLabel: "T", pointLabel: "Thursday"),
-     RangedLineChartDataPoint(value: 36, upperValue: 46, lowerValue: 26, xAxisLabel: "F", pointLabel: "Friday"),
-     RangedLineChartDataPoint(value: 14, upperValue: 24, lowerValue: 4 , xAxisLabel: "S", pointLabel: "Saturday"),
-     RangedLineChartDataPoint(value: 20, upperValue: 30, lowerValue: 10, xAxisLabel: "S", pointLabel: "Sunday")
- ],
- legendTitle: "Steps",
- pointStyle: PointStyle(),
- style: RangedLineStyle(lineColour: ColourStyle(colour: .red),
-                        fillColour: ColourStyle(colour: Color(.blue).opacity(0.25)),
-                        lineType: .curvedLine))
- ```
  */
 public struct RangedLineDataSet: CTRangedLineChartDataSet {
 
@@ -39,8 +21,7 @@ public struct RangedLineDataSet: CTRangedLineChartDataSet {
     public var pointStyle   : PointStyle
     public var style        : RangedLineStyle
 
-
-    /// Initialises a data set for a line in a Line Chart.
+    /// Initialises a data set for a line in a ranged line chart.
     /// - Parameters:
     ///   - dataPoints: Array of elements.
     ///   - legendTitle: Label for the data in legend.

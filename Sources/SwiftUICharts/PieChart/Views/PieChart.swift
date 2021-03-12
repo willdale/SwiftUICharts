@@ -24,6 +24,7 @@ import SwiftUI
  ```
  .touchOverlay(chartData: data)
  .infoBox(chartData: data)
+ .floatingInfoBox(chartData: data)
  .headerBox(chartData: data)
  .legends(chartData: data)
  ```

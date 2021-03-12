@@ -9,15 +9,6 @@ import SwiftUI
 
 /**
  Controlling for the look of the Grid
- 
- # Example
- ```
- GridStyle(numberOfLines: 7,
-           lineColour   : .gray,
-           lineWidth    : 1,
-           dash         : [8],
-           dashPhase    : 0)
- ```
  */
 public struct GridStyle {
     

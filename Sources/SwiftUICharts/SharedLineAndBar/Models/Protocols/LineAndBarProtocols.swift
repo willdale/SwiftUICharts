@@ -86,8 +86,6 @@ public protocol CTLineBarChartStyle: CTChartStyle {
      */
     var markerType : Mark { get set }
     
-    
-    
     /**
      Style of the vertical lines breaking up the chart.
      */
@@ -108,8 +106,10 @@ public protocol CTLineBarChartStyle: CTChartStyle {
      */
     var xAxisLabelsFrom: LabelsFrom { get set }
     
+    /**
+     Label to display next to the chart giving info about the axis.
+     */
     var xAxisTitle: String? { get set }
-    
     
     /**
      Style of the horizontal lines breaking up the chart.
@@ -131,6 +131,9 @@ public protocol CTLineBarChartStyle: CTChartStyle {
      */
     var yAxisNumberOfLabels: Int { get set }
     
+    /**
+     Label to display next to the chart giving info about the axis.
+     */
     var yAxisTitle: String? { get set }
     
     /**
@@ -158,6 +161,9 @@ public protocol CTLineBarDataPointProtocol: CTDataPointBaseProtocol {
 }
 
 extension CTLineBarDataPointProtocol {
+    /**
+     Unwarpped xAxisLabel
+     */
     var wrappedXAxisLabel : String {
         self.xAxisLabel ?? ""
     }

@@ -79,7 +79,9 @@ public protocol CTStandardBarChartDataSet: CTSingleDataSetProtocol {
  */
 public protocol CTMultiBarChartDataSet: CTSingleDataSetProtocol  {}
 
-
+/**
+ A protocol to extend functionality of `CTSingleDataSetProtocol` specifically for Ranged Bar Charts.
+ */
 public protocol CTRangedBarChartDataSet: CTStandardBarChartDataSet  {}
 
 
@@ -122,7 +124,6 @@ public protocol CTMultiBarDataPoint: CTBarDataPointBaseProtocol, CTStandardDataP
      For grouping data points together so they can be drawn in the correct groupings.
      */
     var group : GroupingData { get set }
-    
 }
 
 

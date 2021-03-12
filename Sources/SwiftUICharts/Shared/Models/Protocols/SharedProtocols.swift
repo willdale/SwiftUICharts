@@ -172,6 +172,7 @@ public protocol CTSingleDataSetProtocol: CTDataSetProtocol {
  Protocol for data sets that require a multiple sets of data .
  */
 public protocol CTMultiDataSetProtocol: CTDataSetProtocol {
+    
     /// A type representing a single data set -- `SingleDataSet`
     associatedtype DataSet: CTSingleDataSetProtocol
     

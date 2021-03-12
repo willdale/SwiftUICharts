@@ -24,11 +24,11 @@ import SwiftUI
  ```
  .touchOverlay(chartData: data)
  .infoBox(chartData: data)
+ .floatingInfoBox(chartData: data)
  .headerBox(chartData: data)
  .legends(chartData: data)
  ```
  */
-// .stroke -- REMOVE FORCE UNWRAP
 public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData {
     
     @ObservedObject var chartData: ChartData
@@ -68,4 +68,5 @@ public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData 
             self.startAnimation = false
         }
     }
+    
 }

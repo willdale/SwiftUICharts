@@ -9,12 +9,6 @@ import SwiftUI
 
 /**
  Model for controlling the overall aesthetic of the chart.
- 
- ```
- DoughnutChartStyle(infoBoxPlacement: .floating,
-                    globalAnimation: .linear(duration: 1),
-                    strokeWidth: 60)
- ```
  */
 public struct DoughnutChartStyle: CTDoughnutChartStyle {
         

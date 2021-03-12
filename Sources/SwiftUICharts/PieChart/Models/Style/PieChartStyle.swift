@@ -9,13 +9,6 @@ import SwiftUI
 
 /**
  Model for controlling the overall aesthetic of the chart.
- 
- ```
- PieChartStyle(infoBoxPlacement: .fixed,
-               infoBoxValueColour: Color.primary,
-               infoBoxDescriptionColour: Color(.systemBackground),
-               globalAnimation: .linear(duration: 1))
- ```
  */
 public struct PieChartStyle: CTPieChartStyle {
         
