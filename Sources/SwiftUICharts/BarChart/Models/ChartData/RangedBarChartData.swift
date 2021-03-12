@@ -92,10 +92,8 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)
                             }
-                            Text(data)
-                                .font(.caption)
+                            YAxisChartDataCell(chartData: self, label: data)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .lineLimit(1)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
                             if data != labelArray[labelArray.count-1] {
@@ -118,7 +116,9 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
         let xSection    : CGFloat   = chartSize.width / CGFloat(dataSets.dataPoints.count)
         let index       : Int       = Int((touchLocation.x) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
-            points.append(dataSets.dataPoints[index])
+            var dataPoint = dataSets.dataPoints[index]
+            dataPoint.legendTag = dataSets.legendTitle
+            points.append(dataPoint)
         }
         self.infoView.touchOverlayInfo = points
     }

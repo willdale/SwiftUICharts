@@ -95,10 +95,8 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
                         ForEach(labelArray, id: \.self) { data in
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
-                            Text(data)
-                                .font(.caption)
+                            YAxisChartDataCell(chartData: self, label: data)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .lineLimit(1)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
                             Spacer()
@@ -149,7 +147,9 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
             let xSubSection : CGFloat   = (xSection / CGFloat(dataSet.dataPoints.count))
             let subIndex    : Int       = Int((touchLocation.x - CGFloat((groupSpacing * CGFloat(superIndex)))) / xSubSection) - (dataSet.dataPoints.count * index)
             if subIndex >= 0 && subIndex < dataSet.dataPoints.count {
-                points.append(dataSet.dataPoints[subIndex])
+                var dataPoint = dataSet.dataPoints[subIndex]
+                dataPoint.legendTag = dataSet.setTitle
+                points.append(dataPoint)
             }
         }
         self.infoView.touchOverlayInfo = points

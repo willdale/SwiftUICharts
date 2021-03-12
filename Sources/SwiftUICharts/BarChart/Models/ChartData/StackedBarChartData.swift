@@ -146,10 +146,8 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
                         ForEach(labelArray, id: \.self) { data in
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
-                            Text(data)
-                                .font(.caption)
+                            YAxisChartDataCell(chartData: self, label: data)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .lineLimit(1)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
                             Spacer()
@@ -204,7 +202,9 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
              
              if let index = yIndex?.offset {
                  if index >= 0 && index < dataSet.dataPoints.count {
-                     points.append(dataSet.dataPoints[index])
+                    var dataPoint = dataSet.dataPoints[index]
+                    dataPoint.legendTag = dataSet.setTitle
+                    points.append(dataPoint)
                  }
              }
          }

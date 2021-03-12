@@ -113,15 +113,12 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
                 }
                 .padding(.horizontal, -4)
                 
-                
             case .chartData:
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
                         ForEach(labelArray, id: \.self) { data in
-                            Text(data)
-                                .font(.caption)
+                            YAxisChartDataCell(chartData: self, label: data)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .lineLimit(1)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
                             if data != labelArray[labelArray.count - 1] {
@@ -201,7 +198,9 @@ extension MultiLineChartData {
             let xSection    : CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
             let index       = Int((touchLocation.x + (xSection / 2)) / xSection)
             if index >= 0 && index < dataSet.dataPoints.count {
-                points.append(dataSet.dataPoints[index])
+                var dataPoint = dataSet.dataPoints[index]
+                dataPoint.legendTag = dataSet.legendTitle
+                points.append(dataPoint)
             }
         }
         self.infoView.touchOverlayInfo = points

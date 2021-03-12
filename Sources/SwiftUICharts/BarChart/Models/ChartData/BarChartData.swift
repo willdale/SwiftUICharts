@@ -76,8 +76,7 @@ public final class BarChartData: CTBarChartDataProtocol {
                             .frame(minWidth: 0, maxWidth: 500)
                     }
                 }
-                
-                
+
             case .chartData:
                 
                 if let labelArray = self.xAxisLabels {
@@ -85,10 +84,8 @@ public final class BarChartData: CTBarChartDataProtocol {
                         ForEach(labelArray, id: \.self) { data in
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
-                            Text(data)
-                                .font(.caption)
+                            YAxisChartDataCell(chartData: self, label: data)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .lineLimit(1)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
                             Spacer()
@@ -109,7 +106,9 @@ public final class BarChartData: CTBarChartDataProtocol {
         let xSection    : CGFloat   = chartSize.width / CGFloat(dataSets.dataPoints.count)
         let index       : Int       = Int((touchLocation.x) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
-            points.append(dataSets.dataPoints[index])
+            var dataPoint = dataSets.dataPoints[index]
+            dataPoint.legendTag = dataSets.legendTitle
+            points.append(dataPoint)
         }
         self.infoView.touchOverlayInfo = points
     }
@@ -129,14 +128,16 @@ public final class BarChartData: CTBarChartDataProtocol {
     public typealias CTStyle   = BarChartStyle
 }
 
-struct YAxisDataPointCell<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
+
+
+internal struct YAxisDataPointCell<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
     
     @ObservedObject var chartData : ChartData
     
     private let label : String
     private let rotationAngle : Angle
     
-    init(chartData: ChartData, label: String, rotationAngle : Angle) {
+    internal init(chartData: ChartData, label: String, rotationAngle : Angle) {
         self.chartData     = chartData
         self.label         = label
         self.rotationAngle = rotationAngle
@@ -144,7 +145,7 @@ struct YAxisDataPointCell<ChartData>: View where ChartData: CTLineBarChartDataPr
     
     @State private var width: CGFloat = 0
  
-    var body: some View {
+    internal var body: some View {
 
         Text(label)
             .font(.caption)
@@ -162,6 +163,39 @@ struct YAxisDataPointCell<ChartData>: View where ChartData: CTLineBarChartDataPr
             .frame(width: 10, height: width)
             .onAppear {
                 chartData.viewData.xAxisLabelHeights.append(width)
+            }
+
+    }
+}
+
+internal struct YAxisChartDataCell<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
+    
+    @ObservedObject var chartData : ChartData
+    
+    private let label : String
+    
+    internal init(chartData: ChartData, label: String) {
+        self.chartData     = chartData
+        self.label         = label
+    }
+    
+    @State private var height: CGFloat = 0
+ 
+    internal var body: some View {
+
+        Text(label)
+            .font(.caption)
+            .lineLimit(1)
+            .overlay(
+                GeometryReader { geo in
+                    Color.clear
+                        .onAppear {
+                            self.height = geo.frame(in: .local).height
+                        }
+                }
+            )
+            .onAppear {
+                chartData.viewData.xAxisLabelHeights.append(height)
             }
 
     }
