@@ -42,8 +42,7 @@ internal struct FloatingInfoBox<T>: ViewModifier where T: CTChartData {
             .position(x: chartData.setBoxLocationation(touchLocation: chartData.infoView.touchLocation.x,
                                              boxFrame     : boxFrame,
                                              chartSize    : chartData.infoView.chartSize),
-                      y: 35)
-            .frame(height: 70)
+                      y: boxFrame.midY - 10)
             .padding(.horizontal, 6)
             .zIndex(1)
     }

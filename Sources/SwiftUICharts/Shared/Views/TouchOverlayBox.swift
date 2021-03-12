@@ -49,6 +49,10 @@ internal struct TouchOverlayBox<T: CTChartData>: View {
                 if chartData.infoView.isTouchCurrent {
                     RoundedRectangle(cornerRadius: 5.0, style: .continuous)
                         .fill(chartData.chartStyle.infoBoxBackgroundColour)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 5.0, style: .continuous)
+                                    .stroke(chartData.chartStyle.infoBoxBorderColour, style: chartData.chartStyle.infoBoxBorderStyle)
+                            )
                         .onAppear {
                             self.boxFrame = geo.frame(in: .local)
                         }

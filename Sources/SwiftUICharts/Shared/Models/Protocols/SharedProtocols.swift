@@ -265,7 +265,19 @@ public protocol CTChartStyle {
      */
     var infoBoxDescriptionColour: Color { get set }
     
-    var infoBoxBackgroundColour : Color { get set }
+    /**
+     Colour of the background of the touch info.
+     */
+    var infoBoxBackgroundColour: Color { get set }
+    
+    /**
+     Border colour of the touch info.
+     */
+    var infoBoxBorderColour: Color { get set }
+    /**
+     Border style of the touch info.
+     */
+    var infoBoxBorderStyle: StrokeStyle { get set }
     
     /**
      Global control of animations.

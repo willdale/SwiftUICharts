@@ -20,6 +20,8 @@ public struct BarChartStyle: CTBarChartStyle {
     public var infoBoxValueColour      : Color
     public var infoBoxDescriptionColour: Color
     public var infoBoxBackgroundColour : Color
+    public var infoBoxBorderColour      : Color
+    public var infoBoxBorderStyle       : StrokeStyle
     
     public var markerType              : BarMarkerType
     
@@ -47,6 +49,8 @@ public struct BarChartStyle: CTBarChartStyle {
     ///   - infoBoxValueColour: Colour of the value part of the touch info.
     ///   - infoBoxDescriptionColour: Colour of the description part of the touch info.
     ///   - infoBoxBackgroundColour: Background colour of touch info.
+    ///   - infoBoxBorderColour: Border colour of the touch info.
+    ///   - infoBoxBorderStyle: Border style of the touch info.
     ///
     ///   - markerType: Where the marker lines come from to meet at a specified point.
     ///
@@ -70,6 +74,8 @@ public struct BarChartStyle: CTBarChartStyle {
                 infoBoxValueColour      : Color             = Color.primary,
                 infoBoxDescriptionColour: Color             = Color.primary,
                 infoBoxBackgroundColour : Color             = Color.systemsBackground,
+                infoBoxBorderColour     : Color             = Color.clear,
+                infoBoxBorderStyle      : StrokeStyle       = StrokeStyle(lineWidth: 0),
                 
                 markerType          : BarMarkerType         = .full,
                 
@@ -94,6 +100,8 @@ public struct BarChartStyle: CTBarChartStyle {
         self.infoBoxValueColour       = infoBoxValueColour
         self.infoBoxDescriptionColour = infoBoxDescriptionColour
         self.infoBoxBackgroundColour  = infoBoxBackgroundColour
+        self.infoBoxBorderColour      = infoBoxBorderColour
+        self.infoBoxBorderStyle       = infoBoxBorderStyle
         
         self.markerType          = markerType
         

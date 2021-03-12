@@ -156,6 +156,21 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
                     }
                 }
             }
+            HStack {
+                ForEach(dataSets.dataSets) { dataSet in
+                    HStack(spacing: 0) {
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                        YAxisDataPointCell(chartData: self, label: dataSet.setTitle, rotationAngle: .degrees(0))
+                            .foregroundColor(self.chartStyle.xAxisLabelColour)
+                            .accessibilityLabel(Text("X Axis Label"))
+                            .accessibilityValue(Text("\(dataSet.setTitle)"))
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                    }
+                }
+            }
+            .padding(.horizontal, -4)
         }
     }
     // MARK:  Touch

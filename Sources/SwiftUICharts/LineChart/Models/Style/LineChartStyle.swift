@@ -15,12 +15,14 @@ import SwiftUI
  */
 public struct LineChartStyle: CTLineChartStyle {
     
-    public var infoBoxPlacement        : InfoBoxPlacement
-    public var infoBoxValueColour      : Color
-    public var infoBoxDescriptionColour: Color
-    public var infoBoxBackgroundColour : Color
+    public var infoBoxPlacement         : InfoBoxPlacement
+    public var infoBoxValueColour       : Color
+    public var infoBoxDescriptionColour : Color
+    public var infoBoxBackgroundColour  : Color
+    public var infoBoxBorderColour      : Color
+    public var infoBoxBorderStyle       : StrokeStyle
     
-    public var markerType              : LineMarkerType
+    public var markerType               : LineMarkerType
         
     public var xAxisGridStyle       : GridStyle
     public var xAxisLabelPosition   : XAxisLabelPosistion
@@ -45,6 +47,8 @@ public struct LineChartStyle: CTLineChartStyle {
     ///   - infoBoxValueColour: Colour of the value part of the touch info.
     ///   - infoBoxDescriptionColour: Colour of the description part of the touch info.
     ///   - infoBoxBackgroundColour: Background colour of touch info.
+    ///   - infoBoxBorderColour: Border colour of the touch info.
+    ///   - infoBoxBorderStyle: Border style of the touch info.
     ///
     ///   - markerType: Where the marker lines come from to meet at a specified point.
     ///
@@ -68,6 +72,8 @@ public struct LineChartStyle: CTLineChartStyle {
                 infoBoxValueColour      : Color             = Color.primary,
                 infoBoxDescriptionColour: Color             = Color.primary,
                 infoBoxBackgroundColour : Color             = Color.systemsBackground,
+                infoBoxBorderColour     : Color             = Color.clear,
+                infoBoxBorderStyle      : StrokeStyle       = StrokeStyle(lineWidth: 0),
                 
                 markerType              : LineMarkerType    = .indicator(style: DotStyle()),
                 
@@ -92,6 +98,8 @@ public struct LineChartStyle: CTLineChartStyle {
         self.infoBoxValueColour       = infoBoxValueColour
         self.infoBoxDescriptionColour = infoBoxDescriptionColour
         self.infoBoxBackgroundColour  = infoBoxBackgroundColour
+        self.infoBoxBorderColour      = infoBoxBorderColour
+        self.infoBoxBorderStyle       = infoBoxBorderStyle
         
         self.markerType          = markerType
         
