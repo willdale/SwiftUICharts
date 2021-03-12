@@ -83,7 +83,9 @@ extension PieChartData {
                 
         let dataPoint = self.dataSets.dataPoints.first(where: { $0.startAngle * Double(180 / Double.pi) <= Double(touchDegree) && ($0.startAngle * Double(180 / Double.pi)) + ($0.amount * Double(180 / Double.pi)) >= Double(touchDegree) } )
         if let data = dataPoint {
-            points.append(data)
+            var finalDataPoint = data
+            finalDataPoint.legendTag = dataSets.legendTitle
+            points.append(finalDataPoint)
         }
         self.infoView.touchOverlayInfo = points
     }
