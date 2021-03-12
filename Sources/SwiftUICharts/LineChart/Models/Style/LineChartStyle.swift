@@ -35,6 +35,8 @@ public struct LineChartStyle: CTLineChartStyle {
     public var infoBoxPlacement        : InfoBoxPlacement
     public var infoBoxValueColour      : Color
     public var infoBoxDescriptionColour: Color
+    public var infoBoxBackgroundColour : Color
+    
     public var markerType              : LineMarkerType
         
     public var xAxisGridStyle       : GridStyle
@@ -59,6 +61,7 @@ public struct LineChartStyle: CTLineChartStyle {
     ///   - infoBoxPlacement: Placement of the information box that appears on touch input.
     ///   - infoBoxValueColour: Colour of the value part of the touch info.
     ///   - infoBoxDescriptionColour: Colour of the description part of the touch info.
+    ///   - infoBoxBackgroundColour: Background colour of touch info.
     ///
     ///   - markerType: Where the marker lines come from to meet at a specified point.
     ///
@@ -79,6 +82,7 @@ public struct LineChartStyle: CTLineChartStyle {
     public init(infoBoxPlacement        : InfoBoxPlacement  = .floating,
                 infoBoxValueColour      : Color             = Color.primary,
                 infoBoxDescriptionColour: Color             = Color.primary,
+                infoBoxBackgroundColour : Color             = Color.systemsBackground,
                 
                 markerType              : LineMarkerType    = .indicator(style: DotStyle()),
                 
@@ -102,6 +106,7 @@ public struct LineChartStyle: CTLineChartStyle {
         self.infoBoxPlacement         = infoBoxPlacement
         self.infoBoxValueColour       = infoBoxValueColour
         self.infoBoxDescriptionColour = infoBoxDescriptionColour
+        self.infoBoxBackgroundColour  = infoBoxBackgroundColour
         
         self.markerType          = markerType
         
