@@ -63,6 +63,19 @@ import SwiftUICharts
 
 ### Chart Types
 
+- [Line Chart](#Line-Chart)
+- [Filled Line Chart](#Filled-Line-Chart)
+- [Multi Line Chart](#Multi-Line-Chart)
+- [Ranged Line Chart](#Ranged-Line-Chart)
+
+- [Bar Chart](#Bar-Chart)
+- [Ranged Bar Chart](#Ranged-Bar-Chart)
+- [Grouped Bar Chart](#Grouped-Bar-Chart)
+- [Stacked Bar Chart](#Stacked-Bar-Chart)
+
+- [Pie Chart](#Pie-Chart)
+- [Doughnut Chart](#Doughnut-Chart)
+
 #### Line Chart
 
 Uses `LineChartData` data model.
@@ -184,7 +197,6 @@ DoughnutChart(chartData: DoughnutChartData)
 
 ## View Modifiers
 
-[View Modifiers](#View-Modifiers) 
 - [Touch Overlay](#Touch-Overlay)
 - [Info Box](#Info-Box) 
 - [Floating Info Box](#Floating-Info-Box) 
@@ -407,7 +419,7 @@ Setup within `Data Set -> PointStyle`.
 
 ### Line Chart
 
-```Swift
+```swift
 struct LineChartDemoView: View {
     
     let data : LineChartData = weekOfData()
