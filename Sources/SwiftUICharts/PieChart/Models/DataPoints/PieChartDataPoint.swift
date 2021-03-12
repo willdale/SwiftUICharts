@@ -46,3 +46,16 @@ public struct PieChartDataPoint: CTPieDataPoint {
         self.colour      = colour
     }
 }
+
+
+extension PieChartDataPoint {
+    // Remove legend tag from compare
+    public static func == (left: PieChartDataPoint, right: PieChartDataPoint) -> Bool {
+        return (left.id == right.id) &&
+            (left.amount == right.amount) &&
+            (left.startAngle == right.startAngle) &&
+            (left.value == right.value) &&
+            (left.date == right.date) &&
+            (left.description == right.description)
+        }
+}
