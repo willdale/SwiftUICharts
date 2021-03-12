@@ -7,14 +7,8 @@
 
 import SwiftUI
 
-//MARK: - Line
 /**
- Model for controlling the colours of `Stroke`.
- 
- # Example
- ```
- ColourStyle(colour: .red)
- ```
+ Model for setting up colour styling.
  */
 public struct ColourStyle: CTColourStyle, Hashable {
     

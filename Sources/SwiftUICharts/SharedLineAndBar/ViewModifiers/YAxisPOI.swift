@@ -177,34 +177,37 @@ extension View {
      # Available for:
      - Line Chart
      - Multi Line Chart
+     - Filled Line Chart
+     - Ranged Line Chart
      - Bar Chart
      - Grouped Bar Chart
      - Stacked Bar Chart
+     - Ranged Bar Chart
      
      # Unavailable for:
      - Pie Chart
      - Doughnut Chart
-     - Multi Layer Pie Chart
      
      - Parameters:
         - chartData: Chart data model.
         - markerName: Title of marker, for the legend.
         - markerValue: Value to mark
         - labelPosition: Option to display the markers’ value inline with the marker.
-        - labelColour: Colour of the`Text`.
+        - labelColour: Colour of the `Text`.
         - labelBackground: Colour of the background.
         - lineColour: Line Colour.
         - strokeStyle: Style of Stroke.
      - Returns: A  new view containing the chart with a marker line at a specified value.
-    */
-    public func yAxisPOI<T:CTLineBarChartDataProtocol>(chartData      : T,
-                                                markerName     : String,
-                                                markerValue    : Double,
-                                                labelPosition  : DisplayValue = .center(specifier: "%.0f"),
-                                                labelColour    : Color        = Color.primary,
-                                                labelBackground: Color        = Color.systemsBackground,
-                                                lineColour     : Color        = Color(.blue),
-                                                strokeStyle    : StrokeStyle  = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
+     */
+    public func yAxisPOI<T:CTLineBarChartDataProtocol>(
+        chartData      : T,
+        markerName     : String,
+        markerValue    : Double,
+        labelPosition  : DisplayValue = .center(specifier: "%.0f"),
+        labelColour    : Color        = Color.primary,
+        labelBackground: Color        = Color.systemsBackground,
+        lineColour     : Color        = Color(.blue),
+        strokeStyle    : StrokeStyle  = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
     ) -> some View {
         self.modifier(YAxisPOI(chartData      : chartData,
                                markerName     : markerName,
@@ -219,7 +222,7 @@ extension View {
     
     
     /**
-     Horizontal line marking the average
+     Horizontal line marking the average.
      
      Shows a marker line at the average of all the data points within
      the relevant data set(s).
@@ -246,20 +249,22 @@ extension View {
      # Available for:
      - Line Chart
      - Multi Line Chart
+     - Filled Line Chart
+     - Ranged Line Chart
      - Bar Chart
      - Grouped Bar Chart
      - Stacked Bar Chart
+     - Ranged Bar Chart
      
      # Unavailable for:
      - Pie Chart
      - Doughnut Chart
-     - Multi Layer Pie Chart
      
      - Parameters:
         - chartData: Chart data model.
         - markerName: Title of marker, for the legend.
         - labelPosition: Option to display the markers’ value inline with the marker.
-        - labelColour: Colour of the`Text`.
+        - labelColour: Colour of the `Text`.
         - labelBackground: Colour of the background.
         - lineColour: Line Colour.
         - strokeStyle: Style of Stroke.
@@ -267,13 +272,14 @@ extension View {
      
     - Tag: AverageLine
     */
-    public func averageLine<T:CTLineBarChartDataProtocol>(chartData      : T,
-                                                   markerName     : String        = "Average",
-                                                   labelPosition  : DisplayValue  = .yAxis(specifier: "%.0f"),
-                                                   labelColour    : Color         = Color.primary,
-                                                   labelBackground: Color         = Color.systemsBackground,
-                                                   lineColour     : Color         = Color.primary,
-                                                   strokeStyle    : StrokeStyle   = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
+    public func averageLine<T:CTLineBarChartDataProtocol>(
+        chartData      : T,
+        markerName     : String        = "Average",
+        labelPosition  : DisplayValue  = .yAxis(specifier: "%.0f"),
+        labelColour    : Color         = Color.primary,
+        labelBackground: Color         = Color.systemsBackground,
+        lineColour     : Color         = Color.primary,
+        strokeStyle    : StrokeStyle   = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
     ) -> some View {
         self.modifier(YAxisPOI(chartData      : chartData,
                                markerName     : markerName,

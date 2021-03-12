@@ -8,14 +8,7 @@
 import SwiftUI
 
 /**
- Model for controlling the aesthetic of the line chart.
- 
- # Example
- ```
- LineStyle(colour     : .red,
-           lineType   : .curvedLine,
-           strokeStyle: Stroke(lineWidth: 2))
- ```
+ Model for controlling the styling for individual lines.
  */
 public struct LineStyle: CTLineStyle, Hashable {
         
@@ -32,8 +25,7 @@ public struct LineStyle: CTLineStyle, Hashable {
     */
     public var ignoreZero  : Bool
         
-    // MARK: - Single colour
-    /// Single Colour
+    /// Style of the line.
     /// - Parameters:
     ///   - lineColour: Colour styling of the line.
     ///   - lineType: Drawing style of the line

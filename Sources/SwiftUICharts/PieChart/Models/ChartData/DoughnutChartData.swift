@@ -11,23 +11,6 @@ import SwiftUI
  Data for drawing and styling a doughnut chart.
  
  This model contains the data and styling information for a doughnut chart.
- 
- # Example
- ```
- static func makeData() -> DoughnutChartData {
-     let data = PieDataSet(dataPoints: [PieChartDataPoint(value: 7, pointDescription: "One",   colour: .blue),
-                                        PieChartDataPoint(value: 2, pointDescription: "Two",   colour: .red),
-                                        PieChartDataPoint(value: 9, pointDescription: "Three", colour: .purple),
-                                        PieChartDataPoint(value: 6, pointDescription: "Four",  colour: .green),
-                                        PieChartDataPoint(value: 4, pointDescription: "Five",  colour: .orange)],
-                           legendTitle: "Data")
- 
-     return DoughnutChartData(dataSets: data,
-                              metadata: ChartMetadata(title: "Pie", subtitle: "mmm doughnuts"),
-                              chartStyle: DoughnutChartStyle(infoBoxPlacement: .header),
-                              noDataText: Text("No Data"))
- }
- ```
  */
 public final class DoughnutChartData: CTDoughnutChartDataProtocol {
 
@@ -43,7 +26,7 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol {
     public final var chartType : (chartType: ChartType, dataSetType: DataSetType)
     
     // MARK: Initializer
-    /// Initialises a Doughnut Chart.
+    /// Initialises Doughnut Chart data.
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the chart.
@@ -82,7 +65,9 @@ extension DoughnutChartData {
                 
         let dataPoint = self.dataSets.dataPoints.first(where: { $0.startAngle * Double(180 / Double.pi) <= Double(touchDegree) && ($0.startAngle * Double(180 / Double.pi)) + ($0.amount * Double(180 / Double.pi)) >= Double(touchDegree) } )
         if let data = dataPoint {
-            points.append(data)
+            var finalDataPoint = data
+            finalDataPoint.legendTag = dataSets.legendTitle
+            points.append(finalDataPoint)
         }
         self.infoView.touchOverlayInfo = points
     }

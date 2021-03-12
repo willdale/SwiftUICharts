@@ -17,13 +17,13 @@ internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
         
     internal init(chartData : T,
                   specifier : String,
-                  unit      : Unit
+                  unit      : TouchUnit
     ) {
         self.chartData = chartData
         self.chartData.infoView.touchSpecifier = specifier
         self.chartData.infoView.touchUnit = unit
     }
-    
+        
     internal func body(content: Content) -> some View {
         Group {
             if chartData.isGreaterThanTwo() {
@@ -61,11 +61,14 @@ extension View {
      Adds an overlay to detect touch and display the relivent information from the nearest data point.
      
      - Requires:
-     If  LineChartStyle --> infoBoxPlacement is set to .header
+     If  ChartStyle --> infoBoxPlacement is set to .header
      then `.headerBox` is required.
      
-     If  LineChartStyle --> infoBoxPlacement is set to .fixed or . floating
+     If  ChartStyle --> infoBoxPlacement is set to .infoBox
      then `.infoBox` is required.
+     
+     If  ChartStyle --> infoBoxPlacement is set to .floating
+     then `.floatingInfoBox` is required.
      
      - Attention:
      Unavailable in tvOS
@@ -73,11 +76,12 @@ extension View {
      - Parameters:
         - chartData: Chart data model.
         - specifier: Decimal precision for labels.
+        - unit: Unit to put before or after the value.
      - Returns: A  new view containing the chart with a touch overlay.
      */
     public func touchOverlay<T: CTChartData>(chartData: T,
                                              specifier: String = "%.0f",
-                                             unit     : Unit = .none
+                                             unit     : TouchUnit = .none
     ) -> some View {
         self.modifier(TouchOverlay(chartData: chartData,
                                    specifier: specifier,
@@ -92,7 +96,7 @@ extension View {
      */
     public func touchOverlay<T: CTChartData>(chartData: T,
                                              specifier: String = "%.0f",
-                                             unit     : Unit
+                                             unit     : TouchUnit
     ) -> some View {
         self.modifier(EmptyModifier())
     }

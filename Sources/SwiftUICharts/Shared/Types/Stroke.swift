@@ -41,7 +41,7 @@ public struct Stroke: Hashable, Identifiable {
 
 extension Stroke {
     /// Convert `Stroke` to `StrokeStyle`
-    func strokeToStrokeStyle() -> StrokeStyle {
+   internal func strokeToStrokeStyle() -> StrokeStyle {
         StrokeStyle(lineWidth : self.lineWidth,
                     lineCap   : self.lineCap,
                     lineJoin  : self.lineJoin,
@@ -53,7 +53,7 @@ extension Stroke {
 
 extension StrokeStyle {
     /// Convert `StrokeStyle` to `Stroke`
-    func toStroke() -> Stroke {
+    internal func toStroke() -> Stroke {
         Stroke(lineWidth : self.lineWidth,
                lineCap   : self.lineCap,
                lineJoin  : self.lineJoin,

@@ -28,9 +28,8 @@ public protocol CTChartData: ObservableObject, Identifiable {
     /// A type representing the chart style. -- `CTChartStyle`
     associatedtype CTStyle: CTChartStyle
     
-    /// A type representing opaque View
+    /// A type representing a view for the results of the touch interaction.
     associatedtype Touch: View
-    
     
     var id: ID { get }
     
@@ -123,50 +122,36 @@ public protocol CTChartData: ObservableObject, Identifiable {
     */
     func getPointLocation(dataSet: SetPoint, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint?
     
-    associatedtype TouchInformation: View
-    
-    func headerTouchOverlaySubView(info: DataPoint) -> TouchInformation
 }
-
-extension CTChartData where Self.DataPoint : CTStandardDataPointProtocol {
-    public func headerTouchOverlaySubView(info: Self.DataPoint) -> some View {
-        Group {
-            switch self.infoView.touchUnit {
-            case .none:
-                Text("\(info.value, specifier: self.infoView.touchSpecifier)")
-                    .font(.title3)
-                    .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.pointDescription ?? "")")
-                    .font(.subheadline)
-                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
-            case .prefix(of: let unit):
-                Text("\(unit) \(info.value, specifier: self.infoView.touchSpecifier)")
-                    .font(.title3)
-                    .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.pointDescription ?? "")")
-                    .font(.subheadline)
-                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
-            case .suffix(of: let unit):
-                Text("\(info.value, specifier: self.infoView.touchSpecifier) \(unit)")
-                    .font(.title3)
-                    .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.pointDescription ?? "")")
-                    .font(.subheadline)
-                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
-            }
-        }
-    }
-}
-
-
-
 
 // MARK: - Data Sets
 /**
  Main protocol to set conformace for types of Data Sets.
  */
 public protocol CTDataSetProtocol: Hashable, Identifiable {
-    var id : ID { get }
+    var id: ID { get }
+    
+    /**
+     Returns the highest value in the data set.
+     - Parameter dataSet: Target data set.
+     - Returns: Highest value in data set.
+     */
+    func maxValue() -> Double
+    
+    /**
+     Returns the lowest value in the data set.
+     - Parameter dataSet: Target data set.
+     - Returns: Lowest value in data set.
+     */
+    func minValue() -> Double
+    
+    /**
+     Returns the average value from the data set.
+     - Parameter dataSet: Target data set.
+     - Returns: Average of values in data set.
+     */
+    func average() -> Double
+ 
 }
 
 /**
@@ -174,12 +159,12 @@ public protocol CTDataSetProtocol: Hashable, Identifiable {
  */
 public protocol CTSingleDataSetProtocol: CTDataSetProtocol {
     /// A type representing a data point. -- `CTChartDataPoint`
-    associatedtype DataPoint : CTDataPointBaseProtocol
+    associatedtype DataPoint: CTDataPointBaseProtocol
     
     /**
      Array of data points.
      */
-    var dataPoints  : [DataPoint] { get set }
+    var dataPoints: [DataPoint] { get set }
 
 }
 
@@ -187,13 +172,14 @@ public protocol CTSingleDataSetProtocol: CTDataSetProtocol {
  Protocol for data sets that require a multiple sets of data .
  */
 public protocol CTMultiDataSetProtocol: CTDataSetProtocol {
+    
     /// A type representing a single data set -- `SingleDataSet`
-    associatedtype DataSet : CTSingleDataSetProtocol
+    associatedtype DataSet: CTSingleDataSetProtocol
     
     /**
      Array of single data sets.
      */
-    var dataSets : [DataSet] { get set }
+    var dataSets: [DataSet] { get set }
 }
 
 
@@ -205,7 +191,7 @@ public protocol CTMultiDataSetProtocol: CTDataSetProtocol {
  Protocol to set base configuration for data points.
  */
 public protocol CTDataPointBaseProtocol: Hashable, Identifiable {
-    var id               : ID { get }
+    var id: ID { get }
     
     /**
      A label that can be displayed on touch input
@@ -213,12 +199,22 @@ public protocol CTDataPointBaseProtocol: Hashable, Identifiable {
      It can be displayed in a floating box that tracks the users input location
      or placed in the header.
     */
-    var pointDescription : String? { get set }
+    var description: String? { get set }
     
     /**
      Date can be used for optionally performing additional calculations.
      */
-    var date             : Date? { get set }
+    var date: Date? { get set }
+    
+    var legendTag : String { get set }
+    
+    /**
+     Gets the relevant value(s) from the data point.
+
+     - Parameter specifier: Specifier
+     - Returns: Value as a string.
+     */
+    func valueAsString(specifier: String) -> String
 }
 
 /**
@@ -229,7 +225,7 @@ public protocol CTStandardDataPointProtocol: CTDataPointBaseProtocol {
     /**
      Value of the data point
      */
-    var value            : Double { get set }
+    var value: Double { get set }
 }
 
 /**
@@ -238,10 +234,10 @@ public protocol CTStandardDataPointProtocol: CTDataPointBaseProtocol {
  */
 public protocol CTRangeDataPointProtocol: CTDataPointBaseProtocol {
     /// Value of the upper range of the data point.
-    var upperValue : Double { get set }
+    var upperValue: Double { get set }
     
     /// Value of the lower range of the data point.
-    var lowerValue : Double { get set }
+    var lowerValue: Double { get set }
 }
 
 
@@ -257,17 +253,31 @@ public protocol CTChartStyle {
     /**
      Placement of the information box that appears on touch input.
      */
-    var infoBoxPlacement        : InfoBoxPlacement { get set }
+    var infoBoxPlacement: InfoBoxPlacement { get set }
     
     /**
      Colour of the value part of the touch info.
      */
-    var infoBoxValueColour      : Color { get set }
+    var infoBoxValueColour: Color { get set }
     
     /**
      Colour of the description part of the touch info.
      */
-    var infoBoxDescriptionColour : Color { get set }
+    var infoBoxDescriptionColour: Color { get set }
+    
+    /**
+     Colour of the background of the touch info.
+     */
+    var infoBoxBackgroundColour: Color { get set }
+    
+    /**
+     Border colour of the touch info.
+     */
+    var infoBoxBorderColour: Color { get set }
+    /**
+     Border style of the touch info.
+     */
+    var infoBoxBorderStyle: StrokeStyle { get set }
     
     /**
      Global control of animations.

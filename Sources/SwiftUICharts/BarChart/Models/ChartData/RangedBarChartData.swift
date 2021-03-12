@@ -51,7 +51,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
         self.legends        = [LegendData]()
         self.viewData       = ChartViewData()
         self.chartType      = (.bar, .single)
-//        self.setupLegends()
+        self.setupLegends()
     }
     
     public final var average  : Double {
@@ -68,19 +68,16 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
     public final func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint:
+            case .dataPoint(let angle):
 
                 HStack(spacing: 0) {
                     ForEach(dataSets.dataPoints) { data in
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
-                        Text(data.xAxisLabel ?? "")
-                            .font(.caption)
+                        YAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
                             .foregroundColor(self.chartStyle.xAxisLabelColour)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.5)
-                            .accessibilityLabel( Text("X Axis Label"))
-                            .accessibilityValue(Text("\(data.xAxisLabel ?? "")"))
+                            .accessibilityLabel(Text("X Axis Label"))
+                            .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
                     }
@@ -95,12 +92,9 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)
                             }
-                            Text(data)
-                                .font(.caption)
+                            YAxisChartDataCell(chartData: self, label: data)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
-                                .accessibilityLabel( Text("X Axis Label"))
+                                .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
                             if data != labelArray[labelArray.count-1] {
                                 Spacer()
@@ -122,7 +116,9 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
         let xSection    : CGFloat   = chartSize.width / CGFloat(dataSets.dataPoints.count)
         let index       : Int       = Int((touchLocation.x) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
-            points.append(dataSets.dataPoints[index])
+            var dataPoint = dataSets.dataPoints[index]
+            dataPoint.legendTag = dataSets.legendTitle
+            points.append(dataPoint)
         }
         self.infoView.touchOverlayInfo = points
     }
@@ -138,33 +134,6 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
         }
         return nil
     }
-    public final func headerTouchOverlaySubView(info: RangedBarDataPoint) -> some View {
-        Group {
-            switch self.infoView.touchUnit {
-            case .none:
-                Text("\(info.lowerValue, specifier: self.infoView.touchSpecifier) - \(info.upperValue, specifier: self.infoView.touchSpecifier)")
-                    .font(.subheadline)
-                    .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.pointDescription ?? "")")
-                    .font(.subheadline)
-                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
-            case .prefix(of: let unit):
-                Text("\(unit) \(info.lowerValue, specifier: self.infoView.touchSpecifier) - \(info.upperValue, specifier: self.infoView.touchSpecifier)")
-                    .font(.subheadline)
-                    .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.pointDescription ?? "")")
-                    .font(.subheadline)
-                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
-            case .suffix(of: let unit):
-                Text("\(info.lowerValue, specifier: self.infoView.touchSpecifier) - \(info.upperValue, specifier: self.infoView.touchSpecifier) \(unit)")
-                    .font(.subheadline)
-                    .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.pointDescription ?? "")")
-                    .font(.subheadline)
-                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
-            }
-        }
-    }
 
     public typealias Set            = RangedBarDataSet
     public typealias DataPoint      = RangedBarDataPoint
@@ -177,8 +146,4 @@ extension RangedBarChartData {
         let value = CGFloat((dataPoint.upperValue + dataPoint.lowerValue) / 2) - CGFloat(self.minValue)
         return (height - (value / CGFloat(self.range)) * height)
      }
-    
-    final func getCellAccessibilityValue(dataPoint: RangedBarDataPoint) -> Text {
-        Text("\(dataPoint.lowerValue, specifier: self.infoView.touchSpecifier) - \(dataPoint.upperValue, specifier: self.infoView.touchSpecifier), \(dataPoint.pointDescription ?? "")")
-    }
 }

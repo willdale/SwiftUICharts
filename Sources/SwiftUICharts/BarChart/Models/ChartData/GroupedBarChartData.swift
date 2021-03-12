@@ -11,69 +11,6 @@ import SwiftUI
  Data model for drawing and styling a Grouped Bar Chart.
   
  The grouping data informs the model as to how the datapoints are linked.
- 
- # Example
- ```
- static func makeData() -> GroupedBarChartData {
-
-     enum Group {
-         case one
-         case two
-         case three
-         case four
-         
-         var data : GroupingData {
-             switch self {
-             case .one:
-                 return GroupingData(title: "One"  , colour: .blue)
-             case .two:
-                 return GroupingData(title: "Two"  , colour: .red)
-             case .three:
-                 return GroupingData(title: "Three", colour: .yellow)
-             case .four:
-                 return GroupingData(title: "Four" , colour: .green)
-             }
-         }
-     }
-     
-     let groups : [GroupingData] = [Group.one.data, Group.two.data, Group.three.data, Group.four.data]
-
-     let data = MultiBarDataSets(dataSets: [
-         MultiBarDataSet(dataPoints: [
-             MultiBarChartDataPoint(value: 10, xAxisLabel: "1.1", pointLabel: "One One"    , group: Group.one.data),
-             MultiBarChartDataPoint(value: 50, xAxisLabel: "1.2", pointLabel: "One Two"    , group: Group.two.data),
-             MultiBarChartDataPoint(value: 30, xAxisLabel: "1.3", pointLabel: "One Three"  , group: Group.three.data),
-             MultiBarChartDataPoint(value: 40, xAxisLabel: "1.4", pointLabel: "One Four"   , group: Group.four.data)
-         ]),
-         
-         MultiBarDataSet(dataPoints: [
-             MultiBarChartDataPoint(value: 20, xAxisLabel: "2.1", pointLabel: "Two One"    , group: Group.one.data),
-             MultiBarChartDataPoint(value: 60, xAxisLabel: "2.2", pointLabel: "Two Two"    , group: Group.two.data),
-             MultiBarChartDataPoint(value: 40, xAxisLabel: "2.3", pointLabel: "Two Three"  , group: Group.three.data),
-             MultiBarChartDataPoint(value: 60, xAxisLabel: "2.3", pointLabel: "Two Four"   , group: Group.four.data)
-         ]),
-         
-         MultiBarDataSet(dataPoints: [
-             MultiBarChartDataPoint(value: 30, xAxisLabel: "3.1", pointLabel: "Three One"  , group: Group.one.data),
-             MultiBarChartDataPoint(value: 70, xAxisLabel: "3.2", pointLabel: "Three Two"  , group: Group.two.data),
-             MultiBarChartDataPoint(value: 30, xAxisLabel: "3.3", pointLabel: "Three Three", group: Group.three.data),
-             MultiBarChartDataPoint(value: 90, xAxisLabel: "3.4", pointLabel: "Three Four" , group: Group.four.data)
-         ]),
-         
-         MultiBarDataSet(dataPoints: [
-             MultiBarChartDataPoint(value: 40, xAxisLabel: "4.1", pointLabel: "Four One"   , group: Group.one.data),
-             MultiBarChartDataPoint(value: 80, xAxisLabel: "4.2", pointLabel: "Four Two"   , group: Group.two.data),
-             MultiBarChartDataPoint(value: 20, xAxisLabel: "4.3", pointLabel: "Four Three" , group: Group.three.data),
-             MultiBarChartDataPoint(value: 50, xAxisLabel: "4.3", pointLabel: "Four Four"  , group: Group.four.data)
-         ])
-     ])
-     
-     return GroupedBarChartData(dataSets    : data,
-                                groups      : groups,
-                                metadata    : ChartMetadata(title: "Hello", subtitle: "Bob"),
-                                chartStyle  : BarChartStyle(infoBoxPlacement: .floating,
-                                                            xAxisLabelsFrom : .dataPoint))
- }
  ```
  */
 public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
@@ -130,22 +67,19 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     
     // MARK: Labels
     public final func getXAxisLabels() -> some View {
-        Group {
+        VStack {
             switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint:
+            case .dataPoint(let angle):
                 HStack(spacing: self.groupSpacing) {
                     ForEach(dataSets.dataSets) { dataSet in
                         HStack(spacing: 0) {
                             ForEach(dataSet.dataPoints) { data in
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)
-                                Text(data.xAxisLabel ?? "")
-                                    .font(.caption)
+                                YAxisDataPointCell(chartData: self, label: data.group.title, rotationAngle: angle)
                                     .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.5)
-                                    .accessibilityLabel( Text("XAxisLabel"))
-                                    .accessibilityValue(Text("\(data.xAxisLabel ?? "")"))
+                                    .accessibilityLabel(Text("X Axis Label"))
+                                    .accessibilityValue(Text("\(data.group.title)"))
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)
                             }
@@ -161,12 +95,9 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
                         ForEach(labelArray, id: \.self) { data in
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
-                            Text(data)
-                                .font(.caption)
+                            YAxisChartDataCell(chartData: self, label: data)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
-                                .accessibilityLabel( Text("XAxisLabel"))
+                                .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
@@ -174,8 +105,24 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
                     }
                 }
             }
+            HStack(spacing: self.groupSpacing) {
+                ForEach(dataSets.dataSets) { dataSet in
+                    HStack(spacing: 0) {
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                        YAxisDataPointCell(chartData: self, label: dataSet.setTitle, rotationAngle: .degrees(0))
+                            .foregroundColor(self.chartStyle.xAxisLabelColour)
+                            .accessibilityLabel(Text("X Axis Label"))
+                            .accessibilityValue(Text("\(dataSet.setTitle)"))
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                    }
+                }
+            }
+            .padding(.horizontal, -4)
         }
     }
+    
     // MARK: Touch
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         self.markerSubView()
@@ -200,7 +147,9 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
             let xSubSection : CGFloat   = (xSection / CGFloat(dataSet.dataPoints.count))
             let subIndex    : Int       = Int((touchLocation.x - CGFloat((groupSpacing * CGFloat(superIndex)))) / xSubSection) - (dataSet.dataPoints.count * index)
             if subIndex >= 0 && subIndex < dataSet.dataPoints.count {
-                points.append(dataSet.dataPoints[subIndex])
+                var dataPoint = dataSet.dataPoints[subIndex]
+                dataPoint.legendTag = dataSet.setTitle
+                points.append(dataPoint)
             }
         }
         self.infoView.touchOverlayInfo = points

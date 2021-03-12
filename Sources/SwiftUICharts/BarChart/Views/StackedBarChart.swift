@@ -22,16 +22,22 @@ import SwiftUI
  as the modifiers are various types for stacks that wrap
  around the previous views.
  ```
-    .touchOverlay(chartData: data)
-    .averageLine(chartData: data)
-    .yAxisPOI(chartData: data)
-    .xAxisGrid(chartData: data)
-    .yAxisGrid(chartData: data)
-    .xAxisLabels(chartData: data)
-    .yAxisLabels(chartData: data)
-    .infoBox(chartData: data)
-    .headerBox(chartData: data)
-    .legends(chartData: data)
+ .touchOverlay(chartData: data)
+ .averageLine(chartData: data,
+              strokeStyle: StrokeStyle(lineWidth: 3,dash: [5,10]))
+ .yAxisPOI(chartData: data,
+           markerName: "50",
+           markerValue: 50,
+           lineColour: Color.blue,
+           strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
+ .xAxisGrid(chartData: data)
+ .yAxisGrid(chartData: data)
+ .xAxisLabels(chartData: data)
+ .yAxisLabels(chartData: data)
+ .infoBox(chartData: data)
+ .floatingInfoBox(chartData: data)
+ .headerBox(chartData: data)
+ .legends(chartData: data)
  ```
  */
 public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartData {
@@ -54,7 +60,7 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
             HStack(alignment: .bottom, spacing: 0) {
                 ForEach(chartData.dataSets.dataSets) { dataSet in
                     
-                    StackElementSubView(dataSet: dataSet)
+                    StackElementSubView(dataSet: dataSet, specifier: chartData.infoView.touchSpecifier)
                         .scaleEffect(y: startAnimation ? CGFloat(dataSet.maxValue() / chartData.maxValue) : 0, anchor: .bottom)
                         .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
                         .background(Color(.gray).opacity(0.000000001))

@@ -13,28 +13,28 @@ import SwiftUI
  */
 public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBarChartStyle {
 
-    /// A type representing opaque View
+    /// A type representing a View for displaying labels on the X axis.
     associatedtype XLabels  : View
     
     /**
      Returns the difference between the highest and lowest numbers in the data set or data sets.
      */
-    var range    : Double { get }
+    var range: Double { get }
     
     /**
      Returns the lowest value in the data set or data sets.
      */
-    var minValue : Double { get }
+    var minValue: Double { get }
     
     /**
      Returns the highest value in the data set or data sets
      */
-    var maxValue : Double { get }
+    var maxValue: Double { get }
     
     /**
      Returns the average value from the data set or data sets.
      */
-    var average  : Double { get }
+    var average : Double { get }
     
     /**
      Array of strings for the labels on the X Axis instead of the labels in the data points.
@@ -48,7 +48,6 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
      axis labels so they can configure thier layouts appropriately.
      */
     var viewData: ChartViewData { get set }
-    
     
     /**
      Labels to display on the Y axis
@@ -64,7 +63,7 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
      Displays a view for the labels on the X Axis.
      */
     func getXAxisLabels() -> XLabels
-
+    
 }
 
 
@@ -80,7 +79,7 @@ public protocol MarkerType {}
 public protocol CTLineBarChartStyle: CTChartStyle {
     
     /// A type representing touch overlay marker type. -- `MarkerType`
-    associatedtype Mark : MarkerType
+    associatedtype Mark: MarkerType
     
     /**
      Where the marker lines come from to meet at a specified point.
@@ -107,6 +106,10 @@ public protocol CTLineBarChartStyle: CTChartStyle {
      */
     var xAxisLabelsFrom: LabelsFrom { get set }
     
+    /**
+     Label to display next to the chart giving info about the axis.
+     */
+    var xAxisTitle: String? { get set }
     
     /**
      Style of the horizontal lines breaking up the chart.
@@ -129,6 +132,11 @@ public protocol CTLineBarChartStyle: CTChartStyle {
     var yAxisNumberOfLabels: Int { get set }
     
     /**
+     Label to display next to the chart giving info about the axis.
+     */
+    var yAxisTitle: String? { get set }
+    
+    /**
      Where to start drawing the line chart from. Zero, data set minium or custom.
      */
     var baseline: Baseline { get set }
@@ -136,7 +144,7 @@ public protocol CTLineBarChartStyle: CTChartStyle {
     /**
      Where to finish drawing the chart from. Data set maximum or custom.
      */
-    var topLine : Topline { get set }
+    var topLine: Topline { get set }
     
 }
 
@@ -150,4 +158,13 @@ public protocol CTLineBarDataPointProtocol: CTDataPointBaseProtocol {
      Data points label for the X axis.
      */
     var xAxisLabel: String? { get set }
+}
+
+extension CTLineBarDataPointProtocol {
+    /**
+     Unwarpped xAxisLabel
+     */
+    var wrappedXAxisLabel : String {
+        self.xAxisLabel ?? ""
+    }
 }

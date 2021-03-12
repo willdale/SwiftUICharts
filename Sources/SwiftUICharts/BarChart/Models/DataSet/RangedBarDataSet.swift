@@ -7,16 +7,19 @@
 
 import SwiftUI
 
+/**
+ Data set for ranged bar charts.
+ */
 public struct RangedBarDataSet : CTRangedBarChartDataSet {
     
     public var id: UUID = UUID()
     public var dataPoints   : [RangedBarDataPoint]
     public var legendTitle  : String
     
-    /// Initialises a new data set for standard Bar Charts.
+    /// Initialises a new data set for ranged bar chart.
     /// - Parameters:
     ///   - dataPoints: Array of elements.
-    ///   - legendTitle: label for the data in legend.
+    ///   - legendTitle: Label for the data in legend.
     public init(dataPoints  : [RangedBarDataPoint],
                 legendTitle : String = ""
     ) {

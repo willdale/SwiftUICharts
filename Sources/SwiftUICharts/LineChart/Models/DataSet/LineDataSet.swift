@@ -11,22 +11,6 @@ import SwiftUI
  Data set for a single line
  
  Contains information specific to each line within the chart .
- 
- # Example
- ```
- LineDataSet(dataPoints: [
-     LineChartDataPoint(value: 120, xAxisLabel: "M", pointLabel: "Monday"),
-     LineChartDataPoint(value: 190, xAxisLabel: "T", pointLabel: "Tuesday"),
-     LineChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday"),
-     LineChartDataPoint(value: 175, xAxisLabel: "T", pointLabel: "Thursday"),
-     LineChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"),
-     LineChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday"),
-     LineChartDataPoint(value: 190, xAxisLabel: "S", pointLabel: "Sunday")
- ],
- legendTitle: "Test One",
- pointStyle: PointStyle(),
- style: LineStyle(colour: Color.red, lineType: .curvedLine))
- ```
  */
 public struct LineDataSet: CTLineChartDataSet {
 

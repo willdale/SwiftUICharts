@@ -24,6 +24,7 @@ import SwiftUI
  ```
  .touchOverlay(chartData: data)
  .infoBox(chartData: data)
+ .floatingInfoBox(chartData: data)
  .headerBox(chartData: data)
  .legends(chartData: data)
  ```
@@ -58,7 +59,7 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
                             .shadow(color: Color.primary, radius: 10)
                     }
                     .accessibilityLabel(Text("\(chartData.metadata.title)"))
-                    .accessibilityValue(Text(String(format: chartData.infoView.touchSpecifier, chartData.dataSets.dataPoints[data].value) + "\(chartData.dataSets.dataPoints[data].pointDescription ?? "")"))
+                    .accessibilityValue(chartData.dataSets.dataPoints[data].getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
             }
         }
 

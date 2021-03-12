@@ -12,23 +12,23 @@ import SwiftUI
  
  # Example
  ```
- GroupingData(title: "One", fillColour: ColourStyle(colour: .blue))
+ GroupingData(title: "One", colour: ColourStyle(colour: .blue))
  ```
  */
-public struct GroupingData: Hashable, Identifiable {
+public struct GroupingData: CTBarColourProtocol, Hashable, Identifiable {
     
-    public let id        : UUID = UUID()
-    public var title     : String
-    public var fillColour: ColourStyle
+    public let id       : UUID = UUID()
+    public var title    : String
+    public var colour   : ColourStyle
     
     /// Group with single colour
     /// - Parameters:
     ///   - title: Title for legends
-    ///   - fillColour: Colour styling for the bars.
-    public init(title     : String,
-                fillColour: ColourStyle
+    ///   - colour: Colour styling for the bars.
+    public init(title  : String,
+                colour : ColourStyle
     ) {
-        self.title      = title
-        self.fillColour = fillColour
+        self.title  = title
+        self.colour = colour
     }
 }

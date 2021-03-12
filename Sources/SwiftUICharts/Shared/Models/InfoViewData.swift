@@ -8,7 +8,7 @@
 import SwiftUI
 
 /**
- Data model to pass view information internally for the `InfoBox` and `HeaderBox`.
+ Data model to pass view information internally for the `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
  */
 public struct InfoViewData<DP: CTDataPointBaseProtocol> {
     
@@ -17,7 +17,7 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
     
     Set from TouchOverlay via the relevant protocol.
     
-    Used by `HeaderBox` and `InfoBox`.
+    Used by `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
      */
     var isTouchCurrent: Bool = false
     
@@ -26,7 +26,7 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
      
      Set from TouchOverlay via the relevant protocol.
      
-     Used by `HeaderBox` and `InfoBox`.
+     Used by `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
      */
     var touchOverlayInfo: [DP] = []
     
@@ -35,7 +35,7 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
      
      Set from TouchOverlay via the relevant protocol.
      
-     Used by `HeaderBox` and `InfoBox`.
+     Used by `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
      */
     var touchSpecifier: String = "%.0f"
 
@@ -46,7 +46,7 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
      
      Set from TouchOverlay via the relevant protocol.
      
-     Used by `HeaderBox` and `InfoBox`.
+     Used by `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
      */
    var touchLocation: CGPoint = .zero
     
@@ -57,7 +57,7 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
      
      Set from TouchOverlay via the relevant protocol.
      
-     Used by `HeaderBox` and `InfoBox`.
+     Used by `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
      */
     var chartSize: CGRect  = .zero
     
@@ -72,5 +72,5 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
     /**
      Option to display units before or after values.
      */
-    var touchUnit: Unit = .none
+    var touchUnit: TouchUnit = .none
 }

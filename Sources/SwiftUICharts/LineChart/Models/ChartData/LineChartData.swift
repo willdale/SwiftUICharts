@@ -11,38 +11,6 @@ import SwiftUI
  Data for drawing and styling a single line, line chart.
  
  This model contains the data and styling information for a single line, line chart.
- 
- # Example
- ```
- static func weekOfData() -> LineChartData {
-     
-     let data = LineDataSet(dataPoints: [
-         LineChartDataPoint(value: 120, xAxisLabel: "M", pointLabel: "Monday"),
-         LineChartDataPoint(value: 190, xAxisLabel: "T", pointLabel: "Tuesday"),
-         LineChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday"),
-         LineChartDataPoint(value: 175, xAxisLabel: "T", pointLabel: "Thursday"),
-         LineChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"),
-         LineChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday"),
-         LineChartDataPoint(value: 190, xAxisLabel: "S", pointLabel: "Sunday")
-     ],
-     legendTitle: "Test One",
-     pointStyle: PointStyle(),
-     style: LineStyle(colour: Color.red, lineType: .curvedLine))
-          
-     return LineChartData(dataSets       : data,
-                          metadata       : ChartMetadata(title: "Some Data", subtitle: "A Week"),
-                          xAxisLabels    : ["Monday", "Thursday", "Sunday"],
-                          chartStyle     : LineChartStyle(infoBoxPlacement    : .floating,
-                                                          markerType          : .indicator(style: DotStyle()),
-                                                          xAxisLabelPosition  : .bottom,
-                                                          xAxisLabelsFrom     : .chartData,
-                                                          yAxisLabelPosition  : .leading,
-                                                          yAxisNumberOfLabels : 7,
-                                                          baseline            : .minimumWithMaximum(of: 80),
-                                                          globalAnimation     : .easeOut(duration: 1)))
- }
- 
- ```
  */
 public final class LineChartData: CTLineChartDataProtocol {
     
@@ -56,7 +24,7 @@ public final class LineChartData: CTLineChartDataProtocol {
     @Published public final var legends       : [LegendData]
     @Published public final var viewData      : ChartViewData
     @Published public final var infoView      : InfoViewData<LineChartDataPoint> = InfoViewData()
-    
+        
     public final var noDataText   : Text
     public final var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
@@ -93,19 +61,14 @@ public final class LineChartData: CTLineChartDataProtocol {
     public final func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint:
+            case .dataPoint(let angle):
                 
                 HStack(spacing: 0) {
                     ForEach(dataSets.dataPoints) { data in
-                        if let label = data.xAxisLabel {
-                            Text(label)
-                                .font(.caption)
-                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
-                                .accessibilityLabel( Text("X Axis Label"))
-                                .accessibilityValue(Text("\(data.xAxisLabel ?? "")"))
-                        }
+                        YAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
+                            .foregroundColor(self.chartStyle.xAxisLabelColour)
+                            .accessibilityLabel(Text("X Axis Label"))
+                            .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
                         if data != self.dataSets.dataPoints[self.dataSets.dataPoints.count - 1] {
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
@@ -118,12 +81,9 @@ public final class LineChartData: CTLineChartDataProtocol {
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
                         ForEach(labelArray, id: \.self) { data in
-                            Text(data)
-                                .font(.caption)
+                            YAxisChartDataCell(chartData: self, label: data)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
-                                .accessibilityLabel( Text("X Axis Label"))
+                                .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
                             if data != labelArray[labelArray.count - 1] {
                                 Spacer()
@@ -153,21 +113,6 @@ public final class LineChartData: CTLineChartDataProtocol {
                            touchLocation: touchLocation,
                            chartSize: chartSize)
     }
-    
-    // MARK: Accessibility
-    public final func getAccessibility() -> some View {
-        ForEach(dataSets.dataPoints.indices, id: \.self) { point in
-
-            AccessibilityRectangle(dataPointCount : self.dataSets.dataPoints.count,
-                                   dataPointNo    : point)
-
-                .foregroundColor(Color(.gray).opacity(0.000000001))
-                .accessibilityLabel( Text("\(self.metadata.title)"))
-                .accessibilityValue(Text(String(format: self.infoView.touchSpecifier,
-                                             self.dataSets.dataPoints[point].value) +
-                                ", \(self.dataSets.dataPoints[point].pointDescription ?? "")"))
-        }
-    }
 
     public typealias Set       = LineDataSet
     public typealias DataPoint = LineChartDataPoint
@@ -193,11 +138,14 @@ extension LineChartData {
     }
 
     public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+                
         var points      : [LineChartDataPoint] = []
         let xSection    : CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
         let index       = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
-            points.append(dataSets.dataPoints[index])
+            var dataPoint = dataSets.dataPoints[index]
+            dataPoint.legendTag = dataSets.legendTitle
+            points.append(dataPoint)
         }
         self.infoView.touchOverlayInfo = points
     }

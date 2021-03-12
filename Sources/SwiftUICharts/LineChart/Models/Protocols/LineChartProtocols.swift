@@ -33,15 +33,15 @@ public protocol CTLineChartDataProtocol: CTLineBarChartDataProtocol {
     func getAccessibility() -> Access
 }
 
-
-
-
 // MARK: - Style
 /**
  A protocol to extend functionality of `CTLineBarChartStyle` specifically for  Line Charts.
  */
 public protocol CTLineChartStyle : CTLineBarChartStyle {}
 
+/**
+ Protocol to set up the styling for individual lines.
+ */
 public protocol CTLineStyle {
     /// Drawing style of the line.
     var lineType   : LineType { get set }
@@ -94,10 +94,17 @@ public protocol CTLineChartDataSet: CTSingleDataSetProtocol {
      */
     var pointStyle : PointStyle { get set }
 }
+
+/**
+ A protocol to extend functionality of `CTLineChartDataSet` specifically for Ranged Line Charts.
+ */
 public protocol CTRangedLineChartDataSet: CTLineChartDataSet {
     var legendFillTitle : String { get set }
 }
 
+/**
+ A protocol to extend functionality of `CTMultiDataSetProtocol` specifically for Multi Line Charts.
+ */
 public protocol CTMultiLineChartDataSet: CTMultiDataSetProtocol {}
 
 

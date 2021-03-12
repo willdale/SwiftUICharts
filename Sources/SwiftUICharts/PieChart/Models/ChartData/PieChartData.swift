@@ -11,23 +11,6 @@ import SwiftUI
  Data for drawing and styling a pie chart.
  
  This model contains the data and styling information for a pie chart.
- 
- # Example
- ```
- static func makeData() -> PieChartData {
-     let data = PieDataSet(dataPoints: [
-                             PieChartDataPoint(value: 7, pointDescription: "One", colour: .blue),
-                             PieChartDataPoint(value: 2, pointDescription: "Two", colour: .red),
-                             PieChartDataPoint(value: 9, pointDescription: "Three", colour: .purple),
-                             PieChartDataPoint(value: 6, pointDescription: "Four", colour: .green),
-                             PieChartDataPoint(value: 4, pointDescription: "Five", colour: .orange)],
-                           legendTitle: "Data")
-     
-     return PieChartData(dataSets: data,
-                         metadata: ChartMetadata(title: "Pie", subtitle: "mmm pie"),
-                         chartStyle: PieChartStyle(infoBoxPlacement: .header))
- }
- ```
  */
 public final class PieChartData: CTPieChartDataProtocol {
     
@@ -43,7 +26,7 @@ public final class PieChartData: CTPieChartDataProtocol {
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
     // MARK: Initializer
-    /// Initialises a Pie Chart.
+    /// Initialises Pie Chart data.
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the chart.
@@ -83,7 +66,9 @@ extension PieChartData {
                 
         let dataPoint = self.dataSets.dataPoints.first(where: { $0.startAngle * Double(180 / Double.pi) <= Double(touchDegree) && ($0.startAngle * Double(180 / Double.pi)) + ($0.amount * Double(180 / Double.pi)) >= Double(touchDegree) } )
         if let data = dataPoint {
-            points.append(data)
+            var finalDataPoint = data
+            finalDataPoint.legendTag = dataSets.legendTitle
+            points.append(finalDataPoint)
         }
         self.infoView.touchOverlayInfo = points
     }

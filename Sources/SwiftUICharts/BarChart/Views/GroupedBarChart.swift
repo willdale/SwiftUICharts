@@ -22,16 +22,22 @@ import SwiftUI
  as the modifiers are various types for stacks that wrap
  around the previous views.
  ```
-    .touchOverlay(chartData: data)
-    .averageLine(chartData: data)
-    .yAxisPOI(chartData: data)
-    .xAxisGrid(chartData: data)
-    .yAxisGrid(chartData: data)
-    .xAxisLabels(chartData: data)
-    .yAxisLabels(chartData: data)
-    .infoBox(chartData: data)
-    .headerBox(chartData: data)
-    .legends(chartData: data)
+ .touchOverlay(chartData: data)
+ .averageLine(chartData: data,
+              strokeStyle: StrokeStyle(lineWidth: 3,dash: [5,10]))
+ .yAxisPOI(chartData: data,
+           markerName: "50",
+           markerValue: 50,
+           lineColour: Color.blue,
+           strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
+ .xAxisGrid(chartData: data)
+ .yAxisGrid(chartData: data)
+ .xAxisLabels(chartData: data)
+ .yAxisLabels(chartData: data)
+ .infoBox(chartData: data)
+ .floatingInfoBox(chartData: data)
+ .headerBox(chartData: data)
+ .legends(chartData: data)
  ```
  */
 public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartData {
@@ -59,8 +65,8 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                     HStack(spacing: 0) {
                         ForEach(dataSet.dataPoints) { dataPoint in
 
-                            if dataPoint.group.fillColour.colourType == .colour,
-                               let colour = dataPoint.group.fillColour.colour
+                            if dataPoint.group.colour.colourType == .colour,
+                               let colour = dataPoint.group.colour.colour
                             {
 
                                 ColourBar(chartData   : chartData,
@@ -68,10 +74,10 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                                           colour      : colour)
                                     .accessibilityLabel(Text("\(chartData.metadata.title)"))
 
-                            } else if dataPoint.group.fillColour.colourType == .gradientColour,
-                                      let colours    = dataPoint.group.fillColour.colours,
-                                      let startPoint = dataPoint.group.fillColour.startPoint,
-                                      let endPoint   = dataPoint.group.fillColour.endPoint
+                            } else if dataPoint.group.colour.colourType == .gradientColour,
+                                      let colours    = dataPoint.group.colour.colours,
+                                      let startPoint = dataPoint.group.colour.startPoint,
+                                      let endPoint   = dataPoint.group.colour.endPoint
                             {
 
                                 GradientColoursBar(chartData   : chartData,
@@ -81,10 +87,10 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                                                    endPoint    : endPoint)
                                     .accessibilityLabel( Text("\(chartData.metadata.title)"))
 
-                            } else if dataPoint.group.fillColour.colourType == .gradientStops,
-                                      let stops      = dataPoint.group.fillColour.stops,
-                                      let startPoint = dataPoint.group.fillColour.startPoint,
-                                      let endPoint   = dataPoint.group.fillColour.endPoint
+                            } else if dataPoint.group.colour.colourType == .gradientStops,
+                                      let stops      = dataPoint.group.colour.stops,
+                                      let startPoint = dataPoint.group.colour.startPoint,
+                                      let endPoint   = dataPoint.group.colour.endPoint
                             {
 
                                 let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)

@@ -33,9 +33,16 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
 
         VStack(alignment: .trailing) {
             if chartData.infoView.isTouchCurrent {
-                ForEach(chartData.infoView.touchOverlayInfo, id: \.self) { info in
+                ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
                     
-                    chartData.headerTouchOverlaySubView(info: info)
+                    chartData.infoValueUnit(info: point)
+                        .font(.title3)
+                        .foregroundColor(chartData.chartStyle.infoBoxValueColour)
+                    
+                    chartData.infoDescription(info: point)
+                        .font(.subheadline)
+                        .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                    
                 }
             } else {
                 Text("")
@@ -57,7 +64,7 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
                         titleBox
                         content
                     }
-                case .fixed:
+                case .infoBox:
                     VStack(alignment: .leading) {
                         titleBox
                         content
@@ -98,14 +105,12 @@ extension View {
      Displays the metadata about the chart.
      
      Adds a view above the chart that displays the title and subtitle.
-     infoBoxPlacement is set to .header then the datapoint info will
+     If infoBoxPlacement is set to .header then the datapoint info will
      be displayed here as well.
      
      - Parameter chartData: Chart data model.
      - Returns: A  new view containing the chart with a view above
      to display metadata.
-     
-     - Tag: HeaderBox
      */
     public func headerBox<T:CTChartData>(chartData: T) -> some View {
         self.modifier(HeaderBox(chartData: chartData))

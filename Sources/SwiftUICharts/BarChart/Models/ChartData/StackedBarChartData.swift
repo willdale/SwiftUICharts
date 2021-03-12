@@ -125,17 +125,15 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
     public final func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint:
+            case .dataPoint(let angle):
                 HStack(spacing: 0) {
                     ForEach(groups) { group in
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
-                        Text(group.title)
-                            .font(.caption)
+                        YAxisDataPointCell(chartData: self, label: group.title, rotationAngle: angle)
                             .foregroundColor(self.chartStyle.xAxisLabelColour)
                             .lineLimit(1)
-                            .minimumScaleFactor(0.5)
-                            .accessibilityLabel( Text("X Axis Label"))
+                            .accessibilityLabel(Text("X Axis Label"))
                             .accessibilityValue(Text("\(group.title)"))
                         
                         Spacer()
@@ -148,12 +146,9 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
                         ForEach(labelArray, id: \.self) { data in
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
-                            Text(data)
-                                .font(.caption)
+                            YAxisChartDataCell(chartData: self, label: data)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
-                                .accessibilityLabel( Text("X Axis Label"))
+                                .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
@@ -161,6 +156,21 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
                     }
                 }
             }
+            HStack {
+                ForEach(dataSets.dataSets) { dataSet in
+                    HStack(spacing: 0) {
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                        YAxisDataPointCell(chartData: self, label: dataSet.setTitle, rotationAngle: .degrees(0))
+                            .foregroundColor(self.chartStyle.xAxisLabelColour)
+                            .accessibilityLabel(Text("X Axis Label"))
+                            .accessibilityValue(Text("\(dataSet.setTitle)"))
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                    }
+                }
+            }
+            .padding(.horizontal, -4)
         }
     }
     // MARK:  Touch
@@ -207,7 +217,9 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
              
              if let index = yIndex?.offset {
                  if index >= 0 && index < dataSet.dataPoints.count {
-                     points.append(dataSet.dataPoints[index])
+                    var dataPoint = dataSet.dataPoints[index]
+                    dataPoint.legendTag = dataSet.setTitle
+                    points.append(dataPoint)
                  }
              }
          }

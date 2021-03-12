@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+/**
+ Data for drawing and styling ranged line chart.
+ 
+ This model contains the data and styling information for a ranged line chart.
+ */
 public final class RangedLineChartData: CTLineChartDataProtocol {
     
     // MARK: Properties
@@ -22,11 +27,9 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
     
     public var noDataText   : Text
     public var chartType    : (chartType: ChartType, dataSetType: DataSetType)
-    
-    internal var isFilled      : Bool = false
-    
+        
     // MARK: Initializer
-    /// Initialises a Single Line Chart.
+    /// Initialises a ranged line chart.
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style a line.
@@ -62,19 +65,14 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
     public func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint:
+            case .dataPoint(let angle):
                 
                 HStack(spacing: 0) {
                     ForEach(dataSets.dataPoints) { data in
-                        if let label = data.xAxisLabel {
-                            Text(label)
-                                .font(.caption)
-                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
-                                .accessibilityLabel( Text("X Axis Label"))
-                                .accessibilityValue(Text("\(data.xAxisLabel ?? "")"))
-                        }
+                        YAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
+                            .foregroundColor(self.chartStyle.xAxisLabelColour)
+                            .accessibilityLabel(Text("X Axis Label"))
+                            .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
                         if data != self.dataSets.dataPoints[self.dataSets.dataPoints.count - 1] {
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
@@ -87,12 +85,9 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
                         ForEach(labelArray, id: \.self) { data in
-                            Text(data)
-                                .font(.caption)
+                            YAxisChartDataCell(chartData: self, label: data)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
-                                .accessibilityLabel( Text("X Axis Label"))
+                                .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
                             if data != labelArray[labelArray.count - 1] {
                                 Spacer()
@@ -112,7 +107,7 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
                       minValue  : self.minValue,
                       range     : self.range,
                       animation : self.chartStyle.globalAnimation,
-                      isFilled  : self.isFilled)
+                      isFilled  : false)
     }
 
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
@@ -145,7 +140,9 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
         let xSection    : CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
         let index       = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
-            points.append(dataSets.dataPoints[index])
+            var dataPoint = dataSets.dataPoints[index]
+            dataPoint.legendTag = dataSets.legendTitle
+            points.append(dataPoint)
         }
         self.infoView.touchOverlayInfo = points
     }
@@ -157,32 +154,26 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
                 Text("\(info.upperValue, specifier: self.infoView.touchSpecifier)")
                     .font(.title3)
                     .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.pointDescription ?? "")")
+                Text("\(info.wrappedDescription)")
                     .font(.subheadline)
                     .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
             case .prefix(of: let unit):
                 Text("\(unit) \(info.upperValue, specifier: self.infoView.touchSpecifier)")
                     .font(.title3)
                     .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.pointDescription ?? "")")
+                Text("\(info.wrappedDescription)")
                     .font(.subheadline)
                     .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
             case .suffix(of: let unit):
                 Text("\(info.upperValue, specifier: self.infoView.touchSpecifier) \(unit)")
                     .font(.title3)
                     .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.pointDescription ?? "")")
+                Text("\(info.wrappedDescription)")
                     .font(.subheadline)
                     .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
             }
         }
     }
-
-    // MARK: Accessibility
-    public func getAccessibility() -> some View {
-        EmptyView()
-    }
- 
     
     public typealias Set       = RangedLineDataSet
     public typealias DataPoint = RangedLineChartDataPoint

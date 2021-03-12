@@ -1,269 +1,59 @@
 # SwiftUICharts
 
-A charts / plotting library for SwiftUI. Works on macOS, iOS,  watchOS, and tvOS.
+A charts / plotting library for SwiftUI. Works on macOS, iOS,  watchOS, and tvOS. Has accessibility features built in
 
 [Demo Project](https://github.com/willdale/SwiftUICharts-Demo)
 
 ## Examples
 
-### Line Chart
+### Line Charts
 
-![Example of Line Chart](Resources/LineOne.png)
+#### Line Chart
+![Example of Line Chart](Resources/images/LineCharts/LineChart.png)
 
-#### View
-```swift
-LineChart()
-    .touchOverlay()
-    .pointMarkers()
-    .averageLine(strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
-    .yAxisPOI(markerName: "50", markerValue: 50, lineColour: Color(red: 0.25, green: 0.25, blue: 1.0), strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
-    .xAxisGrid()
-    .yAxisGrid()
-    .xAxisLabels()
-    .yAxisLabels()
-    .headerBox()
-    .legends()
-    .environmentObject(data)
-```
+#### Filled Line Chart
+![Example of Line Chart](Resources/images/LineCharts/FilledLineChart.png)
 
-#### Data Model
+#### Multi Line Chart
+![Example of Line Chart](Resources/images/LineCharts/MultiLineChart.png)
 
-```swift
-static func weekOfData() -> ChartData {
-    
-    let data : [ChartDataPoint] = [
-        ChartDataPoint(value: 20,  xAxisLabel: "M", pointLabel: "Monday"),
-        ChartDataPoint(value: 90,  xAxisLabel: "T", pointLabel: "Tuesday"),
-        ChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday"),
-        ChartDataPoint(value: 75,  xAxisLabel: "T", pointLabel: "Thursday"),
-        ChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"),
-        ChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday"),
-        ChartDataPoint(value: 90,  xAxisLabel: "S", pointLabel: "Sunday")
-    ]
-    
-    let metadata   : ChartMetadata  = ChartMetadata(title       : "Test Data",
-                                                    subtitle    : "A weeks worth",
-                                                    lineLegend  : "Data")
-    
-    let labels      : [String]      = ["Mon", "Thu", "Sun"]
+#### Ranged Line Chart
+![Example of Line Chart](Resources/images/LineCharts/RangedLineChart.png)
 
-    let gridStyle   : GridStyle     = GridStyle(lineColour  : Color(.lightGray).opacity(0.25),
-                                                lineWidth   : 1,
-                                                dash: [CGFloat]())
-    
-    let chartStyle  : ChartStyle    = ChartStyle(infoBoxPlacement: .header,
-                                                 yAxisGridStyle: GridStyle(lineColour: Color.primary.opacity(0.5)))
-    
-    let lineStyle   : LineStyle     = LineStyle(colours     : [Color(red: 1.0, green: 0.15, blue: 0.15), Color(red: 1.0, green: 0.35, blue: 0.35)],
-                                                startPoint  : .leading,
-                                                endPoint    : .trailing,
-                                                lineType    : .curvedLine,
-                                                strokeStyle : StrokeStyle(lineWidth: 3,
-                                                                          lineCap: .round,
-                                                                          lineJoin: .round))
-    
-    let pointStyle : PointStyle     = PointStyle(pointSize: 9, borderColour: Color.primary, lineWidth: 2, pointType: .outline, pointShape: .circle)
-    
-    return ChartData(dataPoints     : data,
-                     metadata       : metadata,
-                     xAxisLabels    : labels,
-                     chartStyle     : chartStyle,
-                     lineStyle      : lineStyle,
-                     pointStyle     : pointStyle
-    )
-}
+
+### Bar Charts
+
+#### Bar Chart
+![Example of Line Chart](Resources/images/BarCharts/BarChart.png)
+
+#### Range Bar Chart
+![Example of Line Chart](Resources/images/BarCharts/RangeBarChart.png)
+
+#### Grouped Bar Chart
+![Example of Line Chart](Resources/images/BarCharts/GroupedBarChart.png)
+
+#### Stacked Bar Chart
+![Example of Line Chart](Resources/images/BarCharts/StackedBarChart.png)
+
+
+### Pie Charts
+
+#### Pie Chart
+![Example of Line Chart](Resources/images/PieCharts/PieChart.png)
+
+#### Doughnut Chart
+![Example of Line Chart](Resources/images/PieCharts/DoughnutChart.png)
+
+
+## Installation
+
+Swift Package Manager
 
 ```
-
-
-![Example of Line Chart](Resources/LineTwo.png)
-
-#### View
-
-
-```swift
-LineChart()
-    .touchOverlay(specifier: "%.2f")
-    .yAxisGrid()
-    .xAxisLabels()
-    .yAxisLabels()
-    .headerBox()
-    .legends()
-    .environmentObject(data)
+File > Swift Packages > Add Package Dependency...
 ```
-
-#### Data Model
-
-```swift
-static func yearOfDataMonthlyAverage() -> ChartData {
-    
-    var data : [ChartDataPoint] = []
-    let calendar = Calendar.current
-    let date = Date()
-    
-    for index in 1...365 {
-        let value: Double = Double(Int.random(in: -100...100))
-        let date = calendar.date(byAdding: .day, value: index, to: date)
-        data.append(ChartDataPoint(value: value, date: date))
-    }
-    
-    let metadata   : ChartMetadata  = ChartMetadata(title       : "Test Data",
-                                                    subtitle    : "A years worth - Monthly Average",
-                                                    lineLegend  : "Data")
-    
-    let labels      : [String]      = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    
-    let chartStyle  : ChartStyle    = ChartStyle(infoBoxPlacement: .header,
-                                                 yAxisGridStyle: GridStyle(lineColour: Color.primary.opacity(0.5)))
-    
-    let lineStyle   : LineStyle     = LineStyle(colour: Color(red: 0.15, green: 0.15, blue: 1.0),
-                                                lineType: .curvedLine,
-                                                strokeStyle: StrokeStyle(lineWidth: 3,
-                                                                         lineCap: .round,
-                                                                         lineJoin: .round))
-    
-    return ChartData(dataPoints     : data,
-                     metadata       : metadata,
-                     xAxisLabels    : labels,
-                     chartStyle     : chartStyle,
-                     lineStyle      : lineStyle,
-                     calculations   : .averageMonth)
-}
-```
-
-
-### Bar Chart
-
-![Example of Line Chart](Resources/BarOne.png)
-
-
-#### View
-
-```swift
-BarChart()
-    .touchOverlay()
-    .averageLine(markerName: "Average", lineColour: Color.primary, strokeStyle: StrokeStyle(lineWidth: 2, dash: [5, 10]))
-    .yAxisGrid()
-    .xAxisLabels()
-    .yAxisLabels()
-    .headerBox()
-    .legends()
-    .environmentObject(data)
-```
-
-#### Data Model
-
-```swift
-static func weekOfData() -> ChartData {
-    
-    let data : [ChartDataPoint] = [
-        ChartDataPoint(value: 20,  xAxisLabel: "M", pointLabel: "Monday"),
-        ChartDataPoint(value: 90,  xAxisLabel: "T", pointLabel: "Tuesday"),
-        ChartDataPoint(value: 100, xAxisLabel: "W", pointLabel: "Wednesday"),
-        ChartDataPoint(value: 75,  xAxisLabel: "T", pointLabel: "Thursday"),
-        ChartDataPoint(value: 160, xAxisLabel: "F", pointLabel: "Friday"),
-        ChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday"),
-        ChartDataPoint(value: 90,  xAxisLabel: "S", pointLabel: "Sunday")
-    ]
-    
-    let metadata   : ChartMetadata  = ChartMetadata(title       : "Test Data",
-                                                    subtitle    : "A weeks worth",
-                                                    lineLegend  : "Data")
-            
-    let gridStyle   : GridStyle     = GridStyle(lineColour  : Color(.lightGray),
-                                                lineWidth   : 1)
-    
-    let chartStyle  : ChartStyle    = ChartStyle(infoBoxPlacement: .header,
-                                                 xAxisGridStyle  : gridStyle,
-                                                 yAxisGridStyle  : gridStyle)
-    
-    let barStyle    : BarStyle      = BarStyle(barWidth: 0.5,
-                                               colourFrom: .barStyle,
-                                               colours: [Color(red: 1.0, green: 0.15, blue: 0.15),
-                                                         Color(red: 1.0, green: 0.35, blue: 0.35)],
-                                               startPoint: .bottom,
-                                               endPoint: .top)
-    
-    return ChartData(dataPoints     : data,
-                     metadata       : metadata,
-                     chartStyle     : chartStyle,
-                     barStyle       : barStyle)
-}
-
-```
-
-
-![Example of Line Chart](Resources/BarTwo.png)
-
-#### View
-
-
-```swift
-BarChart()
-    .touchOverlay()
-    .averageLine(markerName: "Average", lineColour: Color.primary, strokeStyle: StrokeStyle(lineWidth: 2, dash: [5, 10]))
-    .yAxisGrid()
-    .xAxisLabels()
-    .yAxisLabels()
-    .headerBox()
-    .legends()
-    .environmentObject(data)
-```
-
-#### Data Model
-
-```swift
-static func weekOfData() -> ChartData {
-    
-    let data : [ChartDataPoint] = [
-        ChartDataPoint(value: 70,  xAxisLabel: "M", pointLabel: "Monday"   , colour: Color(.systemRed)),
-        ChartDataPoint(value: 40,  xAxisLabel: "T", pointLabel: "Tuesday"  , colour: Color(.systemBlue)),
-        ChartDataPoint(value: 90, xAxisLabel:  "W", pointLabel: "Wednesday", colour: Color(.systemGreen)),
-        ChartDataPoint(value: 35,  xAxisLabel: "T", pointLabel: "Thursday" , colour: Color(.systemOrange)),
-        ChartDataPoint(value: 60, xAxisLabel:  "F", pointLabel: "Friday"   , colour: Color(.systemTeal)),
-        ChartDataPoint(value: 110, xAxisLabel: "S", pointLabel: "Saturday" , colour: Color(.systemPurple)),
-        ChartDataPoint(value: 40,  xAxisLabel: "S", pointLabel: "Sunday"   , colour: Color(.systemYellow))
-    ]
-    
-    let metadata   : ChartMetadata  = ChartMetadata(title       : "Test Data",
-                                                    subtitle    : "A weeks worth",
-                                                    lineLegend  : "Data")
-    
-    
-    let gridStyle   : GridStyle     = GridStyle(lineColour  : Color(.lightGray),
-                                                lineWidth   : 1)
-    
-    let chartStyle  : ChartStyle    = ChartStyle(infoBoxPlacement: .header,
-                                                 xAxisGridStyle  : gridStyle,
-                                                 yAxisGridStyle  : gridStyle,
-                                                 xAxisLabelsFrom: .dataPoint)
-    
-    let barStyle    : BarStyle      = BarStyle(barWidth: 1,
-                                               colourFrom: .dataPoints,
-                                               colours: [Color(red: 1.0, green: 0.15, blue: 0.15),
-                                                         Color(red: 1.0, green: 0.35, blue: 0.35)],
-                                               startPoint: .bottom,
-                                               endPoint: .top)
-    
-    return ChartData(dataPoints     : data,
-                     metadata       : metadata,
-                     chartStyle     : chartStyle,
-                     barStyle       : barStyle
-    )
-}
-```
-
-
 
 ## Documentation
-
-
-
-All data and most styling is passed into the view by an Environment Object. See [ChartData](#ChartData).
-
-```swift
-.environmentObject(data)
-```
 
 [View Modifiers](#View-Modifiers) 
 - [Touch Overlay](#Touch-Overlay) 
@@ -291,119 +81,74 @@ All data and most styling is passed into the view by an Environment Object. See 
 
 ## View Modifiers
 
-### Touch Overlay
+### All Chart Types
 
-Detects input either from touch of pointer. Finds the nearest data point and displays the relevent information.
+#### Touch Overlay
 
-The location of the info box is set in [ChartStyle](#ChartStyle).
+Detects input either from touch of pointer. Finds the nearest data point and displays the relevent information where specified. 
+
+The location of the info box is set in [ChartStyle](#ChartStyle) -> infoBoxPlacement.
 
 ```swift
-.touchOverlay(specifier: String)
+.touchOverlay(chartData: CTChartData, specifier: String, unit: TouchUnit)
 ```
-- specifier: Decimal precision for labels
+- chartData: Chart data model.
+- specifier: Decimal precision for labels.
+- unit: Unit to put before or after the value.
 
 Setup within  [ChartData](#ChartData) --> [ChartStyle](#ChartStyle) 
 
-### Point Markers
 
-Lays out markers over each of the data point.
+---
+
+
+#### Info Box
+
+Displays the information from [Touch Overlay](#TouchOverlay) if `InfoBoxPlacement` is set to `.infoBox`.
+
+The location of the info box is set in [ChartStyle](#ChartStyle) -> infoBoxPlacement.
 
 ```swift
-.pointMarkers()
+.infoBox(chartData: CTChartData)
 ```
-Setup within  [ChartData](#ChartData) --> [PointStyle](#PointStyle) 
+- chartData: Chart data model.
 
 
-### Average Line
+---
 
-Shows a marker line at the average of all the data points.
+
+#### Floating Info Box
+
+Displays the information from [Touch Overlay](#TouchOverlay) if `InfoBoxPlacement` is set to `.floating`.
+
+The location of the info box is set in [ChartStyle](#ChartStyle) -> infoBoxPlacement.
 
 ```swift
-.averageLine(markerName     : String        = "Average",
-             lineColour     : Color         = Color.primary,
-             strokeStyle    : StrokeStyle   = StrokeStyle(lineWidth: 2,
-                                                          lineCap: .round,
-                                                          lineJoin: .round,
-                                                          miterLimit: 10,
-                                                          dash: [CGFloat](),
-                                                          dashPhase: 0)
+.floatingInfoBox(chartData: CTChartData)
 ```
-- markerName: Title of marker, for the legend
-- lineColour: Line Colour
-- strokeStyle: Style of Stroke
+- chartData: Chart data model.
 
 
-### Y Axis Point Of Interest
-
-Configurable Point of interest
-
-```swift
-.yAxisPOI(markerName        : String        = "Average",
-             lineColour     : Color         = Color.primary,
-             strokeStyle    : StrokeStyle   = StrokeStyle(lineWidth: 2,
-                                                          lineCap: .round,
-                                                          lineJoin: .round,
-                                                          miterLimit: 10,
-                                                          dash: [CGFloat](),
-                                                          dashPhase: 0)
-```
-- markerName: Title of marker, for the legend
-- markerValue : Chosen point.
-- lineColour: Line Colour
-- strokeStyle: Style of Stroke
+---
 
 
-### X Axis Grid
+#### Header Box
 
-Adds vertical lines along the X axis.
+Displays the metadata about the chart. See [ChartMetadata](#ChartMetadata).
+
+Displays the information from [Touch Overlay](#TouchOverlay) if `InfoBoxPlacement` is set to `.header`.
+
+The location of the info box is set in [ChartStyle](#ChartStyle) -> infoBoxPlacement.
 
 ```swift
-.xAxisGrid()
-```
-Setup within  [ChartData](#ChartData) --> [ChartStyle](#ChartStyle)  --> [GridStyle](#GridStyle).
-
-
-### Y Axis Grid
-
-Adds horizontal lines along the Y axis.
-
-```swift
-.yAxisGrid()
-```
-Setup within  [ChartData](#ChartData) --> [ChartStyle](#ChartStyle)  --> [GridStyle](#GridStyle).
-
-
-### X Axis Labels
-
-Labels for the X axis.
-
-```swift
-.xAxisLabels()
-```
-Setup within  [ChartData](#ChartData) --> [ChartStyle](#ChartStyle)  --> [XAxisLabelSetup](#XAxisLabelSetup) 
-
-### Y Axis Labels
-
-Automatically generated labels for the Y axis
-
-```swift
-.yAxisLabels(specifier : String = "%.0f")
-```
-- specifier: Decimal precision specifier.
-
-Setup within  [ChartData](#ChartData) --> [ChartStyle](#ChartStyle)  --> [YAxisLabelSetup](#YAxisLabelSetup) 
-
-
-### Header Box
-
-Displays the metadata about the chart. See [ChartMetadata](#ChartMetadata) 
-
-```swift
-.headerBox()
+.headerBox(chartData: data)
 ```
 
 
-### Legends
+---
+
+
+#### Legends
 
 Legends from the data being show on the chart (See [ChartMetadata](#ChartMetadata) ) and any markers (See [Average Line](#Average-Line)  and [Y Axis Point Of Interest](#Y-Axis-Point-Of-Interest)). 
 
@@ -411,6 +156,130 @@ Legends from the data being show on the chart (See [ChartMetadata](#ChartMetadat
 .legends()
 ```
 Lays out markers over each of the data point.
+
+
+---
+
+
+### Line and Bar Charts
+
+#### Average Line
+
+Shows a marker line at the average of all the data points.
+
+```swift
+.averageLine(chartData: CTLineBarChartDataProtocol,
+             markerName: "Average",
+             labelPosition: .yAxis(specifier: "%.0f"),
+             lineColour: .primary,
+             strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
+```
+- chartData: Chart data model.
+- markerName: Title of marker, for the legend.
+- labelPosition: Option to display the markers’ value inline with the marker.
+- labelColour: Colour of the Text.
+- labelBackground: Colour of the background.
+- lineColour: Line Colour.
+- strokeStyle: Style of Stroke.
+
+
+---
+
+
+#### Y Axis Point Of Interest
+
+Configurable Point of interest
+
+```swift
+.yAxisPOI(chartData: CTLineBarChartDataProtocol,
+          markerName: "Marker",
+          markerValue: 123,
+          labelPosition: .center(specifier: "%.0f"),
+          labelColour: Color.black,
+          labelBackground: Color.orange,
+          lineColour: Color.orange,
+          strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
+```
+- chartData: Chart data model.
+- markerName: Title of marker, for the legend.
+- markerValue: Value to mark
+- labelPosition: Option to display the markers’ value inline with the marker.
+- labelColour: Colour of the Text.
+- labelBackground: Colour of the background.
+- lineColour: Line Colour.
+- strokeStyle: Style of Stroke.
+- Returns: A  new view containing the chart with a marker line at a specified value.
+
+
+---
+
+
+#### X Axis Grid
+
+Adds vertical lines along the X axis.
+
+```swift
+.xAxisGrid(chartData: CTLineBarChartDataProtocol)
+```
+Setup within  [ChartData](#ChartData) --> [ChartStyle](#ChartStyle).
+
+
+---
+
+
+#### Y Axis Grid
+
+Adds horizontal lines along the Y axis.
+
+```swift
+.yAxisGrid(chartData: CTLineBarChartDataProtocol)
+```
+Setup within  [ChartData](#ChartData) --> [ChartStyle](#ChartStyle).
+
+
+---
+
+
+#### X Axis Labels
+
+Labels for the X axis.
+
+```swift
+.xAxisLabels(chartData: CTLineBarChartDataProtocol)
+```
+Setup within  [ChartData](#ChartData) --> [ChartStyle](#ChartStyle).
+
+
+---
+
+
+#### Y Axis Labels
+
+Automatically generated labels for the Y axis
+
+```swift
+.yAxisLabels(chartData: CTLineBarChartDataProtocol, specifier: "%.0f")
+```
+- specifier: Decimal precision specifier.
+
+Setup within  [ChartData](#ChartData) --> [ChartStyle](#ChartStyle).
+
+
+---
+
+
+### Line Charts
+
+#### Point Markers
+
+Lays out markers over each of the data point.
+
+```swift
+.pointMarkers(chartData: CTLineChartDataProtocol)
+```
+Setup within  [ChartData](#DataSet) --> [PointStyle](#PointStyle).
+
+
 
 
 

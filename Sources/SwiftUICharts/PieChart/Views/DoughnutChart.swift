@@ -24,11 +24,11 @@ import SwiftUI
  ```
  .touchOverlay(chartData: data)
  .infoBox(chartData: data)
+ .floatingInfoBox(chartData: data)
  .headerBox(chartData: data)
  .legends(chartData: data)
  ```
  */
-// .stroke -- REMOVE FORCE UNWRAP
 public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData {
     
     @ObservedObject var chartData: ChartData
@@ -58,7 +58,7 @@ public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData 
                             .shadow(color: Color.primary, radius: 10)
                     }
                     .accessibilityLabel(Text("\(chartData.metadata.title)"))
-                    .accessibilityValue(Text(String(format: chartData.infoView.touchSpecifier, chartData.dataSets.dataPoints[data].value) + "\(chartData.dataSets.dataPoints[data].pointDescription ?? "")"))
+                    .accessibilityValue(chartData.dataSets.dataPoints[data].getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
             }
         }
         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
@@ -68,4 +68,5 @@ public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData 
             self.startAnimation = false
         }
     }
+    
 }

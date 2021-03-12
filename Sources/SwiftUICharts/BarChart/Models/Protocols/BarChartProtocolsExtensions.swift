@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - Markers
 extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType {
     internal func markerSubView() -> some View {
         Group {
@@ -49,17 +50,17 @@ extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType {
     }
 }
 
-
+// MARK: - Legends
+// MARK: Standard / Ranged
 extension CTBarChartDataProtocol where Self.Set.ID == UUID,
                                        Self.Set.DataPoint.ID == UUID,
                                        Self.Set: CTStandardBarChartDataSet,
-                                       Self.Set.DataPoint: CTStandardBarDataPoint {
+                                       Self.Set.DataPoint: CTBarColourProtocol {
     internal func setupLegends() {
-        
         switch self.barStyle.colourFrom {
         case .barStyle:
-            if self.barStyle.fillColour.colourType == .colour,
-               let colour = self.barStyle.fillColour.colour
+            if self.barStyle.colour.colourType == .colour,
+               let colour = self.barStyle.colour.colour
             {
                 self.legends.append(LegendData(id         : dataSets.id,
                                                legend     : dataSets.legendTitle,
@@ -67,36 +68,36 @@ extension CTBarChartDataProtocol where Self.Set.ID == UUID,
                                                strokeStyle: nil,
                                                prioity    : 1,
                                                chartType  : .bar))
-            } else if self.barStyle.fillColour.colourType == .gradientColour,
-                      let colours = self.barStyle.fillColour.colours
+            } else if self.barStyle.colour.colourType == .gradientColour,
+                      let colours = self.barStyle.colour.colours
             {
                 self.legends.append(LegendData(id         : dataSets.id,
                                                legend     : dataSets.legendTitle,
                                                colour     : ColourStyle(colours: colours,
-                                                                       startPoint: .leading,
-                                                                       endPoint: .trailing),
+                                                                        startPoint: .leading,
+                                                                        endPoint: .trailing),
                                                strokeStyle: nil,
                                                prioity    : 1,
                                                chartType  : .bar))
-            } else if self.barStyle.fillColour.colourType == .gradientStops,
-                      let stops = self.barStyle.fillColour.stops
+            } else if self.barStyle.colour.colourType == .gradientStops,
+                      let stops = self.barStyle.colour.stops
             {
                 self.legends.append(LegendData(id         : dataSets.id,
                                                legend     : dataSets.legendTitle,
                                                colour     : ColourStyle(stops: stops,
-                                                                       startPoint: .leading,
-                                                                       endPoint: .trailing),
+                                                                        startPoint: .leading,
+                                                                        endPoint: .trailing),
                                                strokeStyle: nil,
                                                prioity    : 1,
                                                chartType  : .bar))
             }
         case .dataPoints:
-
+            
             for data in dataSets.dataPoints {
-
-                if data.fillColour.colourType == .colour,
-                   let colour = data.fillColour.colour,
-                   let legend = data.pointDescription
+                
+                if data.colour.colourType == .colour,
+                   let colour = data.colour.colour,
+                   let legend = data.description
                 {
                     self.legends.append(LegendData(id         : data.id,
                                                    legend     : legend,
@@ -104,27 +105,27 @@ extension CTBarChartDataProtocol where Self.Set.ID == UUID,
                                                    strokeStyle: nil,
                                                    prioity    : 1,
                                                    chartType  : .bar))
-                } else if data.fillColour.colourType == .gradientColour,
-                          let colours = data.fillColour.colours,
-                          let legend = data.pointDescription
+                } else if data.colour.colourType == .gradientColour,
+                          let colours = data.colour.colours,
+                          let legend = data.description
                 {
                     self.legends.append(LegendData(id         : data.id,
                                                    legend     : legend,
                                                    colour     : ColourStyle(colours: colours,
-                                                                           startPoint: .leading,
-                                                                           endPoint: .trailing),
+                                                                            startPoint: .leading,
+                                                                            endPoint: .trailing),
                                                    strokeStyle: nil,
                                                    prioity    : 1,
                                                    chartType  : .bar))
-                } else if data.fillColour.colourType == .gradientStops,
-                          let stops = data.fillColour.stops,
-                          let legend = data.pointDescription
+                } else if data.colour.colourType == .gradientStops,
+                          let stops = data.colour.stops,
+                          let legend = data.description
                 {
                     self.legends.append(LegendData(id         : data.id,
                                                    legend     : legend,
                                                    colour     : ColourStyle(stops: stops,
-                                                                           startPoint: .leading,
-                                                                           endPoint: .trailing),
+                                                                            startPoint: .leading,
+                                                                            endPoint: .trailing),
                                                    strokeStyle: nil,
                                                    prioity    : 1,
                                                    chartType  : .bar))
@@ -134,13 +135,14 @@ extension CTBarChartDataProtocol where Self.Set.ID == UUID,
     }
 }
 
+// MARK: Multi Bar
 extension CTMultiBarChartDataProtocol {
     internal func setupLegends() {
         
         for group in self.groups {
             
-            if group.fillColour.colourType == .colour,
-               let colour = group.fillColour.colour
+            if group.colour.colourType == .colour,
+               let colour = group.colour.colour
             {
                 self.legends.append(LegendData(id         : group.id,
                                                legend     : group.title,
@@ -148,8 +150,8 @@ extension CTMultiBarChartDataProtocol {
                                                strokeStyle: nil,
                                                prioity    : 1,
                                                chartType  : .bar))
-            } else if group.fillColour.colourType == .gradientColour,
-                      let colours = group.fillColour.colours
+            } else if group.colour.colourType == .gradientColour,
+                      let colours = group.colour.colours
             {
                 self.legends.append(LegendData(id         : group.id,
                                                legend     : group.title,
@@ -159,8 +161,8 @@ extension CTMultiBarChartDataProtocol {
                                                strokeStyle: nil,
                                                prioity    : 1,
                                                chartType  : .bar))
-            } else if group.fillColour.colourType == .gradientStops,
-                      let stops  = group.fillColour.stops
+            } else if group.colour.colourType == .gradientStops,
+                      let stops  = group.colour.stops
             {
                 self.legends.append(LegendData(id         : group.id,
                                                legend     : group.title,
@@ -172,11 +174,5 @@ extension CTMultiBarChartDataProtocol {
                                                chartType  : .bar))
             }
         }
-    }
-}
-
-extension CTBarChartDataProtocol  {
-    func getCellAccessibilityValue<DP: CTStandardDataPointProtocol>(dataPoint: DP) -> Text {
-        Text("\(dataPoint.value, specifier: self.infoView.touchSpecifier), \(dataPoint.pointDescription ?? "")")
     }
 }
