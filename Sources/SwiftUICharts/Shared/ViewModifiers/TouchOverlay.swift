@@ -76,6 +76,7 @@ extension View {
      - Parameters:
         - chartData: Chart data model.
         - specifier: Decimal precision for labels.
+        - unit: Unit to put before or after the value.
      - Returns: A  new view containing the chart with a touch overlay.
      */
     public func touchOverlay<T: CTChartData>(chartData: T,

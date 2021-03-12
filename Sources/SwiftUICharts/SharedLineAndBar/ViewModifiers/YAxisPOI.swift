@@ -193,7 +193,7 @@ extension View {
         - markerName: Title of marker, for the legend.
         - markerValue: Value to mark
         - labelPosition: Option to display the markers’ value inline with the marker.
-        - labelColour: Colour of the`Text`.
+        - labelColour: Colour of the `Text`.
         - labelBackground: Colour of the background.
         - lineColour: Line Colour.
         - strokeStyle: Style of Stroke.
@@ -222,7 +222,7 @@ extension View {
     
     
     /**
-     Horizontal line marking the average
+     Horizontal line marking the average.
      
      Shows a marker line at the average of all the data points within
      the relevant data set(s).
@@ -264,7 +264,7 @@ extension View {
         - chartData: Chart data model.
         - markerName: Title of marker, for the legend.
         - labelPosition: Option to display the markers’ value inline with the marker.
-        - labelColour: Colour of the`Text`.
+        - labelColour: Colour of the `Text`.
         - labelBackground: Colour of the background.
         - lineColour: Line Colour.
         - strokeStyle: Style of Stroke.
