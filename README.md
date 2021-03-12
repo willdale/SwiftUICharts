@@ -52,34 +52,64 @@ Swift Package Manager
 ```
 File > Swift Packages > Add Package Dependency...
 ```
+```swift
+import SwiftUICharts
+```
 
 ## Documentation
 
+## Chart Types
+
+### LineChart
+
+Uses `LineChartData` data model.
+
+```
+LineChart(chartData: data)
+    .pointMarkers(chartData: data)
+    .touchOverlay(chartData: data, specifier: "%.0f")
+    .yAxisPOI(chartData: data,
+              markerName: "Something",
+              markerValue: 110,
+              labelPosition: .center(specifier: "%.0f"),
+              labelColour: Color.white,
+              labelBackground: Color.blue,
+              lineColour: Color.blue,
+              strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
+    .averageLine(chartData: data,
+                 strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
+    .xAxisGrid(chartData: data)
+    .yAxisGrid(chartData: data)
+    .xAxisLabels(chartData: data)
+    .yAxisLabels(chartData: data)
+    .infoBox(chartData: data)
+    .floatingInfoBox(chartData: data)
+    .headerBox(chartData: data)
+    .legends(chartData: data, columns: [GridItem(.flexible()), GridItem(.flexible())])
+```
+
+---
+
+
+## View Modifiers
+
 [View Modifiers](#View-Modifiers) 
-- [Touch Overlay](#Touch-Overlay) 
-- [Point Markers](#Point-Markers) 
+- [Touch Overlay](#Touch-Overlay)
+- [Info Box](#Info-Box) 
+- [Floating Info Box](#Floating-Info-Box) 
+- [Header Box](#Header-Box) 
+- [Legends](#Legends) 
+
 - [Average Line](#Average-Line) 
 - [Y Axis Point Of Interest](#Y-Axis-Point-Of-Interest) 
 - [X Axis Grid](#X-Axis-Grid) 
 - [Y Axis Grid](#Y-Axis-Grid) 
 - [X Axis Labels](#X-Axis-Labels) 
 - [Y Axis Labels](#Y-Axis-Labels) 
-- [Header Box](#Header-Box) 
-- [Legends](#Legends) 
 
-[Data Models](#Data-Models) 
-- [Chart Data](#ChartData) 
-- [Chart Data Point](#ChartDataPoint) 
-- [Chart Metadata](#ChartMetadata)
-- [Chart Style](#ChartStyle) 
-    - [Grid Style](#GridStyle) 
-    - [XAxisLabelSetup](#XAxisLabelSetup) 
-    - [YAxisLabelSetup](#YAxisLabelSetup) 
-- [Line Style](#LineStyle) 
-- [Bar Style](#BarStyle) 
-- [Point Style](#PointStyle) 
+- [Point Markers](#Point-Markers) 
 
-## View Modifiers
+The order of the view modifiers is some what important as the modifiers are various types for stacks that wrap around the previous views.
 
 ### All Chart Types
 
@@ -87,7 +117,7 @@ File > Swift Packages > Add Package Dependency...
 
 Detects input either from touch of pointer. Finds the nearest data point and displays the relevent information where specified. 
 
-The location of the info box is set in [ChartStyle](#ChartStyle) -> infoBoxPlacement.
+The location of the info box is set in `ChartStyle -> infoBoxPlacement`.
 
 ```swift
 .touchOverlay(chartData: CTChartData, specifier: String, unit: TouchUnit)
@@ -96,7 +126,7 @@ The location of the info box is set in [ChartStyle](#ChartStyle) -> infoBoxPlace
 - specifier: Decimal precision for labels.
 - unit: Unit to put before or after the value.
 
-Setup within  [ChartData](#ChartData) --> [ChartStyle](#ChartStyle) 
+Setup within  Chart Data --> Chart Style
 
 
 ---
@@ -104,9 +134,9 @@ Setup within  [ChartData](#ChartData) --> [ChartStyle](#ChartStyle)
 
 #### Info Box
 
-Displays the information from [Touch Overlay](#TouchOverlay) if `InfoBoxPlacement` is set to `.infoBox`.
+Displays the information from [Touch Overlay](#Touch-Overlay) if `InfoBoxPlacement` is set to `.infoBox`.
 
-The location of the info box is set in [ChartStyle](#ChartStyle) -> infoBoxPlacement.
+The location of the info box is set in `ChartStyle -> infoBoxPlacement`.
 
 ```swift
 .infoBox(chartData: CTChartData)
@@ -119,9 +149,9 @@ The location of the info box is set in [ChartStyle](#ChartStyle) -> infoBoxPlace
 
 #### Floating Info Box
 
-Displays the information from [Touch Overlay](#TouchOverlay) if `InfoBoxPlacement` is set to `.floating`.
+Displays the information from [Touch Overlay](#Touch-Overlay) if `InfoBoxPlacement` is set to `.floating`.
 
-The location of the info box is set in [ChartStyle](#ChartStyle) -> infoBoxPlacement.
+The location of the info box is set in `ChartStyle -> infoBoxPlacement`.
 
 ```swift
 .floatingInfoBox(chartData: CTChartData)
@@ -134,11 +164,11 @@ The location of the info box is set in [ChartStyle](#ChartStyle) -> infoBoxPlace
 
 #### Header Box
 
-Displays the metadata about the chart. See [ChartMetadata](#ChartMetadata).
+Displays the metadata about the chart, set in `Chart Data -> ChartMetadata`
 
-Displays the information from [Touch Overlay](#TouchOverlay) if `InfoBoxPlacement` is set to `.header`.
+Displays the information from [Touch Overlay](#Touch-Overlay) if `InfoBoxPlacement` is set to `.header`.
 
-The location of the info box is set in [ChartStyle](#ChartStyle) -> infoBoxPlacement.
+The location of the info box is set in `ChartStyle -> infoBoxPlacement`.
 
 ```swift
 .headerBox(chartData: data)
@@ -150,7 +180,7 @@ The location of the info box is set in [ChartStyle](#ChartStyle) -> infoBoxPlace
 
 #### Legends
 
-Legends from the data being show on the chart (See [ChartMetadata](#ChartMetadata) ) and any markers (See [Average Line](#Average-Line)  and [Y Axis Point Of Interest](#Y-Axis-Point-Of-Interest)). 
+Displays legends.
 
 ```swift
 .legends()
@@ -221,7 +251,7 @@ Adds vertical lines along the X axis.
 ```swift
 .xAxisGrid(chartData: CTLineBarChartDataProtocol)
 ```
-Setup within  [ChartData](#ChartData) --> [ChartStyle](#ChartStyle).
+Setup within  `ChartData -> ChartStyle`.
 
 
 ---
@@ -234,7 +264,7 @@ Adds horizontal lines along the Y axis.
 ```swift
 .yAxisGrid(chartData: CTLineBarChartDataProtocol)
 ```
-Setup within  [ChartData](#ChartData) --> [ChartStyle](#ChartStyle).
+Setup within  `ChartData -> ChartStyle`.
 
 
 ---
@@ -247,7 +277,7 @@ Labels for the X axis.
 ```swift
 .xAxisLabels(chartData: CTLineBarChartDataProtocol)
 ```
-Setup within  [ChartData](#ChartData) --> [ChartStyle](#ChartStyle).
+Setup within  `ChartData -> ChartStyle`.
 
 
 ---
@@ -262,7 +292,7 @@ Automatically generated labels for the Y axis
 ```
 - specifier: Decimal precision specifier.
 
-Setup within  [ChartData](#ChartData) --> [ChartStyle](#ChartStyle).
+Setup within  `ChartData -> ChartStyle`.
 
 
 ---
@@ -277,277 +307,105 @@ Lays out markers over each of the data point.
 ```swift
 .pointMarkers(chartData: CTLineChartDataProtocol)
 ```
-Setup within  [ChartData](#DataSet) --> [PointStyle](#PointStyle).
+Setup within `Data Set -> PointStyle`.
 
 
+---
 
+## Examples
 
+### Line Chart
 
-## Data Models
-
-### ChartData
-
-The ChartData type is where the majority of the configuration is done. The only required initialiser is dataPoints.
-
-```swift
-ChartData(dataPoints    : [ChartDataPoint],
-          metadata      : ChartMetadata,
-          xAxisLabels   : [String]?,
-          chartStyle    : ChartStyle,
-          lineStyle     : LineStyle,
-          barStyle      : BarStyle,
-          pointStyle    : PointStyle,
-          calculations  : CalculationType)
+```Swift
+struct LineChartDemoView: View {
+    
+    let data : LineChartData = weekOfData()
+    
+    var body: some View {
+        VStack {
+            LineChart(chartData: data)
+                .pointMarkers(chartData: data)
+                .touchOverlay(chartData: data, specifier: "%.0f")
+                .yAxisPOI(chartData: data,
+                          markerName: "Step Count Aim",
+                          markerValue: 15_000,
+                          labelPosition: .center(specifier: "%.0f"),
+                          labelColour: Color.black,
+                          labelBackground: Color(red: 1.0, green: 0.75, blue: 0.25),
+                          lineColour: Color(red: 1.0, green: 0.75, blue: 0.25),
+                          strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
+                .yAxisPOI(chartData: data,
+                          markerName: "Minimum Recommended",
+                          markerValue: 10_000,
+                          labelPosition: .center(specifier: "%.0f"),
+                          labelColour: Color.white,
+                          labelBackground: Color(red: 0.25, green: 0.75, blue: 1.0),
+                          lineColour: Color(red: 0.25, green: 0.75, blue: 1.0),
+                          strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
+                .averageLine(chartData: data,
+                             strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
+                .xAxisGrid(chartData: data)
+                .yAxisGrid(chartData: data)
+                .xAxisLabels(chartData: data)
+                .yAxisLabels(chartData: data)
+                .infoBox(chartData: data)
+                .headerBox(chartData: data)
+                .legends(chartData: data, columns: [GridItem(.flexible()), GridItem(.flexible())])
+                .frame(minWidth: 150, maxWidth: 900, minHeight: 150, idealHeight: 250, maxHeight: 400, alignment: .center)
+        }
+        .navigationTitle("Week of Data")
+    }
+    
+    static func weekOfData() -> LineChartData {
+        let data = LineDataSet(dataPoints: [
+            LineChartDataPoint(value: 12000, xAxisLabel: "M", description: "Monday"),
+            LineChartDataPoint(value: 10000, xAxisLabel: "T", description: "Tuesday"),
+            LineChartDataPoint(value: 8000,  xAxisLabel: "W", description: "Wednesday"),
+            LineChartDataPoint(value: 17500, xAxisLabel: "T", description: "Thursday"),
+            LineChartDataPoint(value: 16000, xAxisLabel: "F", description: "Friday"),
+            LineChartDataPoint(value: 11000, xAxisLabel: "S", description: "Saturday"),
+            LineChartDataPoint(value: 9000,  xAxisLabel: "S", description: "Sunday")
+        ],
+        legendTitle: "Steps",
+        pointStyle: PointStyle(),
+        style: LineStyle(lineColour: ColourStyle(colour: .red), lineType: .curvedLine))
+        
+        let metadata   = ChartMetadata(title: "Step Count", subtitle: "Over a Week")
+        
+        let gridStyle  = GridStyle(numberOfLines: 7,
+                                   lineColour   : Color(.lightGray).opacity(0.5),
+                                   lineWidth    : 1,
+                                   dash         : [8],
+                                   dashPhase    : 0)
+        
+        let chartStyle = LineChartStyle(infoBoxPlacement    : .infoBox(isStatic: false),
+                                        infoBoxBorderColour : Color.primary,
+                                        infoBoxBorderStyle  : StrokeStyle(lineWidth: 1),
+                                        
+                                        markerType          : .vertical(attachment: .line(dot: .style(DotStyle()))),
+                                        
+                                        xAxisGridStyle      : gridStyle,
+                                        xAxisLabelPosition  : .bottom,
+                                        xAxisLabelColour    : Color.primary,
+                                        xAxisLabelsFrom     : .dataPoint(rotation: .degrees(0)),
+                                        
+                                        yAxisGridStyle      : gridStyle,
+                                        yAxisLabelPosition  : .leading,
+                                        yAxisLabelColour    : Color.primary,
+                                        yAxisNumberOfLabels : 7,
+                                        
+                                        baseline            : .minimumWithMaximum(of: 5000),
+                                        topLine             : .maximum(of: 20000),
+                                        
+                                        globalAnimation     : .easeOut(duration: 1))
+        
+        return LineChartData(dataSets       : data,
+                             metadata       : metadata,
+                             chartStyle     : chartStyle)
+        
+    }
+}
 ```
-- dataPoints: Array of ChartDataPoints. See [ChartDataPoint](#ChartDataPoint).
-- metadata: Data to fill in the metadata box above the chart. See [ChartMetadata](#ChartMetadata).
-- xAxisLabels: Array of Strings for when there are too many data points to show all xAxisLabels.
-- chartStyle : The parameters for the aesthetic of the chart. See [ChartStyle](#ChartStyle).
-- lineStyle: The parameters for the aesthetic of the line chart.  See [LineChartStyle](#LineLineChartStyle).
-- barStyle: The parameters for the aesthetic of the bar chart. See [BarStyle](#BarStyle).
-- pointStyle: The parameters for the aesthetic of the data point markers.  See [PointStyle](#PointStyle).
-- calculations: Choose whether to perform calculations on the data points. If so, then by what means.
 
 
-### ChartDataPoint
-
-ChartDataPoint holds the information for each of the individual data points.
-
-Colours are only used in Bar Charts.
-
-__All__
-```swift
-ChartDataPoint(value: Double,
-               xAxisLabel: String?,
-               pointLabel: String?,
-               date: Date?
-               ...)
-```
-- value: Value of the data point.
-- xAxisLabel: Label that can be shown on the X axis.
-- pointLabel: A longer label that can be shown on touch input.
-- date: Date of the data point if any data based calculations are required.
-
-__Single Colour__
-```swift
-ChartDataPoint(...
-               colour: Color)
-          
-```
-- colour: Colour for use with a bar chart.
-
-__Colour Gradient__
-```swift
-ChartDataPoint(...
-               colours     : [Color]?,
-               startPoint  : UnitPoint?,
-               endPoint    : UnitPoint?)
-```
-- colours: Colours for Gradient
-- startPoint: Start point for Gradient
-- endPoint: End point for Gradient
-
-__Colour Gradient with stop control__
-```swift
-ChartDataPoint(...
-               stops: [GradientStop],
-               startPoint: UnitPoint?,
-               endPoint: UnitPoint?)
-               
-```
-- stops: Colours and Stops for Gradient with stop control.
-- startPoint: Start point for Gradient.
-- endPoint: End point for Gradient.
-
-
-### ChartMetadata
-
-Data model for the chart's metadata
-
-```swift
-ChartMetadata(title: String?,
-              subtitle: String?,
-              lineLegend: String?)
-```
-- title: The charts Title
-- subtitle: The charts subtitle
-- lineLegend: The title for the legend
-
-
-### ChartStyle
-
-Model for controlling the overall aesthetic of the chart.
-
-```swift
-ChartStyle(infoBoxPlacement    : InfoBoxPlacement,
-           xAxisGridStyle      : GridStyle,
-           yAxisGridStyle      : GridStyle,
-           xAxisLabelPosition  : XAxisLabelPosistion,
-           xAxisLabelsFrom     : LabelsFrom,         
-           yAxisLabelPosition  : YAxisLabelPosistion,
-           yAxisNumberOfLabels : Int,
-           globalAnimation     : Animation
-```
-- infoBoxPlacement: Placement of the information box that appears on touch input.
-- xAxisGridStyle: Style of the vertical lines breaking up the chart. See [GridStyle](#GridStyle).
-- yAxisGridStyle: Style of the horizontal lines breaking up the chart. See [GridStyle](#GridStyle).
-- xAxisLabelPosition: Location of the X axis labels - Top or Bottom
-- xAxisLabelsFrom: Where the label data come from. DataPoint or xAxisLabels
-- yAxisLabelPosition: Location of the X axis labels - Leading or Trailing
-- yAxisNumberOfLabel: Number Of Labels on Y Axis
-- globalAnimation: Global control of animations.
-
-
-### GridStyle
-
-Model for controlling the look of the Grid
-
-```swift
-GridStyle(numberOfLines : Int,
-          lineColour    : Color,
-          lineWidth     : CGFloat,
-          dash          : [CGFloat],
-          dashPhase     : CGFloat)
-```
-- numberOfLines: Number of lines to break up the axis
-- lineColour: Line Colour
-- lineWidth: Line Width
-- dash: Dash
-- dashPhase: Dash Phase
-
-
-### XAxisLabelSetup
-
-Model for the styling of the labels on the X axis.
-
-```swift
-XAxisLabelSetup(labelPosition: XAxisLabelPosistion,
-                labelsFrom: LabelsFrom)
-```
-- labelPosition: Location of the X axis labels - Top or Bottom
-- labelsFrom: Where the label data come from. DataPoint or xAxisLabels
-
-
-### YAxisLabelSetup
-
-Model for the styling of the labels on the Y axis.
-
-```swift
-YAxisLabelSetup(labelPosition   : YAxisLabelPosistion,
-                numberOfLabels  : Int)
-```
-- labelPosition: Location of the Y axis labels - Leading or Trailing
-- numberOfLabels: Number Of Labels on Y Axis
-
-
-### LineStyle
-
-Model for controlling the overall aesthetic of the line chart.
-
-There are three possible initialisers: Single Colour, Colour Gradient or Colour Gradient with stop control.
-
-__Single Colour__
-```swift
-LineChartStyle(colour: Color,
-          ...
-```
-- colour: Single Colour
-
-__Colour Gradient__
-```swift
-LineChartStyle(colours: [Color]?,
-               startPoint: UnitPoint?,
-               endPoint: UnitPoint?,
-               ...
-```
-- colours: Colours for Gradient
-- startPoint: Start point for Gradient
-- endPoint: End point for Gradient
-
-__Colour Gradient with stop control__
-```swift
-LineChartStyle(stops: [GradientStop],
-               startPoint: UnitPoint?,
-               endPoint: UnitPoint?,
-               ...
-```
-- stops: Colours and Stops for Gradient with stop control.
-- startPoint: Start point for Gradient.
-- endPoint: End point for Gradient.
-
-__All__
-```swift
-LineChartStyle(...
-               strokeStyle : StrokeStyle,
-               ignoreZero: Bool)
-```
-- lineType: Drawing style of the line.
-- strokeStyle: Stroke Style
-- ignoreZero: Whether the chart should skip data points who's value is 0 while keeping the spacing.
-
-
-### BarStyle
-
-Model for controlling the aesthetic of the bar chart.
-
-There are three possible initialisers: Single Colour, Colour Gradient or Colour Gradient with stop control.
-
-__All__
-```swift
-BarStyle(barWidth       : CGFloat,
-         cornerRadius   : CornerRadius,
-         colourFrom     : ColourFrom,
-         ...)
-```
-- barWidth: How much of the available width to use. 0...1
-- cornerRadius: Corner radius of the bar shape.
-- colourFrom: Where to get the colour data from.
-
-__Single Colour__
-```swift
-BarStyle(...
-         colour: Single Colour)    
-```
-- colour: Single Colour
-
-__Colour Gradient__
-```swift
-BarStyle(...
-         colours     : [Color]  
-         startPoint  : UnitPoint
-         endPoint    : UnitPoint)
-```
-- colours: Colours for Gradient
-- startPoint: Start point for Gradient
-- endPoint: End point for Gradient
-
-__Colour Gradient with stop control__
-```swift
-BarStyle(...
-         stops       : [GradientStop]
-         startPoint  : UnitPoint
-         endPoint    : UnitPoint)
-```
-- stops: Colours and Stops for Gradient with stop control.
-- startPoint: Start point for Gradient.
-- endPoint: End point for Gradient.
-
-
-### PointStyle
-
-Model for controlling the aesthetic of the point markers.
-
-```swift
-PointStyle(pointSize    : CGFloat,
-           borderColour : Color,
-           fillColour   : Color,
-           lineWidth    : CGFloat,
-           pointType    : PointType,
-           pointShape   : PointShape)
-```
-- pointSize: Overall size of the mark
-- borderColour: Outter ring colour
-- fillColour: Center fill colour
-- lineWidth: Outter ring line width
-- pointType: Style of the point marks.
-- pointShape: Shape of the points
+---
