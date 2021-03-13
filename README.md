@@ -1,67 +1,11 @@
 # SwiftUICharts
 
-A charts / plotting library for SwiftUI. Works on macOS, iOS,  watchOS, and tvOS. Has accessibility features built in
+A charts / plotting library for SwiftUI. Works on macOS, iOS,  watchOS, and tvOS. Has accessibility features built in.
 
 [Demo Project](https://github.com/willdale/SwiftUICharts-Demo)
 
-## Examples
 
-### Line Charts
-
-#### Line Chart
-![Example of Line Chart](Resources/images/LineCharts/LineChart.png)
-
-#### Filled Line Chart
-![Example of Line Chart](Resources/images/LineCharts/FilledLineChart.png)
-
-#### Multi Line Chart
-![Example of Line Chart](Resources/images/LineCharts/MultiLineChart.png)
-
-#### Ranged Line Chart
-![Example of Line Chart](Resources/images/LineCharts/RangedLineChart.png)
-
-
-### Bar Charts
-
-#### Bar Chart
-![Example of Line Chart](Resources/images/BarCharts/BarChart.png)
-
-#### Range Bar Chart
-![Example of Line Chart](Resources/images/BarCharts/RangeBarChart.png)
-
-#### Grouped Bar Chart
-![Example of Line Chart](Resources/images/BarCharts/GroupedBarChart.png)
-
-#### Stacked Bar Chart
-![Example of Line Chart](Resources/images/BarCharts/StackedBarChart.png)
-
-
-### Pie Charts
-
-#### Pie Chart
-![Example of Line Chart](Resources/images/PieCharts/PieChart.png)
-
-#### Doughnut Chart
-![Example of Line Chart](Resources/images/PieCharts/DoughnutChart.png)
-
-
-## Documentation
-### Installation
-
-Swift Package Manager
-
-```
-File > Swift Packages > Add Package Dependency...
-```
-```swift
-import SwiftUICharts
-```
-
-
----
-
-
-### Chart Types
+## Chart Types
 
 - [Line Chart](#Line-Chart)
 - [Filled Line Chart](#Filled-Line-Chart)
@@ -76,7 +20,11 @@ import SwiftUICharts
 - [Pie Chart](#Pie-Chart)
 - [Doughnut Chart](#Doughnut-Chart)
 
+
+### Line Charts
+
 #### Line Chart
+![Example of Line Chart](Resources/images/LineCharts/LineChart.png)
 
 Uses `LineChartData` data model.
 
@@ -84,11 +32,11 @@ Uses `LineChartData` data model.
 LineChart(chartData: LineChartData)
 ```
 
-
 ---
 
 
 #### Filled Line Chart
+![Example of Filled Line Chart](Resources/images/LineCharts/FilledLineChart.png)
 
 Uses `LineChartData` data model.
 
@@ -101,6 +49,7 @@ FilledLineChart(chartData: LineChartData)
 
 
 #### Multi Line Chart
+![Example of Multi Line Chart](Resources/images/LineCharts/MultiLineChart.png)
 
 Uses `MultiLineChartData` data model.
 
@@ -113,6 +62,7 @@ MultiLineChart(chartData: MultiLineChartData)
 
 
 #### Ranged Line Chart
+![Example of Ranged Line Chart](Resources/images/LineCharts/RangedLineChart.png)
 
 Uses `RangedLineChart` data model.
 
@@ -124,7 +74,10 @@ RangedLineChart(chartData: RangedLineChartData)
 ---
 
 
+### Bar Charts
+
 #### Bar Chart
+![Example of Bar Chart](Resources/images/BarCharts/BarChart.png)
 
 Uses `BarChartData` data model.
 
@@ -136,7 +89,8 @@ BarChart(chartData: BarChartData)
 ---
 
 
-#### Ranged Bar Chart
+#### Range Bar Chart
+![Example of Range Bar Chart](Resources/images/BarCharts/RangeBarChart.png)
 
 Uses `RangedBarChartData` data model.
 
@@ -148,7 +102,9 @@ RangedBarChart(chartData: RangedBarChartData)
 ---
 
 
+
 #### Grouped Bar Chart
+![Example of Grouped Bar Chart](Resources/images/BarCharts/GroupedBarChart.png)
 
 Uses `GroupedBarChartData` data model.
 
@@ -161,6 +117,7 @@ GroupedBarChart(chartData: GroupedBarChartData)
 
 
 #### Stacked Bar Chart
+![Example of Stacked Bar Chart](Resources/images/BarCharts/StackedBarChart.png)
 
 Uses `StackedBarChartData` data model.
 
@@ -171,7 +128,10 @@ StackedBarChart(chartData: StackedBarChartData)
 ---
 
 
+### Pie Charts
+
 #### Pie Chart
+![Example of Pie Chart](Resources/images/PieCharts/PieChart.png)
 
 Uses `PieChartData` data model.
 
@@ -184,11 +144,27 @@ PieChart(chartData: PieChartData)
 
 
 #### Doughnut Chart
+![Example of Doughnut Chart](Resources/images/PieCharts/DoughnutChart.png)
 
 Uses `DoughnutChartData` data model.
 
 ```swift
 DoughnutChart(chartData: DoughnutChartData)
+```
+
+
+---
+
+## Documentation
+### Installation
+
+Swift Package Manager
+
+```
+File > Swift Packages > Add Package Dependency...
+```
+```swift
+import SwiftUICharts
 ```
 
 
@@ -274,7 +250,7 @@ Displays the information from [Touch Overlay](#Touch-Overlay) if `InfoBoxPlaceme
 The location of the info box is set in `ChartStyle -> infoBoxPlacement`.
 
 ```swift
-.headerBox(chartData: data)
+.headerBox(chartData: CTChartData)
 ```
 
 
