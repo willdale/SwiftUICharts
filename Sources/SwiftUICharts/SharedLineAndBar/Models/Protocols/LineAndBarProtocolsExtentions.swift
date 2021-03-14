@@ -10,46 +10,51 @@ import SwiftUI
 // MARK: - Data Set
 extension CTLineBarChartDataProtocol {
     public var range : Double {
-        
-        var _lowestValue  : Double
-        var _highestValue : Double
-        
-        switch self.chartStyle.baseline {
-        case .minimumValue:
-            _lowestValue = self.dataSets.minValue()
-        case .minimumWithMaximum(of: let value):
-            _lowestValue = min(self.dataSets.minValue(), value)
-        case .zero:
-            _lowestValue = 0
+        get {
+            var _lowestValue  : Double
+            var _highestValue : Double
+            
+            switch self.chartStyle.baseline {
+            case .minimumValue:
+                _lowestValue = self.dataSets.minValue()
+            case .minimumWithMaximum(of: let value):
+                _lowestValue = min(self.dataSets.minValue(), value)
+            case .zero:
+                _lowestValue = 0
+            }
+            
+            switch self.chartStyle.topLine {
+            case .maximumValue:
+                _highestValue = self.dataSets.maxValue()
+            case .maximum(of: let value):
+                _highestValue = max(self.dataSets.maxValue(), value)
+            }
+            
+            return (_highestValue - _lowestValue) + 0.001
         }
-        
-        switch self.chartStyle.topLine {
-        case .maximumValue:
-            _highestValue = self.dataSets.maxValue()
-        case .maximum(of: let value):
-            _highestValue = max(self.dataSets.maxValue(), value)
-        }
-
-        return (_highestValue - _lowestValue) + 0.001
     }
     
     public var minValue : Double {
-        switch self.chartStyle.baseline {
-        case .minimumValue:
-            return self.dataSets.minValue()
-        case .minimumWithMaximum(of: let value):
-            return min(self.dataSets.minValue(), value)
-        case .zero:
-            return 0
+        get {
+            switch self.chartStyle.baseline {
+            case .minimumValue:
+                return self.dataSets.minValue()
+            case .minimumWithMaximum(of: let value):
+                return min(self.dataSets.minValue(), value)
+            case .zero:
+                return 0
+            }
         }
     }
     
     public var maxValue : Double {
-        switch self.chartStyle.topLine {
-        case .maximumValue:
-            return self.dataSets.maxValue()
-        case .maximum(of: let value):
-            return max(self.dataSets.maxValue(), value)
+        get {
+            switch self.chartStyle.topLine {
+            case .maximumValue:
+                return self.dataSets.maxValue()
+            case .maximum(of: let value):
+                return max(self.dataSets.maxValue(), value)
+            }
         }
     }
     

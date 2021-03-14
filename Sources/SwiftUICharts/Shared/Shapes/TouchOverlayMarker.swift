@@ -12,7 +12,7 @@ internal struct Vertical: Shape {
     
     private var position : CGPoint
     
-    @inlinable internal init(position : CGPoint) {
+    internal init(position : CGPoint) {
         self.position   = position
     }
     
@@ -32,7 +32,7 @@ internal struct MarkerFull: Shape {
     
     private var position : CGPoint
     
-    @inlinable internal init(position : CGPoint) {
+    internal init(position : CGPoint) {
         self.position = position
     }
     
@@ -57,7 +57,7 @@ internal struct MarkerBottomLeading: Shape {
     
     private var position : CGPoint
 
-    @inlinable internal init(position : CGPoint) {
+    internal init(position : CGPoint) {
         self.position = position
     }
     
@@ -82,7 +82,7 @@ internal struct MarkerBottomTrailing: Shape {
     
     private var position : CGPoint
 
-    @inlinable internal init(position : CGPoint) {
+    internal init(position : CGPoint) {
         self.position = position
     }
     
@@ -107,7 +107,7 @@ internal struct MarkerTopLeading: Shape {
     
     private var position : CGPoint
 
-    @inlinable internal init(position : CGPoint) {
+    internal init(position : CGPoint) {
         self.position = position
     }
     
@@ -132,7 +132,7 @@ internal struct MarkerTopTrailing: Shape {
     
     private var position : CGPoint
     
-    @inlinable internal init(position : CGPoint) {
+    internal init(position : CGPoint) {
         self.position = position
     }
     

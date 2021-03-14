@@ -29,7 +29,7 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
     /**
      Returns the highest value in the data set or data sets
      */
-    var maxValue: Double { get }
+   var maxValue: Double { get }
     
     /**
      Returns the average value from the data set or data sets.
