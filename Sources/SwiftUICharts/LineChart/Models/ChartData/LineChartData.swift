@@ -131,21 +131,37 @@ extension LineChartData {
         
         let index    : Int     = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSet.dataPoints.count {
-            return CGPoint(x: CGFloat(index) * xSection,
-                           y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
+            
+            if !dataSet.style.ignoreZero {
+                return CGPoint(x: CGFloat(index) * xSection,
+                               y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
+            } else {
+                if dataSet.dataPoints[index].value != 0 {
+                    return CGPoint(x: CGFloat(index) * xSection,
+                                   y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
+                }
+            }
         }
         return nil
     }
 
     public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
-                
+        
         var points      : [LineChartDataPoint] = []
         let xSection    : CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
         let index       = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
-            var dataPoint = dataSets.dataPoints[index]
-            dataPoint.legendTag = dataSets.legendTitle
-            points.append(dataPoint)
+            if !dataSets.style.ignoreZero {
+                var dataPoint = dataSets.dataPoints[index]
+                dataPoint.legendTag = dataSets.legendTitle
+                points.append(dataPoint)
+            } else {
+                if dataSets.dataPoints[index].value != 0 {
+                    var dataPoint = dataSets.dataPoints[index]
+                    dataPoint.legendTag = dataSets.legendTitle
+                    points.append(dataPoint)
+                }
+            }
         }
         self.infoView.touchOverlayInfo = points
     }

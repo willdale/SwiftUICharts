@@ -41,6 +41,7 @@ import SwiftUI
  .legends(chartData: data)
  ```
  */
+
 public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
     
     @ObservedObject var chartData: ChartData

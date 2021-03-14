@@ -128,51 +128,38 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
         
         let index    : Int     = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSet.dataPoints.count {
-            return CGPoint(x: CGFloat(index) * xSection,
-                           y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
+            if !dataSet.style.ignoreZero {
+                return CGPoint(x: CGFloat(index) * xSection,
+                               y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
+            } else {
+                if dataSet.dataPoints[index].value != 0 {
+                    return CGPoint(x: CGFloat(index) * xSection,
+                                   y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
+                }
+            }
         }
         return nil
     }
-    
     
     public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points      : [RangedLineChartDataPoint] = []
         let xSection    : CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
         let index       = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
-            var dataPoint = dataSets.dataPoints[index]
-            dataPoint.legendTag = dataSets.legendTitle
-            points.append(dataPoint)
-        }
-        self.infoView.touchOverlayInfo = points
-    }
-    
-    public func headerTouchOverlaySubView(info: RangedLineChartDataPoint) -> some View {
-        Group {
-            switch self.infoView.touchUnit {
-            case .none:
-                Text("\(info.upperValue, specifier: self.infoView.touchSpecifier)")
-                    .font(.title3)
-                    .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.wrappedDescription)")
-                    .font(.subheadline)
-                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
-            case .prefix(of: let unit):
-                Text("\(unit) \(info.upperValue, specifier: self.infoView.touchSpecifier)")
-                    .font(.title3)
-                    .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.wrappedDescription)")
-                    .font(.subheadline)
-                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
-            case .suffix(of: let unit):
-                Text("\(info.upperValue, specifier: self.infoView.touchSpecifier) \(unit)")
-                    .font(.title3)
-                    .foregroundColor(self.chartStyle.infoBoxValueColour)
-                Text("\(info.wrappedDescription)")
-                    .font(.subheadline)
-                    .foregroundColor(self.chartStyle.infoBoxDescriptionColour)
+            
+            if !dataSets.style.ignoreZero {
+                var dataPoint = dataSets.dataPoints[index]
+                dataPoint.legendTag = dataSets.legendTitle
+                points.append(dataPoint)
+            } else {
+                if dataSets.dataPoints[index].value != 0 {
+                    var dataPoint = dataSets.dataPoints[index]
+                    dataPoint.legendTag = dataSets.legendTitle
+                    points.append(dataPoint)
+                }
             }
         }
+        self.infoView.touchOverlayInfo = points
     }
     
     public typealias Set       = RangedLineDataSet

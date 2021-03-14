@@ -130,9 +130,9 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
         }
     }
     
-    public typealias Set = MultiLineDataSet
-    public typealias DataPoint = LineChartDataPoint
-    public typealias CTStyle = LineChartStyle
+    public typealias Set        = MultiLineDataSet
+    public typealias DataPoint  = LineChartDataPoint
+    public typealias CTStyle    = LineChartStyle
 }
 
 
@@ -148,20 +148,38 @@ extension MultiLineChartData {
         
         let index    : Int     = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSet.dataPoints.count {
-            return CGPoint(x: CGFloat(index) * xSection,
-                           y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
+            
+            if !dataSet.style.ignoreZero {
+                return CGPoint(x: CGFloat(index) * xSection,
+                               y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
+            } else {
+                if dataSet.dataPoints[index].value != 0 {
+                    return CGPoint(x: CGFloat(index) * xSection,
+                                   y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
+                }
+            }
         }
         return nil
     }
+    
     public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         var points : [LineChartDataPoint] = []
         for dataSet in dataSets.dataSets {
             let xSection    : CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
             let index       = Int((touchLocation.x + (xSection / 2)) / xSection)
             if index >= 0 && index < dataSet.dataPoints.count {
-                var dataPoint = dataSet.dataPoints[index]
-                dataPoint.legendTag = dataSet.legendTitle
-                points.append(dataPoint)
+                if !dataSet.style.ignoreZero {
+                    var dataPoint = dataSet.dataPoints[index]
+                    dataPoint.legendTag = dataSet.legendTitle
+                    points.append(dataPoint)
+                } else {
+                    
+                    if dataSet.dataPoints[index].value != 0 {
+                        var dataPoint = dataSet.dataPoints[index]
+                        dataPoint.legendTag = dataSet.legendTitle
+                        points.append(dataPoint)
+                    }
+                }
             }
         }
         self.infoView.touchOverlayInfo = points

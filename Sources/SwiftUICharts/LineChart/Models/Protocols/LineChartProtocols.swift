@@ -55,6 +55,8 @@ public protocol CTLineStyle {
      Replica of Apple’s StrokeStyle that conforms to Hashable
      */
     var strokeStyle : Stroke { get set }
+    
+    var ignoreZero  : Bool { get set }
 }
 
 /**

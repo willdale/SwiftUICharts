@@ -69,7 +69,8 @@ internal struct LineChartColourSubView<CD, DS>: View where CD: CTLineChartDataPr
                   lineType  : dataSet.style.lineType,
                   isFilled  : isFilled,
                   minValue  : minValue,
-                  range     : range)
+                  range     : range,
+                  ignoreZero: dataSet.style.ignoreZero)
             .ifElse(isFilled, if: {
                 $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                     .fill(colour)
@@ -139,10 +140,11 @@ internal struct LineChartColoursSubView<CD, DS>: View where CD: CTLineChartDataP
             chartData.getAccessibility()
             
             LineShape(dataPoints: dataSet.dataPoints,
-                      lineType: dataSet.style.lineType,
-                      isFilled: isFilled,
-                      minValue: minValue,
-                      range: range)
+                      lineType  : dataSet.style.lineType,
+                      isFilled  : isFilled,
+                      minValue  : minValue,
+                      range     : range,
+                      ignoreZero: dataSet.style.ignoreZero)
                 .ifElse(isFilled, if: {
                     $0
                         .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
@@ -221,10 +223,11 @@ internal struct LineChartStopsSubView<CD, DS>: View where CD: CTLineChartDataPro
             chartData.getAccessibility()
             
             LineShape(dataPoints: dataSet.dataPoints,
-                      lineType: dataSet.style.lineType,
-                      isFilled: isFilled,
-                      minValue: minValue,
-                      range: range)
+                      lineType  : dataSet.style.lineType,
+                      isFilled  : isFilled,
+                      minValue  : minValue,
+                      range     : range,
+                      ignoreZero: dataSet.style.ignoreZero)
                 
                 .ifElse(isFilled, if: {
                     $0

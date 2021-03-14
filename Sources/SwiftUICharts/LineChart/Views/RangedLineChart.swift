@@ -61,48 +61,53 @@ public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartD
             ZStack {
 
                 chartData.getAccessibility()
+                
                 // MARK: Ranged Box
                 if chartData.dataSets.style.fillColour.colourType == .colour,
                    let colour = chartData.dataSets.style.fillColour.colour
                 {
-                    
+
                     RangedLineFillShape(dataPoints: chartData.dataSets.dataPoints,
-                                    lineType: chartData.dataSets.style.lineType,
-                                    minValue: chartData.minValue,
-                                    range: chartData.range)
+                                        lineType: chartData.dataSets.style.lineType,
+                                        minValue: chartData.minValue,
+                                        range: chartData.range,
+                                        ignoreZero: chartData.dataSets.style.ignoreZero)
                         .fill(colour)
-                    
-                    
+                
+
                 } else if chartData.dataSets.style.fillColour.colourType == .gradientColour,
                           let colours     = chartData.dataSets.style.fillColour.colours,
                           let startPoint  = chartData.dataSets.style.fillColour.startPoint,
                           let endPoint    = chartData.dataSets.style.fillColour.endPoint
                 {
-                    
+
                     RangedLineFillShape(dataPoints: chartData.dataSets.dataPoints,
                                     lineType: chartData.dataSets.style.lineType,
                                     minValue: chartData.minValue,
-                                    range: chartData.range)
+                                    range: chartData.range,
+                                    ignoreZero: chartData.dataSets.style.ignoreZero)
                         .fill(LinearGradient(gradient: Gradient(colors: colours),
                                              startPoint: startPoint,
                                              endPoint: endPoint))
-                    
+                
                 } else if chartData.dataSets.style.fillColour.colourType == .gradientStops,
                           let stops      = chartData.dataSets.style.fillColour.stops,
                           let startPoint = chartData.dataSets.style.fillColour.startPoint,
                           let endPoint   = chartData.dataSets.style.fillColour.endPoint
                 {
                     let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-                    
+
                     RangedLineFillShape(dataPoints: chartData.dataSets.dataPoints,
                                     lineType: chartData.dataSets.style.lineType,
                                     minValue: chartData.minValue,
-                                    range: chartData.range)
+                                    range: chartData.range,
+                                    ignoreZero: chartData.dataSets.style.ignoreZero)
                         .fill(LinearGradient(gradient: Gradient(stops: stops),
                                              startPoint: startPoint,
                                              endPoint: endPoint))
-                    
+
                 }
+            
                 // MARK: Main Line
                 if chartData.dataSets.style.lineColour.colourType == .colour,
                    let colour = chartData.dataSets.style.lineColour.colour

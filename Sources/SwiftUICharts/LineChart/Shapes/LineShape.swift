@@ -19,25 +19,29 @@ internal struct LineShape<DP>: Shape where DP: CTStandardDataPointProtocol {
     private let minValue : Double
     private let range    : Double
     
+    private let ignoreZero: Bool
+    
     internal init(dataPoints: [DP],
                   lineType  : LineType,
                   isFilled  : Bool,
                   minValue  : Double,
-                  range     : Double
+                  range     : Double,
+                  ignoreZero: Bool
     ) {
         self.dataPoints = dataPoints
         self.lineType   = lineType
         self.isFilled   = isFilled
         self.minValue   = minValue
         self.range      = range
+        self.ignoreZero = ignoreZero
     }
   
     internal func path(in rect: CGRect) -> Path {
         switch lineType {
         case .curvedLine:
-            return Path.curvedLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
+            return Path.curvedLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled, ignoreZero: ignoreZero)
         case .line:
-            return Path.straightLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
+            return Path.straightLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled, ignoreZero: ignoreZero)
         }
     }
 }
@@ -54,24 +58,28 @@ internal struct RangedLineFillShape<DP>: Shape where DP: CTRangedLineDataPoint {
     private var minValue : Double
     private let range    : Double
     
+    private let ignoreZero: Bool
+    
     internal init(dataPoints: [DP],
                   lineType  : LineType,
                   minValue  : Double,
-                  range     : Double
+                  range     : Double,
+                  ignoreZero: Bool
     ) {
         self.dataPoints = dataPoints
         self.lineType   = lineType
         self.minValue   = minValue
         self.range      = range
+        self.ignoreZero = ignoreZero
     }
   
     internal func path(in rect: CGRect) -> Path {
         
         switch lineType {
         case .curvedLine:
-            return  Path.curvedLineBox(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            return  Path.curvedLineBox(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, ignoreZero: ignoreZero)
         case .line:
-            return  Path.straightLineBox(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            return  Path.straightLineBox(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, ignoreZero: ignoreZero)
         }
         
     }

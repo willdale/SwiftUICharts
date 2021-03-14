@@ -17,6 +17,7 @@ internal struct Point<T>: Shape where T: CTLineChartDataSet,
     
     private let minValue : Double
     private let range    : Double
+    
         
     internal init(dataSet   : T,
                   minValue  : Double,
@@ -34,11 +35,17 @@ internal struct Point<T>: Shape where T: CTLineChartDataSet,
         
         let firstPointX : CGFloat = (CGFloat(0) * x) -  dataSet.pointStyle.pointSize / CGFloat(2)
         let firstPointY : CGFloat = ((CGFloat(dataSet.dataPoints[0].value - minValue) * -y) + rect.height) -  dataSet.pointStyle.pointSize / CGFloat(2)
-        let firstPoint  : CGRect  = CGRect(x        : firstPointX,
-                                           y        : firstPointY,
-                                           width    :  dataSet.pointStyle.pointSize,
-                                           height   :  dataSet.pointStyle.pointSize)
-        pointSwitch(&path, firstPoint)
+        let firstPoint  : CGRect  = CGRect(x     : firstPointX,
+                                           y     : firstPointY,
+                                           width :  dataSet.pointStyle.pointSize,
+                                           height:  dataSet.pointStyle.pointSize)
+        if !dataSet.style.ignoreZero {
+            pointSwitch(&path, firstPoint)
+        } else {
+            if dataSet.dataPoints[0].value != 0 {
+                pointSwitch(&path, firstPoint)
+            }
+        }
         
         for index in 1 ..< dataSet.dataPoints.count - 1 {
             let pointX : CGFloat = (CGFloat(index) * x) -  dataSet.pointStyle.pointSize / CGFloat(2)
@@ -47,20 +54,32 @@ internal struct Point<T>: Shape where T: CTLineChartDataSet,
                                           y     : pointY,
                                           width :  dataSet.pointStyle.pointSize,
                                           height:  dataSet.pointStyle.pointSize)
-            pointSwitch(&path, point)
+            if !dataSet.style.ignoreZero {
+                pointSwitch(&path, point)
+            } else {
+                if dataSet.dataPoints[index].value != 0 {
+                    pointSwitch(&path, point)
+                }
+            }
         }
         
         
         let lastPointX : CGFloat = (CGFloat(dataSet.dataPoints.count-1) * x) - dataSet.pointStyle.pointSize / CGFloat(2)
         let lastPointY : CGFloat = ((CGFloat(dataSet.dataPoints[dataSet.dataPoints.count-1].value - minValue) * -y) + rect.height) -  dataSet.pointStyle.pointSize / CGFloat(2)
-        let lastPoint  : CGRect  = CGRect(x         : lastPointX,
-                                          y         : lastPointY,
-                                          width     :  dataSet.pointStyle.pointSize,
-                                          height    :  dataSet.pointStyle.pointSize)
-        pointSwitch(&path, lastPoint)
+        let lastPoint  : CGRect  = CGRect(x     : lastPointX,
+                                          y     : lastPointY,
+                                          width :  dataSet.pointStyle.pointSize,
+                                          height:  dataSet.pointStyle.pointSize)
+        if !dataSet.style.ignoreZero {
+            pointSwitch(&path, lastPoint)
+        } else {
+            if dataSet.dataPoints[dataSet.dataPoints.count-1].value != 0 {
+                pointSwitch(&path, lastPoint)
+            }
+        }
+        
         return path
     }
-    
     
     /// Draws the points based on chosen parameters.
     /// - Parameters:
