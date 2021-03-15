@@ -18,21 +18,6 @@ extension View {
         else { self }
     }
 }
-// https://fivestars.blog/swiftui/conditional-modifiers.html
-extension View {
-    @ViewBuilder
-    func `ifElse`<TrueContent: View, FalseContent: View>(_ condition: Bool,
-                                                         if ifTransform: (Self) -> TrueContent,
-                                                         else elseTransform: (Self) -> FalseContent
-    ) -> some View {
-        
-        if condition {
-            ifTransform(self)
-        } else {
-            elseTransform(self)
-        }
-    }
-}
 
 extension View {
     /**

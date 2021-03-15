@@ -57,100 +57,7 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
     public var body: some View {
         
         if chartData.isGreaterThanTwo() {
-            
-<<<<<<< HEAD
-            if style.colourType == .colour,
-               let colour = style.colour
-            {
-                if !isFilled {
-                    LineShape(chartData: chartData, lineType: style.lineType, isFilled: isFilled)
-                        .trim(to: startAnimation ? 1 : 0)
-                        .stroke(colour, style: strokeStyle)
-                        .modifier(LineShapeModifiers(chartData))
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                            self.startAnimation = true
-                        }
-//                        .animateOnDisAppear(using: chartData.chartStyle.globalAnimation) {
-//                            self.startAnimation = false
-//                        }
-                } else {
-                    LineShape(chartData: chartData, lineType: style.lineType, isFilled: isFilled)
-                        .trim(to: startAnimation ? 1 : 0)
-                        .fill(colour)
-                        .modifier(LineShapeModifiers(chartData))
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                            self.startAnimation = true
-                        }
-//                        .animateOnDisAppear(using: chartData.chartStyle.globalAnimation) {
-//                            self.startAnimation = false
-//                        }
-                }
-                
-            } else if style.colourType == .gradientColour,
-                      let colours     = style.colours,
-                      let startPoint  = style.startPoint,
-                      let endPoint    = style.endPoint
-            {
-                if !isFilled {
-                    LineShape(chartData: chartData, lineType: style.lineType, isFilled: isFilled)
-                        .trim(to: startAnimation ? 1 : 0)
-                        .stroke(LinearGradient(gradient: Gradient(colors: colours),
-                                               startPoint: startPoint,
-                                               endPoint: endPoint),
-                                style: strokeStyle)
-                        .modifier(LineShapeModifiers(chartData))
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                            self.startAnimation = true
-                        }
-//                        .animateOnDisAppear(using: chartData.chartStyle.globalAnimation) {
-//                            self.startAnimation = false
-//                        }
-                } else {
-                    LineShape(chartData: chartData, lineType: style.lineType, isFilled: isFilled)
-                        .trim(to: startAnimation ? 1 : 0)
-                        .fill(LinearGradient(gradient: Gradient(colors: colours), startPoint: startPoint, endPoint: endPoint))
-                        .modifier(LineShapeModifiers(chartData))
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                            self.startAnimation = true
-                        }
-//                        .animateOnDisAppear(using: chartData.chartStyle.globalAnimation) {
-//                            self.startAnimation = false
-//                        }
-                }
-            } else if style.colourType == .gradientStops,
-                      let stops      = style.stops,
-                      let startPoint = style.startPoint,
-                      let endPoint   = style.endPoint
-            {
-                let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-                if !isFilled {
-                    LineShape(chartData: chartData, lineType: style.lineType, isFilled: isFilled)
-                        .trim(to: startAnimation ? 1 : 0)
-                        .stroke(LinearGradient(gradient: Gradient(stops: stops),
-                                               startPoint: startPoint,
-                                               endPoint: endPoint),
-                                style: strokeStyle)
-                        .modifier(LineShapeModifiers(chartData))
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                            self.startAnimation = true
-                        }
-//                        .animateOnDisAppear(using: chartData.chartStyle.globalAnimation) {
-//                            self.startAnimation = false
-//                        }
-                } else {
-                    LineShape(chartData: chartData, lineType: style.lineType, isFilled: isFilled)
-                        .trim(to: startAnimation ? 1 : 0)
-                        .fill(LinearGradient(gradient: Gradient(stops: stops),
-                                             startPoint: startPoint,
-                                             endPoint: endPoint))
-                        .modifier(LineShapeModifiers(chartData))
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                            self.startAnimation = true
-                        }
-//                        .animateOnDisAppear(using: chartData.chartStyle.globalAnimation) {
-//                            self.startAnimation = false
-//                        }
-=======
+   
             ZStack {
                 
                 chartData.getAccessibility()
@@ -196,7 +103,6 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
                                           startPoint: startPoint,
                                           endPoint  : endPoint,
                                           isFilled  : false)
->>>>>>> version-2
                 }
             }
         } else { CustomNoDataView(chartData: chartData) }
