@@ -7,21 +7,49 @@
 
 import SwiftUI
 
-internal struct Legends: ViewModifier {
+/**
+ Displays legends under the chart.
+ */
+internal struct Legends<T>: ViewModifier where T: CTChartData {
     
-    @EnvironmentObject var chartData: ChartData
+    @ObservedObject var chartData: T
+    private let columns     : [GridItem]
+    private let textColor   : Color
+    
+    init(chartData: T,
+         columns  : [GridItem],
+         textColor: Color
+    ) {
+        self.chartData = chartData
+        self.columns   = columns
+        self.textColor = textColor
+    }
     
     internal func body(content: Content) -> some View {
-        VStack {
-            content
-            LegendView(chartData: chartData)
+        Group {
+            if chartData.isGreaterThanTwo() {
+                VStack {
+                    content
+                    LegendView(chartData: chartData, columns: columns, textColor: textColor)
+                        
+                }
+            } else { content }
         }
     }
 }
+    
 extension View {
-    /// Displays legends under the chart.
-    /// - Returns: Legends from the charts data and any markers.
-    public func legends() -> some View {
-        self.modifier(Legends())
+    /**
+     Displays legends under the chart.
+     
+     - Parameters:
+        - chartData: Chart data model.
+        - columns: How to layout the legends.
+        - textColor: Colour of the text.
+     - Returns: A  new view containing the chart with chart legends under.
+     */
+    public func legends<T:CTChartData>(chartData: T, columns: [GridItem] = [GridItem(.flexible())], textColor: Color = Color.primary) -> some View {
+        self.modifier(Legends(chartData: chartData, columns: columns, textColor: textColor))
     }
 }
+

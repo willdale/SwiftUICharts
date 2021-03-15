@@ -7,10 +7,13 @@
 
 import SwiftUI
 
-// https://stackoverflow.com/a/62962375
 extension View {
-    @ViewBuilder
-    func `if`<Transform: View>(_ condition: Bool, transform: (Self) -> Transform) -> some View {
+    /**
+     View modifier to conditionally add a view modifier.
+     
+     [SO](https://stackoverflow.com/a/62962375)
+     */
+    @ViewBuilder func `if`<Transform: View>(_ condition: Bool, transform: (Self) -> Transform) -> some View {
         if condition { transform(self) }
         else { self }
     }
@@ -32,26 +35,31 @@ extension View {
 }
 
 extension View {
-    @ViewBuilder
-    func `ifElseElseIf`<TrueContent: View, MidContent: View, FalseContent: View>(_ condition: Bool,
-                                                                                 _ secondCondition: Bool,
-                                                                                  if ifTransform: (Self) -> TrueContent,
-                                                                                  elseIf elseIfTransform: (Self) -> MidContent,
-                                                                                  else elseTransform: (Self) -> FalseContent
+    /**
+     View modifier to conditionally add a view modifier else add a different one.
+     
+     [Five Stars](https://fivestars.blog/swiftui/conditional-modifiers.html)
+    */
+    @ViewBuilder func `ifElse`<TrueContent: View, FalseContent: View>(_ condition: Bool,
+                                                         if ifTransform: (Self) -> TrueContent,
+                                                         else elseTransform: (Self) -> FalseContent
     ) -> some View {
-        
         if condition {
             ifTransform(self)
-        } else if secondCondition {
-            elseIfTransform(self)
         } else {
             elseTransform(self)
         }
     }
 }
 
-// https://www.hackingwithswift.com/quick-start/swiftui/how-to-start-an-animation-immediately-after-a-view-appears
+
+//
 extension View {
+    /**
+     Start animation when the view appears.
+     
+     [HWS](https://www.hackingwithswift.com/quick-start/swiftui/how-to-start-an-animation-immediately-after-a-view-appears)
+     */
     func animateOnAppear(using animation: Animation = Animation.easeInOut(duration: 1), _ action: @escaping () -> Void) -> some View {
         return onAppear {
             withAnimation(animation) {
@@ -60,11 +68,31 @@ extension View {
         }
     }
     
-    func animateOnDisAppear(using animation: Animation = Animation.easeInOut(duration: 1), _ action: @escaping () -> Void) -> some View {
+    /**
+     Reverse animation when the view disappears.
+     
+     [HWS](https://www.hackingwithswift.com/quick-start/swiftui/how-to-start-an-animation-immediately-after-a-view-appears)
+     */
+    func animateOnDisappear(using animation: Animation = Animation.easeInOut(duration: 1), _ action: @escaping () -> Void) -> some View {
         return onDisappear {
             withAnimation(animation) {
                 action()
             }
         }
+    }
+}
+
+extension Color {
+    /// Returns the relevant system background colour for the device.
+    public static var systemsBackground: Color {
+        #if os(iOS)
+        return Color(.systemBackground)
+        #elseif os(watchOS)
+        return Color(.black)
+        #elseif os(tvOS)
+        return Color(.darkGray)
+        #elseif os(macOS)
+        return Color(.windowBackgroundColor)
+        #endif
     }
 }

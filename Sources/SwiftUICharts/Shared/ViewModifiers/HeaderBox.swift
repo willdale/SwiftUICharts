@@ -6,116 +6,113 @@
 //
 
 import SwiftUI
-
-internal struct HeaderBox: ViewModifier {
+ 
+/**
+ Displays the metadata about the chart as well as optionally touch overlay information.
+ */
+internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
     
-    @EnvironmentObject var chartData: ChartData
+    @ObservedObject var chartData: T
     
-    let showTitle   : Bool
-    let showSubtitle: Bool
-    
-    init(showTitle      : Bool = true,
-         showSubtitle   : Bool = true
-    ) {
-        self.showTitle     = showTitle
-        self.showSubtitle  = showSubtitle
+    init(chartData: T) {
+        self.chartData = chartData
     }
     
     var titleBox: some View {
         VStack(alignment: .leading) {
-            if showTitle, let title = chartData.metadata?.title {
-                Text(title)
-                    .font(.title3)
-            }  else {
-                Text("")
-                    .font(.title3)
-            }
-            if showSubtitle, let subtitle = chartData.metadata?.subtitle {
-                Text(subtitle)
-                    .font(.subheadline)
-            } else {
-                Text("")
-                    .font(.subheadline)
-            }
+            Text(chartData.metadata.title)
+                .font(.title3)
+                .foregroundColor(chartData.metadata.titleColour)
+            
+            Text(chartData.metadata.subtitle)
+                .font(.subheadline)
+                .foregroundColor(chartData.metadata.subtitleColour)
         }
     }
-    
     var touchOverlay: some View {
+
         VStack(alignment: .trailing) {
-            if chartData.viewData.isTouchCurrent,
-               let value = chartData.viewData.touchOverlayInfo?.value {
-                
-                
-                switch chartData.viewData.units {
-                case .none:
-                    Text("\(value, specifier: chartData.viewData.touchSpecifier)")
+            if chartData.infoView.isTouchCurrent {
+                ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
+                    
+                    chartData.infoValueUnit(info: point)
                         .font(.title3)
-                case .prefix(of: let units):
-                    Text("\(units) \(value, specifier: chartData.viewData.touchSpecifier)")
-                        .font(.title3)
-                case .suffix(of: let units):
-                    Text("\(value, specifier: chartData.viewData.touchSpecifier) \(units)")
-                        .font(.title3)
+                        .foregroundColor(chartData.chartStyle.infoBoxValueColour)
+                    
+                    chartData.infoDescription(info: point)
+                        .font(.subheadline)
+                        .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                    
                 }
-                
-                
-                
             } else {
                 Text("")
                     .font(.title3)
-            }
-            if chartData.viewData.isTouchCurrent,
-               let label = chartData.viewData.touchOverlayInfo?.pointDescription {
-                Text("\(label)")
-                    .font(.subheadline)
-            } else {
                 Text("")
                     .font(.subheadline)
             }
         }
     }
     
-    @ViewBuilder
+    
     internal func body(content: Content) -> some View {
-        if chartData.dataPoints.count > 2 {
+        Group {
             #if !os(tvOS)
-            if chartData.chartStyle.infoBoxPlacement == .floating {
+            if chartData.isGreaterThanTwo() {
+                switch chartData.chartStyle.infoBoxPlacement {
+                case .floating:
+                    VStack(alignment: .leading) {
+                        titleBox
+                        content
+                    }
+                case .infoBox:
+                    VStack(alignment: .leading) {
+                        titleBox
+                        content
+                    }
+                case .header:
+                    VStack(alignment: .leading) {
+                        HStack(spacing: 0) {
+                            HStack(spacing: 0) {
+                                titleBox
+                                Spacer()
+                            }
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            Spacer()
+                            HStack(spacing: 0) {
+                                Spacer()
+                                touchOverlay
+                            }
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                        }
+                        content
+                    }
+                }
+            } else { content }
+            #elseif os(tvOS)
+            if chartData.isGreaterThanTwo() {
                 VStack(alignment: .leading) {
                     titleBox
                     content
                 }
-            } else if chartData.chartStyle.infoBoxPlacement == .header {
-                VStack(alignment: .leading) {
-                    HStack(spacing: 0) {
-                        HStack(spacing: 0) {
-                            titleBox
-                            Spacer()
-                        }
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        Spacer()
-                        HStack(spacing: 0) {
-                            Spacer()
-                            touchOverlay
-                        }
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                    }
-                    content
-                }
-            }
-            #elseif os(tvOS)
-            VStack(alignment: .leading) {
-                titleBox
-                content
-            }
+            } else { content }
             #endif
-        } else { content }
+        }
     }
 }
 
 extension View {
-    /// Displays the metadata about the chart
-    /// - Returns: Chart title and subtitle.
-    public func headerBox() -> some View {
-        self.modifier(HeaderBox())
+    /**
+     Displays the metadata about the chart.
+     
+     Adds a view above the chart that displays the title and subtitle.
+     If infoBoxPlacement is set to .header then the datapoint info will
+     be displayed here as well.
+     
+     - Parameter chartData: Chart data model.
+     - Returns: A  new view containing the chart with a view above
+     to display metadata.
+     */
+    public func headerBox<T:CTChartData>(chartData: T) -> some View {
+        self.modifier(HeaderBox(chartData: chartData))
     }
 }
