@@ -1,6 +1,6 @@
 # SwiftUICharts
 
-A charts / plotting library for SwiftUI. Works on macOS, iOS,  watchOS, and tvOS. Has accessibility features built in.
+A charts / plotting library for SwiftUI. Works on macOS, iOS,  watchOS, and tvOS and has accessibility features built in.
 
 [Demo Project](https://github.com/willdale/SwiftUICharts-Demo)
 
@@ -167,6 +167,11 @@ File > Swift Packages > Add Package Dependency...
 import SwiftUICharts
 ```
 
+If you have trouble with views not updating correctly, add  `.id()` to your View.
+```swift
+LineChart(chartData: LineChartData)
+    .id(LineChartData.id)
+```
 
 ---
 
@@ -189,6 +194,10 @@ import SwiftUICharts
 - [Point Markers](#Point-Markers) 
 
 The order of the view modifiers is some what important as the modifiers are various types of stacks that wrap around the previous views.
+
+
+---
+
 
 ### All Chart Types
 
@@ -430,6 +439,7 @@ struct LineChartDemoView: View {
                 .infoBox(chartData: data)
                 .headerBox(chartData: data)
                 .legends(chartData: data, columns: [GridItem(.flexible()), GridItem(.flexible())])
+                .id(data.id)
                 .frame(minWidth: 150, maxWidth: 900, minHeight: 150, idealHeight: 250, maxHeight: 400, alignment: .center)
         }
         .navigationTitle("Week of Data")
