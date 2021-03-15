@@ -32,35 +32,6 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
     var touchOverlay: some View {
 
         VStack(alignment: .trailing) {
-<<<<<<< HEAD
-            if chartData.viewData.isTouchCurrent,
-               let value = chartData.viewData.touchOverlayInfo?.value {
-                
-                
-                switch chartData.viewData.units {
-                case .none:
-                    Text("\(value, specifier: chartData.viewData.touchSpecifier)")
-                        .font(.title3)
-                case .prefix(of: let units):
-                    Text("\(units) \(value, specifier: chartData.viewData.touchSpecifier)")
-                        .font(.title3)
-                case .suffix(of: let units):
-                    Text("\(value, specifier: chartData.viewData.touchSpecifier) \(units)")
-                        .font(.title3)
-                }
-                
-                
-                
-            } else {
-                Text("")
-                    .font(.title3)
-            }
-            if chartData.viewData.isTouchCurrent,
-               let label = chartData.viewData.touchOverlayInfo?.pointDescription {
-                Text("\(label)")
-                    .font(.subheadline)
-            } else {
-=======
             if chartData.infoView.isTouchCurrent {
                 ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
                     
@@ -76,7 +47,6 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
             } else {
                 Text("")
                     .font(.title3)
->>>>>>> version-2
                 Text("")
                     .font(.subheadline)
             }

@@ -13,14 +13,6 @@ import SwiftUI
  Contains the Title, Subtitle and colour information for them.
  */
 public struct ChartMetadata {
-<<<<<<< HEAD
-    /// The charts Title
-    public var title       : String?
-    /// The charts subtitle
-    public var subtitle    : String?
-    /// The title for the legend
-    public var lineLegend  : String?
-=======
     /// The charts title
     public var title         : String
     /// The charts subtitle
@@ -29,7 +21,6 @@ public struct ChartMetadata {
     public var titleColour   : Color
     /// Color of the subtitle
     public var subtitleColour: Color
->>>>>>> version-2
     
     /// Model to hold the metadata for the chart.
     /// - Parameters:

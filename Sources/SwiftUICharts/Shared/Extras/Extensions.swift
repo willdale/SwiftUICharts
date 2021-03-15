@@ -35,20 +35,6 @@ extension View {
 }
 
 extension View {
-<<<<<<< HEAD
-    @ViewBuilder
-    func `ifElseElseIf`<TrueContent: View, MidContent: View, FalseContent: View>(_ condition: Bool,
-                                                                                 _ secondCondition: Bool,
-                                                                                  if ifTransform: (Self) -> TrueContent,
-                                                                                  elseIf elseIfTransform: (Self) -> MidContent,
-                                                                                  else elseTransform: (Self) -> FalseContent
-    ) -> some View {
-        
-        if condition {
-            ifTransform(self)
-        } else if secondCondition {
-            elseIfTransform(self)
-=======
     /**
      View modifier to conditionally add a view modifier else add a different one.
      
@@ -60,7 +46,6 @@ extension View {
     ) -> some View {
         if condition {
             ifTransform(self)
->>>>>>> version-2
         } else {
             elseTransform(self)
         }
@@ -83,24 +68,18 @@ extension View {
         }
     }
     
-<<<<<<< HEAD
-    func animateOnDisAppear(using animation: Animation = Animation.easeInOut(duration: 1), _ action: @escaping () -> Void) -> some View {
-=======
     /**
      Reverse animation when the view disappears.
      
      [HWS](https://www.hackingwithswift.com/quick-start/swiftui/how-to-start-an-animation-immediately-after-a-view-appears)
      */
     func animateOnDisappear(using animation: Animation = Animation.easeInOut(duration: 1), _ action: @escaping () -> Void) -> some View {
->>>>>>> version-2
         return onDisappear {
             withAnimation(animation) {
                 action()
             }
         }
     }
-<<<<<<< HEAD
-=======
 }
 
 extension Color {
@@ -116,5 +95,4 @@ extension Color {
         return Color(.windowBackgroundColor)
         #endif
     }
->>>>>>> version-2
 }
