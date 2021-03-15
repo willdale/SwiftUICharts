@@ -65,7 +65,7 @@ internal struct Point<T>: Shape where T: CTLineChartDataSet,
         
         
         let lastPointX : CGFloat = (CGFloat(dataSet.dataPoints.count-1) * x) - dataSet.pointStyle.pointSize / CGFloat(2)
-        let lastPointY : CGFloat = ((CGFloat(dataSet.dataPoints[dataSet.dataPoints.count-1].value - minValue) * -y) + rect.height) -  dataSet.pointStyle.pointSize / CGFloat(2)
+        let lastPointY : CGFloat = ((CGFloat(dataSet.dataPoints[dataSet.dataPoints.count-1].value - minValue) * -y) + rect.height) - dataSet.pointStyle.pointSize / CGFloat(2)
         let lastPoint  : CGRect  = CGRect(x     : lastPointX,
                                           y     : lastPointY,
                                           width :  dataSet.pointStyle.pointSize,

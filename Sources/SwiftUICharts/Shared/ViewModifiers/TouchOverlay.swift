@@ -96,7 +96,7 @@ extension View {
      */
     public func touchOverlay<T: CTChartData>(chartData: T,
                                              specifier: String = "%.0f",
-                                             unit     : TouchUnit
+                                             unit     : TouchUnit = .none
     ) -> some View {
         self.modifier(EmptyModifier())
     }
