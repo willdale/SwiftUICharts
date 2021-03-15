@@ -1,6 +1,11 @@
 import XCTest
 
-import LineChartPathTests
+@testable import BarChartTests
+@testable import GroupedBarChartTests
+@testable import StackedBarChartTests
+@testable import LineChartTests
+@testable import MultiLineChartTest
+@testable import LineChartPathTests
 
 var tests = [XCTestCaseEntry]()
 tests += BarChartTests.allTests()
