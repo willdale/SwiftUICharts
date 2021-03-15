@@ -17,12 +17,13 @@ final class LineChartPathTests: XCTestCase {
     
     func testGetIndicatorLocation() {
         
-        let test = LineChartData.getIndicatorLocation(rect: rect,
-                                                  dataPoints: chartData.dataSets.dataPoints,
-                                                  touchLocation: touchLocation,
-                                                  lineType: .line,
-                                                  minValue: chartData.minValue,
-                                                  range: chartData.range)
+        let test = LineChartData.getIndicatorLocation(rect      : rect,
+                                                  dataPoints    : chartData.dataSets.dataPoints,
+                                                  touchLocation : touchLocation,
+                                                  lineType      : .line,
+                                                  minValue      : chartData.minValue,
+                                                  range         : chartData.range,
+                                                  ignoreZero    : false)
                 
         XCTAssertEqual(test.x, 25, accuracy: 0.1)
         XCTAssertEqual(test.y, 75, accuracy: 0.1)
@@ -35,7 +36,8 @@ final class LineChartPathTests: XCTestCase {
                                      dataPoints : chartData.dataSets.dataPoints,
                                      minValue   : chartData.minValue,
                                      range      : chartData.range,
-                                     isFilled   : false)
+                                     isFilled   : false,
+                                     ignoreZero : false)
         
         let test = LineChartData.getPercentageOfPath(path: path, touchLocation: touchLocation)
         
@@ -48,7 +50,8 @@ final class LineChartPathTests: XCTestCase {
                                      dataPoints : chartData.dataSets.dataPoints,
                                      minValue   : chartData.minValue,
                                      range      : chartData.range,
-                                     isFilled   : false)
+                                     isFilled   : false,
+                                     ignoreZero : false)
                 
         let test = LineChartData.getTotalLength(of: path)
         
@@ -61,7 +64,8 @@ final class LineChartPathTests: XCTestCase {
                                      dataPoints : chartData.dataSets.dataPoints,
                                      minValue   : chartData.minValue,
                                      range      : chartData.range,
-                                     isFilled   : false)
+                                     isFilled   : false,
+                                     ignoreZero : false)
                         
         let test = LineChartData.getLength(to: touchLocation, on: path)
         
@@ -105,7 +109,8 @@ final class LineChartPathTests: XCTestCase {
                                      dataPoints : chartData.dataSets.dataPoints,
                                      minValue   : chartData.minValue,
                                      range      : chartData.range,
-                                     isFilled   : false)
+                                     isFilled   : false,
+                                     ignoreZero : false)
 
         
         let test = LineChartData.locationOnPath(0.5, path)
