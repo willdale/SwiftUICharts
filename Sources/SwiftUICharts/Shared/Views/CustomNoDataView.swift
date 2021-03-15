@@ -7,11 +7,14 @@
 
 import SwiftUI
 
-public struct CustomNoDataView: View {
+/**
+ View to display text if there is not enough data to draw the chart.
+ */
+public struct CustomNoDataView<T>: View where T: CTChartData {
     
-    let chartData : ChartData
+    let chartData : T
     
-    init(chartData: ChartData) {
+    init(chartData: T) {
         self.chartData = chartData
     }
     

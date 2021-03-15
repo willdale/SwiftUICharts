@@ -7,15 +7,23 @@
 
 import SwiftUI
 
-internal struct TouchOverlayBox: View {
+/**
+View that displays information from the touch events.
+ */
+internal struct TouchOverlayBox<T: CTChartData>: View {
     
+<<<<<<< HEAD
     private var selectedPoint   : ChartDataPoint?
     private var specifier       : String
     private var units           : Units
     private var ignoreZero      : Bool
+=======
+    @ObservedObject var chartData: T
+>>>>>>> version-2
     
-    @Binding private var boxFrame   :  CGRect
+    @Binding private var boxFrame:  CGRect
     
+<<<<<<< HEAD
     internal init(selectedPoint  : ChartDataPoint?,
          specifier      : String = "%.0f",
          units          : Units,
@@ -62,38 +70,51 @@ internal struct TouchOverlayBox: View {
             } else if let label = selectedPoint?.xAxisLabel {
                 Text(label)
                     .font(.subheadline)
+=======
+    internal init(chartData: T,
+                  boxFrame : Binding<CGRect>
+    ) {
+        self.chartData = chartData
+        self._boxFrame = boxFrame
+    }
+    
+    internal var body: some View {
+        
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
+                
+                chartData.infoDescription(info: point)
+                    .font(.subheadline)
+                    .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                
+                chartData.infoValueUnit(info: point)
+                    .font(.title3)
+                    .foregroundColor(chartData.chartStyle.infoBoxValueColour)
+
+                chartData.infoLegend(info: point)
+                    .font(.subheadline)
+                    .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                Spacer()
+>>>>>>> version-2
             }
         }
+        
         .padding(.all, 8)
         .background(
             GeometryReader { geo in
-                ZStack {
-                    #if os(iOS)
-                    RoundedRectangle(cornerRadius: 15.0, style: .continuous)
-                        .shadow(color: Color(.systemGray), radius: 6, x: 0, y: 0)
-                    RoundedRectangle(cornerRadius: 15.0, style: .continuous)
-                        .fill(Color(.systemBackground))
-                    #elseif os(macOS)
-                    RoundedRectangle(cornerRadius: 15.0, style: .continuous)
-                        .shadow(color: Color(.highlightColor), radius: 6, x: 0, y: 0)
-                    RoundedRectangle(cornerRadius: 15.0, style: .continuous)
-                        .fill(Color(.windowBackgroundColor))
-                    #endif
-                    
-                }
-                .overlay(
-                    Group {
-                        #if os(iOS)
-                        RoundedRectangle(cornerRadius: 15.0)
-                            .stroke(Color.primary, lineWidth: 1)
-                        #elseif os(macOS)
-                        RoundedRectangle(cornerRadius: 15.0)
-                            .stroke(Color.primary, lineWidth: 2)
-                        #endif
-                    }
-                )
-                .onChange(of: geo.frame(in: .local)) { frame in
-                    self.boxFrame = frame
+                if chartData.infoView.isTouchCurrent {
+                    RoundedRectangle(cornerRadius: 5.0, style: .continuous)
+                        .fill(chartData.chartStyle.infoBoxBackgroundColour)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 5.0, style: .continuous)
+                                    .stroke(chartData.chartStyle.infoBoxBorderColour, style: chartData.chartStyle.infoBoxBorderStyle)
+                            )
+                        .onAppear {
+                            self.boxFrame = geo.frame(in: .local)
+                        }
+                        .onChange(of: geo.frame(in: .local)) { frame in
+                            self.boxFrame = frame
+                        }
                 }
             }
         )

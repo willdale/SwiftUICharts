@@ -8,6 +8,7 @@
 import SwiftUI
 
 #if !os(tvOS)
+<<<<<<< HEAD
 /// Detects input either from touch of pointer. Finds the nearest data point and displays the relevent information.
 internal struct TouchOverlay: ViewModifier {
     
@@ -40,27 +41,37 @@ internal struct TouchOverlay: ViewModifier {
     internal init(specifier: String, units: Units) {
         self.specifier = specifier
         self.units = units
+=======
+/**
+ Finds the nearest data point and displays the relevent information.
+ */
+internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
+
+    @ObservedObject var chartData: T
+        
+    internal init(chartData : T,
+                  specifier : String,
+                  unit      : TouchUnit
+    ) {
+        self.chartData = chartData
+        self.chartData.infoView.touchSpecifier = specifier
+        self.chartData.infoView.touchUnit = unit
+>>>>>>> version-2
     }
-    
-    @ViewBuilder internal func body(content: Content) -> some View {
-        if chartData.dataPoints.count > 2 {
-            GeometryReader { geo in
-                ZStack {
-                    content
-                        .gesture(
-                            DragGesture(minimumDistance: 0)
-                                .onChanged { (value) in
-                                    touchLocation   = value.location
-                                    isTouchCurrent  = true
-                                    
-                                    switch chartData.viewData.chartType {
-                                    case .line:
-                                        getPointLocationLineChart(touchLocation: touchLocation, chartSize: geo)
-                                        getDataPointLineChart(touchLocation: touchLocation, chartSize: geo)
-                                    case .bar:
-                                        getPointLocationBarChart(touchLocation: touchLocation, chartSize: geo)
-                                        getDataPointBarChart(touchLocation: touchLocation, chartSize: geo)
+        
+    internal func body(content: Content) -> some View {
+        Group {
+            if chartData.isGreaterThanTwo() {
+                GeometryReader { geo in
+                    ZStack {
+                        content
+                            .gesture(
+                                DragGesture(minimumDistance: 0)
+                                    .onChanged { (value) in
+                                        chartData.setTouchInteraction(touchLocation: value.location,
+                                                                      chartSize: geo.frame(in: .local))
                                     }
+<<<<<<< HEAD
                                     
                                     if chartData.chartStyle.infoBoxPlacement == .floating {
                                         setBoxLocationation(boxFrame: boxFrame, chartSize: geo)
@@ -220,6 +231,20 @@ internal struct TouchOverlay: ViewModifier {
             return chartSize.frame(in: .local).maxY
         } else {
             return touchLocation.y
+=======
+                                    .onEnded { _ in
+                                        chartData.infoView.isTouchCurrent   = false
+                                        chartData.infoView.touchOverlayInfo = []
+                                    }
+                            )
+                        if chartData.infoView.isTouchCurrent {
+                            chartData.getTouchInteraction(touchLocation: chartData.infoView.touchLocation,
+                                                          chartSize: geo.frame(in: .local))
+                        }
+                    }
+                }
+            } else { content }
+>>>>>>> version-2
         }
     }
 }
@@ -227,6 +252,7 @@ internal struct TouchOverlay: ViewModifier {
 
 extension View {
     #if !os(tvOS)
+<<<<<<< HEAD
     /// Adds an overlay to detect touch and display the relivent information from the nearest data point.
     /// - Parameter specifier: Decimal precision for labels
     public func touchOverlay(specifier: String = "%.0f", units: Units = .none) -> some View {
@@ -234,8 +260,52 @@ extension View {
     }
     #elseif os(tvOS)
     public func touchOverlay(specifier: String = "%.0f", units: Units = .none) -> some View {
+=======
+    /**
+     Adds touch interaction with the chart.
+     
+     Adds an overlay to detect touch and display the relivent information from the nearest data point.
+     
+     - Requires:
+     If  ChartStyle --> infoBoxPlacement is set to .header
+     then `.headerBox` is required.
+     
+     If  ChartStyle --> infoBoxPlacement is set to .infoBox
+     then `.infoBox` is required.
+     
+     If  ChartStyle --> infoBoxPlacement is set to .floating
+     then `.floatingInfoBox` is required.
+     
+     - Attention:
+     Unavailable in tvOS
+     
+     - Parameters:
+        - chartData: Chart data model.
+        - specifier: Decimal precision for labels.
+        - unit: Unit to put before or after the value.
+     - Returns: A  new view containing the chart with a touch overlay.
+     */
+    public func touchOverlay<T: CTChartData>(chartData: T,
+                                             specifier: String = "%.0f",
+                                             unit     : TouchUnit = .none
+    ) -> some View {
+        self.modifier(TouchOverlay(chartData: chartData,
+                                   specifier: specifier,
+                                   unit     : unit))
+    }
+    #elseif os(tvOS)
+    /**
+     Adds touch interaction with the chart.
+     
+     - Attention:
+     Unavailable in tvOS
+     */
+    public func touchOverlay<T: CTChartData>(chartData: T,
+                                             specifier: String = "%.0f",
+                                             unit     : TouchUnit = .none
+    ) -> some View {
+>>>>>>> version-2
         self.modifier(EmptyModifier())
     }
     #endif
-    
 }

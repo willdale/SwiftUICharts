@@ -7,25 +7,35 @@
 
 import SwiftUI
 
-internal struct LineShape: Shape {
+/**
+ Main line shape
+ */
+internal struct LineShape<DP>: Shape where DP: CTStandardDataPointProtocol {
            
-    private let chartData   : ChartData
-        
-    /// Drawing style of the line
+    private let dataPoints  : [DP]
     private let lineType    : LineType
-    /// If it's to be filled some extra lines need to be drawn
     private let isFilled    : Bool
     
     private let minValue : Double
     private let range    : Double
     
+<<<<<<< HEAD
     internal init(chartData : ChartData,
+=======
+    private let ignoreZero: Bool
+    
+    internal init(dataPoints: [DP],
+>>>>>>> version-2
                   lineType  : LineType,
-                  isFilled  : Bool
+                  isFilled  : Bool,
+                  minValue  : Double,
+                  range     : Double,
+                  ignoreZero: Bool
     ) {
-        self.chartData  = chartData
+        self.dataPoints = dataPoints
         self.lineType   = lineType
         self.isFilled   = isFilled
+<<<<<<< HEAD
         
         switch chartData.lineStyle.baseline {
         case .minimumValue:
@@ -86,18 +96,59 @@ internal struct LineShape: Shape {
                 path.closeSubpath()
             }
         return path
+=======
+        self.minValue   = minValue
+        self.range      = range
+        self.ignoreZero = ignoreZero
     }
-
-    internal func lineSwitch(_ path: inout Path, _ nextPoint: CGPoint, _ previousPoint: CGPoint) {
+  
+    internal func path(in rect: CGRect) -> Path {
         switch lineType {
-        case .line:
-            path.addLine(to: nextPoint)
         case .curvedLine:
-            path.addCurve(to: nextPoint,
-                          control1: CGPoint(x: previousPoint.x + (nextPoint.x - previousPoint.x) / 2,
-                                            y: previousPoint.y),
-                          control2: CGPoint(x: nextPoint.x - (nextPoint.x - previousPoint.x) / 2,
-                                            y: nextPoint.y))
+            return Path.curvedLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled, ignoreZero: ignoreZero)
+        case .line:
+            return Path.straightLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled, ignoreZero: ignoreZero)
         }
+>>>>>>> version-2
     }
 }
+
+/**
+ Background fill based on the upper and lower values
+ for a Ranged Line Chart.
+ */
+internal struct RangedLineFillShape<DP>: Shape where DP: CTRangedLineDataPoint {
+           
+    private let dataPoints  : [DP]
+    private let lineType    : LineType
+    
+    private var minValue : Double
+    private let range    : Double
+    
+    private let ignoreZero: Bool
+    
+    internal init(dataPoints: [DP],
+                  lineType  : LineType,
+                  minValue  : Double,
+                  range     : Double,
+                  ignoreZero: Bool
+    ) {
+        self.dataPoints = dataPoints
+        self.lineType   = lineType
+        self.minValue   = minValue
+        self.range      = range
+        self.ignoreZero = ignoreZero
+    }
+  
+    internal func path(in rect: CGRect) -> Path {
+        
+        switch lineType {
+        case .curvedLine:
+            return  Path.curvedLineBox(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, ignoreZero: ignoreZero)
+        case .line:
+            return  Path.straightLineBox(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, ignoreZero: ignoreZero)
+        }
+        
+    }
+}
+

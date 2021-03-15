@@ -7,106 +7,44 @@
 
 import SwiftUI
 
-/// Data model for Legends
-internal struct LegendData: Hashable {
-    
-    var chartType   : ChartType
-    
+/**
+ Data model to hold data for Legends
+ */
+ public struct LegendData: Hashable, Identifiable {
+        
+    public var id           : UUID
+    /// The type of chart being used.
+    public var chartType    : ChartType
     /// Text to be displayed
-    var legend      : String
-
+    public var legend       : String
     /// Style of the stroke
-    var strokeStyle : Stroke?
-    
-    /// Single Colour
-    var colour      : Color?
-    /// Colours for Gradient
-    var colours     : [Color]?
-    /// Colours and Stops for Gradient with stop control
-    var stops       : [GradientStop]?
-    
-    /// Start point for Gradient
-    var startPoint  : UnitPoint?
-    /// End point for Gradient
-    var endPoint    : UnitPoint?
+    public var strokeStyle  : Stroke?
     
     /// Used to make sure the charts data legend is first
-    let prioity     : Int
+    public let prioity      : Int
     
-    /// Legend with single colour
+    public var colour       : ColourStyle
+    
+    /// Legend.
     /// - Parameters:
-    ///   - legend: Text to be displayed
-    ///   - colour: Single Colour
-    ///   - strokeStyle: Stroke Style
-    ///   - prioity: Used to make sure the charts data legend is first
-    internal init(legend     : String,
-                  colour     : Color,
-                  strokeStyle: Stroke?,
-                  prioity    : Int,
-                  chartType  : ChartType
+    ///   - legend: Text to be displayed.
+    ///   - colour: Colour styling.
+    ///   - strokeStyle: Stroke Style.
+    ///   - prioity: Used to make sure the charts data legend is first.
+    ///   - chartType: Type of chart being used.
+    public init(id         : UUID,
+                legend     : String,
+                colour     : ColourStyle,
+                strokeStyle: Stroke?,
+                prioity    : Int,
+                chartType  : ChartType
     ) {
+        self.id          = id
         self.legend      = legend
         self.colour      = colour
-        self.colours     = nil
-        self.stops       = nil
-        self.startPoint  = nil
-        self.endPoint    = nil
         self.strokeStyle = strokeStyle
         self.prioity     = prioity
         self.chartType   = chartType
-    }
-    
-    /// Legend with a gradient colour
-    /// - Parameters:
-    ///   - legend: Text to be displayed
-    ///   - colours: Colours for Gradient
-    ///   - startPoint: Start point for Gradient
-    ///   - endPoint: End point for Gradient
-    ///   - strokeStyle: Stroke Style
-    ///   - prioity: Used to make sure the charts data legend is first
-    internal init(legend     : String,
-                  colours    : [Color],
-                  startPoint : UnitPoint,
-                  endPoint   : UnitPoint,
-                  strokeStyle: Stroke?,
-                  prioity    : Int,
-                  chartType  : ChartType
-    ) {
-        self.legend      = legend
-        self.colour      = nil
-        self.colours     = colours
-        self.stops       = nil
-        self.startPoint  = startPoint
-        self.endPoint    = endPoint
-        self.strokeStyle = strokeStyle
-        self.prioity     = prioity
-        self.chartType   = chartType
-    }
-    
-    /// Legend with a gradient with stop control
-    /// - Parameters:
-    ///   - legend: Text to be displayed
-    ///   - stops: Colours and Stops for Gradient with stop control
-    ///   - startPoint: Start point for Gradient
-    ///   - endPoint: End point for Gradient
-    ///   - strokeStyle: Stroke Style
-    ///   - prioity: Used to make sure the charts data legend is first
-    internal init(legend     : String,
-                  stops      : [GradientStop],
-                  startPoint : UnitPoint,
-                  endPoint   : UnitPoint,
-                  strokeStyle: Stroke?,
-                  prioity    : Int,
-                  chartType  : ChartType
-    ) {
-        self.legend      = legend
-        self.colour      = nil
-        self.colours     = nil
-        self.stops       = stops
-        self.startPoint  = startPoint
-        self.endPoint    = endPoint
-        self.strokeStyle = strokeStyle
-        self.prioity     = prioity
-        self.chartType   = chartType
+
     }
 }
