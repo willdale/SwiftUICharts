@@ -30,52 +30,56 @@ internal struct Point<T>: Shape where T: CTLineChartDataSet,
    
     internal func path(in rect: CGRect) -> Path {
         var path = Path()
-        let x = rect.width / CGFloat(dataSet.dataPoints.count-1)
-        let y = rect.height / CGFloat(range)
         
-        let firstPointX : CGFloat = (CGFloat(0) * x) -  dataSet.pointStyle.pointSize / CGFloat(2)
-        let firstPointY : CGFloat = ((CGFloat(dataSet.dataPoints[0].value - minValue) * -y) + rect.height) -  dataSet.pointStyle.pointSize / CGFloat(2)
-        let firstPoint  : CGRect  = CGRect(x     : firstPointX,
-                                           y     : firstPointY,
-                                           width :  dataSet.pointStyle.pointSize,
-                                           height:  dataSet.pointStyle.pointSize)
-        if !dataSet.style.ignoreZero {
-            pointSwitch(&path, firstPoint)
-        } else {
-            if dataSet.dataPoints[0].value != 0 {
-                pointSwitch(&path, firstPoint)
-            }
-        }
-        
-        for index in 1 ..< dataSet.dataPoints.count - 1 {
-            let pointX : CGFloat = (CGFloat(index) * x) -  dataSet.pointStyle.pointSize / CGFloat(2)
-            let pointY : CGFloat = ((CGFloat(dataSet.dataPoints[index].value - minValue) * -y) + rect.height) -  dataSet.pointStyle.pointSize / CGFloat(2)
-            let point  : CGRect  = CGRect(x     : pointX,
-                                          y     : pointY,
-                                          width :  dataSet.pointStyle.pointSize,
-                                          height:  dataSet.pointStyle.pointSize)
+        if dataSet.dataPoints.count >= 2 {
+            
+            let x = rect.width / CGFloat(dataSet.dataPoints.count-1)
+            let y = rect.height / CGFloat(range)
+            
+            let firstPointX : CGFloat = (CGFloat(0) * x) -  dataSet.pointStyle.pointSize / CGFloat(2)
+            let firstPointY : CGFloat = ((CGFloat(dataSet.dataPoints[0].value - minValue) * -y) + rect.height) -  dataSet.pointStyle.pointSize / CGFloat(2)
+            let firstPoint  : CGRect  = CGRect(x     : firstPointX,
+                                               y     : firstPointY,
+                                               width :  dataSet.pointStyle.pointSize,
+                                               height:  dataSet.pointStyle.pointSize)
             if !dataSet.style.ignoreZero {
-                pointSwitch(&path, point)
+                pointSwitch(&path, firstPoint)
             } else {
-                if dataSet.dataPoints[index].value != 0 {
-                    pointSwitch(&path, point)
+                if dataSet.dataPoints[0].value != 0 {
+                    pointSwitch(&path, firstPoint)
                 }
             }
-        }
-        
-        
-        let lastPointX : CGFloat = (CGFloat(dataSet.dataPoints.count-1) * x) - dataSet.pointStyle.pointSize / CGFloat(2)
-        let lastPointY : CGFloat = ((CGFloat(dataSet.dataPoints[dataSet.dataPoints.count-1].value - minValue) * -y) + rect.height) - dataSet.pointStyle.pointSize / CGFloat(2)
-        let lastPoint  : CGRect  = CGRect(x     : lastPointX,
-                                          y     : lastPointY,
-                                          width :  dataSet.pointStyle.pointSize,
-                                          height:  dataSet.pointStyle.pointSize)
-        if !dataSet.style.ignoreZero {
-            pointSwitch(&path, lastPoint)
-        } else {
-            if dataSet.dataPoints[dataSet.dataPoints.count-1].value != 0 {
-                pointSwitch(&path, lastPoint)
+            
+            for index in 1 ..< dataSet.dataPoints.count - 1 {
+                let pointX : CGFloat = (CGFloat(index) * x) -  dataSet.pointStyle.pointSize / CGFloat(2)
+                let pointY : CGFloat = ((CGFloat(dataSet.dataPoints[index].value - minValue) * -y) + rect.height) -  dataSet.pointStyle.pointSize / CGFloat(2)
+                let point  : CGRect  = CGRect(x     : pointX,
+                                              y     : pointY,
+                                              width :  dataSet.pointStyle.pointSize,
+                                              height:  dataSet.pointStyle.pointSize)
+                if !dataSet.style.ignoreZero {
+                    pointSwitch(&path, point)
+                } else {
+                    if dataSet.dataPoints[index].value != 0 {
+                        pointSwitch(&path, point)
+                    }
+                }
             }
+            
+            let lastPointX : CGFloat = (CGFloat(dataSet.dataPoints.count-1) * x) - dataSet.pointStyle.pointSize / CGFloat(2)
+            let lastPointY : CGFloat = ((CGFloat(dataSet.dataPoints[dataSet.dataPoints.count-1].value - minValue) * -y) + rect.height) - dataSet.pointStyle.pointSize / CGFloat(2)
+            let lastPoint  : CGRect  = CGRect(x     : lastPointX,
+                                              y     : lastPointY,
+                                              width :  dataSet.pointStyle.pointSize,
+                                              height:  dataSet.pointStyle.pointSize)
+            if !dataSet.style.ignoreZero {
+                pointSwitch(&path, lastPoint)
+            } else {
+                if dataSet.dataPoints[dataSet.dataPoints.count-1].value != 0 {
+                    pointSwitch(&path, lastPoint)
+                }
+            }
+            
         }
         
         return path

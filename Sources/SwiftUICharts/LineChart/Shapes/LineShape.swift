@@ -36,7 +36,7 @@ internal struct LineShape<DP>: Shape where DP: CTStandardDataPointProtocol {
         self.range      = range
         self.ignoreZero = ignoreZero
     }
-  
+    
     internal func path(in rect: CGRect) -> Path {
         switch lineType {
         case .curvedLine:

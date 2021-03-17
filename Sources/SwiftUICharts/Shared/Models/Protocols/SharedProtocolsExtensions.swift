@@ -7,21 +7,47 @@
 
 import SwiftUI
 
-extension CTChartData where Set: CTSingleDataSetProtocol {
+extension CTChartData where Self: CTLineChartDataProtocol,
+                            Set: CTSingleDataSetProtocol {
     public func isGreaterThanTwo() -> Bool {
-        return dataSets.dataPoints.count > 2
+        return dataSets.dataPoints.count >= 2
+    }
+}
+extension CTChartData where Self: CTBarChartDataProtocol,
+                            Set: CTSingleDataSetProtocol {
+    public func isGreaterThanTwo() -> Bool {
+        return dataSets.dataPoints.count >= 1
+    }
+}
+extension CTChartData where Self: CTPieDoughnutChartDataProtocol,
+                            Set: CTSingleDataSetProtocol {
+    public func isGreaterThanTwo() -> Bool {
+        return dataSets.dataPoints.count >= 1
     }
 }
 
-extension CTChartData where Set: CTMultiDataSetProtocol {
+extension CTChartData where Self: CTLineChartDataProtocol,
+                            Set: CTMultiDataSetProtocol {
     public func isGreaterThanTwo() -> Bool {
-        var returnValue: Bool = true
+        var returnValue: [Bool] = []
         dataSets.dataSets.forEach { dataSet in
-            returnValue = dataSet.dataPoints.count > 2
+            returnValue.append(dataSet.dataPoints.count >= 2)
         }
-        return returnValue
+        return returnValue.first(where: { $0 == true }) ?? false
     }
 }
+
+extension CTChartData where Self: CTBarChartDataProtocol,
+                            Set: CTMultiDataSetProtocol {
+    public func isGreaterThanTwo() -> Bool {
+        var returnValue: [Bool] = []
+        dataSets.dataSets.forEach { dataSet in
+            returnValue.append(dataSet.dataPoints.count >= 1)
+        }
+        return returnValue.first(where: { $0 == true }) ?? false
+    }
+}
+
 // MARK: Touch
 extension CTChartData {
     public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {

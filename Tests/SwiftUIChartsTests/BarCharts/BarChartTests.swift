@@ -31,15 +31,6 @@ final class BarChartTests: XCTestCase {
         let chartData = BarChartData(dataSets: BarDataSet(dataPoints: dataPoints))
         XCTAssertTrue(chartData.isGreaterThanTwo())
     }
-    
-    func testBarIsGreaterThanTwoFalse() {
-        let dataPoints = [
-            BarChartDataPoint(value: 10),
-            BarChartDataPoint(value: 60)
-        ]
-        let chartData = BarChartData(dataSets: BarDataSet(dataPoints: dataPoints))
-        XCTAssertFalse(chartData.isGreaterThanTwo())
-    }
 
     // MARK: - Labels
     func testBarGetYLabels() {
@@ -137,7 +128,6 @@ final class BarChartTests: XCTestCase {
         ("testBarRange",    testBarRange),
         // Greater
         ("testBarIsGreaterThanTwoTrue",  testBarIsGreaterThanTwoTrue),
-        ("testBarIsGreaterThanTwoFalse", testBarIsGreaterThanTwoFalse),
         // Labels
         ("testBarGetYLabels", testBarGetYLabels),
         // Touch
