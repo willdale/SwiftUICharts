@@ -20,28 +20,32 @@ extension Path {
         let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
         let y : CGFloat = rect.height / CGFloat(range)
         var path = Path()
-        let firstPoint = CGPoint(x: 0,
-                                 y: (CGFloat(dataPoints[0].value - minValue) * -y) + rect.height)
         
-        path.move(to: firstPoint)
-        
-        for index in 1 ..< dataPoints.count {
-            let nextPoint = CGPoint(x: CGFloat(index) * x,
-                                    y: (CGFloat(dataPoints[index].value - minValue) * -y) + rect.height)
+        if dataPoints.count >= 2 {
             
-            if !ignoreZero {
-                path.addLine(to: nextPoint)
-            } else {
-                if dataPoints[index].value != 0 {
+            let firstPoint = CGPoint(x: 0,
+                                     y: (CGFloat(dataPoints[0].value - minValue) * -y) + rect.height)
+            
+            path.move(to: firstPoint)
+            
+            for index in 1 ..< dataPoints.count {
+                let nextPoint = CGPoint(x: CGFloat(index) * x,
+                                        y: (CGFloat(dataPoints[index].value - minValue) * -y) + rect.height)
+                
+                if !ignoreZero {
                     path.addLine(to: nextPoint)
+                } else {
+                    if dataPoints[index].value != 0 {
+                        path.addLine(to: nextPoint)
+                    }
                 }
+                
             }
-            
-        }
-        if isFilled {
-            path.addLine(to: CGPoint(x: CGFloat(dataPoints.count-1) * x,  y: rect.height))
-            path.addLine(to: CGPoint(x: 0, y: rect.height))
-            path.closeSubpath()
+            if isFilled {
+                path.addLine(to: CGPoint(x: CGFloat(dataPoints.count-1) * x,  y: rect.height))
+                path.addLine(to: CGPoint(x: 0, y: rect.height))
+                path.closeSubpath()
+            }
         }
         return path
     }

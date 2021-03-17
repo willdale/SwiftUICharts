@@ -34,8 +34,7 @@ final class LineChartTests: XCTestCase {
     }
     func testLineIsGreaterThanTwoFalse() {
         let dataPoints = [
-            LineChartDataPoint(value: 10),
-            LineChartDataPoint(value: 60)
+            LineChartDataPoint(value: 10)
         ]
         let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints))
         XCTAssertFalse(chartData.isGreaterThanTwo())

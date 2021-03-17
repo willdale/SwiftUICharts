@@ -81,28 +81,6 @@ final class GroupedBarChartTests: XCTestCase {
         XCTAssertTrue(chartData.isGreaterThanTwo())
     }
     
-    func testGroupedBarIsGreaterThanTwoFalse() {
-       let data = MultiBarDataSets(dataSets: [
-            MultiBarDataSet(dataPoints: [
-                MultiBarChartDataPoint(value: 10, description: "One One"  , group: Group.one.data)
-            ]),
-            
-            MultiBarDataSet(dataPoints: [
-                MultiBarChartDataPoint(value: 20, description: "Two One"  , group: Group.one.data)
-            ]),
-            
-            MultiBarDataSet(dataPoints: [
-                MultiBarChartDataPoint(value: 30, description: "Three One", group: Group.one.data)
-
-            ]),
-            
-            MultiBarDataSet(dataPoints: [
-                MultiBarChartDataPoint(value: 40, description: "Four One" , group: Group.one.data)
-            ])
-        ])
-        let chartData = GroupedBarChartData(dataSets: data, groups: groups)
-        XCTAssertFalse(chartData.isGreaterThanTwo())
-    }
 
     // MARK: - Labels
     func testGroupedBarGetYLabels() {
@@ -232,7 +210,6 @@ final class GroupedBarChartTests: XCTestCase {
         ("testGroupedBarRange",    testGroupedBarRange),
         // Greater
         ("testGroupedBarIsGreaterThanTwoTrue",  testGroupedBarIsGreaterThanTwoTrue),
-        ("testGroupedBarIsGreaterThanTwoFalse", testGroupedBarIsGreaterThanTwoFalse),
         // Labels
         ("testGroupedBarGetYLabels", testGroupedBarGetYLabels),
         // Touch

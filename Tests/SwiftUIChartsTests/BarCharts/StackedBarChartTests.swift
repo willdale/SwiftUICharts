@@ -80,28 +80,6 @@ final class StackedBarChartTests: XCTestCase {
         
         XCTAssertTrue(chartData.isGreaterThanTwo())
     }
-    
-    func testStackedBarIsGreaterThanTwoFalse() {
-       let data = MultiBarDataSets(dataSets: [
-            MultiBarDataSet(dataPoints: [
-                MultiBarChartDataPoint(value: 10, description: "One One"  , group: Group.one.data)
-            ]),
-            
-            MultiBarDataSet(dataPoints: [
-                MultiBarChartDataPoint(value: 20, description: "Two One"  , group: Group.one.data)
-            ]),
-            
-            MultiBarDataSet(dataPoints: [
-                MultiBarChartDataPoint(value: 30, description: "Three One", group: Group.one.data)
-            ]),
-            
-            MultiBarDataSet(dataPoints: [
-                MultiBarChartDataPoint(value: 40, description: "Four One" , group: Group.one.data)
-            ])
-        ])
-        let chartData = StackedBarChartData(dataSets: data, groups: groups)
-        XCTAssertFalse(chartData.isGreaterThanTwo())
-    }
 
     // MARK: Labels
     func testStackedBarGetYLabels() {
@@ -287,7 +265,6 @@ final class StackedBarChartTests: XCTestCase {
         ("testStackedBarRange",    testStackedBarRange),
         // Greater
         ("testStackedBarIsGreaterThanTwoTrue",  testStackedBarIsGreaterThanTwoTrue),
-        ("testStackedBarIsGreaterThanTwoFalse", testStackedBarIsGreaterThanTwoFalse),
         // Labels
         ("testStackedBarGetYLabels", testStackedBarGetYLabels),
         // Touch
