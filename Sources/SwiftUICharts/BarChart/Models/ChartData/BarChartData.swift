@@ -75,14 +75,14 @@ public final class BarChartData: CTBarChartDataProtocol {
                     }
                 }
 
-            case .chartData:
+            case .chartData(let angle):
                 
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
                         ForEach(labelArray, id: \.self) { data in
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
-                            YAxisChartDataCell(chartData: self, label: data)
+                            YAxisDataPointCell(chartData: self, label: data, rotationAngle: angle)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))

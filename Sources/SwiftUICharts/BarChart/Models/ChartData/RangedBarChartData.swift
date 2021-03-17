@@ -83,7 +83,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
                     }
                 }
 
-            case .chartData:
+            case .chartData(let angle):
 
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
@@ -92,7 +92,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)
                             }
-                            YAxisChartDataCell(chartData: self, label: data)
+                            YAxisDataPointCell(chartData: self, label: data, rotationAngle: angle)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
