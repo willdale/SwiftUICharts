@@ -33,9 +33,9 @@ public enum XAxisLabelPosistion {
  */
 public enum LabelsFrom {
     /// ChartData --> DataPoint --> xAxisLabel
-    case dataPoint(rotation: Angle)
+    case dataPoint(rotation: Angle = Angle.degrees(0))
     /// ChartData --> xAxisLabels
-    case chartData
+    case chartData(rotation: Angle = Angle.degrees(0))
 }
 
 // MARK: - YAxisLabels
