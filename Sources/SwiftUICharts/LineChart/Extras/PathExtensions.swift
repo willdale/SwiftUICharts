@@ -78,6 +78,7 @@ extension Path {
                               control2: CGPoint(x: nextPoint.x - (nextPoint.x - previousPoint.x) / 2,
                                                 y: nextPoint.y))
                 lastIndex = index
+                previousPoint = nextPoint
             } else {
                 if dataPoints[index].value != 0 {
                     path.addCurve(to: nextPoint,
@@ -85,11 +86,12 @@ extension Path {
                                                     y: previousPoint.y),
                                   control2: CGPoint(x: nextPoint.x - (nextPoint.x - previousPoint.x) / 2,
                                                     y: nextPoint.y))
-                    lastIndex = index
+                    previousPoint = nextPoint
                 }
+                lastIndex = index
             }
             
-            previousPoint = nextPoint
+            
         }
         if isFilled {
             // Draw line straight down from last value
@@ -187,6 +189,7 @@ extension Path {
                                                 y: previousPoint.y),
                               control2: CGPoint(x: nextPoint.x - (nextPoint.x - previousPoint.x) / 2,
                                                 y: nextPoint.y))
+                previousPoint = nextPoint
             } else {
                 if dataPoints[indexUpper].value != 0 {
                     path.addCurve(to: nextPoint,
@@ -194,9 +197,10 @@ extension Path {
                                                     y: previousPoint.y),
                                   control2: CGPoint(x: nextPoint.x - (nextPoint.x - previousPoint.x) / 2,
                                                     y: nextPoint.y))
+                    previousPoint = nextPoint
                 }
             }
-            previousPoint = nextPoint
+            
         }
         
         // Lower Path
@@ -210,6 +214,7 @@ extension Path {
                                                 y: previousPoint.y),
                               control2: CGPoint(x: nextPoint.x - (nextPoint.x - previousPoint.x) / 2,
                                                 y: nextPoint.y))
+                previousPoint = nextPoint
             } else {
                 if dataPoints[indexLower].value != 0 {
                     path.addCurve(to: nextPoint,
@@ -217,9 +222,10 @@ extension Path {
                                                     y: previousPoint.y),
                                   control2: CGPoint(x: nextPoint.x - (nextPoint.x - previousPoint.x) / 2,
                                                     y: nextPoint.y))
+                    previousPoint = nextPoint
                 }
             }
-            previousPoint = nextPoint
+            
         }
         
         path.addLine(to: firstPointUpper)
