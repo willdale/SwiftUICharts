@@ -49,7 +49,7 @@ internal struct InfoBox<T>: ViewModifier where T: CTChartData {
                         boxFrame : $boxFrame)
             .position(x: chartData.setBoxLocationation(touchLocation: chartData.infoView.touchLocation.x,
                                              boxFrame     : boxFrame,
-                                             chartSize    : chartData.infoView.chartSize),
+                                             chartSize    : chartData.infoView.chartSize) - 6, // -6 to compensate for `.padding(.horizontal, 6)`
                       y: 35)
             .frame(height: 70)
             .padding(.horizontal, 6)

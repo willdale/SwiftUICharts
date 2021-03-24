@@ -40,8 +40,8 @@ internal struct FloatingInfoBox<T>: ViewModifier where T: CTChartData {
         TouchOverlayBox(chartData: chartData,
                         boxFrame : $boxFrame)
             .position(x: chartData.setBoxLocationation(touchLocation: chartData.infoView.touchLocation.x,
-                                             boxFrame     : boxFrame,
-                                             chartSize    : chartData.infoView.chartSize),
+                                                       boxFrame     : boxFrame,
+                                                       chartSize    : chartData.infoView.chartSize) - 6, // -6 to compensate for `.padding(.horizontal, 6)`
                       y: boxFrame.midY - 10)
             .padding(.horizontal, 6)
             .zIndex(1)
