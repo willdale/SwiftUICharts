@@ -108,7 +108,7 @@ public enum Topline {
  
  ```
  case numeric // Auto generated, numeric labels.
- case custom // Custom labels array
+ case custom // Custom labels array -- `ChartData -> yAxisLabels`
  ```
  */
 public enum YAxisLabelType {

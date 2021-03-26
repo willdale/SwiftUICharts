@@ -78,7 +78,7 @@ public struct BarChartStyle: CTBarChartStyle {
                 infoBoxBorderColour     : Color             = Color.clear,
                 infoBoxBorderStyle      : StrokeStyle       = StrokeStyle(lineWidth: 0),
                 
-                markerType          : BarMarkerType         = .full,
+                markerType          : BarMarkerType         = .full(),
                 
                 xAxisGridStyle      : GridStyle             = GridStyle(),
                 xAxisLabelPosition  : XAxisLabelPosistion   = .bottom,
