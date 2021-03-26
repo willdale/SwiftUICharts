@@ -88,12 +88,12 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
             case .chartData:
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
-                        ForEach(labelArray, id: \.self) { data in
-                            YAxisChartDataCell(chartData: self, label: data)
+                        ForEach(labelArray.indices, id: \.self) { [unowned self] i in
+                            YAxisChartDataCell(chartData: self, label: labelArray[i])
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .accessibilityLabel(Text("X Axis Label"))
-                                .accessibilityValue(Text("\(data)"))
-                            if data != labelArray[labelArray.count - 1] {
+                                .accessibilityValue(Text("\(labelArray[i])"))
+                            if i != labelArray.count - 1 {
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)
                             }
