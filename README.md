@@ -382,6 +382,12 @@ Automatically generated labels for the Y axis
 
 Setup within  `ChartData -> ChartStyle`.
 
+yAxisLabelType: 
+```swift
+case numeric // Auto generated, numeric labels.
+case custom // Custom labels array
+```
+Custom is set from `ChartData -> yAxisLabels`
 
 ---
 
