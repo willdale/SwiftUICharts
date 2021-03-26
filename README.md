@@ -167,7 +167,7 @@ File > Swift Packages > Add Package Dependency...
 import SwiftUICharts
 ```
 
-If you have trouble with views not updating correctly, add  `.id()` to your View.
+If you have trouble with views not updating correctly, add `.id()` to your View.
 ```swift
 LineChart(chartData: LineChartData)
     .id(LineChartData.id)
@@ -190,6 +190,7 @@ LineChart(chartData: LineChartData)
 - [Y Axis Grid](#Y-Axis-Grid) 
 - [X Axis Labels](#X-Axis-Labels) 
 - [Y Axis Labels](#Y-Axis-Labels) 
+- [Linear Trend Line](#Linear-Trend-Line) 
 
 - [Point Markers](#Point-Markers) 
 
@@ -388,6 +389,22 @@ case numeric // Auto generated, numeric labels.
 case custom // Custom labels array
 ```
 Custom is set from `ChartData -> yAxisLabels`
+
+---
+
+
+#### Linear Trend Line
+
+A line across the chart to show the trend in the data.
+
+```swift
+.linearTrendLine(chartData: CTLineBarChartDataProtocol,
+                 firstValue: Double,
+                 lastValue: Double,
+                 lineColour: ColourStyle,
+                 strokeStyle: StrokeStyle)
+```
+
 
 ---
 
