@@ -35,6 +35,7 @@ public struct BarChartStyle: CTBarChartStyle {
     public var yAxisLabelPosition   : YAxisLabelPosistion
     public var yAxisLabelColour     : Color
     public var yAxisNumberOfLabels  : Int
+    public var yAxisLabelType       : YAxisLabelType
     public var yAxisTitle           : String?
     
     public var baseline             : Baseline
@@ -89,6 +90,7 @@ public struct BarChartStyle: CTBarChartStyle {
                 yAxisLabelPosition  : YAxisLabelPosistion   = .leading,
                 yAxisLabelColour    : Color                 = Color.primary,
                 yAxisNumberOfLabels : Int                   = 10,
+                yAxisLabelType      : YAxisLabelType        = .numeric,
                 yAxisTitle          : String?               = nil,
                 
                 baseline            : Baseline              = .minimumValue,
@@ -115,6 +117,7 @@ public struct BarChartStyle: CTBarChartStyle {
         self.yAxisLabelPosition  = yAxisLabelPosition
         self.yAxisNumberOfLabels = yAxisNumberOfLabels
         self.yAxisLabelColour    = yAxisLabelColour
+        self.yAxisLabelType      = yAxisLabelType
         self.yAxisTitle          = yAxisTitle
         
         self.baseline            = baseline

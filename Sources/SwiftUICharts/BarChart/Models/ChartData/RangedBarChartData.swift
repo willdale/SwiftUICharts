@@ -15,6 +15,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
     @Published public final var dataSets     : RangedBarDataSet
     @Published public final var metadata     : ChartMetadata
     @Published public final var xAxisLabels  : [String]?
+    @Published public final var yAxisLabels  : [String]?
     @Published public final var barStyle     : BarStyle
     @Published public final var chartStyle   : BarChartStyle
     @Published public final var legends      : [LegendData]
@@ -31,12 +32,14 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
     ///   - dataSets: Data to draw and style the bars.
     ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
+    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
     ///   - barStyle: Control for the aesthetic of the bar chart.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(dataSets    : RangedBarDataSet,
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
+                yAxisLabels : [String]?         = nil,
                 barStyle    : BarStyle          = BarStyle(),
                 chartStyle  : BarChartStyle     = BarChartStyle(),
                 noDataText  : Text              = Text("No Data")
@@ -44,6 +47,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
         self.dataSets       = dataSets
         self.metadata       = metadata
         self.xAxisLabels    = xAxisLabels
+        self.yAxisLabels    = yAxisLabels
         self.barStyle       = barStyle
         self.chartStyle     = chartStyle
         self.noDataText     = noDataText

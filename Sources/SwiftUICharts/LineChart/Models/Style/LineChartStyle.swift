@@ -34,6 +34,7 @@ public struct LineChartStyle: CTLineChartStyle {
     public var yAxisLabelPosition   : YAxisLabelPosistion
     public var yAxisLabelColour     : Color
     public var yAxisNumberOfLabels  : Int
+    public var yAxisLabelType       : YAxisLabelType
     public var yAxisTitle           : String?
     
     public var baseline             : Baseline
@@ -87,6 +88,7 @@ public struct LineChartStyle: CTLineChartStyle {
                 yAxisLabelPosition  : YAxisLabelPosistion   = .leading,
                 yAxisLabelColour    : Color                 = Color.primary,
                 yAxisNumberOfLabels : Int                   = 10,
+                yAxisLabelType      : YAxisLabelType        = .numeric,
                 yAxisTitle          : String?               = nil,
 
                 baseline            : Baseline              = .minimumValue,
@@ -113,6 +115,7 @@ public struct LineChartStyle: CTLineChartStyle {
         self.yAxisLabelPosition  = yAxisLabelPosition
         self.yAxisNumberOfLabels = yAxisNumberOfLabels
         self.yAxisLabelColour    = yAxisLabelColour
+        self.yAxisLabelType      = yAxisLabelType
         self.yAxisTitle          = yAxisTitle
         
         self.baseline            = baseline

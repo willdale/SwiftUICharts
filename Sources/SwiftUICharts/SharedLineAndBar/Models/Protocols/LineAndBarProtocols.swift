@@ -42,6 +42,12 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
     var xAxisLabels: [String]? { get set }
     
     /**
+     Array of strings for the labels on the Y Axis instead of the labels generated
+     from data point values.
+    */
+    var yAxisLabels: [String]? { get set }
+    
+    /**
      Data model to hold data about the Views layout.
 
      This informs some `ViewModifiers` whether the chart has X and/or Y
@@ -57,7 +63,7 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
      
      - Returns: Array of evenly spaced numbers.
      */
-    func getYLabels() -> [Double]
+    func getYLabels(_ specifier: String) -> [String]
     
     /**
      Displays a view for the labels on the X Axis.
@@ -132,6 +138,12 @@ public protocol CTLineBarChartStyle: CTChartStyle {
     var yAxisNumberOfLabels: Int { get set }
     
     /**
+     Option to add custom Strings to Y axis rather than
+     auto generated numbers
+     */
+    var yAxisLabelType: YAxisLabelType { get set }
+    
+    /**
      Label to display next to the chart giving info about the axis.
      */
     var yAxisTitle: String? { get set }
@@ -167,4 +179,22 @@ extension CTLineBarDataPointProtocol {
     var wrappedXAxisLabel : String {
         self.xAxisLabel ?? ""
     }
+}
+
+/**
+ Option to choose between auto generated, numeric labels
+ or custum array of strings.
+ 
+ Custom is set from `ChartData -> yAxisLabels`
+ 
+ ```
+ case numeric // Auto generated, numeric labels.
+ case custom // Custom labels array
+ ```
+ */
+public enum YAxisLabelType {
+    /// Auto generated, numeric labels.
+    case numeric
+    /// Custom labels array
+    case custom
 }
