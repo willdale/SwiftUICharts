@@ -160,6 +160,11 @@ extension LineChartData {
                     var dataPoint = dataSets.dataPoints[index]
                     dataPoint.legendTag = dataSets.legendTitle
                     points.append(dataPoint)
+                } else {
+                    var dataPoint = dataSets.dataPoints[index]
+                    dataPoint.legendTag = dataSets.legendTitle
+                    dataPoint.value = -Double.greatestFiniteMagnitude
+                    points.append(dataPoint)
                 }
             }
         }

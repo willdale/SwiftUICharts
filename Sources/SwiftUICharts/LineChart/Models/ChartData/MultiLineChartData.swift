@@ -173,10 +173,14 @@ extension MultiLineChartData {
                     dataPoint.legendTag = dataSet.legendTitle
                     points.append(dataPoint)
                 } else {
-                    
                     if dataSet.dataPoints[index].value != 0 {
                         var dataPoint = dataSet.dataPoints[index]
                         dataPoint.legendTag = dataSet.legendTitle
+                        points.append(dataPoint)
+                    } else {
+                        var dataPoint = dataSet.dataPoints[index]
+                        dataPoint.legendTag = dataSet.legendTitle
+                        dataPoint.value = -Double.greatestFiniteMagnitude
                         points.append(dataPoint)
                     }
                 }
