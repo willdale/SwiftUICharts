@@ -521,3 +521,24 @@ struct LineChartDemoView: View {
 
 
 ---
+
+
+FONTS
+
+Y Axis           - caption
+X Axis Title   - caption
+Y Axis Title   - caption
+
+Header Box ------------------
+
+Chart Title      - title3 
+Chart Subtitle - subheadline
+
+Value           - title3
+Description - subheadline
+
+
+Touch Overlay Box ------------------
+
+Description - subheadline
+Value           - title3

@@ -80,7 +80,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
                             ForEach(dataSet.dataPoints) { data in
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)
-                                YAxisDataPointCell(chartData: self, label: data.group.title, rotationAngle: angle)
+                                XAxisDataPointCell(chartData: self, label: data.group.title, rotationAngle: angle)
                                     .foregroundColor(self.chartStyle.xAxisLabelColour)
                                     .accessibilityLabel(Text("X Axis Label"))
                                     .accessibilityValue(Text("\(data.group.title)"))
@@ -99,7 +99,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
                         ForEach(labelArray, id: \.self) { data in
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
-                            YAxisDataPointCell(chartData: self, label: data, rotationAngle: angle)
+                            XAxisDataPointCell(chartData: self, label: data, rotationAngle: angle)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))
@@ -114,7 +114,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
                     HStack(spacing: 0) {
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
-                        YAxisDataPointCell(chartData: self, label: dataSet.setTitle, rotationAngle: .degrees(0))
+                        XAxisDataPointCell(chartData: self, label: dataSet.setTitle, rotationAngle: .degrees(0))
                             .foregroundColor(self.chartStyle.xAxisLabelColour)
                             .accessibilityLabel(Text("X Axis Label"))
                             .accessibilityValue(Text("\(dataSet.setTitle)"))

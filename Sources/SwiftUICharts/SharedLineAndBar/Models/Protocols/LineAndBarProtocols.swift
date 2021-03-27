@@ -103,6 +103,11 @@ public protocol CTLineBarChartStyle: CTChartStyle {
     var xAxisLabelPosition: XAxisLabelPosistion { get set }
     
     /**
+     Font of the labels on the X axis.
+     */
+    var xAxisLabelFont: Font { get set }
+    
+    /**
      Text Colour for the labels on the X axis.
      */
     var xAxisLabelColour: Color { get set }
@@ -118,6 +123,11 @@ public protocol CTLineBarChartStyle: CTChartStyle {
     var xAxisTitle: String? { get set }
     
     /**
+     Font of the x axis title.
+     */
+    var xAxisTitleFont: Font { get set }
+    
+    /**
      Style of the horizontal lines breaking up the chart.
      */
     var yAxisGridStyle: GridStyle { get set }
@@ -128,18 +138,23 @@ public protocol CTLineBarChartStyle: CTChartStyle {
     var yAxisLabelPosition: YAxisLabelPosistion { get set }
     
     /**
+     Font of the labels on the Y axis.
+     */
+    var yAxisLabelFont: Font { get set }
+    
+    /**
      Text Colour for the labels on the Y axis.
      */
     var yAxisLabelColour: Color { get set }
     
     /**
-     Number Of Labels on Y Axis
+     Number Of Labels on Y Axis.
      */
     var yAxisNumberOfLabels: Int { get set }
     
     /**
      Option to add custom Strings to Y axis rather than
-     auto generated numbers
+     auto generated numbers.
      */
     var yAxisLabelType: YAxisLabelType { get set }
     
@@ -147,6 +162,11 @@ public protocol CTLineBarChartStyle: CTChartStyle {
      Label to display next to the chart giving info about the axis.
      */
     var yAxisTitle: String? { get set }
+    
+    /**
+     Font of the y axis title.
+     */
+    var yAxisTitleFont: Font { get set }
     
     /**
      Where to start drawing the line chart from. Zero, data set minium or custom.

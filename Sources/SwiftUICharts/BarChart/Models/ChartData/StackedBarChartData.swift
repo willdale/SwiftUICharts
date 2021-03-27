@@ -135,7 +135,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
                         HStack(spacing: 0) {
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
-                            YAxisDataPointCell(chartData: self, label: dataSet.setTitle, rotationAngle: angle)
+                            XAxisDataPointCell(chartData: self, label: dataSet.setTitle, rotationAngle: angle)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(dataSet.setTitle)"))
@@ -150,7 +150,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
                         ForEach(labelArray, id: \.self) { data in
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
-                            YAxisDataPointCell(chartData: self, label: data, rotationAngle: angle)
+                            XAxisDataPointCell(chartData: self, label: data, rotationAngle: angle)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))

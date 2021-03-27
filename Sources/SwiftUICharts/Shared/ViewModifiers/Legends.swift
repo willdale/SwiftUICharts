@@ -14,14 +14,20 @@ internal struct Legends<T>: ViewModifier where T: CTChartData {
     
     @ObservedObject var chartData: T
     private let columns     : [GridItem]
+    private let width       : CGFloat
+    private let font        : Font
     private let textColor   : Color
     
     init(chartData: T,
          columns  : [GridItem],
+         width    : CGFloat,
+         font     : Font,
          textColor: Color
     ) {
         self.chartData = chartData
         self.columns   = columns
+        self.width     = width
+        self.font      = font
         self.textColor = textColor
     }
     
@@ -30,7 +36,11 @@ internal struct Legends<T>: ViewModifier where T: CTChartData {
             if chartData.isGreaterThanTwo() {
                 VStack {
                     content
-                    LegendView(chartData: chartData, columns: columns, textColor: textColor)
+                    LegendView(chartData: chartData,
+                               columns: columns,
+                               width: width,
+                               font: font,
+                               textColor: textColor)
                         
                 }
             } else { content }
@@ -48,8 +58,18 @@ extension View {
         - textColor: Colour of the text.
      - Returns: A  new view containing the chart with chart legends under.
      */
-    public func legends<T:CTChartData>(chartData: T, columns: [GridItem] = [GridItem(.flexible())], textColor: Color = Color.primary) -> some View {
-        self.modifier(Legends(chartData: chartData, columns: columns, textColor: textColor))
+    public func legends<T:CTChartData>(
+        chartData: T,
+        columns: [GridItem] = [GridItem(.flexible())],
+        iconWidth: CGFloat = 40,
+        font: Font = .caption,
+        textColor: Color = Color.primary
+    ) -> some View {
+        self.modifier(Legends(chartData: chartData,
+                              columns: columns,
+                              width: iconWidth,
+                              font: font,
+                              textColor: textColor))
     }
 }
 

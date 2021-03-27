@@ -69,7 +69,7 @@ public final class LineChartData: CTLineChartDataProtocol {
                 
                 HStack(spacing: 0) {
                     ForEach(dataSets.dataPoints) { data in
-                        YAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
+                        XAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
                             .foregroundColor(self.chartStyle.xAxisLabelColour)
                             .accessibilityLabel(Text("X Axis Label"))
                             .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
@@ -85,7 +85,7 @@ public final class LineChartData: CTLineChartDataProtocol {
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
                         ForEach(labelArray.indices, id: \.self) { [unowned self] i in
-                            YAxisChartDataCell(chartData: self, label: labelArray[i])
+                            XAxisChartDataCell(chartData: self, label: labelArray[i])
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(labelArray[i])"))

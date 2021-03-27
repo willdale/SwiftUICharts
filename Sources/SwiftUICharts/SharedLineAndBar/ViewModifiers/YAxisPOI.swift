@@ -22,6 +22,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     private let strokeStyle : StrokeStyle
     
     private let labelPosition   : DisplayValue
+    private let labelFont       : Font
     private let labelColour     : Color
     private let labelBackground : Color
     
@@ -33,6 +34,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                   markerName     : String,
                   markerValue    : Double = 0,
                   labelPosition  : DisplayValue,
+                  labelFont      : Font,
                   labelColour    : Color,
                   labelBackground: Color,
                   lineColour     : Color,
@@ -45,6 +47,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
         self.strokeStyle = strokeStyle
         
         self.labelPosition   = labelPosition
+        self.labelFont       = labelFont
         self.labelColour     = labelColour
         self.labelBackground = labelBackground
         
@@ -94,12 +97,13 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                 
             case .yAxis(specifier: let specifier):
                 
-                ValueLabelYAxisSubView(chartData      : chartData,
-                                       markerValue    : markerValue,
-                                       specifier      : specifier,
-                                       labelColour    : labelColour,
-                                       labelBackground: labelBackground,
-                                       lineColour     : lineColour)
+                ValueLabelYAxisSubView(chartData       : chartData,
+                                       markerValue     : markerValue,
+                                       specifier       : specifier,
+                                       labelFont       : labelFont,
+                                       labelColour     : labelColour,
+                                       labelBackground : labelBackground,
+                                       lineColour      : lineColour)
                     .position(x: -(chartData.infoView.yAxisLabelWidth / 2) - 6,
                               y: getYPoint(chartType: chartData.chartType.chartType,
                                            height: geo.size.height))
@@ -111,6 +115,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                 ValueLabelCenterSubView(chartData       : chartData,
                                         markerValue     : markerValue,
                                         specifier       : specifier,
+                                        labelFont       : labelFont,
                                         labelColour     : labelColour,
                                         labelBackground : labelBackground,
                                         lineColour      : lineColour,
@@ -193,6 +198,7 @@ extension View {
         - markerName: Title of marker, for the legend.
         - markerValue: Value to mark
         - labelPosition: Option to display the markers’ value inline with the marker.
+        - labelFont: Font for the label.
         - labelColour: Colour of the `Text`.
         - labelBackground: Colour of the background.
         - lineColour: Line Colour.
@@ -204,6 +210,7 @@ extension View {
         markerName     : String,
         markerValue    : Double,
         labelPosition  : DisplayValue = .center(specifier: "%.0f"),
+        labelFont      : Font         = .caption,
         labelColour    : Color        = Color.primary,
         labelBackground: Color        = Color.systemsBackground,
         lineColour     : Color        = Color(.blue),
@@ -213,6 +220,7 @@ extension View {
                                markerName     : markerName,
                                markerValue    : markerValue,
                                labelPosition  : labelPosition,
+                               labelFont      : labelFont,
                                labelColour    : labelColour,
                                labelBackground: labelBackground,
                                lineColour     : lineColour,
@@ -264,6 +272,7 @@ extension View {
         - chartData: Chart data model.
         - markerName: Title of marker, for the legend.
         - labelPosition: Option to display the markers’ value inline with the marker.
+        - labelFont: Font for the label.
         - labelColour: Colour of the `Text`.
         - labelBackground: Colour of the background.
         - lineColour: Line Colour.
@@ -276,6 +285,7 @@ extension View {
         chartData      : T,
         markerName     : String        = "Average",
         labelPosition  : DisplayValue  = .yAxis(specifier: "%.0f"),
+        labelFont      : Font          = .caption,
         labelColour    : Color         = Color.primary,
         labelBackground: Color         = Color.systemsBackground,
         lineColour     : Color         = Color.primary,
@@ -284,6 +294,7 @@ extension View {
         self.modifier(YAxisPOI(chartData      : chartData,
                                markerName     : markerName,
                                labelPosition  : labelPosition,
+                               labelFont      : labelFont,
                                labelColour    : labelColour,
                                labelBackground: labelBackground,
                                lineColour     : lineColour,

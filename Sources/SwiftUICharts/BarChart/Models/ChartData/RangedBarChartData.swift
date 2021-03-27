@@ -78,7 +78,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
                     ForEach(dataSets.dataPoints) { data in
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
-                        YAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
+                        XAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
                             .foregroundColor(self.chartStyle.xAxisLabelColour)
                             .accessibilityLabel(Text("X Axis Label"))
                             .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
@@ -96,7 +96,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)
                             }
-                            YAxisDataPointCell(chartData: self, label: data, rotationAngle: angle)
+                            XAxisDataPointCell(chartData: self, label: data, rotationAngle: angle)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))

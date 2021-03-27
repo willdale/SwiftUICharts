@@ -34,19 +34,26 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
     @State private var height: CGFloat = 0
     @State private var axisLabelWidth: CGFloat = 0
     
-    @ViewBuilder private var axisTitle: some View {
+    @ViewBuilder
+    private var axisTitle: some View {
         if let title = chartData.chartStyle.yAxisTitle {
             VStack {
                 Text(title)
-                    .font(.caption)
+                    .font(chartData.chartStyle.yAxisTitleFont)
+                    .background(
+                        GeometryReader { geo in
+                            Rectangle()
+                                .foregroundColor(Color.clear)
+                                .onAppear {
+                                    axisLabelWidth = geo.size.height + 10
+                                }
+                        }
+                    )
                     .rotationEffect(Angle.init(degrees: -90), anchor: .center)
                     .fixedSize()
                     .frame(width: axisLabelWidth)
                 Spacer()
                     .frame(height: (self.chartData.viewData.xAxisLabelHeights.max(by: { $0 < $1 }) ?? 0) + axisLabelWidth)
-            }
-            .onAppear {
-                axisLabelWidth = 20
             }
         }
     }
@@ -55,7 +62,7 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
         VStack {
             ForEach(labelsArray.indices.reversed(), id: \.self) { i in
                 Text(labelsArray[i])
-                    .font(.caption)
+                    .font(chartData.chartStyle.yAxisLabelFont)
                     .foregroundColor(chartData.chartStyle.yAxisLabelColour)
                     .lineLimit(1)
                     .accessibilityLabel(Text("Y Axis Label"))
