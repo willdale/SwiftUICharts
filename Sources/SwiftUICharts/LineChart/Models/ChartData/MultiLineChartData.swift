@@ -20,6 +20,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
     @Published public final var dataSets      : MultiLineDataSet
     @Published public final var metadata      : ChartMetadata
     @Published public final var xAxisLabels   : [String]?
+    @Published public final var yAxisLabels   : [String]?
     @Published public final var chartStyle    : LineChartStyle
     @Published public final var legends       : [LegendData]
     @Published public final var viewData      : ChartViewData
@@ -35,17 +36,20 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
     ///   - dataSets: Data to draw and style the lines.
     ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
+    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(dataSets    : MultiLineDataSet,
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
+                yAxisLabels : [String]?         = nil,
                 chartStyle  : LineChartStyle    = LineChartStyle(),
                 noDataText  : Text              = Text("No Data")
     ) {
         self.dataSets       = dataSets
         self.metadata       = metadata
         self.xAxisLabels    = xAxisLabels
+        self.yAxisLabels    = yAxisLabels
         self.chartStyle     = chartStyle
         self.noDataText     = noDataText
         self.legends        = [LegendData]()
@@ -62,7 +66,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
                 
                 HStack(spacing: 0) {
                     ForEach(dataSets.dataSets[0].dataPoints) { data in
-                        YAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
+                        XAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
                             .foregroundColor(self.chartStyle.xAxisLabelColour)
                             .accessibilityLabel(Text("X Axis Label"))
                             .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
@@ -77,12 +81,12 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
             case .chartData:
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
-                        ForEach(labelArray, id: \.self) { data in
-                            YAxisChartDataCell(chartData: self, label: data)
+                        ForEach(labelArray.indices, id: \.self) { [unowned self] i in
+                            XAxisChartDataCell(chartData: self, label: labelArray[i])
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .accessibilityLabel(Text("X Axis Label"))
-                                .accessibilityValue(Text("\(data)"))
-                            if data != labelArray[labelArray.count - 1] {
+                                .accessibilityValue(Text("\(labelArray[i])"))
+                            if i != labelArray.count - 1 {
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)
                             }
@@ -173,10 +177,14 @@ extension MultiLineChartData {
                     dataPoint.legendTag = dataSet.legendTitle
                     points.append(dataPoint)
                 } else {
-                    
                     if dataSet.dataPoints[index].value != 0 {
                         var dataPoint = dataSet.dataPoints[index]
                         dataPoint.legendTag = dataSet.legendTitle
+                        points.append(dataPoint)
+                    } else {
+                        var dataPoint = dataSet.dataPoints[index]
+                        dataPoint.legendTag = dataSet.legendTitle
+                        dataPoint.value = -Double.greatestFiniteMagnitude
                         points.append(dataPoint)
                     }
                 }

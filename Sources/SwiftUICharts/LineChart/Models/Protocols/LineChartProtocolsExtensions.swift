@@ -283,7 +283,7 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
                                                         range: self.range,
                                                         ignoreZero: dataSet.style.ignoreZero))
                 
-            case .vertical(attachment: let attach):
+            case .vertical(attachment: let attach, let colour, let style):
                 
                 switch attach {
                 case .line(dot: let indicator):
@@ -297,7 +297,7 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
                                                              ignoreZero: dataSet.style.ignoreZero)
                     
                     Vertical(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
+                        .stroke(colour, style: style)
                     
                     IndicatorSwitch(indicator: indicator, location: position)
                     
@@ -306,11 +306,11 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
                                                             touchLocation: touchLocation,
                                                             chartSize: chartSize) {
                         Vertical(position: position)
-                            .stroke(Color.primary, lineWidth: 2)
+                            .stroke(colour, style: style)
                     }
                 }
                 
-            case .full(attachment: let attach):
+            case .full(attachment: let attach, let colour, let style):
                 
                 switch attach {
                 case .line(dot: let indicator):
@@ -324,7 +324,7 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
                                                              ignoreZero: dataSet.style.ignoreZero)
                     
                     MarkerFull(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
+                        .stroke(colour, style: style)
                     
                     IndicatorSwitch(indicator: indicator, location: position)
                         
@@ -336,11 +336,11 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
                                                             chartSize: chartSize) {
                         
                         MarkerFull(position: position)
-                            .stroke(Color.primary, lineWidth: 2)
+                            .stroke(colour, style: style)
                     }
                 }
                 
-            case .bottomLeading(attachment: let attach):
+            case .bottomLeading(attachment: let attach, let colour, let style):
                 
                 switch attach {
                 case .line(dot: let indicator):
@@ -365,11 +365,11 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
                                                             chartSize: chartSize) {
                         
                         MarkerBottomLeading(position: position)
-                            .stroke(Color.primary, lineWidth: 2)
+                            .stroke(colour, style: style)
                     }
                 }
                 
-            case .bottomTrailing(attachment: let attach):
+            case .bottomTrailing(attachment: let attach, let colour, let style):
                 
                 switch attach {
                 case .line(dot: let indicator):
@@ -383,7 +383,7 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
                                                              ignoreZero: dataSet.style.ignoreZero)
                     
                     MarkerBottomTrailing(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
+                        .stroke(colour, style: style)
                     
                     IndicatorSwitch(indicator: indicator, location: position)
                     
@@ -394,11 +394,11 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
                                                             chartSize: chartSize) {
                         
                         MarkerBottomTrailing(position: position)
-                            .stroke(Color.primary, lineWidth: 2)
+                            .stroke(colour, style: style)
                     }
                 }
                 
-            case .topLeading(attachment: let attach):
+            case .topLeading(attachment: let attach, let colour, let style):
                 
                 switch attach {
                 case .line(dot: let indicator):
@@ -412,7 +412,7 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
                                                              ignoreZero: dataSet.style.ignoreZero)
                     
                     MarkerTopLeading(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
+                        .stroke(colour, style: style)
                     
                     IndicatorSwitch(indicator: indicator, location: position)
                     
@@ -423,11 +423,11 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
                                                             chartSize: chartSize) {
                         
                         MarkerTopLeading(position: position)
-                            .stroke(Color.primary, lineWidth: 2)
+                            .stroke(colour, style: style)
                     }
                 }
                 
-            case .topTrailing(attachment: let attach):
+            case .topTrailing(attachment: let attach, let colour, let style):
                 
                 switch attach {
                 case .line(dot: let indicator):
@@ -441,7 +441,7 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
                                                              ignoreZero: dataSet.style.ignoreZero)
                     
                     MarkerTopTrailing(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
+                        .stroke(colour, style: style)
                     
                     IndicatorSwitch(indicator: indicator, location: position)
                     
@@ -452,7 +452,7 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
                                                             chartSize: chartSize) {
                         
                         MarkerTopTrailing(position: position)
-                            .stroke(Color.primary, lineWidth: 2)
+                            .stroke(colour, style: style)
                     }
                 }
             }

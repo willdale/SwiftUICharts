@@ -73,7 +73,11 @@ extension LegendData {
      - Parameter textColor: Colour of the text
      - Returns: The relevent legend as a view.
      */
-    public func getLegend(textColor: Color) -> some View {
+    public func getLegend(
+        width: CGFloat = 40,
+        font: Font = .caption,
+        textColor: Color = .primary
+    ) -> some View {
         Group {
             switch self.chartType {
             case .line:
@@ -81,37 +85,37 @@ extension LegendData {
                     let strokeStyle = stroke.strokeToStrokeStyle()
                     if let colour = self.colour.colour {
                         HStack {
-                            LegendLine(width: 40)
+                            LegendLine(width: width)
                                 .stroke(colour, style: strokeStyle)
-                                .frame(width: 40, height: 3)
+                                .frame(width: width, height: 3)
                             Text(self.legend)
-                                .font(.caption)
+                                .font(font)
                                 .foregroundColor(textColor)
                         }
                         
                     } else if let colours = self.colour.colours  {
                         HStack {
-                            LegendLine(width: 40)
+                            LegendLine(width: width)
                                 .stroke(LinearGradient(gradient: Gradient(colors: colours),
                                                        startPoint: .leading,
                                                        endPoint: .trailing),
                                         style: strokeStyle)
-                                .frame(width: 40, height: 3)
+                                .frame(width: width, height: 3)
                             Text(self.legend)
-                                .font(.caption)
+                                .font(font)
                                 .foregroundColor(textColor)
                         }
                     } else if let stops = self.colour.stops {
                         let stops = GradientStop.convertToGradientStopsArray(stops: stops)
                         HStack {
-                            LegendLine(width: 40)
+                            LegendLine(width: width)
                                 .stroke(LinearGradient(gradient: Gradient(stops: stops),
                                                        startPoint: .leading,
                                                        endPoint: .trailing),
                                         style: strokeStyle)
-                                .frame(width: 40, height: 3)
+                                .frame(width: width, height: 3)
                             Text(self.legend)
-                                .font(.caption)
+                                .font(font)
                                 .foregroundColor(textColor)
                         }
                     }
@@ -124,9 +128,9 @@ extension LegendData {
                         HStack {
                             Rectangle()
                                 .fill(colour)
-                                .frame(width: 20, height: 20)
+                                .frame(width: width / 2, height: width / 2)
                             Text(self.legend)
-                                .font(.caption)
+                                .font(font)
                         }
                     } else if let colours    = self.colour.colours,
                               let startPoint = self.colour.startPoint,
@@ -137,9 +141,9 @@ extension LegendData {
                                 .fill(LinearGradient(gradient: Gradient(colors: colours),
                                                      startPoint: startPoint,
                                                      endPoint: endPoint))
-                                .frame(width: 20, height: 20)
+                                .frame(width: width / 2, height: width / 2)
                             Text(self.legend)
-                                .font(.caption)
+                                .font(font)
                         }
                     } else if let stops      = self.colour.stops,
                               let startPoint = self.colour.startPoint,
@@ -151,9 +155,9 @@ extension LegendData {
                                 .fill(LinearGradient(gradient: Gradient(stops: stops),
                                                      startPoint: startPoint,
                                                      endPoint: endPoint))
-                                .frame(width: 20, height: 20)
+                                .frame(width: width / 2, height: width / 2)
                             Text(self.legend)
-                                .font(.caption)
+                                .font(font)
                         }
                     }
                 }
@@ -162,9 +166,9 @@ extension LegendData {
                     HStack {
                         Circle()
                             .fill(colour)
-                            .frame(width: 20, height: 20)
+                            .frame(width: width / 2, height: width / 2)
                         Text(self.legend)
-                            .font(.caption)
+                            .font(font)
                     }
                     
                 } else if let colours    = self.colour.colours,
@@ -176,9 +180,9 @@ extension LegendData {
                             .fill(LinearGradient(gradient: Gradient(colors: colours),
                                                  startPoint: startPoint,
                                                  endPoint: endPoint))
-                            .frame(width: 20, height: 20)
+                            .frame(width: width / 2, height: width / 2)
                         Text(self.legend)
-                            .font(.caption)
+                            .font(font)
                     }
                     
                 } else if let stops      = self.colour.stops,
@@ -191,9 +195,9 @@ extension LegendData {
                             .fill(LinearGradient(gradient: Gradient(stops: stops),
                                                  startPoint: startPoint,
                                                  endPoint: endPoint))
-                            .frame(width: 20, height: 20)
+                            .frame(width: width / 2, height: width / 2)
                         Text(self.legend)
-                            .font(.caption)
+                            .font(font)
                     }
                 }
             }
@@ -205,15 +209,19 @@ extension LegendData {
      - Parameter textColor: Colour of the text
      - Returns: The relevent legend as a view.
      */
-    public func getLegendAsCircle(textColor: Color) -> some View {
+    public func getLegendAsCircle(
+        width: CGFloat = 12,
+        font: Font = .caption,
+        textColor: Color
+    ) -> some View {
         Group {
             if let colour = self.colour.colour {
                 HStack {
                     Circle()
                         .fill(colour)
-                        .frame(width: 12, height: 12)
+                        .frame(width: width, height: width)
                     Text(self.legend)
-                        .font(.caption)
+                        .font(font)
                         .foregroundColor(textColor)
                 }
                 
@@ -223,9 +231,9 @@ extension LegendData {
                         .fill(LinearGradient(gradient: Gradient(colors: colours),
                                              startPoint: .leading,
                                              endPoint: .trailing))
-                        .frame(width: 12, height: 12)
+                        .frame(width: width, height: width)
                     Text(self.legend)
-                        .font(.caption)
+                        .font(font)
                         .foregroundColor(textColor)
                 }
             } else if let stops = self.colour.stops {
@@ -235,9 +243,9 @@ extension LegendData {
                         .fill(LinearGradient(gradient: Gradient(stops: stops),
                                              startPoint: .leading,
                                              endPoint: .trailing))
-                        .frame(width: 12, height: 12)
+                        .frame(width: width, height: width)
                     Text(self.legend)
-                        .font(.caption)
+                        .font(font)
                         .foregroundColor(textColor)
                 }
             } else { EmptyView() }

@@ -284,7 +284,11 @@ extension CTDataPointBaseProtocol {
 extension CTStandardDataPointProtocol {
     /// Data point's value as a string
     public func valueAsString(specifier: String) -> String {
-        String(format: specifier, self.value)
+        if self.value != -Double.greatestFiniteMagnitude {
+           return String(format: specifier, self.value)
+        } else {
+            return String("")
+        }
     }
 }
 extension CTRangeDataPointProtocol {

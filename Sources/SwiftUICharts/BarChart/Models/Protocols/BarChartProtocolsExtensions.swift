@@ -17,33 +17,36 @@ extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType {
                 switch self.chartStyle.markerType {
                 case .none:
                     EmptyView()
-                case .vertical:
+                case .vertical(let colour, let style):
                     
                     MarkerFull(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .full:
+                        .stroke(colour, style: style)
+                    
+                case .full(let colour, let style):
                     
                     MarkerFull(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
-                case .bottomLeading:
+                        .stroke(colour, style: style)
+                    
+                case .bottomLeading(let colour, let style):
                     
                     MarkerBottomLeading(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
+                        .stroke(colour, style: style)
                     
-                case .bottomTrailing:
+                case .bottomTrailing(let colour, let style):
                     
                     MarkerBottomTrailing(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
+                        .stroke(colour, style: style)
                     
-                case .topLeading:
+                case .topLeading(let colour, let style):
                     
                     MarkerTopLeading(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
+                        .stroke(colour, style: style)
                     
-                case .topTrailing:
+                case .topTrailing(let colour, let style):
                     
                     MarkerTopTrailing(position: position)
-                        .stroke(Color.primary, lineWidth: 2)
+                        .stroke(colour, style: style)
+                    
                 }
             }
         }

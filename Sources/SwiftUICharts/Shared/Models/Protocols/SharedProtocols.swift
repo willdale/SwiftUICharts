@@ -256,9 +256,19 @@ public protocol CTChartStyle {
     var infoBoxPlacement: InfoBoxPlacement { get set }
     
     /**
+     Font for the value part of the touch info.
+     */
+    var infoBoxValueFont: Font { get set }
+    
+    /**
      Colour of the value part of the touch info.
      */
     var infoBoxValueColour: Color { get set }
+    
+    /**
+     Font for the description part of the touch info.
+     */
+    var infoBoxDescriptionFont: Font { get set }
     
     /**
      Colour of the description part of the touch info.
@@ -281,7 +291,7 @@ public protocol CTChartStyle {
     
     /**
      Global control of animations.
-         
+     
      ```
      Animation.linear(duration: 1)
      ```

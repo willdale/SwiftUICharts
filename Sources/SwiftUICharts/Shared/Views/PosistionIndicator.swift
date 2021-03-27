@@ -26,11 +26,14 @@ internal struct PosistionIndicator: View {
     }
     
     internal var body: some View {
-        Circle()
-            .fill(fillColour)
-            .overlay(Circle()
-                        .strokeBorder(lineColour, lineWidth: lineWidth)
-            )
+        ZStack {
+            Circle()
+                .foregroundColor(lineColour)
+            Circle()
+                .foregroundColor(fillColour)
+                .padding(EdgeInsets(top: lineWidth, leading: lineWidth, bottom: lineWidth, trailing: lineWidth))
+        }
+            
     }
 }
 

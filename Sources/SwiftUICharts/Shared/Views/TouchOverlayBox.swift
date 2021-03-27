@@ -29,15 +29,14 @@ internal struct TouchOverlayBox<T: CTChartData>: View {
             ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
                 
                 chartData.infoDescription(info: point)
-                    .font(.subheadline)
+                    .font(chartData.chartStyle.infoBoxDescriptionFont)
                     .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
                 
                 chartData.infoValueUnit(info: point)
-                    .font(.title3)
+                    .font(chartData.chartStyle.infoBoxValueFont)
                     .foregroundColor(chartData.chartStyle.infoBoxValueColour)
 
                 chartData.infoLegend(info: point)
-                    .font(.subheadline)
                     .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
             }
         }

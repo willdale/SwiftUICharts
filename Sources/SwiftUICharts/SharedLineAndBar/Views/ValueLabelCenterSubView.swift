@@ -12,6 +12,7 @@ internal struct ValueLabelCenterSubView<T>: View where T: CTLineBarChartDataProt
     private let chartData       : T
     private let markerValue     : Double
     private let specifier       : String
+    private let labelFont       : Font
     private let labelColour     : Color
     private let labelBackground : Color
     private let lineColour      : Color
@@ -20,6 +21,7 @@ internal struct ValueLabelCenterSubView<T>: View where T: CTLineBarChartDataProt
     internal init(chartData       : T,
                   markerValue     : Double,
                   specifier       : String,
+                  labelFont       : Font,
                   labelColour     : Color,
                   labelBackground : Color,
                   lineColour      : Color,
@@ -28,6 +30,7 @@ internal struct ValueLabelCenterSubView<T>: View where T: CTLineBarChartDataProt
         self.chartData       = chartData
         self.markerValue     = markerValue
         self.specifier       = specifier
+        self.labelFont       = labelFont
         self.labelColour     = labelColour
         self.labelBackground = labelBackground
         self.lineColour      = lineColour
@@ -38,7 +41,7 @@ internal struct ValueLabelCenterSubView<T>: View where T: CTLineBarChartDataProt
     
     var body: some View {
         Text("\(markerValue, specifier: specifier)")
-            .font(.caption)
+            .font(labelFont)
             .foregroundColor(labelColour)
             .padding()
             .background(labelBackground)

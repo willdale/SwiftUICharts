@@ -99,3 +99,21 @@ public enum Topline {
     /// Set a custom topline
     case maximum(of: Double)
 }
+
+/**
+ Option to choose between auto generated, numeric labels
+ or custum array of strings.
+ 
+ Custom is set from `ChartData -> yAxisLabels`
+ 
+ ```
+ case numeric // Auto generated, numeric labels.
+ case custom // Custom labels array -- `ChartData -> yAxisLabels`
+ ```
+ */
+public enum YAxisLabelType {
+    /// Auto generated, numeric labels.
+    case numeric
+    /// Custom labels array
+    case custom
+}

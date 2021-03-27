@@ -5,7 +5,7 @@
 //  Created by Will Dale on 08/02/2021.
 //
 
-import Foundation
+import SwiftUI
 
 /**
  Drawing style of the line
@@ -88,17 +88,17 @@ public enum LineMarkerType: MarkerType {
     /// Dot that follows the path.
     case indicator(style: DotStyle)
     /// Vertical line from top to bottom.
-    case vertical(attachment: MarkerAttachemnt)
+    case vertical(attachment: MarkerAttachemnt, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// Full width and height of view intersecting at a specified point.
-    case full(attachment: MarkerAttachemnt)
+    case full(attachment: MarkerAttachemnt, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// From bottom and leading edges meeting at a specified point.
-    case bottomLeading(attachment: MarkerAttachemnt)
+    case bottomLeading(attachment: MarkerAttachemnt, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// From bottom and trailing edges meeting at a specified point.
-    case bottomTrailing(attachment: MarkerAttachemnt)
+    case bottomTrailing(attachment: MarkerAttachemnt, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// From top and leading edges meeting at a specified point.
-    case topLeading(attachment: MarkerAttachemnt)
+    case topLeading(attachment: MarkerAttachemnt, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// From top and trailing edges meeting at a specified point.
-    case topTrailing(attachment: MarkerAttachemnt)
+    case topTrailing(attachment: MarkerAttachemnt, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
 }
 
 /**

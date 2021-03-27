@@ -15,7 +15,7 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
     @ObservedObject var chartData: T
     
     private let specifier       : String
-    private var labelsArray     : [Double] { chartData.getYLabels() }
+    private var labelsArray     : [String] { chartData.getYLabels(specifier) }
     
     private let labelsAndTop    : Bool
     private let labelsAndBottom : Bool
@@ -31,35 +31,42 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
         labelsAndBottom = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .bottom
     }
     
-    @State private var height : CGFloat = 0
-    @State private var axisLabelWidth : CGFloat = 0
+    @State private var height: CGFloat = 0
+    @State private var axisLabelWidth: CGFloat = 0
     
-    @ViewBuilder private var axisTitle: some View {
+    @ViewBuilder
+    private var axisTitle: some View {
         if let title = chartData.chartStyle.yAxisTitle {
             VStack {
                 Text(title)
-                    .font(.caption)
+                    .font(chartData.chartStyle.yAxisTitleFont)
+                    .background(
+                        GeometryReader { geo in
+                            Rectangle()
+                                .foregroundColor(Color.clear)
+                                .onAppear {
+                                    axisLabelWidth = geo.size.height + 10
+                                }
+                        }
+                    )
                     .rotationEffect(Angle.init(degrees: -90), anchor: .center)
                     .fixedSize()
                     .frame(width: axisLabelWidth)
                 Spacer()
                     .frame(height: (self.chartData.viewData.xAxisLabelHeights.max(by: { $0 < $1 }) ?? 0) + axisLabelWidth)
             }
-            .onAppear {
-                axisLabelWidth = 20
-            }
         }
     }
     
     private var labels: some View {
         VStack {
-            ForEach((0...chartData.chartStyle.yAxisNumberOfLabels-1).reversed(), id: \.self) { i in
-                Text("\(labelsArray[i], specifier: specifier)")
-                    .font(.caption)
+            ForEach(labelsArray.indices.reversed(), id: \.self) { i in
+                Text(labelsArray[i])
+                    .font(chartData.chartStyle.yAxisLabelFont)
                     .foregroundColor(chartData.chartStyle.yAxisLabelColour)
                     .lineLimit(1)
                     .accessibilityLabel(Text("Y Axis Label"))
-                    .accessibilityValue(Text("\(labelsArray[i], specifier: specifier)"))
+                    .accessibilityValue(Text(labelsArray[i]))
                 if i != 0 {
                     Spacer()
                         .frame(minHeight: 0, maxHeight: 500)

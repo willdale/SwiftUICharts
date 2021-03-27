@@ -42,6 +42,12 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
     var xAxisLabels: [String]? { get set }
     
     /**
+     Array of strings for the labels on the Y Axis instead of the labels generated
+     from data point values.
+    */
+    var yAxisLabels: [String]? { get set }
+    
+    /**
      Data model to hold data about the Views layout.
 
      This informs some `ViewModifiers` whether the chart has X and/or Y
@@ -57,7 +63,7 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
      
      - Returns: Array of evenly spaced numbers.
      */
-    func getYLabels() -> [Double]
+    func getYLabels(_ specifier: String) -> [String]
     
     /**
      Displays a view for the labels on the X Axis.
@@ -97,6 +103,11 @@ public protocol CTLineBarChartStyle: CTChartStyle {
     var xAxisLabelPosition: XAxisLabelPosistion { get set }
     
     /**
+     Font of the labels on the X axis.
+     */
+    var xAxisLabelFont: Font { get set }
+    
+    /**
      Text Colour for the labels on the X axis.
      */
     var xAxisLabelColour: Color { get set }
@@ -112,6 +123,11 @@ public protocol CTLineBarChartStyle: CTChartStyle {
     var xAxisTitle: String? { get set }
     
     /**
+     Font of the x axis title.
+     */
+    var xAxisTitleFont: Font { get set }
+    
+    /**
      Style of the horizontal lines breaking up the chart.
      */
     var yAxisGridStyle: GridStyle { get set }
@@ -122,19 +138,35 @@ public protocol CTLineBarChartStyle: CTChartStyle {
     var yAxisLabelPosition: YAxisLabelPosistion { get set }
     
     /**
+     Font of the labels on the Y axis.
+     */
+    var yAxisLabelFont: Font { get set }
+    
+    /**
      Text Colour for the labels on the Y axis.
      */
     var yAxisLabelColour: Color { get set }
     
     /**
-     Number Of Labels on Y Axis
+     Number Of Labels on Y Axis.
      */
     var yAxisNumberOfLabels: Int { get set }
+    
+    /**
+     Option to add custom Strings to Y axis rather than
+     auto generated numbers.
+     */
+    var yAxisLabelType: YAxisLabelType { get set }
     
     /**
      Label to display next to the chart giving info about the axis.
      */
     var yAxisTitle: String? { get set }
+    
+    /**
+     Font of the y axis title.
+     */
+    var yAxisTitleFont: Font { get set }
     
     /**
      Where to start drawing the line chart from. Zero, data set minium or custom.

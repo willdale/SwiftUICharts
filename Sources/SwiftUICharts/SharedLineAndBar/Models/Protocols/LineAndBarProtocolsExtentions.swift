@@ -66,15 +66,26 @@ extension CTLineBarChartDataProtocol {
 
 // MARK: - Y Labels
 extension CTLineBarChartDataProtocol {
-    public func getYLabels() -> [Double] {
-        var labels      : [Double]  = [Double]()
-        let dataRange   : Double = self.range
-        let minValue    : Double = self.minValue
-        let range       : Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels-1)
-        labels.append(minValue)
-        for index in 1...self.chartStyle.yAxisNumberOfLabels-1 {
-            labels.append(minValue + range * Double(index))
+    public func getYLabels(_ specifier: String) -> [String] {
+        
+        switch self.chartStyle.yAxisLabelType {
+        case .numeric:
+            
+            var labels      : [String]  = []
+            let dataRange   : Double = self.range
+            let minValue    : Double = self.minValue
+            let range       : Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels-1)
+            labels.append(String(format: specifier, minValue))
+            for index in 1...self.chartStyle.yAxisNumberOfLabels-1 {
+                let labelValue = minValue + range * Double(index)
+                let labelString = String(format: specifier, labelValue)
+                labels.append(labelString)
+            }
+            return labels
+            
+        case .custom:
+            
+            return self.yAxisLabels ?? []
         }
-        return labels
     }
 }

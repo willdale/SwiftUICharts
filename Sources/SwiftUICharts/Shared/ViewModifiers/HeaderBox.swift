@@ -21,11 +21,11 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
     var titleBox: some View {
         VStack(alignment: .leading) {
             Text(chartData.metadata.title)
-                .font(.title3)
+                .font(chartData.metadata.titleFont)
                 .foregroundColor(chartData.metadata.titleColour)
             
             Text(chartData.metadata.subtitle)
-                .font(.subheadline)
+                .font(chartData.metadata.subtitleFont)
                 .foregroundColor(chartData.metadata.subtitleColour)
         }
     }
@@ -36,19 +36,19 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
                 ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
                     
                     chartData.infoValueUnit(info: point)
-                        .font(.title3)
+                        .font(chartData.chartStyle.infoBoxValueFont)
                         .foregroundColor(chartData.chartStyle.infoBoxValueColour)
                     
                     chartData.infoDescription(info: point)
-                        .font(.subheadline)
+                        .font(chartData.chartStyle.infoBoxDescriptionFont)
                         .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
                     
                 }
             } else {
                 Text("")
-                    .font(.title3)
+                    .font(chartData.chartStyle.infoBoxValueFont)
                 Text("")
-                    .font(.subheadline)
+                    .font(chartData.chartStyle.infoBoxDescriptionFont)
             }
         }
     }

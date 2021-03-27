@@ -5,7 +5,7 @@
 //  Created by Will Dale on 08/02/2021.
 //
 
-import Foundation
+import SwiftUI
 
 /**
  Where to get the colour data from.
@@ -36,15 +36,15 @@ public enum BarMarkerType: MarkerType {
     /// No overlay markers.
     case none
     /// Vertical line from top to bottom.
-    case vertical
+    case vertical(colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// Full width and height of view intersecting at a specified point.
-    case full
+    case full(colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// From bottom and leading edges meeting at a specified point.
-    case bottomLeading
+    case bottomLeading(colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// From bottom and trailing edges meeting at a specified point.
-    case bottomTrailing
+    case bottomTrailing(colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// From top and leading edges meeting at a specified point.
-    case topLeading
+    case topLeading(colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// From top and trailing edges meeting at a specified point.
-    case topTrailing
+    case topTrailing(colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
 }

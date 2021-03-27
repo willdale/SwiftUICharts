@@ -14,14 +14,20 @@ internal struct LegendView<T>: View where T: CTChartData {
     
     @ObservedObject var chartData : T
     private let columns     : [GridItem]
+    private let width       : CGFloat
+    private let font        : Font
     private let textColor   : Color
             
     internal init(chartData: T,
                   columns  : [GridItem],
+                  width    : CGFloat,
+                  font     : Font,
                   textColor: Color
     ) {
         self.chartData = chartData
         self.columns   = columns
+        self.width     = width
+        self.font      = font
         self.textColor = textColor
     }
     
@@ -30,12 +36,11 @@ internal struct LegendView<T>: View where T: CTChartData {
         LazyVGrid(columns: columns, alignment: .leading) {
             ForEach(chartData.legends, id: \.id) { legend in
                 
-                legend.getLegend(textColor: textColor)
+                legend.getLegend(width: width, font: font, textColor: textColor)
                     .if(scaleLegendBar(legend: legend)) { $0.scaleEffect(1.2, anchor: .leading) }
                     .if(scaleLegendPie(legend: legend)) {$0.scaleEffect(1.2, anchor: .leading) }
-                    
                     .accessibilityLabel(Text(legend.accessibilityLegendLabel()))
-                    .accessibilityValue(Text("\(legend.legend)"))
+                    .accessibilityValue(Text(legend.legend))
             }
         }
     }
