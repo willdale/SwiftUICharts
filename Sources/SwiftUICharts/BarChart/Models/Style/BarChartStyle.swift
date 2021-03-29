@@ -62,7 +62,7 @@ public struct BarChartStyle: CTBarChartStyle {
     ///
     /// - Parameters:
     ///   - infoBoxPlacement: Placement of the information box that appears on touch input.
-    ///   - infoBoxContentAlignment: Placement of the content inside the information box
+    ///   - infoBoxContentAlignment: Alignment of the content inside of the information box
     ///
     ///   - infoBoxValueFont: Font for the value part of the touch info.
     ///   - infoBoxValueColour: Colour of the value part of the touch info.

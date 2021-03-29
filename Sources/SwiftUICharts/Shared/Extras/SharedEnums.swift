@@ -76,9 +76,10 @@ public enum InfoBoxPlacement {
 
 // MARK: - TouchOverlay
 /**
- XXX
+ Alignment of the content inside of the information box
  ```
- XXX
+ case vertical // Puts the legend, value and description verticaly
+ case horizontal // Puts the legend, value and description horizontaly
  ```
  */
 public enum InfoBoxAlignment{
