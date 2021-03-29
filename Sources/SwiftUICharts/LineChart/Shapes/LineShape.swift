@@ -40,9 +40,21 @@ internal struct LineShape<DP>: Shape where DP: CTStandardDataPointProtocol {
     internal func path(in rect: CGRect) -> Path {
         switch lineType {
         case .curvedLine:
-            return Path.curvedLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled, ignoreZero: ignoreZero)
+            switch ignoreZero {
+            case false:
+                return Path.curvedLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
+            case true:
+                return Path.curvedLineIgnoreZero(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
+            }
+           
         case .line:
-            return Path.straightLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled, ignoreZero: ignoreZero)
+            switch ignoreZero {
+            case false:
+                return Path.straightLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
+            case true:
+                return Path.straightLineIgnoreZero(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
+            }
+            
         }
     }
 }
@@ -56,7 +68,7 @@ internal struct RangedLineFillShape<DP>: Shape where DP: CTRangedLineDataPoint {
     private let dataPoints  : [DP]
     private let lineType    : LineType
     
-    private var minValue : Double
+    private let minValue : Double
     private let range    : Double
     
     private let ignoreZero: Bool
@@ -78,9 +90,21 @@ internal struct RangedLineFillShape<DP>: Shape where DP: CTRangedLineDataPoint {
         
         switch lineType {
         case .curvedLine:
-            return  Path.curvedLineBox(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, ignoreZero: ignoreZero)
+            switch ignoreZero {
+            case false:
+                return Path.curvedLineBox(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            case true:
+                return Path.curvedLineBoxIgnoreZero(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            }
+            
         case .line:
-            return  Path.straightLineBox(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, ignoreZero: ignoreZero)
+            switch ignoreZero {
+            case false:
+                return Path.straightLineBox(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            case true:
+                return Path.straightLineBoxIgnoreZero(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            }
+            
         }
         
     }

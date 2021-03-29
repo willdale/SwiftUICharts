@@ -44,6 +44,7 @@ extension CTLineChartDataProtocol {
         - range: Difference between the highest and lowest numbers in the dataset.
         - touchLocation: Location of the touch or pointer input.
         - isFilled: Whether it is a normal or filled line.
+        - ignoreZero: Whether or not Zeros should be drawn.
      - Returns: The relevent path based on the line type
      */
     static func getPath<DP:CTStandardDataPointProtocol>(
@@ -57,19 +58,35 @@ extension CTLineChartDataProtocol {
     ) -> Path {
         switch lineType {
         case .line:
-            return Path.straightLine(rect       : rect,
-                                     dataPoints : dataPoints,
-                                     minValue   : minValue,
-                                     range      : range,
-                                     isFilled   : isFilled,
-                                     ignoreZero : ignoreZero)
+            switch ignoreZero {
+            case false:
+                return Path.straightLine(rect       : rect,
+                                         dataPoints : dataPoints,
+                                         minValue   : minValue,
+                                         range      : range,
+                                         isFilled   : isFilled)
+            case true:
+                return Path.straightLineIgnoreZero(rect       : rect,
+                                                   dataPoints : dataPoints,
+                                                   minValue   : minValue,
+                                                   range      : range,
+                                                   isFilled   : isFilled)
+            }
         case .curvedLine:
-            return Path.curvedLine(rect       : rect,
-                                   dataPoints : dataPoints,
-                                   minValue   : minValue,
-                                   range      : range,
-                                   isFilled   : isFilled,
-                                   ignoreZero : ignoreZero)
+            switch ignoreZero {
+            case false:
+                return Path.curvedLine(rect       : rect,
+                                       dataPoints : dataPoints,
+                                       minValue   : minValue,
+                                       range      : range,
+                                       isFilled   : isFilled)
+            case true:
+                return Path.curvedLineIgnoreZero(rect       : rect,
+                                                 dataPoints : dataPoints,
+                                                 minValue   : minValue,
+                                                 range      : range,
+                                                 isFilled   : isFilled)
+            }
         }
     }
 

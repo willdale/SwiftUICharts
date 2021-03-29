@@ -266,6 +266,27 @@ extension CTMultiDataSetProtocol where Self.DataSet.DataPoint: CTStandardDataPoi
     }
 }
 
+
+
+extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProtocol & CTnotRanged,
+                                        Self: CTLineChartDataSet {    
+    /**
+     Returns the lowest value in the data set.
+     
+     - Parameter dataSet: Target data set.
+     - Returns: Lowest value in data set.
+     */
+    public func minValue() -> Double  {
+        if !self.style.ignoreZero {
+            return self.dataPoints.min { $0.value < $1.value }?.value ?? 0
+        } else {
+            let noZero = self.dataPoints.filter({ $0.value != 0 })
+            return noZero.min { $0.value < $1.value }?.value ?? 0
+        }
+    }
+}
+
+
 // MARK: - Data Point
 extension CTDataPointBaseProtocol  {
     
