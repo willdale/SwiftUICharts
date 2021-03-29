@@ -27,7 +27,7 @@ internal struct TouchOverlayBox<T: CTChartData>: View {
         
         VStack(alignment: .leading, spacing: 0) {
             ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
-                if true{
+                if chartData.chartStyle.infoBoxContentAlignment == .vertical{
                     chartData.infoDescription(info: point)
                         .font(chartData.chartStyle.infoBoxDescriptionFont)
                         .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
@@ -50,7 +50,7 @@ internal struct TouchOverlayBox<T: CTChartData>: View {
                         chartData.infoValueUnit(info: point)
                             .font(chartData.chartStyle.infoBoxValueFont)
                             .foregroundColor(chartData.chartStyle.infoBoxValueColour)
-                    }                    
+                    }
                 }
             }
         }
