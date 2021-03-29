@@ -73,6 +73,20 @@ public enum InfoBoxPlacement {
     case header
 }
 
+
+// MARK: - TouchOverlay
+/**
+ XXX
+ ```
+ XXX
+ ```
+ */
+public enum InfoBoxAlignment{
+    case vertical
+    case horizontal
+}
+
+
 /**
  Option to display units before or after values.
  

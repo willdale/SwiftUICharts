@@ -13,6 +13,7 @@ import SwiftUI
 public struct PieChartStyle: CTPieChartStyle {
         
     public var infoBoxPlacement         : InfoBoxPlacement
+    public var infoBoxContentAlignment  : InfoBoxAlignment
     
     public var infoBoxValueFont         : Font
     public var infoBoxValueColour       : Color
@@ -29,6 +30,7 @@ public struct PieChartStyle: CTPieChartStyle {
     /// Model for controlling the overall aesthetic of the chart.
     /// - Parameters:
     ///   - infoBoxPlacement: Placement of the information box that appears on touch input.
+    ///    - infoBoxContentAlignment: XXX
     ///
     ///   - infoBoxValueFont: Font for the value part of the touch info.
     ///   - infoBoxValueColour: Colour of the value part of the touch info.
@@ -41,6 +43,7 @@ public struct PieChartStyle: CTPieChartStyle {
     ///   - infoBoxBorderStyle: Border style of the touch info.
     ///   - globalAnimation: Global control of animations.
     public init(infoBoxPlacement        : InfoBoxPlacement  = .floating,
+                infoBoxContentAlignment : InfoBoxAlignment  = .vertical,
                 
                 infoBoxValueFont        : Font              = .title3,
                 infoBoxValueColour      : Color             = Color.primary,
@@ -54,6 +57,7 @@ public struct PieChartStyle: CTPieChartStyle {
                 globalAnimation         : Animation         = Animation.linear(duration: 1)
     ) {
         self.infoBoxPlacement         = infoBoxPlacement
+        self.infoBoxContentAlignment  = infoBoxContentAlignment
         
         self.infoBoxValueFont         = infoBoxValueFont
         self.infoBoxValueColour       = infoBoxValueColour
