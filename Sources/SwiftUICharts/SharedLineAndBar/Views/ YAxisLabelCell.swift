@@ -71,6 +71,7 @@ internal struct XAxisChartDataCell<ChartData>: View where ChartData: CTLineBarCh
                         }
                 }
             )
+            .fixedSize(horizontal: true, vertical: false)
             .onAppear {
                 chartData.viewData.xAxisLabelHeights.append(height)
             }
