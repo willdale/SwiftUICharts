@@ -16,6 +16,7 @@ import SwiftUI
 public struct LineChartStyle: CTLineChartStyle {
     
     public var infoBoxPlacement         : InfoBoxPlacement
+    public var infoBoxContentAlignment  : InfoBoxAlignment
     
     public var infoBoxValueFont         : Font
     public var infoBoxValueColour       : Color
@@ -57,6 +58,7 @@ public struct LineChartStyle: CTLineChartStyle {
     /// Model for controlling the overall aesthetic of the chart.
     /// - Parameters:
     ///   - infoBoxPlacement: Placement of the information box that appears on touch input.
+    ///   - infoBoxContentAlignment: Placement of the content inside the information box
     ///
     ///   - infoBoxValueFont: Font for the value part of the touch info.
     ///   - infoBoxValueColour: Colour of the value part of the touch info.
@@ -95,6 +97,7 @@ public struct LineChartStyle: CTLineChartStyle {
     ///
     ///   - globalAnimation: Global control of animations.
     public init(infoBoxPlacement        : InfoBoxPlacement  = .floating,
+                infoBoxContentAlignment : InfoBoxAlignment  = .vertical,
                 
                 infoBoxValueFont        : Font              = .title3,
                 infoBoxValueColour      : Color             = Color.primary,
@@ -135,6 +138,7 @@ public struct LineChartStyle: CTLineChartStyle {
                 globalAnimation     : Animation             = Animation.linear(duration: 1)
     ) {
         self.infoBoxPlacement         = infoBoxPlacement
+        self.infoBoxContentAlignment  = infoBoxContentAlignment
         
         self.infoBoxValueFont         = infoBoxValueFont
         self.infoBoxValueColour       = infoBoxValueColour

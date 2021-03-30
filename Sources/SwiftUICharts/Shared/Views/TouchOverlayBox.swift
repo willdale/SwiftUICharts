@@ -8,7 +8,7 @@
 import SwiftUI
 
 /**
-View that displays information from the touch events.
+ View that displays information from the touch events.
  */
 internal struct TouchOverlayBox<T: CTChartData>: View {
     
@@ -27,17 +27,31 @@ internal struct TouchOverlayBox<T: CTChartData>: View {
         
         VStack(alignment: .leading, spacing: 0) {
             ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
-                
-                chartData.infoDescription(info: point)
-                    .font(chartData.chartStyle.infoBoxDescriptionFont)
-                    .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
-                
-                chartData.infoValueUnit(info: point)
-                    .font(chartData.chartStyle.infoBoxValueFont)
-                    .foregroundColor(chartData.chartStyle.infoBoxValueColour)
-
-                chartData.infoLegend(info: point)
-                    .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                if chartData.chartStyle.infoBoxContentAlignment == .vertical{
+                    chartData.infoDescription(info: point)
+                        .font(chartData.chartStyle.infoBoxDescriptionFont)
+                        .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                    
+                    chartData.infoValueUnit(info: point)
+                        .font(chartData.chartStyle.infoBoxValueFont)
+                        .foregroundColor(chartData.chartStyle.infoBoxValueColour)
+                    
+                    chartData.infoLegend(info: point)
+                        .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                }else{
+                    HStack{
+                        chartData.infoLegend(info: point)
+                            .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                        
+                        chartData.infoDescription(info: point)
+                            .font(chartData.chartStyle.infoBoxDescriptionFont)
+                            .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                        
+                        chartData.infoValueUnit(info: point)
+                            .font(chartData.chartStyle.infoBoxValueFont)
+                            .foregroundColor(chartData.chartStyle.infoBoxValueColour)
+                    }
+                }
             }
         }
         
@@ -49,8 +63,8 @@ internal struct TouchOverlayBox<T: CTChartData>: View {
                         .fill(chartData.chartStyle.infoBoxBackgroundColour)
                         .overlay(
                             RoundedRectangle(cornerRadius: 5.0, style: .continuous)
-                                    .stroke(chartData.chartStyle.infoBoxBorderColour, style: chartData.chartStyle.infoBoxBorderStyle)
-                            )
+                                .stroke(chartData.chartStyle.infoBoxBorderColour, style: chartData.chartStyle.infoBoxBorderStyle)
+                        )
                         .onAppear {
                             self.boxFrame = geo.frame(in: .local)
                         }

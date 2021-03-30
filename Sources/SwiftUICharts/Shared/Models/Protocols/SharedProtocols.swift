@@ -256,6 +256,11 @@ public protocol CTChartStyle {
     var infoBoxPlacement: InfoBoxPlacement { get set }
     
     /**
+     Placement of the information box that appears on touch input.
+     */
+    var infoBoxContentAlignment: InfoBoxAlignment { get set }
+    
+    /**
      Font for the value part of the touch info.
      */
     var infoBoxValueFont: Font { get set }

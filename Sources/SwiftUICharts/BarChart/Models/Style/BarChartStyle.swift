@@ -15,8 +15,10 @@ import SwiftUI
  specific to the data set(s),
  */
 public struct BarChartStyle: CTBarChartStyle {
-        
+    
     public var infoBoxPlacement         : InfoBoxPlacement
+    
+    public var infoBoxContentAlignment         : InfoBoxAlignment
     
     public var infoBoxValueFont         : Font
     public var infoBoxValueColour       : Color
@@ -60,6 +62,7 @@ public struct BarChartStyle: CTBarChartStyle {
     ///
     /// - Parameters:
     ///   - infoBoxPlacement: Placement of the information box that appears on touch input.
+    ///   - infoBoxContentAlignment: Alignment of the content inside of the information box
     ///
     ///   - infoBoxValueFont: Font for the value part of the touch info.
     ///   - infoBoxValueColour: Colour of the value part of the touch info.
@@ -98,6 +101,7 @@ public struct BarChartStyle: CTBarChartStyle {
     ///
     ///   - globalAnimation: Global control of animations.
     public init(infoBoxPlacement        : InfoBoxPlacement  = .floating,
+                infoBoxContentAlignment        : InfoBoxAlignment  = .vertical,
                 
                 infoBoxValueFont        : Font              = .title3,
                 infoBoxValueColour      : Color             = Color.primary,
@@ -138,6 +142,7 @@ public struct BarChartStyle: CTBarChartStyle {
                 globalAnimation     : Animation             = Animation.linear(duration: 1)
     ) {
         self.infoBoxPlacement         = infoBoxPlacement
+        self.infoBoxContentAlignment         = infoBoxContentAlignment
         
         self.infoBoxValueFont         = infoBoxValueFont
         self.infoBoxValueColour       = infoBoxValueColour
