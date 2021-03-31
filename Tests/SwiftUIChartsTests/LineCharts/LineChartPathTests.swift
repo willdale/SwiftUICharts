@@ -36,8 +36,7 @@ final class LineChartPathTests: XCTestCase {
                                      dataPoints : chartData.dataSets.dataPoints,
                                      minValue   : chartData.minValue,
                                      range      : chartData.range,
-                                     isFilled   : false,
-                                     ignoreZero : false)
+                                     isFilled   : false)
         
         let test = LineChartData.getPercentageOfPath(path: path, touchLocation: touchLocation)
         
@@ -50,8 +49,7 @@ final class LineChartPathTests: XCTestCase {
                                      dataPoints : chartData.dataSets.dataPoints,
                                      minValue   : chartData.minValue,
                                      range      : chartData.range,
-                                     isFilled   : false,
-                                     ignoreZero : false)
+                                     isFilled   : false)
                 
         let test = LineChartData.getTotalLength(of: path)
         
@@ -64,8 +62,7 @@ final class LineChartPathTests: XCTestCase {
                                      dataPoints : chartData.dataSets.dataPoints,
                                      minValue   : chartData.minValue,
                                      range      : chartData.range,
-                                     isFilled   : false,
-                                     ignoreZero : false)
+                                     isFilled   : false)
                         
         let test = LineChartData.getLength(to: touchLocation, on: path)
         
@@ -109,8 +106,7 @@ final class LineChartPathTests: XCTestCase {
                                      dataPoints : chartData.dataSets.dataPoints,
                                      minValue   : chartData.minValue,
                                      range      : chartData.range,
-                                     isFilled   : false,
-                                     ignoreZero : false)
+                                     isFilled   : false)
 
         
         let test = LineChartData.locationOnPath(0.5, path)
