@@ -7,28 +7,6 @@
 
 import SwiftUI
 
-struct AccessibilityRectangle: Shape {
-    
-    let dataPointCount : Int
-    let dataPointNo    : Int
-    
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        
-        let x = rect.width / CGFloat(dataPointCount-1)
-        let pointX : CGFloat = (CGFloat(dataPointNo) * x) - x / CGFloat(2)
-        
-        let point  : CGRect  = CGRect(x     : pointX,
-                                      y     : 0,
-                                      width :  x,
-                                      height:  rect.height)
-        
-        path.addRoundedRect(in: point, cornerSize: CGSize(width: 10, height: 10))
-        
-        return path
-    }
-}
-
 // MARK: - Single colour
 /**
  Sub view gets the line drawn, sets the colour and sets up the animations.
@@ -135,42 +113,37 @@ internal struct LineChartColoursSubView<CD, DS>: View where CD: CTLineChartDataP
     
     internal var body: some View {
         
-        ZStack {
+        LineShape(dataPoints: dataSet.dataPoints,
+                  lineType  : dataSet.style.lineType,
+                  isFilled  : isFilled,
+                  minValue  : minValue,
+                  range     : range,
+                  ignoreZero: dataSet.style.ignoreZero)
+            .ifElse(isFilled, if: {
+                $0
+                    .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                    .fill(LinearGradient(gradient: Gradient(colors: colours),
+                                         startPoint: startPoint,
+                                         endPoint: endPoint))
+            }, else: {
+                $0
+                    .trim(to: startAnimation ? 1 : 0)
+                    .stroke(LinearGradient(gradient: Gradient(colors: colours),
+                                           startPoint: startPoint,
+                                           endPoint: endPoint),
+                            style: dataSet.style.strokeStyle.strokeToStrokeStyle())
+            })
             
-            chartData.getAccessibility()
             
-            LineShape(dataPoints: dataSet.dataPoints,
-                      lineType  : dataSet.style.lineType,
-                      isFilled  : isFilled,
-                      minValue  : minValue,
-                      range     : range,
-                      ignoreZero: dataSet.style.ignoreZero)
-                .ifElse(isFilled, if: {
-                    $0
-                        .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                        .fill(LinearGradient(gradient: Gradient(colors: colours),
-                                             startPoint: startPoint,
-                                             endPoint: endPoint))
-                }, else: {
-                    $0
-                        .trim(to: startAnimation ? 1 : 0)
-                        .stroke(LinearGradient(gradient: Gradient(colors: colours),
-                                               startPoint: startPoint,
-                                               endPoint: endPoint),
-                                style: dataSet.style.strokeStyle.strokeToStrokeStyle())
-                })
-                
-                
-                .background(Color(.gray).opacity(0.000000001))
-                .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
-                .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                    self.startAnimation = true
-                }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
-                    self.startAnimation = false
-                }
-        }
+            .background(Color(.gray).opacity(0.000000001))
+            .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
+            .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
+            }
     }
 }
 
@@ -218,42 +191,36 @@ internal struct LineChartStopsSubView<CD, DS>: View where CD: CTLineChartDataPro
     
     internal var body: some View {
         
-        ZStack {
+        LineShape(dataPoints: dataSet.dataPoints,
+                  lineType  : dataSet.style.lineType,
+                  isFilled  : isFilled,
+                  minValue  : minValue,
+                  range     : range,
+                  ignoreZero: dataSet.style.ignoreZero)
             
-            chartData.getAccessibility()
+            .ifElse(isFilled, if: {
+                $0
+                    .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                    .fill(LinearGradient(gradient: Gradient(stops: stops),
+                                         startPoint: startPoint,
+                                         endPoint: endPoint))
+            }, else: {
+                $0
+                    .trim(to: startAnimation ? 1 : 0)
+                    .stroke(LinearGradient(gradient: Gradient(stops: stops),
+                                           startPoint: startPoint,
+                                           endPoint: endPoint),
+                            style: dataSet.style.strokeStyle.strokeToStrokeStyle())
+            })
             
-            LineShape(dataPoints: dataSet.dataPoints,
-                      lineType  : dataSet.style.lineType,
-                      isFilled  : isFilled,
-                      minValue  : minValue,
-                      range     : range,
-                      ignoreZero: dataSet.style.ignoreZero)
-                
-                .ifElse(isFilled, if: {
-                    $0
-                        .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                        .fill(LinearGradient(gradient: Gradient(stops: stops),
-                                             startPoint: startPoint,
-                                             endPoint: endPoint))
-                }, else: {
-                    $0
-                        .trim(to: startAnimation ? 1 : 0)
-                        .stroke(LinearGradient(gradient: Gradient(stops: stops),
-                                               startPoint: startPoint,
-                                               endPoint: endPoint),
-                                style: dataSet.style.strokeStyle.strokeToStrokeStyle())
-                })
-                
-                .background(Color(.gray).opacity(0.000000001))
-                .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
-                .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                    self.startAnimation = true
-                }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
-                    self.startAnimation = false
-                }
-        }
+            .background(Color(.gray).opacity(0.000000001))
+            .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
+            .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
+            }
     }
 }
-

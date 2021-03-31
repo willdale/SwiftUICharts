@@ -90,7 +90,7 @@ public protocol CTLineBarChartStyle: CTChartStyle {
     /**
      Where the marker lines come from to meet at a specified point.
      */
-    var markerType : Mark { get set }
+    var markerType: Mark { get set }
     
     /**
      Style of the vertical lines breaking up the chart.
