@@ -82,7 +82,7 @@ public enum InfoBoxPlacement {
  case horizontal // Puts the legend, value and description horizontaly
  ```
  */
-public enum InfoBoxAlignment{
+public enum InfoBoxAlignment {
     case vertical
     case horizontal
 }
