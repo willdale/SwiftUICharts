@@ -423,6 +423,22 @@ Setup within `Data Set -> PointStyle`.
 
 ---
 
+
+#### Filled Top Line
+
+Adds an independent line on top of FilledLineChart.
+
+```swift
+.filledTopLine(chartData: LineChartData,
+               lineColour: ColourStyle,
+               strokeStyle: StrokeStyle)
+```
+Allows for a hard line over the data point with a semi opaque fill.
+
+
+---
+
+
 ## Examples
 
 ### Line Chart
