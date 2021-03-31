@@ -13,6 +13,7 @@ import SwiftUI
 public struct DoughnutChartStyle: CTDoughnutChartStyle {
         
     public var infoBoxPlacement         : InfoBoxPlacement
+    public var infoBoxContentAlignment  : InfoBoxAlignment
     public var infoBoxValueFont         : Font
     public var infoBoxValueColour       : Color
     
@@ -29,6 +30,7 @@ public struct DoughnutChartStyle: CTDoughnutChartStyle {
     /// Model for controlling the overall aesthetic of the chart.
     /// - Parameters:
     ///   - infoBoxPlacement: Placement of the information box that appears on touch input.
+    ///   - infoBoxContentAlignment: Alignment of the content inside of the information box
     ///   - infoBoxValueFont: Font for the value part of the touch info.
     ///   - infoBoxValueColour: Colour of the value part of the touch info.
     ///   - infoBoxDescriptionFont: Font for the description part of the touch info.
@@ -39,6 +41,7 @@ public struct DoughnutChartStyle: CTDoughnutChartStyle {
     ///   - globalAnimation: Global control of animations.
     ///   - strokeWidth: Width / Delta of the Doughnut Chart
     public init(infoBoxPlacement        : InfoBoxPlacement  = .floating,
+                infoBoxContentAlignment : InfoBoxAlignment  = .vertical,
                 infoBoxValueFont        : Font              = .title3,
                 infoBoxValueColour      : Color             = Color.primary,
                 
@@ -53,6 +56,7 @@ public struct DoughnutChartStyle: CTDoughnutChartStyle {
                 strokeWidth             : CGFloat           = 30
     ) {
         self.infoBoxPlacement         = infoBoxPlacement
+        self.infoBoxContentAlignment  = infoBoxContentAlignment
         
         self.infoBoxValueFont         = infoBoxValueFont
         self.infoBoxValueColour       = infoBoxValueColour
