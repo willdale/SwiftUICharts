@@ -78,11 +78,11 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
                 }
                 .padding(.horizontal, -4)
                 
-            case .chartData:
+            case .chartData(let angle):
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
                         ForEach(labelArray.indices, id: \.self) { [unowned self] i in
-                            XAxisChartDataCell(chartData: self, label: labelArray[i])
+                            XAxisChartDataCell(chartData: self, label: labelArray[i], rotationAngle: angle)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(labelArray[i])"))
@@ -92,7 +92,6 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
                             }
                         }
                     }
-                    .padding(.horizontal, -4)
                 }
             }
         }

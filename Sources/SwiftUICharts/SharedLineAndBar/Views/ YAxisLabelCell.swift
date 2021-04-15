@@ -9,10 +9,10 @@ import SwiftUI
 
 internal struct XAxisDataPointCell<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
     
-    @ObservedObject var chartData : ChartData
+    @ObservedObject var chartData: ChartData
     
-    private let label : String
-    private let rotationAngle : Angle
+    private let label: String
+    private let rotationAngle: Angle
     
     internal init(chartData: ChartData, label: String, rotationAngle : Angle) {
         self.chartData     = chartData
@@ -41,22 +41,23 @@ internal struct XAxisDataPointCell<ChartData>: View where ChartData: CTLineBarCh
             .onAppear {
                 chartData.viewData.xAxisLabelHeights.append(width)
             }
-
     }
 }
 
 internal struct XAxisChartDataCell<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
     
-    @ObservedObject var chartData : ChartData
+    @ObservedObject var chartData: ChartData
     
-    private let label : String
+    private let label: String
+    private let rotationAngle: Angle
     
-    internal init(chartData: ChartData, label: String) {
+    internal init(chartData: ChartData, label: String, rotationAngle : Angle) {
         self.chartData     = chartData
         self.label         = label
+        self.rotationAngle = rotationAngle
     }
     
-    @State private var height: CGFloat = 0
+    @State private var width: CGFloat = 0
  
     internal var body: some View {
 
@@ -67,15 +68,16 @@ internal struct XAxisChartDataCell<ChartData>: View where ChartData: CTLineBarCh
                 GeometryReader { geo in
                     Color.clear
                         .onAppear {
-                            self.height = geo.frame(in: .local).height
+                            self.width = geo.frame(in: .local).width
                         }
                 }
             )
             .fixedSize(horizontal: true, vertical: false)
+            .rotationEffect(rotationAngle, anchor: .center)
+            .frame(height: width, alignment: .top)
             .onAppear {
-                chartData.viewData.xAxisLabelHeights.append(height)
+                chartData.viewData.xAxisLabelHeights.append(width)
             }
-
     }
 }
 
