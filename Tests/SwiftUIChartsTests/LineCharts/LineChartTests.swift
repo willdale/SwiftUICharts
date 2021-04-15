@@ -1,4 +1,5 @@
 import XCTest
+import SwiftUI
 @testable import SwiftUICharts
 
 final class LineChartTests: XCTestCase {
