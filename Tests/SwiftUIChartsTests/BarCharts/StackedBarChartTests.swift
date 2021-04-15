@@ -256,20 +256,4 @@ final class StackedBarChartTests: XCTestCase {
         XCTAssertEqual(testFourThree.x, testAgainstFourThree.x, accuracy: 0.01)
         XCTAssertEqual(testFourThree.y, testAgainstFourThree.y, accuracy: 0.01)
     }
-    
-    // MARK: - All Tests
-    static var allTests = [
-        // Data
-        ("testStackedBarMaxValue", testStackedBarMaxValue),
-        ("testStackedBarMinValue", testStackedBarMinValue),
-        ("testStackedBarAverage",  testStackedBarAverage),
-        ("testStackedBarRange",    testStackedBarRange),
-        // Greater
-        ("testStackedBarIsGreaterThanTwoTrue",  testStackedBarIsGreaterThanTwoTrue),
-        // Labels
-        ("testStackedBarGetYLabels", testStackedBarGetYLabels),
-        // Touch
-        ("testStackedBarGetDataPoint",     testStackedBarGetDataPoint),
-        ("testStackedBarGetPointLocation", testStackedBarGetPointLocation),
-    ]
 }

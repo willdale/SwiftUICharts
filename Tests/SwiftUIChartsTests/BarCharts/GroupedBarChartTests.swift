@@ -201,21 +201,4 @@ final class GroupedBarChartTests: XCTestCase {
         XCTAssertEqual(testFour.x, testAgainstFour.x, accuracy: 0.01)
         XCTAssertEqual(testFour.y, testAgainstFour.y, accuracy: 0.01)
     }
-    
-    // MARK: - All Tests
-    static var allTests = [
-        // Data
-        ("testGroupedBarMaxValue", testGroupedBarMaxValue),
-        ("testGroupedBarMinValue", testGroupedBarMinValue),
-        ("testGroupedBarAverage",  testGroupedBarAverage),
-        ("testGroupedBarRange",    testGroupedBarRange),
-        // Greater
-        ("testGroupedBarIsGreaterThanTwoTrue",  testGroupedBarIsGreaterThanTwoTrue),
-        // Labels
-        ("testGroupedBarGetYLabels", testGroupedBarGetYLabels),
-        // Touch
-        ("testMultiLineGetDataPoint",      testGroupedBarGetDataPoint),
-        ("testGroupedBarGetPointLocation", testGroupedBarGetPointLocation),
-        
-    ]
 }

@@ -118,21 +118,4 @@ final class BarChartTests: XCTestCase {
         XCTAssertEqual(testTwo.x, testAgainstTwo.x, accuracy: 0.01)
         XCTAssertEqual(testTwo.y, testAgainstTwo.y, accuracy: 0.01)
     }
-    
-    // MARK: - All Tests
-    static var allTests = [
-        // Data
-        ("testBarMaxValue", testBarMaxValue),
-        ("testBarMinValue", testBarMinValue),
-        ("testBarAverage",  testBarAverage),
-        ("testBarRange",    testBarRange),
-        // Greater
-        ("testBarIsGreaterThanTwoTrue",  testBarIsGreaterThanTwoTrue),
-        // Labels
-        ("testBarGetYLabels", testBarGetYLabels),
-        // Touch
-        ("testBarGetDataPoint",     testBarGetDataPoint),
-        ("testBarGetPointLocation", testBarGetPointLocation),
-        
-    ]
 }

@@ -125,20 +125,4 @@ final class LineChartTests: XCTestCase {
         XCTAssertEqual(testTwo.x, testAgainstTwo.x, accuracy: 0.01)
         XCTAssertEqual(testTwo.y, testAgainstTwo.y, accuracy: 0.01)
     }
-    
-    // MARK: - All Tests
-    static var allTests = [
-        // Data
-        ("testLineMaxValue", testLineMaxValue),
-        ("testLineMinValue", testLineMinValue),
-        ("testLineAverage",  testLineAverage),
-        ("testLineRange",    testLineRange),
-        ("testLineIsGreaterThanTwoTrue",  testLineIsGreaterThanTwoTrue),
-        ("testLineIsGreaterThanTwoFalse", testLineIsGreaterThanTwoFalse),
-        // Labels
-        ("testLineGetYLabels", testLineGetYLabels),
-        // Touch
-        ("testLineGetDataPoint",     testLineGetDataPoint),
-        ("testLineGetPointLocation", testLineGetPointLocation),
-    ]
 }

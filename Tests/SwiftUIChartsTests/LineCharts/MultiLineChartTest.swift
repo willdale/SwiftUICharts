@@ -169,21 +169,4 @@ final class MultiLineChartTest: XCTestCase {
         XCTAssertEqual(testTwoFour.x, testAgainstTwoFour.x)
         XCTAssertEqual(testTwoFour.y, testAgainstTwoFour.y)
     }
-    
-    // MARK: - All Tests
-    static var allTests = [
-        // Data
-        ("testMultiLineMaxValue", testMultiLineMaxValue),
-        ("testMultiLineMinValue", testMultiLineMinValue),
-        ("testMultiLineAverage" , testMultiLineAverage),
-        ("testMultiLineRange"   , testMultiLineRange),
-        // Greater
-        ("testMultiLineIsGreaterThanTwoTrue" , testMultiIsGreaterThanTwoTrue),
-        ("testMultiLineIsGreaterThanTwoFalse", testMultiIsGreaterThanTwoFalse),
-        // Labels
-        ("testMultiLineGetYLabels"  , testMultiLineGetYLabels),
-        // Touch
-        ("testMultiLineGetDataPoint", testMultiLineGetDataPoint),
-        ("testMultiLineGetPointLocation", testMultiLineGetPointLocation),
-    ]
 }
