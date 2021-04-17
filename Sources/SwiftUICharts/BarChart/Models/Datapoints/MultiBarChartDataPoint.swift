@@ -13,7 +13,6 @@ import SwiftUI
  # Example
  ```
  MultiBarChartDataPoint(value: 10,
-                        xAxisLabel: "1.1",
                         description: "One One",
                         group: GroupingData(title: "One", colour: .blue))
  ```
