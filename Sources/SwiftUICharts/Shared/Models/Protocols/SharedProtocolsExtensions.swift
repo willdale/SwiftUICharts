@@ -166,10 +166,10 @@ extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProto
             .min() ?? 0
     }
     public func average() -> Double {
-       self.dataPoints
+        self.dataPoints
             .map(\.value)
             .reduce(0, +)
-            .divide(self.dataPoints.count)
+            .divide(by: Double(self.dataPoints.count))
     }
 }
 extension CTSingleDataSetProtocol where Self.DataPoint: CTRangeDataPointProtocol & CTisRanged {
@@ -184,8 +184,9 @@ extension CTSingleDataSetProtocol where Self.DataPoint: CTRangeDataPointProtocol
             .min() ?? 0
     }
     public func average() -> Double {
-        self.dataPoints.reduce(0) { $0 + ($1.upperValue - $1.lowerValue) }
-            .divide(self.dataPoints.count)
+        self.dataPoints
+            .reduce(0) { $0 + ($1.upperValue - $1.lowerValue) }
+            .divide(by: Double(self.dataPoints.count))
     }
 }
 
@@ -195,14 +196,24 @@ extension CTMultiDataSetProtocol where Self.DataSet.DataPoint: CTStandardDataPoi
             .max() ?? 0
     }
     public func minValue() -> Double {
-        self.dataSets.compactMap { $0.dataPoints.map(\.value).min() }
-            .min() ?? 0
+        self.dataSets.compactMap {
+            $0.dataPoints
+                .map(\.value)
+                .min()
+        }
+        .min() ?? 0
     }
     public func average() -> Double {
+
         self.dataSets
-            .compactMap { $0.dataPoints.map(\.value).reduce(0, +) }
+            .compactMap {
+                $0.dataPoints
+                    .map(\.value)
+                    .reduce(0, +)
+                    .divide(by: Double($0.dataPoints.count))
+            }
             .reduce(0, +)
-            .divide(self.dataSets.count)
+            .divide(by: Double(self.dataSets.count))
     }
 }
 

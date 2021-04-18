@@ -71,7 +71,7 @@ extension Double {
     /**
      Simple, neat divide.
      */
-    func divide<T: BinaryInteger>(_ divideBy: T) -> Double {
+    func divide(by divideBy: Double) -> Double {
         self / Double(divideBy)
     }
 }
