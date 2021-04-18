@@ -1,38 +1,38 @@
 //
-//  MultiBarDataSet.swift
+//  StackedBarDataSet.swift
 //  
 //
-//  Created by Will Dale on 04/02/2021.
+//  Created by Will Dale on 18/04/2021.
 //
 
 import SwiftUI
 
 /**
- Main data set for a multi part bar charts.
+ Main data set for a stacked bar charts.
  */
-public struct MultiBarDataSets: CTMultiDataSetProtocol {
+public struct StackedBarDataSets: CTMultiDataSetProtocol {
     
     public let id       : UUID = UUID()
-    public var dataSets : [MultiBarDataSet]
+    public var dataSets : [StackedBarDataSet]
     
     /// Initialises a new data set for Multiline Line Chart.
-    public init(dataSets: [MultiBarDataSet]) {
+    public init(dataSets: [StackedBarDataSet]) {
         self.dataSets = dataSets
     }
 }
 
 /**
- Individual data sets for multi part bars charts.
+ Individual data sets for stacked bars charts.
  
  # Example
  ```
- MultiBarDataSet(dataPoints: [
-     MultiBarChartDataPoint(value: 10, group: GroupingData(title: "One", colour: .blue)),
-     MultiBarChartDataPoint(value: 50, group: GroupingData(title: "Two", colour: .red))
+ GroupedBarDataSet(dataPoints: [
+    GroupedBarChartDataPoint(value: 10, group: GroupingData(title: "One", colour: .blue)),
+    GroupedBarChartDataPoint(value: 50, group: GroupingData(title: "Two", colour: .red))
  ])
  ```
  */
-public struct MultiBarDataSet: CTMultiBarChartDataSet {
+public struct StackedBarDataSet: CTMultiBarChartDataSet {
 
     public let id         : UUID = UUID()
     public var dataPoints : [MultiBarChartDataPoint]

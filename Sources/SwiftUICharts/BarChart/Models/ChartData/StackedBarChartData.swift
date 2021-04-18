@@ -38,7 +38,7 @@ import SwiftUI
      
      let groups : [GroupingData] = [Group.one.data, Group.two.data, Group.three.data, Group.four.data]
 
-     let data = MultiBarDataSets(dataSets: [
+     let data = StackedBarDataSets(dataSets: [
          MultiBarDataSet(dataPoints: [
              MultiBarChartDataPoint(value: 10,  xAxisLabel: "1.1", pointLabel: "One One"    , group: Group.one.data),
              MultiBarChartDataPoint(value: 10,  xAxisLabel: "1.2", pointLabel: "One Two"    , group: Group.two.data),
@@ -77,7 +77,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
     // MARK: Properties
     public let id   : UUID  = UUID()
     
-    @Published public final var dataSets     : MultiBarDataSets
+    @Published public final var dataSets     : StackedBarDataSets
     @Published public final var metadata     : ChartMetadata
     @Published public final var xAxisLabels  : [String]?
     @Published public final var yAxisLabels  : [String]?
@@ -103,7 +103,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
     ///   - barStyle: Control for the aesthetic of the bar chart.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    public init(dataSets    : MultiBarDataSets,
+    public init(dataSets    : StackedBarDataSets,
                 groups      : [GroupingData],
                 metadata    : ChartMetadata     = ChartMetadata(),
                 xAxisLabels : [String]?         = nil,
@@ -181,7 +181,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
              
              // Get the max value of the dataset relative to max value of all datasets.
              // This is used to set the height of the y axis filtering.
-             let setMaxValue = dataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
+            let setMaxValue = dataSet.maxValue()
              let allMaxValue = self.maxValue
              let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
 
@@ -215,7 +215,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
          self.infoView.touchOverlayInfo = points
      }
 
-     public final func getPointLocation(dataSet: MultiBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+     public final func getPointLocation(dataSet: StackedBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
          // Filter to get the right dataset based on the x axis.
          let superXSection : CGFloat = chartSize.width / CGFloat(dataSet.dataSets.count)
          let superIndex    : Int     = Int((touchLocation.x) / superXSection)
@@ -226,7 +226,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
 
              // Get the max value of the dataset relative to max value of all datasets.
              // This is used to set the height of the y axis filtering.
-             let setMaxValue = subDataSet.dataPoints.max { $0.value < $1.value }?.value ?? 0
+             let setMaxValue = subDataSet.maxValue()
              let allMaxValue = self.maxValue
              let fraction : CGFloat = CGFloat(setMaxValue / allMaxValue)
 
@@ -262,7 +262,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
          return nil
      }
 
-    public typealias Set        = MultiBarDataSets
+    public typealias Set        = StackedBarDataSets
     public typealias DataPoint  = MultiBarChartDataPoint
     public typealias CTStyle    = BarChartStyle
 }

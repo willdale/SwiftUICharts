@@ -27,29 +27,29 @@ final class StackedBarChartTests: XCTestCase {
     
     let groups : [GroupingData] = [Group.one.data, Group.two.data, Group.three.data, Group.four.data]
     
-    let data = MultiBarDataSets(dataSets: [
-        MultiBarDataSet(dataPoints: [
+    let data = StackedBarDataSets(dataSets: [
+        StackedBarDataSet(dataPoints: [
             MultiBarChartDataPoint(value: 10, description: "One One"    , group: Group.one.data),
             MultiBarChartDataPoint(value: 50, description: "One Two"    , group: Group.two.data),
             MultiBarChartDataPoint(value: 30, description: "One Three"  , group: Group.three.data),
             MultiBarChartDataPoint(value: 40, description: "One Four"   , group: Group.four.data)
         ]),
         
-        MultiBarDataSet(dataPoints: [
+        StackedBarDataSet(dataPoints: [
             MultiBarChartDataPoint(value: 20, description: "Two One"    , group: Group.one.data),
             MultiBarChartDataPoint(value: 60, description: "Two Two"    , group: Group.two.data),
             MultiBarChartDataPoint(value: 40, description: "Two Three"  , group: Group.three.data),
             MultiBarChartDataPoint(value: 60, description: "Two Four"   , group: Group.four.data)
         ]),
         
-        MultiBarDataSet(dataPoints: [
+        StackedBarDataSet(dataPoints: [
             MultiBarChartDataPoint(value: 30, description: "Three One"  , group: Group.one.data),
             MultiBarChartDataPoint(value: 70, description: "Three Two"  , group: Group.two.data),
             MultiBarChartDataPoint(value: 30, description: "Three Three", group: Group.three.data),
             MultiBarChartDataPoint(value: 90, description: "Three Four" , group: Group.four.data)
         ]),
         
-        MultiBarDataSet(dataPoints: [
+        StackedBarDataSet(dataPoints: [
             MultiBarChartDataPoint(value: 40, description: "Four One"   , group: Group.one.data),
             MultiBarChartDataPoint(value: 80, description: "Four Two"   , group: Group.two.data),
             MultiBarChartDataPoint(value: 20, description: "Four Three" , group: Group.three.data),
@@ -60,7 +60,7 @@ final class StackedBarChartTests: XCTestCase {
     // MARK: - Data
     func testStackedBarMaxValue() {
         let chartData = StackedBarChartData(dataSets: data, groups: groups)
-        XCTAssertEqual(chartData.maxValue, 90)
+        XCTAssertEqual(chartData.maxValue, 220)
     }
     func testStackedBarMinValue() {
         let chartData = StackedBarChartData(dataSets: data, groups: groups)
@@ -72,7 +72,7 @@ final class StackedBarChartTests: XCTestCase {
     }
     func testStackedBarRange() {
         let chartData = StackedBarChartData(dataSets: data, groups: groups)
-        XCTAssertEqual(chartData.range, 80.001)
+        XCTAssertEqual(chartData.range, 210.001)
     }
     
     // MARK: Greater
@@ -91,24 +91,24 @@ final class StackedBarChartTests: XCTestCase {
         chartData.chartStyle.topLine  = .maximumValue
         chartData.chartStyle.baseline = .zero
         XCTAssertEqual(chartData.getYLabels("%.2f")[0], "0.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[1], "45.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[2], "90.00")
+        XCTAssertEqual(chartData.getYLabels("%.2f")[1], "110.00")
+        XCTAssertEqual(chartData.getYLabels("%.2f")[2], "220.00")
         
         chartData.chartStyle.baseline = .minimumValue
         XCTAssertEqual(chartData.getYLabels("%.2f")[0], "10.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[1], "50.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[2], "90.00")
+        XCTAssertEqual(chartData.getYLabels("%.2f")[1], "115.00")
+        XCTAssertEqual(chartData.getYLabels("%.2f")[2], "220.00")
         
         chartData.chartStyle.baseline = .minimumWithMaximum(of: 5)
         XCTAssertEqual(chartData.getYLabels("%.2f")[0], "5.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[1], "47.50")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[2], "90.00")
+        XCTAssertEqual(chartData.getYLabels("%.2f")[1], "112.50")
+        XCTAssertEqual(chartData.getYLabels("%.2f")[2], "220.00")
         
         chartData.chartStyle.topLine  = .maximum(of: 100)
         chartData.chartStyle.baseline = .zero
         XCTAssertEqual(chartData.getYLabels("%.2f")[0], "0.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[1], "50.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[2], "100.00")
+        XCTAssertEqual(chartData.getYLabels("%.2f")[1], "110.00")
+        XCTAssertEqual(chartData.getYLabels("%.2f")[2], "220.00")
     }
     
     // MARK: - Touch
@@ -125,7 +125,7 @@ final class StackedBarChartTests: XCTestCase {
         XCTAssertEqual(testOutputOneTwo[0], testAgainstOneTwo[1])
         
         // Stack 1 - Point 4
-        let touchLocationOneFour: CGPoint = CGPoint(x: 5, y: 60)
+        let touchLocationOneFour: CGPoint = CGPoint(x: 5, y: 50)
         chartData.infoView.touchOverlayInfo = []
         chartData.getDataPoint(touchLocation: touchLocationOneFour, chartSize: rect)
         let testOutputOneFour  = chartData.infoView.touchOverlayInfo
@@ -141,7 +141,7 @@ final class StackedBarChartTests: XCTestCase {
         XCTAssertEqual(testOutputTwoOne[0], testAgainstTwoOne[0])
         
         // Stack 2 - Point 3
-        let touchLocationTwoThree: CGPoint = CGPoint(x: 30, y: 66)
+        let touchLocationTwoThree: CGPoint = CGPoint(x: 30, y: 56)
         chartData.infoView.touchOverlayInfo = []
         chartData.getDataPoint(touchLocation: touchLocationTwoThree, chartSize: rect)
         let testOutputTwoThree  = chartData.infoView.touchOverlayInfo
@@ -190,7 +190,7 @@ final class StackedBarChartTests: XCTestCase {
         let testOneTwo: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets,
                                                              touchLocation: touchLocationOneTwo,
                                                              chartSize: rect)!
-        let testAgainstOneTwo = CGPoint(x: 12.50, y: 74.35)
+        let testAgainstOneTwo = CGPoint(x: 12.50, y: 72.72)
         XCTAssertEqual(testOneTwo.x, testAgainstOneTwo.x, accuracy: 0.01)
         XCTAssertEqual(testOneTwo.y, testAgainstOneTwo.y, accuracy: 0.01)
         
@@ -199,7 +199,7 @@ final class StackedBarChartTests: XCTestCase {
         let testOneFour: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets,
                                                               touchLocation: touchLocationOneFour,
                                                               chartSize: rect)!
-        let testAgainstOneFour = CGPoint(x: 12.50, y: 44.44)
+        let testAgainstOneFour = CGPoint(x: 12.50, y: 59.09)
         XCTAssertEqual(testOneFour.x, testAgainstOneFour.x, accuracy: 0.01)
         XCTAssertEqual(testOneFour.y, testAgainstOneFour.y, accuracy: 0.01)
         
@@ -208,7 +208,7 @@ final class StackedBarChartTests: XCTestCase {
         let testTwoOne: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets,
                                                              touchLocation: touchLocationTwoOne,
                                                              chartSize: rect)!
-        let testAgainstTwoOne = CGPoint(x: 37.50, y: 92.59)
+        let testAgainstTwoOne = CGPoint(x: 37.50, y: 90.90)
         XCTAssertEqual(testTwoOne.x, testAgainstTwoOne.x, accuracy: 0.01)
         XCTAssertEqual(testTwoOne.y, testAgainstTwoOne.y, accuracy: 0.01)
         
@@ -217,7 +217,7 @@ final class StackedBarChartTests: XCTestCase {
         let testTwoThree: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets,
                                                                touchLocation: touchLocationTwoThree,
                                                                chartSize: rect)!
-        let testAgainstTwoThree = CGPoint(x: 37.50, y: 55.55)
+        let testAgainstTwoThree = CGPoint(x: 37.50, y: 63.63)
         XCTAssertEqual(testTwoThree.x, testAgainstTwoThree.x, accuracy: 0.01)
         XCTAssertEqual(testTwoThree.y, testAgainstTwoThree.y, accuracy: 0.01)
         
@@ -244,7 +244,7 @@ final class StackedBarChartTests: XCTestCase {
         let testFourTwo: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets,
                                                                touchLocation: touchLocationFourTwo,
                                                                chartSize: rect)!
-        let testAgainstFourTwo = CGPoint(x: 87.50, y: 43.85)
+        let testAgainstFourTwo = CGPoint(x: 87.50, y: 45.45)
         XCTAssertEqual(testFourTwo.x, testAgainstFourTwo.x, accuracy: 0.01)
         XCTAssertEqual(testFourTwo.y, testAgainstFourTwo.y, accuracy: 0.01)
         
@@ -253,7 +253,7 @@ final class StackedBarChartTests: XCTestCase {
         let testFourThree: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets,
                                                                touchLocation: touchLocationFourThree,
                                                                chartSize: rect)!
-        let testAgainstFourThree = CGPoint(x: 87.50, y: 34.50)
+        let testAgainstFourThree = CGPoint(x: 87.50, y: 36.36)
         XCTAssertEqual(testFourThree.x, testAgainstFourThree.x, accuracy: 0.01)
         XCTAssertEqual(testFourThree.y, testAgainstFourThree.y, accuracy: 0.01)
     }

@@ -133,21 +133,18 @@ public protocol CTDataSetProtocol: Hashable, Identifiable {
     
     /**
      Returns the highest value in the data set.
-     - Parameter dataSet: Target data set.
-     - Returns: Highest value in data set.
+      - Returns: Highest value in data set.
      */
     func maxValue() -> Double
     
     /**
      Returns the lowest value in the data set.
-     - Parameter dataSet: Target data set.
      - Returns: Lowest value in data set.
      */
     func minValue() -> Double
     
     /**
      Returns the average value from the data set.
-     - Parameter dataSet: Target data set.
      - Returns: Average of values in data set.
      */
     func average() -> Double
@@ -175,14 +172,12 @@ public protocol CTMultiDataSetProtocol: CTDataSetProtocol {
     
     /// A type representing a single data set -- `SingleDataSet`
     associatedtype DataSet: CTSingleDataSetProtocol
-    
+        
     /**
      Array of single data sets.
      */
     var dataSets: [DataSet] { get set }
 }
-
-
 
 
 

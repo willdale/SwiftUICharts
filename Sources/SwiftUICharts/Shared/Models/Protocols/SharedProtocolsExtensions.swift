@@ -265,7 +265,30 @@ extension CTMultiDataSetProtocol where Self.DataSet.DataPoint: CTStandardDataPoi
         return sum / Double(setHolder.count)
     }
 }
-
+extension CTMultiDataSetProtocol where Self == StackedBarDataSets {
+    /**
+     Returns the highest value in the data sets
+     - Parameter dataSet: Target data sets.
+     - Returns: Highest value in data sets.
+     */
+    public func maxValue() -> Double {
+        var setHolder : [Double] = []
+        for set in self.dataSets {
+            setHolder.append(set.dataPoints.reduce(0) { $0 + $1.value})
+        }
+        return setHolder.max { $0 < $1 } ?? 0
+    }
+}
+extension CTMultiBarChartDataSet where Self == StackedBarDataSet {
+    /**
+     Returns the highest value in the data set.
+     - Parameter dataSet: Target data set.
+     - Returns: Highest value in data set.
+     */
+    public func maxValue() -> Double  {
+        return self.dataPoints.reduce(0) { $0 + $1.value}
+    }
+}
 
 
 extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProtocol & CTnotRanged,
