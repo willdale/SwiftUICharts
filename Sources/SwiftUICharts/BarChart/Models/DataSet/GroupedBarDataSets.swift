@@ -28,19 +28,19 @@ public struct GroupedBarDataSets: CTMultiDataSetProtocol {
  # Example
  ```
  GroupedBarDataSet(dataPoints: [
-    MultiBarChartDataPoint(value: 10, group: GroupingData(title: "One", colour: .blue)),
-    MultiBarChartDataPoint(value: 50, group: GroupingData(title: "Two", colour: .red))
+    GroupedBarDataPoint(value: 10, group: GroupingData(title: "One", colour: .blue)),
+    GroupedBarDataPoint(value: 50, group: GroupingData(title: "Two", colour: .red))
  ])
  ```
  */
 public struct GroupedBarDataSet: CTMultiBarChartDataSet {
 
     public let id         : UUID = UUID()
-    public var dataPoints : [MultiBarChartDataPoint]
+    public var dataPoints : [GroupedBarDataPoint]
     public var setTitle   : String
         
     /// Initialises a new data set for a Bar Chart.
-    public init(dataPoints: [MultiBarChartDataPoint],
+    public init(dataPoints: [GroupedBarDataPoint],
                 setTitle  : String = ""
     ) {
         self.dataPoints = dataPoints
@@ -48,7 +48,7 @@ public struct GroupedBarDataSet: CTMultiBarChartDataSet {
     }
 
     public typealias ID        = UUID
-    public typealias DataPoint = MultiBarChartDataPoint
+    public typealias DataPoint = GroupedBarDataPoint
     public typealias Styling   = BarStyle
 }
 

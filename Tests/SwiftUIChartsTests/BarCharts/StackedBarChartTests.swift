@@ -29,31 +29,31 @@ final class StackedBarChartTests: XCTestCase {
     
     let data = StackedBarDataSets(dataSets: [
         StackedBarDataSet(dataPoints: [
-            MultiBarChartDataPoint(value: 10, description: "One One"    , group: Group.one.data),
-            MultiBarChartDataPoint(value: 50, description: "One Two"    , group: Group.two.data),
-            MultiBarChartDataPoint(value: 30, description: "One Three"  , group: Group.three.data),
-            MultiBarChartDataPoint(value: 40, description: "One Four"   , group: Group.four.data)
+            StackedBarDataPoint(value: 10, description: "One One"    , group: Group.one.data),
+            StackedBarDataPoint(value: 50, description: "One Two"    , group: Group.two.data),
+            StackedBarDataPoint(value: 30, description: "One Three"  , group: Group.three.data),
+            StackedBarDataPoint(value: 40, description: "One Four"   , group: Group.four.data)
         ]),
         
         StackedBarDataSet(dataPoints: [
-            MultiBarChartDataPoint(value: 20, description: "Two One"    , group: Group.one.data),
-            MultiBarChartDataPoint(value: 60, description: "Two Two"    , group: Group.two.data),
-            MultiBarChartDataPoint(value: 40, description: "Two Three"  , group: Group.three.data),
-            MultiBarChartDataPoint(value: 60, description: "Two Four"   , group: Group.four.data)
+            StackedBarDataPoint(value: 20, description: "Two One"    , group: Group.one.data),
+            StackedBarDataPoint(value: 60, description: "Two Two"    , group: Group.two.data),
+            StackedBarDataPoint(value: 40, description: "Two Three"  , group: Group.three.data),
+            StackedBarDataPoint(value: 60, description: "Two Four"   , group: Group.four.data)
         ]),
         
         StackedBarDataSet(dataPoints: [
-            MultiBarChartDataPoint(value: 30, description: "Three One"  , group: Group.one.data),
-            MultiBarChartDataPoint(value: 70, description: "Three Two"  , group: Group.two.data),
-            MultiBarChartDataPoint(value: 30, description: "Three Three", group: Group.three.data),
-            MultiBarChartDataPoint(value: 90, description: "Three Four" , group: Group.four.data)
+            StackedBarDataPoint(value: 30, description: "Three One"  , group: Group.one.data),
+            StackedBarDataPoint(value: 70, description: "Three Two"  , group: Group.two.data),
+            StackedBarDataPoint(value: 30, description: "Three Three", group: Group.three.data),
+            StackedBarDataPoint(value: 90, description: "Three Four" , group: Group.four.data)
         ]),
         
         StackedBarDataSet(dataPoints: [
-            MultiBarChartDataPoint(value: 40, description: "Four One"   , group: Group.one.data),
-            MultiBarChartDataPoint(value: 80, description: "Four Two"   , group: Group.two.data),
-            MultiBarChartDataPoint(value: 20, description: "Four Three" , group: Group.three.data),
-            MultiBarChartDataPoint(value: 50, description: "Four Four"  , group: Group.four.data)
+            StackedBarDataPoint(value: 40, description: "Four One"   , group: Group.one.data),
+            StackedBarDataPoint(value: 80, description: "Four Two"   , group: Group.two.data),
+            StackedBarDataPoint(value: 20, description: "Four Three" , group: Group.three.data),
+            StackedBarDataPoint(value: 50, description: "Four Four"  , group: Group.four.data)
         ])
     ])
         

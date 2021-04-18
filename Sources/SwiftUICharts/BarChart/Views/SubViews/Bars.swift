@@ -219,7 +219,7 @@ internal struct StackElementSubView: View {
     /// - Returns: Height of the element.
     private func getHeight(height: CGFloat,
                            dataSet: StackedBarDataSet,
-                           dataPoint: MultiBarChartDataPoint
+                           dataPoint: StackedBarDataPoint
     ) -> CGFloat {
         let value = dataPoint.value
         let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }

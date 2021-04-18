@@ -26,7 +26,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     @Published public final var chartStyle   : BarChartStyle
     @Published public final var legends      : [LegendData]
     @Published public final var viewData     : ChartViewData
-    @Published public final var infoView     : InfoViewData<MultiBarChartDataPoint> = InfoViewData()
+    @Published public final var infoView     : InfoViewData<GroupedBarDataPoint> = InfoViewData()
     @Published public final var groups       : [GroupingData]
     
     public final var noDataText   : Text
@@ -133,7 +133,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     }
     public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
         
-        var points : [MultiBarChartDataPoint] = []
+        var points : [GroupedBarDataPoint] = []
         
         // Divide the chart into equal sections.
         let superXSection   : CGFloat   = (chartSize.width / CGFloat(dataSets.dataSets.count))
@@ -191,6 +191,6 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     }
     
     public typealias Set        = GroupedBarDataSets
-    public typealias DataPoint  = MultiBarChartDataPoint
+    public typealias DataPoint  = GroupedBarDataPoint
     public typealias CTStyle    = BarChartStyle
 }
