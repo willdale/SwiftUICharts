@@ -137,6 +137,7 @@ extension CTChartData {
     /// Sets the data point info box location while keeping it within the parent view.
     ///
     /// - Parameters:
+    ///   - touchLocation: Location the user has pressed.
     ///   - boxFrame: The size of the point info box.
     ///   - chartSize: The size of the chart view as the parent view.
     internal func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
@@ -154,126 +155,66 @@ extension CTChartData {
 
 // MARK: - Data Set
 extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProtocol & CTnotRanged {
-    /**
-     Returns the highest value in the data set.
-     
-     - Parameter dataSet: Target data set.
-     - Returns: Highest value in data set.
-     */
-    public func maxValue() -> Double  {
-        return self.dataPoints.max { $0.value < $1.value }?.value ?? 0
+    public func maxValue() -> Double {
+        self.dataPoints
+            .map(\.value)
+            .max() ?? 0
     }
-    
-    /**
-     Returns the lowest value in the data set.
-     
-     - Parameter dataSet: Target data set.
-     - Returns: Lowest value in data set.
-     */
-    public func minValue() -> Double  {
-        return self.dataPoints.min { $0.value < $1.value }?.value ?? 0
+    public func minValue() -> Double {
+        self.dataPoints
+            .map(\.value)
+            .min() ?? 0
     }
-    
-    /**
-     Returns the average value from the data set.
-     
-     - Parameter dataSet: Target data set.
-     - Returns: Average of values in data set.
-     */
     public func average() -> Double {
-        let sum = self.dataPoints.reduce(0) { $0 + $1.value }
-        return sum / Double(self.dataPoints.count)
+       self.dataPoints
+            .map(\.value)
+            .reduce(0, +)
+            .divide(self.dataPoints.count)
     }
-    
 }
 extension CTSingleDataSetProtocol where Self.DataPoint: CTRangeDataPointProtocol & CTisRanged {
-    /**
-     Returns the highest value in the data set.
-     
-     - Parameter dataSet: Target data set.
-     - Returns: Highest value in data set.
-     */
-    public func maxValue() -> Double  {
-        return self.dataPoints.max { $0.upperValue < $1.upperValue }?.upperValue ?? 0
+    public func maxValue() -> Double {
+        self.dataPoints
+            .map(\.upperValue)
+            .max() ?? 0
     }
-    
-    /**
-     Returns the lowest value in the data set.
-     
-     - Parameter dataSet: Target data set.
-     - Returns: Lowest value in data set.
-     */
-    public func minValue() -> Double  {
-        return self.dataPoints.min { $0.lowerValue < $1.lowerValue }?.lowerValue ?? 0
+    public func minValue() -> Double {
+        self.dataPoints
+            .map(\.lowerValue)
+            .min() ?? 0
     }
-    
-    /**
-     Returns the average value from the data set.
-     
-     - Parameter dataSet: Target data set.
-     - Returns: Average of values in data set.
-     */
     public func average() -> Double {
-        let sum = self.dataPoints.reduce(0) { $0 + ($1.upperValue - $1.lowerValue) }
-        return sum / Double(self.dataPoints.count)
+        self.dataPoints.reduce(0) { $0 + ($1.upperValue - $1.lowerValue) }
+            .divide(self.dataPoints.count)
     }
-    
 }
 
 extension CTMultiDataSetProtocol where Self.DataSet.DataPoint: CTStandardDataPointProtocol {
-    /**
-     Returns the highest value in the data sets
-     
-     - Parameter dataSet: Target data sets.
-     - Returns: Highest value in data sets.
-     */
     public func maxValue() -> Double {
-        var setHolder : [Double] = []
-        for set in self.dataSets {
-            setHolder.append(set.dataPoints.max { $0.value < $1.value }?.value ?? 0)
-        }
-        return setHolder.max { $0 < $1 } ?? 0
+        self.dataSets.compactMap { $0.dataPoints.map(\.value).max() }
+            .max() ?? 0
     }
-    
-    /**
-     Returns the lowest value in the data sets.
-     
-     - Parameter dataSet: Target data sets.
-     - Returns: Lowest value in data sets.
-     */
     public func minValue() -> Double {
-        var setHolder : [Double] = []
-        for set in dataSets {
-            setHolder.append(set.dataPoints.min { $0.value < $1.value }?.value ?? 0)
-        }
-        return setHolder.min { $0 < $1 } ?? 0
+        self.dataSets.compactMap { $0.dataPoints.map(\.value).min() }
+            .min() ?? 0
     }
-    
-    /**
-     Returns the average value from the data sets.
-     
-     - Parameter dataSet: Target data sets.
-     - Returns: Average of values in data sets.
-     */
     public func average() -> Double {
-        var setHolder : [Double] = []
-        for set in dataSets {
-            let sum = set.dataPoints.reduce(0) { $0 + $1.value }
-            setHolder.append(sum / Double(set.dataPoints.count))
-        }
-        let sum = setHolder.reduce(0) { $0 + $1 }
-        return sum / Double(setHolder.count)
+        self.dataSets
+            .compactMap { $0.dataPoints.map(\.value).reduce(0, +) }
+            .reduce(0, +)
+            .divide(self.dataSets.count)
     }
 }
+
 extension CTMultiDataSetProtocol where Self == StackedBarDataSets {
     /**
      Returns the highest sum value in the data sets
 
-     Note that this differs from other charts, as Stacked Bar Charts
+     - Note:
+     This differs from other charts, as Stacked Bar Charts
      need to consider the sum value for each data set, instead of the
      max value of a data point.
 
-     - Parameter dataSet: Target data sets.
      - Returns: Highest sum value in data sets.
      */
     public func maxValue() -> Double {
@@ -287,33 +228,31 @@ extension CTMultiBarChartDataSet where Self == StackedBarDataSet {
     /**
      Returns the highest sum value in the data set.
 
-     Note that this differs from other charts, as Stacked Bar Charts
+     - Note:
+     This differs from other charts, as Stacked Bar Charts
      need to consider the sum value for each data set, instead of the
      max value of a data point.
 
-     - Parameter dataSet: Target data set.
      - Returns: Highest sum value in data set.
      */
-    public func maxValue() -> Double  {
+    public func maxValue() -> Double {
         self.dataPoints.map(\.value).reduce(0, +)
     }
 }
 
 
 extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProtocol & CTnotRanged,
-                                        Self: CTLineChartDataSet {    
-    /**
-     Returns the lowest value in the data set.
-     
-     - Parameter dataSet: Target data set.
-     - Returns: Lowest value in data set.
-     */
+                                        Self: CTLineChartDataSet {
     public func minValue() -> Double  {
         if !self.style.ignoreZero {
-            return self.dataPoints.min { $0.value < $1.value }?.value ?? 0
+            return self.dataPoints
+                .map(\.value)
+                .min() ?? 0
         } else {
-            let noZero = self.dataPoints.filter({ $0.value != 0 })
-            return noZero.min { $0.value < $1.value }?.value ?? 0
+            return self.dataPoints
+                .map(\.value)
+                .filter({ $0 != 0 })
+                .min() ?? 0
         }
     }
 }

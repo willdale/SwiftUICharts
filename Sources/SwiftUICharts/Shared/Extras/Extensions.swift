@@ -67,6 +67,15 @@ extension View {
     }
 }
 
+extension Double {
+    /**
+     Simple, neat divide.
+     */
+    func divide<T: BinaryInteger>(_ divideBy: T) -> Double {
+        self / Double(divideBy)
+    }
+}
+
 extension Color {
     /// Returns the relevant system background colour for the device.
     public static var systemsBackground: Color {
