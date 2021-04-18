@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// Generic line drawn horrizontally across the chart
+/// Generic line drawn horizontally across the chart
 internal struct Marker: Shape {
     
     private let value : Double

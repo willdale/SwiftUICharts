@@ -39,25 +39,25 @@ import SwiftUI
      let groups : [GroupingData] = [Group.one.data, Group.two.data, Group.three.data, Group.four.data]
 
      let data = StackedBarDataSets(dataSets: [
-         MultiBarDataSet(dataPoints: [
+         StackedBarDataSet(dataPoints: [
              MultiBarChartDataPoint(value: 10,  xAxisLabel: "1.1", pointLabel: "One One"    , group: Group.one.data),
              MultiBarChartDataPoint(value: 10,  xAxisLabel: "1.2", pointLabel: "One Two"    , group: Group.two.data),
              MultiBarChartDataPoint(value: 30,  xAxisLabel: "1.3", pointLabel: "One Three"  , group: Group.three.data),
              MultiBarChartDataPoint(value: 40,  xAxisLabel: "1.4", pointLabel: "One Four"   , group: Group.four.data)
          ]),
-         MultiBarDataSet(dataPoints: [
+         StackedBarDataSet(dataPoints: [
              MultiBarChartDataPoint(value: 50,  xAxisLabel: "2.1", pointLabel: "Two One"    , group: Group.one.data),
              MultiBarChartDataPoint(value: 10,  xAxisLabel: "2.2", pointLabel: "Two Two"    , group: Group.two.data),
              MultiBarChartDataPoint(value: 40,  xAxisLabel: "2.3", pointLabel: "Two Three"  , group: Group.three.data),
              MultiBarChartDataPoint(value: 60,  xAxisLabel: "2.3", pointLabel: "Two Four"   , group: Group.four.data)
          ]),
-         MultiBarDataSet(dataPoints: [
+         StackedBarDataSet(dataPoints: [
              MultiBarChartDataPoint(value: 10,  xAxisLabel: "3.1", pointLabel: "Three One"  , group: Group.one.data),
              MultiBarChartDataPoint(value: 50,  xAxisLabel: "3.2", pointLabel: "Three Two"  , group: Group.two.data),
              MultiBarChartDataPoint(value: 30,  xAxisLabel: "3.3", pointLabel: "Three Three", group: Group.three.data),
              MultiBarChartDataPoint(value: 100, xAxisLabel: "3.4", pointLabel: "Three Four" , group: Group.four.data)
          ]),
-         MultiBarDataSet(dataPoints: [
+         StackedBarDataSet(dataPoints: [
              MultiBarChartDataPoint(value: 80,  xAxisLabel: "4.1", pointLabel: "Four One"   , group: Group.one.data),
              MultiBarChartDataPoint(value: 10,  xAxisLabel: "4.2", pointLabel: "Four Two"   , group: Group.two.data),
              MultiBarChartDataPoint(value: 20,  xAxisLabel: "4.3", pointLabel: "Four Three" , group: Group.three.data),
@@ -92,7 +92,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
     public final var chartType    : (chartType: ChartType, dataSetType: DataSetType)
     
     // MARK: Initializer
-    /// Initialises a Grouped Bar Chart.
+    /// Initialises a Stacked Bar Chart.
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the bars.

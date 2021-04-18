@@ -8,14 +8,14 @@
 import SwiftUI
 
 /**
- Main data set for a stacked bar charts.
+ Main data set for a stacked bar chart.
  */
 public struct StackedBarDataSets: CTMultiDataSetProtocol {
     
     public let id       : UUID = UUID()
     public var dataSets : [StackedBarDataSet]
     
-    /// Initialises a new data set for Multiline Line Chart.
+    /// Initialises a new data set for a Stacked Bar Chart.
     public init(dataSets: [StackedBarDataSet]) {
         self.dataSets = dataSets
     }
@@ -26,9 +26,9 @@ public struct StackedBarDataSets: CTMultiDataSetProtocol {
  
  # Example
  ```
- GroupedBarDataSet(dataPoints: [
-    GroupedBarChartDataPoint(value: 10, group: GroupingData(title: "One", colour: .blue)),
-    GroupedBarChartDataPoint(value: 50, group: GroupingData(title: "Two", colour: .red))
+ StackedBarDataSet(dataPoints: [
+    MultiBarChartDataPoint(value: 10, group: GroupingData(title: "One", colour: .blue)),
+    MultiBarChartDataPoint(value: 50, group: GroupingData(title: "Two", colour: .red))
  ])
  ```
  */
@@ -38,7 +38,7 @@ public struct StackedBarDataSet: CTMultiBarChartDataSet {
     public var dataPoints : [MultiBarChartDataPoint]
     public var setTitle   : String
         
-    /// Initialises a new data set for a Bar Chart.
+    /// Initialises a new data set for a Stacked Bar Chart.
     public init(dataPoints: [MultiBarChartDataPoint],
                 setTitle  : String = ""
     ) {

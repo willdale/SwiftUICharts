@@ -26,7 +26,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
     public final let chartType    : (chartType: ChartType, dataSetType: DataSetType)
 
     // MARK: Initializer
-    /// Initialises a standard Bar Chart.
+    /// Initialises a Ranged Bar Chart.
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the bars.

@@ -16,7 +16,7 @@ public struct GroupedBarDataSets: CTMultiDataSetProtocol {
     public let id       : UUID = UUID()
     public var dataSets : [GroupedBarDataSet]
     
-    /// Initialises a new data set for Multiline Line Chart.
+    /// Initialises a new data set for Grouped Bar Chart.
     public init(dataSets: [GroupedBarDataSet]) {
         self.dataSets = dataSets
     }
@@ -28,8 +28,8 @@ public struct GroupedBarDataSets: CTMultiDataSetProtocol {
  # Example
  ```
  GroupedBarDataSet(dataPoints: [
-    GroupedBarChartDataPoint(value: 10, group: GroupingData(title: "One", colour: .blue)),
-    GroupedBarChartDataPoint(value: 50, group: GroupingData(title: "Two", colour: .red))
+    MultiBarChartDataPoint(value: 10, group: GroupingData(title: "One", colour: .blue)),
+    MultiBarChartDataPoint(value: 50, group: GroupingData(title: "Two", colour: .red))
  ])
  ```
  */
