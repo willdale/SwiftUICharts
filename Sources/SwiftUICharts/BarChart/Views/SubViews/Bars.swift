@@ -158,10 +158,10 @@ internal struct GradientStopsBar<CD: CTBarChartDataProtocol,
  */
 internal struct StackElementSubView: View {
     
-    private let dataSet : MultiBarDataSet
+    private let dataSet : StackedBarDataSet
     private let specifier : String
     
-    internal init(dataSet: MultiBarDataSet, specifier: String) {
+    internal init(dataSet: StackedBarDataSet, specifier: String) {
         self.dataSet = dataSet
         self.specifier = specifier
     }
@@ -218,8 +218,8 @@ internal struct StackElementSubView: View {
     ///   - dataPoint: Data point to draw.
     /// - Returns: Height of the element.
     private func getHeight(height: CGFloat,
-                           dataSet: MultiBarDataSet,
-                           dataPoint: MultiBarChartDataPoint
+                           dataSet: StackedBarDataSet,
+                           dataPoint: StackedBarDataPoint
     ) -> CGFloat {
         let value = dataPoint.value
         let sum = dataSet.dataPoints.reduce(0) { $0 + $1.value }

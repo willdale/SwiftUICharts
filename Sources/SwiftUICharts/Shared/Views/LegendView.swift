@@ -47,22 +47,23 @@ internal struct LegendView<T>: View where T: CTChartData {
     
     /// Detects whether to run the scale effect on the legend.
     private func scaleLegendBar(legend: LegendData) -> Bool {
-        
-        if chartData is BarChartData {
-            if let datapointID = chartData.infoView.touchOverlayInfo.first?.id as? UUID {
-                return chartData.infoView.isTouchCurrent && legend.id == datapointID
-            } else {
-                return false
-            }
-        } else if chartData is GroupedBarChartData || chartData is StackedBarChartData {
-            if let datapoint = chartData.infoView.touchOverlayInfo.first as? MultiBarChartDataPoint {
-                return chartData.infoView.isTouchCurrent && legend.colour == datapoint.group.colour
-            } else {
-                return false
-            }
-        } else {
-            return false
+
+        if let chartData = chartData as? BarChartData,
+           let datapoint = chartData.infoView.touchOverlayInfo.first {
+            return chartData.infoView.isTouchCurrent && legend.id == datapoint.id
         }
+
+        if let chartData = chartData as? GroupedBarChartData,
+           let datapoint = chartData.infoView.touchOverlayInfo.first {
+            return chartData.infoView.isTouchCurrent && legend.colour == datapoint.group.colour
+        }
+
+        if let chartData = chartData as? StackedBarChartData,
+           let datapoint = chartData.infoView.touchOverlayInfo.first {
+            return chartData.infoView.isTouchCurrent && legend.colour == datapoint.group.colour
+        }
+        
+        return false
     }
     /// Detects whether to run the scale effect on the legend.
     private func scaleLegendPie(legend: LegendData) -> Bool {
