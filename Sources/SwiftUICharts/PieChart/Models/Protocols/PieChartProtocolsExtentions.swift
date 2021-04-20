@@ -17,7 +17,7 @@ extension CTPieDoughnutChartDataProtocol where Set == PieDataSet, DataPoint == P
      It configures each data point with startAngle and amount variables in radians.
      */
     internal func makeDataPoints() {
-        let total       = self.dataSets.dataPoints.reduce(0) { $0 + $1.value }
+        let total       = self.dataSets.dataPoints.map(\.value).reduce(0, +)
         var startAngle  = -Double.pi / 2
         self.dataSets.dataPoints.indices.forEach { (point) in
             let amount = .pi * 2 * (self.dataSets.dataPoints[point].value / total)

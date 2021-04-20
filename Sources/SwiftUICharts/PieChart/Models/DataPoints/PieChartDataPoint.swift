@@ -17,10 +17,14 @@ public struct PieChartDataPoint: CTPieDataPoint {
     public var description : String?
     public var date        : Date?
     public var colour      : Color
+    public var label       : String?
+    public var systemIcon  : String?
+    public var labelColour : Color
+    
     public var startAngle  : Double = 0
     public var amount      : Double = 0
     
-    public var legendTag : String = ""
+    public var legendTag   : String = ""
     
     /// Data model for a single data point for a pie chart.
     /// - Parameters:
@@ -31,12 +35,18 @@ public struct PieChartDataPoint: CTPieDataPoint {
     public init(value       : Double,
                 description : String?   = nil,
                 date        : Date?     = nil,
-                colour      : Color     = Color.red
+                colour      : Color     = Color.red,
+                label       : String?   = nil,
+                systemIcon  : String?   = nil,
+                labelColour : Color     = .primary
     ) {
         self.value       = value
         self.description = description
         self.date        = date
         self.colour      = colour
+        self.label       = label
+        self.systemIcon  = systemIcon
+        self.labelColour = labelColour
     }
 }
 
@@ -49,6 +59,9 @@ extension PieChartDataPoint {
             (left.startAngle == right.startAngle) &&
             (left.value == right.value) &&
             (left.date == right.date) &&
-            (left.description == right.description)
+            (left.description == right.description) &&
+            (left.label == right.label) &&
+            (left.systemIcon == right.systemIcon) &&
+            (left.labelColour == right.labelColour)
         }
 }
