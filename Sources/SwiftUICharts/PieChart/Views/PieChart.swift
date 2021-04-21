@@ -51,8 +51,9 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
                                     amount:     chartData.dataSets.dataPoints[data].amount)
                         .fill(chartData.dataSets.dataPoints[data].colour)
                         .overlay(
-                            Text(chartData.dataSets.dataPoints[data].wrappedDescription)
-                                .foregroundColor(chartData.dataSets.dataPoints[data].labelColour)
+//                            Text(chartData.dataSets.dataPoints[data].wrappedDescription)
+                            self.overlay(dataPoint: chartData.dataSets.dataPoints[data])
+//                                .foregroundColor(chartData.dataSets.dataPoints[data].labelColour)
                                 .position(getPosition(rect: geo.frame(in: .local),
                                                       startRad: chartData.dataSets.dataPoints[data].startAngle,
                                                       amountRad: chartData.dataSets.dataPoints[data].amount))
@@ -95,7 +96,6 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
         let radius = min(rect.width, rect.height) / 2
         let center = CGPoint(x: rect.width / 2, y: rect.height / 2)
         
-        
         let startDegree = (startRad * Double(180 / Double.pi)) + 90
         let amountDegree = amountRad * Double(180 / Double.pi)
         let segmentDegree = (startDegree + (startDegree + amountDegree)) / 2
@@ -105,5 +105,15 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
         let y = center.y + (radius * 0.75) * sin(segmentRad)
         
         return CGPoint(x: x, y: y)
+    }
+    
+    @ViewBuilder func overlay(dataPoint: PieChartDataPoint) -> some View {
+        switch dataPoint.label {
+        case .label(let value):
+            Text(value)
+        case .icon(let value):
+            Image(systemName: value)
+            
+        }
     }
 }

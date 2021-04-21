@@ -17,9 +17,9 @@ public struct PieChartDataPoint: CTPieDataPoint {
     public var description : String?
     public var date        : Date?
     public var colour      : Color
-    public var label       : String?
-    public var systemIcon  : String?
-    public var labelColour : Color
+    public var label       : OverlayType
+//    public var systemIcon  : String?
+//    public var labelColour : Color
     
     public var startAngle  : Double = 0
     public var amount      : Double = 0
@@ -36,20 +36,27 @@ public struct PieChartDataPoint: CTPieDataPoint {
                 description : String?   = nil,
                 date        : Date?     = nil,
                 colour      : Color     = Color.red,
-                label       : String?   = nil,
-                systemIcon  : String?   = nil,
-                labelColour : Color     = .primary
+                label       : OverlayType = .label(text: "")
+//                labelColour : Color     = .primary
     ) {
         self.value       = value
         self.description = description
         self.date        = date
         self.colour      = colour
         self.label       = label
-        self.systemIcon  = systemIcon
-        self.labelColour = labelColour
+//        self.systemIcon  = systemIcon
+//        self.labelColour = labelColour
     }
+    
+//    public enum OverlayType: Hashable {
+//        case label(text: String)
+//        case icon(systemName: String)
+//    }
 }
-
+public enum OverlayType: Hashable {
+    case label(text: String)
+    case icon(systemName: String)
+}
 
 extension PieChartDataPoint {
     // Remove legend tag from compare
@@ -60,8 +67,8 @@ extension PieChartDataPoint {
             (left.value == right.value) &&
             (left.date == right.date) &&
             (left.description == right.description) &&
-            (left.label == right.label) &&
-            (left.systemIcon == right.systemIcon) &&
-            (left.labelColour == right.labelColour)
+            (left.label == right.label) //&&
+//            (left.systemIcon == right.systemIcon) &&
+//            (left.labelColour == right.labelColour)
         }
 }
