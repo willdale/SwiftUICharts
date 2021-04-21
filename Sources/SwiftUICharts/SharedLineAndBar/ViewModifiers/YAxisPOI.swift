@@ -67,13 +67,13 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                 content
                 marker
                 valueLabel
+                    .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                        self.startAnimation = true
+                    }
+                    .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                        self.startAnimation = false
+                    }
             } else { content }
-        }
-        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-            self.startAnimation = true
-        }
-        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
-            self.startAnimation = false
         }
     }
     
