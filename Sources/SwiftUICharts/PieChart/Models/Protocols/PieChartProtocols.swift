@@ -29,6 +29,11 @@ public protocol CTDoughnutChartDataProtocol : CTPieDoughnutChartDataProtocol {}
  A protocol to extend functionality of `CTStandardDataPointProtocol` specifically for Pie and Doughnut Charts.
  */
 public protocol CTPieDataPoint: CTStandardDataPointProtocol, CTnotRanged {
+
+    /**
+     Colour of the segment
+     */
+    var colour: Color { get set }
     
     /**
      Where the data point should start drawing from
@@ -36,14 +41,17 @@ public protocol CTPieDataPoint: CTStandardDataPointProtocol, CTnotRanged {
      
      In radians.
      */
-    var startAngle  : Double { get set }
+    var startAngle: Double { get set }
     
     /**
      The data points value in radians.
      */
-    var amount      : Double { get set }
+    var amount: Double { get set }
     
-    var colour      : Color { get set }
+    /**
+     Option to add overlays on top of the segment.
+     */
+    var label: OverlayType { get set }
 }
 
 

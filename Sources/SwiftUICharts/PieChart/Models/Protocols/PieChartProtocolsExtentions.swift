@@ -70,3 +70,63 @@ extension CTPieDoughnutChartDataProtocol where Self.Set.DataPoint.ID == UUID,
         }
     }
 }
+
+extension View {
+    internal func overlay<CD: CTPieDoughnutChartDataProtocol>(
+        dataPoint: PieChartDataPoint,
+        chartData: CD,
+        rect: CGRect
+    ) -> some View {
+                
+        self
+            .overlay(
+                Group {
+                    switch dataPoint.label {
+                    case .none:
+                        EmptyView()
+                    case .label(let text, let colour, let font, let rFactor):
+                        Text(text)
+                            .font(font)
+                            .foregroundColor(colour)
+                            .position(chartData.getOverlayPosition(rect: rect,
+                                                                   startRad:  dataPoint.startAngle,
+                                                                   amountRad: dataPoint.amount,
+                                                                   rFactor: rFactor))
+                    case .icon(let name, let colour, let size, let rFactor):
+                        Image(systemName: name)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: size, height: size)
+                            .foregroundColor(colour)
+                            .position(chartData.getOverlayPosition(rect: rect,
+                                                                   startRad:  dataPoint.startAngle,
+                                                                   amountRad: dataPoint.amount,
+                                                                   rFactor: rFactor))
+                    }
+                }
+            )
+    }
+}
+
+extension CTPieDoughnutChartDataProtocol {
+    internal func getOverlayPosition(
+        rect: CGRect,
+        startRad: Double,
+        amountRad: Double,
+        rFactor: CGFloat
+    ) -> CGPoint {
+        
+        let radius = min(rect.width, rect.height) / 2
+        let center = CGPoint(x: rect.width / 2, y: rect.height / 2)
+        
+        let startDegree = (startRad * Double(180 / Double.pi)) + 90
+        let amountDegree = amountRad * Double(180 / Double.pi)
+        let segmentDegree = (startDegree + (startDegree + amountDegree)) / 2
+        let segmentRad = CGFloat.pi * CGFloat(segmentDegree - 90) / 180
+        
+        let x = center.x + (radius * rFactor) * cos(segmentRad)
+        let y = center.y + (radius * rFactor) * sin(segmentRad)
+        
+        return CGPoint(x: x, y: y)
+    }
+}
