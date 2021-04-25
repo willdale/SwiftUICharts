@@ -11,29 +11,27 @@ import SwiftUI
  Main line shape
  */
 internal struct LineShape<DP>: Shape where DP: CTStandardDataPointProtocol {
-           
-    private let dataPoints  : [DP]
-    private let lineType    : LineType
-    private let isFilled    : Bool
     
-    private let minValue : Double
-    private let range    : Double
-    
+    private let dataPoints: [DP]
+    private let lineType: LineType
+    private let isFilled: Bool
+    private let minValue: Double
+    private let range: Double
     private let ignoreZero: Bool
     
-    internal init(dataPoints: [DP],
-                  lineType  : LineType,
-                  isFilled  : Bool,
-                  minValue  : Double,
-                  range     : Double,
-                  ignoreZero: Bool
+    internal init(
+        dataPoints: [DP],
+        lineType: LineType,
+        isFilled: Bool,
+        minValue: Double,
+        range: Double,
+        ignoreZero: Bool
     ) {
         self.dataPoints = dataPoints
-        self.lineType   = lineType
-        self.isFilled   = isFilled
-
-        self.minValue   = minValue
-        self.range      = range
+        self.lineType = lineType
+        self.isFilled = isFilled
+        self.minValue = minValue
+        self.range = range
         self.ignoreZero = ignoreZero
     }
     
@@ -46,7 +44,6 @@ internal struct LineShape<DP>: Shape where DP: CTStandardDataPointProtocol {
             case true:
                 return Path.curvedLineIgnoreZero(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
             }
-           
         case .line:
             switch ignoreZero {
             case false:
@@ -54,7 +51,6 @@ internal struct LineShape<DP>: Shape where DP: CTStandardDataPointProtocol {
             case true:
                 return Path.straightLineIgnoreZero(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
             }
-            
         }
     }
 }
@@ -64,30 +60,28 @@ internal struct LineShape<DP>: Shape where DP: CTStandardDataPointProtocol {
  for a Ranged Line Chart.
  */
 internal struct RangedLineFillShape<DP>: Shape where DP: CTRangedLineDataPoint {
-           
-    private let dataPoints  : [DP]
-    private let lineType    : LineType
     
-    private let minValue : Double
-    private let range    : Double
-    
+    private let dataPoints: [DP]
+    private let lineType: LineType
+    private let minValue: Double
+    private let range: Double
     private let ignoreZero: Bool
     
-    internal init(dataPoints: [DP],
-                  lineType  : LineType,
-                  minValue  : Double,
-                  range     : Double,
-                  ignoreZero: Bool
+    internal init(
+        dataPoints: [DP],
+        lineType: LineType,
+        minValue: Double,
+        range: Double,
+        ignoreZero: Bool
     ) {
         self.dataPoints = dataPoints
-        self.lineType   = lineType
-        self.minValue   = minValue
-        self.range      = range
+        self.lineType = lineType
+        self.minValue = minValue
+        self.range = range
         self.ignoreZero = ignoreZero
     }
-  
+    
     internal func path(in rect: CGRect) -> Path {
-        
         switch lineType {
         case .curvedLine:
             switch ignoreZero {
@@ -96,7 +90,6 @@ internal struct RangedLineFillShape<DP>: Shape where DP: CTRangedLineDataPoint {
             case true:
                 return Path.curvedLineBoxIgnoreZero(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
             }
-            
         case .line:
             switch ignoreZero {
             case false:
@@ -106,7 +99,6 @@ internal struct RangedLineFillShape<DP>: Shape where DP: CTRangedLineDataPoint {
             }
             
         }
-        
     }
 }
 

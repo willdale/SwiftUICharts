@@ -10,20 +10,23 @@ import SwiftUI
 /**
  Data model to hold data for Legends
  */
- public struct LegendData: Hashable, Identifiable {
-        
-    public var id           : UUID
+public struct LegendData: Hashable, Identifiable {
+    
+    public var id: UUID
+    
     /// The type of chart being used.
-    public var chartType    : ChartType
+    public var chartType: ChartType
+    
     /// Text to be displayed
-    public var legend       : String
+    public var legend: String
+    
     /// Style of the stroke
-    public var strokeStyle  : Stroke?
+    public var strokeStyle: Stroke?
     
     /// Used to make sure the charts data legend is first
-    public let prioity      : Int
+    public let prioity: Int
     
-    public var colour       : ColourStyle
+    public var colour: ColourStyle
     
     /// Legend.
     /// - Parameters:
@@ -32,19 +35,19 @@ import SwiftUI
     ///   - strokeStyle: Stroke Style.
     ///   - prioity: Used to make sure the charts data legend is first.
     ///   - chartType: Type of chart being used.
-    public init(id         : UUID,
-                legend     : String,
-                colour     : ColourStyle,
+    public init(id: UUID,
+                legend: String,
+                colour: ColourStyle,
                 strokeStyle: Stroke?,
-                prioity    : Int,
-                chartType  : ChartType
+                prioity: Int,
+                chartType: ChartType
     ) {
-        self.id          = id
-        self.legend      = legend
-        self.colour      = colour
+        self.id = id
+        self.legend = legend
+        self.colour = colour
         self.strokeStyle = strokeStyle
-        self.prioity     = prioity
-        self.chartType   = chartType
-
+        self.prioity = prioity
+        self.chartType = chartType
+        
     }
 }

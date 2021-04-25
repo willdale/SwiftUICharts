@@ -9,31 +9,31 @@ import SwiftUI
 
 /**
  Data model for drawing and styling a Grouped Bar Chart.
-  
+ 
  The grouping data informs the model as to how the datapoints are linked.
  ```
  */
 public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     
     // MARK: Properties
-    public let id   : UUID  = UUID()
-
-    @Published public final var dataSets     : GroupedBarDataSets
-    @Published public final var metadata     : ChartMetadata
-    @Published public final var xAxisLabels  : [String]?
-    @Published public final var yAxisLabels  : [String]?
-    @Published public final var barStyle     : BarStyle
-    @Published public final var chartStyle   : BarChartStyle
-    @Published public final var legends      : [LegendData]
-    @Published public final var viewData     : ChartViewData
-    @Published public final var infoView     : InfoViewData<GroupedBarDataPoint> = InfoViewData()
-    @Published public final var groups       : [GroupingData]
+    public let id: UUID = UUID()
     
-    public final var noDataText   : Text
-    public final var chartType    : (chartType: ChartType, dataSetType: DataSetType)
+    @Published public final var dataSets: GroupedBarDataSets
+    @Published public final var metadata: ChartMetadata
+    @Published public final var xAxisLabels: [String]?
+    @Published public final var yAxisLabels: [String]?
+    @Published public final var barStyle: BarStyle
+    @Published public final var chartStyle: BarChartStyle
+    @Published public final var legends: [LegendData]
+    @Published public final var viewData: ChartViewData
+    @Published public final var infoView: InfoViewData<GroupedBarDataPoint> = InfoViewData()
+    @Published public final var groups: [GroupingData]
     
-    final var groupSpacing : CGFloat = 0
-        
+    public final var noDataText: Text
+    public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
+    
+    final var groupSpacing: CGFloat = 0
+    
     // MARK: Initializer
     /// Initialises a Grouped Bar Chart.
     ///
@@ -46,26 +46,27 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     ///   - barStyle: Control for the aesthetic of the bar chart.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    public init(dataSets    : GroupedBarDataSets,
-                groups      : [GroupingData],
-                metadata    : ChartMetadata     = ChartMetadata(),
-                xAxisLabels : [String]?         = nil,
-                yAxisLabels : [String]?         = nil,
-                barStyle    : BarStyle          = BarStyle(),
-                chartStyle  : BarChartStyle     = BarChartStyle(),
-                noDataText  : Text              = Text("No Data")
+    public init(
+        dataSets: GroupedBarDataSets,
+        groups: [GroupingData],
+        metadata: ChartMetadata = ChartMetadata(),
+        xAxisLabels: [String]? = nil,
+        yAxisLabels: [String]? = nil,
+        barStyle: BarStyle = BarStyle(),
+        chartStyle: BarChartStyle = BarChartStyle(),
+        noDataText: Text = Text("No Data")
     ) {
-        self.dataSets       = dataSets
-        self.groups         = groups
-        self.metadata       = metadata
-        self.xAxisLabels    = xAxisLabels
-        self.yAxisLabels    = yAxisLabels
-        self.barStyle       = barStyle
-        self.chartStyle     = chartStyle
-        self.noDataText     = noDataText
-        self.legends        = [LegendData]()
-        self.viewData       = ChartViewData()
-        self.chartType      = (chartType: .bar, dataSetType: .multi)
+        self.dataSets = dataSets
+        self.groups = groups
+        self.metadata = metadata
+        self.xAxisLabels = xAxisLabels
+        self.yAxisLabels = yAxisLabels
+        self.barStyle = barStyle
+        self.chartStyle = chartStyle
+        self.noDataText = noDataText
+        self.legends = [LegendData]()
+        self.viewData = ChartViewData()
+        self.chartType = (chartType: .bar, dataSetType: .multi)
         self.setupLegends()
     }
     
@@ -131,58 +132,51 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         self.markerSubView()
     }
+    
     public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
-        
-        var points : [GroupedBarDataPoint] = []
-        
         // Divide the chart into equal sections.
-        let superXSection   : CGFloat   = (chartSize.width / CGFloat(dataSets.dataSets.count))
-        let superIndex      : Int       = Int((touchLocation.x) / superXSection)
+        let superXSection: CGFloat = (chartSize.width / CGFloat(dataSets.dataSets.count))
+        let superIndex: Int = Int((touchLocation.x) / superXSection)
         
         // Work out how much to remove from xSection due to groupSpacing.
-        let compensation : CGFloat = ((groupSpacing * CGFloat(dataSets.dataSets.count - 1)) / CGFloat(dataSets.dataSets.count))
+        let compensation: CGFloat = ((groupSpacing * CGFloat(dataSets.dataSets.count - 1)) / CGFloat(dataSets.dataSets.count))
         
         // Make those sections take account of spacing between groups.
-        let xSection : CGFloat  = (chartSize.width / CGFloat(dataSets.dataSets.count)) - compensation
-        let index    : Int      = Int((touchLocation.x - CGFloat((groupSpacing * CGFloat(superIndex)))) / xSection)
-
+        let xSection: CGFloat = superXSection - compensation
+        let index: Int = Int((touchLocation.x - CGFloat((groupSpacing * CGFloat(superIndex)))) / xSection)
+        
         if index >= 0 && index < dataSets.dataSets.count && superIndex == index {
-            let dataSet = dataSets.dataSets[index]
-            let xSubSection : CGFloat   = (xSection / CGFloat(dataSet.dataPoints.count))
-            let subIndex    : Int       = Int((touchLocation.x - CGFloat((groupSpacing * CGFloat(superIndex)))) / xSubSection) - (dataSet.dataPoints.count * index)
-            if subIndex >= 0 && subIndex < dataSet.dataPoints.count {
-                var dataPoint = dataSet.dataPoints[subIndex]
-                dataPoint.legendTag = dataSet.setTitle
-                points.append(dataPoint)
+            let xSubSection: CGFloat = (xSection / CGFloat(dataSets.dataSets[index].dataPoints.count))
+            let subIndex: Int = Int((touchLocation.x - CGFloat((groupSpacing * CGFloat(superIndex)))) / xSubSection) - (dataSets.dataSets[index].dataPoints.count * index)
+            if subIndex >= 0 && subIndex < dataSets.dataSets[index].dataPoints.count {
+                dataSets.dataSets[index].dataPoints[subIndex].legendTag = dataSets.dataSets[index].setTitle
+                self.infoView.touchOverlayInfo = [dataSets.dataSets[index].dataPoints[subIndex]]
             }
         }
-        self.infoView.touchOverlayInfo = points
     }
+    
     public final func getPointLocation(dataSet: GroupedBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
-        
         // Divide the chart into equal sections.
-        let superXSection   : CGFloat   = (chartSize.width / CGFloat(dataSet.dataSets.count))
-        let superIndex      : Int       = Int((touchLocation.x) / superXSection)
-
+        let superXSection: CGFloat = (chartSize.width / CGFloat(dataSet.dataSets.count))
+        let superIndex: Int = Int((touchLocation.x) / superXSection)
+        
         // Work out how much to remove from xSection due to groupSpacing.
-        let compensation : CGFloat = ((groupSpacing * CGFloat(dataSet.dataSets.count - 1)) / CGFloat(dataSet.dataSets.count))
-
+        let compensation: CGFloat = ((groupSpacing * CGFloat(dataSet.dataSets.count - 1)) / CGFloat(dataSet.dataSets.count))
+        
         // Make those sections take account of spacing between groups.
-        let xSection : CGFloat  = (chartSize.width / CGFloat(dataSet.dataSets.count)) - compensation
-        let ySection : CGFloat  = chartSize.height / CGFloat(self.maxValue)
-
-        let index    : Int      = Int((touchLocation.x - CGFloat(groupSpacing * CGFloat(superIndex))) / xSection)
-
+        let xSection: CGFloat = superXSection - compensation
+        let ySection: CGFloat = chartSize.height / CGFloat(self.maxValue)
+        
+        let index: Int = Int((touchLocation.x - CGFloat(groupSpacing * CGFloat(superIndex))) / xSection)
+        
         if index >= 0 && index < dataSet.dataSets.count && superIndex == index {
-
             let subDataSet = dataSet.dataSets[index]
-            let xSubSection : CGFloat   = (xSection / CGFloat(subDataSet.dataPoints.count))
-            let subIndex    : Int       = Int((touchLocation.x - CGFloat(groupSpacing * CGFloat(index))) / xSubSection) - (subDataSet.dataPoints.count * index)
-
+            let xSubSection: CGFloat = (xSection / CGFloat(subDataSet.dataPoints.count))
+            let subIndex: Int = Int((touchLocation.x - CGFloat(groupSpacing * CGFloat(index))) / xSubSection) - (subDataSet.dataPoints.count * index)
             if subIndex >= 0 && subIndex < subDataSet.dataPoints.count {
-                let element : CGFloat = (CGFloat(subIndex) * xSubSection) + (xSubSection / 2)
-                let section : CGFloat = (superXSection * CGFloat(superIndex))
-                let spacing : CGFloat = ((groupSpacing / CGFloat(dataSets.dataSets.count)) * CGFloat(superIndex))
+                let element: CGFloat = (CGFloat(subIndex) * xSubSection) + (xSubSection / 2)
+                let section: CGFloat = (superXSection * CGFloat(superIndex))
+                let spacing: CGFloat = ((groupSpacing / CGFloat(dataSets.dataSets.count)) * CGFloat(superIndex))
                 return CGPoint(x: element + section + spacing,
                                y: (chartSize.height - CGFloat(subDataSet.dataPoints[subIndex].value) * ySection))
             }
@@ -190,7 +184,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
         return nil
     }
     
-    public typealias Set        = GroupedBarDataSets
-    public typealias DataPoint  = GroupedBarDataPoint
-    public typealias CTStyle    = BarChartStyle
+    public typealias Set = GroupedBarDataSets
+    public typealias DataPoint = GroupedBarDataPoint
+    public typealias CTStyle = BarChartStyle
 }

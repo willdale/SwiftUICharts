@@ -9,21 +9,23 @@ import SwiftUI
 
 internal struct XAxisDataPointCell<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
     
-    @ObservedObject var chartData: ChartData
-    
+    @ObservedObject private var chartData: ChartData
     private let label: String
     private let rotationAngle: Angle
     
-    internal init(chartData: ChartData, label: String, rotationAngle : Angle) {
-        self.chartData     = chartData
-        self.label         = label
+    internal init(
+        chartData: ChartData,
+        label: String,
+        rotationAngle: Angle
+    ) {
+        self.chartData = chartData
+        self.label = label
         self.rotationAngle = rotationAngle
     }
     
     @State private var width: CGFloat = 0
- 
+    
     internal var body: some View {
-
         Text(label)
             .font(chartData.chartStyle.xAxisLabelFont)
             .lineLimit(1)
@@ -46,14 +48,17 @@ internal struct XAxisDataPointCell<ChartData>: View where ChartData: CTLineBarCh
 
 internal struct XAxisChartDataCell<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
     
-    @ObservedObject var chartData: ChartData
-    
+    @ObservedObject private var chartData: ChartData
     private let label: String
     private let rotationAngle: Angle
     
-    internal init(chartData: ChartData, label: String, rotationAngle: Angle) {
-        self.chartData     = chartData
-        self.label         = label
+    internal init(
+        chartData: ChartData,
+        label: String,
+        rotationAngle: Angle
+    ) {
+        self.chartData = chartData
+        self.label = label
         self.rotationAngle = rotationAngle
     }
     
@@ -61,7 +66,6 @@ internal struct XAxisChartDataCell<ChartData>: View where ChartData: CTLineBarCh
     @State private var height: CGFloat = 0
     
     internal var body: some View {
-
         Text(label)
             .font(chartData.chartStyle.xAxisLabelFont)
             .lineLimit(1)
@@ -82,4 +86,3 @@ internal struct XAxisChartDataCell<ChartData>: View where ChartData: CTLineBarCh
             }
     }
 }
-

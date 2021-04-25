@@ -32,10 +32,10 @@ final class BarChartTests: XCTestCase {
         let chartData = BarChartData(dataSets: BarDataSet(dataPoints: dataPoints))
         XCTAssertTrue(chartData.isGreaterThanTwo())
     }
-
+    
     // MARK: - Labels
     func testBarGetYLabels() {
-
+        
         let chartData = BarChartData(dataSets: BarDataSet(dataPoints: dataPoints),
                                      chartStyle: BarChartStyle(yAxisNumberOfLabels: 3))
         
@@ -61,7 +61,7 @@ final class BarChartTests: XCTestCase {
         XCTAssertEqual(chartData.getYLabels("%.2f")[1], "50.00" )
         XCTAssertEqual(chartData.getYLabels("%.2f")[2], "100.00")
     }
-        
+    
     // MARK: - Touch
     func testBarGetDataPoint() {
         let rect: CGRect  = CGRect(x: 0, y: 0, width: 100, height: 100)
@@ -95,7 +95,6 @@ final class BarChartTests: XCTestCase {
         let testAgainstFour = chartData.dataSets.dataPoints
         XCTAssertEqual(testOutputFour[0], testAgainstFour[3])
     }
-
     
     func testBarGetPointLocation() {
         let rect: CGRect  = CGRect(x: 0, y: 0, width: 100, height: 100)

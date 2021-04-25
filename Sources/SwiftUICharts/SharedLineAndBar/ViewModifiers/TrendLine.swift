@@ -12,17 +12,18 @@ import SwiftUI
  */
 internal struct LinearTrendLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
-    @ObservedObject private var chartData : T
+    @ObservedObject private var chartData: T
     private let firstValue: Double
     private let lastValue: Double
     private let lineColour: ColourStyle
     private let strokeStyle: StrokeStyle
     
-    init(chartData: T,
-         firstValue: Double,
-         lastValue: Double,
-         lineColour: ColourStyle,
-         strokeStyle: StrokeStyle
+    init(
+        chartData: T,
+        firstValue: Double,
+        lastValue: Double,
+        lineColour: ColourStyle,
+        strokeStyle: StrokeStyle
     ) {
         self.chartData = chartData
         self.firstValue = firstValue
@@ -34,8 +35,6 @@ internal struct LinearTrendLine<T>: ViewModifier where T: CTLineBarChartDataProt
     internal func body(content: Content) -> some View {
         ZStack {
             content
-            
-            
             if lineColour.colourType == .colour,
                let colour = lineColour.colour
             {
@@ -44,13 +43,11 @@ internal struct LinearTrendLine<T>: ViewModifier where T: CTLineBarChartDataProt
                                      range: chartData.range,
                                      minValue: chartData.minValue)
                     .stroke(colour, style: strokeStyle)
-
             } else if lineColour.colourType == .gradientColour,
-                      let colours     = lineColour.colours,
-                      let startPoint  = lineColour.startPoint,
-                      let endPoint    = lineColour.endPoint
+                      let colours = lineColour.colours,
+                      let startPoint = lineColour.startPoint,
+                      let endPoint = lineColour.endPoint
             {
-
                 LinearTrendLineShape(firstValue: firstValue,
                                      lastValue: lastValue,
                                      range: chartData.range,
@@ -59,14 +56,12 @@ internal struct LinearTrendLine<T>: ViewModifier where T: CTLineBarChartDataProt
                                            startPoint: startPoint,
                                            endPoint: endPoint),
                             style: strokeStyle)
-
             } else if lineColour.colourType == .gradientStops,
-                      let stops      = lineColour.stops,
+                      let stops = lineColour.stops,
                       let startPoint = lineColour.startPoint,
-                      let endPoint   = lineColour.endPoint
+                      let endPoint = lineColour.endPoint
             {
                 let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-
                 LinearTrendLineShape(firstValue: firstValue,
                                      lastValue: lastValue,
                                      range: chartData.range,
@@ -85,11 +80,11 @@ extension View {
      Draws a line across the chart to show the the trend in the data.
      
      - Parameters:
-       - chartData: Chart data model.
-       - firstValue: The value of the leading data point.
-       - lastValue: The value of the trailnig data point.
-       - lineColour: Line Colour.
-       - strokeStyle: Stroke Style.
+        - chartData: Chart data model.
+        - firstValue: The value of the leading data point.
+        - lastValue: The value of the trailnig data point.
+        - lineColour: Line Colour.
+        - strokeStyle: Stroke Style.
      - Returns: A  new view containing the chart with a trend line.
      */
     public func linearTrendLine<T: CTLineBarChartDataProtocol>(

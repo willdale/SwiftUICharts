@@ -9,7 +9,7 @@ import SwiftUI
 
 /**
  View for creating a grouped bar chart.
-  
+ 
  Uses `RangedBarChartData` data model.
  
  # Declaration
@@ -42,7 +42,7 @@ import SwiftUI
  */
 public struct RangedBarChart<ChartData>: View where ChartData: RangedBarChartData {
     
-    @ObservedObject var chartData: ChartData
+    @ObservedObject private var chartData: ChartData
     
     /// Initialises a bar chart view.
     /// - Parameter chartData: Must be RangedBarChartData model.
@@ -53,16 +53,13 @@ public struct RangedBarChart<ChartData>: View where ChartData: RangedBarChartDat
     public var body: some View {
         if chartData.isGreaterThanTwo() {
             HStack(spacing: 0) {
-                
                 switch chartData.barStyle.colourFrom {
                 case .barStyle:
-                    
                     RangedBarChartBarStyleSubView(chartData: chartData)
-                        .accessibilityLabel( Text("\(chartData.metadata.title)"))
+                        .accessibilityLabel(Text("\(chartData.metadata.title)"))
                 case .dataPoints:
-                    
                     RangedBarChartDataPointSubView(chartData: chartData)
-                        .accessibilityLabel( Text("\(chartData.metadata.title)"))
+                        .accessibilityLabel(Text("\(chartData.metadata.title)"))
                 }
             }
         } else { CustomNoDataView(chartData: chartData) }

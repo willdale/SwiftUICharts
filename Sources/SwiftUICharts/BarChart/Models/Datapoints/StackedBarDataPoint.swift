@@ -1,16 +1,16 @@
 //
-//  GroupedBarDataPoint.swift
-//  SwiftUICharts
+//  StackedBarDataPoint.swift
+//  
 //
-//  Created by Ataias Pereira Reis on 18/04/21.
+//  Created by Will Dale on 19/02/2021.
 //
 
 import SwiftUI
 
 /**
- Data for a single grouped bar chart data point.
+ Data for a single stacked chart data point.
  */
-public struct GroupedBarDataPoint: CTMultiBarDataPoint {
+public struct StackedBarDataPoint: CTMultiBarDataPoint {
     
     public let id: UUID = UUID()
     public var value: Double
@@ -20,7 +20,7 @@ public struct GroupedBarDataPoint: CTMultiBarDataPoint {
     public var group: GroupingData
     public var legendTag: String = ""
     
-    /// Data model for a single data point with colour info for use with a grouped bar chart.
+    /// Data model for a single data point with colour info for use with a stacked bar chart.
     /// - Parameters:
     ///   - value: Value of the data point.
     ///   - description: A longer label that can be shown on touch input.

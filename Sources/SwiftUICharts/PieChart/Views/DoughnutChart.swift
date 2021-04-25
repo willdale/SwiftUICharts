@@ -31,25 +31,28 @@ import SwiftUI
  */
 public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData {
     
-    @ObservedObject var chartData: ChartData
+    @ObservedObject private var chartData: ChartData
     
     /// Initialises a bar chart view.
     /// - Parameter chartData: Must be DoughnutChartData.
-    public init(chartData : ChartData) {
+    public init(chartData: ChartData) {
         self.chartData = chartData
     }
     
-    @State private var startAnimation : Bool = false
+    @State private var startAnimation: Bool = false
     
     public var body: some View {
         GeometryReader { geo in
             ZStack {
                 ForEach(chartData.dataSets.dataPoints.indices, id: \.self) { data in
-                    DoughnutSegmentShape(id:         chartData.dataSets.dataPoints[data].id,
+                    DoughnutSegmentShape(id: chartData.dataSets.dataPoints[data].id,
                                          startAngle: chartData.dataSets.dataPoints[data].startAngle,
-                                         amount:     chartData.dataSets.dataPoints[data].amount)
-                        .stroke(chartData.dataSets.dataPoints[data].colour, lineWidth: chartData.chartStyle.strokeWidth)
-                        .overlay(dataPoint: chartData.dataSets.dataPoints[data], chartData: chartData, rect: geo.frame(in: .local))
+                                         amount: chartData.dataSets.dataPoints[data].amount)
+                        .stroke(chartData.dataSets.dataPoints[data].colour,
+                                lineWidth: chartData.chartStyle.strokeWidth)
+                        .overlay(dataPoint: chartData.dataSets.dataPoints[data],
+                                 chartData: chartData,
+                                 rect: geo.frame(in: .local))
                         .scaleEffect(startAnimation ? 1 : 0)
                         .opacity(startAnimation ? 1 : 0)
                         .animation(Animation.spring().delay(Double(data) * 0.06))

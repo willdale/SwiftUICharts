@@ -13,11 +13,11 @@ import SwiftUI
  */
 public protocol CTBarChartDataProtocol: CTLineBarChartDataProtocol {
     
-    associatedtype BarStyle : CTBarStyle
+    associatedtype BarStyle: CTBarStyle
     /**
      Overall styling for the bars
      */
-    var barStyle : BarStyle { get set }
+    var barStyle: BarStyle { get set }
 }
 
 
@@ -30,7 +30,7 @@ public protocol CTMultiBarChartDataProtocol: CTBarChartDataProtocol {
     /**
      Grouping data to inform the chart about the relationship between the datapoints.
      */
-    var groups : [GroupingData] { get set }
+    var groups: [GroupingData] { get set }
 }
 
 /**
@@ -49,13 +49,13 @@ public protocol CTBarChartStyle: CTLineBarChartStyle {}
 
 public protocol CTBarStyle: CTBarColourProtocol, Hashable {
     /// How much of the available width to use. 0...1
-    var barWidth    : CGFloat { get set }
+    var barWidth: CGFloat { get set }
     /// Corner radius of the bar shape.
     var cornerRadius: CornerRadius { get set }
     /// Where to get the colour data from.
-    var colourFrom  : ColourFrom { get set }
+    var colourFrom: ColourFrom { get set }
     /// Drawing style of the fill.
-    var colour : ColourStyle { get set }
+    var colour: ColourStyle { get set }
 }
 
 
@@ -71,13 +71,20 @@ public protocol CTStandardBarChartDataSet: CTSingleDataSetProtocol {
     /**
      Label to display in the legend.
      */
-    var legendTitle : String { get set }
+    var legendTitle: String { get set }
 }
 
 /**
  A protocol to extend functionality of `CTSingleDataSetProtocol` specifically for Multi Part Bar Charts.
  */
-public protocol CTMultiBarChartDataSet: CTSingleDataSetProtocol  {}
+public protocol CTMultiBarChartDataSet: CTSingleDataSetProtocol  {
+    /**
+     Title of the data set.
+     
+     This is used as an x axis label.
+     */
+    var setTitle: String { get set }
+}
 
 /**
  A protocol to extend functionality of `CTSingleDataSetProtocol` specifically for Ranged Bar Charts.
@@ -101,7 +108,7 @@ public protocol CTBarDataPointBaseProtocol: CTLineBarDataPointProtocol {}
  */
 public protocol CTBarColourProtocol {
     /// Drawing style of the range fill.
-    var colour : ColourStyle { get set }
+    var colour: ColourStyle { get set }
 }
 
 /**
@@ -123,7 +130,5 @@ public protocol CTMultiBarDataPoint: CTBarDataPointBaseProtocol, CTStandardDataP
     /**
      For grouping data points together so they can be drawn in the correct groupings.
      */
-    var group : GroupingData { get set }
+    var group: GroupingData { get set }
 }
-
-

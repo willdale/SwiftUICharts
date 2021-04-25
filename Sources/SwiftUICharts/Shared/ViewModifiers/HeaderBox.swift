@@ -6,13 +6,13 @@
 //
 
 import SwiftUI
- 
+
 /**
  Displays the metadata about the chart as well as optionally touch overlay information.
  */
 internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
     
-    @ObservedObject var chartData: T
+    @ObservedObject private var chartData: T
     
     init(chartData: T) {
         self.chartData = chartData
@@ -23,26 +23,21 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
             Text(chartData.metadata.title)
                 .font(chartData.metadata.titleFont)
                 .foregroundColor(chartData.metadata.titleColour)
-            
             Text(chartData.metadata.subtitle)
                 .font(chartData.metadata.subtitleFont)
                 .foregroundColor(chartData.metadata.subtitleColour)
         }
     }
     var touchOverlay: some View {
-
         VStack(alignment: .trailing) {
             if chartData.infoView.isTouchCurrent {
                 ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
-                    
                     chartData.infoValueUnit(info: point)
                         .font(chartData.chartStyle.infoBoxValueFont)
                         .foregroundColor(chartData.chartStyle.infoBoxValueColour)
-                    
                     chartData.infoDescription(info: point)
                         .font(chartData.chartStyle.infoBoxDescriptionFont)
                         .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
-                    
                 }
             } else {
                 Text("")
@@ -52,7 +47,6 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
             }
         }
     }
-    
     
     internal func body(content: Content) -> some View {
         Group {

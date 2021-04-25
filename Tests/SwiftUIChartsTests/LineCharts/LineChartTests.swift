@@ -68,7 +68,7 @@ final class LineChartTests: XCTestCase {
         XCTAssertEqual(chartData.getYLabels("%.2f")[1], "50.00")
         XCTAssertEqual(chartData.getYLabels("%.2f")[2], "100.00")
     }
-
+    
     
     // MARK: - Touch
     func testLineGetDataPoint() {

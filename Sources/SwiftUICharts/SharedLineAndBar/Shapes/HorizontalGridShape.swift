@@ -8,7 +8,9 @@
 import SwiftUI
 
 /**
- Horizontal line.
+ Basic horizontal line shape.
+ 
+ Used in Grid
  */
 internal struct HorizontalGridShape: Shape {
     internal func path(in rect: CGRect) -> Path {

@@ -16,38 +16,37 @@ import SwiftUI
 internal struct LineChartColourSubView<CD, DS>: View where CD: CTLineChartDataProtocol,
                                                            DS: CTLineChartDataSet,
                                                            DS.DataPoint: CTStandardDataPointProtocol {
+    private let chartData: CD
+    private let dataSet: DS
+    private let minValue: Double
+    private let range: Double
+    private let colour: Color
+    private let isFilled: Bool
     
-    private let chartData   : CD
-    private let dataSet     : DS
-    private let minValue    : Double
-    private let range       : Double
-    private let colour      : Color
-    private let isFilled    : Bool
-           
-    internal init(chartData : CD,
-                  dataSet   : DS,
-                  minValue  : Double,
-                  range     : Double,
-                  colour    : Color,
-                  isFilled  : Bool
+    internal init(
+        chartData: CD,
+        dataSet: DS,
+        minValue: Double,
+        range: Double,
+        colour: Color,
+        isFilled: Bool
     ) {
-        self.chartData  = chartData
-        self.dataSet    = dataSet
-        self.minValue   = minValue
-        self.range      = range
-        self.colour     = colour
-        self.isFilled   = isFilled
+        self.chartData = chartData
+        self.dataSet = dataSet
+        self.minValue = minValue
+        self.range = range
+        self.colour = colour
+        self.isFilled = isFilled
     }
     
-    @State private var startAnimation : Bool = false
+    @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        
         LineShape(dataPoints: dataSet.dataPoints,
-                  lineType  : dataSet.style.lineType,
-                  isFilled  : isFilled,
-                  minValue  : minValue,
-                  range     : range,
+                  lineType: dataSet.style.lineType,
+                  isFilled: isFilled,
+                  minValue: minValue,
+                  range: range,
                   ignoreZero: dataSet.style.ignoreZero)
             .ifElse(isFilled, if: {
                 $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
@@ -78,46 +77,43 @@ internal struct LineChartColourSubView<CD, DS>: View where CD: CTLineChartDataPr
 internal struct LineChartColoursSubView<CD, DS>: View where CD: CTLineChartDataProtocol,
                                                             DS: CTLineChartDataSet,
                                                             DS.DataPoint: CTStandardDataPointProtocol {
+    private let chartData: CD
+    private let dataSet: DS
+    private let minValue: Double
+    private let range: Double
+    private let colours: [Color]
+    private let startPoint: UnitPoint
+    private let endPoint: UnitPoint
+    private let isFilled: Bool
     
-    private let chartData   : CD
-    private let dataSet     : DS
-    
-    private let minValue    : Double
-    private let range       : Double
-    private let colours     : [Color]
-    private let startPoint  : UnitPoint
-    private let endPoint    : UnitPoint
-    
-    private let isFilled    : Bool
-    
-    internal init(chartData : CD,
-                  dataSet   : DS,
-                  minValue  : Double,
-                  range     : Double,
-                  colours   : [Color],
-                  startPoint: UnitPoint,
-                  endPoint  : UnitPoint,
-                  isFilled  : Bool
+    internal init(
+        chartData: CD,
+        dataSet: DS,
+        minValue: Double,
+        range: Double,
+        colours: [Color],
+        startPoint: UnitPoint,
+        endPoint: UnitPoint,
+        isFilled: Bool
     ) {
-        self.chartData  = chartData
-        self.dataSet    = dataSet
-        self.minValue   = minValue
-        self.range      = range
-        self.colours    = colours
+        self.chartData = chartData
+        self.dataSet = dataSet
+        self.minValue = minValue
+        self.range = range
+        self.colours = colours
         self.startPoint = startPoint
-        self.endPoint   = endPoint
-        self.isFilled   = isFilled
+        self.endPoint = endPoint
+        self.isFilled = isFilled
     }
     
-    @State private var startAnimation : Bool = false
+    @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        
         LineShape(dataPoints: dataSet.dataPoints,
-                  lineType  : dataSet.style.lineType,
-                  isFilled  : isFilled,
-                  minValue  : minValue,
-                  range     : range,
+                  lineType: dataSet.style.lineType,
+                  isFilled: isFilled,
+                  minValue: minValue,
+                  range: range,
                   ignoreZero: dataSet.style.ignoreZero)
             .ifElse(isFilled, if: {
                 $0
@@ -133,8 +129,6 @@ internal struct LineChartColoursSubView<CD, DS>: View where CD: CTLineChartDataP
                                            endPoint: endPoint),
                             style: dataSet.style.strokeStyle.strokeToStrokeStyle())
             })
-            
-            
             .background(Color(.gray).opacity(0.000000001))
             .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
             .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }
@@ -156,48 +150,44 @@ internal struct LineChartColoursSubView<CD, DS>: View where CD: CTLineChartDataP
 internal struct LineChartStopsSubView<CD, DS>: View where CD: CTLineChartDataProtocol,
                                                           DS: CTLineChartDataSet,
                                                           DS.DataPoint: CTStandardDataPointProtocol {
-
-    private let chartData   : CD
-    private let dataSet     : DS
-
-    private let minValue    : Double
-    private let range       : Double
-    private let stops       : [Gradient.Stop]
-    private let startPoint  : UnitPoint
-    private let endPoint    : UnitPoint
-
-    private let isFilled    : Bool
+    private let chartData: CD
+    private let dataSet: DS
+    private let minValue: Double
+    private let range: Double
+    private let stops: [Gradient.Stop]
+    private let startPoint: UnitPoint
+    private let endPoint: UnitPoint
+    private let isFilled: Bool
     
-    internal init(chartData : CD,
-                  dataSet   : DS,
-                  minValue  : Double,
-                  range     : Double,
-                  stops     : [Gradient.Stop],
-                  startPoint: UnitPoint,
-                  endPoint  : UnitPoint,
-                  isFilled  : Bool
+    internal init(
+        chartData: CD,
+        dataSet: DS,
+        minValue: Double,
+        range: Double,
+        stops: [Gradient.Stop],
+        startPoint: UnitPoint,
+        endPoint: UnitPoint,
+        isFilled: Bool
     ) {
-        self.chartData  = chartData
-        self.dataSet    = dataSet
-        self.minValue   = minValue
-        self.range      = range
-        self.stops      = stops
+        self.chartData = chartData
+        self.dataSet = dataSet
+        self.minValue = minValue
+        self.range = range
+        self.stops = stops
         self.startPoint = startPoint
-        self.endPoint   = endPoint
-        self.isFilled   = isFilled
+        self.endPoint = endPoint
+        self.isFilled = isFilled
     }
     
-    @State private var startAnimation : Bool = false
+    @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        
         LineShape(dataPoints: dataSet.dataPoints,
-                  lineType  : dataSet.style.lineType,
-                  isFilled  : isFilled,
-                  minValue  : minValue,
-                  range     : range,
+                  lineType: dataSet.style.lineType,
+                  isFilled: isFilled,
+                  minValue: minValue,
+                  range: range,
                   ignoreZero: dataSet.style.ignoreZero)
-            
             .ifElse(isFilled, if: {
                 $0
                     .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
@@ -212,7 +202,6 @@ internal struct LineChartStopsSubView<CD, DS>: View where CD: CTLineChartDataPro
                                            endPoint: endPoint),
                             style: dataSet.style.strokeStyle.strokeToStrokeStyle())
             })
-            
             .background(Color(.gray).opacity(0.000000001))
             .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
             .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }

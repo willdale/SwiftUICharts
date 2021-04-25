@@ -16,12 +16,12 @@ public protocol CTPieDoughnutChartDataProtocol: CTChartData {}
 /**
  A protocol to extend functionality of `CTPieDoughnutChartDataProtocol` specifically for Pie Charts.
  */
-public protocol CTPieChartDataProtocol : CTPieDoughnutChartDataProtocol {}
+public protocol CTPieChartDataProtocol: CTPieDoughnutChartDataProtocol {}
 
 /**
  A protocol to extend functionality of `CTPieDoughnutChartDataProtocol` specifically for  Doughnut Charts.
  */
-public protocol CTDoughnutChartDataProtocol : CTPieDoughnutChartDataProtocol {}
+public protocol CTDoughnutChartDataProtocol: CTPieDoughnutChartDataProtocol {}
 
 
 // MARK: - DataPoints
@@ -29,7 +29,7 @@ public protocol CTDoughnutChartDataProtocol : CTPieDoughnutChartDataProtocol {}
  A protocol to extend functionality of `CTStandardDataPointProtocol` specifically for Pie and Doughnut Charts.
  */
 public protocol CTPieDataPoint: CTStandardDataPointProtocol, CTnotRanged {
-
+    
     /**
      Colour of the segment
      */
@@ -79,6 +79,6 @@ public protocol CTDoughnutChartStyle: CTPieAndDoughnutChartStyle {
     
     /**
      Width / Delta of the Doughnut Chart
-    */
+     */
     var strokeWidth: CGFloat { get set }
 }

@@ -12,25 +12,25 @@ import SwiftUI
  */
 internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
     
-    @ObservedObject var chartData: T
+    @ObservedObject private var chartData: T
     private let lineColour: ColourStyle
     private let strokeStyle: StrokeStyle
+    private let minValue: Double
+    private let range: Double
     
-    private let minValue : Double
-    private let range    : Double
-    
-    internal init(chartData : T,
-                  lineColour: ColourStyle,
-                  strokeStyle: StrokeStyle
+    internal init(
+        chartData: T,
+        lineColour: ColourStyle,
+        strokeStyle: StrokeStyle
     ) {
-        self.chartData  = chartData
+        self.chartData = chartData
         self.lineColour = lineColour
         self.strokeStyle = strokeStyle
-        self.minValue   = chartData.minValue
-        self.range      = chartData.range
+        self.minValue = chartData.minValue
+        self.range = chartData.range
     }
     
-    @State private var startAnimation : Bool = false
+    @State private var startAnimation: Bool = false
     
     internal func body(content: Content) -> some View {
         ZStack {
@@ -38,14 +38,12 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                 if lineColour.colourType == .colour,
                    let colour = lineColour.colour
                 {
-                    
                     LineShape(dataPoints: chartData.dataSets.dataPoints,
-                              lineType  : chartData.dataSets.style.lineType,
-                              isFilled  : false,
-                              minValue  : self.minValue,
-                              range     : self.range,
+                              lineType: chartData.dataSets.style.lineType,
+                              isFilled: false,
+                              minValue: self.minValue,
+                              range: self.range,
                               ignoreZero: chartData.dataSets.style.ignoreZero)
-                        
                         .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                         .stroke(colour, style: strokeStyle)
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
@@ -54,20 +52,17 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                         .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = false
                         }
-                    
                 } else if lineColour.colourType == .gradientColour,
-                          let colours     = lineColour.colours,
-                          let startPoint  = lineColour.startPoint,
-                          let endPoint    = lineColour.endPoint
+                          let colours = lineColour.colours,
+                          let startPoint = lineColour.startPoint,
+                          let endPoint = lineColour.endPoint
                 {
-                    
                     LineShape(dataPoints: chartData.dataSets.dataPoints,
-                              lineType  : chartData.dataSets.style.lineType,
-                              isFilled  : false,
-                              minValue  : self.minValue,
-                              range     : self.range,
+                              lineType: chartData.dataSets.style.lineType,
+                              isFilled: false,
+                              minValue: self.minValue,
+                              range: self.range,
                               ignoreZero: chartData.dataSets.style.ignoreZero)
-                        
                         .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                         .stroke(LinearGradient(gradient: Gradient(colors: colours),
                                                startPoint: startPoint,
@@ -79,22 +74,18 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                         .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = false
                         }
-                    
-                    
                 } else if lineColour.colourType == .gradientStops,
-                          let stops      = lineColour.stops,
+                          let stops = lineColour.stops,
                           let startPoint = lineColour.startPoint,
-                          let endPoint   = lineColour.endPoint
+                          let endPoint = lineColour.endPoint
                 {
                     let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-                    
                     LineShape(dataPoints: chartData.dataSets.dataPoints,
-                              lineType  : chartData.dataSets.style.lineType,
-                              isFilled  : false,
-                              minValue  : self.minValue,
-                              range     : self.range,
+                              lineType: chartData.dataSets.style.lineType,
+                              isFilled: false,
+                              minValue: self.minValue,
+                              range: self.range,
                               ignoreZero: chartData.dataSets.style.ignoreZero)
-                        
                         .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                         .stroke(LinearGradient(gradient: Gradient(stops: stops),
                                                startPoint: startPoint,
@@ -106,7 +97,6 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                         .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = false
                         }
-                    
                 }
                 content
             } else { content }
@@ -153,4 +143,3 @@ extension View {
         self.modifier(FilledTopLine(chartData: chartData, lineColour: lineColour, strokeStyle: strokeStyle))
     }
 }
-

@@ -12,22 +12,23 @@ import SwiftUI
  */
 internal struct Legends<T>: ViewModifier where T: CTChartData {
     
-    @ObservedObject var chartData: T
-    private let columns     : [GridItem]
-    private let width       : CGFloat
-    private let font        : Font
-    private let textColor   : Color
+    @ObservedObject private var chartData: T
+    private let columns: [GridItem]
+    private let width: CGFloat
+    private let font: Font
+    private let textColor: Color
     
-    init(chartData: T,
-         columns  : [GridItem],
-         width    : CGFloat,
-         font     : Font,
-         textColor: Color
+    internal init(
+        chartData: T,
+        columns: [GridItem],
+        width: CGFloat,
+        font: Font,
+        textColor: Color
     ) {
         self.chartData = chartData
-        self.columns   = columns
-        self.width     = width
-        self.font      = font
+        self.columns = columns
+        self.width = width
+        self.font = font
         self.textColor = textColor
     }
     
@@ -41,13 +42,12 @@ internal struct Legends<T>: ViewModifier where T: CTChartData {
                                width: width,
                                font: font,
                                textColor: textColor)
-                        
                 }
             } else { content }
         }
     }
 }
-    
+
 extension View {
     /**
      Displays legends under the chart.
@@ -72,4 +72,3 @@ extension View {
                               textColor: textColor))
     }
 }
-

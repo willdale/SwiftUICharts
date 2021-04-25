@@ -15,7 +15,9 @@ import SwiftUI
  ```
  */
 public enum ColourFrom {
+    /// From BarStyle data model
     case barStyle
+    /// From each data point
     case dataPoints
 }
 

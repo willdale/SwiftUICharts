@@ -24,10 +24,10 @@ public enum OverlayType: Hashable {
      Text overlay
      
      # Parameters:
-        - text: Text the use as label.
-        - colour: Foreground colour.
-        - font: System font.
-        - rFactor: Distance the from center of chart.
+     - text: Text the use as label.
+     - colour: Foreground colour.
+     - font: System font.
+     - rFactor: Distance the from center of chart.
      0 is center, 1 is perimeter. It can go beyond 1 to
      place it outside.
      */
@@ -37,10 +37,10 @@ public enum OverlayType: Hashable {
      System icon overlay
      
      # Parameters:
-        - systemName: SF Symbols name.
-        - colour: Foreground colour.
-        - size: Image frame size.
-        - rFactor: Distance the from center of chart.
+     - systemName: SF Symbols name.
+     - colour: Foreground colour.
+     - size: Image frame size.
+     - rFactor: Distance the from center of chart.
      0 is center, 1 is perimeter. It can go beyond 1 to
      place it outside.
      */

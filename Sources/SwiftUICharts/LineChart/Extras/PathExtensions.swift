@@ -18,8 +18,8 @@ extension Path {
         range: Double,
         isFilled: Bool
     ) -> Path {
-        let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
-        let y : CGFloat = rect.height / CGFloat(range)
+        let x: CGFloat = rect.width / CGFloat(dataPoints.count - 1)
+        let y: CGFloat = rect.height / CGFloat(range)
         var path = Path()
         
         if dataPoints.count >= 2 {
@@ -31,11 +31,10 @@ extension Path {
             for index in 1 ..< dataPoints.count {
                 let nextPoint = CGPoint(x: CGFloat(index) * x,
                                         y: (CGFloat(dataPoints[index].value - minValue) * -y) + rect.height)
-                
                 path.addLine(to: nextPoint)
             }
             if isFilled {
-                path.addLine(to: CGPoint(x: CGFloat(dataPoints.count-1) * x,  y: rect.height))
+                path.addLine(to: CGPoint(x: CGFloat(dataPoints.count-1) * x, y: rect.height))
                 path.addLine(to: CGPoint(x: 0, y: rect.height))
                 path.closeSubpath()
             }
@@ -51,12 +50,12 @@ extension Path {
         range: Double,
         isFilled: Bool
     ) -> Path {
-        let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
-        let y : CGFloat = rect.height / CGFloat(range)
+        let x: CGFloat = rect.width / CGFloat(dataPoints.count - 1)
+        let y: CGFloat = rect.height / CGFloat(range)
         var path = Path()
         
-        let firstPoint = CGPoint(x: 0,
-                                 y: (CGFloat(dataPoints[0].value - minValue) * -y) + rect.height)
+        let firstPoint: CGPoint = CGPoint(x: 0,
+                                          y: (CGFloat(dataPoints[0].value - minValue) * -y) + rect.height)
         path.move(to: firstPoint)
         
         var previousPoint = firstPoint
@@ -65,7 +64,6 @@ extension Path {
         for index in 1 ..< dataPoints.count {
             let nextPoint = CGPoint(x: CGFloat(index) * x,
                                     y: (CGFloat(dataPoints[index].value - minValue) * -y) + rect.height)
-            
             path.addCurve(to: nextPoint,
                           control1: CGPoint(x: previousPoint.x + (nextPoint.x - previousPoint.x) / 2,
                                             y: previousPoint.y),
@@ -73,7 +71,6 @@ extension Path {
                                             y: nextPoint.y))
             lastIndex = index
             previousPoint = nextPoint
-                        
         }
         if isFilled {
             path.addLine(to: CGPoint(x: CGFloat(lastIndex) * x,
@@ -92,8 +89,8 @@ extension Path {
         minValue: Double,
         range: Double
     ) -> Path {
-        let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
-        let y : CGFloat = rect.height / CGFloat(range)
+        let x: CGFloat = rect.width / CGFloat(dataPoints.count - 1)
+        let y: CGFloat = rect.height / CGFloat(range)
         
         var path = Path()
         
@@ -129,8 +126,8 @@ extension Path {
         minValue: Double,
         range: Double
     ) -> Path {
-        let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
-        let y : CGFloat = rect.height / CGFloat(range)
+        let x: CGFloat = rect.width / CGFloat(dataPoints.count - 1)
+        let y: CGFloat = rect.height / CGFloat(range)
         
         var path = Path()
         
@@ -182,8 +179,8 @@ extension Path {
         range: Double,
         isFilled: Bool
     ) -> Path {
-        let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
-        let y : CGFloat = rect.height / CGFloat(range)
+        let x: CGFloat = rect.width / CGFloat(dataPoints.count - 1)
+        let y: CGFloat = rect.height / CGFloat(range)
         var path = Path()
         
         if dataPoints.count >= 2 {
@@ -204,10 +201,9 @@ extension Path {
                 if dataPoints[index].value != 0 {
                     path.addLine(to: nextPoint)
                 }
-                
             }
             if isFilled {
-                path.addLine(to: CGPoint(x: CGFloat(dataPoints.count-1) * x,  y: rect.height))
+                path.addLine(to: CGPoint(x: CGFloat(dataPoints.count-1) * x, y: rect.height))
                 path.addLine(to: CGPoint(x: 0, y: rect.height))
                 path.closeSubpath()
             }
@@ -223,8 +219,8 @@ extension Path {
         range: Double,
         isFilled: Bool
     ) -> Path {
-        let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
-        let y : CGFloat = rect.height / CGFloat(range)
+        let x: CGFloat = rect.width / CGFloat(dataPoints.count - 1)
+        let y: CGFloat = rect.height / CGFloat(range)
         var path = Path()
         
         var firstPoint: CGPoint = .zero
@@ -239,7 +235,7 @@ extension Path {
         }
         
         var previousPoint = firstPoint
-        var lastIndex : Int = 0
+        var lastIndex: Int = 0
         
         
         for index in 1 ..< dataPoints.count {
@@ -274,8 +270,8 @@ extension Path {
         minValue: Double,
         range: Double
     ) -> Path {
-        let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
-        let y : CGFloat = rect.height / CGFloat(range)
+        let x: CGFloat = rect.width / CGFloat(dataPoints.count - 1)
+        let y: CGFloat = rect.height / CGFloat(range)
         
         var path = Path()
         
@@ -315,8 +311,8 @@ extension Path {
         minValue: Double,
         range: Double
     ) -> Path {
-        let x : CGFloat = rect.width / CGFloat(dataPoints.count - 1)
-        let y : CGFloat = rect.height / CGFloat(range)
+        let x: CGFloat = rect.width / CGFloat(dataPoints.count - 1)
+        let y: CGFloat = rect.height / CGFloat(range)
         
         var path = Path()
         

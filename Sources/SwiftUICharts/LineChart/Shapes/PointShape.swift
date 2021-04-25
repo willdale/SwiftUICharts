@@ -13,35 +13,32 @@ import SwiftUI
 internal struct Point<T>: Shape where T: CTLineChartDataSet,
                                       T.DataPoint: CTStandardDataPointProtocol  {
     
-    private let dataSet     : T
+    private let dataSet: T
+    private let minValue: Double
+    private let range: Double
     
-    private let minValue : Double
-    private let range    : Double
-    
-        
-    internal init(dataSet   : T,
-                  minValue  : Double,
-                  range     : Double
+    internal init(
+        dataSet: T,
+        minValue: Double,
+        range: Double
     ) {
-        self.dataSet    = dataSet
-        self.minValue   = minValue
-        self.range      = range
+        self.dataSet = dataSet
+        self.minValue = minValue
+        self.range = range
     }
-   
+    
     internal func path(in rect: CGRect) -> Path {
         var path = Path()
         
         if dataSet.dataPoints.count >= 2 {
             
-            let x = rect.width / CGFloat(dataSet.dataPoints.count-1)
-            let y = rect.height / CGFloat(range)
+            let x: CGFloat = rect.width / CGFloat(dataSet.dataPoints.count-1)
+            let y: CGFloat = rect.height / CGFloat(range)
+            let offset: CGFloat = dataSet.pointStyle.pointSize / CGFloat(2)
             
-            let firstPointX : CGFloat = (CGFloat(0) * x) -  dataSet.pointStyle.pointSize / CGFloat(2)
-            let firstPointY : CGFloat = ((CGFloat(dataSet.dataPoints[0].value - minValue) * -y) + rect.height) -  dataSet.pointStyle.pointSize / CGFloat(2)
-            let firstPoint  : CGRect  = CGRect(x     : firstPointX,
-                                               y     : firstPointY,
-                                               width :  dataSet.pointStyle.pointSize,
-                                               height:  dataSet.pointStyle.pointSize)
+            let firstPointX: CGFloat = (CGFloat(0) * x) - offset
+            let firstPointY: CGFloat = ((CGFloat(dataSet.dataPoints[0].value - minValue) * -y) + rect.height) - offset
+            let firstPoint: CGRect = CGRect(x: firstPointX, y: firstPointY, width: dataSet.pointStyle.pointSize, height: dataSet.pointStyle.pointSize)
             if !dataSet.style.ignoreZero {
                 pointSwitch(&path, firstPoint)
             } else {
@@ -51,12 +48,9 @@ internal struct Point<T>: Shape where T: CTLineChartDataSet,
             }
             
             for index in 1 ..< dataSet.dataPoints.count - 1 {
-                let pointX : CGFloat = (CGFloat(index) * x) -  dataSet.pointStyle.pointSize / CGFloat(2)
-                let pointY : CGFloat = ((CGFloat(dataSet.dataPoints[index].value - minValue) * -y) + rect.height) -  dataSet.pointStyle.pointSize / CGFloat(2)
-                let point  : CGRect  = CGRect(x     : pointX,
-                                              y     : pointY,
-                                              width :  dataSet.pointStyle.pointSize,
-                                              height:  dataSet.pointStyle.pointSize)
+                let pointX: CGFloat = (CGFloat(index) * x) -  offset
+                let pointY: CGFloat = ((CGFloat(dataSet.dataPoints[index].value - minValue) * -y) + rect.height) - offset
+                let point: CGRect = CGRect(x: pointX, y: pointY, width: dataSet.pointStyle.pointSize, height: dataSet.pointStyle.pointSize)
                 if !dataSet.style.ignoreZero {
                     pointSwitch(&path, point)
                 } else {
@@ -66,12 +60,9 @@ internal struct Point<T>: Shape where T: CTLineChartDataSet,
                 }
             }
             
-            let lastPointX : CGFloat = (CGFloat(dataSet.dataPoints.count-1) * x) - dataSet.pointStyle.pointSize / CGFloat(2)
-            let lastPointY : CGFloat = ((CGFloat(dataSet.dataPoints[dataSet.dataPoints.count-1].value - minValue) * -y) + rect.height) - dataSet.pointStyle.pointSize / CGFloat(2)
-            let lastPoint  : CGRect  = CGRect(x     : lastPointX,
-                                              y     : lastPointY,
-                                              width :  dataSet.pointStyle.pointSize,
-                                              height:  dataSet.pointStyle.pointSize)
+            let lastPointX: CGFloat = (CGFloat(dataSet.dataPoints.count-1) * x) - offset
+            let lastPointY: CGFloat = ((CGFloat(dataSet.dataPoints[dataSet.dataPoints.count-1].value - minValue) * -y) + rect.height) - offset
+            let lastPoint: CGRect = CGRect(x: lastPointX, y: lastPointY, width: dataSet.pointStyle.pointSize, height: dataSet.pointStyle.pointSize)
             if !dataSet.style.ignoreZero {
                 pointSwitch(&path, lastPoint)
             } else {
@@ -79,9 +70,7 @@ internal struct Point<T>: Shape where T: CTLineChartDataSet,
                     pointSwitch(&path, lastPoint)
                 }
             }
-            
         }
-        
         return path
     }
     

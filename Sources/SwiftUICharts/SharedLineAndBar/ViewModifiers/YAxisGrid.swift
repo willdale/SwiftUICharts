@@ -12,7 +12,11 @@ import SwiftUI
  */
 internal struct YAxisGrid<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
-    @ObservedObject var chartData : T
+    @ObservedObject private var chartData: T
+    
+    internal init(chartData: T) {
+        self.chartData = chartData
+    }
     
     internal func body(content: Content) -> some View {
         ZStack {
@@ -58,7 +62,7 @@ extension View {
      
      - Parameter chartData: Chart data model.
      - Returns: A  new view containing the chart with horizontal lines under it.
-    */
+     */
     public func yAxisGrid<T: CTLineBarChartDataProtocol>(chartData: T) -> some View {
         self.modifier(YAxisGrid<T>(chartData: chartData))
     }

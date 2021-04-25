@@ -9,10 +9,10 @@ import SwiftUI
 
 // MARK: - Data Set
 extension CTLineBarChartDataProtocol {
-    public var range : Double {
+    public var range: Double {
         get {
-            var _lowestValue  : Double
-            var _highestValue : Double
+            var _lowestValue: Double
+            var _highestValue: Double
             
             switch self.chartStyle.baseline {
             case .minimumValue:
@@ -34,7 +34,7 @@ extension CTLineBarChartDataProtocol {
         }
     }
     
-    public var minValue : Double {
+    public var minValue: Double {
         get {
             switch self.chartStyle.baseline {
             case .minimumValue:
@@ -47,7 +47,7 @@ extension CTLineBarChartDataProtocol {
         }
     }
     
-    public var maxValue : Double {
+    public var maxValue: Double {
         get {
             switch self.chartStyle.topLine {
             case .maximumValue:
@@ -58,33 +58,24 @@ extension CTLineBarChartDataProtocol {
         }
     }
     
-    public var average  : Double {
+    public var average: Double {
         return self.dataSets.average()
     }
 }
 
-
 // MARK: - Y Labels
 extension CTLineBarChartDataProtocol {
     public func getYLabels(_ specifier: String) -> [String] {
-        
         switch self.chartStyle.yAxisLabelType {
         case .numeric:
-            
-            var labels      : [String]  = []
-            let dataRange   : Double = self.range
-            let minValue    : Double = self.minValue
-            let range       : Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels-1)
-            labels.append(String(format: specifier, minValue))
-            for index in 1...self.chartStyle.yAxisNumberOfLabels-1 {
-                let labelValue = minValue + range * Double(index)
-                let labelString = String(format: specifier, labelValue)
-                labels.append(labelString)
-            }
+            let dataRange: Double = self.range
+            let minValue: Double = self.minValue
+            let range: Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels-1)
+            let firstLabel = [String(format: specifier, minValue)]
+            let otherLabels = (1...self.chartStyle.yAxisNumberOfLabels-1).map { String(format: specifier, minValue + range * Double($0)) }
+            let labels = firstLabel + otherLabels
             return labels
-            
         case .custom:
-            
             return self.yAxisLabels ?? []
         }
     }

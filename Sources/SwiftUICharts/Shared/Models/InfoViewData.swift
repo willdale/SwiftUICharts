@@ -13,11 +13,11 @@ import SwiftUI
 public struct InfoViewData<DP: CTDataPointBaseProtocol> {
     
     /**
-    Is there currently input (touch or click) on the chart.
-    
-    Set from TouchOverlay via the relevant protocol.
-    
-    Used by `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
+     Is there currently input (touch or click) on the chart.
+     
+     Set from TouchOverlay via the relevant protocol.
+     
+     Used by `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
      */
     var isTouchCurrent: Bool = false
     
@@ -38,7 +38,7 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
      Used by `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
      */
     var touchSpecifier: String = "%.0f"
-
+    
     /**
      X axis posistion of the overlay box.
      
@@ -48,7 +48,7 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
      
      Used by `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
      */
-   var touchLocation: CGPoint = .zero
+    var touchLocation: CGPoint = .zero
     
     /**
      Size of the chart.

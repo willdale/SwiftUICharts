@@ -12,7 +12,7 @@ import SwiftUI
  */
 public struct CustomNoDataView<T>: View where T: CTChartData {
     
-    let chartData : T
+    private let chartData: T
     
     init(chartData: T) {
         self.chartData = chartData

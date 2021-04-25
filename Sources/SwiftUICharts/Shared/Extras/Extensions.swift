@@ -13,7 +13,10 @@ extension View {
      
      [SO](https://stackoverflow.com/a/62962375)
      */
-    @ViewBuilder func `if`<Transform: View>(_ condition: Bool, transform: (Self) -> Transform) -> some View {
+    @ViewBuilder func `if`<Transform: View>(
+        _ condition: Bool,
+        transform: (Self) -> Transform
+    ) -> some View {
         if condition { transform(self) }
         else { self }
     }
@@ -24,10 +27,11 @@ extension View {
      View modifier to conditionally add a view modifier else add a different one.
      
      [Five Stars](https://fivestars.blog/swiftui/conditional-modifiers.html)
-    */
-    @ViewBuilder func `ifElse`<TrueContent: View, FalseContent: View>(_ condition: Bool,
-                                                         if ifTransform: (Self) -> TrueContent,
-                                                         else elseTransform: (Self) -> FalseContent
+     */
+    @ViewBuilder func `ifElse`<TrueContent: View, FalseContent: View>(
+        _ condition: Bool,
+        if ifTransform: (Self) -> TrueContent,
+        else elseTransform: (Self) -> FalseContent
     ) -> some View {
         if condition {
             ifTransform(self)
@@ -37,15 +41,16 @@ extension View {
     }
 }
 
-
-//
 extension View {
     /**
      Start animation when the view appears.
      
      [HWS](https://www.hackingwithswift.com/quick-start/swiftui/how-to-start-an-animation-immediately-after-a-view-appears)
      */
-    func animateOnAppear(using animation: Animation = Animation.easeInOut(duration: 1), _ action: @escaping () -> Void) -> some View {
+    func animateOnAppear(
+        using animation: Animation = Animation.easeInOut(duration: 1),
+        _ action: @escaping () -> Void
+    ) -> some View {
         return onAppear {
             withAnimation(animation) {
                 action()
@@ -58,7 +63,10 @@ extension View {
      
      [HWS](https://www.hackingwithswift.com/quick-start/swiftui/how-to-start-an-animation-immediately-after-a-view-appears)
      */
-    func animateOnDisappear(using animation: Animation = Animation.easeInOut(duration: 1), _ action: @escaping () -> Void) -> some View {
+    func animateOnDisappear(
+        using animation: Animation = Animation.easeInOut(duration: 1),
+        _ action: @escaping () -> Void
+    ) -> some View {
         return onDisappear {
             withAnimation(animation) {
                 action()

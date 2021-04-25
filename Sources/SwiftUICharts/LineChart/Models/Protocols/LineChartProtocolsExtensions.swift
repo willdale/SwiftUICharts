@@ -21,14 +21,13 @@ extension CTLineChartDataProtocol {
         range: Double,
         ignoreZero: Bool
     ) -> CGPoint {
-        
-        let path = Self.getPath(lineType     : lineType,
-                                rect         : rect,
-                                dataPoints   : dataPoints,
-                                minValue     : minValue,
-                                range        : range,
-                                isFilled     : false,
-                                ignoreZero   : ignoreZero)
+        let path = Self.getPath(lineType: lineType,
+                                rect: rect,
+                                dataPoints: dataPoints,
+                                minValue: minValue,
+                                range: range,
+                                isFilled: false,
+                                ignoreZero: ignoreZero)
         return Self.locationOnPath(Self.getPercentageOfPath(path: path, touchLocation: touchLocation), path)
     }
 }
@@ -54,52 +53,51 @@ extension CTLineChartDataProtocol {
         minValue: Double,
         range: Double,
         isFilled: Bool,
-        ignoreZero : Bool
+        ignoreZero: Bool
     ) -> Path {
         switch lineType {
         case .line:
             switch ignoreZero {
             case false:
-                return Path.straightLine(rect       : rect,
-                                         dataPoints : dataPoints,
-                                         minValue   : minValue,
-                                         range      : range,
-                                         isFilled   : isFilled)
+                return Path.straightLine(rect: rect,
+                                         dataPoints: dataPoints,
+                                         minValue: minValue,
+                                         range: range,
+                                         isFilled: isFilled)
             case true:
-                return Path.straightLineIgnoreZero(rect       : rect,
-                                                   dataPoints : dataPoints,
-                                                   minValue   : minValue,
-                                                   range      : range,
-                                                   isFilled   : isFilled)
+                return Path.straightLineIgnoreZero(rect: rect,
+                                                   dataPoints: dataPoints,
+                                                   minValue: minValue,
+                                                   range: range,
+                                                   isFilled: isFilled)
             }
         case .curvedLine:
             switch ignoreZero {
             case false:
-                return Path.curvedLine(rect       : rect,
-                                       dataPoints : dataPoints,
-                                       minValue   : minValue,
-                                       range      : range,
-                                       isFilled   : isFilled)
+                return Path.curvedLine(rect: rect,
+                                       dataPoints: dataPoints,
+                                       minValue: minValue,
+                                       range: range,
+                                       isFilled: isFilled)
             case true:
-                return Path.curvedLineIgnoreZero(rect       : rect,
-                                                 dataPoints : dataPoints,
-                                                 minValue   : minValue,
-                                                 range      : range,
-                                                 isFilled   : isFilled)
+                return Path.curvedLineIgnoreZero(rect: rect,
+                                                 dataPoints: dataPoints,
+                                                 minValue: minValue,
+                                                 range: range,
+                                                 isFilled: isFilled)
             }
         }
     }
-
+    
     /**
      How far along the path the touch or pointer is as a percent of the total.
-     .
      - Parameters:
         - path: Path being acted on.
         - touchLocation: Location of the touch or pointer input.
      - Returns: How far along the path the touch is.
      */
     static func getPercentageOfPath(path: Path, touchLocation: CGPoint) -> CGFloat {
-        let totalLength   = self.getTotalLength(of: path)
+        let totalLength = self.getTotalLength(of: path)
         let lengthToTouch = self.getLength(to: touchLocation, on: path)
         let pointLocation = lengthToTouch / totalLength
         return pointLocation
@@ -115,9 +113,9 @@ extension CTLineChartDataProtocol {
      - Returns: Total length of the path.
      */
     static func getTotalLength(of path: Path) -> CGFloat {
-        var total       : CGFloat = 0
+        var total: CGFloat = 0
         var currentPoint: CGPoint = .zero
-        path.forEach { (element) in
+        path.forEach { element in
             switch element {
             case .move(to: let first):
                 currentPoint = first
@@ -147,10 +145,10 @@ extension CTLineChartDataProtocol {
      - Returns: Length of path to touch point.
      */
     static func getLength(to touchLocation: CGPoint, on path: Path) -> CGFloat {
-        var total       : CGFloat = 0
+        var total: CGFloat = 0
         var currentPoint: CGPoint = .zero
-        var isComplete  : Bool    = false
-        path.forEach { (element) in
+        var isComplete: Bool = false
+        path.forEach { element in
             if isComplete { return }
             switch element {
             case .move(to: let point):
@@ -162,8 +160,8 @@ extension CTLineChartDataProtocol {
                 }
             case .line(to: let nextPoint):
                 if touchLocation.x < nextPoint.x {
-                    total += distanceToTouch(from  : currentPoint,
-                                             to    : nextPoint,
+                    total += distanceToTouch(from: currentPoint,
+                                             to: nextPoint,
                                              touchX: touchLocation.x)
                     isComplete = true
                     return
@@ -173,8 +171,8 @@ extension CTLineChartDataProtocol {
                 }
             case .curve(to: let nextPoint, control1: _, control2: _ ):
                 if touchLocation.x < nextPoint.x {
-                    total += distanceToTouch(from  : currentPoint,
-                                             to    : nextPoint,
+                    total += distanceToTouch(from: currentPoint,
+                                             to: nextPoint,
                                              touchX: touchLocation.x)
                     isComplete = true
                     return
@@ -184,8 +182,8 @@ extension CTLineChartDataProtocol {
                 }
             case .quadCurve(to: let nextPoint, control: _):
                 if touchLocation.x < nextPoint.x {
-                    total += distanceToTouch(from  : currentPoint,
-                                             to    : nextPoint,
+                    total += distanceToTouch(from: currentPoint,
+                                             to: nextPoint,
                                              touchX: touchLocation.x)
                     isComplete = true
                     return
@@ -201,7 +199,7 @@ extension CTLineChartDataProtocol {
         }
         return total
     }
-
+    
     /**
      Returns a point on the path based on the location of the touch
      or pointer input on the X axis.
@@ -216,7 +214,7 @@ extension CTLineChartDataProtocol {
         CGPoint(x: touchX,
                 y: from.y + (touchX - from.x) * ((to.y - from.y) / (to.x - from.x)))
     }
-
+    
     /**
      Returns the length along the path from a point to the touch locatiions X axis.
      
@@ -229,7 +227,7 @@ extension CTLineChartDataProtocol {
     static func distanceToTouch(from: CGPoint, to: CGPoint, touchX: CGFloat) -> CGFloat {
         distance(from: from, to: relativePoint(from: from, to: to, touchX: touchX))
     }
-
+    
     /**
      Returns the distance between two points.
      
@@ -251,8 +249,8 @@ extension CTLineChartDataProtocol {
      [SwiftUI Lab](https://swiftui-lab.com/swiftui-animations-part2/)
      
      - Parameters:
-       - percent: The distance along the path as a percentage.
-       - path: Path to find location on.
+        - percent: The distance along the path as a percentage.
+        - path: Path to find location on.
      - Returns: Point on path.
      */
     static func locationOnPath(_ percent: CGFloat, _ path: Path) -> CGPoint {
@@ -264,7 +262,7 @@ extension CTLineChartDataProtocol {
         let pct = percent > 1 ? 0 : (percent < 0 ? 1 : percent)
         
         let from = pct > comp ? comp : pct
-        let to   = pct > comp ? 1 : pct + diff
+        let to = pct > comp ? 1 : pct + diff
         let trimmedPoint = path.trimmedPath(from: from, to: to)
         
         return CGPoint(x: trimmedPoint.boundingRect.midX,
@@ -274,14 +272,15 @@ extension CTLineChartDataProtocol {
 
 // MARK: - Markers
 extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
-
+    
     internal func markerSubView<DS: CTLineChartDataSet,
-                                DP: CTStandardDataPointProtocol>
-    (dataSet         : DS,
-     dataPoints      : [DP],
-     lineType        : LineType,
-     touchLocation   : CGPoint,
-     chartSize       : CGRect) -> some View {
+                                DP: CTStandardDataPointProtocol>(
+        dataSet: DS,
+        dataPoints: [DP],
+        lineType: LineType,
+        touchLocation: CGPoint,
+        chartSize: CGRect
+    ) -> some View {
         Group {
             switch self.chartStyle.markerType {
             case .none:
@@ -344,7 +343,7 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
                         .stroke(colour, style: style)
                     
                     IndicatorSwitch(indicator: indicator, location: position)
-                        
+                    
                     
                 case .point:
                     
@@ -481,9 +480,9 @@ extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
  Sub view for laying out and styling the indicator dot.
  */
 internal struct IndicatorSwitch: View {
-
+    
     private let indicator: Dot
-    private let location : CGPoint
+    private let location: CGPoint
     
     internal init(indicator: Dot, location: CGPoint) {
         self.indicator = indicator
@@ -494,10 +493,11 @@ internal struct IndicatorSwitch: View {
         switch indicator {
         case .none: EmptyView()
         case .style(let style):
-            PosistionIndicator(fillColour: style.fillColour, lineColour: style.lineColour, lineWidth: style.lineWidth)
+            PosistionIndicator(fillColour: style.fillColour,
+                               lineColour: style.lineColour,
+                               lineWidth: style.lineWidth)
                 .frame(width: style.size, height: style.size)
                 .position(location)
-                
         }
     }
     
@@ -505,7 +505,7 @@ internal struct IndicatorSwitch: View {
 
 // MARK: - Legends
 extension CTLineChartDataProtocol where Self.Set.ID == UUID,
-                                        Self.Set : CTLineChartDataSet {
+                                        Self.Set: CTLineChartDataSet {
     internal func setupLegends() {
         lineLegendSetup(dataSet: dataSets)
     }
@@ -513,49 +513,47 @@ extension CTLineChartDataProtocol where Self.Set.ID == UUID,
 
 extension CTLineChartDataProtocol where Self.Set == MultiLineDataSet {
     internal func setupLegends() {
-        for dataSet in dataSets.dataSets {
-            lineLegendSetup(dataSet: dataSet)
-        }
+        dataSets.dataSets.forEach { lineLegendSetup(dataSet: $0) }
     }
 }
+
 extension CTLineChartDataProtocol {
     internal func lineLegendSetup<DS: CTLineChartDataSet>(dataSet: DS) where DS.ID == UUID {
         if dataSet.style.lineColour.colourType == .colour,
            let colour = dataSet.style.lineColour.colour
         {
-            self.legends.append(LegendData(id         : dataSet.id,
-                                           legend     : dataSet.legendTitle,
-                                           colour     : ColourStyle(colour: colour),
+            self.legends.append(LegendData(id: dataSet.id,
+                                           legend: dataSet.legendTitle,
+                                           colour: ColourStyle(colour: colour),
                                            strokeStyle: dataSet.style.strokeStyle,
-                                           prioity    : 1,
-                                           chartType  : .line))
-            
+                                           prioity: 1,
+                                           chartType: .line))
         } else if dataSet.style.lineColour.colourType == .gradientColour,
                   let colours = dataSet.style.lineColour.colours
         {
-            self.legends.append(LegendData(id         : dataSet.id,
-                                           legend     : dataSet.legendTitle,
-                                           colour     : ColourStyle(colours: colours,
-                                                                    startPoint: .leading,
-                                                                    endPoint: .trailing),
+            self.legends.append(LegendData(id: dataSet.id,
+                                           legend: dataSet.legendTitle,
+                                           colour: ColourStyle(colours: colours,
+                                                               startPoint: .leading,
+                                                               endPoint: .trailing),
                                            strokeStyle: dataSet.style.strokeStyle,
-                                           prioity    : 1,
-                                           chartType  : .line))
-            
+                                           prioity: 1,
+                                           chartType: .line))
         } else if dataSet.style.lineColour.colourType == .gradientStops,
                   let stops = dataSet.style.lineColour.stops
         {
-            self.legends.append(LegendData(id         : dataSet.id,
-                                           legend     : dataSet.legendTitle,
-                                           colour     : ColourStyle(stops: stops,
-                                                                    startPoint: .leading,
-                                                                    endPoint: .trailing),
+            self.legends.append(LegendData(id: dataSet.id,
+                                           legend: dataSet.legendTitle,
+                                           colour: ColourStyle(stops: stops,
+                                                               startPoint: .leading,
+                                                               endPoint: .trailing),
                                            strokeStyle: dataSet.style.strokeStyle,
-                                           prioity    : 1,
-                                           chartType  : .line))
+                                           prioity: 1,
+                                           chartType: .line))
         }
     }
 }
+
 extension CTLineChartDataProtocol where Self.Set.ID == UUID,
                                         Self.Set: CTRangedLineChartDataSet,
                                         Self.Set.Styling: CTRangedLineStyle {
@@ -563,36 +561,34 @@ extension CTLineChartDataProtocol where Self.Set.ID == UUID,
         if dataSets.style.fillColour.colourType == .colour,
            let colour = dataSets.style.fillColour.colour
         {
-            self.legends.append(LegendData(id         : UUID(),
-                                           legend     : dataSets.legendFillTitle,
-                                           colour     : ColourStyle(colour: colour),
+            self.legends.append(LegendData(id: UUID(),
+                                           legend: dataSets.legendFillTitle,
+                                           colour: ColourStyle(colour: colour),
                                            strokeStyle: dataSets.style.strokeStyle,
-                                           prioity    : 1,
-                                           chartType  : .bar))
-            
+                                           prioity: 1,
+                                           chartType: .bar))
         } else if dataSets.style.fillColour.colourType == .gradientColour,
                   let colours = dataSets.style.fillColour.colours
         {
-            self.legends.append(LegendData(id         : UUID(),
-                                           legend     : dataSets.legendFillTitle,
-                                           colour     : ColourStyle(colours: colours,
-                                                                    startPoint: .leading,
-                                                                    endPoint: .trailing),
+            self.legends.append(LegendData(id: UUID(),
+                                           legend: dataSets.legendFillTitle,
+                                           colour: ColourStyle(colours: colours,
+                                                               startPoint: .leading,
+                                                               endPoint: .trailing),
                                            strokeStyle: dataSets.style.strokeStyle,
-                                           prioity    : 1,
-                                           chartType  : .bar))
-            
+                                           prioity: 1,
+                                           chartType: .bar))
         } else if dataSets.style.fillColour.colourType == .gradientStops,
                   let stops = dataSets.style.fillColour.stops
         {
-            self.legends.append(LegendData(id         : UUID(),
-                                           legend     : dataSets.legendFillTitle,
-                                           colour     : ColourStyle(stops: stops,
-                                                                    startPoint: .leading,
-                                                                    endPoint: .trailing),
+            self.legends.append(LegendData(id: UUID(),
+                                           legend: dataSets.legendFillTitle,
+                                           colour: ColourStyle(stops: stops,
+                                                               startPoint: .leading,
+                                                               endPoint: .trailing),
                                            strokeStyle: dataSets.style.strokeStyle,
-                                           prioity    : 1,
-                                           chartType  : .bar))
+                                           prioity: 1,
+                                           chartType: .bar))
         }
     }
 }
@@ -602,8 +598,8 @@ extension CTLineChartDataProtocol where Set: CTLineChartDataSet {
     public func getAccessibility() -> some View {
         ForEach(dataSets.dataPoints.indices, id: \.self) { point in
             
-            AccessibilityRectangle(dataPointCount : self.dataSets.dataPoints.count,
-                                   dataPointNo    : point)
+            AccessibilityRectangle(dataPointCount: self.dataSets.dataPoints.count,
+                                   dataPointNo: point)
                 
                 .foregroundColor(Color(.gray).opacity(0.000000001))
                 .accessibilityLabel(Text("\(self.metadata.title)"))

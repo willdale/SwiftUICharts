@@ -12,12 +12,12 @@ import SwiftUI
  */
 public struct ColourStyle: CTColourStyle, Hashable {
     
-    public var colourType  : ColourType
-    public var colour      : Color?
-    public var colours     : [Color]?
-    public var stops       : [GradientStop]?
-    public var startPoint  : UnitPoint?
-    public var endPoint    : UnitPoint?
+    public var colourType: ColourType
+    public var colour: Color?
+    public var colours: [Color]?
+    public var stops: [GradientStop]?
+    public var startPoint: UnitPoint?
+    public var endPoint: UnitPoint?
     
     // MARK: Single colour
     /// Single Colour
@@ -26,11 +26,11 @@ public struct ColourStyle: CTColourStyle, Hashable {
     public init(colour: Color = Color(.red)
     ) {
         self.colourType = .colour
-        self.colour     = colour
-        self.colours    = nil
-        self.stops      = nil
+        self.colour = colour
+        self.colours = nil
+        self.stops = nil
         self.startPoint = nil
-        self.endPoint   = nil
+        self.endPoint = nil
     }
     
     // MARK: Gradient colour
@@ -39,17 +39,17 @@ public struct ColourStyle: CTColourStyle, Hashable {
     ///   - colours: Colours for Gradient.
     ///   - startPoint: Start point for Gradient.
     ///   - endPoint: End point for Gradient.
-    public init(colours     : [Color]    =  [Color(.red), Color(.blue)],
-                startPoint  : UnitPoint  =  .leading,
-                endPoint    : UnitPoint  =  .trailing
-                
+    public init(
+        colours: [Color] =  [Color(.red), Color(.blue)],
+        startPoint: UnitPoint =  .leading,
+        endPoint: UnitPoint =  .trailing
     ) {
-        self.colourType  = .gradientColour
-        self.colour     = nil
-        self.colours    = colours
-        self.stops      = nil
+        self.colourType = .gradientColour
+        self.colour = nil
+        self.colours = colours
+        self.stops = nil
         self.startPoint = startPoint
-        self.endPoint   = endPoint
+        self.endPoint = endPoint
     }
     
     // MARK: Gradient with stops
@@ -58,15 +58,16 @@ public struct ColourStyle: CTColourStyle, Hashable {
     ///   - stops: Colours and Stops for Gradient with stop control.
     ///   - startPoint: Start point for Gradient.
     ///   - endPoint: End point for Gradient.
-    public init(stops       : [GradientStop]    = [GradientStop(color: Color(.red), location: 0.0)],
-                startPoint  : UnitPoint         =  .leading,
-                endPoint    : UnitPoint         =  .trailing
+    public init(
+        stops: [GradientStop] = [GradientStop(color: Color(.red), location: 0.0)],
+        startPoint: UnitPoint = .leading,
+        endPoint: UnitPoint = .trailing
     ) {
-        self.colourType     = .gradientStops
-        self.colour         = nil
-        self.colours        = nil
-        self.stops          = stops
-        self.startPoint     = startPoint
-        self.endPoint       = endPoint
+        self.colourType = .gradientStops
+        self.colour = nil
+        self.colours = nil
+        self.stops = stops
+        self.startPoint = startPoint
+        self.endPoint = endPoint
     }
 }

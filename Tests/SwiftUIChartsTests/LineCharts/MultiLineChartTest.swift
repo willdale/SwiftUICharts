@@ -134,8 +134,8 @@ final class MultiLineChartTest: XCTestCase {
         // Data set 1 - point 1
         let touchLocationOneOne: CGPoint = CGPoint(x: 5, y: 25)
         let testOneOne: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets.dataSets[0],
-                                                          touchLocation: touchLocationOneOne,
-                                                          chartSize: rect)!
+                                                             touchLocation: touchLocationOneOne,
+                                                             chartSize: rect)!
         let testAgainstOneOne = CGPoint(x: 0, y: 100)
         XCTAssertEqual(testOneOne.x, testAgainstOneOne.x)
         XCTAssertEqual(testOneOne.y, testAgainstOneOne.y)
@@ -143,20 +143,20 @@ final class MultiLineChartTest: XCTestCase {
         // Data set 1 - point 3
         let touchLocationOneThree: CGPoint = CGPoint(x: 66, y: 25)
         let testOneThree: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets.dataSets[0],
-                                                          touchLocation: touchLocationOneThree,
-                                                          chartSize: rect)!
+                                                               touchLocation: touchLocationOneThree,
+                                                               chartSize: rect)!
         let testAgainstOneThree = CGPoint(x: 66.66, y: 77.77)
         XCTAssertEqual(testOneThree.x, testAgainstOneThree.x, accuracy: 0.01)
         XCTAssertEqual(testOneThree.y, testAgainstOneThree.y, accuracy: 0.01)
-
+        
         
         
         
         // Data set 2 - point 2
         let touchLocationTwoTwo: CGPoint = CGPoint(x: 66, y: 25)
         let testTwoTwo: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets.dataSets[0],
-                                                          touchLocation: touchLocationTwoTwo,
-                                                          chartSize: rect)!
+                                                             touchLocation: touchLocationTwoTwo,
+                                                             chartSize: rect)!
         let testAgainstTwoTwo = CGPoint(x: 66.66, y: 77.77)
         XCTAssertEqual(testTwoTwo.x, testAgainstTwoTwo.x, accuracy: 0.01)
         XCTAssertEqual(testTwoTwo.y, testAgainstTwoTwo.y, accuracy: 0.01)
@@ -164,8 +164,8 @@ final class MultiLineChartTest: XCTestCase {
         // Data set 2 - point 4
         let touchLocationTwoFour: CGPoint = CGPoint(x: 5, y: 25)
         let testTwoFour: CGPoint = chartData.getPointLocation(dataSet: chartData.dataSets.dataSets[0],
-                                                          touchLocation: touchLocationTwoFour,
-                                                          chartSize: rect)!
+                                                              touchLocation: touchLocationTwoFour,
+                                                              chartSize: rect)!
         let testAgainstTwoFour = CGPoint(x: 0, y: 100)
         XCTAssertEqual(testTwoFour.x, testAgainstTwoFour.x)
         XCTAssertEqual(testTwoFour.y, testAgainstTwoFour.y)
