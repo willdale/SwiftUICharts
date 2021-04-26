@@ -8,36 +8,37 @@
 import SwiftUI
 
 internal struct ValueLabelCenterSubView<T>: View where T: CTLineBarChartDataProtocol {
-
-    private let chartData       : T
-    private let markerValue     : Double
-    private let specifier       : String
-    private let labelFont       : Font
-    private let labelColour     : Color
-    private let labelBackground : Color
-    private let lineColour      : Color
-    private let strokeStyle     : StrokeStyle
     
-    internal init(chartData       : T,
-                  markerValue     : Double,
-                  specifier       : String,
-                  labelFont       : Font,
-                  labelColour     : Color,
-                  labelBackground : Color,
-                  lineColour      : Color,
-                  strokeStyle     : StrokeStyle
+    private let chartData: T
+    private let markerValue: Double
+    private let specifier: String
+    private let labelFont: Font
+    private let labelColour: Color
+    private let labelBackground: Color
+    private let lineColour: Color
+    private let strokeStyle: StrokeStyle
+    
+    internal init(
+        chartData: T,
+        markerValue: Double,
+        specifier: String,
+        labelFont: Font,
+        labelColour: Color,
+        labelBackground: Color,
+        lineColour: Color,
+        strokeStyle: StrokeStyle
     ) {
-        self.chartData       = chartData
-        self.markerValue     = markerValue
-        self.specifier       = specifier
-        self.labelFont       = labelFont
-        self.labelColour     = labelColour
+        self.chartData = chartData
+        self.markerValue = markerValue
+        self.specifier = specifier
+        self.labelFont = labelFont
+        self.labelColour = labelColour
         self.labelBackground = labelBackground
-        self.lineColour      = lineColour
-        self.strokeStyle     = strokeStyle
+        self.lineColour = lineColour
+        self.strokeStyle = strokeStyle
     }
     
-    @State private var startAnimation : Bool = false
+    @State private var startAnimation: Bool = false
     
     var body: some View {
         Text("\(markerValue, specifier: specifier)")
@@ -56,7 +57,5 @@ internal struct ValueLabelCenterSubView<T>: View where T: CTLineBarChartDataProt
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            
     }
 }
-

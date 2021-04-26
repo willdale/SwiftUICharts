@@ -12,23 +12,27 @@ import SwiftUI
  */
 internal struct Legends<T>: ViewModifier where T: CTChartData {
     
-    @ObservedObject var chartData: T
-    private let columns     : [GridItem]
-    private let width       : CGFloat
-    private let font        : Font
-    private let textColor   : Color
+    @ObservedObject private var chartData: T
+    private let columns: [GridItem]
+    private let width: CGFloat
+    private let font: Font
+    private let textColor: Color
+    private let topPadding: CGFloat
     
-    init(chartData: T,
-         columns  : [GridItem],
-         width    : CGFloat,
-         font     : Font,
-         textColor: Color
+    internal init(
+        chartData: T,
+        columns: [GridItem],
+        width: CGFloat,
+        font: Font,
+        textColor: Color,
+        topPadding: CGFloat
     ) {
         self.chartData = chartData
-        self.columns   = columns
-        self.width     = width
-        self.font      = font
+        self.columns = columns
+        self.width = width
+        self.font = font
         self.textColor = textColor
+        self.topPadding = topPadding
     }
     
     internal func body(content: Content) -> some View {
@@ -41,13 +45,13 @@ internal struct Legends<T>: ViewModifier where T: CTChartData {
                                width: width,
                                font: font,
                                textColor: textColor)
-                        
+                        .padding(.top, topPadding)
                 }
             } else { content }
         }
     }
 }
-    
+
 extension View {
     /**
      Displays legends under the chart.
@@ -63,13 +67,14 @@ extension View {
         columns: [GridItem] = [GridItem(.flexible())],
         iconWidth: CGFloat = 40,
         font: Font = .caption,
-        textColor: Color = Color.primary
+        textColor: Color = Color.primary,
+        topPadding: CGFloat = 18
     ) -> some View {
         self.modifier(Legends(chartData: chartData,
                               columns: columns,
                               width: iconWidth,
                               font: font,
-                              textColor: textColor))
+                              textColor: textColor,
+                              topPadding: topPadding))
     }
 }
-

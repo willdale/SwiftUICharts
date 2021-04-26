@@ -12,11 +12,12 @@ import SwiftUI
  A protocol to extend functionality of `CTLineBarChartDataProtocol` specifically for Line Charts.
  */
 public protocol CTLineChartDataProtocol: CTLineBarChartDataProtocol {
-
+    
     /// A type representing opaque View
-    associatedtype Points : View
+    associatedtype Points: View
+    
     /// A type representing opaque View
-    associatedtype Access : View
+    associatedtype Access: View
     
     /**
      Displays Shapes over the data points.
@@ -37,26 +38,33 @@ public protocol CTLineChartDataProtocol: CTLineBarChartDataProtocol {
 /**
  A protocol to extend functionality of `CTLineBarChartStyle` specifically for  Line Charts.
  */
-public protocol CTLineChartStyle : CTLineBarChartStyle {}
+public protocol CTLineChartStyle: CTLineBarChartStyle {}
 
 /**
  Protocol to set up the styling for individual lines.
  */
 public protocol CTLineStyle {
     /// Drawing style of the line.
-    var lineType   : LineType { get set }
+    var lineType: LineType { get set }
     
     /// Colour styling of the line.
-    var lineColour : ColourStyle { get set }
+    var lineColour: ColourStyle { get set }
     
     /**
-     Styling for stroke
+     Styling for stroke 
      
      Replica of Apple’s StrokeStyle that conforms to Hashable
      */
-    var strokeStyle : Stroke { get set }
+    var strokeStyle: Stroke { get set }
     
-    var ignoreZero  : Bool { get set }
+    /**
+     Whether the chart should skip data points who's value is 0.
+     
+     This might be useful when showing trends over time but each day does not necessarily have data.
+     
+     The default is false.
+     */
+    var ignoreZero: Bool { get set }
 }
 
 /**
@@ -64,7 +72,7 @@ public protocol CTLineStyle {
  */
 public protocol CTRangedLineStyle: CTLineStyle {
     /// Drawing style of the range fill.
-    var fillColour : ColourStyle { get set }
+    var fillColour: ColourStyle { get set }
 }
 
 
@@ -76,17 +84,17 @@ public protocol CTRangedLineStyle: CTLineStyle {
 public protocol CTLineChartDataSet: CTSingleDataSetProtocol {
     
     /// A type representing colour styling
-    associatedtype Styling   : CTLineStyle
+    associatedtype Styling: CTLineStyle
     
     /**
      Label to display in the legend.
      */
-    var legendTitle : String { get set }
+    var legendTitle: String { get set }
     
     /**
      Sets the style for the Data Set (as opposed to Chart Data Style).
      */
-    var style : Styling { get set }
+    var style: Styling { get set }
     
     /**
      Sets the look of the markers over the data points.
@@ -94,14 +102,18 @@ public protocol CTLineChartDataSet: CTSingleDataSetProtocol {
      The markers are layed out when the ViewModifier `PointMarkers`
      is applied.
      */
-    var pointStyle : PointStyle { get set }
+    var pointStyle: PointStyle { get set }
 }
 
 /**
  A protocol to extend functionality of `CTLineChartDataSet` specifically for Ranged Line Charts.
  */
 public protocol CTRangedLineChartDataSet: CTLineChartDataSet {
-    var legendFillTitle : String { get set }
+    
+    /**
+     Label to display in the legend for the range area..
+     */
+    var legendFillTitle: String { get set }
 }
 
 /**

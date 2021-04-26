@@ -12,20 +12,20 @@ import SwiftUI
  */
 internal struct HorizontalGridView<T>: View where T: CTLineBarChartDataProtocol {
     
-    @ObservedObject private var chartData : T
-     
-     internal init(chartData: T) {
-         self.chartData = chartData
-     }
+    @ObservedObject private var chartData: T
     
-    @State private var startAnimation : Bool = false
+    internal init(chartData: T) {
+        self.chartData = chartData
+    }
+    
+    @State private var startAnimation: Bool = false
     
     var body: some View {
         HorizontalGridShape()
             .trim(to: startAnimation ? 1 : 0)
             .stroke(chartData.chartStyle.yAxisGridStyle.lineColour,
                     style: StrokeStyle(lineWidth: chartData.chartStyle.yAxisGridStyle.lineWidth,
-                                       dash     : chartData.chartStyle.yAxisGridStyle.dash,
+                                       dash: chartData.chartStyle.yAxisGridStyle.dash,
                                        dashPhase: chartData.chartStyle.yAxisGridStyle.dashPhase))
             .frame(height: chartData.chartStyle.yAxisGridStyle.lineWidth)
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {

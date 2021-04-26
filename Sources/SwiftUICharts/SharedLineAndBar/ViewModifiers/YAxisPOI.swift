@@ -11,55 +11,56 @@ import SwiftUI
  Configurable Point of interest
  */
 internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
-        
-    @ObservedObject var chartData: T
     
-    private let uuid        : UUID = UUID()
+    @ObservedObject private var chartData: T
     
-    private let markerName  : String
-    private var markerValue : Double
-    private let lineColour  : Color
-    private let strokeStyle : StrokeStyle
+    private let uuid: UUID = UUID()
     
-    private let labelPosition   : DisplayValue
-    private let labelFont       : Font
-    private let labelColour     : Color
-    private let labelBackground : Color
+    private let markerName: String
+    private var markerValue: Double
+    private let lineColour: Color
+    private let strokeStyle: StrokeStyle
     
-    private let range       : Double
-    private let minValue    : Double
-    private let maxValue    : Double
-        
-    internal init(chartData      : T,
-                  markerName     : String,
-                  markerValue    : Double = 0,
-                  labelPosition  : DisplayValue,
-                  labelFont      : Font,
-                  labelColour    : Color,
-                  labelBackground: Color,
-                  lineColour     : Color,
-                  strokeStyle    : StrokeStyle,
-                  isAverage      : Bool
+    private let labelPosition: DisplayValue
+    private let labelFont: Font
+    private let labelColour: Color
+    private let labelBackground: Color
+    
+    private let range: Double
+    private let minValue: Double
+    private let maxValue: Double
+    
+    internal init(
+        chartData: T,
+        markerName: String,
+        markerValue: Double = 0,
+        labelPosition: DisplayValue,
+        labelFont: Font,
+        labelColour: Color,
+        labelBackground: Color,
+        lineColour: Color,
+        strokeStyle: StrokeStyle,
+        isAverage: Bool
     ) {
-        self.chartData   = chartData
-        self.markerName  = markerName
-        self.lineColour  = lineColour
+        self.chartData = chartData
+        self.markerName = markerName
+        self.lineColour = lineColour
         self.strokeStyle = strokeStyle
         
-        self.labelPosition   = labelPosition
-        self.labelFont       = labelFont
-        self.labelColour     = labelColour
+        self.labelPosition = labelPosition
+        self.labelFont = labelFont
+        self.labelColour = labelColour
         self.labelBackground = labelBackground
         
         self.markerValue = isAverage ? chartData.average : markerValue
-        self.maxValue    = chartData.maxValue
-        self.range       = chartData.range
-        self.minValue    = chartData.minValue
+        self.maxValue = chartData.maxValue
+        self.range = chartData.range
+        self.minValue = chartData.minValue
         
         self.setupPOILegends()
     }
     
-    @State private var startAnimation : Bool = false
+    @State private var startAnimation: Bool = false
     
     internal func body(content: Content) -> some View {
         ZStack {
@@ -78,77 +79,75 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     }
     
     var marker: some View {
-        Marker(value        : markerValue,
-               range        : range,
-               minValue     : minValue,
-               maxValue     : maxValue,
-               chartType    : chartData.chartType.chartType)
+        Marker(value: markerValue,
+               range: range,
+               minValue: minValue,
+               chartType: chartData.chartType.chartType)
             .trim(to: startAnimation ? 1 : 0)
             .stroke(lineColour, style: strokeStyle)
     }
     
     var valueLabel: some View {
         GeometryReader { geo in
-            
             switch labelPosition {
             case .none:
-                
                 EmptyView()
-                
             case .yAxis(specifier: let specifier):
-                
-                ValueLabelYAxisSubView(chartData       : chartData,
-                                       markerValue     : markerValue,
-                                       specifier       : specifier,
-                                       labelFont       : labelFont,
-                                       labelColour     : labelColour,
-                                       labelBackground : labelBackground,
-                                       lineColour      : lineColour)
+                ValueLabelYAxisSubView(chartData: chartData,
+                                       markerValue: markerValue,
+                                       specifier: specifier,
+                                       labelFont: labelFont,
+                                       labelColour: labelColour,
+                                       labelBackground: labelBackground,
+                                       lineColour: lineColour)
                     .position(x: -(chartData.infoView.yAxisLabelWidth / 2) - 6,
-                              y: getYPoint(chartType: chartData.chartType.chartType,
-                                           height: geo.size.height))
+                              y: getYPoint(chartType: chartData.chartType.chartType, height: geo.size.height, markerValue: markerValue, range: range, minValue: minValue))
                     .accessibilityLabel(Text("P O I Marker"))
                     .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
-                
             case .center(specifier: let specifier):
-                
-                ValueLabelCenterSubView(chartData       : chartData,
-                                        markerValue     : markerValue,
-                                        specifier       : specifier,
-                                        labelFont       : labelFont,
-                                        labelColour     : labelColour,
-                                        labelBackground : labelBackground,
-                                        lineColour      : lineColour,
-                                        strokeStyle     : strokeStyle)
+                ValueLabelCenterSubView(chartData: chartData,
+                                        markerValue: markerValue,
+                                        specifier: specifier,
+                                        labelFont: labelFont,
+                                        labelColour: labelColour,
+                                        labelBackground: labelBackground,
+                                        lineColour: lineColour,
+                                        strokeStyle: strokeStyle)
                     .position(x: geo.frame(in: .local).width / 2,
-                              y: getYPoint(chartType: chartData.chartType.chartType, height: geo.size.height))
-                    
+                              y: getYPoint(chartType: chartData.chartType.chartType, height: geo.size.height, markerValue: markerValue, range: range, minValue: minValue))
                     .accessibilityLabel(Text("P O I Marker"))
                     .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
             }
         }
     }
-    private func getYPoint(chartType: ChartType, height: CGFloat) -> CGFloat {
-         switch chartData.chartType.chartType {
-         case .line:
-            let y = height / CGFloat(chartData.range)
-            return (CGFloat(markerValue - chartData.minValue) * -y) + height
-         case .bar:
-            let value = CGFloat(markerValue) - CGFloat(chartData.minValue)
-            return (height - (value / CGFloat(chartData.range)) * height)
-         
-         case .pie:
-             return 0
-         }
-     }
+    
+    private func getYPoint(
+        chartType: ChartType,
+        height: CGFloat,
+        markerValue: Double,
+        range: Double,
+        minValue: Double
+    ) -> CGFloat {
+        switch chartType {
+        case .line:
+            let y = height / CGFloat(range)
+            return (CGFloat(markerValue - minValue) * -y) + height
+        case .bar:
+            let value = CGFloat(markerValue) - CGFloat(minValue)
+            return (height - (value / CGFloat(range)) * height)
+        case .pie:
+            return 0
+        }
+    }
+    
     private func setupPOILegends() {
         if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
-            chartData.legends.append(LegendData(id          : uuid,
-                                                legend      : markerName,
-                                                colour      : ColourStyle(colour: lineColour),
-                                                strokeStyle : strokeStyle.toStroke(),
-                                                prioity     : 2,
-                                                chartType   : .line))
+            chartData.legends.append(LegendData(id: uuid,
+                                                legend: markerName,
+                                                colour: ColourStyle(colour: lineColour),
+                                                strokeStyle: strokeStyle.toStroke(),
+                                                prioity: 2,
+                                                chartType: .line))
         }
     }
 }
@@ -206,26 +205,26 @@ extension View {
      - Returns: A  new view containing the chart with a marker line at a specified value.
      */
     public func yAxisPOI<T:CTLineBarChartDataProtocol>(
-        chartData      : T,
-        markerName     : String,
-        markerValue    : Double,
-        labelPosition  : DisplayValue = .center(specifier: "%.0f"),
-        labelFont      : Font         = .caption,
-        labelColour    : Color        = Color.primary,
-        labelBackground: Color        = Color.systemsBackground,
-        lineColour     : Color        = Color(.blue),
-        strokeStyle    : StrokeStyle  = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
+        chartData: T,
+        markerName: String,
+        markerValue: Double,
+        labelPosition: DisplayValue = .center(specifier: "%.0f"),
+        labelFont: Font = .caption,
+        labelColour: Color = Color.primary,
+        labelBackground: Color = Color.systemsBackground,
+        lineColour: Color = Color(.blue),
+        strokeStyle: StrokeStyle = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
     ) -> some View {
-        self.modifier(YAxisPOI(chartData      : chartData,
-                               markerName     : markerName,
-                               markerValue    : markerValue,
-                               labelPosition  : labelPosition,
-                               labelFont      : labelFont,
-                               labelColour    : labelColour,
+        self.modifier(YAxisPOI(chartData: chartData,
+                               markerName: markerName,
+                               markerValue: markerValue,
+                               labelPosition: labelPosition,
+                               labelFont: labelFont,
+                               labelColour: labelColour,
                                labelBackground: labelBackground,
-                               lineColour     : lineColour,
-                               strokeStyle    : strokeStyle,
-                               isAverage      : false))
+                               lineColour: lineColour,
+                               strokeStyle: strokeStyle,
+                               isAverage: false))
     }
     
     
@@ -278,27 +277,25 @@ extension View {
         - lineColour: Line Colour.
         - strokeStyle: Style of Stroke.
      - Returns: A  new view containing the chart with a marker line at the average.
-     
-    - Tag: AverageLine
-    */
+     */
     public func averageLine<T:CTLineBarChartDataProtocol>(
-        chartData      : T,
-        markerName     : String        = "Average",
-        labelPosition  : DisplayValue  = .yAxis(specifier: "%.0f"),
-        labelFont      : Font          = .caption,
-        labelColour    : Color         = Color.primary,
-        labelBackground: Color         = Color.systemsBackground,
-        lineColour     : Color         = Color.primary,
-        strokeStyle    : StrokeStyle   = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
+        chartData: T,
+        markerName: String = "Average",
+        labelPosition: DisplayValue = .yAxis(specifier: "%.0f"),
+        labelFont: Font = .caption,
+        labelColour: Color = Color.primary,
+        labelBackground: Color = Color.systemsBackground,
+        lineColour: Color = Color.primary,
+        strokeStyle: StrokeStyle = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
     ) -> some View {
-        self.modifier(YAxisPOI(chartData      : chartData,
-                               markerName     : markerName,
-                               labelPosition  : labelPosition,
-                               labelFont      : labelFont,
-                               labelColour    : labelColour,
+        self.modifier(YAxisPOI(chartData: chartData,
+                               markerName: markerName,
+                               labelPosition: labelPosition,
+                               labelFont: labelFont,
+                               labelColour: labelColour,
                                labelBackground: labelBackground,
-                               lineColour     : lineColour,
-                               strokeStyle    : strokeStyle,
-                               isAverage      : true))
+                               lineColour: lineColour,
+                               strokeStyle: strokeStyle,
+                               isAverage: true))
     }
 }

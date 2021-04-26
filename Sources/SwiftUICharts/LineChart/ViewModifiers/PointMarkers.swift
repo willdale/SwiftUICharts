@@ -12,15 +12,15 @@ import SwiftUI
  */
 internal struct PointMarkers<T>: ViewModifier where T: CTLineChartDataProtocol {
     
-    @ObservedObject var chartData: T
+    @ObservedObject private var chartData: T
     
-    private let minValue : Double
-    private let range    : Double
+    private let minValue: Double
+    private let range: Double
     
-    internal init(chartData : T) {
-        self.chartData  = chartData
-        self.minValue   = chartData.minValue
-        self.range      = chartData.range
+    internal init(chartData: T) {
+        self.chartData = chartData
+        self.minValue = chartData.minValue
+        self.range = chartData.range
     }
     internal func body(content: Content) -> some View {
         ZStack {

@@ -13,13 +13,15 @@ import SwiftUI
  Gradient.Stop doesn't conform to Hashable.
  */
 public struct GradientStop: Hashable {
-    public var color   : Color
+    
+    public var color: Color
     public var location: CGFloat
     
-    public init(color   : Color,
-                location: CGFloat
+    public init(
+        color: Color,
+        location: CGFloat
     ) {
-        self.color    = color
+        self.color = color
         self.location = location
     }
 }
@@ -29,10 +31,6 @@ extension GradientStop {
     /// - Parameter stops: Array of GradientStop
     /// - Returns: Array of Gradient.Stop
     static func convertToGradientStopsArray(stops: [GradientStop]) -> [Gradient.Stop] {
-        var stopsArray : [Gradient.Stop] = []
-        for stop in stops {
-            stopsArray.append(Gradient.Stop(color: stop.color, location: stop.location))
-        }
-        return stopsArray
+        stops.map { Gradient.Stop(color: $0.color, location: $0.location) }
     }
 }

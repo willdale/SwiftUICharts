@@ -12,22 +12,21 @@ import SwiftUI
  */
 internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
-    @ObservedObject var chartData: T
+    @ObservedObject private var chartData: T
+    private let specifier: String
+    private var labelsArray: [String] { chartData.getYLabels(specifier) }
+    private let labelsAndTop: Bool
+    private let labelsAndBottom: Bool
     
-    private let specifier       : String
-    private var labelsArray     : [String] { chartData.getYLabels(specifier) }
-    
-    private let labelsAndTop    : Bool
-    private let labelsAndBottom : Bool
-    
-    internal init(chartData: T,
-                  specifier: String
+    internal init(
+        chartData: T,
+        specifier: String
     ) {
         self.chartData = chartData
         self.specifier = specifier
         chartData.viewData.hasYAxisLabels = true
         
-        labelsAndTop    = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .top
+        labelsAndTop = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .top
         labelsAndBottom = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .bottom
     }
     
@@ -139,7 +138,7 @@ extension View {
      - Doughnut Chart
      
      - Parameters:
-      - specifier: Decimal precision specifier
+        - specifier: Decimal precision specifier
      - Returns: HStack of labels
      */
     public func yAxisLabels<T: CTLineBarChartDataProtocol>(chartData: T, specifier: String = "%.0f") -> some View {

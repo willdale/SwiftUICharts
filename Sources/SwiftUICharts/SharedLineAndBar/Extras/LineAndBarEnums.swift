@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - XAxisLabels
 /**
-Location of the X axis labels
+ Location of the X axis labels
  ```
  case top
  case bottom
@@ -40,7 +40,7 @@ public enum LabelsFrom {
 
 // MARK: - YAxisLabels
 /**
-Location of the Y axis labels
+ Location of the Y axis labels
  ```
  case leading
  case trailing

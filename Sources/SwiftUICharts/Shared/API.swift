@@ -10,9 +10,9 @@ import SwiftUI
 /**
  Displays the data points value with the unit.
  */
-public struct InfoValue<T> : View where T: CTChartData {
+public struct InfoValue<T>: View where T: CTChartData {
     
-    @ObservedObject var chartData: T
+    @ObservedObject private var chartData: T
     
     public init(chartData: T) {
         self.chartData = chartData
@@ -28,9 +28,9 @@ public struct InfoValue<T> : View where T: CTChartData {
 /**
  Displays the data points description.
  */
-public struct InfoDescription<T> : View where T: CTChartData {
+public struct InfoDescription<T>: View where T: CTChartData {
     
-    @ObservedObject var chartData: T
+    @ObservedObject private var chartData: T
     
     public init(chartData: T) {
         self.chartData = chartData
@@ -48,15 +48,14 @@ public struct InfoDescription<T> : View where T: CTChartData {
  */
 public struct InfoExtra<T>: View where T: CTChartData {
     
-    @ObservedObject var chartData: T
-    
+    @ObservedObject private var chartData: T
     private let text: String
     
     public init(chartData: T, text: String) {
         self.chartData = chartData
         self.text = text
     }
-
+    
     public var body: some View {
         if chartData.infoView.isTouchCurrent {
             Text(text)
@@ -92,7 +91,6 @@ extension LegendData {
                                 .font(font)
                                 .foregroundColor(textColor)
                         }
-                        
                     } else if let colours = self.colour.colours  {
                         HStack {
                             LegendLine(width: width)
@@ -123,8 +121,7 @@ extension LegendData {
                 
             case.bar:
                 Group {
-                    if let colour = self.colour.colour
-                    {
+                    if let colour = self.colour.colour {
                         HStack {
                             Rectangle()
                                 .fill(colour)
@@ -132,9 +129,9 @@ extension LegendData {
                             Text(self.legend)
                                 .font(font)
                         }
-                    } else if let colours    = self.colour.colours,
+                    } else if let colours = self.colour.colours,
                               let startPoint = self.colour.startPoint,
-                              let endPoint   = self.colour.endPoint
+                              let endPoint = self.colour.endPoint
                     {
                         HStack {
                             Rectangle()
@@ -145,9 +142,9 @@ extension LegendData {
                             Text(self.legend)
                                 .font(font)
                         }
-                    } else if let stops      = self.colour.stops,
+                    } else if let stops = self.colour.stops,
                               let startPoint = self.colour.startPoint,
-                              let endPoint   = self.colour.endPoint
+                              let endPoint = self.colour.endPoint
                     {
                         let stops = GradientStop.convertToGradientStopsArray(stops: stops)
                         HStack {
@@ -170,10 +167,9 @@ extension LegendData {
                         Text(self.legend)
                             .font(font)
                     }
-                    
-                } else if let colours    = self.colour.colours,
+                } else if let colours = self.colour.colours,
                           let startPoint = self.colour.startPoint,
-                          let endPoint   = self.colour.endPoint
+                          let endPoint = self.colour.endPoint
                 {
                     HStack {
                         Circle()
@@ -185,9 +181,9 @@ extension LegendData {
                             .font(font)
                     }
                     
-                } else if let stops      = self.colour.stops,
+                } else if let stops = self.colour.stops,
                           let startPoint = self.colour.startPoint,
-                          let endPoint   = self.colour.endPoint
+                          let endPoint = self.colour.endPoint
                 {
                     let stops = GradientStop.convertToGradientStopsArray(stops: stops)
                     HStack {
@@ -224,7 +220,6 @@ extension LegendData {
                         .font(font)
                         .foregroundColor(textColor)
                 }
-                
             } else if let colours = self.colour.colours  {
                 HStack {
                     Circle()
@@ -251,7 +246,7 @@ extension LegendData {
             } else { EmptyView() }
         }
     }
-                
+    
     internal func accessibilityLegendLabel() -> String {
         switch self.chartType {
         case .line:

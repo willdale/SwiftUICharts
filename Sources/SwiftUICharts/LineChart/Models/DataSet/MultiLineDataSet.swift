@@ -14,12 +14,11 @@ import SwiftUI
  */
 public struct MultiLineDataSet: CTMultiLineChartDataSet {
     
-    public let id       : UUID = UUID()
-    public var dataSets : [LineDataSet]
+    public let id: UUID = UUID()
+    public var dataSets: [LineDataSet]
     
     /// Initialises a new data set for multi-line Line Charts.
     public init(dataSets: [LineDataSet]) {
         self.dataSets = dataSets
     }
 }
-

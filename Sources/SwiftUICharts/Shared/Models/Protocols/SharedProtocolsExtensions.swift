@@ -7,18 +7,21 @@
 
 import SwiftUI
 
+// MARK: - Is Greater Than
 extension CTChartData where Self: CTLineChartDataProtocol,
                             Set: CTSingleDataSetProtocol {
     public func isGreaterThanTwo() -> Bool {
         return dataSets.dataPoints.count >= 2
     }
 }
+
 extension CTChartData where Self: CTBarChartDataProtocol,
                             Set: CTSingleDataSetProtocol {
     public func isGreaterThanTwo() -> Bool {
         return dataSets.dataPoints.count >= 1
     }
 }
+
 extension CTChartData where Self: CTPieDoughnutChartDataProtocol,
                             Set: CTSingleDataSetProtocol {
     public func isGreaterThanTwo() -> Bool {
@@ -48,12 +51,12 @@ extension CTChartData where Self: CTBarChartDataProtocol,
     }
 }
 
-// MARK: Touch
+// MARK: - Touch
 extension CTChartData {
     public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent   = true
-        self.infoView.touchLocation    = touchLocation
-        self.infoView.chartSize        = chartSize
+        self.infoView.isTouchCurrent = true
+        self.infoView.touchLocation = touchLocation
+        self.infoView.chartSize = chartSize
         self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
     }
 }
@@ -115,15 +118,15 @@ extension CTChartData {
     }
     
     /**
-    Displays the relevent Legend for the data point.
-    
-    - Parameter info: A data point
-    - Returns: A View of a Legend.
-    */
+     Displays the relevent Legend for the data point.
+     
+     - Parameter info: A data point
+     - Returns: A View of a Legend.
+     */
     @ViewBuilder public func infoLegend(info: DataPoint) -> some View {
         if let legend = self.legends.first(where: {
             $0.prioity == 1 &&
-            $0.legend == info.legendTag
+                $0.legend == info.legendTag
         }) {
             legend.getLegendAsCircle(textColor: .primary)
         } else {
@@ -141,7 +144,7 @@ extension CTChartData {
     ///   - boxFrame: The size of the point info box.
     ///   - chartSize: The size of the chart view as the parent view.
     internal func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
-        var returnPoint : CGFloat = .zero
+        var returnPoint: CGFloat = .zero
         if touchLocation < chartSize.minX + (boxFrame.width / 2) {
             returnPoint = chartSize.minX + (boxFrame.width / 2)
         } else if touchLocation > chartSize.maxX - (boxFrame.width / 2) {
@@ -192,8 +195,12 @@ extension CTSingleDataSetProtocol where Self.DataPoint: CTRangeDataPointProtocol
 
 extension CTMultiDataSetProtocol where Self.DataSet.DataPoint: CTStandardDataPointProtocol {
     public func maxValue() -> Double {
-        self.dataSets.compactMap { $0.dataPoints.map(\.value).max() }
-            .max() ?? 0
+        self.dataSets.compactMap {
+            $0.dataPoints
+                .map(\.value)
+                .max()
+        }
+        .max() ?? 0
     }
     public func minValue() -> Double {
         self.dataSets.compactMap {
@@ -204,7 +211,7 @@ extension CTMultiDataSetProtocol where Self.DataSet.DataPoint: CTStandardDataPoi
         .min() ?? 0
     }
     public func average() -> Double {
-
+        
         self.dataSets
             .compactMap {
                 $0.dataPoints
@@ -220,34 +227,39 @@ extension CTMultiDataSetProtocol where Self.DataSet.DataPoint: CTStandardDataPoi
 extension CTMultiDataSetProtocol where Self == StackedBarDataSets {
     /**
      Returns the highest sum value in the data sets
-
+     
      - Note:
      This differs from other charts, as Stacked Bar Charts
      need to consider the sum value for each data set, instead of the
      max value of a data point.
-
+     
      - Returns: Highest sum value in data sets.
      */
     public func maxValue() -> Double {
-        let maxSums = self.dataSets.map { set in
-            set.dataPoints.map(\.value).reduce(0.0, +)
-        }
-        return maxSums.max() ?? 0
+        self.dataSets
+            .map {
+                $0.dataPoints
+                    .map(\.value)
+                    .reduce(0.0, +)
+            }
+            .max() ?? 0
     }
 }
 extension CTMultiBarChartDataSet where Self == StackedBarDataSet {
     /**
      Returns the highest sum value in the data set.
-
+     
      - Note:
      This differs from other charts, as Stacked Bar Charts
      need to consider the sum value for each data set, instead of the
      max value of a data point.
-
+     
      - Returns: Highest sum value in data set.
      */
     public func maxValue() -> Double {
-        self.dataPoints.map(\.value).reduce(0, +)
+        self.dataPoints
+            .map(\.value)
+            .reduce(0, +)
     }
 }
 
@@ -280,26 +292,29 @@ extension CTDataPointBaseProtocol  {
 
 extension CTDataPointBaseProtocol {
     /// Unwraps description
-    public var wrappedDescription : String {
+    public var wrappedDescription: String {
         self.description ?? ""
     }
 }
+
 extension CTStandardDataPointProtocol {
     /// Data point's value as a string
     public func valueAsString(specifier: String) -> String {
         if self.value != -Double.greatestFiniteMagnitude {
-           return String(format: specifier, self.value)
+            return String(format: specifier, self.value)
         } else {
             return String("")
         }
     }
 }
+
 extension CTRangeDataPointProtocol {
     /// Data point's value as a string
     public func valueAsString(specifier: String) -> String {
         String(format: specifier, self.lowerValue) + "-" + String(format: specifier, self.upperValue)
     }
 }
+
 extension CTRangedLineDataPoint {
     /// Data point's value as a string
     public func valueAsString(specifier: String) -> String {

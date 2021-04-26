@@ -15,45 +15,45 @@ import SwiftUI
  */
 public struct LineChartStyle: CTLineChartStyle {
     
-    public var infoBoxPlacement         : InfoBoxPlacement
-    public var infoBoxContentAlignment  : InfoBoxAlignment
+    public var infoBoxPlacement: InfoBoxPlacement
+    public var infoBoxContentAlignment: InfoBoxAlignment
     
-    public var infoBoxValueFont         : Font
-    public var infoBoxValueColour       : Color
+    public var infoBoxValueFont: Font
+    public var infoBoxValueColour: Color
     
-    public var infoBoxDescriptionFont   : Font
-    public var infoBoxDescriptionColour : Color
-    public var infoBoxBackgroundColour  : Color
-    public var infoBoxBorderColour      : Color
-    public var infoBoxBorderStyle       : StrokeStyle
+    public var infoBoxDescriptionFont: Font
+    public var infoBoxDescriptionColour: Color
+    public var infoBoxBackgroundColour: Color
+    public var infoBoxBorderColour: Color
+    public var infoBoxBorderStyle: StrokeStyle
     
-    public var markerType               : LineMarkerType
-        
-    public var xAxisGridStyle       : GridStyle
+    public var markerType: LineMarkerType
     
-    public var xAxisLabelPosition   : XAxisLabelPosistion
-    public var xAxisLabelFont       : Font
-    public var xAxisLabelColour     : Color
-    public var xAxisLabelsFrom      : LabelsFrom
+    public var xAxisGridStyle: GridStyle
     
-    public var xAxisTitle           : String?
-    public var xAxisTitleFont       : Font
+    public var xAxisLabelPosition: XAxisLabelPosistion
+    public var xAxisLabelFont: Font
+    public var xAxisLabelColour: Color
+    public var xAxisLabelsFrom: LabelsFrom
     
-    public var yAxisGridStyle       : GridStyle
+    public var xAxisTitle: String?
+    public var xAxisTitleFont: Font
     
-    public var yAxisLabelPosition   : YAxisLabelPosistion
-    public var yAxisLabelFont       : Font
-    public var yAxisLabelColour     : Color
-    public var yAxisNumberOfLabels  : Int
-    public var yAxisLabelType       : YAxisLabelType
+    public var yAxisGridStyle: GridStyle
     
-    public var yAxisTitle           : String?
-    public var yAxisTitleFont       : Font
+    public var yAxisLabelPosition: YAxisLabelPosistion
+    public var yAxisLabelFont: Font
+    public var yAxisLabelColour: Color
+    public var yAxisNumberOfLabels: Int
+    public var yAxisLabelType: YAxisLabelType
     
-    public var baseline             : Baseline
-    public var topLine              : Topline
+    public var yAxisTitle: String?
+    public var yAxisTitleFont: Font
     
-    public var globalAnimation      : Animation
+    public var baseline: Baseline
+    public var topLine: Topline
+    
+    public var globalAnimation: Animation
     
     /// Model for controlling the overall aesthetic of the chart.
     /// - Parameters:
@@ -87,7 +87,8 @@ public struct LineChartStyle: CTLineChartStyle {
     ///   - yAxisLabelPosition: Location of the X axis labels - Leading or Trailing.
     ///   - yAxisLabelFont: Font of the labels on the Y axis.
     ///   - yAxisLabelColour: Text Colour for the labels on the Y axis.
-    ///   - yAxisNumberOfLabel: Number Of Labels on Y Axis.
+    ///   - yAxisNumberOfLabels: Number Of Labels on Y Axis.
+    ///   - yAxisLabelType: Option to add custom Strings to Y axis rather than auto generated numbers.
     ///
     ///   - yAxisTitle: Label to display next to the chart giving info about the axis.
     ///   - yAxisTitleFont: Font of the y axis title.
@@ -96,86 +97,87 @@ public struct LineChartStyle: CTLineChartStyle {
     ///   - topLine: Where to finish drawing the chart from. Data set maximum or custom.
     ///
     ///   - globalAnimation: Global control of animations.
-    public init(infoBoxPlacement        : InfoBoxPlacement  = .floating,
-                infoBoxContentAlignment : InfoBoxAlignment  = .vertical,
-                
-                infoBoxValueFont        : Font              = .title3,
-                infoBoxValueColour      : Color             = Color.primary,
-                
-                infoBoxDescriptionFont  : Font              = .caption,
-                infoBoxDescriptionColour: Color             = Color.primary,
-                
-                infoBoxBackgroundColour : Color             = Color.systemsBackground,
-                infoBoxBorderColour     : Color             = Color.clear,
-                infoBoxBorderStyle      : StrokeStyle       = StrokeStyle(lineWidth: 0),
-                
-                markerType              : LineMarkerType    = .indicator(style: DotStyle()),
-                
-                xAxisGridStyle      : GridStyle             = GridStyle(),
-                
-                xAxisLabelPosition  : XAxisLabelPosistion   = .bottom,
-                xAxisLabelFont      : Font                  = .caption,
-                xAxisLabelColour    : Color                 = Color.primary,
-                xAxisLabelsFrom     : LabelsFrom            = .dataPoint(rotation: .degrees(0)),
-                
-                xAxisTitle          : String?               = nil,
-                xAxisTitleFont      : Font                  = .caption,
-                
-                yAxisGridStyle      : GridStyle             = GridStyle(),
-                
-                yAxisLabelPosition  : YAxisLabelPosistion   = .leading,
-                yAxisLabelFont      : Font                  = .caption,
-                yAxisLabelColour    : Color                 = Color.primary,
-                yAxisNumberOfLabels : Int                   = 10,
-                yAxisLabelType      : YAxisLabelType        = .numeric,
-                
-                yAxisTitle          : String?               = nil,
-                yAxisTitleFont      : Font                  = .caption,
-
-                baseline            : Baseline              = .minimumValue,
-                topLine             : Topline               = .maximumValue,
-                
-                globalAnimation     : Animation             = Animation.linear(duration: 1)
+    public init(
+        infoBoxPlacement: InfoBoxPlacement = .floating,
+        infoBoxContentAlignment: InfoBoxAlignment = .vertical,
+        
+        infoBoxValueFont: Font = .title3,
+        infoBoxValueColour: Color = Color.primary,
+        
+        infoBoxDescriptionFont: Font = .caption,
+        infoBoxDescriptionColour: Color = Color.primary,
+        
+        infoBoxBackgroundColour: Color = Color.systemsBackground,
+        infoBoxBorderColour: Color = Color.clear,
+        infoBoxBorderStyle: StrokeStyle = StrokeStyle(lineWidth: 0),
+        
+        markerType: LineMarkerType = .indicator(style: DotStyle()),
+        
+        xAxisGridStyle: GridStyle = GridStyle(),
+        
+        xAxisLabelPosition: XAxisLabelPosistion = .bottom,
+        xAxisLabelFont: Font = .caption,
+        xAxisLabelColour: Color = Color.primary,
+        xAxisLabelsFrom: LabelsFrom = .dataPoint(rotation: .degrees(0)),
+        
+        xAxisTitle: String? = nil,
+        xAxisTitleFont: Font = .caption,
+        
+        yAxisGridStyle: GridStyle = GridStyle(),
+        
+        yAxisLabelPosition: YAxisLabelPosistion = .leading,
+        yAxisLabelFont: Font = .caption,
+        yAxisLabelColour: Color = Color.primary,
+        yAxisNumberOfLabels: Int = 10,
+        yAxisLabelType: YAxisLabelType = .numeric,
+        
+        yAxisTitle: String? = nil,
+        yAxisTitleFont: Font = .caption,
+        
+        baseline: Baseline = .minimumValue,
+        topLine: Topline = .maximumValue,
+        
+        globalAnimation: Animation = Animation.linear(duration: 1)
     ) {
-        self.infoBoxPlacement         = infoBoxPlacement
-        self.infoBoxContentAlignment  = infoBoxContentAlignment
+        self.infoBoxPlacement = infoBoxPlacement
+        self.infoBoxContentAlignment = infoBoxContentAlignment
         
-        self.infoBoxValueFont         = infoBoxValueFont
-        self.infoBoxValueColour       = infoBoxValueColour
+        self.infoBoxValueFont = infoBoxValueFont
+        self.infoBoxValueColour = infoBoxValueColour
         
-        self.infoBoxDescriptionFont   = infoBoxDescriptionFont
+        self.infoBoxDescriptionFont = infoBoxDescriptionFont
         self.infoBoxDescriptionColour = infoBoxDescriptionColour
         
-        self.infoBoxBackgroundColour  = infoBoxBackgroundColour
-        self.infoBoxBorderColour      = infoBoxBorderColour
-        self.infoBoxBorderStyle       = infoBoxBorderStyle
+        self.infoBoxBackgroundColour = infoBoxBackgroundColour
+        self.infoBoxBorderColour = infoBoxBorderColour
+        self.infoBoxBorderStyle = infoBoxBorderStyle
         
-        self.markerType          = markerType
+        self.markerType = markerType
         
-        self.xAxisGridStyle      = xAxisGridStyle
+        self.xAxisGridStyle = xAxisGridStyle
         
-        self.xAxisLabelPosition  = xAxisLabelPosition
-        self.xAxisLabelFont      = xAxisLabelFont
-        self.xAxisLabelsFrom     = xAxisLabelsFrom
-        self.xAxisLabelColour    = xAxisLabelColour
+        self.xAxisLabelPosition = xAxisLabelPosition
+        self.xAxisLabelFont = xAxisLabelFont
+        self.xAxisLabelsFrom = xAxisLabelsFrom
+        self.xAxisLabelColour = xAxisLabelColour
         
-        self.xAxisTitle          = xAxisTitle
-        self.xAxisTitleFont      = xAxisTitleFont
+        self.xAxisTitle = xAxisTitle
+        self.xAxisTitleFont = xAxisTitleFont
         
-        self.yAxisGridStyle      = yAxisGridStyle
+        self.yAxisGridStyle = yAxisGridStyle
         
-        self.yAxisLabelPosition  = yAxisLabelPosition
+        self.yAxisLabelPosition = yAxisLabelPosition
         self.yAxisNumberOfLabels = yAxisNumberOfLabels
-        self.yAxisLabelFont      = yAxisLabelFont
-        self.yAxisLabelColour    = yAxisLabelColour
-        self.yAxisLabelType      = yAxisLabelType
+        self.yAxisLabelFont = yAxisLabelFont
+        self.yAxisLabelColour = yAxisLabelColour
+        self.yAxisLabelType = yAxisLabelType
         
-        self.yAxisTitle          = yAxisTitle
-        self.yAxisTitleFont      = yAxisTitleFont
+        self.yAxisTitle = yAxisTitle
+        self.yAxisTitleFont = yAxisTitleFont
         
-        self.baseline            = baseline
-        self.topLine             = topLine
+        self.baseline = baseline
+        self.topLine = topLine
         
-        self.globalAnimation     = globalAnimation
+        self.globalAnimation = globalAnimation
     }
 }

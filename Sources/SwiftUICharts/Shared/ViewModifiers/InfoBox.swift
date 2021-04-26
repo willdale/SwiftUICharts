@@ -12,7 +12,7 @@ import SwiftUI
  */
 internal struct InfoBox<T>: ViewModifier where T: CTChartData {
     
-    @ObservedObject var chartData: T
+    @ObservedObject private var chartData: T
     
     internal init(chartData: T) {
         self.chartData = chartData
@@ -46,27 +46,23 @@ internal struct InfoBox<T>: ViewModifier where T: CTChartData {
     
     private var floating: some View {
         TouchOverlayBox(chartData: chartData,
-                        boxFrame : $boxFrame)
+                        boxFrame: $boxFrame)
             .position(x: chartData.setBoxLocationation(touchLocation: chartData.infoView.touchLocation.x,
-                                             boxFrame     : boxFrame,
-                                             chartSize    : chartData.infoView.chartSize) - 6, // -6 to compensate for `.padding(.horizontal, 6)`
+                                                       boxFrame: boxFrame,
+                                                       chartSize: chartData.infoView.chartSize) - 6, // -6 to compensate for `.padding(.horizontal, 6)`
                       y: 35)
             .frame(height: 70)
             .padding(.horizontal, 6)
             .zIndex(1)
     }
-
     
     private var fixed: some View {
         TouchOverlayBox(chartData: chartData,
-                        boxFrame : $boxFrame)
+                        boxFrame: $boxFrame)
             .frame(height: 70)
             .padding(.horizontal, 6)
             .zIndex(1)
     }
-    
-    
-    
 }
 
 extension View {

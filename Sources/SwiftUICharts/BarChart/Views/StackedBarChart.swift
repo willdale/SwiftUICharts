@@ -9,7 +9,7 @@ import SwiftUI
 
 /**
  View for creating a stacked bar chart.
-  
+ 
  Uses `StackedBarChartData` data model.
  
  # Declaration
@@ -42,8 +42,8 @@ import SwiftUI
  */
 public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartData {
     
-    @ObservedObject var chartData: ChartData
-          
+    @ObservedObject private var chartData: ChartData
+    
     /// Initialises a stacked bar chart view.
     /// - Parameters:
     ///   - chartData: Must be StackedBarChartData model.
@@ -51,15 +51,12 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
         self.chartData = chartData
     }
     
-    @State private var startAnimation : Bool = false
+    @State private var startAnimation: Bool = false
     
     public var body: some View {
-                
         if chartData.isGreaterThanTwo() {
-            
             HStack(alignment: .bottom, spacing: 0) {
                 ForEach(chartData.dataSets.dataSets) { dataSet in
-                    
                     StackElementSubView(dataSet: dataSet, specifier: chartData.infoView.touchSpecifier)
                         .scaleEffect(y: startAnimation ? CGFloat(dataSet.maxValue() / chartData.maxValue) : 0, anchor: .bottom)
                         .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)

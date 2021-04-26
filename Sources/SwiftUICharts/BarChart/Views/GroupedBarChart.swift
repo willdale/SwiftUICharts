@@ -9,7 +9,7 @@ import SwiftUI
 
 /**
  View for creating a grouped bar chart.
-  
+ 
  Uses `GroupedBarChartData` data model.
  
  # Declaration
@@ -24,7 +24,7 @@ import SwiftUI
  ```
  .touchOverlay(chartData: data)
  .averageLine(chartData: data,
-              strokeStyle: StrokeStyle(lineWidth: 3,dash: [5,10]))
+ strokeStyle: StrokeStyle(lineWidth: 3,dash: [5,10]))
  .yAxisPOI(chartData: data,
            markerName: "50",
            markerValue: 50,
@@ -42,21 +42,23 @@ import SwiftUI
  */
 public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartData {
     
-    @ObservedObject var chartData: ChartData
-    
-    private let groupSpacing : CGFloat
+    @ObservedObject private var chartData: ChartData
+    private let groupSpacing: CGFloat
     
     /// Initialises a grouped bar chart view.
     /// - Parameters:
     ///   - chartData: Must be GroupedBarChartData model.
     ///   - groupSpacing: Spacing between groups of bars.
-    public init(chartData: ChartData, groupSpacing: CGFloat) {
-        self.chartData    = chartData
+    public init(
+        chartData: ChartData,
+        groupSpacing: CGFloat
+    ) {
+        self.chartData = chartData
         self.groupSpacing = groupSpacing
         self.chartData.groupSpacing = groupSpacing
     }
     
-    @State private var startAnimation : Bool = false
+    @State private var startAnimation: Bool = false
     
     public var body: some View {
         if chartData.isGreaterThanTwo() {
@@ -64,45 +66,36 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                 ForEach(chartData.dataSets.dataSets) { dataSet in
                     HStack(spacing: 0) {
                         ForEach(dataSet.dataPoints) { dataPoint in
-
                             if dataPoint.group.colour.colourType == .colour,
                                let colour = dataPoint.group.colour.colour
                             {
-
-                                ColourBar(chartData   : chartData,
-                                          dataPoint   : dataPoint,
-                                          colour      : colour)
+                                ColourBar(chartData: chartData,
+                                          dataPoint: dataPoint,
+                                          colour: colour)
                                     .accessibilityLabel(Text("\(chartData.metadata.title)"))
-
                             } else if dataPoint.group.colour.colourType == .gradientColour,
-                                      let colours    = dataPoint.group.colour.colours,
+                                      let colours = dataPoint.group.colour.colours,
                                       let startPoint = dataPoint.group.colour.startPoint,
-                                      let endPoint   = dataPoint.group.colour.endPoint
+                                      let endPoint = dataPoint.group.colour.endPoint
                             {
-
-                                GradientColoursBar(chartData   : chartData,
-                                                   dataPoint   : dataPoint,
-                                                   colours     : colours,
-                                                   startPoint  : startPoint,
-                                                   endPoint    : endPoint)
-                                    .accessibilityLabel( Text("\(chartData.metadata.title)"))
-
+                                GradientColoursBar(chartData: chartData,
+                                                   dataPoint: dataPoint,
+                                                   colours: colours,
+                                                   startPoint: startPoint,
+                                                   endPoint: endPoint)
+                                    .accessibilityLabel(Text("\(chartData.metadata.title)"))
                             } else if dataPoint.group.colour.colourType == .gradientStops,
-                                      let stops      = dataPoint.group.colour.stops,
+                                      let stops = dataPoint.group.colour.stops,
                                       let startPoint = dataPoint.group.colour.startPoint,
-                                      let endPoint   = dataPoint.group.colour.endPoint
+                                      let endPoint = dataPoint.group.colour.endPoint
                             {
-
                                 let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
-
-                                GradientStopsBar(chartData    : chartData,
-                                                 dataPoint   : dataPoint,
-                                                 stops       : safeStops,
-                                                 startPoint  : startPoint,
-                                                 endPoint    : endPoint)
-
-                                    .accessibilityLabel( Text("\(chartData.metadata.title)"))
-
+                                GradientStopsBar(chartData: chartData,
+                                                 dataPoint: dataPoint,
+                                                 stops: safeStops,
+                                                 startPoint: startPoint,
+                                                 endPoint: endPoint)
+                                    .accessibilityLabel(Text("\(chartData.metadata.title)"))
                             }
                         }
                     }

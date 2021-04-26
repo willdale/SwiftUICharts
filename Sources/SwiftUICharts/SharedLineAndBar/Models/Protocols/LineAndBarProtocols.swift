@@ -12,9 +12,9 @@ import SwiftUI
  A protocol to extend functionality of `CTChartData` specifically for Line and Bar Charts.
  */
 public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBarChartStyle {
-
+    
     /// A type representing a View for displaying labels on the X axis.
-    associatedtype XLabels  : View
+    associatedtype XLabels: View
     
     /**
      Returns the difference between the highest and lowest numbers in the data set or data sets.
@@ -29,27 +29,27 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
     /**
      Returns the highest value in the data set or data sets
      */
-   var maxValue: Double { get }
+    var maxValue: Double { get }
     
     /**
      Returns the average value from the data set or data sets.
      */
-    var average : Double { get }
+    var average: Double { get }
     
     /**
      Array of strings for the labels on the X Axis instead of the labels in the data points.
-    */
+     */
     var xAxisLabels: [String]? { get set }
     
     /**
      Array of strings for the labels on the Y Axis instead of the labels generated
      from data point values.
-    */
+     */
     var yAxisLabels: [String]? { get set }
     
     /**
      Data model to hold data about the Views layout.
-
+     
      This informs some `ViewModifiers` whether the chart has X and/or Y
      axis labels so they can configure thier layouts appropriately.
      */
@@ -193,10 +193,11 @@ public protocol CTLineBarDataPointProtocol: CTDataPointBaseProtocol {
 }
 
 extension CTLineBarDataPointProtocol {
+    
     /**
      Unwarpped xAxisLabel
      */
-    var wrappedXAxisLabel : String {
+    var wrappedXAxisLabel: String {
         self.xAxisLabel ?? ""
     }
 }

@@ -12,17 +12,18 @@ import SwiftUI
  */
 internal struct PosistionIndicator: View {
     
-    private let fillColour : Color
-    private let lineColour : Color
-    private let lineWidth  : CGFloat
+    private let fillColour: Color
+    private let lineColour: Color
+    private let lineWidth: CGFloat
     
-    internal init(fillColour : Color   = Color.primary,
-                  lineColour : Color   = Color.blue,
-                  lineWidth  : CGFloat = 3
+    internal init(
+        fillColour: Color = Color.primary,
+        lineColour: Color = Color.blue,
+        lineWidth: CGFloat = 3
     ) {
         self.fillColour = fillColour
         self.lineColour = lineColour
-        self.lineWidth  = lineWidth
+        self.lineWidth = lineWidth
     }
     
     internal var body: some View {
@@ -33,7 +34,6 @@ internal struct PosistionIndicator: View {
                 .foregroundColor(fillColour)
                 .padding(EdgeInsets(top: lineWidth, leading: lineWidth, bottom: lineWidth, trailing: lineWidth))
         }
-            
     }
 }
 
@@ -42,10 +42,10 @@ internal struct PosistionIndicator: View {
  */
 public struct DotStyle {
     
-    let size       : CGFloat
-    let fillColour : Color
-    let lineColour : Color
-    let lineWidth  : CGFloat
+    let size: CGFloat
+    let fillColour: Color
+    let lineColour: Color
+    let lineWidth: CGFloat
     
     /// Sets the style of the Posistion Indicator
     /// - Parameters:
@@ -53,14 +53,15 @@ public struct DotStyle {
     ///   - fillColour: Fill colour.
     ///   - lineColour: Border colour.
     ///   - lineWidth: Border width.
-    public init(size       : CGFloat    = 15,
-                fillColour : Color      = Color.primary,
-                lineColour : Color      = Color.blue,
-                lineWidth  : CGFloat    = 3
+    public init(
+        size: CGFloat = 15,
+        fillColour: Color = Color.primary,
+        lineColour: Color = Color.blue,
+        lineWidth: CGFloat = 3
     ) {
-        self.size       = size
+        self.size = size
         self.fillColour = fillColour
         self.lineColour = lineColour
-        self.lineWidth  = lineWidth
+        self.lineWidth = lineWidth
     }
 }

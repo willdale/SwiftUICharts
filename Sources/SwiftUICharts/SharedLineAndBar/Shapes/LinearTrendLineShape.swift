@@ -14,14 +14,14 @@ internal struct LinearTrendLineShape: Shape {
     
     private let firstValue: Double
     private let lastValue: Double
-    
-    private let range   : Double
+    private let range: Double
     private let minValue: Double
     
-    internal init(firstValue: Double,
-                  lastValue: Double,
-                  range: Double,
-                  minValue: Double
+    internal init(
+        firstValue: Double,
+        lastValue: Double,
+        range: Double,
+        minValue: Double
     ) {
         self.firstValue = firstValue
         self.lastValue = lastValue
@@ -30,7 +30,7 @@ internal struct LinearTrendLineShape: Shape {
     }
     
     internal func path(in rect: CGRect) -> Path {
-        let y : CGFloat = rect.height / CGFloat(range)
+        let y: CGFloat = rect.height / CGFloat(range)
         var path = Path()
         path.move(to: CGPoint(x: 0,
                               y: (CGFloat(firstValue - minValue) * -y) + rect.height))

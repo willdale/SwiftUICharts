@@ -12,32 +12,29 @@ import SwiftUI
  */
 internal struct TouchOverlayBox<T: CTChartData>: View {
     
-    @ObservedObject var chartData: T
+    @ObservedObject private var chartData: T
     
     @Binding private var boxFrame: CGRect
     
-    internal init(chartData: T,
-                  boxFrame : Binding<CGRect>
+    internal init(
+        chartData: T,
+        boxFrame: Binding<CGRect>
     ) {
         self.chartData = chartData
         self._boxFrame = boxFrame
     }
     
     internal var body: some View {
-        
         Group {
             if chartData.chartStyle.infoBoxContentAlignment == .vertical {
                 VStack(alignment: .leading, spacing: 0) {
                     ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
-                        
                         chartData.infoDescription(info: point)
                             .font(chartData.chartStyle.infoBoxDescriptionFont)
                             .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
-                        
                         chartData.infoValueUnit(info: point)
                             .font(chartData.chartStyle.infoBoxValueFont)
                             .foregroundColor(chartData.chartStyle.infoBoxValueColour)
-                        
                         chartData.infoLegend(info: point)
                             .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
                     }
@@ -45,15 +42,12 @@ internal struct TouchOverlayBox<T: CTChartData>: View {
             } else {
                 HStack {
                     ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
-                        
                         chartData.infoLegend(info: point)
                             .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
                             .layoutPriority(1)
-                        
                         chartData.infoDescription(info: point)
                             .font(chartData.chartStyle.infoBoxDescriptionFont)
                             .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
-                        
                         chartData.infoValueUnit(info: point)
                             .font(chartData.chartStyle.infoBoxValueFont)
                             .foregroundColor(chartData.chartStyle.infoBoxValueColour)

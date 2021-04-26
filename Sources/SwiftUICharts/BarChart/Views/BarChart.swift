@@ -42,7 +42,7 @@ import SwiftUI
  */
 public struct BarChart<ChartData>: View where ChartData: BarChartData {
     
-    @ObservedObject var chartData: ChartData
+    @ObservedObject private var chartData: ChartData
     
     /// Initialises a bar chart view.
     /// - Parameter chartData: Must be BarChartData model.
@@ -53,18 +53,14 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
     public var body: some View {
         if chartData.isGreaterThanTwo() {
             HStack(spacing: 0) {
-                
-                    switch chartData.barStyle.colourFrom {
-                    case .barStyle:
-                        
-                        BarChartBarStyleSubView(chartData: chartData)
-                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
-                        
-                    case .dataPoints:
-                        
-                        BarChartDataPointSubView(chartData: chartData)
-                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
-                    }
+                switch chartData.barStyle.colourFrom {
+                case .barStyle:
+                    BarChartBarStyleSubView(chartData: chartData)
+                        .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                case .dataPoints:
+                    BarChartDataPointSubView(chartData: chartData)
+                        .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                }
             }
         } else { CustomNoDataView(chartData: chartData) }
     }

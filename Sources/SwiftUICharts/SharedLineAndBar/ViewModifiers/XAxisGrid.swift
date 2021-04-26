@@ -12,8 +12,12 @@ import SwiftUI
  */
 internal struct XAxisGrid<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
-    @ObservedObject var chartData : T
-        
+    @ObservedObject private var chartData: T
+    
+    internal init(chartData: T) {
+        self.chartData = chartData
+    }
+    
     internal func body(content: Content) -> some View {
         ZStack {
             if chartData.isGreaterThanTwo() {
@@ -29,7 +33,6 @@ internal struct XAxisGrid<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                 }
                 content
             } else { content }
-            
         }
     }
 }
@@ -59,7 +62,7 @@ extension View {
      
      - Parameter chartData: Chart data model.
      - Returns: A  new view containing the chart with vertical lines under it.
-    */
+     */
     public func xAxisGrid<T: CTLineBarChartDataProtocol>(chartData: T) -> some View {
         self.modifier(XAxisGrid(chartData: chartData))
     }

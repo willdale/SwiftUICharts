@@ -15,20 +15,20 @@ import SwiftUI
 public final class RangedLineChartData: CTLineChartDataProtocol {
     
     // MARK: Properties
-    public let id   : UUID  = UUID()
+    public let id: UUID  = UUID()
     
-    @Published public final var dataSets      : RangedLineDataSet
-    @Published public final var metadata      : ChartMetadata
-    @Published public final var xAxisLabels   : [String]?
-    @Published public final var yAxisLabels   : [String]?
-    @Published public final var chartStyle    : LineChartStyle
-    @Published public final var legends       : [LegendData]
-    @Published public final var viewData      : ChartViewData
-    @Published public final var infoView      : InfoViewData<RangedLineChartDataPoint> = InfoViewData()
+    @Published public final var dataSets: RangedLineDataSet
+    @Published public final var metadata: ChartMetadata
+    @Published public final var xAxisLabels: [String]?
+    @Published public final var yAxisLabels: [String]?
+    @Published public final var chartStyle: LineChartStyle
+    @Published public final var legends: [LegendData]
+    @Published public final var viewData: ChartViewData
+    @Published public final var infoView: InfoViewData<RangedLineChartDataPoint> = InfoViewData()
     
-    public final var noDataText   : Text
-    public final var chartType    : (chartType: ChartType, dataSetType: DataSetType)
-        
+    public final var noDataText: Text
+    public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
+    
     // MARK: Initializer
     /// Initialises a ranged line chart.
     ///
@@ -39,30 +39,33 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
     ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    public init(dataSets    : RangedLineDataSet,
-                metadata    : ChartMetadata     = ChartMetadata(),
-                xAxisLabels : [String]?         = nil,
-                yAxisLabels : [String]?         = nil,
-                chartStyle  : LineChartStyle    = LineChartStyle(),
-                noDataText  : Text              = Text("No Data")
+    public init(
+        dataSets: RangedLineDataSet,
+        metadata: ChartMetadata = ChartMetadata(),
+        xAxisLabels: [String]? = nil,
+        yAxisLabels: [String]? = nil,
+        chartStyle: LineChartStyle = LineChartStyle(),
+        noDataText: Text = Text("No Data")
     ) {
-        self.dataSets       = dataSets
-        self.metadata       = metadata
-        self.xAxisLabels    = xAxisLabels
-        self.yAxisLabels    = yAxisLabels
-        self.chartStyle     = chartStyle
-        self.noDataText     = noDataText
-        self.legends        = [LegendData]()
-        self.viewData       = ChartViewData()
-        self.chartType      = (chartType: .line, dataSetType: .single)
+        self.dataSets = dataSets
+        self.metadata = metadata
+        self.xAxisLabels = xAxisLabels
+        self.yAxisLabels = yAxisLabels
+        self.chartStyle = chartStyle
+        self.noDataText = noDataText
+        self.legends = [LegendData]()
+        self.viewData = ChartViewData()
+        self.chartType = (chartType: .line, dataSetType: .single)
         
         self.setupLegends()
         self.setupRangeLegends()
     }
     
-    public final var average  : Double {
-        let sum = dataSets.dataPoints.reduce(0) { $0 + $1.value }
-        return sum / Double(dataSets.dataPoints.count)
+    public final var average: Double {
+        dataSets.dataPoints
+            .map(\.value)
+            .reduce(0, +)
+            .divide(by: Double(dataSets.dataPoints.count))
     }
     
     // MARK: Labels
@@ -103,16 +106,16 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
             }
         }
     }
-
+    
     // MARK: Points
     public final func getPointMarker() -> some View {
-        PointsSubView(dataSets  : dataSets,
-                      minValue  : self.minValue,
-                      range     : self.range,
-                      animation : self.chartStyle.globalAnimation,
-                      isFilled  : false)
+        PointsSubView(dataSets: dataSets,
+                      minValue: self.minValue,
+                      range: self.range,
+                      animation: self.chartStyle.globalAnimation,
+                      isFilled: false)
     }
-
+    
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         self.markerSubView(dataSet: dataSets,
                            dataPoints: dataSets.dataPoints,
@@ -122,14 +125,11 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
     }
     
     public final func getPointLocation(dataSet: RangedLineDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
-        
-        let minValue : Double = self.minValue
-        let range    : Double = self.range
-        
-        let xSection : CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
-        let ySection : CGFloat = chartSize.height / CGFloat(range)
-        
-        let index    : Int     = Int((touchLocation.x + (xSection / 2)) / xSection)
+        let minValue: Double = self.minValue
+        let range: Double = self.range
+        let xSection: CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
+        let ySection: CGFloat = chartSize.height / CGFloat(range)
+        let index: Int = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSet.dataPoints.count {
             if !dataSet.style.ignoreZero {
                 return CGPoint(x: CGFloat(index) * xSection,
@@ -145,31 +145,25 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
     }
     
     public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
-        var points      : [RangedLineChartDataPoint] = []
-        let xSection    : CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
-        let index       = Int((touchLocation.x + (xSection / 2)) / xSection)
+        let xSection: CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
+        let index = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
-            
             if !dataSets.style.ignoreZero {
-                var dataPoint = dataSets.dataPoints[index]
-                dataPoint.legendTag = dataSets.legendTitle
-                points.append(dataPoint)
+                dataSets.dataPoints[index].legendTag = dataSets.legendTitle
+                self.infoView.touchOverlayInfo = [dataSets.dataPoints[index]]
             } else {
                 if dataSets.dataPoints[index].value != 0 {
-                    var dataPoint = dataSets.dataPoints[index]
-                    dataPoint.legendTag = dataSets.legendTitle
-                    points.append(dataPoint)
+                    dataSets.dataPoints[index].legendTag = dataSets.legendTitle
+                    self.infoView.touchOverlayInfo = [dataSets.dataPoints[index]]
                 } else {
-                    var dataPoint = dataSets.dataPoints[index]
-                    dataPoint.legendTag = dataSets.legendTitle
-                    dataPoint.value = -Double.greatestFiniteMagnitude
-                    points.append(dataPoint)
+                    dataSets.dataPoints[index].legendTag = dataSets.legendTitle
+                    dataSets.dataPoints[index].value = -Double.greatestFiniteMagnitude
+                    self.infoView.touchOverlayInfo = [dataSets.dataPoints[index]]
                 }
             }
         }
-        self.infoView.touchOverlayInfo = points
     }
     
-    public typealias Set       = RangedLineDataSet
+    public typealias Set = RangedLineDataSet
     public typealias DataPoint = RangedLineChartDataPoint
 }

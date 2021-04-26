@@ -14,51 +14,52 @@ import SwiftUI
  */
 public struct Stroke: Hashable, Identifiable {
     
-    public let id   : UUID = UUID()
+    public let id: UUID = UUID()
     
-    private let lineWidth   : CGFloat
-    private let lineCap     : CGLineCap
-    private let lineJoin    : CGLineJoin
-    private let miterLimit  : CGFloat
-    private let dash        : [CGFloat]
-    private let dashPhase   : CGFloat
+    private let lineWidth: CGFloat
+    private let lineCap: CGLineCap
+    private let lineJoin: CGLineJoin
+    private let miterLimit: CGFloat
+    private let dash: [CGFloat]
+    private let dashPhase: CGFloat
     
-    public init(lineWidth : CGFloat      = 3,
-                lineCap   : CGLineCap    = .round,
-                lineJoin  : CGLineJoin   = .round,
-                miterLimit: CGFloat      = 10,
-                dash      : [CGFloat]    = [CGFloat](),
-                dashPhase : CGFloat      = 0
+    public init(
+        lineWidth: CGFloat = 3,
+        lineCap: CGLineCap = .round,
+        lineJoin: CGLineJoin = .round,
+        miterLimit: CGFloat = 10,
+        dash: [CGFloat] = [CGFloat](),
+        dashPhase: CGFloat = 0
     ) {
-        self.lineWidth  = lineWidth
-        self.lineCap    = lineCap
-        self.lineJoin   = lineJoin
+        self.lineWidth = lineWidth
+        self.lineCap = lineCap
+        self.lineJoin = lineJoin
         self.miterLimit = miterLimit
-        self.dash       = dash
-        self.dashPhase  = dashPhase
+        self.dash = dash
+        self.dashPhase = dashPhase
     }    
 }
 
 extension Stroke {
     /// Convert `Stroke` to `StrokeStyle`
-   internal func strokeToStrokeStyle() -> StrokeStyle {
-        StrokeStyle(lineWidth : self.lineWidth,
-                    lineCap   : self.lineCap,
-                    lineJoin  : self.lineJoin,
+    internal func strokeToStrokeStyle() -> StrokeStyle {
+        StrokeStyle(lineWidth: self.lineWidth,
+                    lineCap: self.lineCap,
+                    lineJoin: self.lineJoin,
                     miterLimit: self.miterLimit,
-                    dash      : self.dash,
-                    dashPhase : self.dashPhase)
+                    dash: self.dash,
+                    dashPhase: self.dashPhase)
     }
 }
 
 extension StrokeStyle {
     /// Convert `StrokeStyle` to `Stroke`
     internal func toStroke() -> Stroke {
-        Stroke(lineWidth : self.lineWidth,
-               lineCap   : self.lineCap,
-               lineJoin  : self.lineJoin,
+        Stroke(lineWidth: self.lineWidth,
+               lineCap: self.lineCap,
+               lineJoin: self.lineJoin,
                miterLimit: self.miterLimit,
-               dash      : self.dash,
-               dashPhase : self.dashPhase)
+               dash: self.dash,
+               dashPhase: self.dashPhase)
     }
 }

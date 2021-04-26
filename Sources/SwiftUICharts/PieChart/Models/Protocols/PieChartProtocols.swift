@@ -16,12 +16,12 @@ public protocol CTPieDoughnutChartDataProtocol: CTChartData {}
 /**
  A protocol to extend functionality of `CTPieDoughnutChartDataProtocol` specifically for Pie Charts.
  */
-public protocol CTPieChartDataProtocol : CTPieDoughnutChartDataProtocol {}
+public protocol CTPieChartDataProtocol: CTPieDoughnutChartDataProtocol {}
 
 /**
  A protocol to extend functionality of `CTPieDoughnutChartDataProtocol` specifically for  Doughnut Charts.
  */
-public protocol CTDoughnutChartDataProtocol : CTPieDoughnutChartDataProtocol {}
+public protocol CTDoughnutChartDataProtocol: CTPieDoughnutChartDataProtocol {}
 
 
 // MARK: - DataPoints
@@ -31,19 +31,27 @@ public protocol CTDoughnutChartDataProtocol : CTPieDoughnutChartDataProtocol {}
 public protocol CTPieDataPoint: CTStandardDataPointProtocol, CTnotRanged {
     
     /**
+     Colour of the segment
+     */
+    var colour: Color { get set }
+    
+    /**
      Where the data point should start drawing from
      based on where the prvious one finished.
      
      In radians.
      */
-    var startAngle  : Double { get set }
+    var startAngle: Double { get set }
     
     /**
      The data points value in radians.
      */
-    var amount      : Double { get set }
+    var amount: Double { get set }
     
-    var colour      : Color { get set }
+    /**
+     Option to add overlays on top of the segment.
+     */
+    var label: OverlayType { get set }
 }
 
 
@@ -71,6 +79,6 @@ public protocol CTDoughnutChartStyle: CTPieAndDoughnutChartStyle {
     
     /**
      Width / Delta of the Doughnut Chart
-    */
+     */
     var strokeWidth: CGFloat { get set }
 }

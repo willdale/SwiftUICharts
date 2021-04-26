@@ -12,14 +12,13 @@ import SwiftUI
  */
 internal struct XAxisBorder<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
-    @ObservedObject var chartData: T
-    private let labelsAndTop     : Bool
-    private let labelsAndBottom  : Bool
+    @ObservedObject private var chartData: T
+    private let labelsAndTop: Bool
+    private let labelsAndBottom: Bool
     
     init(chartData: T) {
         self.chartData = chartData
-        
-        self.labelsAndTop    = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .top
+        self.labelsAndTop = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .top
         self.labelsAndBottom = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .bottom
     }
     
@@ -53,13 +52,13 @@ internal struct XAxisBorder<T>: ViewModifier where T: CTLineBarChartDataProtocol
  */
 internal struct YAxisBorder<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
-    @ObservedObject var chartData: T
-    private let labelsAndLeading : Bool
+    @ObservedObject private var chartData: T
+    private let labelsAndLeading: Bool
     private let labelsAndTrailing: Bool
     
     internal init(chartData: T) {
         self.chartData = chartData
-        self.labelsAndLeading  = chartData.viewData.hasYAxisLabels && chartData.chartStyle.yAxisLabelPosition == .leading
+        self.labelsAndLeading = chartData.viewData.hasYAxisLabels && chartData.chartStyle.yAxisLabelPosition == .leading
         self.labelsAndTrailing = chartData.viewData.hasYAxisLabels && chartData.chartStyle.yAxisLabelPosition == .trailing
     }
     
@@ -90,7 +89,7 @@ extension View {
     internal func xAxisBorder<T: CTLineBarChartDataProtocol>(chartData: T) -> some View {
         self.modifier(XAxisBorder(chartData: chartData))
     }
-
+    
     internal func yAxisBorder<T: CTLineBarChartDataProtocol>(chartData: T) -> some View {
         self.modifier(YAxisBorder(chartData: chartData))
     }
