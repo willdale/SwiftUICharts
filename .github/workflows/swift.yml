@@ -12,4 +12,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build
-      run: swift build -v     
+      run: swift build -v
+    - name: Test
+      run: |
+        swift test --enable-code-coverage
+        - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./.build/debug/codecov/SwiftUICharts.json
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
