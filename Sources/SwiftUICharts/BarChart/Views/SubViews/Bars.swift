@@ -211,7 +211,7 @@ internal struct StackElementSubView: View {
     
     /// Sets the height of each element.
     /// - Parameters:
-    ///   - height: Hiehgt of the whole bar.
+    ///   - height: Height of the whole bar.
     ///   - dataSet: Which data set the bar comes from.
     ///   - dataPoint: Data point to draw.
     /// - Returns: Height of the element.
