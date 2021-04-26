@@ -102,7 +102,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)
                             }
-                            XAxisDataPointCell(chartData: self, label: data, rotationAngle: angle)
+                            XAxisChartDataCell(chartData: self, label: data, rotationAngle: angle)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
                                 .accessibilityLabel(Text("X Axis Label"))
                                 .accessibilityValue(Text("\(data)"))

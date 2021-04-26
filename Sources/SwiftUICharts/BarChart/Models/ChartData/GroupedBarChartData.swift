@@ -115,7 +115,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
                     HStack(spacing: 0) {
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
-                        XAxisDataPointCell(chartData: self, label: dataSet.setTitle, rotationAngle: .degrees(0))
+                        XAxisChartDataCell(chartData: self, label: dataSet.setTitle, rotationAngle: .degrees(0))
                             .foregroundColor(self.chartStyle.xAxisLabelColour)
                             .accessibilityLabel(Text("X Axis Label"))
                             .accessibilityValue(Text("\(dataSet.setTitle)"))

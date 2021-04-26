@@ -70,7 +70,7 @@ internal struct XAxisChartDataCell<ChartData>: View where ChartData: CTLineBarCh
             .font(chartData.chartStyle.xAxisLabelFont)
             .lineLimit(1)
             .fixedSize(horizontal: true, vertical: false)
-            .rotationEffect(rotationAngle, anchor: .top)
+            .rotationEffect(rotationAngle, anchor: .center)
             .overlay(
                 GeometryReader { geo in
                     Color.clear
@@ -80,9 +80,17 @@ internal struct XAxisChartDataCell<ChartData>: View where ChartData: CTLineBarCh
                         }
                 }
             )
-            .frame(width: width, height: rotationAngle == .init(degrees: 0) || rotationAngle == .init(radians: 0) ? height : width)
+            .frame(width: rotationDegrees || rotationRadians ? 10 : width,
+                   height: rotationAngle == .init(degrees: 0) || rotationAngle == .init(radians: 0) ? height : width)
             .onAppear {
                 chartData.viewData.xAxisLabelHeights.append(width)
             }
+    }
+    
+    private var rotationDegrees: Bool {
+        rotationAngle == .init(degrees: 90) || rotationAngle == .init(degrees: -90)
+    }
+    private var rotationRadians: Bool {
+        rotationAngle == .init(radians: 1.5708) || rotationAngle == .init(radians: -1.5708)
     }
 }
