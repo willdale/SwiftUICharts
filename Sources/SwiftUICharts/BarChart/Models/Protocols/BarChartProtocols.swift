@@ -38,6 +38,10 @@ public protocol CTMultiBarChartDataProtocol: CTBarChartDataProtocol {
  */
 public protocol CTRangedBarChartDataProtocol: CTBarChartDataProtocol {}
 
+/**
+ A protocol to extend functionality of `CTBarChartDataProtocol` specifically for Horizontal Bar Charts.
+ */
+public protocol CTHorizontalBarChartDataProtocol: CTBarChartDataProtocol {}
 
 
 

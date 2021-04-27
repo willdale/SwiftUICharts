@@ -63,20 +63,256 @@ extension CTLineBarChartDataProtocol {
     }
 }
 
-// MARK: - Y Labels
+// MARK: - Y Axis
 extension CTLineBarChartDataProtocol {
+    
+    private var labelsArray: [String] { self.getYLabels(self.viewData.yAxisSpecifier) }
+    
     public func getYLabels(_ specifier: String) -> [String] {
         switch self.chartStyle.yAxisLabelType {
         case .numeric:
             let dataRange: Double = self.range
             let minValue: Double = self.minValue
             let range: Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels-1)
-            let firstLabel = [String(format: specifier, minValue)]
-            let otherLabels = (1...self.chartStyle.yAxisNumberOfLabels-1).map { String(format: specifier, minValue + range * Double($0)) }
+            let firstLabel = [String(format: self.viewData.yAxisSpecifier, minValue)]
+            let otherLabels = (1...self.chartStyle.yAxisNumberOfLabels-1).map { String(format: self.viewData.yAxisSpecifier, minValue + range * Double($0)) }
             let labels = firstLabel + otherLabels
             return labels
         case .custom:
             return self.yAxisLabels ?? []
+        }
+    }
+}
+extension CTLineBarChartDataProtocol {
+        
+    public func showYAxisLabels() -> some View {
+        VStack {
+            ForEach(self.labelsArray.indices.reversed(), id: \.self) { i in
+                Text(self.labelsArray[i])
+                    .font(self.chartStyle.yAxisLabelFont)
+                    .foregroundColor(self.chartStyle.yAxisLabelColour)
+                    .lineLimit(1)
+                    .accessibilityLabel(Text("Y Axis Label"))
+                    .accessibilityValue(Text(self.labelsArray[i]))
+                if i != 0 {
+                    Spacer()
+                        .frame(minHeight: 0, maxHeight: 500)
+                }
+            }
+            Spacer()
+                .frame(height: (self.viewData.xAxisLabelHeights.max() ?? 0) + self.viewData.xAxisTitleHeight)
+        }
+    }
+}
+extension CTLineBarChartDataProtocol where Self: CTHorizontalBarChartDataProtocol,
+                                           Self.Set: CTSingleDataSetProtocol,
+                                           Self.Set.DataPoint: CTLineBarDataPointProtocol {
+    @ViewBuilder public func showYAxisLabels() -> some View {
+            switch self.chartStyle.xAxisLabelsFrom {
+            case .dataPoint(let _):
+                
+                VStack(alignment: .trailing, spacing: 0) {
+                    ForEach(dataSets.dataPoints) { data in
+                        Spacer()
+                            .frame(minHeight: 0, maxHeight: 500)
+                        
+                        Text(data.wrappedXAxisLabel)
+                            .font(self.chartStyle.xAxisLabelFont)
+                            .lineLimit(1)
+                            .foregroundColor(self.chartStyle.xAxisLabelColour)
+                            .overlay(
+                                GeometryReader { geo in
+                                    Rectangle()
+                                        .foregroundColor(Color.clear)
+                                        .onAppear {
+                                            self.viewData.yAxisLabelWidth.append(geo.size.width)
+                                        }
+                                }
+                            )
+                            .accessibilityLabel(Text("X Axis Label"))
+                            .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
+
+                        Spacer()
+                            .frame(minHeight: 0, maxHeight: 500)
+                    }
+                    Spacer()
+                        .frame(height: self.viewData.xAxisTitleHeight + (self.viewData.xAxisLabelHeights.max() ?? 0) + 8)
+                }
+                .frame(width: self.viewData.yAxisLabelWidth.max())
+                Spacer()
+                
+            case .chartData(let angle):
+                
+                if let labelArray = self.xAxisLabels {
+                     VStack(spacing: 0) {
+                        ForEach(labelArray, id: \.self) { data in
+                            Spacer()
+                                .frame(minHeight: 0, maxHeight: 500)
+                            XAxisChartDataCell(chartData: self, label: data, rotationAngle: angle)
+                                .foregroundColor(self.chartStyle.xAxisLabelColour)
+                                .accessibilityLabel(Text("X Axis Label"))
+                                .accessibilityValue(Text("\(data)"))
+                            Spacer()
+                                .frame(minHeight: 0, maxHeight: 500)
+                        }
+                    }
+                }
+        }
+    }
+}
+extension CTLineBarChartDataProtocol {
+    public func showYAxisTitle() -> some View {
+        Group {
+            if let title = self.chartStyle.yAxisTitle {
+                VStack {
+                    Text(title)
+                        .font(self.chartStyle.yAxisTitleFont)
+                        .background(
+                            GeometryReader { geo in
+                                Rectangle()
+                                    .foregroundColor(Color.clear)
+                                    .onAppear {
+                                        self.viewData.yAxisTitleWidth = geo.size.height + 10
+                                    }
+                            }
+                        )
+                        .rotationEffect(Angle.init(degrees: -90), anchor: .center)
+                        .fixedSize()
+                        .frame(width: self.viewData.yAxisTitleWidth)
+                    Spacer()
+                        .frame(height: (self.viewData.xAxisLabelHeights.max() ?? 0) + self.viewData.yAxisTitleWidth)
+                }
+            }
+        }
+    }
+}
+
+// MARK: - X Axis
+extension CTBarChartDataProtocol where Self.Set: CTSingleDataSetProtocol,
+                                       Self.Set.DataPoint: CTLineBarDataPointProtocol {
+    
+    public func getXAxisLabels() -> some View {
+        Group {
+            switch self.chartStyle.xAxisLabelsFrom {
+            case .dataPoint(let angle):
+                
+                HStack(alignment: .top, spacing: 0) {
+                    ForEach(dataSets.dataPoints) { data in
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                        XAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
+                            .foregroundColor(self.chartStyle.xAxisLabelColour)
+                            .accessibilityLabel(Text("X Axis Label"))
+                            .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                    }
+                }
+                
+            case .chartData(let angle):
+                
+                if let labelArray = self.xAxisLabels {
+                    HStack(spacing: 0) {
+                        ForEach(labelArray, id: \.self) { data in
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                            XAxisChartDataCell(chartData: self, label: data, rotationAngle: angle)
+                                .foregroundColor(self.chartStyle.xAxisLabelColour)
+                                .accessibilityLabel(Text("X Axis Label"))
+                                .accessibilityValue(Text("\(data)"))
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+extension CTMultiBarChartDataProtocol where Self.Set: CTMultiDataSetProtocol,
+                                            Self.Set.DataSet: CTMultiBarChartDataSet {
+    public func getXAxisLabels() -> some View {
+        Group {
+            switch self.chartStyle.xAxisLabelsFrom {
+            case .dataPoint(let angle):
+                HStack(spacing: 0) {
+                    ForEach(dataSets.dataSets) { dataSet in
+                        HStack(spacing: 0) {
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                            XAxisDataPointCell(chartData: self, label: dataSet.setTitle, rotationAngle: angle)
+                                .foregroundColor(self.chartStyle.xAxisLabelColour)
+                                .accessibilityLabel(Text("X Axis Label"))
+                                .accessibilityValue(Text("\(dataSet.setTitle)"))
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                        }
+                    }
+                }
+            case .chartData(let angle):
+                if let labelArray = self.xAxisLabels {
+                    HStack(spacing: 0) {
+                        ForEach(labelArray, id: \.self) { data in
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                            XAxisChartDataCell(chartData: self, label: data, rotationAngle: angle)
+                                .foregroundColor(self.chartStyle.xAxisLabelColour)
+                                .accessibilityLabel(Text("X Axis Label"))
+                                .accessibilityValue(Text("\(data)"))
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+extension CTBarChartDataProtocol where Self: CTHorizontalBarChartDataProtocol {
+    public func getXAxisLabels() -> some View {
+        HStack(spacing: 0) {
+            ForEach(self.getYLabels("%.f").indices, id: \.self) { i in
+                Text(self.getYLabels("%.f")[i])
+                    .font(self.chartStyle.yAxisLabelFont)
+                    .foregroundColor(self.chartStyle.yAxisLabelColour)
+                    .lineLimit(1)
+                    .accessibilityLabel(Text("Y Axis Label"))
+                    .accessibilityValue(Text(self.getYLabels("%.f")[i]))
+                    .overlay(
+                        GeometryReader { geo in
+                            Color.clear
+                                .onAppear {
+                                    self.viewData.xAxisLabelHeights.append(geo.size.height)
+                                }
+                        }
+                    )
+                if i != self.getYLabels("%.f").count - 1 {
+                    Spacer()
+                        .frame(minWidth: 0, maxWidth: 500)
+                }
+            }
+        }
+    }
+}
+
+extension CTLineBarChartDataProtocol {
+    internal func xAxisTitle() -> some View {
+        Group {
+            if let title = self.chartStyle.xAxisTitle {
+                Text(title)
+                    .font(self.chartStyle.xAxisTitleFont)
+                    .background(
+                        GeometryReader { geo in
+                            Rectangle()
+                                .foregroundColor(Color.clear)
+                                .onAppear {
+                                    self.viewData.xAxisTitleHeight = geo.size.height
+                                }
+                        }
+                    )
+            }
         }
     }
 }

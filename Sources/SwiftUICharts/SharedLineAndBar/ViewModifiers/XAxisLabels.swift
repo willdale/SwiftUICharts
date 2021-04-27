@@ -28,13 +28,13 @@ internal struct XAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                     VStack {
                         content
                         chartData.getXAxisLabels()
-                        axisTitle
+                        chartData.xAxisTitle()
                     }
                 } else { content }
             case .top:
                 if chartData.isGreaterThanTwo() {
                     VStack {
-                        axisTitle
+                        chartData.xAxisTitle()
                         chartData.getXAxisLabels()
                         content
                     }
@@ -43,22 +43,7 @@ internal struct XAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
         }
     }
     
-    @ViewBuilder
-    private var axisTitle: some View {
-        if let title = chartData.chartStyle.xAxisTitle {
-            Text(title)
-                .font(chartData.chartStyle.xAxisTitleFont)
-                .background(
-                    GeometryReader { geo in
-                        Rectangle()
-                            .foregroundColor(Color.clear)
-                            .onAppear {
-                                chartData.viewData.xAxisTitleHeight = geo.size.height
-                            }
-                    }
-                )
-        }
-    }
+
 }
 
 extension View {

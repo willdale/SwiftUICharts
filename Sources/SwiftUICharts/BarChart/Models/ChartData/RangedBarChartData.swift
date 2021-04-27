@@ -11,7 +11,6 @@ import SwiftUI
  Data for drawing and styling a ranged Bar Chart.
  */
 public final class RangedBarChartData: CTRangedBarChartDataProtocol {
-    
     // MARK: Properties
     public let id: UUID = UUID()
     
@@ -74,48 +73,48 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
         return (upperAverage + lowerAverage) / 2
     }
     
-    // MARK: Labels
-    public final func getXAxisLabels() -> some View {
-        Group {
-            switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint(let angle):
-                
-                HStack(spacing: 0) {
-                    ForEach(dataSets.dataPoints) { data in
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
-                        XAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
-                            .foregroundColor(self.chartStyle.xAxisLabelColour)
-                            .accessibilityLabel(Text("X Axis Label"))
-                            .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
-                    }
-                }
-                
-            case .chartData(let angle):
-                
-                if let labelArray = self.xAxisLabels {
-                    HStack(spacing: 0) {
-                        ForEach(labelArray, id: \.self) { data in
-                            if data != labelArray[0] {
-                                Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
-                            }
-                            XAxisChartDataCell(chartData: self, label: data, rotationAngle: angle)
-                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .accessibilityLabel(Text("X Axis Label"))
-                                .accessibilityValue(Text("\(data)"))
-                            if data != labelArray[labelArray.count-1] {
-                                Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    // MARK: Labels
+//    public final func getXAxisLabels() -> some View {
+//        Group {
+//            switch self.chartStyle.xAxisLabelsFrom {
+//            case .dataPoint(let angle):
+//                
+//                HStack(spacing: 0) {
+//                    ForEach(dataSets.dataPoints) { data in
+//                        Spacer()
+//                            .frame(minWidth: 0, maxWidth: 500)
+//                        XAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
+//                            .foregroundColor(self.chartStyle.xAxisLabelColour)
+//                            .accessibilityLabel(Text("X Axis Label"))
+//                            .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
+//                        Spacer()
+//                            .frame(minWidth: 0, maxWidth: 500)
+//                    }
+//                }
+//                
+//            case .chartData(let angle):
+//                
+//                if let labelArray = self.xAxisLabels {
+//                    HStack(spacing: 0) {
+//                        ForEach(labelArray, id: \.self) { data in
+//                            if data != labelArray[0] {
+//                                Spacer()
+//                                    .frame(minWidth: 0, maxWidth: 500)
+//                            }
+//                            XAxisChartDataCell(chartData: self, label: data, rotationAngle: angle)
+//                                .foregroundColor(self.chartStyle.xAxisLabelColour)
+//                                .accessibilityLabel(Text("X Axis Label"))
+//                                .accessibilityValue(Text("\(data)"))
+//                            if data != labelArray[labelArray.count-1] {
+//                                Spacer()
+//                                    .frame(minWidth: 0, maxWidth: 500)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     // MARK: - Touch
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {

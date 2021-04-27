@@ -94,3 +94,42 @@ internal struct XAxisChartDataCell<ChartData>: View where ChartData: CTLineBarCh
         rotationAngle == .init(radians: 1.5708) || rotationAngle == .init(radians: -1.5708)
     }
 }
+
+internal struct HorizontalXAxisDataPointCell<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
+    
+    @ObservedObject private var chartData: ChartData
+    private let label: String
+    private let rotationAngle: Angle
+    
+    internal init(
+        chartData: ChartData,
+        label: String,
+        rotationAngle: Angle
+    ) {
+        self.chartData = chartData
+        self.label = label
+        self.rotationAngle = rotationAngle
+    }
+    
+    @State private var width: CGFloat = 0
+    
+    internal var body: some View {
+        Text(label)
+            .font(chartData.chartStyle.xAxisLabelFont)
+            .lineLimit(1)
+            .overlay(
+                GeometryReader { geo in
+                    Color.clear
+                        .onAppear {
+                            self.width = geo.frame(in: .local).width
+                        }
+                }
+            )
+            .fixedSize(horizontal: true, vertical: false)
+            .rotationEffect(rotationAngle, anchor: .center)
+            .frame(width: width, height: 10)
+            .onAppear {
+                chartData.viewData.xAxisLabelHeights.append(width)
+            }
+    }
+}

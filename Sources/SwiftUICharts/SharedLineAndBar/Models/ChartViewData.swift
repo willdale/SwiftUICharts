@@ -34,4 +34,11 @@ public struct ChartViewData {
      If the chart has labels on the Y axis, the X axis needs a different layout
      */
     var hasYAxisLabels: Bool = false
+    
+    
+    var yAxisSpecifier: String = "%.f"
+    
+    var yAxisTitleWidth: CGFloat = 0
+    
+    var yAxisLabelWidth: [CGFloat] = []
 }

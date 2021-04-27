@@ -13,9 +13,6 @@ import SwiftUI
  */
 public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBarChartStyle {
     
-    /// A type representing a View for displaying labels on the X axis.
-    associatedtype XLabels: View
-    
     /**
      Returns the difference between the highest and lowest numbers in the data set or data sets.
      */
@@ -65,11 +62,18 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
      */
     func getYLabels(_ specifier: String) -> [String]
     
+    /// A type representing a View for displaying labels on the X axis.
+    associatedtype XLabels: View
     /**
      Displays a view for the labels on the X Axis.
      */
     func getXAxisLabels() -> XLabels
     
+    associatedtype yAxis: View
+    func showYAxisLabels() -> yAxis
+    
+    associatedtype yAxisTitle: View
+    func showYAxisTitle() -> yAxisTitle
 }
 
 

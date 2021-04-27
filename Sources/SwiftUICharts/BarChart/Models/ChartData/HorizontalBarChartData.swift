@@ -1,8 +1,8 @@
 //
-//  BarChartData.swift
+//  HorizontalBarChartData.swift
 //  
 //
-//  Created by Will Dale on 23/01/2021.
+//  Created by Will Dale on 26/04/2021.
 //
 
 import SwiftUI
@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Data for drawing and styling a standard Bar Chart.
  */
-public final class BarChartData: CTBarChartDataProtocol {
+public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol {
     // MARK: Properties
     public let id: UUID = UUID()
     
@@ -34,7 +34,7 @@ public final class BarChartData: CTBarChartDataProtocol {
     ///   - dataSets: Data to draw and style the bars.
     ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
-    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
+    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
     ///   - barStyle: Control for the aesthetic of the bar chart.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
@@ -60,45 +60,6 @@ public final class BarChartData: CTBarChartDataProtocol {
         self.chartType = (.bar, .single)
         self.setupLegends()
     }
-    
-//    // MARK: Labels
-//    public final func getXAxisLabels() -> some View {
-//        Group {
-//            switch self.chartStyle.xAxisLabelsFrom {
-//            case .dataPoint(let angle):
-//                
-//                HStack(alignment: .top, spacing: 0) {
-//                    ForEach(dataSets.dataPoints) { data in
-//                        Spacer()
-//                            .frame(minWidth: 0, maxWidth: 500)
-//                        XAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
-//                            .foregroundColor(self.chartStyle.xAxisLabelColour)
-//                            .accessibilityLabel(Text("X Axis Label"))
-//                            .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
-//                        Spacer()
-//                            .frame(minWidth: 0, maxWidth: 500)
-//                    }
-//                }
-//                
-//            case .chartData(let angle):
-//                
-//                if let labelArray = self.xAxisLabels {
-//                    HStack(spacing: 0) {
-//                        ForEach(labelArray, id: \.self) { data in
-//                            Spacer()
-//                                .frame(minWidth: 0, maxWidth: 500)
-//                            XAxisChartDataCell(chartData: self, label: data, rotationAngle: angle)
-//                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-//                                .accessibilityLabel(Text("X Axis Label"))
-//                                .accessibilityValue(Text("\(data)"))
-//                            Spacer()
-//                                .frame(minWidth: 0, maxWidth: 500)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
     
     // MARK: - Touch
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
