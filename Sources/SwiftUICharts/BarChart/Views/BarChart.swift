@@ -13,6 +13,7 @@ import SwiftUI
  Uses `BarChartData` data model.
  
  # Declaration
+
  ```
  BarChart(chartData: data)
  ```
@@ -51,17 +52,29 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
     }
     
     public var body: some View {
-        if chartData.isGreaterThanTwo() {
-            HStack(spacing: 0) {
-                switch chartData.barStyle.colourFrom {
-                case .barStyle:
-                    BarChartBarStyleSubView(chartData: chartData)
-                        .accessibilityLabel(Text("\(chartData.metadata.title)"))
-                case .dataPoints:
-                    BarChartDataPointSubView(chartData: chartData)
-                        .accessibilityLabel(Text("\(chartData.metadata.title)"))
+        GeometryReader { geo in
+            if chartData.isGreaterThanTwo() {
+                HStack(spacing: 0) {
+                    switch chartData.barStyle.colourFrom {
+                    case .barStyle:
+                        BarChartBarStyleSubView(chartData: chartData)
+                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                    case .dataPoints:
+                        BarChartDataPointSubView(chartData: chartData)
+                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                    }
                 }
+                // Needed for axes label frames
+                .onChange(of: geo.frame(in: .local)) { value in
+                    self.chartData.viewData.chartSize = value
+                }
+            } else {
+                CustomNoDataView(chartData: chartData)
+                    // Needed for axes label frames
+                    .onChange(of: geo.frame(in: .local)) { value in
+                        self.chartData.viewData.chartSize = value
+                    }
             }
-        } else { CustomNoDataView(chartData: chartData) }
+        }
     }
 }

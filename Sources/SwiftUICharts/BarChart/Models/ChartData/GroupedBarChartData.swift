@@ -71,62 +71,23 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     }
     
     // MARK: Labels
-    public final func getXAxisLabels() -> some View {
-//        VStack {
-//            switch self.chartStyle.xAxisLabelsFrom {
-//            case .dataPoint(let angle):
-//                HStack(spacing: self.groupSpacing) {
-//                    ForEach(dataSets.dataSets) { dataSet in
-//                        HStack(spacing: 0) {
-//                            ForEach(dataSet.dataPoints) { data in
-//                                Spacer()
-//                                    .frame(minWidth: 0, maxWidth: 500)
-//                                XAxisDataPointCell(chartData: self, label: data.group.title, rotationAngle: angle)
-//                                    .foregroundColor(self.chartStyle.xAxisLabelColour)
-//                                    .accessibilityLabel(Text("X Axis Label"))
-//                                    .accessibilityValue(Text("\(data.group.title)"))
-//                                Spacer()
-//                                    .frame(minWidth: 0, maxWidth: 500)
-//                            }
-//                        }
-//                    }
-//                }
-//                .padding(.horizontal, -4)
-//
-//            case .chartData(let angle):
-//
-//                if let labelArray = self.xAxisLabels {
+//    public final func getXAxisLabels() -> some View {
+//            HStack(spacing: self.groupSpacing) {
+//                ForEach(dataSets.dataSets) { dataSet in
 //                    HStack(spacing: 0) {
-//                        ForEach(labelArray, id: \.self) { data in
-//                            Spacer()
-//                                .frame(minWidth: 0, maxWidth: 500)
-//                            XAxisDataPointCell(chartData: self, label: data, rotationAngle: angle)
-//                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-//                                .accessibilityLabel(Text("X Axis Label"))
-//                                .accessibilityValue(Text("\(data)"))
-//                            Spacer()
-//                                .frame(minWidth: 0, maxWidth: 500)
-//                        }
+//                        Spacer()
+//                            .frame(minWidth: 0, maxWidth: 500)
+//                        XAxisChartDataCell(chartData: self, label: dataSet.setTitle, rotationAngle: .degrees(0))
+//                            .foregroundColor(self.chartStyle.xAxisLabelColour)
+//                            .accessibilityLabel(Text("X Axis Label"))
+//                            .accessibilityValue(Text("\(dataSet.setTitle)"))
+//                        Spacer()
+//                            .frame(minWidth: 0, maxWidth: 500)
 //                    }
 //                }
 //            }
-            HStack(spacing: self.groupSpacing) {
-                ForEach(dataSets.dataSets) { dataSet in
-                    HStack(spacing: 0) {
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
-                        XAxisChartDataCell(chartData: self, label: dataSet.setTitle, rotationAngle: .degrees(0))
-                            .foregroundColor(self.chartStyle.xAxisLabelColour)
-                            .accessibilityLabel(Text("X Axis Label"))
-                            .accessibilityValue(Text("\(dataSet.setTitle)"))
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
-                    }
-                }
-            }
-            .padding(.horizontal, -4)
-//        }
-    }
+//            .padding(.horizontal, -4)
+//    }
     
     // MARK: Touch
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {

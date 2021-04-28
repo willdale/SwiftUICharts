@@ -76,12 +76,12 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol {
     }
     
     public final func getPointLocation(dataSet: BarDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
-        let xSection: CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count)
-        let ySection: CGFloat = chartSize.height / CGFloat(self.maxValue)
-        let index: Int = Int((touchLocation.x) / xSection)
+        let ySection: CGFloat = chartSize.height / CGFloat(dataSet.dataPoints.count)
+        let xSection: CGFloat = chartSize.width / CGFloat(self.maxValue)
+        let index: Int = Int((touchLocation.y) / ySection)
         if index >= 0 && index < dataSet.dataPoints.count {
-            return CGPoint(x: (CGFloat(index) * xSection) + (xSection / 2),
-                           y: (chartSize.size.height - CGFloat(dataSet.dataPoints[index].value) * ySection))
+            return CGPoint(x: (CGFloat(dataSet.dataPoints[index].value) * xSection),
+                           y: (CGFloat(index) * ySection) + (ySection / 2))
         }
         return nil
     }

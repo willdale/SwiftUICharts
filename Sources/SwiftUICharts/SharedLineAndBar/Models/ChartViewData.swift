@@ -11,6 +11,8 @@ import SwiftUI
  */
 public struct ChartViewData {
     
+    var chartSize: CGRect = .zero
+    
     /**
      If the chart has labels on the X axis, the Y axis needs a different layout
      */
@@ -41,4 +43,6 @@ public struct ChartViewData {
     var yAxisTitleWidth: CGFloat = 0
     
     var yAxisLabelWidth: [CGFloat] = []
+    
+    var xAxisTestHeight: CGFloat = 0
 }
