@@ -84,8 +84,8 @@ extension CTLineBarChartDataProtocol {
     }
 }
 
+// MARK: Most
 extension CTLineBarChartDataProtocol {
-        
     public func showYAxisLabels() -> some View {
         VStack {
             ForEach(self.labelsArray.indices.reversed(), id: \.self) { i in
@@ -105,19 +105,52 @@ extension CTLineBarChartDataProtocol {
         }
     }
 }
+
+// MARK: Horizontal Bar Chart
 extension CTLineBarChartDataProtocol where Self: CTHorizontalBarChartDataProtocol,
                                            Self.Set: CTSingleDataSetProtocol,
                                            Self.Set.DataPoint: CTLineBarDataPointProtocol {
     @ViewBuilder public func showYAxisLabels() -> some View {
-            switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint(let _):
-                
-                VStack(alignment: .trailing, spacing: 0) {
-                    ForEach(dataSets.dataPoints) { data in
+        switch self.chartStyle.xAxisLabelsFrom {
+        case .dataPoint:
+            
+            VStack(alignment: .trailing, spacing: 0) {
+                ForEach(dataSets.dataPoints, id: \.id) { data in
+                    Spacer()
+                        .frame(minHeight: 0, maxHeight: 500)
+                    Text(data.wrappedXAxisLabel)
+                        .font(self.chartStyle.xAxisLabelFont)
+                        .lineLimit(1)
+                        .foregroundColor(self.chartStyle.xAxisLabelColour)
+                        .overlay(
+                            GeometryReader { geo in
+                                Rectangle()
+                                    .foregroundColor(Color.clear)
+                                    .onAppear {
+                                        self.viewData.yAxisLabelWidth.append(geo.size.width)
+                                    }
+                            }
+                        )
+                        .accessibilityLabel(Text("X Axis Label"))
+                        .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
+                    
+                    Spacer()
+                        .frame(minHeight: 0, maxHeight: 500)
+                }
+                Spacer()
+                    .frame(height: self.viewData.xAxisTitleHeight + (self.viewData.xAxisLabelHeights.max() ?? 0) + 8)
+            }
+            .frame(width: self.viewData.yAxisLabelWidth.max())
+            Spacer()
+            
+        case .chartData:
+            
+            if let labelArray = self.xAxisLabels {
+                VStack(spacing: 0) {
+                    ForEach(labelArray, id: \.self) { data in
                         Spacer()
                             .frame(minHeight: 0, maxHeight: 500)
-                        
-                        Text(data.wrappedXAxisLabel)
+                        Text(data)
                             .font(self.chartStyle.xAxisLabelFont)
                             .lineLimit(1)
                             .foregroundColor(self.chartStyle.xAxisLabelColour)
@@ -131,8 +164,8 @@ extension CTLineBarChartDataProtocol where Self: CTHorizontalBarChartDataProtoco
                                 }
                             )
                             .accessibilityLabel(Text("X Axis Label"))
-                            .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
-
+                            .accessibilityValue(Text("\(data)"))
+                        
                         Spacer()
                             .frame(minHeight: 0, maxHeight: 500)
                     }
@@ -141,26 +174,12 @@ extension CTLineBarChartDataProtocol where Self: CTHorizontalBarChartDataProtoco
                 }
                 .frame(width: self.viewData.yAxisLabelWidth.max())
                 Spacer()
-                
-            case .chartData(let angle):
-                
-                if let labelArray = self.xAxisLabels {
-                     VStack(spacing: 0) {
-                        ForEach(labelArray, id: \.self) { data in
-                            Spacer()
-                                .frame(minHeight: 0, maxHeight: 500)
-                            XAxisChartDataCell(chartData: self, label: data, rotationAngle: angle)
-                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .accessibilityLabel(Text("X Axis Label"))
-                                .accessibilityValue(Text("\(data)"))
-                            Spacer()
-                                .frame(minHeight: 0, maxHeight: 500)
-                        }
-                    }
-                }
+            }
         }
     }
 }
+
+// MARK: Title
 extension CTLineBarChartDataProtocol {
     public func showYAxisTitle() -> some View {
         Group {
@@ -188,53 +207,17 @@ extension CTLineBarChartDataProtocol {
     }
 }
 
-internal struct RotatedText<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
- 
-    @ObservedObject private var chartData: ChartData
-    private let label: String
-    private let rotation: Angle
+// MARK: - X Axis
+//
+//
+//
+// MARK: Bar Chart && Ranged Bar Chart
+extension CTBarChartDataProtocol where Self.Set: CTSingleDataSetProtocol,
+                                       Self.Set.DataPoint: CTLineBarDataPointProtocol {
     
-    internal init(
-        chartData: ChartData,
-        label: String,
-        rotation: Angle
-    ) {
-        self.chartData = chartData
-        self.label = label
-        self.rotation = rotation
-    }
-    
-    @State private var finalFrame: CGRect = .zero
-    
-    internal var body: some View {
-        Text(label)
-            .font(chartData.chartStyle.xAxisLabelFont)
-            .foregroundColor(chartData.chartStyle.xAxisLabelColour)
-            .lineLimit(1)
-            .overlay(
-                GeometryReader { geo in
-                    Color.clear
-                        .onAppear {
-                            finalFrame = geo.frame(in: .local)
-                            chartData.viewData.xAxisLabelHeights.append(geo.frame(in: .local).width) }
-                }
-            )
-            .fixedSize(horizontal: true, vertical: false)
-            .rotationEffect(rotation, anchor: .center)
-            .frame(width: finalFrame.height, height: finalFrame.width)
-            .accessibilityLabel(Text("X Axis Label"))
-            .accessibilityValue(Text(label))
-    }
-}
-
-extension CTBarChartDataProtocol {
     func getBarChartXSection<DS: CTSingleDataSetProtocol>(dataSet: DS, chartSize: CGRect) -> CGFloat {
          chartSize.width / CGFloat(dataSet.dataPoints.count)
     }
-}
-// MARK: - X Axis
-extension CTBarChartDataProtocol where Self.Set: CTSingleDataSetProtocol,
-                                       Self.Set.DataPoint: CTLineBarDataPointProtocol {
     
     public func getXAxisLabels() -> some View {
         Group {
@@ -254,9 +237,7 @@ extension CTBarChartDataProtocol where Self.Set: CTSingleDataSetProtocol,
                             .frame(minWidth: 0, maxWidth: 500)
                     }
                 }
-                
             case .chartData(let angle):
-                
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
                         ForEach(labelArray.indices, id: \.self) { i in
@@ -278,12 +259,19 @@ extension CTBarChartDataProtocol where Self.Set: CTSingleDataSetProtocol,
     }
 }
 
+// MARK: Grouped Bar Chart
 extension GroupedBarChartData {
     func getGroupedBarChartXSection<DS: CTMultiDataSetProtocol>(dataSet: DS, chartSize: CGRect, groupSpacing: CGFloat) -> CGFloat {
         let superXSection: CGFloat = (chartSize.width / CGFloat(dataSet.dataSets.count))
         let compensation: CGFloat = ((groupSpacing * CGFloat(dataSets.dataSets.count - 1)) / CGFloat(dataSets.dataSets.count))
-        let test = superXSection - compensation
-        return test > 0 ? test : 0
+        let section = superXSection - compensation
+        return section > 0 ? section : 0
+    }
+    func getGroupedBarChartXSectionTest(dataSet: GroupedBarDataSets, chartSize: CGRect) -> CGFloat {
+        let dataPointCount = dataSet.dataSets
+            .flatMap(\.dataPoints)
+            .count
+        return chartSize.width / CGFloat(dataPointCount)
     }
     
     public func getXAxisLabels() -> some View {
@@ -291,7 +279,7 @@ extension GroupedBarChartData {
             switch self.chartStyle.xAxisLabelsFrom {
             case .dataPoint(let angle):
                 HStack(spacing: 0) {
-                    ForEach(dataSets.dataSets.indices) { i in
+                    ForEach(dataSets.dataSets.indices, id: \.self) { i in
                         if i > 0 {
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
@@ -311,15 +299,21 @@ extension GroupedBarChartData {
             case .chartData(let angle):
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
-                        ForEach(labelArray, id: \.self) { data in
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
-                            XAxisChartDataCell(chartData: self, label: data, rotationAngle: angle)
-                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .accessibilityLabel(Text("X Axis Label"))
-                                .accessibilityValue(Text("\(data)"))
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
+                        ForEach(labelArray.indices, id: \.self) { i in
+                            if i > 0 {
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
+                            }
+                            VStack {
+                                RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                Spacer()
+                            }
+                            .frame(width: self.getGroupedBarChartXSectionTest(dataSet: self.dataSets, chartSize: self.viewData.chartSize),
+                                   height: self.viewData.xAxisLabelHeights.max())
+                            if i < labelArray.count - 1 {
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
+                            }
                         }
                     }
                 }
@@ -328,24 +322,27 @@ extension GroupedBarChartData {
     }
 }
 
+// MARK: Stacked Bar Chart
 extension CTMultiBarChartDataProtocol where Self.Set: CTMultiDataSetProtocol,
                                             Self.Set.DataSet: CTMultiBarChartDataSet {
     
-
+    func getBarChartXSection<DS: CTMultiDataSetProtocol>(dataSet: DS, chartSize: CGRect) -> CGFloat {
+         return chartSize.width / CGFloat(dataSet.dataSets.count)
+    }
     
     public func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
             case .dataPoint(let angle):
                 HStack(spacing: 0) {
-                    ForEach(dataSets.dataSets) { dataSet in
+                    ForEach(dataSets.dataSets, id: \.id) { dataSet in
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
                         VStack {
                             RotatedText(chartData: self, label: dataSet.setTitle, rotation: angle)
                             Spacer()
                         }
-                        .frame(width: self.getBarChartXSection(dataSet: dataSet, chartSize: self.viewData.chartSize),
+                        .frame(width: self.getBarChartXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize),
                                height: self.viewData.xAxisLabelHeights.max())
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
@@ -354,15 +351,22 @@ extension CTMultiBarChartDataProtocol where Self.Set: CTMultiDataSetProtocol,
             case .chartData(let angle):
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
-                        ForEach(labelArray, id: \.self) { data in
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
-                            XAxisChartDataCell(chartData: self, label: data, rotationAngle: angle)
-                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .accessibilityLabel(Text("X Axis Label"))
-                                .accessibilityValue(Text("\(data)"))
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
+                        ForEach(labelArray.indices, id: \.self) { i in
+                            if i > 0 {
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
+                            }
+                            VStack {
+                                RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                Spacer()
+                            }
+                            .frame(width: self.viewData.xAxislabelWidth,
+                                   height: self.viewData.xAxisLabelHeights.max())
+                            .border(Color.blue, width: 1)
+                            if i < labelArray.count - 1 {
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
+                            }
                         }
                     }
                 }
@@ -371,6 +375,8 @@ extension CTMultiBarChartDataProtocol where Self.Set: CTMultiDataSetProtocol,
     }
 }
 
+
+// MARK: Horizontal Bar Chart
 extension CTBarChartDataProtocol where Self: CTHorizontalBarChartDataProtocol {
     public func getXAxisLabels() -> some View {
         HStack(spacing: 0) {
@@ -398,6 +404,7 @@ extension CTBarChartDataProtocol where Self: CTHorizontalBarChartDataProtocol {
     }
 }
 
+// MARK: Title
 extension CTLineBarChartDataProtocol {
     internal func xAxisTitle() -> some View {
         Group {
@@ -415,5 +422,48 @@ extension CTLineBarChartDataProtocol {
                     )
             }
         }
+    }
+}
+
+
+// MARK: - Rotated Text
+internal struct RotatedText<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
+    
+    @ObservedObject private var chartData: ChartData
+    private let label: String
+    private let rotation: Angle
+    
+    internal init(
+        chartData: ChartData,
+        label: String,
+        rotation: Angle
+    ) {
+        self.chartData = chartData
+        self.label = label
+        self.rotation = rotation
+    }
+    
+    @State private var finalFrame: CGRect = .zero
+    
+    internal var body: some View {
+        Text(label)
+            .font(chartData.chartStyle.xAxisLabelFont)
+            .foregroundColor(chartData.chartStyle.xAxisLabelColour)
+            .lineLimit(1)
+            .overlay(
+                GeometryReader { geo in
+                    Color.clear
+                        .onAppear {
+                            finalFrame = geo.frame(in: .local)
+                            chartData.viewData.xAxisLabelHeights.append(geo.frame(in: .local).width)
+                            chartData.viewData.xAxislabelWidth = geo.frame(in: .local).height
+                        }
+                }
+            )
+            .fixedSize(horizontal: true, vertical: false)
+            .rotationEffect(rotation, anchor: .center)
+            .frame(width: finalFrame.height, height: finalFrame.width)
+            .accessibilityLabel(Text("X Axis Label"))
+            .accessibilityValue(Text(label))
     }
 }

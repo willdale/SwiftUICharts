@@ -13,11 +13,13 @@ import SwiftUI
  Uses `RangedBarChartData` data model.
  
  # Declaration
+ 
  ```
  RangedBarChart(chartData: data)
  ```
  
  # View Modifiers
+ 
  The order of the view modifiers is some what important
  as the modifiers are various types for stacks that wrap
  around the previous views.
@@ -51,17 +53,23 @@ public struct RangedBarChart<ChartData>: View where ChartData: RangedBarChartDat
     }
     
     public var body: some View {
-        if chartData.isGreaterThanTwo() {
-            HStack(spacing: 0) {
-                switch chartData.barStyle.colourFrom {
-                case .barStyle:
-                    RangedBarChartBarStyleSubView(chartData: chartData)
-                        .accessibilityLabel(Text("\(chartData.metadata.title)"))
-                case .dataPoints:
-                    RangedBarChartDataPointSubView(chartData: chartData)
-                        .accessibilityLabel(Text("\(chartData.metadata.title)"))
+        GeometryReader { geo in
+            if chartData.isGreaterThanTwo() {
+                HStack(spacing: 0) {
+                    switch chartData.barStyle.colourFrom {
+                    case .barStyle:
+                        RangedBarChartBarStyleSubView(chartData: chartData)
+                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                    case .dataPoints:
+                        RangedBarChartDataPointSubView(chartData: chartData)
+                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                    }
                 }
-            }
-        } else { CustomNoDataView(chartData: chartData) }
+                // Needed for axes label frames
+                .onChange(of: geo.frame(in: .local)) { value in
+                    self.chartData.viewData.chartSize = value
+                }
+            } else { CustomNoDataView(chartData: chartData) }
+        }
     }
 }

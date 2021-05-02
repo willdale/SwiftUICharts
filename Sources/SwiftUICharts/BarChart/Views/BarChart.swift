@@ -68,13 +68,7 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
                 .onChange(of: geo.frame(in: .local)) { value in
                     self.chartData.viewData.chartSize = value
                 }
-            } else {
-                CustomNoDataView(chartData: chartData)
-                    // Needed for axes label frames
-                    .onChange(of: geo.frame(in: .local)) { value in
-                        self.chartData.viewData.chartSize = value
-                    }
-            }
+            } else { CustomNoDataView(chartData: chartData) }
         }
     }
 }
