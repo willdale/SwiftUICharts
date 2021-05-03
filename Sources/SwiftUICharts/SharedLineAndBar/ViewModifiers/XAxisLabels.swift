@@ -13,7 +13,6 @@ import SwiftUI
 internal struct XAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
     @ObservedObject private var chartData: T
-    private var titleHeight: CGFloat = 0
     
     internal init(chartData: T) {
         self.chartData = chartData
@@ -42,8 +41,6 @@ internal struct XAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
             }
         }
     }
-    
-
 }
 
 extension View {

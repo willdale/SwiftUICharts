@@ -61,44 +61,49 @@ public final class BarChartData: CTBarChartDataProtocol {
         self.setupLegends()
     }
     
-//    // MARK: Labels
-//    public final func getXAxisLabels() -> some View {
-//        Group {
-//            switch self.chartStyle.xAxisLabelsFrom {
-//            case .dataPoint(let angle):
-//                
-//                HStack(alignment: .top, spacing: 0) {
-//                    ForEach(dataSets.dataPoints) { data in
-//                        Spacer()
-//                            .frame(minWidth: 0, maxWidth: 500)
-//                        XAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
-//                            .foregroundColor(self.chartStyle.xAxisLabelColour)
-//                            .accessibilityLabel(Text("X Axis Label"))
-//                            .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
-//                        Spacer()
-//                            .frame(minWidth: 0, maxWidth: 500)
-//                    }
-//                }
-//                
-//            case .chartData(let angle):
-//                
-//                if let labelArray = self.xAxisLabels {
-//                    HStack(spacing: 0) {
-//                        ForEach(labelArray, id: \.self) { data in
-//                            Spacer()
-//                                .frame(minWidth: 0, maxWidth: 500)
-//                            XAxisChartDataCell(chartData: self, label: data, rotationAngle: angle)
-//                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-//                                .accessibilityLabel(Text("X Axis Label"))
-//                                .accessibilityValue(Text("\(data)"))
-//                            Spacer()
-//                                .frame(minWidth: 0, maxWidth: 500)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+    // MARK: Labels
+    public final func getXAxisLabels() -> some View {
+        Group {
+            switch self.chartStyle.xAxisLabelsFrom {
+            case .dataPoint(let angle):
+                HStack(spacing: 0) {
+                    ForEach(dataSets.dataPoints, id: \.id) { data in
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                        VStack {
+                            RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
+                            Spacer()
+                        }
+                        .frame(width: self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize),
+                               height: self.viewData.xAxisLabelHeights.max())
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                    }
+                }
+            case .chartData(let angle):
+                if let labelArray = self.xAxisLabels {
+                    HStack(spacing: 0) {
+                        ForEach(labelArray.indices, id: \.self) { i in
+                            VStack {
+                                RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                Spacer()
+                            }
+                            .frame(width: self.viewData.xAxislabelWidth,
+                                   height: self.viewData.xAxisLabelHeights.max())
+                            if i != labelArray.count - 1 {
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private final func getXSection(dataSet: BarDataSet, chartSize: CGRect) -> CGFloat {
+         chartSize.width / CGFloat(dataSet.dataPoints.count)
+    }
+    
     
     // MARK: - Touch
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {

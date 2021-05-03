@@ -67,6 +67,49 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
         self.setupLegends()
     }
 
+    // MARK: Labels
+    public final func getXAxisLabels() -> some View {
+        Group {
+            switch self.chartStyle.xAxisLabelsFrom {
+            case .dataPoint(let angle):
+                HStack(spacing: 0) {
+                    ForEach(dataSets.dataSets, id: \.id) { dataSet in
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                        VStack {
+                            RotatedText(chartData: self, label: dataSet.setTitle, rotation: angle)
+                            Spacer()
+                        }
+                        .frame(width: self.viewData.xAxislabelWidth,
+                               height: self.viewData.xAxisLabelHeights.max())
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                    }
+                }
+            case .chartData(let angle):
+                if let labelArray = self.xAxisLabels {
+                    HStack(spacing: 0) {
+                        ForEach(labelArray.indices, id: \.self) { i in
+                            if i > 0 {
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
+                            }
+                            VStack {
+                                RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                Spacer()
+                            }
+                            .frame(width: self.viewData.xAxislabelWidth,
+                                   height: self.viewData.xAxisLabelHeights.max())
+                            if i < labelArray.count - 1 {
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     // MARK:  Touch
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {

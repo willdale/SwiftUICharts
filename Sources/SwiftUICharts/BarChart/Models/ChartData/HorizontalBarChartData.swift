@@ -61,14 +61,109 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol {
         self.setupLegends()
     }
     
-    // MARK: - Touch
+    // MARK: Labels
+    public final func getXAxisLabels() -> some View {
+        HStack(spacing: 0) {
+            ForEach(self.getYLabels("%.f").indices, id: \.self) { i in
+                Text(self.getYLabels("%.f")[i])
+                    .font(self.chartStyle.yAxisLabelFont)
+                    .foregroundColor(self.chartStyle.yAxisLabelColour)
+                    .lineLimit(1)
+                    .accessibilityLabel(Text("Y Axis Label"))
+                    .accessibilityValue(Text(self.getYLabels("%.f")[i]))
+                    .overlay(
+                        GeometryReader { geo in
+                            Color.clear
+                                .onAppear {
+                                    self.viewData.xAxisLabelHeights.append(geo.size.height)
+                                }
+                        }
+                    )
+                if i != self.getYLabels("%.f").count - 1 {
+                    Spacer()
+                        .frame(minWidth: 0, maxWidth: 500)
+                }
+            }
+        }
+    }
+    public final func showYAxisLabels() -> some View {
+        Group {
+            switch self.chartStyle.xAxisLabelsFrom {
+            case .dataPoint:
+                
+                VStack(alignment: .trailing, spacing: 0) {
+                    ForEach(dataSets.dataPoints, id: \.id) { data in
+                        Spacer()
+                            .frame(minHeight: 0, maxHeight: 500)
+                        Text(data.wrappedXAxisLabel)
+                            .font(self.chartStyle.xAxisLabelFont)
+                            .lineLimit(1)
+                            .foregroundColor(self.chartStyle.xAxisLabelColour)
+                            .overlay(
+                                GeometryReader { geo in
+                                    Rectangle()
+                                        .foregroundColor(Color.clear)
+                                        .onAppear {
+                                            self.viewData.yAxisLabelWidth.append(geo.size.width)
+                                        }
+                                }
+                            )
+                            .accessibilityLabel(Text("X Axis Label"))
+                            .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
+                        
+                        Spacer()
+                            .frame(minHeight: 0, maxHeight: 500)
+                    }
+                    Spacer()
+                        .frame(height: self.viewData.xAxisTitleHeight + (self.viewData.xAxisLabelHeights.max() ?? 0) + 8)
+                }
+                .frame(width: self.viewData.yAxisLabelWidth.max())
+                Spacer()
+                
+            case .chartData:
+                
+                if let labelArray = self.xAxisLabels {
+                    VStack(spacing: 0) {
+                        ForEach(labelArray, id: \.self) { data in
+                            Spacer()
+                                .frame(minHeight: 0, maxHeight: 500)
+                            Text(data)
+                                .font(self.chartStyle.xAxisLabelFont)
+                                .lineLimit(1)
+                                .foregroundColor(self.chartStyle.xAxisLabelColour)
+                                .overlay(
+                                    GeometryReader { geo in
+                                        Rectangle()
+                                            .foregroundColor(Color.clear)
+                                            .onAppear {
+                                                self.viewData.yAxisLabelWidth.append(geo.size.width)
+                                            }
+                                    }
+                                )
+                                .accessibilityLabel(Text("X Axis Label"))
+                                .accessibilityValue(Text("\(data)"))
+                            
+                            Spacer()
+                                .frame(minHeight: 0, maxHeight: 500)
+                        }
+                        Spacer()
+                            .frame(height: self.viewData.xAxisTitleHeight + (self.viewData.xAxisLabelHeights.max() ?? 0) + 8)
+                    }
+                    .frame(width: self.viewData.yAxisLabelWidth.max())
+                    Spacer()
+                }
+            }
+        }
+    }
+    
+    // MARK: Touch
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         self.markerSubView()
     }
     
     public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
-        let xSection: CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count)
-        let index: Int = Int((touchLocation.x) / xSection)
+        let ySection: CGFloat = chartSize.height / CGFloat(dataSets.dataPoints.count)
+        let index: Int = Int((touchLocation.y) / ySection)
         if index >= 0 && index < dataSets.dataPoints.count {
             dataSets.dataPoints[index].legendTag = dataSets.legendTitle
             self.infoView.touchOverlayInfo = [dataSets.dataPoints[index]]

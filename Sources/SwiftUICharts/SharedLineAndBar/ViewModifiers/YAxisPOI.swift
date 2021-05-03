@@ -66,77 +66,52 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
         ZStack {
             if chartData.isGreaterThanTwo() {
                 content
-                marker
-                valueLabel
-                    .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                        self.startAnimation = true
+                chartData.poiMarker(value: markerValue,
+                                    range: range,
+                                    minValue: minValue)
+                    .trim(to: startAnimation ? 1 : 0)
+                    .stroke(lineColour, style: strokeStyle)
+                
+                GeometryReader { geo in
+                    switch labelPosition {
+                    case .none:
+                        EmptyView()
+                    case .yAxis(specifier: let specifier):
+                        ValueLabelYAxisSubView(chartData: chartData,
+                                               markerValue: markerValue,
+                                               specifier: specifier,
+                                               labelFont: labelFont,
+                                               labelColour: labelColour,
+                                               labelBackground: labelBackground,
+                                               lineColour: lineColour)
+                            
+                            .position(chartData.poiValueLabelPositionAxis(frame: geo.frame(in: .local), markerValue: markerValue, minValue: minValue, range: range))
+                            
+                            .accessibilityLabel(Text("P O I Marker"))
+                            .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
+                    case .center(specifier: let specifier):
+                        ValueLabelCenterSubView(chartData: chartData,
+                                                markerValue: markerValue,
+                                                specifier: specifier,
+                                                labelFont: labelFont,
+                                                labelColour: labelColour,
+                                                labelBackground: labelBackground,
+                                                lineColour: lineColour,
+                                                strokeStyle: strokeStyle)
+                            
+                            .position(chartData.poiValueLabelPositionCenter(frame: geo.frame(in: .local), markerValue: markerValue, minValue: minValue, range: range))
+                            
+                            .accessibilityLabel(Text("P O I Marker"))
+                            .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
                     }
-                    .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
-                        self.startAnimation = false
-                    }
+                }
+                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = true
+                }
+                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = false
+                }
             } else { content }
-        }
-    }
-    
-    var marker: some View {
-        Marker(value: markerValue,
-               range: range,
-               minValue: minValue,
-               chartType: chartData.chartType.chartType)
-            .trim(to: startAnimation ? 1 : 0)
-            .stroke(lineColour, style: strokeStyle)
-    }
-    
-    var valueLabel: some View {
-        GeometryReader { geo in
-            switch labelPosition {
-            case .none:
-                EmptyView()
-            case .yAxis(specifier: let specifier):
-                ValueLabelYAxisSubView(chartData: chartData,
-                                       markerValue: markerValue,
-                                       specifier: specifier,
-                                       labelFont: labelFont,
-                                       labelColour: labelColour,
-                                       labelBackground: labelBackground,
-                                       lineColour: lineColour)
-                    .position(x: -(chartData.infoView.yAxisLabelWidth / 2) - 6,
-                              y: getYPoint(chartType: chartData.chartType.chartType, height: geo.size.height, markerValue: markerValue, range: range, minValue: minValue))
-                    .accessibilityLabel(Text("P O I Marker"))
-                    .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
-            case .center(specifier: let specifier):
-                ValueLabelCenterSubView(chartData: chartData,
-                                        markerValue: markerValue,
-                                        specifier: specifier,
-                                        labelFont: labelFont,
-                                        labelColour: labelColour,
-                                        labelBackground: labelBackground,
-                                        lineColour: lineColour,
-                                        strokeStyle: strokeStyle)
-                    .position(x: geo.frame(in: .local).width / 2,
-                              y: getYPoint(chartType: chartData.chartType.chartType, height: geo.size.height, markerValue: markerValue, range: range, minValue: minValue))
-                    .accessibilityLabel(Text("P O I Marker"))
-                    .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
-            }
-        }
-    }
-    
-    private func getYPoint(
-        chartType: ChartType,
-        height: CGFloat,
-        markerValue: Double,
-        range: Double,
-        minValue: Double
-    ) -> CGFloat {
-        switch chartType {
-        case .line:
-            let y = height / CGFloat(range)
-            return (CGFloat(markerValue - minValue) * -y) + height
-        case .bar:
-            let value = CGFloat(markerValue) - CGFloat(minValue)
-            return (height - (value / CGFloat(range)) * height)
-        case .pie:
-            return 0
         }
     }
     
@@ -159,6 +134,7 @@ extension View {
      Shows a marker line at a specified value.
      
      # Example
+     
      ```
      .yAxisPOI(chartData: data,
                   markerName: "Marker",
@@ -176,9 +152,11 @@ extension View {
      ```
      
      - Requires:
+     
      Chart Data to conform to CTLineBarChartDataProtocol.
      
      # Available for:
+     
      - Line Chart
      - Multi Line Chart
      - Filled Line Chart
@@ -189,6 +167,7 @@ extension View {
      - Ranged Bar Chart
      
      # Unavailable for:
+     
      - Pie Chart
      - Doughnut Chart
      
@@ -235,6 +214,7 @@ extension View {
      the relevant data set(s).
      
      # Example
+     
      ```
      .averageLine(chartData: data,
                   markerName: "Average",
@@ -251,9 +231,11 @@ extension View {
      ```
      
      - Requires:
+     
      Chart Data to conform to CTLineBarChartDataProtocol.
      
      # Available for:
+     
      - Line Chart
      - Multi Line Chart
      - Filled Line Chart
@@ -264,6 +246,7 @@ extension View {
      - Ranged Bar Chart
      
      # Unavailable for:
+     
      - Pie Chart
      - Doughnut Chart
      

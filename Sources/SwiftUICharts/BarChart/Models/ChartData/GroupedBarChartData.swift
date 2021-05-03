@@ -71,23 +71,59 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     }
     
     // MARK: Labels
-//    public final func getXAxisLabels() -> some View {
-//            HStack(spacing: self.groupSpacing) {
-//                ForEach(dataSets.dataSets) { dataSet in
-//                    HStack(spacing: 0) {
-//                        Spacer()
-//                            .frame(minWidth: 0, maxWidth: 500)
-//                        XAxisChartDataCell(chartData: self, label: dataSet.setTitle, rotationAngle: .degrees(0))
-//                            .foregroundColor(self.chartStyle.xAxisLabelColour)
-//                            .accessibilityLabel(Text("X Axis Label"))
-//                            .accessibilityValue(Text("\(dataSet.setTitle)"))
-//                        Spacer()
-//                            .frame(minWidth: 0, maxWidth: 500)
-//                    }
-//                }
-//            }
-//            .padding(.horizontal, -4)
-//    }
+    public final func getXAxisLabels() -> some View {
+        Group {
+            switch self.chartStyle.xAxisLabelsFrom {
+            case .dataPoint(let angle):
+                HStack(spacing: 0) {
+                    ForEach(dataSets.dataSets.indices, id: \.self) { i in
+                        if i > 0 {
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                        }
+                        VStack {
+                            RotatedText(chartData: self, label: self.dataSets.dataSets[i].setTitle, rotation: angle)
+                            Spacer()
+                        }
+                        .frame(width: self.getXSectionForDataPoint(dataSet: self.dataSets, chartSize: self.viewData.chartSize, groupSpacing: self.groupSpacing),
+                               height: self.viewData.xAxisLabelHeights.max())
+                        if i < self.dataSets.dataSets.count - 1 {
+                            Spacer()
+                                .frame(minWidth: 0, maxWidth: 500)
+                        }
+                    }
+                }
+            case .chartData(let angle):
+                if let labelArray = self.xAxisLabels {
+                    HStack(spacing: 0) {
+                        ForEach(labelArray.indices, id: \.self) { i in
+                            if i > 0 {
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
+                            }
+                            VStack {
+                                RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                Spacer()
+                            }
+                            .frame(width: self.viewData.xAxislabelWidth,
+                                   height: self.viewData.xAxisLabelHeights.max())
+                            if i < labelArray.count - 1 {
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private final func getXSectionForDataPoint(dataSet: GroupedBarDataSets, chartSize: CGRect, groupSpacing: CGFloat) -> CGFloat {
+        let superXSection: CGFloat = (chartSize.width / CGFloat(dataSet.dataSets.count))
+        let compensation: CGFloat = ((groupSpacing * CGFloat(dataSets.dataSets.count - 1)) / CGFloat(dataSets.dataSets.count))
+        let section = superXSection - compensation
+        return section > 0 ? section : 0
+    }
     
     // MARK: Touch
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {

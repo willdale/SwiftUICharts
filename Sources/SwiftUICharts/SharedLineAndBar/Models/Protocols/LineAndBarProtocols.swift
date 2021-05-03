@@ -53,27 +53,59 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
     var viewData: ChartViewData { get set }
     
     /**
-     Labels to display on the Y axis
-     
-     The labels are generated based on the range between the lowest number in the
-     data set (or 0) and highest number in the data set.
-     
-     - Returns: Array of evenly spaced numbers.
+     A type representing a View for displaying labels on the X axis.
      */
-    func getYLabels(_ specifier: String) -> [String]
-    
-    /// A type representing a View for displaying labels on the X axis.
     associatedtype XLabels: View
     /**
      Displays a view for the labels on the X Axis.
      */
     func getXAxisLabels() -> XLabels
     
-    associatedtype yAxis: View
-    func showYAxisLabels() -> yAxis
+    /**
+     A type representing a Shape for displaying a line
+     as a POI.
+     */
+    associatedtype MarkerShape: Shape
+    /**
+     Displays a line marking a Point Of Interest.
+     
+     In standard charts this will return a horizontal line.
+     In horizontal charts this will return a vertical line.
+     
+     - Parameters:
+        - value: Value of of the POI.
+        - range: Difference between the highest and lowest values in the data set.
+        - minValue: Lowest value in the data set.
+     - Returns: A line shape at a specified point.
+     */
+    func poiMarker(value: Double, range: Double, minValue: Double) -> MarkerShape
     
-    associatedtype yAxisTitle: View
-    func showYAxisTitle() -> yAxisTitle
+    /**
+     Sets the position of the POI Label when it's over
+     one of the axes.
+     
+     - Parameters:
+        - frame: Size of the chart.
+        - markerValue: Value of the POI marker.
+        - minValue: Lowest value in the data set.
+        - range: Difference between the highest and lowest values in the data set.
+     - Returns: Position of label.
+     */
+    func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint
+    
+    /**
+     Sets the position of the POI Label when it's in
+     the center of the view.
+     
+     - Parameters:
+        - frame: Size of the chart.
+        - markerValue: Value of the POI marker.
+        - minValue: Lowest value in the data set.
+        - range: Difference between the highest and lowest values in the data set.
+     - Returns: Position of label.
+     */
+    func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint
+
 }
 
 
