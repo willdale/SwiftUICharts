@@ -1,0 +1,29 @@
+name: Docs
+
+on:
+  release:
+    types: published
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: GetJazzy
+      run: gem install jazzy
+      
+    - name: RunJazzy
+      run: |
+        jazzy --min-acl public --theme fullwidth
+        touch docs/.nojekyll
+      
+    - name: Push
+      run: |
+        git add .
+        git config user.email "nil"
+        git config user.name "bob"
+        git commit -m "make docs"
+        git push -f origin HEAD:gh-pages
