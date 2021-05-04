@@ -48,7 +48,7 @@ public struct ChartViewData {
      Needed for calculating other parts
      of the layout system.
      */
-    var xAxislabelWidth: CGFloat = 0
+    var xAxislabelWidths: [CGFloat] = []
     
     
     // MARK: Y Axis

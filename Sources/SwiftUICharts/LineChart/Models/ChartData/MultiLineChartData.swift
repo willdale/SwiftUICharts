@@ -67,10 +67,12 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
                 
                 HStack(spacing: 0) {
                     ForEach(dataSets.dataSets[0].dataPoints) { data in
-                        XAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
-                            .foregroundColor(self.chartStyle.xAxisLabelColour)
-                            .accessibilityLabel(Text("X Axis Label"))
-                            .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
+                        VStack {
+                            RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
+                            Spacer()
+                        }
+                        .frame(width: self.viewData.xAxislabelWidths.min(),
+                               height: self.viewData.xAxisLabelHeights.max())
                         if data != self.dataSets.dataSets[0].dataPoints[self.dataSets.dataSets[0].dataPoints.count - 1] {
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
@@ -82,11 +84,13 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
             case .chartData(let angle):
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
-                        ForEach(labelArray.indices, id: \.self) { [unowned self] i in
-                            XAxisChartDataCell(chartData: self, label: labelArray[i], rotationAngle: angle)
-                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .accessibilityLabel(Text("X Axis Label"))
-                                .accessibilityValue(Text("\(labelArray[i])"))
+                        ForEach(labelArray.indices, id: \.self) { i in
+                            VStack {
+                                RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                Spacer()
+                            }
+                            .frame(width: self.viewData.xAxislabelWidths.min(),
+                                   height: self.viewData.xAxisLabelHeights.max())
                             if i != labelArray.count - 1 {
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)
@@ -96,6 +100,9 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
                 }
             }
         }
+    }
+    private final func getXSection(dataSet: LineDataSet, chartSize: CGRect) -> CGFloat {
+         chartSize.width / CGFloat(dataSet.dataPoints.count)
     }
     
     // MARK: Points
