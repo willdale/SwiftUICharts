@@ -121,8 +121,9 @@ extension CTLineBarChartDataProtocol {
                 }
             }
             Spacer()
-                .frame(height: (self.viewData.xAxisLabelHeights.max() ?? 0) + self.viewData.xAxisTitleHeight)
+                .frame(height: (self.viewData.xAxisLabelHeights.max() ?? 0) + self.viewData.xAxisTitleHeight + (self.viewData.hasXAxisLabels ? 4 : 0)) // 4 accounts for padding
         }
+        .padding(.top, -8)
     }
 }
 
@@ -154,7 +155,7 @@ extension CTLineBarChartDataProtocol {
                         .fixedSize()
                         .frame(width: self.viewData.yAxisTitleWidth)
                     Spacer()
-                        .frame(height: (self.viewData.xAxisLabelHeights.max() ?? 0) + self.viewData.yAxisTitleWidth)
+                        .frame(height: (self.viewData.xAxisLabelHeights.max() ?? 0) + self.viewData.yAxisTitleWidth + (self.viewData.hasXAxisLabels ? 4 : 0)) // 4 accounts for padding
                 }
             }
         }

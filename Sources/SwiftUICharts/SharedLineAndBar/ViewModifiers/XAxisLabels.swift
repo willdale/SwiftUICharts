@@ -26,7 +26,7 @@ internal struct XAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                 if chartData.isGreaterThanTwo() {
                     VStack {
                         content
-                        chartData.getXAxisLabels()
+                        chartData.getXAxisLabels().padding(.top, 4)
                         chartData.xAxisTitle()
                     }
                 } else { content }
@@ -34,7 +34,7 @@ internal struct XAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                 if chartData.isGreaterThanTwo() {
                     VStack {
                         chartData.xAxisTitle()
-                        chartData.getXAxisLabels()
+                        chartData.getXAxisLabels().padding(.bottom, 4)
                         content
                     }
                 } else { content }

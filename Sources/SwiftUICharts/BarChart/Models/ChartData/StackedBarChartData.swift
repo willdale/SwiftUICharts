@@ -80,7 +80,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
                             RotatedText(chartData: self, label: dataSet.setTitle, rotation: angle)
                             Spacer()
                         }
-                        .frame(width: self.viewData.xAxislabelWidth,
+                        .frame(width: self.viewData.xAxislabelWidths.max(),
                                height: self.viewData.xAxisLabelHeights.max())
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
@@ -98,7 +98,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
                                 RotatedText(chartData: self, label: labelArray[i], rotation: angle)
                                 Spacer()
                             }
-                            .frame(width: self.viewData.xAxislabelWidth,
+                            .frame(width: self.viewData.xAxislabelWidths.max(),
                                    height: self.viewData.xAxisLabelHeights.max())
                             if i < labelArray.count - 1 {
                                 Spacer()

@@ -88,7 +88,7 @@ public final class BarChartData: CTBarChartDataProtocol {
                                 RotatedText(chartData: self, label: labelArray[i], rotation: angle)
                                 Spacer()
                             }
-                            .frame(width: self.viewData.xAxislabelWidth,
+                            .frame(width: self.viewData.xAxislabelWidths.max(),
                                    height: self.viewData.xAxisLabelHeights.max())
                             if i != labelArray.count - 1 {
                                 Spacer()
