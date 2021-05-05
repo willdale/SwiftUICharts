@@ -10,7 +10,7 @@ import SwiftUI
 /**
  A view that displays information from `TouchOverlay`.
  */
-internal struct FloatingInfoBox<T>: ViewModifier where T: CTChartData {
+internal struct FloatingInfoBox<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
     @ObservedObject private var chartData: T
     
@@ -58,7 +58,7 @@ extension View {
      - Returns: A  new view containing the chart with a view to
      display touch overlay information.
      */
-    public func floatingInfoBox<T: CTChartData>(chartData: T) -> some View {
+    public func floatingInfoBox<T: CTLineBarChartDataProtocol>(chartData: T) -> some View {
         self.modifier(FloatingInfoBox(chartData: chartData))
     }
 }

@@ -147,7 +147,7 @@ extension CTLineBarChartDataProtocol {
                                 Rectangle()
                                     .foregroundColor(Color.clear)
                                     .onAppear {
-                                        self.viewData.yAxisTitleWidth = geo.size.height + 10
+                                        self.viewData.yAxisTitleWidth = geo.size.height + 10 // 10 to add padding
                                     }
                             }
                         )
@@ -201,7 +201,7 @@ extension CTLineBarChartDataProtocol where Self: isHorizontal {
 // MARK: Line Charts
 extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol {
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        CGPoint(x: -(self.infoView.yAxisLabelWidth / 2) - 6,
+        CGPoint(x: -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - self.viewData.yAxisTitleWidth,
                 y: CGFloat(markerValue - minValue) * -(frame.height / CGFloat(range)) + frame.height)
     }
     public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
@@ -213,7 +213,7 @@ extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol {
 // MARK: Vertical Bar Charts
 extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol {
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        CGPoint(x: -(self.infoView.yAxisLabelWidth / 2) - 6,
+        CGPoint(x: -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - self.viewData.yAxisTitleWidth,
                 y: frame.height - CGFloat((markerValue - minValue) / range) * frame.height)
     }
     public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
@@ -228,7 +228,7 @@ extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol,
     
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         CGPoint(x: CGFloat((markerValue - minValue) / range) * frame.width,
-                y: -(self.infoView.yAxisLabelWidth / 2) - 6)
+                y: -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - self.viewData.yAxisTitleWidth)
     }
     public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         CGPoint(x: CGFloat((markerValue - minValue) / range) * frame.width,

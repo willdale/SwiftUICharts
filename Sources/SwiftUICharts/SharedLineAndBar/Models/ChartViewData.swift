@@ -80,6 +80,14 @@ public struct ChartViewData {
      
      Needed for calculating other parts
      of the layout system.
+     
+     ---
+     
+     Current width of the `yAxisLabels`
+     
+     Needed line up the touch overlay to compensate for
+     the loss of width.
+     
      */
     var yAxisLabelWidth: [CGFloat] = []
 }
