@@ -101,7 +101,7 @@ public final class BarChartData: CTBarChartDataProtocol {
         }
     }
     private final func getXSection(dataSet: BarDataSet, chartSize: CGRect) -> CGFloat {
-         chartSize.width / CGFloat(dataSet.dataPoints.count)
+        chartSize.width.divide(by: dataSet.dataPoints.count)
     }
     
     

@@ -73,7 +73,7 @@ public final class LineChartData: CTLineChartDataProtocol {
                             RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
                             Spacer()
                         }
-                        .frame(width: self.viewData.xAxislabelWidths.min(),
+                        .frame(width: min(self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize), self.viewData.xAxislabelWidths.min() ?? 0),
                                height: self.viewData.xAxisLabelHeights.max())
                         if data != self.dataSets.dataPoints[self.dataSets.dataPoints.count - 1] {
                             Spacer()
@@ -81,7 +81,6 @@ public final class LineChartData: CTLineChartDataProtocol {
                         }
                     }
                 }
-                .padding(.horizontal, -4)
                 
             case .chartData(let angle):
                 if let labelArray = self.xAxisLabels {

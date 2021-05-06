@@ -71,7 +71,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
                             RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
                             Spacer()
                         }
-                        .frame(width: self.viewData.xAxislabelWidths.min(),
+                        .frame(width: min(self.getXSection(dataSet: self.dataSets.dataSets[0], chartSize: self.viewData.chartSize), self.viewData.xAxislabelWidths.min() ?? 0),
                                height: self.viewData.xAxisLabelHeights.max())
                         if data != self.dataSets.dataSets[0].dataPoints[self.dataSets.dataSets[0].dataPoints.count - 1] {
                             Spacer()
@@ -79,7 +79,6 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
                         }
                     }
                 }
-                .padding(.horizontal, -4)
                 
             case .chartData(let angle):
                 if let labelArray = self.xAxisLabels {

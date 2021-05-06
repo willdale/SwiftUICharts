@@ -80,7 +80,7 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
                             RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
                             Spacer()
                         }
-                        .frame(width: self.viewData.xAxislabelWidths.min(),
+                        .frame(width: min(self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize), self.viewData.xAxislabelWidths.min() ?? 0),
                                height: self.viewData.xAxisLabelHeights.max())
                         if data != self.dataSets.dataPoints[self.dataSets.dataPoints.count - 1] {
                             Spacer()
@@ -88,7 +88,6 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
                         }
                     }
                 }
-                .padding(.horizontal, -4)
                 
             case .chartData(let angle):
                 if let labelArray = self.xAxisLabels {
@@ -109,6 +108,9 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
                 }
             }
         }
+    }
+    private final func getXSection(dataSet: RangedLineDataSet, chartSize: CGRect) -> CGFloat {
+        chartSize.width.divide(by: CGFloat(dataSet.dataPoints.count))
     }
     
     // MARK: Points

@@ -13,11 +13,13 @@ import SwiftUI
  Uses `MultiLineChartData` data model.
  
  # Declaration
+ 
  ```
  MultiLineChart(chartData: data)
  ```
  
  # View Modifiers
+ 
  The order of the view modifiers is some what important
  as the modifiers are various types for stacks that wrap
  around the previous views.
@@ -59,49 +61,55 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
     @State private var startAnimation: Bool = false
     
     public var body: some View {
-        if chartData.isGreaterThanTwo() {
-            ZStack {
-                chartData.getAccessibility()
-                ForEach(chartData.dataSets.dataSets, id: \.id) { dataSet in
-                    if dataSet.style.lineColour.colourType == .colour,
-                       let colour = dataSet.style.lineColour.colour
-                    {
-                        LineChartColourSubView(chartData: chartData,
-                                               dataSet: dataSet,
-                                               minValue: minValue,
-                                               range: range,
-                                               colour: colour,
-                                               isFilled: false)
-                    } else if dataSet.style.lineColour.colourType == .gradientColour,
-                              let colours = dataSet.style.lineColour.colours,
-                              let startPoint = dataSet.style.lineColour.startPoint,
-                              let endPoint = dataSet.style.lineColour.endPoint
-                    {
-                        LineChartColoursSubView(chartData: chartData,
-                                                dataSet: dataSet,
-                                                minValue: minValue,
-                                                range: range,
-                                                colours: colours,
-                                                startPoint: startPoint,
-                                                endPoint: endPoint,
-                                                isFilled: false)
-                    } else if dataSet.style.lineColour.colourType == .gradientStops,
-                              let stops = dataSet.style.lineColour.stops,
-                              let startPoint = dataSet.style.lineColour.startPoint,
-                              let endPoint = dataSet.style.lineColour.endPoint
-                    {
-                        let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-                        LineChartStopsSubView(chartData: chartData,
-                                              dataSet: dataSet,
-                                              minValue: minValue,
-                                              range: range,
-                                              stops: stops,
-                                              startPoint: startPoint,
-                                              endPoint: endPoint,
-                                              isFilled: false)
+        GeometryReader { geo in
+            if chartData.isGreaterThanTwo() {
+                ZStack {
+                    chartData.getAccessibility()
+                    ForEach(chartData.dataSets.dataSets, id: \.id) { dataSet in
+                        if dataSet.style.lineColour.colourType == .colour,
+                           let colour = dataSet.style.lineColour.colour
+                        {
+                            LineChartColourSubView(chartData: chartData,
+                                                   dataSet: dataSet,
+                                                   minValue: minValue,
+                                                   range: range,
+                                                   colour: colour,
+                                                   isFilled: false)
+                        } else if dataSet.style.lineColour.colourType == .gradientColour,
+                                  let colours = dataSet.style.lineColour.colours,
+                                  let startPoint = dataSet.style.lineColour.startPoint,
+                                  let endPoint = dataSet.style.lineColour.endPoint
+                        {
+                            LineChartColoursSubView(chartData: chartData,
+                                                    dataSet: dataSet,
+                                                    minValue: minValue,
+                                                    range: range,
+                                                    colours: colours,
+                                                    startPoint: startPoint,
+                                                    endPoint: endPoint,
+                                                    isFilled: false)
+                        } else if dataSet.style.lineColour.colourType == .gradientStops,
+                                  let stops = dataSet.style.lineColour.stops,
+                                  let startPoint = dataSet.style.lineColour.startPoint,
+                                  let endPoint = dataSet.style.lineColour.endPoint
+                        {
+                            let stops = GradientStop.convertToGradientStopsArray(stops: stops)
+                            LineChartStopsSubView(chartData: chartData,
+                                                  dataSet: dataSet,
+                                                  minValue: minValue,
+                                                  range: range,
+                                                  stops: stops,
+                                                  startPoint: startPoint,
+                                                  endPoint: endPoint,
+                                                  isFilled: false)
+                        }
                     }
                 }
-            }
-        } else { CustomNoDataView(chartData: chartData) }
+                // Needed for axes label frames
+                .onAppear {
+                    self.chartData.viewData.chartSize = geo.frame(in: .local)
+                }
+            } else { CustomNoDataView(chartData: chartData) }
+        }
     }
 }

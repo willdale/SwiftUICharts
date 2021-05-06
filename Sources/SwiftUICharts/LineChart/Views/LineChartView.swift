@@ -101,8 +101,8 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
                     }
                 }
                 // Needed for axes label frames
-                .onChange(of: geo.frame(in: .local)) { value in
-                    self.chartData.viewData.chartSize = value
+                .onAppear {
+                    self.chartData.viewData.chartSize = geo.frame(in: .local)
                 }
             } else { CustomNoDataView(chartData: chartData) }
         }
