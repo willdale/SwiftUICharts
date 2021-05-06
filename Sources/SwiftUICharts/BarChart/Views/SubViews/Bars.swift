@@ -7,7 +7,11 @@
 
 import SwiftUI
 
-// MARK: Standard
+// MARK: - Standard
+//
+//
+//
+// MARK: Colour
 /**
  Sub view of a single bar using a single colour.
  
@@ -52,7 +56,7 @@ internal struct ColourBar<CD: CTBarChartDataProtocol,
 }
 
 
-
+// MARK: Gradient
 /**
  Sub view of a single bar using colour gradient.
  
@@ -104,6 +108,8 @@ internal struct GradientColoursBar<CD: CTBarChartDataProtocol,
     }
 }
 
+
+// MARK: Gradient Stops
 /**
  Sub view of a single bar using colour gradient with stop control.
  
@@ -228,6 +234,7 @@ internal struct StackElementSubView: View {
     }
 }
 
+// MARK: Colour
 /**
  Sub view of an element of a bar using a single colour.
  
@@ -253,6 +260,7 @@ internal struct ColourPartBar: View {
     }
 }
 
+// MARK: Gradient
 /**
  Sub view of an element of a bar using colour gradient.
  
@@ -286,6 +294,7 @@ internal struct GradientColoursPartBar: View {
     }
 }
 
+// MARK: Gradient Stops
 /**
  Sub view of an element of a bar using colour gradient with stop control.
  
@@ -320,6 +329,10 @@ internal struct GradientStopsPartBar: View {
 }
 
 // MARK: - Ranged
+//
+//
+//
+// MARK: Colour
 internal struct RangedBarChartColourCell<CD:RangedBarChartData>: View {
     
     private let chartData: CD
@@ -362,7 +375,7 @@ internal struct RangedBarChartColourCell<CD:RangedBarChartData>: View {
     }
 }
 
-
+// MARK: Gradient
 internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
     
     private let chartData: CD
@@ -413,6 +426,7 @@ internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
     }
 }
 
+// MARK: Gradient Stops
 internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
     
     private let chartData: CD
@@ -452,6 +466,160 @@ internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
             .position(x: barSize.midX,
                       y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
+            .background(Color(.gray).opacity(0.000000001))
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
+            }
+            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+    }
+}
+
+// MARK: - Horizontal
+//
+//
+//
+// MARK: Colour
+/**
+ Sub view of a single bar using a single colour.
+ 
+ For Standard and Grouped Bar Charts.
+ */
+internal struct HorizontalColourBar<CD: CTBarChartDataProtocol,
+                                    DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
+    
+    private let chartData: CD
+    private let colour: Color
+    private let dataPoint: DP
+    
+    internal init(
+        chartData: CD,
+        dataPoint: DP,
+        colour: Color
+    ) {
+        self.chartData = chartData
+        self.dataPoint = dataPoint
+        self.colour = colour
+    }
+    
+    @State private var startAnimation: Bool = false
+    
+    internal var body: some View {
+        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
+                                 tr: chartData.barStyle.cornerRadius.top,
+                                 bl: chartData.barStyle.cornerRadius.bottom,
+                                 br: chartData.barStyle.cornerRadius.bottom)
+            .fill(colour)
+            .scaleEffect(x: startAnimation ? CGFloat(dataPoint.value / chartData.maxValue) : 0, anchor: .leading)
+            .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
+            .background(Color(.gray).opacity(0.000000001))
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
+            }
+            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+    }
+}
+
+
+// MARK: Gradient
+/**
+ Sub view of a single bar using colour gradient.
+ 
+ For Standard and Grouped Bar Charts.
+ */
+internal struct HorizontalGradientColoursBar<CD: CTBarChartDataProtocol,
+                                             DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
+    
+    private let chartData: CD
+    private let dataPoint: DP
+    private let colours: [Color]
+    private let startPoint: UnitPoint
+    private let endPoint: UnitPoint
+    
+    internal init(
+        chartData: CD,
+        dataPoint: DP,
+        colours: [Color],
+        startPoint: UnitPoint,
+        endPoint: UnitPoint
+    ) {
+        self.chartData = chartData
+        self.dataPoint = dataPoint
+        self.colours = colours
+        self.startPoint = startPoint
+        self.endPoint = endPoint
+    }
+    
+    @State private var startAnimation: Bool = false
+    
+    internal var body: some View {
+        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
+                                 tr: chartData.barStyle.cornerRadius.top,
+                                 bl: chartData.barStyle.cornerRadius.bottom,
+                                 br: chartData.barStyle.cornerRadius.bottom)
+            .fill(LinearGradient(gradient: Gradient(colors: colours),
+                                 startPoint: startPoint,
+                                 endPoint: endPoint))
+            .scaleEffect(x: startAnimation ? CGFloat(dataPoint.value / chartData.maxValue) : 0, anchor: .leading)
+            .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
+            .background(Color(.gray).opacity(0.000000001))
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = false
+            }
+            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+    }
+}
+
+
+// MARK: Gradient Stops
+/**
+ Sub view of a single bar using colour gradient with stop control.
+ 
+ For Standard and Grouped Bar Charts.
+ */
+internal struct HorizontalGradientStopsBar<CD: CTBarChartDataProtocol,
+                                           DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
+    
+    private let chartData: CD
+    private let dataPoint: DP
+    private let stops: [Gradient.Stop]
+    private let startPoint: UnitPoint
+    private let endPoint: UnitPoint
+    
+    internal init(
+        chartData: CD,
+        dataPoint: DP,
+        stops: [Gradient.Stop],
+        startPoint: UnitPoint,
+        endPoint: UnitPoint
+    ) {
+        self.chartData = chartData
+        self.dataPoint = dataPoint
+        self.stops = stops
+        self.startPoint = startPoint
+        self.endPoint = endPoint
+    }
+    
+    @State private var startAnimation: Bool = false
+    
+    internal var body: some View {
+        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
+                                 tr: chartData.barStyle.cornerRadius.top,
+                                 bl: chartData.barStyle.cornerRadius.bottom,
+                                 br: chartData.barStyle.cornerRadius.bottom)
+            .fill(LinearGradient(gradient: Gradient(stops: stops),
+                                 startPoint: startPoint,
+                                 endPoint: endPoint))
+            .scaleEffect(x: startAnimation ? CGFloat(dataPoint.value / chartData.maxValue) : 0, anchor: .leading)
+            .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
             .background(Color(.gray).opacity(0.000000001))
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true

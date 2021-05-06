@@ -20,13 +20,15 @@ public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBar
     public var body: some View {
         if chartData.isGreaterThanTwo() {
             VStack(spacing: 0) {
-                ForEach(chartData.dataSets.dataPoints) { dataPoint in
-                    Rectangle()
-                        .fill(dataPoint.colour.colour ?? .blue)
-                        .scaleEffect(x: CGFloat(dataPoint.value / chartData.maxValue), anchor: .leading)
-                        .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
-                        .background(Color(.gray).opacity(0.000000001))
+                switch chartData.barStyle.colourFrom {
+                case .barStyle:
+                    HorizontalBarChartBarStyleSubView(chartData: chartData)
+                        .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                case .dataPoints:
+                    HorizontalBarChartDataPointSubView(chartData: chartData)
+                        .accessibilityLabel(Text("\(chartData.metadata.title)"))
                 }
+                
             }
         } else { CustomNoDataView(chartData: chartData) }
     }
