@@ -119,8 +119,19 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
      - Returns: Position of label.
      */
     func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint
-
+    
+    /**
+     Sets the data point info box location while keeping it within the parent view.
+     
+     - Parameters:
+        - touchLocation: Location the user has pressed.
+        - boxFrame: The size of the point info box.
+        - chartSize: The size of the chart view as the parent view.
+     */
+    func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat
 }
+
+
 
 
 // MARK: - Style
