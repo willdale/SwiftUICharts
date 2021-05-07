@@ -136,7 +136,7 @@ extension CTLineBarChartDataProtocol {
     }
 }
 
-// MARK: Axes Titles
+// MARK: - Axes Titles
 extension CTLineBarChartDataProtocol {
     /**
      Returns the title for y axis.
@@ -151,6 +151,7 @@ extension CTLineBarChartDataProtocol {
                 VStack {
                     Text(title)
                         .font(self.chartStyle.yAxisTitleFont)
+                        .foregroundColor(self.chartStyle.yAxisTitleColour)
                         .background(
                             GeometryReader { geo in
                                 Rectangle()
@@ -181,6 +182,7 @@ extension CTLineBarChartDataProtocol {
             if let title = self.chartStyle.xAxisTitle {
                 Text(title)
                     .font(self.chartStyle.xAxisTitleFont)
+                    .foregroundColor(self.chartStyle.xAxisTitleColour)
                     .background(
                         GeometryReader { geo in
                             Rectangle()

@@ -189,6 +189,11 @@ public protocol CTLineBarChartStyle: CTChartStyle {
     var xAxisTitleFont: Font { get set }
     
     /**
+     Colour of the x axis title.
+     */
+    var xAxisTitleColour: Color { get set }
+    
+    /**
      Style of the horizontal lines breaking up the chart.
      */
     var yAxisGridStyle: GridStyle { get set }
@@ -228,6 +233,11 @@ public protocol CTLineBarChartStyle: CTChartStyle {
      Font of the y axis title.
      */
     var yAxisTitleFont: Font { get set }
+    
+    /**
+     Font of the y axis title.
+     */
+    var yAxisTitleColour: Color { get set }
     
     /**
      Where to start drawing the line chart from. Zero, data set minium or custom.
