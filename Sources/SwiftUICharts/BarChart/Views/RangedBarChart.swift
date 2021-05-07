@@ -53,23 +53,17 @@ public struct RangedBarChart<ChartData>: View where ChartData: RangedBarChartDat
     }
     
     public var body: some View {
-        GeometryReader { geo in
-            if chartData.isGreaterThanTwo() {
-                HStack(spacing: 0) {
-                    switch chartData.barStyle.colourFrom {
-                    case .barStyle:
-                        RangedBarChartBarStyleSubView(chartData: chartData)
-                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
-                    case .dataPoints:
-                        RangedBarChartDataPointSubView(chartData: chartData)
-                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
-                    }
+        if chartData.isGreaterThanTwo() {
+            HStack(spacing: 0) {
+                switch chartData.barStyle.colourFrom {
+                case .barStyle:
+                    RangedBarChartBarStyleSubView(chartData: chartData)
+                        .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                case .dataPoints:
+                    RangedBarChartDataPointSubView(chartData: chartData)
+                        .accessibilityLabel(Text("\(chartData.metadata.title)"))
                 }
-                // Needed for axes label frames
-                .onChange(of: geo.frame(in: .local)) { value in
-                    self.chartData.viewData.chartSize = value
-                }
-            } else { CustomNoDataView(chartData: chartData) }
-        }
+            }
+        } else { CustomNoDataView(chartData: chartData) }
     }
 }

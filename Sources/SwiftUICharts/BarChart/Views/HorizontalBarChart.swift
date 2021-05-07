@@ -18,18 +18,24 @@ public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBar
     }
     
     public var body: some View {
-        if chartData.isGreaterThanTwo() {
-            VStack(spacing: 0) {
-                switch chartData.barStyle.colourFrom {
-                case .barStyle:
-                    HorizontalBarChartBarStyleSubView(chartData: chartData)
-                        .accessibilityLabel(Text("\(chartData.metadata.title)"))
-                case .dataPoints:
-                    HorizontalBarChartDataPointSubView(chartData: chartData)
-                        .accessibilityLabel(Text("\(chartData.metadata.title)"))
+        GeometryReader { geo in
+            if chartData.isGreaterThanTwo() {
+                VStack(spacing: 0) {
+                    switch chartData.barStyle.colourFrom {
+                    case .barStyle:
+                        HorizontalBarChartBarStyleSubView(chartData: chartData)
+                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                    case .dataPoints:
+                        HorizontalBarChartDataPointSubView(chartData: chartData)
+                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                    }
+                    
                 }
-                
-            }
-        } else { CustomNoDataView(chartData: chartData) }
+                // Needed for axes label frames
+                .onChange(of: geo.frame(in: .local)) { value in
+                    self.chartData.viewData.chartSize = value
+                }
+            } else { CustomNoDataView(chartData: chartData) }
+        }
     }
 }

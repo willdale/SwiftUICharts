@@ -507,10 +507,10 @@ internal struct HorizontalColourBar<CD: CTBarChartDataProtocol,
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
+        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.bottom,
                                  tr: chartData.barStyle.cornerRadius.top,
                                  bl: chartData.barStyle.cornerRadius.bottom,
-                                 br: chartData.barStyle.cornerRadius.bottom)
+                                 br: chartData.barStyle.cornerRadius.top)
             .fill(colour)
             .scaleEffect(x: startAnimation ? CGFloat(dataPoint.value / chartData.maxValue) : 0, anchor: .leading)
             .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
@@ -558,10 +558,10 @@ internal struct HorizontalGradientColoursBar<CD: CTBarChartDataProtocol,
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
+        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.bottom,
                                  tr: chartData.barStyle.cornerRadius.top,
                                  bl: chartData.barStyle.cornerRadius.bottom,
-                                 br: chartData.barStyle.cornerRadius.bottom)
+                                 br: chartData.barStyle.cornerRadius.top)
             .fill(LinearGradient(gradient: Gradient(colors: colours),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
@@ -611,10 +611,10 @@ internal struct HorizontalGradientStopsBar<CD: CTBarChartDataProtocol,
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
+        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.bottom,
                                  tr: chartData.barStyle.cornerRadius.top,
                                  bl: chartData.barStyle.cornerRadius.bottom,
-                                 br: chartData.barStyle.cornerRadius.bottom)
+                                 br: chartData.barStyle.cornerRadius.top)
             .fill(LinearGradient(gradient: Gradient(stops: stops),
                                  startPoint: startPoint,
                                  endPoint: endPoint))

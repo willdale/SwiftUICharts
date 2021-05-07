@@ -50,14 +50,7 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
      */
     var touchLocation: CGPoint = .zero
     
-    
-    
-    
-    // MARK: TODO:
-    //
-    //
-    //
-    // MARK: Move to `viewData`
+
     /**
      Size of the chart.
      
@@ -68,20 +61,6 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
      Used by `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
      */
     var chartSize: CGRect  = .zero
-    
-    /**
-     Current width of the `YAxisLabels`
-     
-     Needed line up the touch overlay to compensate for
-     the loss of width.
-     */
-//    var yAxisLabelWidth: CGFloat = 0
-    
-    //
-    //
-    //
-    //
-    // MARK: End TODO
     
     /**
      Option to display units before or after values.
