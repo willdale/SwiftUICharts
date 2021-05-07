@@ -113,6 +113,15 @@ extension CTLineBarChartDataProtocol {
                     .font(self.chartStyle.yAxisLabelFont)
                     .foregroundColor(self.chartStyle.yAxisLabelColour)
                     .lineLimit(1)
+                    .overlay(
+                        GeometryReader { geo in
+                            Rectangle()
+                                .foregroundColor(Color.clear)
+                                .onAppear {
+                                    self.viewData.yAxisLabelWidth.append(geo.size.width)
+                                }
+                        }
+                    )
                     .accessibilityLabel(Text("Y Axis Label"))
                     .accessibilityValue(Text(self.labelsArray[i]))
                 if i != 0 {
@@ -191,17 +200,57 @@ extension CTLineBarChartDataProtocol {
     public func poiMarker(value: Double, range: Double, minValue: Double) -> some Shape {
         HorizontalMarker(chartData: self, value: value, range: range, minValue: minValue)
     }
+    public func poiLabelAxis(markerValue: Double, specifier: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color) -> some View {
+        Text("\(markerValue, specifier: specifier)")
+            .font(labelFont)
+            .foregroundColor(labelColour)
+            .padding(4)
+            .background(labelBackground)
+            .ifElse(self.chartStyle.yAxisLabelPosition == .leading, if: {
+                $0
+                    .clipShape(LeadingLabelShape())
+                    .overlay(LeadingLabelShape()
+                                .stroke(lineColour)
+                    )
+            }, else: {
+                $0
+                    .clipShape(TrailingLabelShape())
+                    .overlay(TrailingLabelShape()
+                                .stroke(lineColour)
+                    )
+            })
+    }
 }
 extension CTLineBarChartDataProtocol where Self: isHorizontal {
     public func poiMarker(value: Double, range: Double, minValue: Double) -> some Shape {
         VerticalMarker(chartData: self, value: value, range: range, minValue: minValue)
+    }
+    public func poiLabelAxis(markerValue: Double, specifier: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color) -> some View {
+        Text("\(markerValue, specifier: specifier)")
+            .font(labelFont)
+            .foregroundColor(labelColour)
+            .padding(4)
+            .background(labelBackground)
+            .ifElse(self.chartStyle.xAxisLabelPosition == .bottom, if: {
+                $0
+                    .clipShape(BottomLabelShape())
+                    .overlay(BottomLabelShape()
+                                .stroke(lineColour)
+                    )
+            }, else: {
+                $0
+                    .clipShape(TopLabelShape())
+                    .overlay(TopLabelShape()
+                                .stroke(lineColour)
+                    )
+            })
     }
 }
 
 // MARK: Line Charts
 extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol {
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        CGPoint(x: -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - self.viewData.yAxisTitleWidth,
+        CGPoint(x: -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - 4, // -4 for padding at the root.
                 y: CGFloat(markerValue - minValue) * -(frame.height / CGFloat(range)) + frame.height)
     }
     public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
@@ -213,7 +262,7 @@ extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol {
 // MARK: Vertical Bar Charts
 extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol {
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        CGPoint(x: -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - self.viewData.yAxisTitleWidth,
+        return CGPoint(x: -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - 4, // -4 for padding at the root.
                 y: frame.height - CGFloat((markerValue - minValue) / range) * frame.height)
     }
     public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
@@ -228,7 +277,7 @@ extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol,
     
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         CGPoint(x: CGFloat((markerValue - minValue) / range) * frame.width,
-                y: -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - self.viewData.yAxisTitleWidth)
+                y: -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2))
     }
     public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         CGPoint(x: CGFloat((markerValue - minValue) / range) * frame.width,

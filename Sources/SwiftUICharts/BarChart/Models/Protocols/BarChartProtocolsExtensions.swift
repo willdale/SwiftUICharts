@@ -42,6 +42,9 @@ extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType {
 }
 
 // MARK: - Legends
+//
+//
+//
 // MARK: Standard / Ranged
 extension CTBarChartDataProtocol where Self.Set.ID == UUID,
                                        Self.Set.DataPoint.ID == UUID,

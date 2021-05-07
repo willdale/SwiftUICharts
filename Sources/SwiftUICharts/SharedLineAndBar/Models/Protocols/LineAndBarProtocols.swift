@@ -81,6 +81,20 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
     func poiMarker(value: Double, range: Double, minValue: Double) -> MarkerShape
     
     /**
+     A type representing a View for displaying a label
+     as a POI in an axis.
+     */
+    associatedtype LabelAxis: View
+    /**
+     Displays a label and box that mark a Point Of Interest
+     in an axis.
+     
+     In standard charts this will display leading or trailing.
+     In horizontal charts this will display bottom or top.
+     */
+    func poiLabelAxis(markerValue: Double, specifier: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color) -> LabelAxis
+    
+    /**
      Sets the position of the POI Label when it's over
      one of the axes.
      
