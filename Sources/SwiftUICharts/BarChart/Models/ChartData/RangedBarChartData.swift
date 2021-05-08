@@ -83,8 +83,13 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
                         VStack {
-                            RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
-                            Spacer()
+                            if self.chartStyle.xAxisLabelPosition == .bottom {
+                                RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
+                                Spacer()
+                            } else {
+                                Spacer()
+                                RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
+                            }
                         }
                         .frame(width: self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize),
                                height: self.viewData.xAxisLabelHeights.max())
@@ -97,8 +102,13 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
                     HStack(spacing: 0) {
                         ForEach(labelArray.indices, id: \.self) { i in
                             VStack {
-                                RotatedText(chartData: self, label: labelArray[i], rotation: angle)
-                                Spacer()
+                                if self.chartStyle.xAxisLabelPosition == .bottom {
+                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                    Spacer()
+                                } else {
+                                    Spacer()
+                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                }
                             }
                             .frame(width: self.viewData.xAxislabelWidths.max(),
                                    height: self.viewData.xAxisLabelHeights.max())

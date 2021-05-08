@@ -72,3 +72,58 @@ internal struct RotatedText<ChartData>: View where ChartData: CTLineBarChartData
             .accessibilityValue(Text(label))
     }
 }
+
+
+
+/**
+ A view that displays text with rotation.
+ 
+ Each time if gets layed out, it appends it's width
+ to `xAxisLabelHeights`  in `viewData`.
+ It also sets `xAxislabelWidth` in
+ `viewData` of it's approximate width.
+ This gets used higher up the view hierarchy
+ to set the frame of the of the text after rotation.
+ */
+internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTLineBarChartDataProtocol & isHorizontal {
+    
+    @ObservedObject private var chartData: ChartData
+    private let label: String
+    
+    /**
+     Initialises a new instance of RotatedText.
+     
+     A view that displays text with rotation.
+     
+     - Parameters:
+        - chartData: Chart Data must conform to `CTLineBarChartDataProtocol`.
+        - label: The string to show in the `Text` view.
+     */
+    internal init(
+        chartData: ChartData,
+        label: String
+    ) {
+        self.chartData = chartData
+        self.label = label
+    }
+    
+    @State private var finalFrame: CGRect = .zero
+    
+    internal var body: some View {
+        Text(label)
+            .font(chartData.chartStyle.xAxisLabelFont)
+            .lineLimit(1)
+            .foregroundColor(chartData.chartStyle.xAxisLabelColour)
+            .overlay(
+                GeometryReader { geo in
+                    Rectangle()
+                        .foregroundColor(Color.clear)
+                        .onAppear {
+                            chartData.viewData.yAxisLabelWidth.append(geo.frame(in: .local).width + 10)
+                        }
+                }
+            )
+            .accessibilityLabel(Text("X Axis Label"))
+            .accessibilityValue(Text(label))
+    }
+}

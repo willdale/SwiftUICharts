@@ -30,15 +30,15 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                 switch chartData.chartStyle.yAxisLabelPosition {
                 case .leading:
                     HStack(spacing: 0) {
-                        chartData.showYAxisTitle()
-                        chartData.showYAxisLabels().padding(.trailing, 4)
+                        chartData.getYAxisTitle()
+                        chartData.getYAxisLabels().padding(.trailing, 4)
                         content
                     }
                 case .trailing:
                     HStack(spacing: 0) {
                         content
-                        chartData.showYAxisLabels().padding(.leading, 4)
-                        chartData.showYAxisTitle()
+                        chartData.getYAxisLabels().padding(.leading, 4)
+                        chartData.getYAxisTitle()
                     }
                 }
             } else { content }

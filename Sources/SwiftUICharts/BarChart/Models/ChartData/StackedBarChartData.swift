@@ -77,8 +77,13 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
                         VStack {
-                            RotatedText(chartData: self, label: dataSet.setTitle, rotation: angle)
-                            Spacer()
+                            if self.chartStyle.xAxisLabelPosition == .bottom {
+                                RotatedText(chartData: self, label: dataSet.setTitle, rotation: angle)
+                                Spacer()
+                            } else {
+                                Spacer()
+                                RotatedText(chartData: self, label: dataSet.setTitle, rotation: angle)
+                            }
                         }
                         .frame(width: self.viewData.xAxislabelWidths.max(),
                                height: self.viewData.xAxisLabelHeights.max())
@@ -95,8 +100,13 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
                                     .frame(minWidth: 0, maxWidth: 500)
                             }
                             VStack {
-                                RotatedText(chartData: self, label: labelArray[i], rotation: angle)
-                                Spacer()
+                                if self.chartStyle.xAxisLabelPosition == .bottom {
+                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                    Spacer()
+                                } else {
+                                    Spacer()
+                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                }
                             }
                             .frame(width: self.viewData.xAxislabelWidths.max(),
                                    height: self.viewData.xAxisLabelHeights.max())

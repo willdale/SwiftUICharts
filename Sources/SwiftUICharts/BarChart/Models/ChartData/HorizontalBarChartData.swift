@@ -64,13 +64,13 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol {
     // MARK: Labels
     public final func getXAxisLabels() -> some View {
         HStack(spacing: 0) {
-            ForEach(self.getYLabels("%.f").indices, id: \.self) { i in
-                Text(self.getYLabels("%.f")[i])
+            ForEach(self.labelsArray.indices, id: \.self) { i in
+                Text(self.labelsArray[i])
                     .font(self.chartStyle.yAxisLabelFont)
                     .foregroundColor(self.chartStyle.yAxisLabelColour)
                     .lineLimit(1)
                     .accessibilityLabel(Text("Y Axis Label"))
-                    .accessibilityValue(Text(self.getYLabels("%.f")[i]))
+                    .accessibilityValue(Text(self.labelsArray[i]))
                     .overlay(
                         GeometryReader { geo in
                             Color.clear
@@ -79,46 +79,45 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol {
                                 }
                         }
                     )
-                if i != self.getYLabels("%.f").count - 1 {
+                if i != self.labelsArray.count - 1 {
                     Spacer()
                         .frame(minWidth: 0, maxWidth: 500)
                 }
             }
         }
     }
-    public final func showYAxisLabels() -> some View {
+    
+    public final func getYAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
             case .dataPoint:
                 
-                VStack(alignment: .trailing, spacing: 0) {
+                VStack {
+                    if self.chartStyle.xAxisLabelPosition == .top {
+                        Spacer()
+                            .frame(height: yAxisPaddingHeight + 8) // Why 8 ?
+                    }
                     ForEach(dataSets.dataPoints, id: \.id) { data in
                         Spacer()
                             .frame(minHeight: 0, maxHeight: 500)
-                        Text(data.wrappedXAxisLabel)
-                            .font(self.chartStyle.xAxisLabelFont)
-                            .lineLimit(1)
-                            .foregroundColor(self.chartStyle.xAxisLabelColour)
-                            .overlay(
-                                GeometryReader { geo in
-                                    Rectangle()
-                                        .foregroundColor(Color.clear)
-                                        .onAppear {
-                                            self.viewData.yAxisLabelWidth.append(geo.size.width)
-                                        }
-                                }
-                            )
-                            .accessibilityLabel(Text("X Axis Label"))
-                            .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
-                        
+                        HStack(spacing: 0) {
+                            if self.chartStyle.yAxisLabelPosition == .leading {
+                                Spacer()
+                                HorizontalRotatedText(chartData: self, label: data.wrappedXAxisLabel)
+                            } else {
+                                HorizontalRotatedText(chartData: self, label: data.wrappedXAxisLabel)
+                                Spacer()
+                            }
+                        }
+                        .frame(width: self.viewData.yAxisLabelWidth.max())
                         Spacer()
                             .frame(minHeight: 0, maxHeight: 500)
                     }
-                    Spacer()
-                        .frame(height: self.viewData.xAxisTitleHeight + (self.viewData.xAxisLabelHeights.max() ?? 0) + 8)
+                    if self.chartStyle.xAxisLabelPosition == .bottom {
+                        Spacer()
+                            .frame(height: yAxisPaddingHeight + 8) // Why 8 ?
+                    }
                 }
-                .frame(width: self.viewData.yAxisLabelWidth.max())
-                Spacer()
                 
             case .chartData:
                 
@@ -147,10 +146,9 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol {
                                 .frame(minHeight: 0, maxHeight: 500)
                         }
                         Spacer()
-                            .frame(height: self.viewData.xAxisTitleHeight + (self.viewData.xAxisLabelHeights.max() ?? 0) + 8)
+                            .frame(height: yAxisPaddingHeight + 8) // Why 8 ?
                     }
                     .frame(width: self.viewData.yAxisLabelWidth.max())
-                    Spacer()
                 }
             }
         }

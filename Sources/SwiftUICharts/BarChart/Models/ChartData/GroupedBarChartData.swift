@@ -78,18 +78,21 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
                 HStack(spacing: 0) {
                     ForEach(dataSets.dataSets.indices, id: \.self) { i in
                         if i > 0 {
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
+                            Spacer().frame(minWidth: 0, maxWidth: 500)
                         }
                         VStack {
-                            RotatedText(chartData: self, label: self.dataSets.dataSets[i].setTitle, rotation: angle)
-                            Spacer()
+                            if self.chartStyle.xAxisLabelPosition == .bottom {
+                                RotatedText(chartData: self, label: self.dataSets.dataSets[i].setTitle, rotation: angle)
+                                Spacer()
+                            } else {
+                                Spacer()
+                                RotatedText(chartData: self, label: self.dataSets.dataSets[i].setTitle, rotation: angle)
+                            }
                         }
                         .frame(width: self.getXSectionForDataPoint(dataSet: self.dataSets, chartSize: self.viewData.chartSize, groupSpacing: self.groupSpacing),
                                height: self.viewData.xAxisLabelHeights.max())
                         if i < self.dataSets.dataSets.count - 1 {
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
+                            Spacer().frame(minWidth: 0, maxWidth: 500)
                         }
                     }
                 }
@@ -98,18 +101,21 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
                     HStack(spacing: 0) {
                         ForEach(labelArray.indices, id: \.self) { i in
                             if i > 0 {
-                                Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
+                                Spacer().frame(minWidth: 0, maxWidth: 500)
                             }
                             VStack {
-                                RotatedText(chartData: self, label: labelArray[i], rotation: angle)
-                                Spacer()
+                                if self.chartStyle.xAxisLabelPosition == .bottom {
+                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                    Spacer()
+                                } else {
+                                    Spacer()
+                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                }
                             }
                             .frame(width: self.viewData.xAxislabelWidths.max(),
                                    height: self.viewData.xAxisLabelHeights.max())
                             if i < labelArray.count - 1 {
-                                Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
+                                Spacer().frame(minWidth: 0, maxWidth: 500)
                             }
                         }
                     }

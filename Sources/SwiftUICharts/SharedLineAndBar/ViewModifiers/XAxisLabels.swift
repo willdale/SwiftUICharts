@@ -26,15 +26,15 @@ internal struct XAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                 if chartData.isGreaterThanTwo() {
                     VStack {
                         content
-                        chartData.getXAxisLabels().padding(.top, 4)
-                        chartData.xAxisTitle()
+                        chartData.getXAxisLabels().padding(.top, 2)
+                        chartData.getXAxisTitle()
                     }
                 } else { content }
             case .top:
                 if chartData.isGreaterThanTwo() {
                     VStack {
-                        chartData.xAxisTitle()
-                        chartData.getXAxisLabels().padding(.bottom, 4)
+                        chartData.getXAxisTitle()
+                        chartData.getXAxisLabels().padding(.bottom, 2)
                         content
                     }
                 } else { content }

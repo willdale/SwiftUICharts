@@ -70,8 +70,14 @@ public final class LineChartData: CTLineChartDataProtocol {
                 HStack(spacing: 0) {
                     ForEach(dataSets.dataPoints) { data in
                         VStack {
-                            RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
-                            Spacer()
+                            if self.chartStyle.xAxisLabelPosition == .bottom {
+                                RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
+                                Spacer()
+                            } else {
+                                Spacer()
+                                RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
+                            }
+                            
                         }
                         .frame(width: min(self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize), self.viewData.xAxislabelWidths.min() ?? 0),
                                height: self.viewData.xAxisLabelHeights.max())
@@ -87,8 +93,13 @@ public final class LineChartData: CTLineChartDataProtocol {
                     HStack(spacing: 0) {
                         ForEach(labelArray.indices, id: \.self) { i in
                             VStack {
-                                RotatedText(chartData: self, label: labelArray[i], rotation: angle)
-                                Spacer()
+                                if self.chartStyle.xAxisLabelPosition == .bottom {
+                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                    Spacer()
+                                } else {
+                                    Spacer()
+                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                }
                             }
                             .frame(width: self.viewData.xAxislabelWidths.min(),
                                    height: self.viewData.xAxisLabelHeights.max())
