@@ -95,8 +95,8 @@ extension CTLineBarChartDataProtocol {
             let dataRange: Double = self.range
             let minValue: Double = self.minValue
             let range: Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels-1)
-            let firstLabel = [String(format: self.viewData.yAxisSpecifier, minValue)]
-            let otherLabels = (1...self.chartStyle.yAxisNumberOfLabels-1).map { String(format: self.viewData.yAxisSpecifier, minValue + range * Double($0)) }
+            let firstLabel = [String(format: specifier, minValue)]
+            let otherLabels = (1...self.chartStyle.yAxisNumberOfLabels-1).map { String(format: specifier, minValue + range * Double($0)) }
             let labels = firstLabel + otherLabels
             return labels
         case .custom:
