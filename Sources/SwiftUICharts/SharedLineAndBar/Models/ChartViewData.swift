@@ -73,6 +73,19 @@ public struct ChartViewData {
      of the layout system.
      */
     var yAxisTitleWidth: CGFloat = 0
+    /**
+     Experimental
+     */
+    var yAxisTitleHeight: CGFloat = 0
+    
+    /**
+     Experimental
+     */
+    var extraYAxisTitleWidth: CGFloat = 0
+    /**
+     Experimental
+     */
+    var extraYAxisTitleHeight: CGFloat = 0
     
     /**
      Width of the y axis labels once

@@ -85,9 +85,9 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
                                                 endPoint: endPoint,
                                                 isFilled: false)
                     } else if chartData.dataSets.style.lineColour.colourType == .gradientStops,
-                              let stops      = chartData.dataSets.style.lineColour.stops,
+                              let stops = chartData.dataSets.style.lineColour.stops,
                               let startPoint = chartData.dataSets.style.lineColour.startPoint,
-                              let endPoint   = chartData.dataSets.style.lineColour.endPoint
+                              let endPoint = chartData.dataSets.style.lineColour.endPoint
                     {
                         let stops = GradientStop.convertToGradientStopsArray(stops: stops)
                         LineChartStopsSubView(chartData: chartData,

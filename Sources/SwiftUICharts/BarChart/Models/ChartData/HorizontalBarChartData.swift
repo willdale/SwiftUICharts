@@ -24,6 +24,8 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol {
     @Published public final var viewData: ChartViewData
     @Published public final var infoView: InfoViewData<BarChartDataPoint> = InfoViewData()
     
+    @Published public final var extraLineData: ExtraLineData<HorizontalBarChartData> = ExtraLineData<HorizontalBarChartData>(dataSets: ExtraLineDataSet(dataPoints: []))
+    
     public final var noDataText: Text
     public final let chartType: (chartType: ChartType, dataSetType: DataSetType)
     

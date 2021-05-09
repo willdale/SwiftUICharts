@@ -28,6 +28,8 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
     @Published public final var infoView: InfoViewData<StackedBarDataPoint> = InfoViewData()
     @Published public final var groups: [GroupingData]
     
+    @Published public final var extraLineData: ExtraLineData<StackedBarChartData> = ExtraLineData<StackedBarChartData>(dataSets: ExtraLineDataSet(dataPoints: []))
+    
     public final var noDataText: Text
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     

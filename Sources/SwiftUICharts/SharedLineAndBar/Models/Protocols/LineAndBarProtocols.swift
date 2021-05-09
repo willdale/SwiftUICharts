@@ -52,6 +52,31 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
      */
     var viewData: ChartViewData { get set }
     
+    
+    
+    
+    /**
+     Experimental
+    */
+    var extraLineData: ExtraLineData<Self> { get set }
+    /**
+     Experimental
+    */
+    associatedtype ExtraYLabels: View
+    
+    /**
+     Experimental
+    */
+    func getExtraYAxisLabels() -> ExtraYLabels
+    /**
+     Experimental
+    */
+    func getColour() -> ColourStyle
+    
+    
+    
+    
+    
     /**
      A type representing a View for displaying labels on the X axis.
      */

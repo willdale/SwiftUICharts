@@ -29,6 +29,8 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
     public final var noDataText: Text
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
+    @Published public final var extraLineData: ExtraLineData<MultiLineChartData> = ExtraLineData<MultiLineChartData>(dataSets: ExtraLineDataSet(dataPoints: []))
+    
     // MARK: Initializers
     /// Initialises a Multi Line Chart.
     ///

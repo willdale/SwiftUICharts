@@ -29,6 +29,8 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     @Published public final var infoView: InfoViewData<GroupedBarDataPoint> = InfoViewData()
     @Published public final var groups: [GroupingData]
     
+    @Published public final var extraLineData: ExtraLineData<GroupedBarChartData> = ExtraLineData<GroupedBarChartData>(dataSets: ExtraLineDataSet(dataPoints: []))
+    
     public final var noDataText: Text
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     

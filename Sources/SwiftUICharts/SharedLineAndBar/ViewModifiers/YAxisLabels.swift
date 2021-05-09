@@ -14,13 +14,16 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
     
     @ObservedObject private var chartData: T
     private let specifier: String
+    private let colourIndicator: AxisColour
     
     internal init(
         chartData: T,
-        specifier: String
+        specifier: String,
+        colourIndicator: AxisColour
     ) {
         self.chartData = chartData
         self.specifier = specifier
+        self.colourIndicator = colourIndicator
         chartData.viewData.hasYAxisLabels = true
     }
     
@@ -30,7 +33,7 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                 switch chartData.chartStyle.yAxisLabelPosition {
                 case .leading:
                     HStack(spacing: 0) {
-                        chartData.getYAxisTitle()
+                        chartData.getYAxisTitle(colour: colourIndicator)
                         chartData.getYAxisLabels().padding(.trailing, 4)
                         content
                     }
@@ -38,7 +41,7 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                     HStack(spacing: 0) {
                         content
                         chartData.getYAxisLabels().padding(.leading, 4)
-                        chartData.getYAxisTitle()
+                        chartData.getYAxisTitle(colour: colourIndicator)
                     }
                 }
             } else { content }
@@ -70,10 +73,15 @@ extension View {
      - Doughnut Chart
      
      - Parameters:
-     - specifier: Decimal precision specifier
+        - chartData: Data that conforms to CTLineBarChartDataProtocol
+        - specifier: Decimal precision specifier
      - Returns: HStack of labels
      */
-    public func yAxisLabels<T: CTLineBarChartDataProtocol>(chartData: T, specifier: String = "%.0f") -> some View {
-        self.modifier(YAxisLabels(chartData: chartData, specifier: specifier))
+    public func yAxisLabels<T: CTLineBarChartDataProtocol>(
+        chartData: T,
+        specifier: String = "%.0f",
+        colourIndicator: AxisColour = .none
+    ) -> some View {
+        self.modifier(YAxisLabels(chartData: chartData, specifier: specifier, colourIndicator: colourIndicator))
     }
 }
