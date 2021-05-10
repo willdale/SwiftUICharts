@@ -24,7 +24,7 @@ public final class BarChartData: CTBarChartDataProtocol {
     @Published public final var viewData: ChartViewData
     @Published public final var infoView: InfoViewData<BarChartDataPoint> = InfoViewData()
     
-    @Published public final var extraLineData: ExtraLineData<BarChartData> = ExtraLineData<BarChartData>(dataSets: ExtraLineDataSet(dataPoints: []))
+    @Published public final var extraLineData: ExtraLineData!
     
     public final var noDataText: Text
     public final let chartType: (chartType: ChartType, dataSetType: DataSetType)

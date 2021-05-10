@@ -58,7 +58,7 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
     /**
      Experimental
     */
-    var extraLineData: ExtraLineData<Self> { get set }
+    var extraLineData: ExtraLineData!/*<Self>*/ { get set }
     /**
      Experimental
     */

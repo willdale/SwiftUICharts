@@ -24,7 +24,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
     @Published public final var viewData: ChartViewData
     @Published public final var infoView: InfoViewData<RangedBarDataPoint> = InfoViewData()
     
-    @Published public final var extraLineData: ExtraLineData<RangedBarChartData> = ExtraLineData<RangedBarChartData>(dataSets: ExtraLineDataSet(dataPoints: []))
+    @Published public final var extraLineData: ExtraLineData!
     
     public final var noDataText: Text
     public final let chartType: (chartType: ChartType, dataSetType: DataSetType)

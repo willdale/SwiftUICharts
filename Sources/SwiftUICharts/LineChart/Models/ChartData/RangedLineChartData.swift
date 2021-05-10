@@ -29,7 +29,7 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
     public final var noDataText: Text
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
-    @Published public final var extraLineData: ExtraLineData<RangedLineChartData> = ExtraLineData<RangedLineChartData>(dataSets: ExtraLineDataSet(dataPoints: []))
+    @Published public final var extraLineData: ExtraLineData!
     
     // MARK: Initializer
     /// Initialises a ranged line chart.

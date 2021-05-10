@@ -11,16 +11,19 @@ import SwiftUI
 internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
     @ObservedObject private var chartData: T
-    private var data: ExtraLineData<T>
     
     init(
         chartData: T,
-        data: ExtraLineData<T>
+        legendTitle: String,
+        datapoints: @escaping ()->([ExtraLineDataPoint]),
+        style: @escaping ()->(ExtraLineStyle)
     ) {
         self.chartData = chartData
-        self.data = data
-        self.chartData.extraLineData = data
-        self.lineLegendSetup(dataSet: data.dataSets)
+        self.chartData.extraLineData = ExtraLineData(legendTitle: legendTitle,
+                                                     dataPoints: datapoints,
+                                                     style: style)
+        
+        self.lineLegendSetup()
     }
     
     @State private var startAnimation: Bool = false
@@ -29,14 +32,14 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
         Group {
             if chartData.isGreaterThanTwo() {
                 ZStack {
-                    if data.dataSets.style.lineColour.colourType == .colour,
-                       let colour = data.dataSets.style.lineColour.colour
+                    if chartData.extraLineData.style.lineColour.colourType == .colour,
+                       let colour = chartData.extraLineData.style.lineColour.colour
                     {
-                        ExtraLineShape(dataPoints: data.dataSets.dataPoints.map(\.value),
-                                       lineType: data.dataSets.style.lineType,
-                                       spacingType: data.dataSets.style.spacingType,
-                                       range: data.range,
-                                       minValue: data.minValue)
+                        ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints.map(\.value),
+                                       lineType: chartData.extraLineData.style.lineType,
+                                       lineSpacing: chartData.extraLineData.style.lineSpacing,
+                                       range: chartData.extraLineData.range,
+                                       minValue: chartData.extraLineData.minValue)
                             .trim(to: startAnimation ? 1 : 0)
                             .stroke(colour, style: StrokeStyle(lineWidth: 3))
                             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
@@ -46,16 +49,16 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                                 self.startAnimation = false
                             }
                             .zIndex(1)
-                    } else if data.dataSets.style.lineColour.colourType == .gradientColour,
-                              let colours = data.dataSets.style.lineColour.colours,
-                              let startPoint = data.dataSets.style.lineColour.startPoint,
-                              let endPoint = data.dataSets.style.lineColour.endPoint
+                    } else if chartData.extraLineData.style.lineColour.colourType == .gradientColour,
+                              let colours = chartData.extraLineData.style.lineColour.colours,
+                              let startPoint = chartData.extraLineData.style.lineColour.startPoint,
+                              let endPoint = chartData.extraLineData.style.lineColour.endPoint
                     {
-                        ExtraLineShape(dataPoints: data.dataSets.dataPoints.map(\.value),
-                                       lineType: data.dataSets.style.lineType,
-                                       spacingType: data.dataSets.style.spacingType,
-                                       range: data.range,
-                                       minValue: data.minValue)
+                        ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints.map(\.value),
+                                       lineType: chartData.extraLineData.style.lineType,
+                                       lineSpacing: chartData.extraLineData.style.lineSpacing,
+                                       range: chartData.extraLineData.range,
+                                       minValue: chartData.extraLineData.minValue)
                             .trim(to: startAnimation ? 1 : 0)
                             .stroke(LinearGradient(gradient: Gradient(colors: colours),
                                                    startPoint: startPoint,
@@ -68,17 +71,17 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                                 self.startAnimation = false
                             }
                             .zIndex(1)
-                    } else if data.dataSets.style.lineColour.colourType == .gradientStops,
-                              let stops = data.dataSets.style.lineColour.stops,
-                              let startPoint = data.dataSets.style.lineColour.startPoint,
-                              let endPoint = data.dataSets.style.lineColour.endPoint
+                    } else if chartData.extraLineData.style.lineColour.colourType == .gradientStops,
+                              let stops = chartData.extraLineData.style.lineColour.stops,
+                              let startPoint = chartData.extraLineData.style.lineColour.startPoint,
+                              let endPoint = chartData.extraLineData.style.lineColour.endPoint
                     {
                         let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-                        ExtraLineShape(dataPoints: data.dataSets.dataPoints.map(\.value),
-                                       lineType: data.dataSets.style.lineType,
-                                       spacingType: data.dataSets.style.spacingType,
-                                       range: data.range,
-                                       minValue: data.minValue)
+                        ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints.map(\.value),
+                                       lineType: chartData.extraLineData.style.lineType,
+                                       lineSpacing: chartData.extraLineData.style.lineSpacing,
+                                       range: chartData.extraLineData.range,
+                                       minValue: chartData.extraLineData.minValue)
                             .trim(to: startAnimation ? 1 : 0)
                             .stroke(LinearGradient(gradient: Gradient(stops: stops),
                                                    startPoint: startPoint,
@@ -98,147 +101,143 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
         }
     }
     
-    private func lineLegendSetup(dataSet: ExtraLineDataSet) {
-        if dataSet.style.lineColour.colourType == .colour,
-           let colour = dataSet.style.lineColour.colour
+    private func lineLegendSetup() {
+        if self.chartData.extraLineData.style.lineColour.colourType == .colour,
+           let colour = self.chartData.extraLineData.style.lineColour.colour
         {
-            chartData.legends.append(LegendData(id: dataSet.id,
-                                           legend: dataSet.legendTitle,
-                                           colour: ColourStyle(colour: colour),
-                                           strokeStyle: dataSet.style.strokeStyle,
-                                           prioity: 3,
-                                           chartType: .line))
-        } else if dataSet.style.lineColour.colourType == .gradientColour,
-                  let colours = dataSet.style.lineColour.colours
+            chartData.legends.append(LegendData(id: self.chartData.extraLineData.id,
+                                                legend: self.chartData.extraLineData.legendTitle,
+                                                colour: ColourStyle(colour: colour),
+                                                strokeStyle: self.chartData.extraLineData.style.strokeStyle,
+                                                prioity: 3,
+                                                chartType: .line))
+        } else if self.chartData.extraLineData.style.lineColour.colourType == .gradientColour,
+                  let colours = self.chartData.extraLineData.style.lineColour.colours
         {
-            chartData.legends.append(LegendData(id: dataSet.id,
-                                           legend: dataSet.legendTitle,
-                                           colour: ColourStyle(colours: colours,
-                                                               startPoint: .leading,
-                                                               endPoint: .trailing),
-                                           strokeStyle: dataSet.style.strokeStyle,
-                                           prioity: 3,
-                                           chartType: .line))
-        } else if dataSet.style.lineColour.colourType == .gradientStops,
-                  let stops = dataSet.style.lineColour.stops
+            chartData.legends.append(LegendData(id: self.chartData.extraLineData.id,
+                                                legend: self.chartData.extraLineData.legendTitle,
+                                                colour: ColourStyle(colours: colours,
+                                                                    startPoint: .leading,
+                                                                    endPoint: .trailing),
+                                                strokeStyle: self.chartData.extraLineData.style.strokeStyle,
+                                                prioity: 3,
+                                                chartType: .line))
+        } else if self.chartData.extraLineData.style.lineColour.colourType == .gradientStops,
+                  let stops = self.chartData.extraLineData.style.lineColour.stops
         {
-            chartData.legends.append(LegendData(id: dataSet.id,
-                                           legend: dataSet.legendTitle,
-                                           colour: ColourStyle(stops: stops,
-                                                               startPoint: .leading,
-                                                               endPoint: .trailing),
-                                           strokeStyle: dataSet.style.strokeStyle,
-                                           prioity: 3,
-                                           chartType: .line))
+            chartData.legends.append(LegendData(id: self.chartData.extraLineData.id,
+                                                legend: self.chartData.extraLineData.legendTitle,
+                                                colour: ColourStyle(stops: stops,
+                                                                    startPoint: .leading,
+                                                                    endPoint: .trailing),
+                                                strokeStyle: self.chartData.extraLineData.style.strokeStyle,
+                                                prioity: 3,
+                                                chartType: .line))
         }
     }
 }
+
 
 // MARK: - View Extension
 extension View {
     public func extraLine<T: CTLineBarChartDataProtocol>(
         chartData: T,
-        data: ()->(ExtraLineData<T>)
+        legendTitle: String,
+        datapoints: @escaping ()->([ExtraLineDataPoint]),
+        style: @escaping ()->(ExtraLineStyle)
     ) -> some View {
-        self.modifier(ExtraLine<T>(chartData: chartData, data: data()))
+        self.modifier(ExtraLine<T>(chartData: chartData,
+                                   legendTitle: legendTitle,
+                                   datapoints: datapoints,
+                                   style: style)
+        )
     }
 }
 
 
 
 // MARK: - Data
-public struct ExtraLineData<T: CTLineBarChartDataProtocol> {
+public struct ExtraLineData: Identifiable {
     
-    public let dataSets: ExtraLineDataSet
+    public let id: UUID = UUID()
     
-    public init(dataSets: ExtraLineDataSet) {
-        self.dataSets = dataSets
+    public var dataPoints: [ExtraLineDataPoint]
+    public var style: ExtraLineStyle
+    public var legendTitle: String
+    
+    public init(
+        legendTitle: String,
+        dataPoints: ()->([ExtraLineDataPoint]),
+        style: ()->(ExtraLineStyle)
+    ) {
+        self.dataPoints = dataPoints()
+        self.style = style()
+        self.legendTitle = legendTitle
+        
     }
-    
-    public var range: Double {
+
+    internal var range: Double {
         get {
             var _lowestValue: Double
             var _highestValue: Double
             
-            switch self.dataSets.style.baseline {
+            switch self.style.baseline {
             case .minimumValue:
-                _lowestValue = self.dataSets.minValue()
+                _lowestValue = self.getMinValue()
             case .minimumWithMaximum(of: let value):
-                _lowestValue = min(self.dataSets.minValue(), value)
+                _lowestValue = min(self.getMinValue(), value)
             case .zero:
                 _lowestValue = 0
             }
             
-            switch self.dataSets.style.topLine {
+            switch self.style.topLine {
             case .maximumValue:
-                _highestValue = self.dataSets.maxValue()
+                _highestValue = self.getMaxValue()
             case .maximum(of: let value):
-                _highestValue = max(self.dataSets.maxValue(), value)
+                _highestValue = max(self.getMaxValue(), value)
             }
             
             return (_highestValue - _lowestValue) + 0.001
         }
     }
-    
-    public var minValue: Double {
+    internal var minValue: Double {
         get {
-            switch self.dataSets.style.baseline {
+            switch self.style.baseline {
             case .minimumValue:
-                return self.dataSets.minValue()
+                return self.getMinValue()
             case .minimumWithMaximum(of: let value):
-                return min(self.dataSets.minValue(), value)
+                return min(self.getMinValue(), value)
             case .zero:
                 return 0
             }
         }
     }
-    
-    public var maxValue: Double {
+    internal var maxValue: Double {
         get {
-            switch self.dataSets.style.topLine {
+            switch self.style.topLine {
             case .maximumValue:
-                return self.dataSets.maxValue()
+                return self.getMaxValue()
             case .maximum(of: let value):
-                return max(self.dataSets.maxValue(), value)
+                return max(self.getMaxValue(), value)
             }
         }
     }
-    
-    public var average: Double {
-        return self.dataSets.average()
-    }
-}
-
-
-// MARK: - Data Set
-public struct ExtraLineDataSet {
-    
-    public let id: UUID = UUID()
-    public var dataPoints: [ExtraLineDataPoint]
-    public var legendTitle: String
-    public var style: ExtraLineStyle
-    
-    public init(
-        dataPoints: [ExtraLineDataPoint],
-        legendTitle: String = "",
-        style: ExtraLineStyle = ExtraLineStyle()
-    ) {
-        self.dataPoints = dataPoints
-        self.legendTitle = legendTitle
-        self.style = style
+    internal var average: Double {
+        return self.getAverage()
     }
     
-    public func maxValue() -> Double {
+    
+    internal func getMaxValue() -> Double {
         self.dataPoints
             .map(\.value)
             .max() ?? 0
     }
-    public func minValue() -> Double {
+    internal func getMinValue() -> Double {
         self.dataPoints
             .map(\.value)
             .min() ?? 0
     }
-    public func average() -> Double {
+    internal func getAverage() -> Double {
         self.dataPoints
             .map(\.value)
             .reduce(0, +)
@@ -246,33 +245,39 @@ public struct ExtraLineDataSet {
     }
 }
 
+
+
 // MARK: - Style
 public struct ExtraLineStyle: Hashable {
     
     public var lineColour: ColourStyle
     public var lineType: LineType
-    public var spacingType: SpacingType
+    public var lineSpacing: SpacingType
+    
     public var strokeStyle: Stroke
     
     public var yAxisTitle: String?
     public var yAxisNumberOfLabels: Int
+    
     public var baseline: Baseline
     public var topLine: Topline
 
     public init(
         lineColour: ColourStyle = ColourStyle(colour: .red),
         lineType: LineType = .curvedLine,
-        spacingType: SpacingType = .line,
+        lineSpacing: SpacingType = .line,
+        
         strokeStyle: Stroke = Stroke(),
         
         yAxisTitle: String? = nil,
         yAxisNumberOfLabels: Int = 7,
+        
         baseline: Baseline = .minimumValue,
         topLine: Topline = .maximumValue
     ) {
         self.lineColour = lineColour
         self.lineType = lineType
-        self.spacingType = spacingType
+        self.lineSpacing = lineSpacing
         self.strokeStyle = strokeStyle
         
         self.yAxisTitle = yAxisTitle
@@ -304,26 +309,26 @@ internal struct ExtraLineShape: Shape {
     
     private let dataPoints: [Double]
     private let lineType: LineType
-    private let spacingType: ExtraLineStyle.SpacingType
+    private let lineSpacing: ExtraLineStyle.SpacingType
     private let range: Double
     private let minValue: Double
     
     internal init(
         dataPoints: [Double],
         lineType: LineType,
-        spacingType: ExtraLineStyle.SpacingType,
+        lineSpacing: ExtraLineStyle.SpacingType,
         range: Double,
         minValue: Double
     ) {
         self.dataPoints = dataPoints
         self.lineType = lineType
-        self.spacingType = spacingType
+        self.lineSpacing = lineSpacing
         self.range = range
         self.minValue = minValue
     }
     
     internal func path(in rect: CGRect) -> Path {
-        switch (lineType, spacingType) {
+        switch (lineType, lineSpacing) {
         case (.curvedLine, .line):
             return Path.extraLineCurved(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
         case (.line, .line):
@@ -467,9 +472,9 @@ extension CTLineBarChartDataProtocol {
         
         let dataRange: Double = self.extraLineData.range
         let minValue: Double = self.extraLineData.minValue
-        let range: Double = dataRange / Double(self.extraLineData.dataSets.style.yAxisNumberOfLabels-1)
+        let range: Double = dataRange / Double(self.extraLineData.style.yAxisNumberOfLabels-1)
         let firstLabel = [String(format: specifier, minValue)]
-        let otherLabels = (1...self.extraLineData.dataSets.style.yAxisNumberOfLabels-1).map { String(format: specifier, minValue + range * Double($0)) }
+        let otherLabels = (1...self.extraLineData.style.yAxisNumberOfLabels-1).map { String(format: specifier, minValue + range * Double($0)) }
         let labels = firstLabel + otherLabels
         return labels
 
@@ -514,7 +519,7 @@ extension CTLineBarChartDataProtocol {
     }
     public func getExtraYAxisTitle(colour: AxisColour) -> some View {
         Group {
-            if let title = self.extraLineData.dataSets.style.yAxisTitle {
+            if let title = self.extraLineData.style.yAxisTitle {
                 VStack {
                     if self.chartStyle.xAxisLabelPosition == .top {
                         Spacer()
@@ -542,7 +547,7 @@ extension CTLineBarChartDataProtocol {
                             case .none:
                                 EmptyView()
                             case .style(let size):
-                                self.getAxisColourAsCircle(customColour: self.extraLineData.dataSets.style.lineColour, width: size)
+                                self.getAxisColourAsCircle(customColour: self.extraLineData.style.lineColour, width: size)
                             case .custom(let colour, let size):
                                 self.getAxisColourAsCircle(customColour: colour, width: size)
                             }

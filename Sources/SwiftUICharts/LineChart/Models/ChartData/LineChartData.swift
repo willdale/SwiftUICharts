@@ -29,7 +29,7 @@ public final class LineChartData: CTLineChartDataProtocol {
     public final var noDataText: Text
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
-    @Published public final var extraLineData: ExtraLineData<LineChartData> = ExtraLineData<LineChartData>(dataSets: ExtraLineDataSet(dataPoints: []))
+    @Published public final var extraLineData: ExtraLineData!
     
     internal final var isFilled: Bool = false
     
