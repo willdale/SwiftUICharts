@@ -337,11 +337,19 @@ extension CTLineBarChartDataProtocol where Self: isHorizontal {
     }
 }
 
+// MARK: - POI Lable Position
+//
+//
+//
 // MARK: Line Charts
 extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol {
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        CGPoint(x: self.chartStyle.yAxisLabelPosition == .leading ? -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - 4 : frame.width + ((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) + 4, // -4 for padding at the root view.
-                y: CGFloat(markerValue - minValue) * -(frame.height / CGFloat(range)) + frame.height)
+        let leading: CGFloat = -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - 4 // -4 for padding at the root view.
+        let trailing: CGFloat = frame.width + ((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) + 4 // +4 for padding at the root view.
+        let value: CGFloat = CGFloat(markerValue - minValue)
+        let sizing: CGFloat = -(frame.height / CGFloat(range))
+        return CGPoint(x: self.chartStyle.yAxisLabelPosition == .leading ? leading : trailing,
+                       y: value * sizing + frame.height)
     }
     public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         CGPoint(x: frame.width / 2,
@@ -352,8 +360,11 @@ extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol {
 // MARK: Vertical Bar Charts
 extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol {
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        CGPoint(x: self.chartStyle.yAxisLabelPosition == .leading ? -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - 4 : frame.width + ((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) + 4, // 4 for padding at the root view.
-                y: frame.height - CGFloat((markerValue - minValue) / range) * frame.height)
+        let leading: CGFloat = -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - 4 // -4 for padding at the root view.
+        let trailing: CGFloat = frame.width + ((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) + 4 // +4 for padding at the root view.
+        let value: CGFloat = CGFloat((markerValue - minValue) / range)
+        return CGPoint(x: self.chartStyle.yAxisLabelPosition == .leading ? leading : trailing,
+                       y: frame.height - value * frame.height)
     }
     public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         CGPoint(x: frame.width / 2,
@@ -364,10 +375,12 @@ extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol {
 // MARK: Horizontal Bar Charts
 extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol,
                                            Self: isHorizontal {
-    
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        CGPoint(x: CGFloat((markerValue - minValue) / range) * frame.width,
-                y: self.chartStyle.xAxisLabelPosition == .bottom ? frame.height + ((self.viewData.xAxisLabelHeights.max() ?? 0) / 2) + 4 : -((self.viewData.xAxisLabelHeights.max() ?? 0) / 2) - 4) // 4 for padding at the root view.
+        let bottom: CGFloat = frame.height + ((self.viewData.xAxisLabelHeights.max() ?? 0) / 2) + 4  // +4 for padding at the root view
+        let top: CGFloat = -((self.viewData.xAxisLabelHeights.max() ?? 0) / 2) - 4  // -4 for padding at the root view
+        let value: CGFloat = CGFloat((markerValue - minValue) / range)
+        return CGPoint(x: value * frame.width,
+                y: self.chartStyle.xAxisLabelPosition == .bottom ? bottom : top)
     }
     public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         CGPoint(x: CGFloat((markerValue - minValue) / range) * frame.width,
