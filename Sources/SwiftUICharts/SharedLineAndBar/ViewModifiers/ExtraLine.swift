@@ -40,8 +40,13 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                                        lineSpacing: chartData.extraLineData.style.lineSpacing,
                                        range: chartData.extraLineData.range,
                                        minValue: chartData.extraLineData.minValue)
-                            .trim(to: startAnimation ? 1 : 0)
-                            .stroke(colour, style: StrokeStyle(lineWidth: 3))
+                            .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
+                                $0.trim(to: startAnimation ? 1 : 0)
+                                    .stroke(colour, style: StrokeStyle(lineWidth: 3))
+                            }, else: {
+                                $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                                    .stroke(colour, style: StrokeStyle(lineWidth: 3))
+                            })
                             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                                 self.startAnimation = true
                             }
@@ -59,11 +64,20 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                                        lineSpacing: chartData.extraLineData.style.lineSpacing,
                                        range: chartData.extraLineData.range,
                                        minValue: chartData.extraLineData.minValue)
-                            .trim(to: startAnimation ? 1 : 0)
-                            .stroke(LinearGradient(gradient: Gradient(colors: colours),
-                                                   startPoint: startPoint,
-                                                   endPoint: endPoint),
-                                    style: StrokeStyle(lineWidth: 3))
+                            .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
+                                $0.trim(to: startAnimation ? 1 : 0)
+                                    .stroke(LinearGradient(gradient: Gradient(colors: colours),
+                                                           startPoint: startPoint,
+                                                           endPoint: endPoint),
+                                            style: StrokeStyle(lineWidth: 3))
+                            }, else: {
+                                $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                                    .stroke(LinearGradient(gradient: Gradient(colors: colours),
+                                                           startPoint: startPoint,
+                                                           endPoint: endPoint),
+                                            style: StrokeStyle(lineWidth: 3))
+                            })
+                            
                             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                                 self.startAnimation = true
                             }
@@ -82,11 +96,19 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                                        lineSpacing: chartData.extraLineData.style.lineSpacing,
                                        range: chartData.extraLineData.range,
                                        minValue: chartData.extraLineData.minValue)
-                            .trim(to: startAnimation ? 1 : 0)
-                            .stroke(LinearGradient(gradient: Gradient(stops: stops),
-                                                   startPoint: startPoint,
-                                                   endPoint: endPoint),
-                                    style: StrokeStyle(lineWidth: 3))
+                            .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
+                                $0.trim(to: startAnimation ? 1 : 0)
+                                    .stroke(LinearGradient(gradient: Gradient(stops: stops),
+                                                           startPoint: startPoint,
+                                                           endPoint: endPoint),
+                                            style: StrokeStyle(lineWidth: 3))
+                            }, else: {
+                                $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                                    .stroke(LinearGradient(gradient: Gradient(stops: stops),
+                                                           startPoint: startPoint,
+                                                           endPoint: endPoint),
+                                            style: StrokeStyle(lineWidth: 3))
+                            })
                             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                                 self.startAnimation = true
                             }
@@ -259,6 +281,8 @@ public struct ExtraLineStyle: Hashable {
     public var yAxisTitle: String?
     public var yAxisNumberOfLabels: Int
     
+    public var animationType: AnimationType
+    
     public var baseline: Baseline
     public var topLine: Topline
 
@@ -272,6 +296,8 @@ public struct ExtraLineStyle: Hashable {
         yAxisTitle: String? = nil,
         yAxisNumberOfLabels: Int = 7,
         
+        animationType: AnimationType = .draw,
+        
         baseline: Baseline = .minimumValue,
         topLine: Topline = .maximumValue
     ) {
@@ -282,8 +308,16 @@ public struct ExtraLineStyle: Hashable {
         
         self.yAxisTitle = yAxisTitle
         self.yAxisNumberOfLabels = yAxisNumberOfLabels
+        
+        self.animationType = animationType
+        
         self.baseline = baseline
         self.topLine = topLine
+    }
+    
+    public enum AnimationType: Hashable {
+        case draw
+        case raise
     }
     
     public enum SpacingType: Hashable {
