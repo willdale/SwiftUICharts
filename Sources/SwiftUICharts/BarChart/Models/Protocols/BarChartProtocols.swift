@@ -14,6 +14,7 @@ import SwiftUI
 public protocol CTBarChartDataProtocol: CTLineBarChartDataProtocol {
     
     associatedtype BarStyle: CTBarStyle
+    
     /**
      Overall styling for the bars
      */
@@ -38,8 +39,12 @@ public protocol CTMultiBarChartDataProtocol: CTBarChartDataProtocol {
  */
 public protocol CTRangedBarChartDataProtocol: CTBarChartDataProtocol {}
 
+/**
+ A protocol to extend functionality of `CTBarChartDataProtocol` specifically for Horizontal Bar Charts.
+ */
+public protocol CTHorizontalBarChartDataProtocol: CTBarChartDataProtocol, isHorizontal {}
 
-
+public protocol isHorizontal {}
 
 // MARK: - Style
 /**

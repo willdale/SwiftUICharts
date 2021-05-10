@@ -79,8 +79,28 @@ extension Double {
     /**
      Simple, neat divide.
      */
-    func divide(by divideBy: Double) -> Double {
+    func divide<T:BinaryInteger>(by divideBy: T) -> Double {
         self / Double(divideBy)
+    }
+    /**
+     Simple, neat divide.
+     */
+    func divide<T:BinaryFloatingPoint>(by divideBy: T) -> Double {
+        self / Double(divideBy)
+    }
+}
+extension CGFloat {
+    /**
+     Simple, neat divide.
+     */
+    func divide<T:BinaryInteger>(by divideBy: T) -> CGFloat {
+        self / CGFloat(divideBy)
+    }
+    /**
+     Simple, neat divide.
+     */
+    func divide<T:BinaryFloatingPoint>(by divideBy: T) -> CGFloat {
+        self / CGFloat(divideBy)
     }
 }
 

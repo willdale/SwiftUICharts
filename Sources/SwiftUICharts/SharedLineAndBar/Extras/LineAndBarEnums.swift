@@ -77,7 +77,7 @@ public enum DisplayValue {
  case zero // Set 0 as the lowest value
  ```
  */
-public enum Baseline {
+public enum Baseline: Hashable {
     /// Lowest value in the data set(s)
     case minimumValue
     /// Set a custom baseline
@@ -93,7 +93,7 @@ public enum Baseline {
  case maximum(of: Double) // Set a custom topline
  ```
  */
-public enum Topline {
+public enum Topline: Hashable {
     /// Highest value in the data set(s)
     case maximumValue
     /// Set a custom topline

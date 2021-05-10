@@ -87,28 +87,29 @@ final class StackedBarChartTests: XCTestCase {
         let chartData = StackedBarChartData(dataSets: data,
                                             groups: groups,
                                             chartStyle: BarChartStyle(yAxisNumberOfLabels: 3))
+        chartData.viewData.yAxisSpecifier = "%.2f"
         
         chartData.chartStyle.topLine  = .maximumValue
         chartData.chartStyle.baseline = .zero
-        XCTAssertEqual(chartData.getYLabels("%.2f")[0], "0.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[1], "110.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[2], "220.00")
+        XCTAssertEqual(chartData.labelsArray[0], "0.00")
+        XCTAssertEqual(chartData.labelsArray[1], "110.00")
+        XCTAssertEqual(chartData.labelsArray[2], "220.00")
         
         chartData.chartStyle.baseline = .minimumValue
-        XCTAssertEqual(chartData.getYLabels("%.2f")[0], "10.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[1], "115.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[2], "220.00")
+        XCTAssertEqual(chartData.labelsArray[0], "10.00")
+        XCTAssertEqual(chartData.labelsArray[1], "115.00")
+        XCTAssertEqual(chartData.labelsArray[2], "220.00")
         
         chartData.chartStyle.baseline = .minimumWithMaximum(of: 5)
-        XCTAssertEqual(chartData.getYLabels("%.2f")[0], "5.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[1], "112.50")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[2], "220.00")
+        XCTAssertEqual(chartData.labelsArray[0], "5.00")
+        XCTAssertEqual(chartData.labelsArray[1], "112.50")
+        XCTAssertEqual(chartData.labelsArray[2], "220.00")
         
         chartData.chartStyle.topLine  = .maximum(of: 100)
         chartData.chartStyle.baseline = .zero
-        XCTAssertEqual(chartData.getYLabels("%.2f")[0], "0.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[1], "110.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[2], "220.00")
+        XCTAssertEqual(chartData.labelsArray[0], "0.00")
+        XCTAssertEqual(chartData.labelsArray[1], "110.00")
+        XCTAssertEqual(chartData.labelsArray[2], "220.00")
     }
     
     // MARK: - Touch

@@ -88,28 +88,29 @@ final class GroupedBarChartTests: XCTestCase {
         let chartData = GroupedBarChartData(dataSets: data,
                                             groups: groups,
                                             chartStyle: BarChartStyle(yAxisNumberOfLabels: 3))
+        chartData.viewData.yAxisSpecifier = "%.2f"
         
         chartData.chartStyle.topLine  = .maximumValue
         chartData.chartStyle.baseline = .zero
-        XCTAssertEqual(chartData.getYLabels("%.2f")[0], "0.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[1], "45.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[2], "90.00")
+        XCTAssertEqual(chartData.labelsArray[0], "0.00")
+        XCTAssertEqual(chartData.labelsArray[1], "45.00")
+        XCTAssertEqual(chartData.labelsArray[2], "90.00")
         
         chartData.chartStyle.baseline = .minimumValue
-        XCTAssertEqual(chartData.getYLabels("%.2f")[0], "10.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[1], "50.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[2], "90.00")
+        XCTAssertEqual(chartData.labelsArray[0], "10.00")
+        XCTAssertEqual(chartData.labelsArray[1], "50.00")
+        XCTAssertEqual(chartData.labelsArray[2], "90.00")
         
         chartData.chartStyle.baseline = .minimumWithMaximum(of: 5)
-        XCTAssertEqual(chartData.getYLabels("%.2f")[0], "5.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[1], "47.50")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[2], "90.00")
+        XCTAssertEqual(chartData.labelsArray[0], "5.00")
+        XCTAssertEqual(chartData.labelsArray[1], "47.50")
+        XCTAssertEqual(chartData.labelsArray[2], "90.00")
         
         chartData.chartStyle.topLine  = .maximum(of: 100)
         chartData.chartStyle.baseline = .zero
-        XCTAssertEqual(chartData.getYLabels("%.2f")[0], "0.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[1], "50.00")
-        XCTAssertEqual(chartData.getYLabels("%.2f")[2], "100.00")
+        XCTAssertEqual(chartData.labelsArray[0], "0.00")
+        XCTAssertEqual(chartData.labelsArray[1], "50.00")
+        XCTAssertEqual(chartData.labelsArray[2], "100.00")
     }
     // MARK: - Touch
     func testGroupedBarGetDataPoint() {

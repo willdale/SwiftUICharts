@@ -38,3 +38,36 @@ public struct TrailingLabelShape: Shape {
         return path
     }
 }
+
+
+/**
+ Shape used in POI Markers when displaying value in the X axis labels on the bottom edge.
+ */
+public struct BottomLabelShape: Shape {
+    public func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY - (rect.height / 5)))
+        path.addLine(to: CGPoint(x: rect.midX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.midY - (rect.height / 5)))
+        path.closeSubpath()
+        return path
+    }
+}
+
+/**
+ Shape used in POI Markers when displaying value in the X axis labels on the top edge.
+ */
+public struct TopLabelShape: Shape {
+    public func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.midY + (rect.height / 5)))
+        path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY + (rect.height / 5)))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+        path.closeSubpath()
+        return path
+    }
+}

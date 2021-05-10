@@ -61,6 +61,7 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
     @State private var startAnimation: Bool = false
     
     public var body: some View {
+        GeometryReader { geo in
         if chartData.isGreaterThanTwo() {
             HStack(spacing: groupSpacing) {
                 ForEach(chartData.dataSets.dataSets) { dataSet in
@@ -101,6 +102,10 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                     }
                 }
             }
+            .onAppear {
+                self.chartData.viewData.chartSize = geo.frame(in: .local)
+            }
         } else { CustomNoDataView(chartData: chartData) }
+        }
     }
 }

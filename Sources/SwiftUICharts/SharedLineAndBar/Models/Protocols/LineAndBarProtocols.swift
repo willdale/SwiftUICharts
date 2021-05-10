@@ -13,9 +13,6 @@ import SwiftUI
  */
 public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBarChartStyle {
     
-    /// A type representing a View for displaying labels on the X axis.
-    associatedtype XLabels: View
-    
     /**
      Returns the difference between the highest and lowest numbers in the data set or data sets.
      */
@@ -55,22 +52,121 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
      */
     var viewData: ChartViewData { get set }
     
-    /**
-     Labels to display on the Y axis
-     
-     The labels are generated based on the range between the lowest number in the
-     data set (or 0) and highest number in the data set.
-     
-     - Returns: Array of evenly spaced numbers.
-     */
-    func getYLabels(_ specifier: String) -> [String]
     
+    
+    
+    /**
+     Experimental
+    */
+    var extraLineData: ExtraLineData!/*<Self>*/ { get set }
+    /**
+     Experimental
+    */
+    associatedtype ExtraYLabels: View
+    
+    /**
+     Experimental
+    */
+    func getExtraYAxisLabels() -> ExtraYLabels
+    /**
+     Experimental
+    */
+    func getColour() -> ColourStyle
+    
+    
+    
+    
+    
+    /**
+     A type representing a View for displaying labels on the X axis.
+     */
+    associatedtype XLabels: View
     /**
      Displays a view for the labels on the X Axis.
      */
     func getXAxisLabels() -> XLabels
     
+    /**
+     A type representing a View for displaying labels on the X axis.
+     */
+    associatedtype YLabels: View
+    
+    /**
+     Displays a view for the labels on the Y Axis.
+     */
+    func getYAxisLabels() -> YLabels
+    
+    /**
+     A type representing a Shape for displaying a line
+     as a POI.
+     */
+    associatedtype MarkerShape: Shape
+    /**
+     Displays a line marking a Point Of Interest.
+     
+     In standard charts this will return a horizontal line.
+     In horizontal charts this will return a vertical line.
+     
+     - Parameters:
+        - value: Value of of the POI.
+        - range: Difference between the highest and lowest values in the data set.
+        - minValue: Lowest value in the data set.
+     - Returns: A line shape at a specified point.
+     */
+    func poiMarker(value: Double, range: Double, minValue: Double) -> MarkerShape
+    
+    /**
+     A type representing a View for displaying a label
+     as a POI in an axis.
+     */
+    associatedtype LabelAxis: View
+    /**
+     Displays a label and box that mark a Point Of Interest
+     in an axis.
+     
+     In standard charts this will display leading or trailing.
+     In horizontal charts this will display bottom or top.
+     */
+    func poiLabelAxis(markerValue: Double, specifier: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color) -> LabelAxis
+    
+    /**
+     Sets the position of the POI Label when it's over
+     one of the axes.
+     
+     - Parameters:
+        - frame: Size of the chart.
+        - markerValue: Value of the POI marker.
+        - minValue: Lowest value in the data set.
+        - range: Difference between the highest and lowest values in the data set.
+     - Returns: Position of label.
+     */
+    func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint
+    
+    /**
+     Sets the position of the POI Label when it's in
+     the center of the view.
+     
+     - Parameters:
+        - frame: Size of the chart.
+        - markerValue: Value of the POI marker.
+        - minValue: Lowest value in the data set.
+        - range: Difference between the highest and lowest values in the data set.
+     - Returns: Position of label.
+     */
+    func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint
+    
+    /**
+     Sets the data point info box location while keeping it within the parent view.
+     
+     - Parameters:
+        - touchLocation: Location the user has pressed.
+        - boxFrame: The size of the point info box.
+        - chartSize: The size of the chart view as the parent view.
+     */
+    func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat
 }
+
+
 
 
 // MARK: - Style
@@ -128,6 +224,11 @@ public protocol CTLineBarChartStyle: CTChartStyle {
     var xAxisTitleFont: Font { get set }
     
     /**
+     Colour of the x axis title.
+     */
+    var xAxisTitleColour: Color { get set }
+    
+    /**
      Style of the horizontal lines breaking up the chart.
      */
     var yAxisGridStyle: GridStyle { get set }
@@ -167,6 +268,11 @@ public protocol CTLineBarChartStyle: CTChartStyle {
      Font of the y axis title.
      */
     var yAxisTitleFont: Font { get set }
+    
+    /**
+     Font of the y axis title.
+     */
+    var yAxisTitleColour: Color { get set }
     
     /**
      Where to start drawing the line chart from. Zero, data set minium or custom.

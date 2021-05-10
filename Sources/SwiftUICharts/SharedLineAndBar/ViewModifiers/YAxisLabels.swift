@@ -14,82 +14,17 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
     
     @ObservedObject private var chartData: T
     private let specifier: String
-    private var labelsArray: [String] { chartData.getYLabels(specifier) }
-    private let labelsAndTop: Bool
-    private let labelsAndBottom: Bool
+    private let colourIndicator: AxisColour
     
     internal init(
         chartData: T,
-        specifier: String
+        specifier: String,
+        colourIndicator: AxisColour
     ) {
         self.chartData = chartData
         self.specifier = specifier
+        self.colourIndicator = colourIndicator
         chartData.viewData.hasYAxisLabels = true
-        
-        labelsAndTop = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .top
-        labelsAndBottom = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .bottom
-    }
-    
-    @State private var height: CGFloat = 0
-    @State private var axisLabelWidth: CGFloat = 0
-    
-    @ViewBuilder
-    private var axisTitle: some View {
-        if let title = chartData.chartStyle.yAxisTitle {
-            VStack {
-                Text(title)
-                    .font(chartData.chartStyle.yAxisTitleFont)
-                    .background(
-                        GeometryReader { geo in
-                            Rectangle()
-                                .foregroundColor(Color.clear)
-                                .onAppear {
-                                    axisLabelWidth = geo.size.height + 10
-                                }
-                        }
-                    )
-                    .rotationEffect(Angle.init(degrees: -90), anchor: .center)
-                    .fixedSize()
-                    .frame(width: axisLabelWidth)
-                Spacer()
-                    .frame(height: (self.chartData.viewData.xAxisLabelHeights.max(by: { $0 < $1 }) ?? 0) + axisLabelWidth)
-            }
-        }
-    }
-    
-    private var labels: some View {
-        VStack {
-            ForEach(labelsArray.indices.reversed(), id: \.self) { i in
-                Text(labelsArray[i])
-                    .font(chartData.chartStyle.yAxisLabelFont)
-                    .foregroundColor(chartData.chartStyle.yAxisLabelColour)
-                    .lineLimit(1)
-                    .accessibilityLabel(Text("Y Axis Label"))
-                    .accessibilityValue(Text(labelsArray[i]))
-                if i != 0 {
-                    Spacer()
-                        .frame(minHeight: 0, maxHeight: 500)
-                }
-            }
-            Spacer()
-                .frame(height: (chartData.viewData.xAxisLabelHeights.max(by: { $0 < $1 }) ?? 0) + chartData.viewData.xAxisTitleHeight)
-        }
-        .if(labelsAndBottom) { $0.padding(.top, -8) }
-        .if(labelsAndTop) { $0.padding(.bottom, -8) }
-        .padding(.trailing, 10)
-        .background(
-            GeometryReader { geo in
-                Rectangle()
-                    .foregroundColor(Color.clear)
-                    .onAppear {
-                        chartData.infoView.yAxisLabelWidth = geo.frame(in: .local).size.width
-                        self.height = geo.frame(in: .local).height
-                    }
-                    .onChange(of: axisLabelWidth) { width in
-                        chartData.infoView.yAxisLabelWidth = geo.frame(in: .local).size.width + width
-                    }
-            }
-        )
     }
     
     internal func body(content: Content) -> some View {
@@ -98,15 +33,15 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                 switch chartData.chartStyle.yAxisLabelPosition {
                 case .leading:
                     HStack(spacing: 0) {
-                        axisTitle
-                        labels
+                        chartData.getYAxisTitle(colour: colourIndicator)
+                        chartData.getYAxisLabels().padding(.trailing, 4)
                         content
                     }
                 case .trailing:
                     HStack(spacing: 0) {
                         content
-                        labels
-                        axisTitle
+                        chartData.getYAxisLabels().padding(.leading, 4)
+                        chartData.getYAxisTitle(colour: colourIndicator)
                     }
                 }
             } else { content }
@@ -138,10 +73,15 @@ extension View {
      - Doughnut Chart
      
      - Parameters:
+        - chartData: Data that conforms to CTLineBarChartDataProtocol
         - specifier: Decimal precision specifier
      - Returns: HStack of labels
      */
-    public func yAxisLabels<T: CTLineBarChartDataProtocol>(chartData: T, specifier: String = "%.0f") -> some View {
-        self.modifier(YAxisLabels(chartData: chartData, specifier: specifier))
+    public func yAxisLabels<T: CTLineBarChartDataProtocol>(
+        chartData: T,
+        specifier: String = "%.0f",
+        colourIndicator: AxisColour = .none
+    ) -> some View {
+        self.modifier(YAxisLabels(chartData: chartData, specifier: specifier, colourIndicator: colourIndicator))
     }
 }

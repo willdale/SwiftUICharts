@@ -135,15 +135,8 @@ extension CTChartData {
     }
 }
 
-extension CTChartData {
-    
-    /// Sets the data point info box location while keeping it within the parent view.
-    ///
-    /// - Parameters:
-    ///   - touchLocation: Location the user has pressed.
-    ///   - boxFrame: The size of the point info box.
-    ///   - chartSize: The size of the chart view as the parent view.
-    internal func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
+extension CTLineBarChartDataProtocol {
+    public func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
         var returnPoint: CGFloat = .zero
         if touchLocation < chartSize.minX + (boxFrame.width / 2) {
             returnPoint = chartSize.minX + (boxFrame.width / 2)
@@ -152,7 +145,20 @@ extension CTChartData {
         } else {
             returnPoint = touchLocation
         }
-        return returnPoint + self.infoView.yAxisLabelWidth
+        return returnPoint + (self.viewData.yAxisLabelWidth.max() ?? 0) + self.viewData.yAxisTitleWidth + (self.viewData.hasYAxisLabels ? 4 : 0) // +4 For Padding
+    }
+}
+extension CTLineBarChartDataProtocol where Self: isHorizontal {
+    public func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
+        var returnPoint: CGFloat = .zero
+        if touchLocation < chartSize.minY + (boxFrame.height / 2) {
+            returnPoint = chartSize.minY + (boxFrame.height / 2)
+        } else if touchLocation > chartSize.maxY - (boxFrame.height / 2) {
+            returnPoint = chartSize.maxY - (boxFrame.height / 2)
+        } else {
+            returnPoint = touchLocation
+        }
+        return returnPoint
     }
 }
 

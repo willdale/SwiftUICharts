@@ -13,7 +13,6 @@ import SwiftUI
 internal struct XAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
     @ObservedObject private var chartData: T
-    private var titleHeight: CGFloat = 0
     
     internal init(chartData: T) {
         self.chartData = chartData
@@ -27,36 +26,19 @@ internal struct XAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                 if chartData.isGreaterThanTwo() {
                     VStack {
                         content
-                        chartData.getXAxisLabels()
-                        axisTitle
+                        chartData.getXAxisLabels().padding(.top, 2)
+                        chartData.getXAxisTitle()
                     }
                 } else { content }
             case .top:
                 if chartData.isGreaterThanTwo() {
                     VStack {
-                        axisTitle
-                        chartData.getXAxisLabels()
+                        chartData.getXAxisTitle()
+                        chartData.getXAxisLabels().padding(.bottom, 2)
                         content
                     }
                 } else { content }
             }
-        }
-    }
-    
-    @ViewBuilder
-    private var axisTitle: some View {
-        if let title = chartData.chartStyle.xAxisTitle {
-            Text(title)
-                .font(chartData.chartStyle.xAxisTitleFont)
-                .background(
-                    GeometryReader { geo in
-                        Rectangle()
-                            .foregroundColor(Color.clear)
-                            .onAppear {
-                                chartData.viewData.xAxisTitleHeight = geo.size.height
-                            }
-                    }
-                )
         }
     }
 }

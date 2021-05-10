@@ -1,5 +1,5 @@
 //
-//  TrendLine.swift
+//  LinearTrendLine.swift
 //  
 //
 //  Created by Will Dale on 26/03/2021.

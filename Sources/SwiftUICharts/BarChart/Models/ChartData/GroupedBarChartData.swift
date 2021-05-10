@@ -29,6 +29,8 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     @Published public final var infoView: InfoViewData<GroupedBarDataPoint> = InfoViewData()
     @Published public final var groups: [GroupingData]
     
+    @Published public final var extraLineData: ExtraLineData!
+    
     public final var noDataText: Text
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
@@ -72,60 +74,63 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     
     // MARK: Labels
     public final func getXAxisLabels() -> some View {
-        VStack {
+        Group {
             switch self.chartStyle.xAxisLabelsFrom {
             case .dataPoint(let angle):
-                HStack(spacing: self.groupSpacing) {
-                    ForEach(dataSets.dataSets) { dataSet in
-                        HStack(spacing: 0) {
-                            ForEach(dataSet.dataPoints) { data in
+                HStack(spacing: 0) {
+                    ForEach(dataSets.dataSets.indices, id: \.self) { i in
+                        if i > 0 {
+                            Spacer().frame(minWidth: 0, maxWidth: 500)
+                        }
+                        VStack {
+                            if self.chartStyle.xAxisLabelPosition == .bottom {
+                                RotatedText(chartData: self, label: self.dataSets.dataSets[i].setTitle, rotation: angle)
                                 Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
-                                XAxisDataPointCell(chartData: self, label: data.group.title, rotationAngle: angle)
-                                    .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                    .accessibilityLabel(Text("X Axis Label"))
-                                    .accessibilityValue(Text("\(data.group.title)"))
+                            } else {
                                 Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
+                                RotatedText(chartData: self, label: self.dataSets.dataSets[i].setTitle, rotation: angle)
+                            }
+                        }
+                        .frame(width: self.getXSectionForDataPoint(dataSet: self.dataSets, chartSize: self.viewData.chartSize, groupSpacing: self.groupSpacing),
+                               height: self.viewData.xAxisLabelHeights.max())
+                        if i < self.dataSets.dataSets.count - 1 {
+                            Spacer().frame(minWidth: 0, maxWidth: 500)
+                        }
+                    }
+                }
+            case .chartData(let angle):
+                if let labelArray = self.xAxisLabels {
+                    HStack(spacing: 0) {
+                        ForEach(labelArray.indices, id: \.self) { i in
+                            if i > 0 {
+                                Spacer().frame(minWidth: 0, maxWidth: 500)
+                            }
+                            VStack {
+                                if self.chartStyle.xAxisLabelPosition == .bottom {
+                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                    Spacer()
+                                } else {
+                                    Spacer()
+                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                }
+                            }
+                            .frame(width: self.viewData.xAxislabelWidths.max(),
+                                   height: self.viewData.xAxisLabelHeights.max())
+                            if i < labelArray.count - 1 {
+                                Spacer().frame(minWidth: 0, maxWidth: 500)
                             }
                         }
                     }
                 }
-                .padding(.horizontal, -4)
-                
-            case .chartData(let angle):
-                
-                if let labelArray = self.xAxisLabels {
-                    HStack(spacing: 0) {
-                        ForEach(labelArray, id: \.self) { data in
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
-                            XAxisDataPointCell(chartData: self, label: data, rotationAngle: angle)
-                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .accessibilityLabel(Text("X Axis Label"))
-                                .accessibilityValue(Text("\(data)"))
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
-                        }
-                    }
-                }
             }
-            HStack(spacing: self.groupSpacing) {
-                ForEach(dataSets.dataSets) { dataSet in
-                    HStack(spacing: 0) {
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
-                        XAxisChartDataCell(chartData: self, label: dataSet.setTitle, rotationAngle: .degrees(0))
-                            .foregroundColor(self.chartStyle.xAxisLabelColour)
-                            .accessibilityLabel(Text("X Axis Label"))
-                            .accessibilityValue(Text("\(dataSet.setTitle)"))
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
-                    }
-                }
-            }
-            .padding(.horizontal, -4)
         }
+    }
+    
+    private final func getXSectionForDataPoint(dataSet: GroupedBarDataSets, chartSize: CGRect, groupSpacing: CGFloat) -> CGFloat {
+        let superXSection: CGFloat = (chartSize.width / CGFloat(dataSet.dataSets.count))
+        let compensation: CGFloat = ((groupSpacing * CGFloat(dataSets.dataSets.count - 1)) / CGFloat(dataSets.dataSets.count))
+        let section = superXSection - compensation
+        return section > 0 ? section : 0
     }
     
     // MARK: Touch

@@ -29,6 +29,8 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
     public final var noDataText: Text
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
+    @Published public final var extraLineData: ExtraLineData!
+    
     // MARK: Initializer
     /// Initialises a ranged line chart.
     ///
@@ -76,26 +78,39 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
                 
                 HStack(spacing: 0) {
                     ForEach(dataSets.dataPoints) { data in
-                        XAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
-                            .foregroundColor(self.chartStyle.xAxisLabelColour)
-                            .accessibilityLabel(Text("X Axis Label"))
-                            .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
+                        VStack {
+                            if self.chartStyle.xAxisLabelPosition == .bottom {
+                                RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
+                                Spacer()
+                            } else {
+                                Spacer()
+                                RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
+                            }
+                        }
+                        .frame(width: min(self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize), self.viewData.xAxislabelWidths.min() ?? 0),
+                               height: self.viewData.xAxisLabelHeights.max())
                         if data != self.dataSets.dataPoints[self.dataSets.dataPoints.count - 1] {
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
                         }
                     }
                 }
-                .padding(.horizontal, -4)
                 
             case .chartData(let angle):
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
-                        ForEach(labelArray.indices, id: \.self) { [unowned self] i in
-                            XAxisChartDataCell(chartData: self, label: labelArray[i], rotationAngle: angle)
-                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .accessibilityLabel(Text("X Axis Label"))
-                                .accessibilityValue(Text("\(labelArray[i])"))
+                        ForEach(labelArray.indices, id: \.self) { i in
+                            VStack {
+                                if self.chartStyle.xAxisLabelPosition == .bottom {
+                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                    Spacer()
+                                } else {
+                                    Spacer()
+                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                }
+                            }
+                            .frame(width: self.viewData.xAxislabelWidths.min(),
+                                   height: self.viewData.xAxisLabelHeights.max())
                             if i != labelArray.count - 1 {
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)
@@ -105,6 +120,9 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
                 }
             }
         }
+    }
+    private final func getXSection(dataSet: RangedLineDataSet, chartSize: CGRect) -> CGFloat {
+        chartSize.width.divide(by: CGFloat(dataSet.dataPoints.count))
     }
     
     // MARK: Points

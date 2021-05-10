@@ -13,11 +13,13 @@ import SwiftUI
  Uses `RangedBarChartData` data model.
  
  # Declaration
+ 
  ```
  RangedBarChart(chartData: data)
  ```
  
  # View Modifiers
+ 
  The order of the view modifiers is some what important
  as the modifiers are various types for stacks that wrap
  around the previous views.

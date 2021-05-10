@@ -13,11 +13,13 @@ import SwiftUI
  Uses `RangedLineChartData` data model.
  
  # Declaration
+ 
  ```
  RangedLineChart(chartData: data)
  ```
  
  # View Modifiers
+ 
  The order of the view modifiers is some what important
  as the modifiers are various types for stacks that wrap
  around the previous views.
@@ -55,6 +57,7 @@ public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartD
     }
     
     public var body: some View {
+        GeometryReader { geo in
         if chartData.isGreaterThanTwo() {
             ZStack {
                 chartData.getAccessibility()
@@ -136,6 +139,11 @@ public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartD
                                           isFilled: false)
                 }
             }
+            // Needed for axes label frames
+            .onAppear {
+                self.chartData.viewData.chartSize = geo.frame(in: .local)
+            }
         } else { CustomNoDataView(chartData: chartData) }
+    }
     }
 }

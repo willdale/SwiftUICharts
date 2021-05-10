@@ -28,6 +28,8 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
     @Published public final var infoView: InfoViewData<StackedBarDataPoint> = InfoViewData()
     @Published public final var groups: [GroupingData]
     
+    @Published public final var extraLineData: ExtraLineData!
+    
     public final var noDataText: Text
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
@@ -66,37 +68,54 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
         self.chartType = (chartType: .bar, dataSetType: .multi)
         self.setupLegends()
     }
+
     // MARK: Labels
     public final func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
             case .dataPoint(let angle):
                 HStack(spacing: 0) {
-                    ForEach(dataSets.dataSets) { dataSet in
-                        HStack(spacing: 0) {
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
-                            XAxisDataPointCell(chartData: self, label: dataSet.setTitle, rotationAngle: angle)
-                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .accessibilityLabel(Text("X Axis Label"))
-                                .accessibilityValue(Text("\(dataSet.setTitle)"))
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
+                    ForEach(dataSets.dataSets, id: \.id) { dataSet in
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
+                        VStack {
+                            if self.chartStyle.xAxisLabelPosition == .bottom {
+                                RotatedText(chartData: self, label: dataSet.setTitle, rotation: angle)
+                                Spacer()
+                            } else {
+                                Spacer()
+                                RotatedText(chartData: self, label: dataSet.setTitle, rotation: angle)
+                            }
                         }
+                        .frame(width: self.viewData.xAxislabelWidths.max(),
+                               height: self.viewData.xAxisLabelHeights.max())
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
                     }
                 }
             case .chartData(let angle):
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
-                        ForEach(labelArray, id: \.self) { data in
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
-                            XAxisChartDataCell(chartData: self, label: data, rotationAngle: angle)
-                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .accessibilityLabel(Text("X Axis Label"))
-                                .accessibilityValue(Text("\(data)"))
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
+                        ForEach(labelArray.indices, id: \.self) { i in
+                            if i > 0 {
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
+                            }
+                            VStack {
+                                if self.chartStyle.xAxisLabelPosition == .bottom {
+                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                    Spacer()
+                                } else {
+                                    Spacer()
+                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                }
+                            }
+                            .frame(width: self.viewData.xAxislabelWidths.max(),
+                                   height: self.viewData.xAxisLabelHeights.max())
+                            if i < labelArray.count - 1 {
+                                Spacer()
+                                    .frame(minWidth: 0, maxWidth: 500)
+                            }
                         }
                     }
                 }

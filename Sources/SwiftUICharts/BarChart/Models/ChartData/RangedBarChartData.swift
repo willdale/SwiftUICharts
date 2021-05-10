@@ -11,7 +11,6 @@ import SwiftUI
  Data for drawing and styling a ranged Bar Chart.
  */
 public final class RangedBarChartData: CTRangedBarChartDataProtocol {
-    
     // MARK: Properties
     public let id: UUID = UUID()
     
@@ -24,6 +23,8 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
     @Published public final var legends: [LegendData]
     @Published public final var viewData: ChartViewData
     @Published public final var infoView: InfoViewData<RangedBarDataPoint> = InfoViewData()
+    
+    @Published public final var extraLineData: ExtraLineData!
     
     public final var noDataText: Text
     public final let chartType: (chartType: ChartType, dataSetType: DataSetType)
@@ -79,34 +80,41 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
             case .dataPoint(let angle):
-                
                 HStack(spacing: 0) {
-                    ForEach(dataSets.dataPoints) { data in
+                    ForEach(dataSets.dataPoints, id: \.id) { data in
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
-                        XAxisDataPointCell(chartData: self, label: data.wrappedXAxisLabel, rotationAngle: angle)
-                            .foregroundColor(self.chartStyle.xAxisLabelColour)
-                            .accessibilityLabel(Text("X Axis Label"))
-                            .accessibilityValue(Text("\(data.wrappedXAxisLabel)"))
+                        VStack {
+                            if self.chartStyle.xAxisLabelPosition == .bottom {
+                                RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
+                                Spacer()
+                            } else {
+                                Spacer()
+                                RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
+                            }
+                        }
+                        .frame(width: self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize),
+                               height: self.viewData.xAxisLabelHeights.max())
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)
                     }
                 }
-                
             case .chartData(let angle):
-                
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
-                        ForEach(labelArray, id: \.self) { data in
-                            if data != labelArray[0] {
-                                Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
+                        ForEach(labelArray.indices, id: \.self) { i in
+                            VStack {
+                                if self.chartStyle.xAxisLabelPosition == .bottom {
+                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                    Spacer()
+                                } else {
+                                    Spacer()
+                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
+                                }
                             }
-                            XAxisChartDataCell(chartData: self, label: data, rotationAngle: angle)
-                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .accessibilityLabel(Text("X Axis Label"))
-                                .accessibilityValue(Text("\(data)"))
-                            if data != labelArray[labelArray.count-1] {
+                            .frame(width: self.viewData.xAxislabelWidths.max(),
+                                   height: self.viewData.xAxisLabelHeights.max())
+                            if i != labelArray.count - 1 {
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)
                             }
@@ -115,6 +123,9 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
                 }
             }
         }
+    }
+    private final func getXSection(dataSet: RangedBarDataSet, chartSize: CGRect) -> CGFloat {
+         chartSize.width / CGFloat(dataSet.dataPoints.count)
     }
     
     // MARK: - Touch

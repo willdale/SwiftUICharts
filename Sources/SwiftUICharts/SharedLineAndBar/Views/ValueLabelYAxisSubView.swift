@@ -36,23 +36,11 @@ internal struct ValueLabelYAxisSubView<T>: View where T: CTLineBarChartDataProto
     }
     
     var body: some View {
-        Text("\(markerValue, specifier: specifier)")
-            .font(labelFont)
-            .foregroundColor(labelColour)
-            .padding(4)
-            .background(labelBackground)
-            .ifElse(self.chartData.chartStyle.yAxisLabelPosition == .leading, if: {
-                $0
-                    .clipShape(LeadingLabelShape())
-                    .overlay(LeadingLabelShape()
-                                .stroke(lineColour)
-                    )
-            }, else: {
-                $0
-                    .clipShape(TrailingLabelShape())
-                    .overlay(TrailingLabelShape()
-                                .stroke(lineColour)
-                    )
-            })
+        chartData.poiLabelAxis(markerValue: markerValue,
+                               specifier: specifier,
+                               labelFont: labelFont,
+                               labelColour: labelColour,
+                               labelBackground: labelBackground,
+                               lineColour: lineColour)
     }
 }

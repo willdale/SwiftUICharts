@@ -40,6 +40,7 @@ public struct BarChartStyle: CTBarChartStyle {
     
     public var xAxisTitle: String?
     public var xAxisTitleFont: Font
+    public var xAxisTitleColour: Color
     
     public var yAxisGridStyle: GridStyle
     
@@ -51,6 +52,7 @@ public struct BarChartStyle: CTBarChartStyle {
     
     public var yAxisTitle: String?
     public var yAxisTitleFont: Font
+    public var yAxisTitleColour: Color
     
     public var baseline: Baseline
     public var topLine: Topline
@@ -84,6 +86,7 @@ public struct BarChartStyle: CTBarChartStyle {
     ///
     ///   - xAxisTitle: Label to display next to the chart giving info about the axis.
     ///   - xAxisTitleFont: Font of the x axis title.
+    ///   - xAxisTitleColour: Colour of the x axis title.
     ///
     ///   - yAxisGridStyle: Style of the horizontal lines breaking up the chart.
     ///
@@ -95,6 +98,7 @@ public struct BarChartStyle: CTBarChartStyle {
     ///
     ///   - yAxisTitle: Label to display next to the chart giving info about the axis.
     ///   - yAxisTitleFont: Font of the y axis title.
+    ///   - yAxisTitleColour: Colour of the y axis title.
     ///
     ///   - baseline: Whether the chart is drawn from baseline of zero or the minimum datapoint value.
     ///   - topLine: Where to finish drawing the chart from. Data set maximum or custom.
@@ -125,6 +129,7 @@ public struct BarChartStyle: CTBarChartStyle {
         
         xAxisTitle: String? = nil,
         xAxisTitleFont: Font = .caption,
+        xAxisTitleColour: Color = .primary,
         
         yAxisGridStyle: GridStyle = GridStyle(),
         
@@ -136,6 +141,7 @@ public struct BarChartStyle: CTBarChartStyle {
         
         yAxisTitle: String? = nil,
         yAxisTitleFont: Font = .caption,
+        yAxisTitleColour: Color = .primary,
         
         baseline: Baseline = .minimumValue,
         topLine: Topline = .maximumValue,
@@ -166,6 +172,7 @@ public struct BarChartStyle: CTBarChartStyle {
         
         self.xAxisTitle = xAxisTitle
         self.xAxisTitleFont = xAxisTitleFont
+        self.xAxisTitleColour = xAxisTitleColour
         
         self.yAxisGridStyle = yAxisGridStyle
         
@@ -177,6 +184,7 @@ public struct BarChartStyle: CTBarChartStyle {
         
         self.yAxisTitle = yAxisTitle
         self.yAxisTitleFont = yAxisTitleFont
+        self.yAxisTitleColour = yAxisTitleColour
         
         self.baseline = baseline
         self.topLine = topLine
