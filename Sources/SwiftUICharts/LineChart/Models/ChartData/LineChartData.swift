@@ -72,33 +72,16 @@ public final class LineChartData: CTLineChartDataProtocol {
                 GeometryReader { geo in
                     ZStack {
                         ForEach(self.dataSets.dataPoints.indices) { i in
-                            
-                            Text(self.dataSets.dataPoints[i].wrappedXAxisLabel)
-                                .font(self.chartStyle.xAxisLabelFont)
-                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .lineLimit(1)
-                                .overlay(
-                                    GeometryReader { geo in
-                                        Color.clear
-                                            .onAppear {
-                                                if angle == .degrees(0) {
-                                                    self.viewData.xAxisLabelHeights.append(geo.frame(in: .local).height)
-                                                } else {
-                                                    self.viewData.xAxisLabelHeights.append(geo.frame(in: .local).width)
-                                                }
-                                            }
-                                    }
-                                )
-                                .fixedSize(horizontal: true, vertical: false)
-                                .rotationEffect(angle, anchor: .center)
-                                .accessibilityLabel(Text("X Axis Label"))
-                                .accessibilityValue(Text(self.dataSets.dataPoints[i].wrappedXAxisLabel))
-                                
-                                .frame(width: self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize),
-                                       height: self.viewData.xAxisLabelHeights.max() ?? 0)
-                                .offset(x: CGFloat(i) * (geo.frame(in: .local).width / CGFloat(self.dataSets.dataPoints.count - 1)),
-                                        y: 0)
-                            
+                            if let label = self.dataSets.dataPoints[i].xAxisLabel {
+                                if label != "" {
+                                    TempText(chartData: self, label: label, rotation: angle)
+                                        
+                                        .frame(width: min(self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize), self.viewData.xAxislabelWidths.min() ?? 0),
+                                               height: self.viewData.xAxisLabelHeights.max() ?? 0)
+                                        .offset(x: CGFloat(i) * (geo.frame(in: .local).width / CGFloat(self.dataSets.dataPoints.count - 1)),
+                                                y: 0)
+                                }
+                            }
                         }
                     }
                 }

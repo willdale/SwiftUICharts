@@ -127,3 +127,67 @@ internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTLineBa
             .accessibilityValue(Text(label))
     }
 }
+
+
+
+
+internal struct TempText<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
+    
+    @ObservedObject private var chartData: ChartData
+    private let label: String
+    private let rotation: Angle
+    
+    /**
+     Initialises a new instance of RotatedText.
+     
+     A view that displays text with rotation.
+     
+     - Parameters:
+        - chartData: Chart Data must conform to `CTLineBarChartDataProtocol`.
+        - label: The string to show in the `Text` view.
+        - rotation: The angle to rotate the `Text` view by.
+     */
+    internal init(
+        chartData: ChartData,
+        label: String,
+        rotation: Angle
+    ) {
+        self.chartData = chartData
+        self.label = label
+        self.rotation = rotation
+    }
+    
+    @State private var finalFrame: CGRect = .zero
+    
+    internal var body: some View {
+        Text(label)
+            .font(chartData.chartStyle.xAxisLabelFont)
+            .foregroundColor(chartData.chartStyle.xAxisLabelColour)
+            .lineLimit(1)
+            .overlay(
+                GeometryReader { geo in
+                    Color.clear
+                        .onAppear {
+                            if rotation == .degrees(0) {
+                                chartData.viewData.xAxisLabelHeights.append(geo.frame(in: .local).height)
+                            } else {
+                                chartData.viewData.xAxisLabelHeights.append(geo.frame(in: .local).width)
+                            }
+                            
+                            if rotation == .degrees(0) || rotation == .radians(0) {
+                                chartData.viewData.xAxislabelWidths.append(geo.frame(in: .local).width)
+                            } else {
+                                chartData.viewData.xAxislabelWidths.append(geo.frame(in: .local).height)
+                            }
+                        }
+                }
+            )
+            .fixedSize(horizontal: true, vertical: false)
+            .rotationEffect(rotation, anchor: .center)
+            
+            .frame(width: rotation == .degrees(0) || rotation == .radians(0) ? finalFrame.width : finalFrame.height,
+                   height: rotation == .degrees(0) || rotation == .radians(0) ? finalFrame.height : finalFrame.width)
+            .accessibilityLabel(Text("X Axis Label"))
+            .accessibilityValue(Text(label))
+    }
+}
