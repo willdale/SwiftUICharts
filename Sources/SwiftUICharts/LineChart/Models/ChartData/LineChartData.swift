@@ -69,26 +69,40 @@ public final class LineChartData: CTLineChartDataProtocol {
             switch self.chartStyle.xAxisLabelsFrom {
             case .dataPoint(let angle):
                 
-                HStack(spacing: 0) {
-                    ForEach(dataSets.dataPoints) { data in
-                        VStack {
-                            if self.chartStyle.xAxisLabelPosition == .bottom {
-                                RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
-                                Spacer()
-                            } else {
-                                Spacer()
-                                RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
-                            }
+                GeometryReader { geo in
+                    ZStack {
+                        ForEach(self.dataSets.dataPoints.indices) { i in
                             
-                        }
-                        .frame(width: min(self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize), self.viewData.xAxislabelWidths.min() ?? 0),
-                               height: self.viewData.xAxisLabelHeights.max())
-                        if data != self.dataSets.dataPoints[self.dataSets.dataPoints.count - 1] {
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
+                            Text(self.dataSets.dataPoints[i].wrappedXAxisLabel)
+                                .font(self.chartStyle.xAxisLabelFont)
+                                .foregroundColor(self.chartStyle.xAxisLabelColour)
+                                .lineLimit(1)
+                                .overlay(
+                                    GeometryReader { geo in
+                                        Color.clear
+                                            .onAppear {
+                                                if angle == .degrees(0) {
+                                                    self.viewData.xAxisLabelHeights.append(geo.frame(in: .local).height)
+                                                } else {
+                                                    self.viewData.xAxisLabelHeights.append(geo.frame(in: .local).width)
+                                                }
+                                            }
+                                    }
+                                )
+                                .fixedSize(horizontal: true, vertical: false)
+                                .rotationEffect(angle, anchor: .center)
+                                .accessibilityLabel(Text("X Axis Label"))
+                                .accessibilityValue(Text(self.dataSets.dataPoints[i].wrappedXAxisLabel))
+                                
+                                .frame(width: self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize),
+                                       height: self.viewData.xAxisLabelHeights.max() ?? 0)
+                                .offset(x: CGFloat(i) * (geo.frame(in: .local).width / CGFloat(self.dataSets.dataPoints.count - 1)),
+                                        y: 0)
+                            
                         }
                     }
                 }
+                .frame(height: self.viewData.xAxisLabelHeights.max())
                 
             case .chartData(let angle):
                 if let labelArray = self.xAxisLabels {
