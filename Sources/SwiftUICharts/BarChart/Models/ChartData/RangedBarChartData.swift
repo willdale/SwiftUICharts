@@ -80,25 +80,24 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
             case .dataPoint(let angle):
-                HStack(spacing: 0) {
-                    ForEach(dataSets.dataPoints, id: \.id) { data in
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
-                        VStack {
-                            if self.chartStyle.xAxisLabelPosition == .bottom {
-                                RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
-                                Spacer()
-                            } else {
-                                Spacer()
-                                RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
+                
+                GeometryReader { geo in
+                    ZStack {
+                        ForEach(self.dataSets.dataPoints.indices) { i in
+                            if let label = self.dataSets.dataPoints[i].xAxisLabel {
+                                if label != "" {
+                                    TempText(chartData: self, label: label, rotation: angle)
+                                        .frame(width: self.getXSection(dataSet: self.dataSets, chartSize: geo.frame(in: .local)),
+                                               height: self.viewData.xAxisLabelHeights.max() ?? 0)
+                                        .offset(x: CGFloat(i) * (geo.frame(in: .local).width / CGFloat(self.dataSets.dataPoints.count)),
+                                                y: 0)
+                                }
                             }
                         }
-                        .frame(width: self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize),
-                               height: self.viewData.xAxisLabelHeights.max())
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
                     }
                 }
+                .frame(height: self.viewData.xAxisLabelHeights.max())
+                
             case .chartData(let angle):
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
