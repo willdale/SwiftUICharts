@@ -13,7 +13,7 @@ import Combine
  
  This model contains the data and styling information for a single line, line chart.
  */
-public final class LineChartData: CTLineChartDataProtocol {
+public final class LineChartData: CTLineChartDataProtocol, Publishable {
     
     // MARK: Properties
     public final let id: UUID = UUID()
@@ -32,6 +32,7 @@ public final class LineChartData: CTLineChartDataProtocol {
     
     @Published public final var extraLineData: ExtraLineData!
     
+    // Publishable
     public var subscription = SubscriptionSet().subscription
     public let touchedDataPointPublisher = PassthroughSubject<DataPoint,Never>()
     
@@ -136,7 +137,7 @@ public final class LineChartData: CTLineChartDataProtocol {
                            chartSize: chartSize)
     }
     
-    public typealias Set = LineDataSet
+    public typealias SetType = LineDataSet
     public typealias DataPoint = LineChartDataPoint
 }
 

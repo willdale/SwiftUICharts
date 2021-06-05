@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import Combine
 
 /**
  Data model for drawing and styling a Stacked Bar Chart.
  
  The grouping data informs the model as to how the datapoints are linked.
  */
-public final class StackedBarChartData: CTMultiBarChartDataProtocol {
+public final class StackedBarChartData: CTMultiBarChartDataProtocol, Publishable {
     
     // MARK: Properties
     public let id: UUID = UUID()
@@ -29,6 +30,10 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
     @Published public final var groups: [GroupingData]
     
     @Published public final var extraLineData: ExtraLineData!
+    
+    // Publishable
+    public var subscription = SubscriptionSet().subscription
+    public let touchedDataPointPublisher = PassthroughSubject<DataPoint,Never>()
     
     public final var noDataText: Text
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
@@ -139,6 +144,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
                 if index >= 0 && index < dataSets.dataSets[superIndex].dataPoints.count {
                     dataSets.dataSets[superIndex].dataPoints[index].legendTag = dataSets.dataSets[superIndex].setTitle
                     self.infoView.touchOverlayInfo = [dataSets.dataSets[superIndex].dataPoints[index]]
+                    touchedDataPointPublisher.send(dataSets.dataSets[superIndex].dataPoints[index])
                 }
             }
         }
@@ -198,7 +204,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol {
         return (yIndex, endPointOfElements)
     }
     
-    public typealias Set = StackedBarDataSets
+    public typealias SetType = StackedBarDataSets
     public typealias DataPoint = StackedBarDataPoint
     public typealias CTStyle = BarChartStyle
 }

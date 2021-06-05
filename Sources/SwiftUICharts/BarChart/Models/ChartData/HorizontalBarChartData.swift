@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import Combine
 
 /**
  Data for drawing and styling a standard Bar Chart.
  */
-public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol {
+public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Publishable {
     // MARK: Properties
     public let id: UUID = UUID()
     
@@ -25,6 +26,10 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol {
     @Published public final var infoView: InfoViewData<BarChartDataPoint> = InfoViewData()
     
     @Published public final var extraLineData: ExtraLineData!
+    
+    // Publishable
+    public var subscription = SubscriptionSet().subscription
+    public let touchedDataPointPublisher = PassthroughSubject<DataPoint,Never>()
     
     public final var noDataText: Text
     public final let chartType: (chartType: ChartType, dataSetType: DataSetType)
@@ -167,6 +172,7 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol {
         if index >= 0 && index < dataSets.dataPoints.count {
             dataSets.dataPoints[index].legendTag = dataSets.legendTitle
             self.infoView.touchOverlayInfo = [dataSets.dataPoints[index]]
+            touchedDataPointPublisher.send(dataSets.dataPoints[index])
         }
     }
     
@@ -181,7 +187,7 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol {
         return nil
     }
     
-    public typealias Set = BarDataSet
+    public typealias SetType = BarDataSet
     public typealias DataPoint = BarChartDataPoint
     public typealias CTStyle = BarChartStyle
 }

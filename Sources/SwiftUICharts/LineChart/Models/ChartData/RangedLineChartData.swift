@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import Combine
 
 /**
  Data for drawing and styling ranged line chart.
  
  This model contains the data and styling information for a ranged line chart.
  */
-public final class RangedLineChartData: CTLineChartDataProtocol {
+public final class RangedLineChartData: CTLineChartDataProtocol, Publishable {
     
     // MARK: Properties
     public let id: UUID  = UUID()
@@ -30,6 +31,10 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
     @Published public final var extraLineData: ExtraLineData!
+    
+    // Publishable
+    public var subscription = SubscriptionSet().subscription
+    public let touchedDataPointPublisher = PassthroughSubject<DataPoint,Never>()
     
     // MARK: Initializer
     /// Initialises a ranged line chart.
@@ -179,9 +184,10 @@ public final class RangedLineChartData: CTLineChartDataProtocol {
                     self.infoView.touchOverlayInfo = [dataSets.dataPoints[index]]
                 }
             }
+            touchedDataPointPublisher.send(dataSets.dataPoints[index])
         }
     }
     
-    public typealias Set = RangedLineDataSet
+    public typealias SetType = RangedLineDataSet
     public typealias DataPoint = RangedLineChartDataPoint
 }
