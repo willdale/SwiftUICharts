@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import Combine
 
 /**
  Data for drawing and styling a pie chart.
  
  This model contains the data and styling information for a pie chart.
  */
-public final class PieChartData: CTPieChartDataProtocol {
+public final class PieChartData: CTPieChartDataProtocol, Publishable {
     
     // MARK: Properties
     public var id: UUID = UUID()
@@ -21,6 +22,10 @@ public final class PieChartData: CTPieChartDataProtocol {
     @Published public final var chartStyle: PieChartStyle
     @Published public final var legends: [LegendData]
     @Published public final var infoView: InfoViewData<PieChartDataPoint>
+    
+    // Publishable
+    public var subscription = SubscriptionSet().subscription
+    public let touchedDataPointPublisher = PassthroughSubject<DataPoint,Never>()
     
     public final var noDataText: Text
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
@@ -53,7 +58,7 @@ public final class PieChartData: CTPieChartDataProtocol {
     
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View { EmptyView() }
     
-    public typealias Set = PieDataSet
+    public typealias SetType = PieDataSet
     public typealias DataPoint = PieChartDataPoint
     public typealias CTStyle = PieChartStyle
 }
@@ -71,6 +76,7 @@ extension PieChartData {
         guard let wrappedIndex = index else { return }
         self.dataSets.dataPoints[wrappedIndex].legendTag = dataSets.legendTitle
         self.infoView.touchOverlayInfo = [self.dataSets.dataPoints[wrappedIndex]]
+        touchedDataPointPublisher.send(self.dataSets.dataPoints[wrappedIndex])
     }
     
     public func getPointLocation(dataSet: PieDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {

@@ -62,7 +62,7 @@ public enum PointShape {
  case point // Attached to the data points.
  ```
  */
-public enum MarkerAttachemnt {
+public enum MarkerAttachment {
     /// Attached to the line.
     case line(dot: Dot)
     /// Attached to the data points.
@@ -74,12 +74,12 @@ public enum MarkerAttachemnt {
  ```
  case none // No overlay markers.
  case indicator(style: DotStyle) // Dot that follows the path.
- case vertical(attachment: MarkerAttachemnt) // Vertical line from top to bottom.
- case full(attachment: MarkerAttachemnt) // Full width and height of view intersecting at a specified point.
- case bottomLeading(attachment: MarkerAttachemnt) // From bottom and leading edges meeting at a specified point.
- case bottomTrailing(attachment: MarkerAttachemnt) // From bottom and trailing edges meeting at a specified point.
- case topLeading(attachment: MarkerAttachemnt) // From top and leading edges meeting at a specified point.
- case topTrailing(attachment: MarkerAttachemnt) // From top and trailing edges meeting at a specified point.
+ case vertical(attachment: MarkerAttachment) // Vertical line from top to bottom.
+ case full(attachment: MarkerAttachment) // Full width and height of view intersecting at a specified point.
+ case bottomLeading(attachment: MarkerAttachment) // From bottom and leading edges meeting at a specified point.
+ case bottomTrailing(attachment: MarkerAttachment) // From bottom and trailing edges meeting at a specified point.
+ case topLeading(attachment: MarkerAttachment) // From top and leading edges meeting at a specified point.
+ case topTrailing(attachment: MarkerAttachment) // From top and trailing edges meeting at a specified point.
  ```
  */
 public enum LineMarkerType: MarkerType {
@@ -88,17 +88,17 @@ public enum LineMarkerType: MarkerType {
     /// Dot that follows the path.
     case indicator(style: DotStyle)
     /// Vertical line from top to bottom.
-    case vertical(attachment: MarkerAttachemnt, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
+    case vertical(attachment: MarkerAttachment, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// Full width and height of view intersecting at a specified point.
-    case full(attachment: MarkerAttachemnt, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
+    case full(attachment: MarkerAttachment, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// From bottom and leading edges meeting at a specified point.
-    case bottomLeading(attachment: MarkerAttachemnt, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
+    case bottomLeading(attachment: MarkerAttachment, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// From bottom and trailing edges meeting at a specified point.
-    case bottomTrailing(attachment: MarkerAttachemnt, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
+    case bottomTrailing(attachment: MarkerAttachment, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// From top and leading edges meeting at a specified point.
-    case topLeading(attachment: MarkerAttachemnt, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
+    case topLeading(attachment: MarkerAttachment, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// From top and trailing edges meeting at a specified point.
-    case topTrailing(attachment: MarkerAttachemnt, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
+    case topTrailing(attachment: MarkerAttachment, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
 }
 
 /**

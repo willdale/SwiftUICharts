@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import Combine
 
 /**
  Data for drawing and styling a multi line, line chart.
  
  This model contains all the data and styling information for a single line, line chart.
  */
-public final class MultiLineChartData: CTLineChartDataProtocol {
+public final class MultiLineChartData: CTLineChartDataProtocol, Publishable {
     
     // MARK: Properties
     public let id: UUID = UUID()
@@ -30,6 +31,10 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
     @Published public final var extraLineData: ExtraLineData!
+    
+    // Publishable
+    public var subscription = SubscriptionSet().subscription
+    public let touchedDataPointPublisher = PassthroughSubject<DataPoint,Never>()
     
     // MARK: Initializers
     /// Initialises a Multi Line Chart.
@@ -152,7 +157,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol {
         }
     }
     
-    public typealias Set = MultiLineDataSet
+    public typealias SetType = MultiLineDataSet
     public typealias DataPoint = LineChartDataPoint
     public typealias CTStyle = LineChartStyle
 }
@@ -182,11 +187,11 @@ extension MultiLineChartData {
     }
     
     public func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
-        
         self.infoView.touchOverlayInfo = dataSets.dataSets.indices.compactMap { setIndex in
             let xSection: CGFloat = chartSize.width / CGFloat(dataSets.dataSets[setIndex].dataPoints.count - 1)
             let index = Int((touchLocation.x + (xSection / 2)) / xSection)
             if index >= 0 && index < dataSets.dataSets[setIndex].dataPoints.count {
+                touchedDataPointPublisher.send(dataSets.dataSets[setIndex].dataPoints[index])
                 if !dataSets.dataSets[setIndex].style.ignoreZero {
                     dataSets.dataSets[setIndex].dataPoints[index].legendTag = dataSets.dataSets[setIndex].legendTitle
                     return dataSets.dataSets[setIndex].dataPoints[index]

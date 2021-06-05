@@ -9,28 +9,28 @@ import SwiftUI
 
 // MARK: - Is Greater Than
 extension CTChartData where Self: CTLineChartDataProtocol,
-                            Set: CTSingleDataSetProtocol {
+                            SetType: CTSingleDataSetProtocol {
     public func isGreaterThanTwo() -> Bool {
         return dataSets.dataPoints.count >= 2
     }
 }
 
 extension CTChartData where Self: CTBarChartDataProtocol,
-                            Set: CTSingleDataSetProtocol {
+                            SetType: CTSingleDataSetProtocol {
     public func isGreaterThanTwo() -> Bool {
         return dataSets.dataPoints.count >= 1
     }
 }
 
 extension CTChartData where Self: CTPieDoughnutChartDataProtocol,
-                            Set: CTSingleDataSetProtocol {
+                            SetType: CTSingleDataSetProtocol {
     public func isGreaterThanTwo() -> Bool {
         return dataSets.dataPoints.count >= 1
     }
 }
 
 extension CTChartData where Self: CTLineChartDataProtocol,
-                            Set: CTMultiDataSetProtocol {
+                            SetType: CTMultiDataSetProtocol {
     public func isGreaterThanTwo() -> Bool {
         var returnValue: [Bool] = []
         dataSets.dataSets.forEach { dataSet in
@@ -41,7 +41,7 @@ extension CTChartData where Self: CTLineChartDataProtocol,
 }
 
 extension CTChartData where Self: CTBarChartDataProtocol,
-                            Set: CTMultiDataSetProtocol {
+                            SetType: CTMultiDataSetProtocol {
     public func isGreaterThanTwo() -> Bool {
         var returnValue: [Bool] = []
         dataSets.dataSets.forEach { dataSet in

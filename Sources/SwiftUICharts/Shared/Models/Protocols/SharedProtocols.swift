@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 // MARK: Chart Data
 /**
  Main protocol for passing data around library.
@@ -17,7 +16,7 @@ import SwiftUI
 public protocol CTChartData: ObservableObject, Identifiable {
     
     /// A type representing a  data set. -- `CTDataSetProtocol`
-    associatedtype Set: CTDataSetProtocol
+    associatedtype SetType: CTDataSetProtocol
     
     /// A type representing a  data set. -- `CTDataSetProtocol`
     associatedtype SetPoint: CTDataSetProtocol
@@ -36,7 +35,7 @@ public protocol CTChartData: ObservableObject, Identifiable {
     /**
      Data model containing datapoints and styling information.
      */
-    var dataSets: Set { get set }
+    var dataSets: SetType { get set }
     
     /**
      Data model containing the charts Title, Subtitle and the Title for Legend.

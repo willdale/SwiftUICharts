@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import Combine
 
 /**
  Data for drawing and styling a single line, line chart.
  
  This model contains the data and styling information for a single line, line chart.
  */
-public final class LineChartData: CTLineChartDataProtocol {
+public final class LineChartData: CTLineChartDataProtocol, Publishable {
     
     // MARK: Properties
     public final let id: UUID = UUID()
@@ -30,6 +31,10 @@ public final class LineChartData: CTLineChartDataProtocol {
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
     @Published public final var extraLineData: ExtraLineData!
+    
+    // Publishable
+    public var subscription = SubscriptionSet().subscription
+    public let touchedDataPointPublisher = PassthroughSubject<DataPoint,Never>()
     
     internal final var isFilled: Bool = false
     
@@ -75,7 +80,6 @@ public final class LineChartData: CTLineChartDataProtocol {
                             if let label = self.dataSets.dataPoints[i].xAxisLabel {
                                 if label != "" {
                                     TempText(chartData: self, label: label, rotation: angle)
-                                        
                                         .frame(width: min(self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize), self.viewData.xAxislabelWidths.min() ?? 0),
                                                height: self.viewData.xAxisLabelHeights.max() ?? 0)
                                         .offset(x: CGFloat(i) * (geo.frame(in: .local).width / CGFloat(self.dataSets.dataPoints.count - 1)),
@@ -133,7 +137,7 @@ public final class LineChartData: CTLineChartDataProtocol {
                            chartSize: chartSize)
     }
     
-    public typealias Set = LineDataSet
+    public typealias SetType = LineDataSet
     public typealias DataPoint = LineChartDataPoint
 }
 
@@ -181,6 +185,7 @@ extension LineChartData {
                     self.infoView.touchOverlayInfo = [dataSets.dataPoints[index]]
                 }
             }
+            touchedDataPointPublisher.send(dataSets.dataPoints[index])
         }
     }
 }

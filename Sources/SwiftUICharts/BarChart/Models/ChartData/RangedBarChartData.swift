@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import Combine
 
 /**
  Data for drawing and styling a ranged Bar Chart.
  */
-public final class RangedBarChartData: CTRangedBarChartDataProtocol {
+public final class RangedBarChartData: CTRangedBarChartDataProtocol, Publishable {
     // MARK: Properties
     public let id: UUID = UUID()
     
@@ -25,6 +26,10 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
     @Published public final var infoView: InfoViewData<RangedBarDataPoint> = InfoViewData()
     
     @Published public final var extraLineData: ExtraLineData!
+    
+    // Publishable
+    public var subscription = SubscriptionSet().subscription
+    public let touchedDataPointPublisher = PassthroughSubject<DataPoint,Never>()
     
     public final var noDataText: Text
     public final let chartType: (chartType: ChartType, dataSetType: DataSetType)
@@ -138,6 +143,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
         if index >= 0 && index < dataSets.dataPoints.count {
             dataSets.dataPoints[index].legendTag = dataSets.legendTitle
             self.infoView.touchOverlayInfo = [dataSets.dataPoints[index]]
+            touchedDataPointPublisher.send(dataSets.dataPoints[index])
         }
     }
     
@@ -152,7 +158,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol {
         return nil
     }
     
-    public typealias Set = RangedBarDataSet
+    public typealias SetType = RangedBarDataSet
     public typealias DataPoint = RangedBarDataPoint
     public typealias CTStyle = BarChartStyle
 }

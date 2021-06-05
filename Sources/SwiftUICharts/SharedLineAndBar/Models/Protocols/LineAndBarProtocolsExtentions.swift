@@ -268,14 +268,14 @@ extension CTLineBarChartDataProtocol {
     }
 }
 extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol,
-                                           Self.Set: CTLineChartDataSet {
+                                           Self.SetType: CTLineChartDataSet {
     public func getColour() -> ColourStyle {
         dataSets.style.lineColour
     }
 }
 extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol,
-                                           Self.Set: CTMultiLineChartDataSet,
-                                           Self.Set.DataSet: CTLineChartDataSet {
+                                           Self.SetType: CTMultiLineChartDataSet,
+                                           Self.SetType.DataSet: CTLineChartDataSet {
     public func getColour() -> ColourStyle {
         dataSets.dataSets.first?.style.lineColour ?? ColourStyle()
     }

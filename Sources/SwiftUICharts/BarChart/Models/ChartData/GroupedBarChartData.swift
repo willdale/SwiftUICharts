@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 /**
  Data model for drawing and styling a Grouped Bar Chart.
@@ -13,7 +14,7 @@ import SwiftUI
  The grouping data informs the model as to how the datapoints are linked.
  ```
  */
-public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
+public final class GroupedBarChartData: CTMultiBarChartDataProtocol, Publishable {
     
     // MARK: Properties
     public let id: UUID = UUID()
@@ -30,6 +31,10 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
     @Published public final var groups: [GroupingData]
     
     @Published public final var extraLineData: ExtraLineData!
+    
+    // Publishable
+    public var subscription = SubscriptionSet().subscription
+    public let touchedDataPointPublisher = PassthroughSubject<DataPoint,Never>()
     
     public final var noDataText: Text
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
@@ -156,6 +161,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
             if subIndex >= 0 && subIndex < dataSets.dataSets[index].dataPoints.count {
                 dataSets.dataSets[index].dataPoints[subIndex].legendTag = dataSets.dataSets[index].setTitle
                 self.infoView.touchOverlayInfo = [dataSets.dataSets[index].dataPoints[subIndex]]
+                touchedDataPointPublisher.send(dataSets.dataSets[index].dataPoints[subIndex])
             }
         }
     }
@@ -189,7 +195,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol {
         return nil
     }
     
-    public typealias Set = GroupedBarDataSets
+    public typealias SetType = GroupedBarDataSets
     public typealias DataPoint = GroupedBarDataPoint
     public typealias CTStyle = BarChartStyle
 }
