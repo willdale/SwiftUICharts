@@ -337,7 +337,7 @@ extension CTLineBarChartDataProtocol where Self: isHorizontal {
     }
 }
 
-// MARK: - POI Lable Position
+// MARK: POI Lable Position
 //
 //
 //
@@ -356,7 +356,10 @@ extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol {
                 y: CGFloat(markerValue - minValue) * -(frame.height / CGFloat(range)) + frame.height)
     }
 }
-
+// MARK: POI Lable Position
+//
+//
+//
 // MARK: Vertical Bar Charts
 extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol {
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
@@ -371,7 +374,10 @@ extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol {
                 y: frame.height - CGFloat((markerValue - minValue) / range) * frame.height)
     }
 }
-
+// MARK: POI Lable Position
+//
+//
+//
 // MARK: Horizontal Bar Charts
 extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol,
                                            Self: isHorizontal {
@@ -385,5 +391,106 @@ extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol,
     public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         CGPoint(x: CGFloat((markerValue - minValue) / range) * frame.width,
                 y: frame.height / 2)
+    }
+}
+
+
+// MARK: - Extra Y Axis Labels
+extension CTLineBarChartDataProtocol {
+    
+    internal var extraLabelsArray: [String] { self.generateExtraYLabels(self.viewData.yAxisSpecifier) }
+    private func generateExtraYLabels(_ specifier: String) -> [String] {
+        
+        let dataRange: Double = self.extraLineData.range
+        let minValue: Double = self.extraLineData.minValue
+        let range: Double = dataRange / Double(self.extraLineData.style.yAxisNumberOfLabels-1)
+        let firstLabel = [String(format: specifier, minValue)]
+        let otherLabels = (1...self.extraLineData.style.yAxisNumberOfLabels-1).map { String(format: specifier, minValue + range * Double($0)) }
+        let labels = firstLabel + otherLabels
+        return labels
+
+    }
+    public func getExtraYAxisLabels() -> some View {
+        VStack {
+            if self.chartStyle.xAxisLabelPosition == .top {
+                Spacer()
+                    .frame(height: yAxisPaddingHeight)
+            }
+            ForEach(self.extraLabelsArray.indices.reversed(), id: \.self) { i in
+                Text(self.extraLabelsArray[i])
+                    .font(self.chartStyle.yAxisLabelFont)
+                    .foregroundColor(self.chartStyle.yAxisLabelColour)
+                    .lineLimit(1)
+                    .overlay(
+                        GeometryReader { geo in
+                            Rectangle()
+                                .foregroundColor(Color.clear)
+                                .onAppear {
+                                    self.viewData.yAxisLabelWidth.append(geo.size.width)
+                                }
+                        }
+                    )
+                    .accessibilityLabel(Text("Y Axis Label"))
+                    .accessibilityValue(Text(self.extraLabelsArray[i]))
+                if i != 0 {
+                    Spacer()
+                        .frame(minHeight: 0, maxHeight: 500)
+                }
+            }
+            if self.chartStyle.xAxisLabelPosition == .bottom {
+                Spacer()
+                    .frame(height: yAxisPaddingHeight)
+            }
+        }
+        .ifElse(self.chartStyle.xAxisLabelPosition == .bottom, if: {
+            $0.padding(.top, -8)
+        }, else: {
+            $0.padding(.bottom, -8)
+        })
+    }
+    public func getExtraYAxisTitle(colour: AxisColour) -> some View {
+        Group {
+            if let title = self.extraLineData.style.yAxisTitle {
+                VStack {
+                    if self.chartStyle.xAxisLabelPosition == .top {
+                        Spacer()
+                            .frame(height: yAxisPaddingHeight)
+                    }
+                    VStack {
+                        Text(title)
+                            .font(self.chartStyle.yAxisTitleFont)
+                            .foregroundColor(self.chartStyle.yAxisTitleColour)
+                            .background(
+                                GeometryReader { geo in
+                                    Rectangle()
+                                        .foregroundColor(Color.clear)
+                                        .onAppear {
+                                            self.viewData.extraYAxisTitleWidth = geo.size.height + 10 // 10 to add padding
+                                            self.viewData.extraYAxisTitleHeight = geo.size.width
+                                        }
+                                }
+                            )
+                            .rotationEffect(Angle.init(degrees: -90), anchor: .center)
+                            .fixedSize()
+                            .frame(width: self.viewData.extraYAxisTitleWidth)
+                        Group {
+                            switch colour {
+                            case .none:
+                                EmptyView()
+                            case .style(let size):
+                                self.getAxisColourAsCircle(customColour: self.extraLineData.style.lineColour, width: size)
+                            case .custom(let colour, let size):
+                                self.getAxisColourAsCircle(customColour: colour, width: size)
+                            }
+                        }
+                        .offset(x: 0, y: self.viewData.extraYAxisTitleHeight / 2)
+                    }
+                    if self.chartStyle.xAxisLabelPosition == .bottom {
+                        Spacer()
+                            .frame(height: yAxisPaddingHeight)
+                    }
+                }
+            }
+        }
     }
 }

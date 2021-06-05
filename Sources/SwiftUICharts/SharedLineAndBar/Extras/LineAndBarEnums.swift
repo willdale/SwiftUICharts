@@ -117,3 +117,22 @@ public enum YAxisLabelType {
     /// Custom labels array
     case custom
 }
+
+// MARK: - Extra Y Axis
+/**
+ Controls how second Y Axis will be styled.
+ 
+ ```
+ case none // No colour marker.
+ case style(size: CGFloat) // Get style from data model.
+ case custom(colour: ColourStyle, size: CGFloat) // Set custom style.
+ ```
+ */
+public enum AxisColour {
+    /// No colour marker.
+    case none
+    /// Get style from data model.
+    case style(size: CGFloat)
+    /// Set custom style.
+    case custom(colour: ColourStyle, size: CGFloat)
+}
