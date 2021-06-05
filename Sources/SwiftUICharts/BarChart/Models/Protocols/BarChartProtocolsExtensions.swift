@@ -46,10 +46,10 @@ extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType {
 //
 //
 // MARK: Standard / Ranged
-extension CTBarChartDataProtocol where Self.Set.ID == UUID,
-                                       Self.Set.DataPoint.ID == UUID,
-                                       Self.Set: CTStandardBarChartDataSet,
-                                       Self.Set.DataPoint: CTBarColourProtocol {
+extension CTBarChartDataProtocol where Self.SetType.ID == UUID,
+                                       Self.SetType.DataPoint.ID == UUID,
+                                       Self.SetType: CTStandardBarChartDataSet,
+                                       Self.SetType.DataPoint: CTBarColourProtocol {
     internal func setupLegends() {
         switch self.barStyle.colourFrom {
         case .barStyle:

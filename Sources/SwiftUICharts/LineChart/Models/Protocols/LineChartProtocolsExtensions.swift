@@ -504,14 +504,14 @@ internal struct IndicatorSwitch: View {
 }
 
 // MARK: - Legends
-extension CTLineChartDataProtocol where Self.Set.ID == UUID,
-                                        Self.Set: CTLineChartDataSet {
+extension CTLineChartDataProtocol where Self.SetType.ID == UUID,
+                                        Self.SetType: CTLineChartDataSet {
     internal func setupLegends() {
         lineLegendSetup(dataSet: dataSets)
     }
 }
 
-extension CTLineChartDataProtocol where Self.Set == MultiLineDataSet {
+extension CTLineChartDataProtocol where Self.SetType == MultiLineDataSet {
     internal func setupLegends() {
         dataSets.dataSets.forEach { lineLegendSetup(dataSet: $0) }
     }
@@ -554,9 +554,9 @@ extension CTLineChartDataProtocol {
     }
 }
 
-extension CTLineChartDataProtocol where Self.Set.ID == UUID,
-                                        Self.Set: CTRangedLineChartDataSet,
-                                        Self.Set.Styling: CTRangedLineStyle {
+extension CTLineChartDataProtocol where Self.SetType.ID == UUID,
+                                        Self.SetType: CTRangedLineChartDataSet,
+                                        Self.SetType.Styling: CTRangedLineStyle {
     internal func setupRangeLegends() {
         if dataSets.style.fillColour.colourType == .colour,
            let colour = dataSets.style.fillColour.colour
@@ -594,7 +594,7 @@ extension CTLineChartDataProtocol where Self.Set.ID == UUID,
 }
 
 // MARK: - Accessibility
-extension CTLineChartDataProtocol where Set: CTLineChartDataSet {
+extension CTLineChartDataProtocol where SetType: CTLineChartDataSet {
     public func getAccessibility() -> some View {
         ForEach(dataSets.dataPoints.indices, id: \.self) { point in
             

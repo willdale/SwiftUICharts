@@ -336,13 +336,13 @@ internal struct GradientStopsPartBar: View {
 internal struct RangedBarChartColourCell<CD:RangedBarChartData>: View {
     
     private let chartData: CD
-    private let dataPoint: CD.Set.DataPoint
+    private let dataPoint: CD.SetType.DataPoint
     private let colour: Color
     private let barSize: CGRect
     
     internal init(
         chartData: CD,
-        dataPoint: CD.Set.DataPoint,
+        dataPoint: CD.SetType.DataPoint,
         colour: Color,
         barSize: CGRect
     ) {
@@ -379,7 +379,7 @@ internal struct RangedBarChartColourCell<CD:RangedBarChartData>: View {
 internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
     
     private let chartData: CD
-    private let dataPoint: CD.Set.DataPoint
+    private let dataPoint: CD.SetType.DataPoint
     private let colours: [Color]
     private let startPoint: UnitPoint
     private let endPoint: UnitPoint
@@ -387,7 +387,7 @@ internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
     
     internal init(
         chartData: CD,
-        dataPoint: CD.Set.DataPoint,
+        dataPoint: CD.SetType.DataPoint,
         colours: [Color],
         startPoint: UnitPoint,
         endPoint: UnitPoint,
@@ -430,7 +430,7 @@ internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
 internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
     
     private let chartData: CD
-    private let dataPoint: CD.Set.DataPoint
+    private let dataPoint: CD.SetType.DataPoint
     private let stops: [Gradient.Stop]
     private let startPoint: UnitPoint
     private let endPoint: UnitPoint
@@ -438,7 +438,7 @@ internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
     
     internal init(
         chartData: CD,
-        dataPoint: CD.Set.DataPoint,
+        dataPoint: CD.SetType.DataPoint,
         stops: [Gradient.Stop],
         startPoint: UnitPoint,
         endPoint: UnitPoint,

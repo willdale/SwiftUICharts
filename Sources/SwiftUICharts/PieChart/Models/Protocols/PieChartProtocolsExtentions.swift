@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - Extentions
 
-extension CTPieDoughnutChartDataProtocol where Set == PieDataSet, DataPoint == PieChartDataPoint {
+extension CTPieDoughnutChartDataProtocol where SetType == PieDataSet, DataPoint == PieChartDataPoint {
     
     /**
      Sets up the data points in a way that can be sent to renderer for drawing.
@@ -56,9 +56,9 @@ extension CTPieDoughnutChartDataProtocol where Set == PieDataSet, DataPoint == P
     }
 }
 
-extension CTPieDoughnutChartDataProtocol where Self.Set.DataPoint.ID == UUID,
-                                               Self.Set: CTSingleDataSetProtocol,
-                                               Self.Set.DataPoint: CTPieDataPoint {
+extension CTPieDoughnutChartDataProtocol where Self.SetType.DataPoint.ID == UUID,
+                                               Self.SetType: CTSingleDataSetProtocol,
+                                               Self.SetType.DataPoint: CTPieDataPoint {
     internal func setupLegends() {
         dataSets.dataPoints.forEach { dataPoint in
             guard let legend = dataPoint.description else { return }
