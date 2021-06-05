@@ -7,22 +7,6 @@
 
 import SwiftUI
 
-
-import Combine
-public protocol Publishable {
-    
-    associatedtype DataPoint: CTDataPointBaseProtocol
-    
-    var subscription: Set<AnyCancellable> { get set }
-    
-    /**
-     Streams the data points from touch overlay.
-     
-     Uses Combine
-     */
-    var touchedDataPointPublisher: PassthroughSubject<DataPoint, Never> { get }
-}
-
 // MARK: Chart Data
 /**
  Main protocol for passing data around library.
