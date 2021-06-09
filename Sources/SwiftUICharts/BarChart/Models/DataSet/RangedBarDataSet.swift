@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Data set for ranged bar charts.
  */
-public struct RangedBarDataSet: CTRangedBarChartDataSet {
+public struct RangedBarDataSet: CTRangedBarChartDataSet, DataFunctionsProtocol {
     
     public var id: UUID = UUID()
     public var dataPoints: [RangedBarDataPoint]

@@ -13,7 +13,7 @@ import Combine
  
  The grouping data informs the model as to how the datapoints are linked.
  */
-public final class StackedBarChartData: CTMultiBarChartDataProtocol, Publishable {
+public final class StackedBarChartData: CTMultiBarChartDataProtocol, GetDataProtocol, Publishable {
     
     // MARK: Properties
     public let id: UUID = UUID()

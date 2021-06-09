@@ -271,7 +271,7 @@ extension CTLineChartDataProtocol {
 }
 
 // MARK: - Markers
-extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType {
+extension CTLineChartDataProtocol where Self.CTStyle.Mark == LineMarkerType, Self: GetDataProtocol {
     
     internal func markerSubView<DS: CTLineChartDataSet,
                                 DP: CTStandardDataPointProtocol>(

@@ -127,27 +127,7 @@ public protocol CTChartData: ObservableObject, Identifiable {
  Main protocol to set conformace for types of Data Sets.
  */
 public protocol CTDataSetProtocol: Hashable, Identifiable {
-    
     var id: ID { get }
-    
-    /**
-     Returns the highest value in the data set.
-     - Returns: Highest value in data set.
-     */
-    func maxValue() -> Double
-    
-    /**
-     Returns the lowest value in the data set.
-     - Returns: Lowest value in data set.
-     */
-    func minValue() -> Double
-    
-    /**
-     Returns the average value from the data set.
-     - Returns: Average of values in data set.
-     */
-    func average() -> Double
-    
 }
 
 /**

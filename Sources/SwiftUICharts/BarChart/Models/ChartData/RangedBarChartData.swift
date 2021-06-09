@@ -11,7 +11,7 @@ import Combine
 /**
  Data for drawing and styling a ranged Bar Chart.
  */
-public final class RangedBarChartData: CTRangedBarChartDataProtocol, Publishable {
+public final class RangedBarChartData: CTRangedBarChartDataProtocol, GetDataProtocol, Publishable {
     // MARK: Properties
     public let id: UUID = UUID()
     

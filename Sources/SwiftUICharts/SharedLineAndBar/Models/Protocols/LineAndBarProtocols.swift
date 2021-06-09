@@ -13,25 +13,7 @@ import SwiftUI
  */
 public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBarChartStyle {
     
-    /**
-     Returns the difference between the highest and lowest numbers in the data set or data sets.
-     */
-    var range: Double { get }
     
-    /**
-     Returns the lowest value in the data set or data sets.
-     */
-    var minValue: Double { get }
-    
-    /**
-     Returns the highest value in the data set or data sets
-     */
-    var maxValue: Double { get }
-    
-    /**
-     Returns the average value from the data set or data sets.
-     */
-    var average: Double { get }
     
     /**
      Array of strings for the labels on the X Axis instead of the labels in the data points.
@@ -56,20 +38,22 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
     
     
     /**
-     Experimental
+     A data model for the `ExtraLine` View Modifier
     */
-    var extraLineData: ExtraLineData!/*<Self>*/ { get set }
+    var extraLineData: ExtraLineData! { get set }
+    
     /**
-     Experimental
+     A type representing a View for displaying second set of labels on the Y axis.
     */
     associatedtype ExtraYLabels: View
     
     /**
-     Experimental
+     View for displaying second set of labels on the Y axis.
     */
     func getExtraYAxisLabels() -> ExtraYLabels
+    
     /**
-     Experimental
+     Get the relevant colour indicator for the y axis labels.
     */
     func getColour() -> ColourStyle
     
@@ -101,6 +85,7 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
      as a POI.
      */
     associatedtype MarkerShape: Shape
+    
     /**
      Displays a line marking a Point Of Interest.
      

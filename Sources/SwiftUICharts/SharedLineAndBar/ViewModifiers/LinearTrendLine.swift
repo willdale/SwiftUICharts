@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Draws a line across the chart to show the the trend in the data.
  */
-internal struct LinearTrendLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
+internal struct LinearTrendLine<T>: ViewModifier where T: CTLineBarChartDataProtocol & GetDataProtocol {
     
     @ObservedObject private var chartData: T
     private let firstValue: Double
@@ -87,7 +87,7 @@ extension View {
         - strokeStyle: Stroke Style.
      - Returns: A  new view containing the chart with a trend line.
      */
-    public func linearTrendLine<T: CTLineBarChartDataProtocol>(
+    public func linearTrendLine<T: CTLineBarChartDataProtocol & GetDataProtocol>(
         chartData: T,
         firstValue: Double,
         lastValue: Double,
