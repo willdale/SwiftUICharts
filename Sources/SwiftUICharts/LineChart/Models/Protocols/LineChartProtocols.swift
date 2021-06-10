@@ -127,7 +127,9 @@ public protocol CTMultiLineChartDataSet: CTMultiDataSetProtocol {}
 /**
  A protocol to extend functionality of `CTLineBarDataPointProtocol` specifically for Line and Bar Charts.
  */
-public protocol CTLineDataPointProtocol: CTLineBarDataPointProtocol {}
+public protocol CTLineDataPointProtocol: CTLineBarDataPointProtocol {
+    var pointColour: PointColour? { get set }
+}
 
 /**
  A protocol to extend functionality of `CTStandardDataPointProtocol` specifically for Ranged Line Charts.

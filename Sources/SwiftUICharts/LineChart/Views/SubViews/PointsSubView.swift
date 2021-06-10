@@ -103,7 +103,7 @@ import SwiftUI
  Sub view gets the point markers drawn, sets the styling and sets up the animations.
  */
 internal struct PointsSubView<DS>: View where DS: CTLineChartDataSet,
-                                              DS.DataPoint: CTStandardDataPointProtocol {
+                                              DS.DataPoint: CTStandardDataPointProtocol & CTLineDataPointProtocol {
     
     private let dataSets: DS
     private let minValue: Double
@@ -142,10 +142,10 @@ internal struct PointsSubView<DS>: View where DS: CTLineChartDataSet,
                        pointStyle: dataSets.pointStyle.pointShape)
                     .ifElse(!isFilled, if: {
                         $0.trim(to: startAnimation ? 1 : 0)
-                            .stroke(dataSets.pointStyle.borderColour, lineWidth: dataSets.pointStyle.lineWidth)
+                            .fill(dataSets.dataPoints[index].pointColour?.fill ?? dataSets.pointStyle.fillColour)
                     }, else: {
                         $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                            .stroke(dataSets.pointStyle.borderColour, lineWidth: dataSets.pointStyle.lineWidth)
+                            .fill(dataSets.dataPoints[index].pointColour?.fill ?? dataSets.pointStyle.fillColour)
                     })
             }
             .animateOnAppear(using: animation) {
@@ -166,10 +166,12 @@ internal struct PointsSubView<DS>: View where DS: CTLineChartDataSet,
                        pointStyle: dataSets.pointStyle.pointShape)
                     .ifElse(!isFilled, if: {
                         $0.trim(to: startAnimation ? 1 : 0)
-                            .stroke(dataSets.pointStyle.borderColour, lineWidth: dataSets.pointStyle.lineWidth)
+                            .stroke(dataSets.dataPoints[index].pointColour?.border ?? dataSets.pointStyle.borderColour,
+                                    lineWidth: dataSets.pointStyle.lineWidth)
                     }, else: {
                         $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                            .stroke(dataSets.pointStyle.borderColour, lineWidth: dataSets.pointStyle.lineWidth)
+                            .stroke(dataSets.dataPoints[index].pointColour?.border ?? dataSets.pointStyle.borderColour,
+                                    lineWidth: dataSets.pointStyle.lineWidth)
                     })
             }
             .animateOnAppear(using: animation) {
@@ -190,10 +192,12 @@ internal struct PointsSubView<DS>: View where DS: CTLineChartDataSet,
                        pointStyle: dataSets.pointStyle.pointShape)
                     .ifElse(!isFilled, if: {
                         $0.trim(to: startAnimation ? 1 : 0)
-                            .stroke(dataSets.pointStyle.borderColour, lineWidth: dataSets.pointStyle.lineWidth)
+                            .stroke(dataSets.dataPoints[index].pointColour?.border ?? dataSets.pointStyle.borderColour,
+                                    lineWidth: dataSets.pointStyle.lineWidth)
                     }, else: {
                         $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                            .stroke(dataSets.pointStyle.borderColour, lineWidth: dataSets.pointStyle.lineWidth)
+                            .stroke(dataSets.dataPoints[index].pointColour?.border ?? dataSets.pointStyle.borderColour,
+                                    lineWidth: dataSets.pointStyle.lineWidth)
                     })
                     .background(Point2(value: dataSets.dataPoints[index].value,
                                        index: index,
@@ -203,7 +207,7 @@ internal struct PointsSubView<DS>: View where DS: CTLineChartDataSet,
                                        pointSize: dataSets.pointStyle.pointSize,
                                        ignoreZero: dataSets.style.ignoreZero,
                                        pointStyle: dataSets.pointStyle.pointShape)
-                                    .foregroundColor(dataSets.pointStyle.fillColour)
+                                    .foregroundColor(dataSets.dataPoints[index].pointColour?.fill ?? dataSets.pointStyle.fillColour)
                     )
             }
             .animateOnAppear(using: animation) {
