@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-internal struct ValueLabelYAxisSubView<T>: View where T: CTLineBarChartDataProtocol {
+internal struct ValueLabelYAxisSubView<T>: View where T: CTLineBarChartDataProtocol & PointOfInterestProtocol {
     
     @ObservedObject private var chartData: T
     private let markerValue: Double

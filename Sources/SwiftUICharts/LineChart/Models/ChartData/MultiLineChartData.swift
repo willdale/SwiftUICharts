@@ -13,7 +13,7 @@ import Combine
  
  This model contains all the data and styling information for a single line, line chart.
  */
-public final class MultiLineChartData: CTLineChartDataProtocol, GetDataProtocol, Publishable {
+public final class MultiLineChartData: CTLineChartDataProtocol, GetDataProtocol, Publishable, PointOfInterestProtocol {
     
     // MARK: Properties
     public let id: UUID = UUID()

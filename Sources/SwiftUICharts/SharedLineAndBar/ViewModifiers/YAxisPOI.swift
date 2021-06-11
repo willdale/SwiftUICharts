@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Configurable Point of interest
  */
-internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & GetDataProtocol {
+internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & GetDataProtocol & PointOfInterestProtocol {
     
     @ObservedObject private var chartData: T
     
@@ -183,7 +183,7 @@ extension View {
         - strokeStyle: Style of Stroke.
      - Returns: A  new view containing the chart with a marker line at a specified value.
      */
-    public func yAxisPOI<T:CTLineBarChartDataProtocol & GetDataProtocol>(
+    public func yAxisPOI<T:CTLineBarChartDataProtocol & GetDataProtocol & PointOfInterestProtocol>(
         chartData: T,
         markerName: String,
         markerValue: Double,
@@ -261,7 +261,7 @@ extension View {
         - strokeStyle: Style of Stroke.
      - Returns: A  new view containing the chart with a marker line at the average.
      */
-    public func averageLine<T:CTLineBarChartDataProtocol & GetDataProtocol>(
+    public func averageLine<T:CTLineBarChartDataProtocol & GetDataProtocol & PointOfInterestProtocol>(
         chartData: T,
         markerName: String = "Average",
         labelPosition: DisplayValue = .yAxis(specifier: "%.0f"),

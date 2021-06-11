@@ -287,7 +287,7 @@ extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol {
     }
 }
 // MARK: - Y Axis POI
-extension CTLineBarChartDataProtocol {
+extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
     public func poiMarker(value: Double, range: Double, minValue: Double) -> some Shape {
         HorizontalMarker(chartData: self, value: value, range: range, minValue: minValue)
     }
@@ -312,7 +312,7 @@ extension CTLineBarChartDataProtocol {
             })
     }
 }
-extension CTLineBarChartDataProtocol where Self: isHorizontal {
+extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol & isHorizontal {
     public func poiMarker(value: Double, range: Double, minValue: Double) -> some Shape {
         VerticalMarker(chartData: self, value: value, range: range, minValue: minValue)
     }
@@ -343,7 +343,7 @@ extension CTLineBarChartDataProtocol where Self: isHorizontal {
 //
 //
 // MARK: Line Charts
-extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol {
+extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol & PointOfInterestProtocol {
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         let leading: CGFloat = -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - 4 // -4 for padding at the root view.
         let trailing: CGFloat = frame.width + ((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) + 4 // +4 for padding at the root view.
@@ -362,7 +362,7 @@ extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol {
 //
 //
 // MARK: Vertical Bar Charts
-extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol {
+extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointOfInterestProtocol {
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         let leading: CGFloat = -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - 4 // -4 for padding at the root view.
         let trailing: CGFloat = frame.width + ((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) + 4 // +4 for padding at the root view.
@@ -380,7 +380,7 @@ extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol {
 //
 //
 // MARK: Horizontal Bar Charts
-extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol,
+extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointOfInterestProtocol,
                                            Self: isHorizontal {
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         let bottom: CGFloat = frame.height + ((self.viewData.xAxisLabelHeights.max() ?? 0) / 2) + 4  // +4 for padding at the root view

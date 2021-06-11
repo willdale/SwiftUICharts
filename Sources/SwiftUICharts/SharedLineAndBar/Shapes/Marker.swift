@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Generic line, drawn horizontally across the chart.
-internal struct HorizontalMarker<ChartData>: Shape where ChartData: CTLineBarChartDataProtocol {
+internal struct HorizontalMarker<ChartData>: Shape where ChartData: CTLineBarChartDataProtocol & PointOfInterestProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let value: Double
@@ -41,7 +41,7 @@ internal struct HorizontalMarker<ChartData>: Shape where ChartData: CTLineBarCha
 }
 
 /// Generic line, drawn vertically across the chart.
-internal struct VerticalMarker<ChartData>: Shape where ChartData: CTLineBarChartDataProtocol {
+internal struct VerticalMarker<ChartData>: Shape where ChartData: CTLineBarChartDataProtocol & PointOfInterestProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let value: Double

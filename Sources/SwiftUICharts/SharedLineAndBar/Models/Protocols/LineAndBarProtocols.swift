@@ -13,8 +13,6 @@ import SwiftUI
  */
 public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBarChartStyle {
     
-    
-    
     /**
      Array of strings for the labels on the X Axis instead of the labels in the data points.
      */
@@ -80,6 +78,25 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
      */
     func getYAxisLabels() -> YLabels
     
+    
+    
+    
+    
+    
+    
+    
+    /**
+     Sets the data point info box location while keeping it within the parent view.
+     
+     - Parameters:
+        - touchLocation: Location the user has pressed.
+        - boxFrame: The size of the point info box.
+        - chartSize: The size of the chart view as the parent view.
+     */
+    func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat
+}
+
+public protocol PointOfInterestProtocol {
     /**
      A type representing a Shape for displaying a line
      as a POI.
@@ -140,18 +157,7 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
      */
     func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint
     
-    /**
-     Sets the data point info box location while keeping it within the parent view.
-     
-     - Parameters:
-        - touchLocation: Location the user has pressed.
-        - boxFrame: The size of the point info box.
-        - chartSize: The size of the chart view as the parent view.
-     */
-    func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat
 }
-
-
 
 
 // MARK: - Style

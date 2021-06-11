@@ -136,7 +136,7 @@ extension CTChartData {
 }
 
 extension CTLineBarChartDataProtocol {
-    public func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
+    public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
         var returnPoint: CGFloat = .zero
         if touchLocation < chartSize.minX + (boxFrame.width / 2) {
             returnPoint = chartSize.minX + (boxFrame.width / 2)
@@ -149,7 +149,7 @@ extension CTLineBarChartDataProtocol {
     }
 }
 extension CTLineBarChartDataProtocol where Self: isHorizontal {
-    public func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
+    public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
         var returnPoint: CGFloat = .zero
         if touchLocation < chartSize.minY + (boxFrame.height / 2) {
             returnPoint = chartSize.minY + (boxFrame.height / 2)

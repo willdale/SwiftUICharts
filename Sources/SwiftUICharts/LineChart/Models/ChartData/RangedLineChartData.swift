@@ -13,7 +13,7 @@ import Combine
  
  This model contains the data and styling information for a ranged line chart.
  */
-public final class RangedLineChartData: CTLineChartDataProtocol, GetDataProtocol, Publishable {
+public final class RangedLineChartData: CTLineChartDataProtocol, GetDataProtocol, Publishable, PointOfInterestProtocol {
     
     // MARK: Properties
     public let id: UUID  = UUID()

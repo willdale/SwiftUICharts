@@ -39,7 +39,7 @@ internal struct FloatingInfoBox<T>: ViewModifier where T: CTLineBarChartDataProt
     private var floating: some View {
         TouchOverlayBox(chartData: chartData,
                         boxFrame: $boxFrame)
-            .position(x: chartData.setBoxLocationation(touchLocation: chartData.infoView.touchLocation.x,
+            .position(x: chartData.setBoxLocation(touchLocation: chartData.infoView.touchLocation.x,
                                                        boxFrame: boxFrame,
                                                        chartSize: chartData.infoView.chartSize) - 6, // -6 to compensate for `.padding(.horizontal, 6)`
                       y: boxFrame.midY - 10)
@@ -81,7 +81,7 @@ internal struct HorizontalFloatingInfoBox<T>: ViewModifier where T: CTLineBarCha
         TouchOverlayBox(chartData: chartData,
                         boxFrame: $boxFrame)
             .position(x: chartData.infoView.chartSize.width,
-                      y: chartData.setBoxLocationation(touchLocation: chartData.infoView.touchLocation.y,
+                      y: chartData.setBoxLocation(touchLocation: chartData.infoView.touchLocation.y,
                 boxFrame: boxFrame,
                 chartSize: chartData.infoView.chartSize))
             .padding(.horizontal, 6)
