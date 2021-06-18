@@ -135,33 +135,6 @@ extension CTChartData {
     }
 }
 
-extension CTLineBarChartDataProtocol {
-    public func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
-        var returnPoint: CGFloat = .zero
-        if touchLocation < chartSize.minX + (boxFrame.width / 2) {
-            returnPoint = chartSize.minX + (boxFrame.width / 2)
-        } else if touchLocation > chartSize.maxX - (boxFrame.width / 2) {
-            returnPoint = chartSize.maxX - (boxFrame.width / 2)
-        } else {
-            returnPoint = touchLocation
-        }
-        return returnPoint + (self.viewData.yAxisLabelWidth.max() ?? 0) + self.viewData.yAxisTitleWidth + (self.viewData.hasYAxisLabels ? 4 : 0) // +4 For Padding
-    }
-}
-extension CTLineBarChartDataProtocol where Self: isHorizontal {
-    public func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
-        var returnPoint: CGFloat = .zero
-        if touchLocation < chartSize.minY + (boxFrame.height / 2) {
-            returnPoint = chartSize.minY + (boxFrame.height / 2)
-        } else if touchLocation > chartSize.maxY - (boxFrame.height / 2) {
-            returnPoint = chartSize.maxY - (boxFrame.height / 2)
-        } else {
-            returnPoint = touchLocation
-        }
-        return returnPoint
-    }
-}
-
 // MARK: - Data Set
 extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProtocol & CTnotRanged {
     public func maxValue() -> Double {
@@ -303,14 +276,26 @@ extension CTDataPointBaseProtocol {
     }
 }
 
-extension CTStandardDataPointProtocol {
+extension CTStandardDataPointProtocol where Self: CTBarDataPointBaseProtocol {
     /// Data point's value as a string
     public func valueAsString(specifier: String) -> String {
-        if self.value != -Double.greatestFiniteMagnitude {
+            return String(format: specifier, self.value)
+    }
+}
+extension CTStandardDataPointProtocol where Self: CTLineDataPointProtocol & IgnoreMe {
+    /// Data point's value as a string
+    public func valueAsString(specifier: String) -> String {
+        if !self.ignoreMe {
             return String(format: specifier, self.value)
         } else {
             return String("")
         }
+    }
+}
+extension CTStandardDataPointProtocol where Self: CTPieDataPoint {
+    /// Data point's value as a string
+    public func valueAsString(specifier: String) -> String {
+            return String(format: specifier, self.value)
     }
 }
 

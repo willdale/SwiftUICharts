@@ -181,7 +181,7 @@ extension LineChartData {
                     self.infoView.touchOverlayInfo = [dataSets.dataPoints[index]]
                 } else {
                     dataSets.dataPoints[index].legendTag = dataSets.legendTitle
-                    dataSets.dataPoints[index].value = -Double.greatestFiniteMagnitude
+                    dataSets.dataPoints[index].ignoreMe = true
                     self.infoView.touchOverlayInfo = [dataSets.dataPoints[index]]
                 }
             }
