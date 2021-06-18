@@ -15,7 +15,7 @@ import SwiftUI
  */
 internal struct LineChartColourSubView<CD, DS>: View where CD: CTLineChartDataProtocol,
                                                            DS: CTLineChartDataSet,
-                                                           DS.DataPoint: CTStandardDataPointProtocol {
+                                                           DS.DataPoint: CTStandardDataPointProtocol & IgnoreMe {
     private let chartData: CD
     private let dataSet: DS
     private let minValue: Double
@@ -76,7 +76,7 @@ internal struct LineChartColourSubView<CD, DS>: View where CD: CTLineChartDataPr
  */
 internal struct LineChartColoursSubView<CD, DS>: View where CD: CTLineChartDataProtocol,
                                                             DS: CTLineChartDataSet,
-                                                            DS.DataPoint: CTStandardDataPointProtocol {
+                                                            DS.DataPoint: CTStandardDataPointProtocol & IgnoreMe {
     private let chartData: CD
     private let dataSet: DS
     private let minValue: Double
@@ -149,7 +149,7 @@ internal struct LineChartColoursSubView<CD, DS>: View where CD: CTLineChartDataP
  */
 internal struct LineChartStopsSubView<CD, DS>: View where CD: CTLineChartDataProtocol,
                                                           DS: CTLineChartDataSet,
-                                                          DS.DataPoint: CTStandardDataPointProtocol {
+                                                          DS.DataPoint: CTStandardDataPointProtocol & IgnoreMe {
     private let chartData: CD
     private let dataSet: DS
     private let minValue: Double
