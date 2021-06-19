@@ -5,7 +5,7 @@
 //  Created by Will Dale on 11/06/2021.
 //
 
-import Foundation
+import SwiftUI
 
 public protocol PointOfInterestProtocol {
     /**
