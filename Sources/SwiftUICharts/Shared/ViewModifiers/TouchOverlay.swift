@@ -14,13 +14,16 @@ import SwiftUI
 internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
     
     @ObservedObject private var chartData: T
+    let minDistance: CGFloat
     
     internal init(
         chartData: T,
         specifier: String,
-        unit: TouchUnit
+        unit: TouchUnit,
+        minDistance: CGFloat
     ) {
         self.chartData = chartData
+        self.minDistance = minDistance
         self.chartData.infoView.touchSpecifier = specifier
         self.chartData.infoView.touchUnit = unit
     }
@@ -32,7 +35,7 @@ internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
                     ZStack {
                         content
                             .gesture(
-                                DragGesture(minimumDistance: 0)
+                                DragGesture(minimumDistance: minDistance, coordinateSpace: .local)
                                     .onChanged { (value) in
                                         chartData.setTouchInteraction(touchLocation: value.location,
                                                                       chartSize: geo.frame(in: .local))
@@ -78,16 +81,19 @@ extension View {
         - chartData: Chart data model.
         - specifier: Decimal precision for labels.
         - unit: Unit to put before or after the value.
+        - minDistance: The distance that the touch event needs to travel to register.
      - Returns: A  new view containing the chart with a touch overlay.
      */
     public func touchOverlay<T: CTChartData>(
         chartData: T,
         specifier: String = "%.0f",
-        unit: TouchUnit = .none
+        unit: TouchUnit = .none,
+        minDistance: CGFloat = 0
     ) -> some View {
         self.modifier(TouchOverlay(chartData: chartData,
                                    specifier: specifier,
-                                   unit: unit))
+                                   unit: unit,
+                                   minDistance: minDistance))
     }
     #elseif os(tvOS)
     /**
@@ -99,7 +105,8 @@ extension View {
     public func touchOverlay<T: CTChartData>(
         chartData: T,
         specifier: String = "%.0f",
-        unit: TouchUnit = .none
+        unit: TouchUnit = .none,
+        minDistance: CGFloat = 0
     ) -> some View {
         self.modifier(EmptyModifier())
     }
