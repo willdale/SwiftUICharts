@@ -130,7 +130,44 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
 // MARK: - Extension
 extension View {
     /**
-
+     Vertical line marking a custom value.
+     
+     Shows a marker line at a specified value.
+     
+     
+     - Requires:
+     
+     Chart Data to conform to CTLineBarChartDataProtocol.
+     
+     # Available for:
+     
+     - Line Chart
+     - Multi Line Chart
+     - Filled Line Chart
+     - Ranged Line Chart
+     - Bar Chart
+     - Grouped Bar Chart
+     - Stacked Bar Chart
+     - Ranged Bar Chart
+     
+     # Unavailable for:
+     
+     - Pie Chart
+     - Doughnut Chart
+     
+     - Parameters:
+        - chartData: Chart data model.
+        - markerName: Title of marker, for the legend.
+        - markerValue: Value to mark.
+        - dataPointCount: Total number of data points in data set.
+        - labelPosition: Option to display the markers’ value inline with the marker.
+        - labelFont: Font for the label.
+        - labelColour: Colour of the `Text`.
+        - labelBackground: Colour of the background.
+        - lineColour: Line Colour.
+        - strokeStyle: Style of Stroke.
+        - addToLegends: Whether or not to add this to the legends.
+     - Returns: A  new view containing the chart with a marker line at a specified value.
      */
     public func xAxisPOI<T:CTLineBarChartDataProtocol & GetDataProtocol & PointOfInterestProtocol>(
         chartData: T,

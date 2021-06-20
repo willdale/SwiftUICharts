@@ -186,6 +186,7 @@ extension View {
         - labelBackground: Colour of the background.
         - lineColour: Line Colour.
         - strokeStyle: Style of Stroke.
+        - addToLegends: Whether or not to add this to the legends.
      - Returns: A  new view containing the chart with a marker line at a specified value.
      */
     public func yAxisPOI<T:CTLineBarChartDataProtocol & GetDataProtocol & PointOfInterestProtocol>(
@@ -266,6 +267,7 @@ extension View {
         - labelBackground: Colour of the background.
         - lineColour: Line Colour.
         - strokeStyle: Style of Stroke.
+        - addToLegends: Whether or not to add this to the legends.
      - Returns: A  new view containing the chart with a marker line at the average.
      */
     public func averageLine<T:CTLineBarChartDataProtocol & GetDataProtocol & PointOfInterestProtocol>(
