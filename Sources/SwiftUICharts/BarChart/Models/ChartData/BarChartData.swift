@@ -11,7 +11,7 @@ import Combine
 /**
  Data for drawing and styling a standard Bar Chart.
  */
-public final class BarChartData: CTBarChartDataProtocol, Publishable {
+public final class BarChartData: CTBarChartDataProtocol, GetDataProtocol, Publishable, PointOfInterestProtocol {
     // MARK: Properties
     public let id: UUID = UUID()
     

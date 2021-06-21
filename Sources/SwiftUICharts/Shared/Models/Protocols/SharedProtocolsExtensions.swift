@@ -135,6 +135,33 @@ extension CTChartData {
     }
 }
 
+extension CTLineBarChartDataProtocol {
+    public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
+        var returnPoint: CGFloat = .zero
+        if touchLocation < chartSize.minX + (boxFrame.width / 2) {
+            returnPoint = chartSize.minX + (boxFrame.width / 2)
+        } else if touchLocation > chartSize.maxX - (boxFrame.width / 2) {
+            returnPoint = chartSize.maxX - (boxFrame.width / 2)
+        } else {
+            returnPoint = touchLocation
+        }
+        return returnPoint + (self.viewData.yAxisLabelWidth.max() ?? 0) + self.viewData.yAxisTitleWidth + (self.viewData.hasYAxisLabels ? 4 : 0) // +4 For Padding
+    }
+}
+extension CTLineBarChartDataProtocol where Self: isHorizontal {
+    public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
+        var returnPoint: CGFloat = .zero
+        if touchLocation < chartSize.minY + (boxFrame.height / 2) {
+            returnPoint = chartSize.minY + (boxFrame.height / 2)
+        } else if touchLocation > chartSize.maxY - (boxFrame.height / 2) {
+            returnPoint = chartSize.maxY - (boxFrame.height / 2)
+        } else {
+            returnPoint = touchLocation
+        }
+        return returnPoint
+    }
+}
+
 // MARK: - Data Set
 extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProtocol & CTnotRanged {
     public func maxValue() -> Double {

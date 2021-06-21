@@ -17,7 +17,7 @@ import SwiftUI
  
  For Standard and Grouped Bar Charts.
  */
-internal struct ColourBar<CD: CTBarChartDataProtocol,
+internal struct ColourBar<CD: CTBarChartDataProtocol & GetDataProtocol,
                           DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
     private let chartData: CD
@@ -62,7 +62,7 @@ internal struct ColourBar<CD: CTBarChartDataProtocol,
  
  For Standard and Grouped Bar Charts.
  */
-internal struct GradientColoursBar<CD: CTBarChartDataProtocol,
+internal struct GradientColoursBar<CD: CTBarChartDataProtocol & GetDataProtocol,
                                    DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
     private let chartData: CD
@@ -115,7 +115,7 @@ internal struct GradientColoursBar<CD: CTBarChartDataProtocol,
  
  For Standard and Grouped Bar Charts.
  */
-internal struct GradientStopsBar<CD: CTBarChartDataProtocol,
+internal struct GradientStopsBar<CD: CTBarChartDataProtocol & GetDataProtocol,
                                  DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
     private let chartData: CD
@@ -487,7 +487,7 @@ internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
  
  For Standard and Grouped Bar Charts.
  */
-internal struct HorizontalColourBar<CD: CTBarChartDataProtocol,
+internal struct HorizontalColourBar<CD: CTBarChartDataProtocol & GetDataProtocol,
                                     DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
     private let chartData: CD
@@ -532,7 +532,7 @@ internal struct HorizontalColourBar<CD: CTBarChartDataProtocol,
  
  For Standard and Grouped Bar Charts.
  */
-internal struct HorizontalGradientColoursBar<CD: CTBarChartDataProtocol,
+internal struct HorizontalGradientColoursBar<CD: CTBarChartDataProtocol & GetDataProtocol,
                                              DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
     private let chartData: CD
@@ -585,7 +585,7 @@ internal struct HorizontalGradientColoursBar<CD: CTBarChartDataProtocol,
  
  For Standard and Grouped Bar Charts.
  */
-internal struct HorizontalGradientStopsBar<CD: CTBarChartDataProtocol,
+internal struct HorizontalGradientStopsBar<CD: CTBarChartDataProtocol & GetDataProtocol,
                                            DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
     private let chartData: CD

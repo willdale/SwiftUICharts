@@ -10,65 +10,52 @@ import SwiftUI
 /**
  Draws point markers over the data point locations.
  */
-internal struct Point<T>: Shape where T: CTLineChartDataSet,
-                                      T.DataPoint: CTStandardDataPointProtocol  {
+internal struct Point: Shape {
     
-    private let dataSet: T
+    private let value: Double
+    private let index: Int
     private let minValue: Double
     private let range: Double
+    private let datapointCount: Int
+    private let pointSize: CGFloat
+    private let ignoreZero: Bool
+    private let pointStyle: PointShape
     
     internal init(
-        dataSet: T,
+        value: Double,
+        index: Int,
         minValue: Double,
-        range: Double
+        range: Double,
+        datapointCount: Int,
+        pointSize: CGFloat,
+        ignoreZero: Bool,
+        pointStyle: PointShape
     ) {
-        self.dataSet = dataSet
+        self.value = value
+        self.index = index
         self.minValue = minValue
         self.range = range
+        self.datapointCount = datapointCount
+        self.pointSize = pointSize
+        self.ignoreZero = ignoreZero
+        self.pointStyle = pointStyle
     }
     
     internal func path(in rect: CGRect) -> Path {
         var path = Path()
         
-        if dataSet.dataPoints.count >= 2 {
-            
-            let x: CGFloat = rect.width / CGFloat(dataSet.dataPoints.count-1)
-            let y: CGFloat = rect.height / CGFloat(range)
-            let offset: CGFloat = dataSet.pointStyle.pointSize / CGFloat(2)
-            
-            let firstPointX: CGFloat = (CGFloat(0) * x) - offset
-            let firstPointY: CGFloat = ((CGFloat(dataSet.dataPoints[0].value - minValue) * -y) + rect.height) - offset
-            let firstPoint: CGRect = CGRect(x: firstPointX, y: firstPointY, width: dataSet.pointStyle.pointSize, height: dataSet.pointStyle.pointSize)
-            if !dataSet.style.ignoreZero {
-                pointSwitch(&path, firstPoint)
-            } else {
-                if dataSet.dataPoints[0].value != 0 {
-                    pointSwitch(&path, firstPoint)
-                }
-            }
-            
-            for index in 1 ..< dataSet.dataPoints.count - 1 {
-                let pointX: CGFloat = (CGFloat(index) * x) -  offset
-                let pointY: CGFloat = ((CGFloat(dataSet.dataPoints[index].value - minValue) * -y) + rect.height) - offset
-                let point: CGRect = CGRect(x: pointX, y: pointY, width: dataSet.pointStyle.pointSize, height: dataSet.pointStyle.pointSize)
-                if !dataSet.style.ignoreZero {
-                    pointSwitch(&path, point)
-                } else {
-                    if dataSet.dataPoints[index].value != 0 {
-                        pointSwitch(&path, point)
-                    }
-                }
-            }
-            
-            let lastPointX: CGFloat = (CGFloat(dataSet.dataPoints.count-1) * x) - offset
-            let lastPointY: CGFloat = ((CGFloat(dataSet.dataPoints[dataSet.dataPoints.count-1].value - minValue) * -y) + rect.height) - offset
-            let lastPoint: CGRect = CGRect(x: lastPointX, y: lastPointY, width: dataSet.pointStyle.pointSize, height: dataSet.pointStyle.pointSize)
-            if !dataSet.style.ignoreZero {
-                pointSwitch(&path, lastPoint)
-            } else {
-                if dataSet.dataPoints[dataSet.dataPoints.count-1].value != 0 {
-                    pointSwitch(&path, lastPoint)
-                }
+        let x: CGFloat = rect.width / CGFloat(datapointCount-1)
+        let y: CGFloat = rect.height / CGFloat(range)
+        let offset: CGFloat = pointSize / CGFloat(2)
+        
+        let pointX: CGFloat = (CGFloat(index) * x) - offset
+        let pointY: CGFloat = ((CGFloat(value - minValue) * -y) + rect.height) - offset
+        let point: CGRect = CGRect(x: pointX, y: pointY, width: pointSize, height: pointSize)
+        if !ignoreZero {
+            pointSwitch(&path, point)
+        } else {
+            if value != 0 {
+                pointSwitch(&path, point)
             }
         }
         return path
@@ -79,7 +66,7 @@ internal struct Point<T>: Shape where T: CTLineChartDataSet,
     ///   - path: Path to draw on.
     ///   - point: Position to draw the point.
     internal func pointSwitch(_ path: inout Path, _ point: CGRect) {
-        switch dataSet.pointStyle.pointShape {
+        switch pointStyle {
         case .circle:
             path.addEllipse(in: point)
         case .square:

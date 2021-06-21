@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Main data set for a grouped bar charts.
  */
-public struct GroupedBarDataSets: CTMultiDataSetProtocol {
+public struct GroupedBarDataSets: CTMultiDataSetProtocol, DataFunctionsProtocol {
     
     public let id: UUID = UUID()
     public var dataSets: [GroupedBarDataSet]

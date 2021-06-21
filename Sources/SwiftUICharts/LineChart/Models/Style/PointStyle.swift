@@ -56,3 +56,17 @@ public struct PointStyle: Hashable {
         self.pointShape = pointShape
     }
 }
+
+public struct PointColour: Hashable {
+    public let border: Color
+    public let fill: Color
+    
+    public init(
+        border: Color = .primary,
+        fill: Color = .primary
+    ) {
+        self.border = border
+        self.fill = fill
+    }
+}
+

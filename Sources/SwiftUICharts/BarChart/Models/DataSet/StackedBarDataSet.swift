@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Main data set for a stacked bar chart.
  */
-public struct StackedBarDataSets: CTMultiDataSetProtocol {
+public struct StackedBarDataSets: CTMultiDataSetProtocol, DataFunctionsProtocol {
     
     public let id: UUID = UUID()
     public var dataSets: [StackedBarDataSet]

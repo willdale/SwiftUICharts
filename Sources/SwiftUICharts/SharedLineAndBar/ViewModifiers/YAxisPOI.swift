@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Configurable Point of interest
  */
-internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
+internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & GetDataProtocol & PointOfInterestProtocol {
     
     @ObservedObject private var chartData: T
     
@@ -26,6 +26,8 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     private let labelColour: Color
     private let labelBackground: Color
     
+    private let addToLegends: Bool
+    
     private let range: Double
     private let minValue: Double
     private let maxValue: Double
@@ -40,6 +42,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
         labelBackground: Color,
         lineColour: Color,
         strokeStyle: StrokeStyle,
+        addToLegends: Bool,
         isAverage: Bool
     ) {
         self.chartData = chartData
@@ -51,6 +54,8 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
         self.labelFont = labelFont
         self.labelColour = labelColour
         self.labelBackground = labelBackground
+        
+        self.addToLegends = addToLegends
         
         self.markerValue = isAverage ? chartData.average : markerValue
         self.maxValue = chartData.maxValue
@@ -76,29 +81,28 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                     switch labelPosition {
                     case .none:
                         EmptyView()
-                    case .yAxis(specifier: let specifier):
-                        ValueLabelYAxisSubView(chartData: chartData,
-                                               markerValue: markerValue,
+                    case .yAxis(let specifier):
+                        
+                        chartData.poiLabelAxis(markerValue: markerValue,
                                                specifier: specifier,
                                                labelFont: labelFont,
                                                labelColour: labelColour,
                                                labelBackground: labelBackground,
                                                lineColour: lineColour)
-                            
                             .position(chartData.poiValueLabelPositionAxis(frame: geo.frame(in: .local), markerValue: markerValue, minValue: minValue, range: range))
                             
                             .accessibilityLabel(Text("P O I Marker"))
                             .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
-                    case .center(specifier: let specifier):
-                        ValueLabelCenterSubView(chartData: chartData,
-                                                markerValue: markerValue,
-                                                specifier: specifier,
-                                                labelFont: labelFont,
-                                                labelColour: labelColour,
-                                                labelBackground: labelBackground,
-                                                lineColour: lineColour,
-                                                strokeStyle: strokeStyle)
-                            
+                        
+                    case .center(let specifier):
+                        
+                        chartData.poiLabelCenter(markerValue: markerValue,
+                                                 specifier: specifier,
+                                                 labelFont: labelFont,
+                                                 labelColour: labelColour,
+                                                 labelBackground: labelBackground,
+                                                 lineColour: lineColour,
+                                                 strokeStyle: strokeStyle)
                             .position(chartData.poiValueLabelPositionCenter(frame: geo.frame(in: .local), markerValue: markerValue, minValue: minValue, range: range))
                             
                             .accessibilityLabel(Text("P O I Marker"))
@@ -116,7 +120,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     }
     
     private func setupPOILegends() {
-        if !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
+        if addToLegends && !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
             chartData.legends.append(LegendData(id: uuid,
                                                 legend: markerName,
                                                 colour: ColourStyle(colour: lineColour),
@@ -127,6 +131,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     }
 }
 
+// MARK: - Extensions
 extension View {
     /**
      Horizontal line marking a custom value.
@@ -181,9 +186,10 @@ extension View {
         - labelBackground: Colour of the background.
         - lineColour: Line Colour.
         - strokeStyle: Style of Stroke.
+        - addToLegends: Whether or not to add this to the legends.
      - Returns: A  new view containing the chart with a marker line at a specified value.
      */
-    public func yAxisPOI<T:CTLineBarChartDataProtocol>(
+    public func yAxisPOI<T:CTLineBarChartDataProtocol & GetDataProtocol & PointOfInterestProtocol>(
         chartData: T,
         markerName: String,
         markerValue: Double,
@@ -192,7 +198,8 @@ extension View {
         labelColour: Color = Color.primary,
         labelBackground: Color = Color.systemsBackground,
         lineColour: Color = Color(.blue),
-        strokeStyle: StrokeStyle = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
+        strokeStyle: StrokeStyle = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0),
+        addToLegends: Bool = true
     ) -> some View {
         self.modifier(YAxisPOI(chartData: chartData,
                                markerName: markerName,
@@ -203,6 +210,7 @@ extension View {
                                labelBackground: labelBackground,
                                lineColour: lineColour,
                                strokeStyle: strokeStyle,
+                               addToLegends: addToLegends,
                                isAverage: false))
     }
     
@@ -259,9 +267,10 @@ extension View {
         - labelBackground: Colour of the background.
         - lineColour: Line Colour.
         - strokeStyle: Style of Stroke.
+        - addToLegends: Whether or not to add this to the legends.
      - Returns: A  new view containing the chart with a marker line at the average.
      */
-    public func averageLine<T:CTLineBarChartDataProtocol>(
+    public func averageLine<T:CTLineBarChartDataProtocol & GetDataProtocol & PointOfInterestProtocol>(
         chartData: T,
         markerName: String = "Average",
         labelPosition: DisplayValue = .yAxis(specifier: "%.0f"),
@@ -269,7 +278,8 @@ extension View {
         labelColour: Color = Color.primary,
         labelBackground: Color = Color.systemsBackground,
         lineColour: Color = Color.primary,
-        strokeStyle: StrokeStyle = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0)
+        strokeStyle: StrokeStyle = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0),
+        addToLegends: Bool = true
     ) -> some View {
         self.modifier(YAxisPOI(chartData: chartData,
                                markerName: markerName,
@@ -279,6 +289,7 @@ extension View {
                                labelBackground: labelBackground,
                                lineColour: lineColour,
                                strokeStyle: strokeStyle,
+                               addToLegends: addToLegends,
                                isAverage: true))
     }
 }

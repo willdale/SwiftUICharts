@@ -12,7 +12,7 @@ import SwiftUI
  
  Contains information specific to each line within the chart .
  */
-public struct LineDataSet: CTLineChartDataSet {
+public struct LineDataSet: CTLineChartDataSet, DataFunctionsProtocol {
     
     public let id: UUID = UUID()
     public var dataPoints: [LineChartDataPoint]
