@@ -141,3 +141,9 @@ public protocol CTStandardLineDataPoint: CTLineDataPointProtocol, CTStandardData
  */
 public protocol CTRangedLineDataPoint: CTLineDataPointProtocol, CTStandardDataPointProtocol, CTRangeDataPointProtocol, CTisRanged {}
 
+
+
+
+public protocol IgnoreMe {
+    var ignoreMe: Bool { get set }
+}

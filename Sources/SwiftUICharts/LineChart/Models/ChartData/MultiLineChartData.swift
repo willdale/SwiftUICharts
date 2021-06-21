@@ -201,7 +201,7 @@ extension MultiLineChartData {
                         return dataSets.dataSets[setIndex].dataPoints[index]
                     } else {
                         dataSets.dataSets[setIndex].dataPoints[index].legendTag = dataSets.dataSets[setIndex].legendTitle
-                        dataSets.dataSets[setIndex].dataPoints[index].value = -Double.greatestFiniteMagnitude
+                        dataSets.dataSets[setIndex].dataPoints[index].ignoreMe = true
                         return dataSets.dataSets[setIndex].dataPoints[index]
                     }
                 }

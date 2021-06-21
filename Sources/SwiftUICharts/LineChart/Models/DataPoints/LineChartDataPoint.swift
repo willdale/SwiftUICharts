@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Data for a single data point.
  */
-public struct LineChartDataPoint: CTStandardLineDataPoint {
+public struct LineChartDataPoint: CTStandardLineDataPoint, IgnoreMe {
     
     public let id: UUID = UUID()
     public var value: Double
@@ -18,6 +18,8 @@ public struct LineChartDataPoint: CTStandardLineDataPoint {
     public var description: String?
     public var date: Date?
     public var pointColour: PointColour?
+    
+    public var ignoreMe: Bool = false
     
     public var legendTag: String = ""
     

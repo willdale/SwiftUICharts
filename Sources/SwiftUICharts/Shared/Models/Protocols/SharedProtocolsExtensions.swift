@@ -303,14 +303,26 @@ extension CTDataPointBaseProtocol {
     }
 }
 
-extension CTStandardDataPointProtocol {
+extension CTStandardDataPointProtocol where Self: CTBarDataPointBaseProtocol {
     /// Data point's value as a string
     public func valueAsString(specifier: String) -> String {
-        if self.value != -Double.greatestFiniteMagnitude {
+            return String(format: specifier, self.value)
+    }
+}
+extension CTStandardDataPointProtocol where Self: CTLineDataPointProtocol & IgnoreMe {
+    /// Data point's value as a string
+    public func valueAsString(specifier: String) -> String {
+        if !self.ignoreMe {
             return String(format: specifier, self.value)
         } else {
             return String("")
         }
+    }
+}
+extension CTStandardDataPointProtocol where Self: CTPieDataPoint {
+    /// Data point's value as a string
+    public func valueAsString(specifier: String) -> String {
+            return String(format: specifier, self.value)
     }
 }
 

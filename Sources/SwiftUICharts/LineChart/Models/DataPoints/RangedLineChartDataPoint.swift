@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Data for a single ranged data point.
  */
-public struct RangedLineChartDataPoint: CTRangedLineDataPoint {
+public struct RangedLineChartDataPoint: CTRangedLineDataPoint, IgnoreMe {
     
     public let id: UUID = UUID()
     public var value: Double
@@ -20,6 +20,8 @@ public struct RangedLineChartDataPoint: CTRangedLineDataPoint {
     public var description: String?
     public var date: Date?
     public var pointColour: PointColour?
+    
+    public var ignoreMe: Bool = false
     
     public var legendTag: String = ""
     
