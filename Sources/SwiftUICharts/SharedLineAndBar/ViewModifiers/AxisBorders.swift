@@ -29,14 +29,14 @@ internal struct XAxisBorder<T>: ViewModifier where T: CTLineBarChartDataProtocol
                     VStack {
                         ZStack(alignment: .bottom) {
                             content
-                            Divider()
+                            Divider().if(chartData.chartStyle.xAxisBorderColour != nil) { $0.background(chartData.chartStyle.xAxisBorderColour) }
                         }
                     }
                 } else if labelsAndTop {
                     VStack {
                         ZStack(alignment: .top) {
                             content
-                            Divider()
+                            Divider().if(chartData.chartStyle.yAxisBorderColour != nil) { $0.background(chartData.chartStyle.yAxisBorderColour) }
                         }
                     }
                 } else {

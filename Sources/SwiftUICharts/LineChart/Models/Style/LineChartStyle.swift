@@ -39,7 +39,8 @@ public struct LineChartStyle: CTLineChartStyle {
     public var xAxisTitle: String?
     public var xAxisTitleFont: Font
     public var xAxisTitleColour: Color
-    
+    public var xAxisBorderColour: Color?
+
     public var yAxisGridStyle: GridStyle
     
     public var yAxisLabelPosition: YAxisLabelPosistion
@@ -51,7 +52,8 @@ public struct LineChartStyle: CTLineChartStyle {
     public var yAxisTitle: String?
     public var yAxisTitleFont: Font
     public var yAxisTitleColour: Color
-    
+    public var yAxisBorderColour: Color?
+
     public var baseline: Baseline
     public var topLine: Topline
     
@@ -84,6 +86,7 @@ public struct LineChartStyle: CTLineChartStyle {
     ///   - xAxisTitle: Label to display next to the chart giving info about the axis.
     ///   - xAxisTitleFont: Font of the x axis title.
     ///   - xAxisTitleColour: Colour of the x axis title.
+    ///   - xAxisBorderColour: Colour of the x axis border.
     ///
     ///   - yAxisGridStyle: Style of the horizontal lines breaking up the chart.
     ///
@@ -96,6 +99,7 @@ public struct LineChartStyle: CTLineChartStyle {
     ///   - yAxisTitle: Label to display next to the chart giving info about the axis.
     ///   - yAxisTitleFont: Font of the y axis title.
     ///   - yAxisTitleColour: Colour of the y axis title.
+    ///   - yAxisBorderColour: Colour of the y axis border.
     ///
     ///   - baseline: Whether the chart is drawn from baseline of zero or the minimum datapoint value.
     ///   - topLine: Where to finish drawing the chart from. Data set maximum or custom.
@@ -127,7 +131,8 @@ public struct LineChartStyle: CTLineChartStyle {
         xAxisTitle: String? = nil,
         xAxisTitleFont: Font = .caption,
         xAxisTitleColour: Color = .primary,
-        
+        xAxisBorderColour: Color? = nil,
+
         yAxisGridStyle: GridStyle = GridStyle(),
         
         yAxisLabelPosition: YAxisLabelPosistion = .leading,
@@ -139,7 +144,8 @@ public struct LineChartStyle: CTLineChartStyle {
         yAxisTitle: String? = nil,
         yAxisTitleFont: Font = .caption,
         yAxisTitleColour: Color = .primary,
-        
+        yAxisBorderColour: Color? = nil,
+
         baseline: Baseline = .minimumValue,
         topLine: Topline = .maximumValue,
         
@@ -170,6 +176,7 @@ public struct LineChartStyle: CTLineChartStyle {
         self.xAxisTitle = xAxisTitle
         self.xAxisTitleFont = xAxisTitleFont
         self.xAxisTitleColour = xAxisTitleColour
+        self.xAxisBorderColour = xAxisBorderColour
         
         self.yAxisGridStyle = yAxisGridStyle
         
@@ -182,7 +189,8 @@ public struct LineChartStyle: CTLineChartStyle {
         self.yAxisTitle = yAxisTitle
         self.yAxisTitleFont = yAxisTitleFont
         self.yAxisTitleColour = yAxisTitleColour
-        
+        self.yAxisBorderColour = yAxisBorderColour
+
         self.baseline = baseline
         self.topLine = topLine
         
