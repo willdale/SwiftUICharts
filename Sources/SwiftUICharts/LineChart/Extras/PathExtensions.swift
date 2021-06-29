@@ -58,23 +58,27 @@ extension Path {
         let y: CGFloat = rect.height / CGFloat(range)
         var path = Path()
         
-        let firstPoint: CGPoint = CGPoint(x: 0,
-                                          y: (CGFloat(dataPoints[0].value - minValue) * -y) + rect.height)
-        path.move(to: firstPoint)
         
-        var previousPoint = firstPoint
+        
         var lastIndex: Int = 0
+
         
-        for index in 1 ..< dataPoints.count {
-            let nextPoint = CGPoint(x: CGFloat(index) * x,
-                                    y: (CGFloat(dataPoints[index].value - minValue) * -y) + rect.height)
-            path.addCurve(to: nextPoint,
-                          control1: CGPoint(x: previousPoint.x + (nextPoint.x - previousPoint.x) / 2,
-                                            y: previousPoint.y),
-                          control2: CGPoint(x: nextPoint.x - (nextPoint.x - previousPoint.x) / 2,
-                                            y: nextPoint.y))
-            lastIndex = index
-            previousPoint = nextPoint
+        let config = BezierConfiguration()
+        let data = config.graphDataToPoints(dataPoints:dataPoints, minValue: minValue, rect:rect , x:x, y:y)
+        
+        let controlPoints = config.configureControlPoints(data: data)
+
+        
+        for i in 0..<data.count {
+            let point = data[i]
+            if i == 0 {
+                path.move(to: point)
+            }
+            else {
+                let segment = controlPoints[i - 1]
+                path.addCurve(to: point , control1: segment.firstControlPoint, control2: segment.secondControlPoint)
+            }
+            lastIndex = i
         }
         if isFilled {
             path.addLine(to: CGPoint(x: CGFloat(lastIndex) * x,
