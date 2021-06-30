@@ -44,18 +44,22 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
     
     @ObservedObject private var chartData: ChartData
     private let groupSpacing: CGFloat
+    private let barSpacing: CGFloat
     
     /// Initialises a grouped bar chart view.
     /// - Parameters:
     ///   - chartData: Must be GroupedBarChartData model.
     ///   - groupSpacing: Spacing between groups of bars.
+    ///   - barSpacing: Spacing between individual bars within groups.
     public init(
         chartData: ChartData,
-        groupSpacing: CGFloat
+        groupSpacing: CGFloat,
+        barSpacing: CGFloat = 0
     ) {
         self.chartData = chartData
         self.groupSpacing = groupSpacing
-        self.chartData.groupSpacing = groupSpacing
+        self.barSpacing = barSpacing
+        self.chartData.groupSpacing = groupSpacing 
     }
     
     @State private var startAnimation: Bool = false
@@ -65,7 +69,7 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
         if chartData.isGreaterThanTwo() {
             HStack(spacing: groupSpacing) {
                 ForEach(chartData.dataSets.dataSets) { dataSet in
-                    HStack(spacing: 0) {
+                    HStack(spacing: barSpacing) {
                         ForEach(dataSet.dataPoints) { dataPoint in
                             if dataPoint.group.colour.colourType == .colour,
                                let colour = dataPoint.group.colour.colour
