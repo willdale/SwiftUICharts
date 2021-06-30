@@ -36,7 +36,7 @@ internal struct XAxisBorder<T>: ViewModifier where T: CTLineBarChartDataProtocol
                     VStack {
                         ZStack(alignment: .top) {
                             content
-                            Divider().if(chartData.chartStyle.yAxisBorderColour != nil) { $0.background(chartData.chartStyle.yAxisBorderColour) }
+                            Divider().if(chartData.chartStyle.xAxisBorderColour != nil) { $0.background(chartData.chartStyle.xAxisBorderColour) }
                         }
                     }
                 } else {
@@ -68,14 +68,14 @@ internal struct YAxisBorder<T>: ViewModifier where T: CTLineBarChartDataProtocol
                 HStack {
                     ZStack(alignment: .leading) {
                         content
-                        Divider()
+                        Divider().if(chartData.chartStyle.yAxisBorderColour != nil) { $0.background(chartData.chartStyle.yAxisBorderColour) }
                     }
                 }
             } else if labelsAndTrailing {
                 HStack {
                     ZStack(alignment: .trailing) {
                         content
-                        Divider()
+                        Divider().if(chartData.chartStyle.yAxisBorderColour != nil) { $0.background(chartData.chartStyle.yAxisBorderColour) }
                     }
                 }
             } else {
