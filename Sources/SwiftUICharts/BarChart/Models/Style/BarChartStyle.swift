@@ -41,7 +41,8 @@ public struct BarChartStyle: CTBarChartStyle {
     public var xAxisTitle: String?
     public var xAxisTitleFont: Font
     public var xAxisTitleColour: Color
-    
+    public var xAxisBorderColour: Color?
+
     public var yAxisGridStyle: GridStyle
     
     public var yAxisLabelPosition: YAxisLabelPosistion
@@ -53,7 +54,8 @@ public struct BarChartStyle: CTBarChartStyle {
     public var yAxisTitle: String?
     public var yAxisTitleFont: Font
     public var yAxisTitleColour: Color
-    
+    public var yAxisBorderColour: Color?
+
     public var baseline: Baseline
     public var topLine: Topline
     
