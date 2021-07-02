@@ -5,6 +5,14 @@
 //  Created by Muhammad Osama Naeem on 4/18/20.
 //  Copyright © 2020 Muhammad Osama Naeem. All rights reserved.
 //
+
+// Take from https://github.com/Onaeem26/CubicBezierCurveSwift
+// With permission: 
+// https://github.com/Onaeem26/CubicBezierCurveSwift/issues/1#issuecomment-872802354
+
+// Explanation on how it works: https://exploringswift.com/blog/Drawing-Smooth-Cubic-Bezier-Curve-through-prescribed-points-using-Swift
+
+
 import UIKit
 
 struct BezierSegmentControlPoints {
