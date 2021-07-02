@@ -6,7 +6,7 @@
 //  Copyright © 2020 Muhammad Osama Naeem. All rights reserved.
 //
 
-// Take from https://github.com/Onaeem26/CubicBezierCurveSwift
+// Taken from https://github.com/Onaeem26/CubicBezierCurveSwift
 // With permission: 
 // https://github.com/Onaeem26/CubicBezierCurveSwift/issues/1#issuecomment-872802354
 

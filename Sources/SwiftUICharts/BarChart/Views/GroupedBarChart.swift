@@ -62,50 +62,90 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
     
     public var body: some View {
         GeometryReader { geo in
-        if chartData.isGreaterThanTwo() {
-            HStack(spacing: groupSpacing) {
-                ForEach(chartData.dataSets.dataSets) { dataSet in
-                    HStack(spacing: 0) {
-                        ForEach(dataSet.dataPoints) { dataPoint in
-                            if dataPoint.group.colour.colourType == .colour,
-                               let colour = dataPoint.group.colour.colour
-                            {
-                                ColourBar(chartData: chartData,
-                                          dataPoint: dataPoint,
-                                          colour: colour)
-                                    .accessibilityLabel(Text("\(chartData.metadata.title)"))
-                            } else if dataPoint.group.colour.colourType == .gradientColour,
-                                      let colours = dataPoint.group.colour.colours,
-                                      let startPoint = dataPoint.group.colour.startPoint,
-                                      let endPoint = dataPoint.group.colour.endPoint
-                            {
-                                GradientColoursBar(chartData: chartData,
-                                                   dataPoint: dataPoint,
-                                                   colours: colours,
-                                                   startPoint: startPoint,
-                                                   endPoint: endPoint)
-                                    .accessibilityLabel(Text("\(chartData.metadata.title)"))
-                            } else if dataPoint.group.colour.colourType == .gradientStops,
-                                      let stops = dataPoint.group.colour.stops,
-                                      let startPoint = dataPoint.group.colour.startPoint,
-                                      let endPoint = dataPoint.group.colour.endPoint
-                            {
-                                let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
-                                GradientStopsBar(chartData: chartData,
-                                                 dataPoint: dataPoint,
-                                                 stops: safeStops,
-                                                 startPoint: startPoint,
-                                                 endPoint: endPoint)
-                                    .accessibilityLabel(Text("\(chartData.metadata.title)"))
-                            }
-                        }
+            if chartData.isGreaterThanTwo() {
+                HStack(spacing: groupSpacing) {
+                    ForEach(chartData.dataSets.dataSets) { dataSet in
+                        GroupedBarGroup(chartData: chartData, dataSet: dataSet)
                     }
                 }
-            }
-            .onAppear {
-                self.chartData.viewData.chartSize = geo.frame(in: .local)
-            }
-        } else { CustomNoDataView(chartData: chartData) }
+                .onAppear {
+                    self.chartData.viewData.chartSize = geo.frame(in: .local)
+                }
+            } else { CustomNoDataView(chartData: chartData) }
         }
     }
+}
+
+internal struct GroupedBarGroup<ChartData>: View where ChartData: GroupedBarChartData {
+    
+    private let chartData: ChartData
+    private let dataSet: GroupedBarDataSet
+    
+    init(
+        chartData: ChartData,
+        dataSet: GroupedBarDataSet
+    ) {
+        self.chartData = chartData
+        self.dataSet = dataSet
+    }
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(dataSet.dataPoints) { dataPoint in
+                GroupedBarCell(chartData: chartData, dataPoint: dataPoint)
+            }
+        }
+    }
+}
+
+
+internal struct GroupedBarCell<ChartData>: View where ChartData: GroupedBarChartData {
+    
+    private let chartData: ChartData
+    private let dataPoint: GroupedBarDataPoint
+    
+    init(
+        chartData: ChartData,
+        dataPoint: GroupedBarDataPoint
+    ) {
+        self.chartData = chartData
+        self.dataPoint = dataPoint
+    }
+    
+    internal var body: some View {
+        Group {
+            if dataPoint.group.colour.colourType == .colour,
+               let colour = dataPoint.group.colour.colour
+            {
+                ColourBar(chartData: chartData,
+                          dataPoint: dataPoint,
+                          colour: colour)
+                    .accessibilityLabel(Text("\(chartData.metadata.title)"))
+            } else if dataPoint.group.colour.colourType == .gradientColour,
+                      let colours = dataPoint.group.colour.colours,
+                      let startPoint = dataPoint.group.colour.startPoint,
+                      let endPoint = dataPoint.group.colour.endPoint
+            {
+                GradientColoursBar(chartData: chartData,
+                                   dataPoint: dataPoint,
+                                   colours: colours,
+                                   startPoint: startPoint,
+                                   endPoint: endPoint)
+                    .accessibilityLabel(Text("\(chartData.metadata.title)"))
+            } else if dataPoint.group.colour.colourType == .gradientStops,
+                      let stops = dataPoint.group.colour.stops,
+                      let startPoint = dataPoint.group.colour.startPoint,
+                      let endPoint = dataPoint.group.colour.endPoint
+            {
+                let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
+                GradientStopsBar(chartData: chartData,
+                                 dataPoint: dataPoint,
+                                 stops: safeStops,
+                                 startPoint: startPoint,
+                                 endPoint: endPoint)
+                    .accessibilityLabel(Text("\(chartData.metadata.title)"))
+            }
+        }
+    }
+    
 }
