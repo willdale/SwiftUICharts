@@ -24,10 +24,10 @@ public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBar
                     switch chartData.barStyle.colourFrom {
                     case .barStyle:
                         HorizontalBarChartBarStyleSubView(chartData: chartData)
-                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                            .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
                     case .dataPoints:
                         HorizontalBarChartDataPointSubView(chartData: chartData)
-                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                            .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
                     }
                     
                 }

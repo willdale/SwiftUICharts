@@ -20,10 +20,10 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
     
     var titleBox: some View {
         VStack(alignment: .leading) {
-            Text(chartData.metadata.title)
+            Text(LocalizedStringKey(chartData.metadata.title))
                 .font(chartData.metadata.titleFont)
                 .foregroundColor(chartData.metadata.titleColour)
-            Text(chartData.metadata.subtitle)
+            Text(LocalizedStringKey(chartData.metadata.subtitle))
                 .font(chartData.metadata.subtitleFont)
                 .foregroundColor(chartData.metadata.subtitleColour)
         }

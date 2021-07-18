@@ -72,11 +72,11 @@ extension CTChartData {
     public func infoValueUnit(info: DataPoint) -> some View {
         switch self.infoView.touchUnit {
         case .none:
-            return Text("\(info.valueAsString(specifier: self.infoView.touchSpecifier))")
+            return Text(LocalizedStringKey(info.valueAsString(specifier: self.infoView.touchSpecifier)))
         case .prefix(of: let unit):
-            return Text("\(unit) \(info.valueAsString(specifier: self.infoView.touchSpecifier))")
+            return Text(LocalizedStringKey(unit + " " + info.valueAsString(specifier: self.infoView.touchSpecifier)))
         case .suffix(of: let unit):
-            return Text("\(info.valueAsString(specifier: self.infoView.touchSpecifier)) \(unit)")
+            return Text(LocalizedStringKey(info.valueAsString(specifier: self.infoView.touchSpecifier) + " " + unit))
         }
     }
     
@@ -87,7 +87,7 @@ extension CTChartData {
      - Returns: Text View with the value with relevent info.
      */
     public func infoValue(info: DataPoint) -> some View {
-        Text("\(info.valueAsString(specifier: self.infoView.touchSpecifier))")
+        Text(LocalizedStringKey(info.valueAsString(specifier: self.infoView.touchSpecifier)))
     }
     
     /**
@@ -101,9 +101,9 @@ extension CTChartData {
         case .none:
             return Text("")
         case .prefix(of: let unit):
-            return Text("\(unit)")
+            return Text(LocalizedStringKey("\(unit)"))
         case .suffix(of: let unit):
-            return Text("\(unit)")
+            return Text(LocalizedStringKey("\(unit)"))
         }
     }
     
@@ -114,7 +114,7 @@ extension CTChartData {
      - Returns: Text View with the points description.
      */
     public func infoDescription(info: DataPoint) -> some View {
-        Text("\(info.wrappedDescription)")
+        Text(LocalizedStringKey(info.wrappedDescription))
     }
     
     /**
@@ -292,7 +292,7 @@ extension CTDataPointBaseProtocol  {
     
     /// Returns information about the data point for use in accessibility tags.
     func getCellAccessibilityValue(specifier: String) -> Text {
-        Text(self.valueAsString(specifier: specifier) + ", " + self.wrappedDescription)
+        Text(String(format: NSLocalizedString("%@ \(self.wrappedDescription)", comment: ""), "\(self.valueAsString(specifier: specifier))"))
     }
 }
 

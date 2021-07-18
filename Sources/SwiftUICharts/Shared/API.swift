@@ -58,7 +58,7 @@ public struct InfoExtra<T>: View where T: CTChartData {
     
     public var body: some View {
         if chartData.infoView.isTouchCurrent {
-            Text(text)
+            Text(LocalizedStringKey(text))
         } else {
             EmptyView()
         }
@@ -87,7 +87,7 @@ extension LegendData {
                             LegendLine(width: width)
                                 .stroke(colour, style: strokeStyle)
                                 .frame(width: width, height: 3)
-                            Text(self.legend)
+                            Text(LocalizedStringKey(self.legend))
                                 .font(font)
                                 .foregroundColor(textColor)
                         }
@@ -99,7 +99,7 @@ extension LegendData {
                                                        endPoint: .trailing),
                                         style: strokeStyle)
                                 .frame(width: width, height: 3)
-                            Text(self.legend)
+                            Text(LocalizedStringKey(self.legend))
                                 .font(font)
                                 .foregroundColor(textColor)
                         }
@@ -112,7 +112,7 @@ extension LegendData {
                                                        endPoint: .trailing),
                                         style: strokeStyle)
                                 .frame(width: width, height: 3)
-                            Text(self.legend)
+                            Text(LocalizedStringKey(self.legend))
                                 .font(font)
                                 .foregroundColor(textColor)
                         }
@@ -126,7 +126,7 @@ extension LegendData {
                             Rectangle()
                                 .fill(colour)
                                 .frame(width: width / 2, height: width / 2)
-                            Text(self.legend)
+                            Text(LocalizedStringKey(self.legend))
                                 .font(font)
                         }
                     } else if let colours = self.colour.colours,
@@ -139,7 +139,7 @@ extension LegendData {
                                                      startPoint: startPoint,
                                                      endPoint: endPoint))
                                 .frame(width: width / 2, height: width / 2)
-                            Text(self.legend)
+                            Text(LocalizedStringKey(self.legend))
                                 .font(font)
                         }
                     } else if let stops = self.colour.stops,
@@ -153,7 +153,7 @@ extension LegendData {
                                                      startPoint: startPoint,
                                                      endPoint: endPoint))
                                 .frame(width: width / 2, height: width / 2)
-                            Text(self.legend)
+                            Text(LocalizedStringKey(self.legend))
                                 .font(font)
                         }
                     }
@@ -164,7 +164,7 @@ extension LegendData {
                         Circle()
                             .fill(colour)
                             .frame(width: width / 2, height: width / 2)
-                        Text(self.legend)
+                        Text(LocalizedStringKey(self.legend))
                             .font(font)
                     }
                 } else if let colours = self.colour.colours,
@@ -177,7 +177,7 @@ extension LegendData {
                                                  startPoint: startPoint,
                                                  endPoint: endPoint))
                             .frame(width: width / 2, height: width / 2)
-                        Text(self.legend)
+                        Text(LocalizedStringKey(self.legend))
                             .font(font)
                     }
                     
@@ -192,7 +192,7 @@ extension LegendData {
                                                  startPoint: startPoint,
                                                  endPoint: endPoint))
                             .frame(width: width / 2, height: width / 2)
-                        Text(self.legend)
+                        Text(LocalizedStringKey(self.legend))
                             .font(font)
                     }
                 }
@@ -216,7 +216,7 @@ extension LegendData {
                     Circle()
                         .fill(colour)
                         .frame(width: width, height: width)
-                    Text(self.legend)
+                    Text(LocalizedStringKey(self.legend))
                         .font(font)
                         .foregroundColor(textColor)
                 }
@@ -227,7 +227,7 @@ extension LegendData {
                                              startPoint: .leading,
                                              endPoint: .trailing))
                         .frame(width: width, height: width)
-                    Text(self.legend)
+                    Text(LocalizedStringKey(self.legend))
                         .font(font)
                         .foregroundColor(textColor)
                 }
@@ -239,7 +239,7 @@ extension LegendData {
                                              startPoint: .leading,
                                              endPoint: .trailing))
                         .frame(width: width, height: width)
-                    Text(self.legend)
+                    Text(LocalizedStringKey(self.legend))
                         .font(font)
                         .foregroundColor(textColor)
                 }
@@ -251,21 +251,21 @@ extension LegendData {
         switch self.chartType {
         case .line:
             if self.prioity == 1 {
-                return "Line Chart Legend"
+                return "Line-Chart-Legend"
             } else {
-                return "P O I Marker Legend"
+                return "P-O-I-Marker-Legend"
             }
         case .bar:
             if self.prioity == 1 {
-                return "Bar Chart Legend"
+                return "Bar-Chart-Legend"
             } else {
-                return "P O I Marker Legend"
+                return "P-O-I-Marker-Legend"
             }
         case .pie:
             if self.prioity == 1 {
-                return "Pie Chart Legend"
+                return "Pie-Chart-Legend"
             } else {
-                return "P O I Marker Legend"
+                return "P-O-I-Marker-Legend"
             }
         }
     }

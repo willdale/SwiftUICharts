@@ -46,7 +46,7 @@ internal struct RotatedText<ChartData>: View where ChartData: CTLineBarChartData
     @State private var finalFrame: CGRect = .zero
     
     internal var body: some View {
-        Text(label)
+        Text(LocalizedStringKey(label))
             .font(chartData.chartStyle.xAxisLabelFont)
             .foregroundColor(chartData.chartStyle.xAxisLabelColour)
             .lineLimit(1)
@@ -68,8 +68,8 @@ internal struct RotatedText<ChartData>: View where ChartData: CTLineBarChartData
             .rotationEffect(rotation, anchor: .center)
             .frame(width: rotation == .degrees(0) || rotation == .radians(0) ? finalFrame.width : finalFrame.height,
                    height: rotation == .degrees(0) || rotation == .radians(0) ? finalFrame.height : finalFrame.width)
-            .accessibilityLabel(Text("X Axis Label"))
-            .accessibilityValue(Text(label))
+            .accessibilityLabel(LocalizedStringKey("X-Axis-Label"))
+            .accessibilityValue(LocalizedStringKey(label))
     }
 }
 
@@ -110,7 +110,7 @@ internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTLineBa
     @State private var finalFrame: CGRect = .zero
     
     internal var body: some View {
-        Text(label)
+        Text(LocalizedStringKey(label))
             .font(chartData.chartStyle.xAxisLabelFont)
             .lineLimit(1)
             .foregroundColor(chartData.chartStyle.xAxisLabelColour)
@@ -123,8 +123,8 @@ internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTLineBa
                         }
                 }
             )
-            .accessibilityLabel(Text("X Axis Label"))
-            .accessibilityValue(Text(label))
+            .accessibilityLabel(LocalizedStringKey("X-Axis-Label"))
+            .accessibilityValue(LocalizedStringKey(label))
     }
 }
 
@@ -160,7 +160,7 @@ internal struct TempText<ChartData>: View where ChartData: CTLineBarChartDataPro
     @State private var finalFrame: CGRect = .zero
     
     internal var body: some View {
-        Text(label)
+        Text(LocalizedStringKey(label))
             .font(chartData.chartStyle.xAxisLabelFont)
             .foregroundColor(chartData.chartStyle.xAxisLabelColour)
             .lineLimit(1)
@@ -187,7 +187,7 @@ internal struct TempText<ChartData>: View where ChartData: CTLineBarChartDataPro
             
             .frame(width: rotation == .degrees(0) || rotation == .radians(0) ? finalFrame.width : finalFrame.height,
                    height: rotation == .degrees(0) || rotation == .radians(0) ? finalFrame.height : finalFrame.width)
-            .accessibilityLabel(Text("X Axis Label"))
-            .accessibilityValue(Text(label))
+            .accessibilityLabel(LocalizedStringKey("X-Axis-Label"))
+            .accessibilityValue(LocalizedStringKey(label))
     }
 }

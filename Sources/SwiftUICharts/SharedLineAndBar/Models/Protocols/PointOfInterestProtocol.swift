@@ -177,7 +177,7 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
         HorizontalMarker(chartData: self, value: value, range: range, minValue: minValue)
     }
     public func poiLabelAxis(markerValue: Double, specifier: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color) -> some View {
-        Text("\(markerValue, specifier: specifier)")
+        Text(LocalizedStringKey("\(markerValue, specifier: specifier)"))
             .font(labelFont)
             .foregroundColor(labelColour)
             .padding(4)
@@ -198,7 +198,7 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
     }
     
    public func poiLabelCenter(markerValue: Double, specifier: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color, strokeStyle: StrokeStyle) -> some View {
-        Text("\(markerValue, specifier: specifier)")
+        Text(LocalizedStringKey("\(markerValue, specifier: specifier)"))
             .font(labelFont)
             .foregroundColor(labelColour)
             .padding()
@@ -214,7 +214,7 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol & isHor
         VerticalMarker(chartData: self, value: value, range: range, minValue: minValue)
     }
     public func poiLabelAxis(markerValue: Double, specifier: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color) -> some View {
-        Text("\(markerValue, specifier: specifier)")
+        Text(LocalizedStringKey("\(markerValue, specifier: specifier)"))
             .font(labelFont)
             .foregroundColor(labelColour)
             .padding(4)
@@ -299,7 +299,7 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
         VerticalAbscissaMarker(chartData: self, markerValue: markerValue, dataPointCount: dataPointCount)
     }
     public func poiAbscissaLabelAxis(marker: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color) -> some View {
-        Text(marker)
+        Text(LocalizedStringKey(marker))
             .font(labelFont)
             .foregroundColor(labelColour)
             .padding(4)
@@ -311,7 +311,7 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
             )
     }
     public func poiAbscissaLabelCenter(marker: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color, strokeStyle: StrokeStyle) -> some View {
-        Text(marker)
+        Text(LocalizedStringKey(marker))
             .font(labelFont)
             .foregroundColor(labelColour)
             .padding()
@@ -328,7 +328,7 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol & isHor
         HorizontalAbscissaMarker(chartData: self, markerValue: markerValue, dataPointCount: dataPointCount)
     }
     public func poiAbscissaLabelAxis(marker: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color) -> some View {
-        Text(marker)
+        Text(LocalizedStringKey(marker))
             .font(labelFont)
             .foregroundColor(labelColour)
             .padding(4)

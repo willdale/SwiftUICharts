@@ -120,7 +120,7 @@ extension CTLineBarChartDataProtocol where Self: GetDataProtocol {
                     .frame(height: yAxisPaddingHeight)
             }
             ForEach(self.labelsArray.indices.reversed(), id: \.self) { i in
-                Text(self.labelsArray[i])
+                Text(LocalizedStringKey(self.labelsArray[i]))
                     .font(self.chartStyle.yAxisLabelFont)
                     .foregroundColor(self.chartStyle.yAxisLabelColour)
                     .lineLimit(1)
@@ -133,8 +133,8 @@ extension CTLineBarChartDataProtocol where Self: GetDataProtocol {
                                 }
                         }
                     )
-                    .accessibilityLabel(Text("Y Axis Label"))
-                    .accessibilityValue(Text(self.labelsArray[i]))
+                    .accessibilityLabel(LocalizedStringKey("Y-Axis-Label"))
+                    .accessibilityValue(LocalizedStringKey(self.labelsArray[i]))
                 if i != 0 {
                     Spacer()
                         .frame(minHeight: 0, maxHeight: 500)
@@ -171,7 +171,7 @@ extension CTLineBarChartDataProtocol {
                             .frame(height: yAxisPaddingHeight)
                     }
                     VStack(spacing: 0) {
-                        Text(title)
+                        Text(LocalizedStringKey(title))
                             .font(self.chartStyle.yAxisTitleFont)
                             .foregroundColor(self.chartStyle.yAxisTitleColour)
                             .background(
@@ -218,7 +218,7 @@ extension CTLineBarChartDataProtocol {
     internal func getXAxisTitle() -> some View {
         Group {
             if let title = self.chartStyle.xAxisTitle {
-                Text(title)
+                Text(LocalizedStringKey(title))
                     .font(self.chartStyle.xAxisTitleFont)
                     .foregroundColor(self.chartStyle.xAxisTitleColour)
                     .ifElse(self.chartStyle.xAxisLabelPosition == .bottom, if: {
@@ -303,6 +303,7 @@ extension CTLineBarChartDataProtocol {
         return labels
 
     }
+    
     public func getExtraYAxisLabels() -> some View {
         VStack {
             if self.chartStyle.xAxisLabelPosition == .top {
@@ -310,7 +311,7 @@ extension CTLineBarChartDataProtocol {
                     .frame(height: yAxisPaddingHeight)
             }
             ForEach(self.extraLabelsArray.indices.reversed(), id: \.self) { i in
-                Text(self.extraLabelsArray[i])
+                Text(LocalizedStringKey(self.extraLabelsArray[i]))
                     .font(self.chartStyle.yAxisLabelFont)
                     .foregroundColor(self.chartStyle.yAxisLabelColour)
                     .lineLimit(1)
@@ -323,8 +324,8 @@ extension CTLineBarChartDataProtocol {
                                 }
                         }
                     )
-                    .accessibilityLabel(Text("Y Axis Label"))
-                    .accessibilityValue(Text(self.extraLabelsArray[i]))
+                    .accessibilityLabel(LocalizedStringKey("Y-Axis-Label"))
+                    .accessibilityValue(LocalizedStringKey(self.extraLabelsArray[i]))
                 if i != 0 {
                     Spacer()
                         .frame(minHeight: 0, maxHeight: 500)
@@ -341,6 +342,7 @@ extension CTLineBarChartDataProtocol {
             $0.padding(.bottom, -8)
         })
     }
+    
     public func getExtraYAxisTitle(colour: AxisColour) -> some View {
         Group {
             if let title = self.extraLineData.style.yAxisTitle {
@@ -350,7 +352,7 @@ extension CTLineBarChartDataProtocol {
                             .frame(height: yAxisPaddingHeight)
                     }
                     VStack {
-                        Text(title)
+                        Text(LocalizedStringKey(title))
                             .font(self.chartStyle.yAxisTitleFont)
                             .foregroundColor(self.chartStyle.yAxisTitleColour)
                             .background(

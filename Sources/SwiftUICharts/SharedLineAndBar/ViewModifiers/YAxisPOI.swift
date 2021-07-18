@@ -91,8 +91,8 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                                                lineColour: lineColour)
                             .position(chartData.poiValueLabelPositionAxis(frame: geo.frame(in: .local), markerValue: markerValue, minValue: minValue, range: range))
                             
-                            .accessibilityLabel(Text("P O I Marker"))
-                            .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
+                            .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
+                            .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(markerName) %@", comment: ""), String(format: specifier, markerValue))))
                         
                     case .center(let specifier):
                         
@@ -105,8 +105,8 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                                                  strokeStyle: strokeStyle)
                             .position(chartData.poiValueLabelPositionCenter(frame: geo.frame(in: .local), markerValue: markerValue, minValue: minValue, range: range))
                             
-                            .accessibilityLabel(Text("P O I Marker"))
-                            .accessibilityValue(Text("\(markerName), \(markerValue, specifier: specifier)"))
+                            .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
+                            .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(markerName) %@", comment: ""), String(format: specifier, markerValue))))
                     }
                 }
                 .animateOnAppear(using: chartData.chartStyle.globalAnimation) {

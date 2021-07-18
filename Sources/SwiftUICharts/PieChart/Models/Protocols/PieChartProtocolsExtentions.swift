@@ -85,7 +85,7 @@ extension View {
                     case .none:
                         EmptyView()
                     case .label(let text, let colour, let font, let rFactor):
-                        Text(text)
+                        Text(LocalizedStringKey(text))
                             .font(font)
                             .foregroundColor(colour)
                             .position(chartData.getOverlayPosition(rect: rect,
