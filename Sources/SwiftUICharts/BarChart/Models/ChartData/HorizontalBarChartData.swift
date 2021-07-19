@@ -72,12 +72,12 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Get
     public final func getXAxisLabels() -> some View {
         HStack(spacing: 0) {
             ForEach(self.labelsArray.indices, id: \.self) { i in
-                Text(self.labelsArray[i])
+                Text(LocalizedStringKey(self.labelsArray[i]))
                     .font(self.chartStyle.yAxisLabelFont)
                     .foregroundColor(self.chartStyle.yAxisLabelColour)
                     .lineLimit(1)
-                    .accessibilityLabel(Text("Y Axis Label"))
-                    .accessibilityValue(Text(self.labelsArray[i]))
+                    .accessibilityLabel(LocalizedStringKey("Y-Axis-Label"))
+                    .accessibilityValue(LocalizedStringKey(self.labelsArray[i]))
                     .overlay(
                         GeometryReader { geo in
                             Color.clear
@@ -133,7 +133,7 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Get
                         ForEach(labelArray, id: \.self) { data in
                             Spacer()
                                 .frame(minHeight: 0, maxHeight: 500)
-                            Text(data)
+                            Text(LocalizedStringKey(data))
                                 .font(self.chartStyle.xAxisLabelFont)
                                 .lineLimit(1)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
@@ -146,8 +146,8 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Get
                                             }
                                     }
                                 )
-                                .accessibilityLabel(Text("X Axis Label"))
-                                .accessibilityValue(Text("\(data)"))
+                                .accessibilityLabel(LocalizedStringKey("Y-Axis-Label"))
+                                .accessibilityValue(LocalizedStringKey(data))
                             
                             Spacer()
                                 .frame(minHeight: 0, maxHeight: 500)

@@ -69,7 +69,7 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
                         .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = false
                         }
-                        .accessibilityLabel( Text("\(chartData.metadata.title)"))
+                        .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
                 }
             }
         } else { CustomNoDataView(chartData: chartData) }
