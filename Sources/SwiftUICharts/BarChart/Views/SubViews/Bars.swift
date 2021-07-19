@@ -45,6 +45,7 @@ internal struct ColourBar<CD: CTBarChartDataProtocol & GetDataProtocol,
             .scaleEffect(y: startAnimation ? CGFloat(dataPoint.value / chartData.maxValue) : 0, anchor: .bottom)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
             .background(Color(.gray).opacity(0.000000001))
+
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
