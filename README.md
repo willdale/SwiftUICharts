@@ -536,26 +536,58 @@ struct LineChartDemoView: View {
 }
 ```
 
+# Accessibility
+
+Inside certain elements are additional tags to help describe the chart for VoiceOver.
+
+See [Localization of Accessibility](#Localization-of-Accessibility)
+
+# Localization
+
+All labels support localization. There are, however, some hidden labels that are there to support VoiceOver. See [Localization of Accessibility](#Localization-of-Accessibility)
+
+# Localization of Accessibility
+
+See the localization demo in the [Demo Project](https://github.com/willdale/SwiftUICharts-Demo).
 
 ---
 
-
-FONTS
-
-Y Axis           - caption
-X Axis Title   - caption
-Y Axis Title   - caption
-
-Header Box ------------------
-
-Chart Title      - title3 
-Chart Subtitle - subheadline
-
-Value           - title3
-Description - subheadline
+Voice over description of a datapoint when the user touches the area closest to the data point.
+The VoiceOver will say `<chart title>, <data point value>, <data point description>`.
+```swift
+"%@ <local_description_of_a_data_point>" = "%@, <Description of a data point>";
+```
 
 
-Touch Overlay Box ------------------
+Read out before a `poiMarker`.
+The VoiceOver will say `<p o i marker>, <marker legend title>, <marker value>`.
+```swift
+"P-O-I-Marker" = "P O I Marker";
+"Average" = "Average";
+```
 
-Description - subheadline
-Value           - title3
+Voice over description of a `poiMarker`.
+The VoiceOver will say `<P-O-I-Marker>, <marker legend title>, <marker value>`.
+```swift
+"<local_marker_legend_title> %@" = "local_marker_legend_title, %@";
+```
+
+
+
+Read out before a `axisLabel`.
+The VoiceOver will say `<axisLabel>, <marker value>`.
+```
+"X-Axis-Label" = "X Axis Label";
+"Y-Axis-Label" = "Y Axis Label";
+```
+
+Read out before a `legend`.
+The VoiceOver will say `<chart type legend>, <legend title>`.
+```swift
+"Line-Chart-Legend" = "Line Chart Legend";
+"P-O-I-Marker-Legend" = "P O I Marker Legend";
+"Bar-Chart-Legend" = "Bar Chart Legend";
+"P-O-I-Marker-Legend" = "P O I Marker Legend";
+"Pie-Chart-Legend" = "Pie Chart Legend";
+"P-O-I-Marker-Legend" = "P O I Marker Legend";
+```
