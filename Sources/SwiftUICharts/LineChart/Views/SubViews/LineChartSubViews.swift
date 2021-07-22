@@ -16,7 +16,7 @@ import SwiftUI
 internal struct LineChartColourSubView<CD, DS>: View where CD: CTLineChartDataProtocol,
                                                            DS: CTLineChartDataSet,
                                                            DS.DataPoint: CTStandardDataPointProtocol & IgnoreMe {
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     private let dataSet: DS
     private let minValue: Double
     private let range: Double
@@ -58,6 +58,7 @@ internal struct LineChartColourSubView<CD, DS>: View where CD: CTLineChartDataPr
             .background(Color(.gray).opacity(0.000000001))
             .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
             .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }
+
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
@@ -77,7 +78,7 @@ internal struct LineChartColourSubView<CD, DS>: View where CD: CTLineChartDataPr
 internal struct LineChartColoursSubView<CD, DS>: View where CD: CTLineChartDataProtocol,
                                                             DS: CTLineChartDataSet,
                                                             DS.DataPoint: CTStandardDataPointProtocol & IgnoreMe {
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     private let dataSet: DS
     private let minValue: Double
     private let range: Double
@@ -150,7 +151,7 @@ internal struct LineChartColoursSubView<CD, DS>: View where CD: CTLineChartDataP
 internal struct LineChartStopsSubView<CD, DS>: View where CD: CTLineChartDataProtocol,
                                                           DS: CTLineChartDataSet,
                                                           DS.DataPoint: CTStandardDataPointProtocol & IgnoreMe {
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     private let dataSet: DS
     private let minValue: Double
     private let range: Double

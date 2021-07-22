@@ -20,7 +20,7 @@ import SwiftUI
 internal struct ColourBar<CD: CTBarChartDataProtocol & GetDataProtocol,
                           DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     private let colour: Color
     private let dataPoint: DP
     
@@ -66,7 +66,7 @@ internal struct ColourBar<CD: CTBarChartDataProtocol & GetDataProtocol,
 internal struct GradientColoursBar<CD: CTBarChartDataProtocol & GetDataProtocol,
                                    DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     private let dataPoint: DP
     private let colours: [Color]
     private let startPoint: UnitPoint
@@ -99,12 +99,14 @@ internal struct GradientColoursBar<CD: CTBarChartDataProtocol & GetDataProtocol,
             .scaleEffect(y: startAnimation ? CGFloat(dataPoint.value / chartData.maxValue) : 0, anchor: .bottom)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
             .background(Color(.gray).opacity(0.000000001))
+            
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
+            
             .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }
@@ -119,7 +121,7 @@ internal struct GradientColoursBar<CD: CTBarChartDataProtocol & GetDataProtocol,
 internal struct GradientStopsBar<CD: CTBarChartDataProtocol & GetDataProtocol,
                                  DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     private let dataPoint: DP
     private let stops: [Gradient.Stop]
     private let startPoint: UnitPoint
@@ -152,12 +154,14 @@ internal struct GradientStopsBar<CD: CTBarChartDataProtocol & GetDataProtocol,
             .scaleEffect(y: startAnimation ? CGFloat(dataPoint.value / chartData.maxValue) : 0, anchor: .bottom)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
             .background(Color(.gray).opacity(0.000000001))
+            
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
+            
             .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }
@@ -336,7 +340,7 @@ internal struct GradientStopsPartBar: View {
 // MARK: Colour
 internal struct RangedBarChartColourCell<CD:RangedBarChartData>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     private let dataPoint: CD.SetType.DataPoint
     private let colour: Color
     private let barSize: CGRect
@@ -379,7 +383,7 @@ internal struct RangedBarChartColourCell<CD:RangedBarChartData>: View {
 // MARK: Gradient
 internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     private let dataPoint: CD.SetType.DataPoint
     private let colours: [Color]
     private let startPoint: UnitPoint
@@ -430,7 +434,7 @@ internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
 // MARK: Gradient Stops
 internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     private let dataPoint: CD.SetType.DataPoint
     private let stops: [Gradient.Stop]
     private let startPoint: UnitPoint
@@ -491,7 +495,7 @@ internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
 internal struct HorizontalColourBar<CD: CTBarChartDataProtocol & GetDataProtocol,
                                     DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     private let colour: Color
     private let dataPoint: DP
     
@@ -536,7 +540,7 @@ internal struct HorizontalColourBar<CD: CTBarChartDataProtocol & GetDataProtocol
 internal struct HorizontalGradientColoursBar<CD: CTBarChartDataProtocol & GetDataProtocol,
                                              DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     private let dataPoint: DP
     private let colours: [Color]
     private let startPoint: UnitPoint
@@ -589,7 +593,7 @@ internal struct HorizontalGradientColoursBar<CD: CTBarChartDataProtocol & GetDat
 internal struct HorizontalGradientStopsBar<CD: CTBarChartDataProtocol & GetDataProtocol,
                                            DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     private let dataPoint: DP
     private let stops: [Gradient.Stop]
     private let startPoint: UnitPoint
