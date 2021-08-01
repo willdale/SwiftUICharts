@@ -13,22 +13,22 @@ import Combine
  
  This model contains the data and styling information for a pie chart.
  */
-public final class PieChartData: CTPieChartDataProtocol, Publishable {
+public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable {
     
     // MARK: Properties
     public var id: UUID = UUID()
-    @Published public final var dataSets: PieDataSet
-    @Published public final var metadata: ChartMetadata
-    @Published public final var chartStyle: PieChartStyle
-    @Published public final var legends: [LegendData]
-    @Published public final var infoView: InfoViewData<PieChartDataPoint>
+    @Published public var dataSets: PieDataSet
+    @Published public var metadata: ChartMetadata
+    @Published public var chartStyle: PieChartStyle
+    @Published public var legends: [LegendData] = []
+    @Published public var infoView: InfoViewData<PieChartDataPoint> = InfoViewData()
+
+    public var noDataText: Text
     
-    // Publishable
-    public var subscription = SubscriptionSet().subscription
-    public let touchedDataPointPublisher = PassthroughSubject<DataPoint,Never>()
+    public var subscription = Set<AnyCancellable>()
+    public let touchedDataPointPublisher = PassthroughSubject<PublishedTouchData<PieChartDataPoint>,Never>()
     
-    public final var noDataText: Text
-    public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
+    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .pie, dataSetType: .single)
     
     // MARK: Initializer
     /// Initialises Pie Chart data.
@@ -47,26 +47,21 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable {
         self.dataSets = dataSets
         self.metadata = metadata
         self.chartStyle = chartStyle
-        self.legends = [LegendData]()
-        self.infoView = InfoViewData()
         self.noDataText = noDataText
-        self.chartType = (chartType: .pie, dataSetType: .single)
         
         self.setupLegends()
         self.makeDataPoints()
     }
     
-    public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View { EmptyView() }
+    // MARK: - Touch
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+        self.infoView.isTouchCurrent = true
+        self.infoView.touchLocation = touchLocation
+        self.infoView.chartSize = chartSize
+        self.processTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
+    }
     
-    public typealias SetType = PieDataSet
-    public typealias DataPoint = PieChartDataPoint
-    public typealias CTStyle = PieChartStyle
-}
-
-// MARK: - Touch
-extension PieChartData {
-    
-    public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+    private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         let touchDegree = degree(from: touchLocation, in: chartSize)
         let index = self.dataSets.dataPoints.firstIndex(where:) {
             let start = $0.startAngle * Double(180 / Double.pi) <= Double(touchDegree)
@@ -74,12 +69,14 @@ extension PieChartData {
             return start && end
         }
         guard let wrappedIndex = index else { return }
-        self.dataSets.dataPoints[wrappedIndex].legendTag = dataSets.legendTitle
-        self.infoView.touchOverlayInfo = [self.dataSets.dataPoints[wrappedIndex]]
-        touchedDataPointPublisher.send(self.dataSets.dataPoints[wrappedIndex])
+        let datapoint = self.dataSets.dataPoints[wrappedIndex]
+        self.touchedDataPointPublisher.send(PublishedTouchData(datapoint: datapoint, location: .zero))
     }
     
-    public func getPointLocation(dataSet: PieDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
-        return nil
-    }
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View { EmptyView() }
+    
+    public typealias SetType = PieDataSet
+    public typealias DataPoint = PieChartDataPoint
+    public typealias CTStyle = PieChartStyle
 }
+

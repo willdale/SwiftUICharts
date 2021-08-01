@@ -8,12 +8,10 @@
 import SwiftUI
 
 // MARK: - Markers
-extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType {
-    internal func markerSubView() -> some View {
+extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType, Self: Publishable {
+
+    internal func markerSubView(position: CGPoint) -> some View {
         Group {
-            if let position = self.getPointLocation(dataSet: dataSets as! Self.SetPoint,
-                                                    touchLocation: self.infoView.touchLocation,
-                                                    chartSize: self.infoView.chartSize) {
                 switch self.chartStyle.markerType {
                 case .none:
                     EmptyView()
@@ -36,7 +34,6 @@ extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType {
                     MarkerTopTrailing(position: position)
                         .stroke(colour, style: style)
                 }
-            }
         }
     }
 }

@@ -21,7 +21,7 @@ public struct LineChartDataPoint: CTStandardLineDataPoint, IgnoreMe {
     
     public var ignoreMe: Bool = false
     
-    public var legendTag: String = ""
+    public var _legendTag: String = ""
     
     /// Data model for a single data point with colour for use with a line chart.
     /// - Parameters:
