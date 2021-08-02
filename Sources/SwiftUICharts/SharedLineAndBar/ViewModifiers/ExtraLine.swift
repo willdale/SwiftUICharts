@@ -189,7 +189,19 @@ extension View {
     }
     
     
-    
+    /**
+     Adds an seperate line that is over-layed on top of a other chart.
+     
+     - Requires:
+     Chart Data to conform to CTLineBarChartDataProtocol.
+     
+     - Parameters:
+        - chartData: Data that conforms to CTLineBarChartDataProtocol.
+        - legendTitle: Title of the extra line to display in the legends.
+        - datapoints: Data point to create the line.
+        - style: Styling data for the line.
+     - Returns: The chart with an extra line stacked on top.
+     */
     public func extraLine<T: CTLineBarChartDataProtocol>(
         chartData: T,
         legendTitle: String,
