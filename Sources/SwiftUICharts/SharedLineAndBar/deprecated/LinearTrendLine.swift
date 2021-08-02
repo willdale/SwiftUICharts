@@ -87,6 +87,7 @@ extension View {
         - strokeStyle: Stroke Style.
      - Returns: A  new view containing the chart with a trend line.
      */
+    @available(*, deprecated, message: "Please use `.extraLine` instead.")
     public func linearTrendLine<T: CTLineBarChartDataProtocol & GetDataProtocol>(
         chartData: T,
         firstValue: Double,
