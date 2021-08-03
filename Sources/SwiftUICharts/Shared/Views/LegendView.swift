@@ -74,3 +74,28 @@ internal struct LegendView<T>: View where T: CTChartData {
         }
     }
 }
+
+extension LegendData {
+    internal func accessibilityLegendLabel() -> String {
+        switch self.chartType {
+        case .line:
+            if self.prioity == 1 {
+                return "Line Chart Legend"
+            } else {
+                return "P O I Marker Legend"
+            }
+        case .bar:
+            if self.prioity == 1 {
+                return "Bar Chart Legend"
+            } else {
+                return "P O I Marker Legend"
+            }
+        case .pie:
+            if self.prioity == 1 {
+                return "Pie Chart Legend"
+            } else {
+                return "P O I Marker Legend"
+            }
+        }
+    }
+}

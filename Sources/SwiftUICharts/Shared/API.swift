@@ -7,64 +7,6 @@
 
 import SwiftUI
 
-/**
- Displays the data points value with the unit.
- */
-public struct InfoValue<T>: View where T: CTChartData {
-    
-    @ObservedObject private var chartData: T
-    
-    public init(chartData: T) {
-        self.chartData = chartData
-    }
-    
-    public var body: some View {
-        ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
-            chartData.infoValueUnit(info: point)
-        }
-    }
-}
-
-/**
- Displays the data points description.
- */
-public struct InfoDescription<T>: View where T: CTChartData {
-    
-    @ObservedObject private var chartData: T
-    
-    public init(chartData: T) {
-        self.chartData = chartData
-    }
-    
-    public var body: some View {
-        ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
-            chartData.infoDescription(info: point)
-        }
-    }
-}
-
-/**
- Option the as a String between the Value and the Description.
- */
-public struct InfoExtra<T>: View where T: CTChartData {
-    
-    @ObservedObject private var chartData: T
-    private let text: String
-    
-    public init(chartData: T, text: String) {
-        self.chartData = chartData
-        self.text = text
-    }
-    
-    public var body: some View {
-        if chartData.infoView.isTouchCurrent {
-            Text(text)
-        } else {
-            EmptyView()
-        }
-    }
-}
-
 extension LegendData {
     /**
      Get the legend as a view.
@@ -247,26 +189,5 @@ extension LegendData {
         }
     }
     
-    internal func accessibilityLegendLabel() -> String {
-        switch self.chartType {
-        case .line:
-            if self.prioity == 1 {
-                return "Line Chart Legend"
-            } else {
-                return "P O I Marker Legend"
-            }
-        case .bar:
-            if self.prioity == 1 {
-                return "Bar Chart Legend"
-            } else {
-                return "P O I Marker Legend"
-            }
-        case .pie:
-            if self.prioity == 1 {
-                return "Pie Chart Legend"
-            } else {
-                return "P O I Marker Legend"
-            }
-        }
-    }
+    
 }
