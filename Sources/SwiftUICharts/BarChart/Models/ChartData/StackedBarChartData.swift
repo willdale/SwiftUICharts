@@ -13,6 +13,7 @@ import Combine
  
  The grouping data informs the model as to how the datapoints are linked.
  */
+@available(macOS 11.0, iOS 13, watchOS 7, tvOS 14, *)
 public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConformance {
     
     // MARK: Properties

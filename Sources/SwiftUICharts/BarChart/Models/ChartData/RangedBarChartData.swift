@@ -11,6 +11,7 @@ import Combine
 /**
  Data for drawing and styling a ranged Bar Chart.
  */
+@available(macOS 11.0, iOS 13, watchOS 7, tvOS 14, *)
 public final class RangedBarChartData: CTRangedBarChartDataProtocol, ChartConformance {
     // MARK: Properties
     public let id: UUID = UUID()

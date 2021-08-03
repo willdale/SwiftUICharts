@@ -11,7 +11,8 @@ import Combine
 /**
  Data for drawing and styling a standard Bar Chart.
  */
-public final class BarChartData: CTBarChartDataProtocol, ChartConformance {
+@available(macOS 11.0, iOS 13, watchOS 7, tvOS 14, *)
+public final class BarChartData: CTBarChartDataProtocol, ChartConformance{
     
     // MARK: Properties
     public let id: UUID = UUID()

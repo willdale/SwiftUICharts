@@ -13,6 +13,7 @@ import Combine
  
  This model contains the data and styling information for a ranged line chart.
  */
+@available(macOS 11.0, iOS 13, watchOS 7, tvOS 14, *)
 public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformance {
     
     // MARK: Properties

@@ -13,6 +13,7 @@ import Combine
  
  This model contains all the data and styling information for a single line, line chart.
  */
+@available(macOS 11.0, iOS 13, watchOS 7, tvOS 14, *)
 public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance {
     
     // MARK: Properties
