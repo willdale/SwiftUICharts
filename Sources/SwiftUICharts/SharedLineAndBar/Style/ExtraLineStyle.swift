@@ -18,6 +18,8 @@ public struct ExtraLineStyle: Hashable {
     
     public var strokeStyle: Stroke
     
+    public var pointStyle: PointStyle
+    
     public var yAxisTitle: String?
     public var yAxisNumberOfLabels: Int
     
@@ -32,6 +34,7 @@ public struct ExtraLineStyle: Hashable {
         lineSpacing: SpacingType = .line,
         
         strokeStyle: Stroke = Stroke(),
+        pointStyle: PointStyle = PointStyle(),
         
         yAxisTitle: String? = nil,
         yAxisNumberOfLabels: Int = 7,
@@ -44,7 +47,9 @@ public struct ExtraLineStyle: Hashable {
         self.lineColour = lineColour
         self.lineType = lineType
         self.lineSpacing = lineSpacing
+        
         self.strokeStyle = strokeStyle
+        self.pointStyle = pointStyle
         
         self.yAxisTitle = yAxisTitle
         self.yAxisNumberOfLabels = yAxisNumberOfLabels
