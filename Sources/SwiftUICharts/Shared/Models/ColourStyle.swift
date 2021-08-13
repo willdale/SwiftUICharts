@@ -23,8 +23,7 @@ public struct ColourStyle: CTColourStyle, Hashable {
     /// Single Colour
     /// - Parameters:
     ///   - colour: Single Colour
-    public init(colour: Color = Color(.red)
-    ) {
+    public init(colour: Color = Color(.red)) {
         self.colourType = .colour
         self.colour = colour
         self.colours = nil

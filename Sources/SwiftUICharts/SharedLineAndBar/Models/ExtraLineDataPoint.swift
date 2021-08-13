@@ -14,9 +14,17 @@ public struct ExtraLineDataPoint: Hashable, Identifiable {
     
     public let id: UUID = UUID()
     public var value: Double
+    public var pointColour: PointColour?
+    public var pointDescription: String?
 
-    public init(value: Double) {
+    public init(
+        value: Double,
+        pointColour: PointColour? = nil,
+        pointDescription: String? = nil
+    ) {
         self.value = value
+        self.pointColour = pointColour
+        self.pointDescription = pointDescription
     }
 }
 

@@ -130,7 +130,10 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
     
     // MARK:  Touch
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        self.markerSubView()
+        ZStack {
+            self.markerSubView()
+            self.extraLineData?.getTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
+        }
     }
     
     public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
@@ -144,6 +147,12 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
                 if index >= 0 && index < dataSets.dataSets[superIndex].dataPoints.count {
                     dataSets.dataSets[superIndex].dataPoints[index].legendTag = dataSets.dataSets[superIndex].setTitle
                     self.infoView.touchOverlayInfo = [dataSets.dataSets[superIndex].dataPoints[index]]
+                    if let data = self.extraLineData,
+                       let point = data.getDataPoint(touchLocation: touchLocation, chartSize: chartSize) {
+                        var dp = StackedBarDataPoint(value: point.value, description: point.pointDescription, group: GroupingData(title: data.legendTitle, colour: ColourStyle()))
+                        dp.legendTag = data.legendTitle
+                        self.infoView.touchOverlayInfo.append(dp)
+                    }
                     touchedDataPointPublisher.send(dataSets.dataSets[superIndex].dataPoints[index])
                 }
             }

@@ -136,11 +136,11 @@ extension Path {
         var path = Path()
         
         let firstPointOne: CGPoint = CGPoint(x: 0,
-                                          y: (CGFloat(dataPoints[0] - minValue) * -y) + rect.height)
+                                             y: (CGFloat(dataPoints[0] - minValue) * -y) + rect.height)
         path.move(to: firstPointOne)
         
         let firstPointTwo: CGPoint = CGPoint(x: 0 + (x / 2),
-                                          y: (CGFloat(dataPoints[0] - minValue) * -y) + rect.height)
+                                             y: (CGFloat(dataPoints[0] - minValue) * -y) + rect.height)
         path.addLine(to: firstPointTwo)
         
         var previousPoint = firstPointTwo

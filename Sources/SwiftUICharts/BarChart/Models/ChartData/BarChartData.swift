@@ -124,7 +124,10 @@ public final class BarChartData: CTBarChartDataProtocol, GetDataProtocol, Publis
     
     // MARK: - Touch
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        self.markerSubView()
+        ZStack {
+            self.markerSubView()
+            self.extraLineData?.getTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
+        }
     }
     
     public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
@@ -133,6 +136,12 @@ public final class BarChartData: CTBarChartDataProtocol, GetDataProtocol, Publis
         if index >= 0 && index < dataSets.dataPoints.count {
             dataSets.dataPoints[index].legendTag = dataSets.legendTitle
             self.infoView.touchOverlayInfo = [dataSets.dataPoints[index]]
+            if let data = self.extraLineData,
+               let point = data.getDataPoint(touchLocation: touchLocation, chartSize: chartSize) {
+                var dp = BarChartDataPoint(value: point.value, description: point.pointDescription)
+                dp.legendTag = data.legendTitle
+                self.infoView.touchOverlayInfo.append(dp)
+            }
             touchedDataPointPublisher.send(dataSets.dataPoints[index])
         }
     }

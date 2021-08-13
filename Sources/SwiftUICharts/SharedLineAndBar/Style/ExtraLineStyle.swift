@@ -10,13 +10,17 @@ import SwiftUI
 /**
   Control of the styling of the Extra Line.
  */
-public struct ExtraLineStyle: Hashable {
+public struct ExtraLineStyle {
     
     public var lineColour: ColourStyle
     public var lineType: LineType
     public var lineSpacing: SpacingType
     
+    public var markerType: LineMarkerType
+    
     public var strokeStyle: Stroke
+    
+    public var pointStyle: PointStyle
     
     public var yAxisTitle: String?
     public var yAxisNumberOfLabels: Int
@@ -30,8 +34,10 @@ public struct ExtraLineStyle: Hashable {
         lineColour: ColourStyle = ColourStyle(colour: .red),
         lineType: LineType = .curvedLine,
         lineSpacing: SpacingType = .line,
+        markerType: LineMarkerType = .indicator(style: DotStyle()),
         
         strokeStyle: Stroke = Stroke(),
+        pointStyle: PointStyle = PointStyle(pointSize: 0),
         
         yAxisTitle: String? = nil,
         yAxisNumberOfLabels: Int = 7,
@@ -44,7 +50,11 @@ public struct ExtraLineStyle: Hashable {
         self.lineColour = lineColour
         self.lineType = lineType
         self.lineSpacing = lineSpacing
+        
+        self.markerType = markerType
+        
         self.strokeStyle = strokeStyle
+        self.pointStyle = pointStyle
         
         self.yAxisTitle = yAxisTitle
         self.yAxisNumberOfLabels = yAxisNumberOfLabels

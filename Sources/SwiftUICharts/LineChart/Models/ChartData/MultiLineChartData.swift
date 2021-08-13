@@ -141,6 +141,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, GetDataProtocol,
                                    touchLocation: touchLocation,
                                    chartSize: chartSize)
             }
+            self.extraLineData?.getTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
         }
     }
     
@@ -191,6 +192,12 @@ extension MultiLineChartData {
             let xSection: CGFloat = chartSize.width / CGFloat(dataSets.dataSets[setIndex].dataPoints.count - 1)
             let index = Int((touchLocation.x + (xSection / 2)) / xSection)
             if index >= 0 && index < dataSets.dataSets[setIndex].dataPoints.count {
+                if let data = self.extraLineData,
+                   let point = data.getDataPoint(touchLocation: touchLocation, chartSize: chartSize) {
+                    var dp = LineChartDataPoint(value: point.value, xAxisLabel: point.pointDescription, description: point.pointDescription)
+                    dp.legendTag = data.legendTitle
+                    self.infoView.touchOverlayInfo.append(dp)
+                }
                 touchedDataPointPublisher.send(dataSets.dataSets[setIndex].dataPoints[index])
                 if !dataSets.dataSets[setIndex].style.ignoreZero {
                     dataSets.dataSets[setIndex].dataPoints[index].legendTag = dataSets.dataSets[setIndex].legendTitle
