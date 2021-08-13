@@ -140,7 +140,10 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
     
     // MARK: Touch
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        self.markerSubView()
+        ZStack {
+            self.markerSubView()
+            self.extraLineData?.getTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
+        }
     }
     
     public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
@@ -161,6 +164,12 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
             if subIndex >= 0 && subIndex < dataSets.dataSets[index].dataPoints.count {
                 dataSets.dataSets[index].dataPoints[subIndex].legendTag = dataSets.dataSets[index].setTitle
                 self.infoView.touchOverlayInfo = [dataSets.dataSets[index].dataPoints[subIndex]]
+                if let data = self.extraLineData,
+                   let point = data.getDataPoint(touchLocation: touchLocation, chartSize: chartSize) {
+                    var dp = GroupedBarDataPoint(value: point.value, description: point.pointDescription, group: GroupingData(title: data.legendTitle, colour: ColourStyle()))
+                    dp.legendTag = data.legendTitle
+                    self.infoView.touchOverlayInfo.append(dp)
+                }
                 touchedDataPointPublisher.send(dataSets.dataSets[index].dataPoints[subIndex])
             }
         }

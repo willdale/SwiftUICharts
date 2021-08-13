@@ -140,11 +140,14 @@ public final class RangedLineChartData: CTLineChartDataProtocol, GetDataProtocol
     }
     
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        self.markerSubView(dataSet: dataSets,
-                           dataPoints: dataSets.dataPoints,
-                           lineType: dataSets.style.lineType,
-                           touchLocation: touchLocation,
-                           chartSize: chartSize)
+        ZStack {
+            self.markerSubView(dataSet: dataSets,
+                               dataPoints: dataSets.dataPoints,
+                               lineType: dataSets.style.lineType,
+                               touchLocation: touchLocation,
+                               chartSize: chartSize)
+            self.extraLineData?.getTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
+        }
     }
     
     public final func getPointLocation(dataSet: RangedLineDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
@@ -183,6 +186,12 @@ public final class RangedLineChartData: CTLineChartDataProtocol, GetDataProtocol
                     dataSets.dataPoints[index].ignoreMe = true
                     self.infoView.touchOverlayInfo = [dataSets.dataPoints[index]]
                 }
+            }
+            if let data = self.extraLineData,
+               let point = data.getDataPoint(touchLocation: touchLocation, chartSize: chartSize) {
+                var dp = RangedLineChartDataPoint(value: point.value, upperValue: point.value, lowerValue: point.value, description: point.pointDescription)
+                dp.legendTag = data.legendTitle
+                self.infoView.touchOverlayInfo.append(dp)
             }
             touchedDataPointPublisher.send(dataSets.dataPoints[index])
         }

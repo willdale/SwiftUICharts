@@ -130,11 +130,14 @@ public final class LineChartData: CTLineChartDataProtocol, GetDataProtocol, Publ
     }
     
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        self.markerSubView(dataSet: dataSets,
-                           dataPoints: dataSets.dataPoints,
-                           lineType: dataSets.style.lineType,
-                           touchLocation: touchLocation,
-                           chartSize: chartSize)
+        ZStack {
+            self.markerSubView(dataSet: dataSets,
+                               dataPoints: dataSets.dataPoints,
+                               lineType: dataSets.style.lineType,
+                               touchLocation: touchLocation,
+                               chartSize: chartSize)
+            self.extraLineData?.getTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
+        }
     }
     
     public typealias SetType = LineDataSet
@@ -154,7 +157,6 @@ extension LineChartData {
         
         let index: Int = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSet.dataPoints.count {
-            
             if !dataSet.style.ignoreZero {
                 return CGPoint(x: CGFloat(index) * xSection,
                                y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
@@ -184,6 +186,12 @@ extension LineChartData {
                     dataSets.dataPoints[index].ignoreMe = true
                     self.infoView.touchOverlayInfo = [dataSets.dataPoints[index]]
                 }
+            }
+            if let data = self.extraLineData,
+               let point = data.getDataPoint(touchLocation: touchLocation, chartSize: chartSize) {
+                var dp = LineChartDataPoint(value: point.value, description: point.pointDescription)
+                dp.legendTag = data.legendTitle
+                self.infoView.touchOverlayInfo.append(dp)
             }
             touchedDataPointPublisher.send(dataSets.dataPoints[index])
         }
