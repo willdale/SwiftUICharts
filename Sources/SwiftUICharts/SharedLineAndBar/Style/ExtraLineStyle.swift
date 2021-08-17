@@ -37,7 +37,7 @@ public struct ExtraLineStyle {
         markerType: LineMarkerType = .indicator(style: DotStyle()),
         
         strokeStyle: Stroke = Stroke(),
-        pointStyle: PointStyle = PointStyle(pointSize: 0),
+        pointStyle: PointStyle = PointStyle(pointSize: 0, borderColour: .clear, fillColour: .clear),
         
         yAxisTitle: String? = nil,
         yAxisNumberOfLabels: Int = 7,
