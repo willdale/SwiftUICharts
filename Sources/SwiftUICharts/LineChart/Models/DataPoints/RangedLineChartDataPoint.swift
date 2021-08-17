@@ -25,6 +25,8 @@ public struct RangedLineChartDataPoint: CTRangedLineDataPoint, IgnoreMe {
     
     public var legendTag: String = ""
     
+    internal var _valueOnly: Bool = false
+    
     /// Data model for a single data point with colour for use with a ranged line chart.
     /// - Parameters:
     ///   - value: Value of the data point.

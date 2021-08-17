@@ -150,6 +150,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol, GetDataProt
                let point = data.getDataPoint(touchLocation: touchLocation, chartSize: chartSize) {
                 var dp = RangedBarDataPoint(lowerValue: point.value, upperValue: point.value, description: point.pointDescription)
                 dp.legendTag = data.legendTitle
+                dp._value = point.value
                 self.infoView.touchOverlayInfo.append(dp)
             }
             touchedDataPointPublisher.send(dataSets.dataPoints[index])

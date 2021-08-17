@@ -191,6 +191,7 @@ public final class RangedLineChartData: CTLineChartDataProtocol, GetDataProtocol
                let point = data.getDataPoint(touchLocation: touchLocation, chartSize: chartSize) {
                 var dp = RangedLineChartDataPoint(value: point.value, upperValue: point.value, lowerValue: point.value, description: point.pointDescription)
                 dp.legendTag = data.legendTitle
+                dp._valueOnly = true
                 self.infoView.touchOverlayInfo.append(dp)
             }
             touchedDataPointPublisher.send(dataSets.dataPoints[index])

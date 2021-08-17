@@ -288,7 +288,6 @@ extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProto
 
 // MARK: - Data Point
 extension CTDataPointBaseProtocol  {
-    
     /// Returns information about the data point for use in accessibility tags.
     func getCellAccessibilityValue(specifier: String) -> Text {
         Text(String(format: NSLocalizedString("%@ \(self.wrappedDescription)", comment: ""), "\(self.valueAsString(specifier: specifier))"))
@@ -325,16 +324,24 @@ extension CTStandardDataPointProtocol where Self: CTPieDataPoint {
     }
 }
 
-extension CTRangeDataPointProtocol {
+extension CTRangeDataPointProtocol where Self == RangedBarDataPoint {
     /// Data point's value as a string
     public func valueAsString(specifier: String) -> String {
-        String(format: specifier, self.lowerValue) + "-" + String(format: specifier, self.upperValue)
+        if !self._valueOnly {
+            return String(format: specifier, self.lowerValue) + "-" + String(format: specifier, self.upperValue)
+        } else {
+            return String(format: specifier, self._value)
+        }
     }
 }
 
-extension CTRangedLineDataPoint {
+extension CTRangedLineDataPoint where Self == RangedLineChartDataPoint {
     /// Data point's value as a string
     public func valueAsString(specifier: String) -> String {
-        String(format: specifier, self.lowerValue) + "-" + String(format: specifier, self.upperValue)
+        if !self._valueOnly {
+            return String(format: specifier, self.lowerValue) + "-" + String(format: specifier, self.upperValue)
+        } else {
+            return String(format: specifier, self.value)
+        }
     }
 }

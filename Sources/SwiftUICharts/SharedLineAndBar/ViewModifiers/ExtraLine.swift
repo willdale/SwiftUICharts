@@ -346,6 +346,7 @@ internal struct PointsExtraLineView<ChartData>: View where ChartData: CTLineBarC
                 }
             }
         }
+        .zIndex(1.0)
     }
 }
 
@@ -380,7 +381,7 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
                   pointSize: chartData.extraLineData.style.pointStyle.pointSize,
                   ignoreZero: false,
                   pointStyle: chartData.extraLineData.style.pointStyle.pointShape)
-                .ifElse(chartData.extraLineData.style.lineSpacing == .line, if: {
+                .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
                     $0
                         .trim(to: startAnimation ? 1 : 0)
                         .fill(dataPoint.pointColour?.fill ?? chartData.extraLineData.style.pointStyle.fillColour)
@@ -404,7 +405,7 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
                            pointSize: chartData.extraLineData.style.pointStyle.pointSize,
                            ignoreZero: false,
                            pointStyle: chartData.extraLineData.style.pointStyle.pointShape)
-                .ifElse(chartData.extraLineData.style.lineSpacing == .line, if: {
+                .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
                     $0
                         .trim(to: startAnimation ? 1 : 0)
                         .fill(dataPoint.pointColour?.fill ?? chartData.extraLineData.style.pointStyle.fillColour)
@@ -454,7 +455,7 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
                   pointSize: chartData.extraLineData.style.pointStyle.pointSize,
                   ignoreZero: false,
                   pointStyle: chartData.extraLineData.style.pointStyle.pointShape)
-                .ifElse(chartData.extraLineData.style.lineSpacing == .line, if: {
+                .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
                     $0.trim(to: startAnimation ? 1 : 0)
                         .stroke(dataPoint.pointColour?.border ?? chartData.extraLineData.style.pointStyle.borderColour,
                                 lineWidth: chartData.extraLineData.style.pointStyle.lineWidth)
@@ -478,7 +479,7 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
                            pointSize: chartData.extraLineData.style.pointStyle.pointSize,
                            ignoreZero: false,
                            pointStyle: chartData.extraLineData.style.pointStyle.pointShape)
-                .ifElse(chartData.extraLineData.style.lineSpacing == .line, if: {
+                .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
                     $0.trim(to: startAnimation ? 1 : 0)
                         .stroke(dataPoint.pointColour?.border ?? chartData.extraLineData.style.pointStyle.borderColour,
                                 lineWidth: chartData.extraLineData.style.pointStyle.lineWidth)
