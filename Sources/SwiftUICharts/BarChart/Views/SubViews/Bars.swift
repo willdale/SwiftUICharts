@@ -42,7 +42,7 @@ internal struct ColourBar<CD: CTBarChartDataProtocol & GetDataProtocol,
                                  bl: chartData.barStyle.cornerRadius.bottom,
                                  br: chartData.barStyle.cornerRadius.bottom)
             .fill(colour)
-            .scaleEffect(y: startAnimation ? CGFloat(dataPoint.value / chartData.maxValue) : 0, anchor: .bottom)
+            .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue) : 0, anchor: .bottom)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
             .background(Color(.gray).opacity(0.000000001))
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
@@ -54,7 +54,6 @@ internal struct ColourBar<CD: CTBarChartDataProtocol & GetDataProtocol,
             .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }
-
 
 // MARK: Gradient
 /**
@@ -95,7 +94,7 @@ internal struct GradientColoursBar<CD: CTBarChartDataProtocol & GetDataProtocol,
             .fill(LinearGradient(gradient: Gradient(colors: colours),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
-            .scaleEffect(y: startAnimation ? CGFloat(dataPoint.value / chartData.maxValue) : 0, anchor: .bottom)
+            .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue) : 0, anchor: .bottom)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
             .background(Color(.gray).opacity(0.000000001))
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
@@ -148,7 +147,7 @@ internal struct GradientStopsBar<CD: CTBarChartDataProtocol & GetDataProtocol,
             .fill(LinearGradient(gradient: Gradient(stops: stops),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
-            .scaleEffect(y: startAnimation ? CGFloat(dataPoint.value / chartData.maxValue) : 0, anchor: .bottom)
+            .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue) : 0, anchor: .bottom)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
             .background(Color(.gray).opacity(0.000000001))
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
@@ -360,7 +359,7 @@ internal struct RangedBarChartColourCell<CD:RangedBarChartData>: View {
                                  bl: chartData.barStyle.cornerRadius.bottom,
                                  br: chartData.barStyle.cornerRadius.bottom)
             .fill(colour)
-            .scaleEffect(y: startAnimation ? CGFloat((dataPoint.upperValue - dataPoint.lowerValue) / chartData.range) : 0, anchor: .center)
+            .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range) : 0, anchor: .center)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
             .position(x: barSize.midX,
                       y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
@@ -411,7 +410,7 @@ internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
             .fill(LinearGradient(gradient: Gradient(colors: colours),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
-            .scaleEffect(y: startAnimation ? CGFloat((dataPoint.upperValue - dataPoint.lowerValue) / chartData.range) : 0, anchor: .center)
+            .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range) : 0, anchor: .center)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
             .position(x: barSize.midX,
                       y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
@@ -462,7 +461,7 @@ internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
             .fill(LinearGradient(gradient: Gradient(stops: stops),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
-            .scaleEffect(y: startAnimation ? CGFloat((dataPoint.upperValue - dataPoint.lowerValue) / chartData.range) : 0, anchor: .center)
+            .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range) : 0, anchor: .center)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
             .position(x: barSize.midX,
                       y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
@@ -512,7 +511,7 @@ internal struct HorizontalColourBar<CD: CTBarChartDataProtocol & GetDataProtocol
                                  bl: chartData.barStyle.cornerRadius.bottom,
                                  br: chartData.barStyle.cornerRadius.top)
             .fill(colour)
-            .scaleEffect(x: startAnimation ? CGFloat(dataPoint.value / chartData.maxValue) : 0, anchor: .leading)
+            .scaleEffect(x: startAnimation ? divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue) : 0, anchor: .leading)
             .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
             .background(Color(.gray).opacity(0.000000001))
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
@@ -565,7 +564,7 @@ internal struct HorizontalGradientColoursBar<CD: CTBarChartDataProtocol & GetDat
             .fill(LinearGradient(gradient: Gradient(colors: colours),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
-            .scaleEffect(x: startAnimation ? CGFloat(dataPoint.value / chartData.maxValue) : 0, anchor: .leading)
+            .scaleEffect(x: startAnimation ? divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue) : 0, anchor: .leading)
             .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
             .background(Color(.gray).opacity(0.000000001))
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
@@ -618,7 +617,7 @@ internal struct HorizontalGradientStopsBar<CD: CTBarChartDataProtocol & GetDataP
             .fill(LinearGradient(gradient: Gradient(stops: stops),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
-            .scaleEffect(x: startAnimation ? CGFloat(dataPoint.value / chartData.maxValue) : 0, anchor: .leading)
+            .scaleEffect(x: startAnimation ? divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue) : 0, anchor: .leading)
             .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
             .background(Color(.gray).opacity(0.000000001))
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
