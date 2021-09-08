@@ -262,13 +262,13 @@ extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointO
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         let leading: CGFloat = -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - 4 // -4 for padding at the root view.
         let trailing: CGFloat = frame.width + ((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) + 4 // +4 for padding at the root view.
-        let value: CGFloat = CGFloat((markerValue - minValue) / range)
+        let value: CGFloat = divideByZeroProtection(CGFloat.self, (markerValue - minValue), range)
         return CGPoint(x: self.chartStyle.yAxisLabelPosition == .leading ? leading : trailing,
                        y: frame.height - value * frame.height)
     }
     public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         CGPoint(x: frame.width / 2,
-                y: frame.height - CGFloat((markerValue - minValue) / range) * frame.height)
+                y: frame.height - divideByZeroProtection(CGFloat.self, (markerValue - minValue), range) * frame.height)
     }
 }
 
@@ -278,12 +278,12 @@ extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointO
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         let bottom: CGFloat = frame.height + ((self.viewData.xAxisLabelHeights.max() ?? 0) / 2) + 4  // +4 for padding at the root view
         let top: CGFloat = -((self.viewData.xAxisLabelHeights.max() ?? 0) / 2) - 4  // -4 for padding at the root view
-        let value: CGFloat = CGFloat((markerValue - minValue) / range)
+        let value: CGFloat = divideByZeroProtection(CGFloat.self, (markerValue - minValue), range)
         return CGPoint(x: value * frame.width,
                 y: self.chartStyle.xAxisLabelPosition == .bottom ? bottom : top)
     }
     public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        CGPoint(x: CGFloat((markerValue - minValue) / range) * frame.width,
+        CGPoint(x: divideByZeroProtection(CGFloat.self, (markerValue - minValue), range) * frame.width,
                 y: frame.height / 2)
     }
 }
