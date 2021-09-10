@@ -60,6 +60,7 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
             HStack(alignment: .bottom, spacing: 0) {
                 ForEach(chartData.dataSets.dataSets) { dataSet in
                     StackElementSubView(dataSet: dataSet, specifier: chartData.infoView.touchSpecifier)
+                        .clipShape(RoundedRectangleBarShape(chartData.barStyle.cornerRadius))
                         .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, dataSet.maxValue(), chartData.maxValue) : 0, anchor: .bottom)
                         .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
                         .background(Color(.gray).opacity(0.000000001))
