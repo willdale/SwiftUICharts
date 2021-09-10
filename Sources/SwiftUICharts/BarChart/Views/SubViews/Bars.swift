@@ -37,10 +37,7 @@ internal struct ColourBar<CD: CTBarChartDataProtocol & GetDataProtocol,
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
-                                 tr: chartData.barStyle.cornerRadius.top,
-                                 bl: chartData.barStyle.cornerRadius.bottom,
-                                 br: chartData.barStyle.cornerRadius.bottom)
+        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
             .fill(colour)
             .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue) : 0, anchor: .bottom)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
@@ -87,10 +84,7 @@ internal struct GradientColoursBar<CD: CTBarChartDataProtocol & GetDataProtocol,
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
-                                 tr: chartData.barStyle.cornerRadius.top,
-                                 bl: chartData.barStyle.cornerRadius.bottom,
-                                 br: chartData.barStyle.cornerRadius.bottom)
+        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
             .fill(LinearGradient(gradient: Gradient(colors: colours),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
@@ -140,10 +134,7 @@ internal struct GradientStopsBar<CD: CTBarChartDataProtocol & GetDataProtocol,
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
-                                 tr: chartData.barStyle.cornerRadius.top,
-                                 bl: chartData.barStyle.cornerRadius.bottom,
-                                 br: chartData.barStyle.cornerRadius.bottom)
+        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
             .fill(LinearGradient(gradient: Gradient(stops: stops),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
@@ -354,10 +345,7 @@ internal struct RangedBarChartColourCell<CD:RangedBarChartData>: View {
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
-                                 tr: chartData.barStyle.cornerRadius.top,
-                                 bl: chartData.barStyle.cornerRadius.bottom,
-                                 br: chartData.barStyle.cornerRadius.bottom)
+        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
             .fill(colour)
             .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range) : 0, anchor: .center)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
@@ -403,10 +391,7 @@ internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
-                                 tr: chartData.barStyle.cornerRadius.top,
-                                 bl: chartData.barStyle.cornerRadius.bottom,
-                                 br: chartData.barStyle.cornerRadius.bottom)
+        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
             .fill(LinearGradient(gradient: Gradient(colors: colours),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
@@ -454,10 +439,7 @@ internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.top,
-                                 tr: chartData.barStyle.cornerRadius.top,
-                                 bl: chartData.barStyle.cornerRadius.bottom,
-                                 br: chartData.barStyle.cornerRadius.bottom)
+        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
             .fill(LinearGradient(gradient: Gradient(stops: stops),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
@@ -506,10 +488,7 @@ internal struct HorizontalColourBar<CD: CTBarChartDataProtocol & GetDataProtocol
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.bottom,
-                                 tr: chartData.barStyle.cornerRadius.top,
-                                 bl: chartData.barStyle.cornerRadius.bottom,
-                                 br: chartData.barStyle.cornerRadius.top)
+        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
             .fill(colour)
             .scaleEffect(x: startAnimation ? divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue) : 0, anchor: .leading)
             .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
@@ -557,10 +536,7 @@ internal struct HorizontalGradientColoursBar<CD: CTBarChartDataProtocol & GetDat
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.bottom,
-                                 tr: chartData.barStyle.cornerRadius.top,
-                                 bl: chartData.barStyle.cornerRadius.bottom,
-                                 br: chartData.barStyle.cornerRadius.top)
+        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
             .fill(LinearGradient(gradient: Gradient(colors: colours),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
@@ -610,10 +586,7 @@ internal struct HorizontalGradientStopsBar<CD: CTBarChartDataProtocol & GetDataP
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(tl: chartData.barStyle.cornerRadius.bottom,
-                                 tr: chartData.barStyle.cornerRadius.top,
-                                 bl: chartData.barStyle.cornerRadius.bottom,
-                                 br: chartData.barStyle.cornerRadius.top)
+        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
             .fill(LinearGradient(gradient: Gradient(stops: stops),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
