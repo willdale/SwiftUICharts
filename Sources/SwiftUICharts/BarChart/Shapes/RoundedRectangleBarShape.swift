@@ -32,10 +32,10 @@ internal struct RoundedRectangleBarShape: Shape {
     }
     
     internal init(_ cornerRadius: CornerRadius) {
-        self.tl = cornerRadius.top
-        self.tr = cornerRadius.top
-        self.bl = cornerRadius.bottom
-        self.br = cornerRadius.bottom
+        self.tl = cornerRadius.topLeading
+        self.tr = cornerRadius.topTrailing
+        self.bl = cornerRadius.bottomLeading
+        self.br = cornerRadius.bottomTrailing
     }
     
     internal func path(in rect: CGRect) -> Path {

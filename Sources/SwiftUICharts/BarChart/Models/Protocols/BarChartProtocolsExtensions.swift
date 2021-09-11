@@ -166,3 +166,42 @@ extension CTMultiBarChartDataProtocol {
         }
     }
 }
+
+// MARK: - Bar Size and Position
+extension CTBarChartDataProtocol {
+    internal func barFrame(_ section: CGSize, _ widthFactor: CGFloat, _ value: Double, _ maxValue: Double) -> CGSize {
+        return CGSize(width: barWidth(section.width, widthFactor),
+                      height: barHeight(section.height, value, maxValue))
+    }
+    
+    internal func barHorizontalFrame(_ section: CGSize, _ widthFactor: CGFloat, _ value: Double, _ maxValue: Double) -> CGSize {
+        return CGSize(width: barHeight(section.width, value, maxValue),
+                      height: barWidth(section.height, widthFactor))
+    }
+    
+    internal func barWidth(_ totalWidth: CGFloat, _ widthFactor: CGFloat) -> CGFloat {
+        return totalWidth * widthFactor
+    }
+    
+    internal func barHeight(_ totalHeight: CGFloat, _ value: Double, _ maxValue: Double) -> CGFloat {
+        return totalHeight * divideByZeroProtection(CGFloat.self, value, maxValue)
+    }
+    
+    internal func barOffset(_ section: CGSize, _ widthFactor: CGFloat, _ value: Double, _ maxValue: Double) -> CGSize {
+        return CGSize(width: barXOffset(section.width, widthFactor),
+                      height: barYOffset(section.height, value, maxValue))
+    }
+    
+    internal func barHorizontalOffset(_ section: CGSize, _ widthFactor: CGFloat, _ value: Double, _ maxValue: Double) -> CGSize {
+        return CGSize(width: 0,
+                      height: (-(section.height * widthFactor) / 2) + (section.height / 2))
+    }
+    
+    internal func barXOffset(_ totalWidth: CGFloat, _ widthFactor: CGFloat) -> CGFloat {
+        return (-(totalWidth * widthFactor) / 2) + (totalWidth / 2)
+    }
+    
+    internal func barYOffset(_ totalHeight: CGFloat, _ value: Double, _ maxValue: Double) -> CGFloat {
+        return totalHeight - (totalHeight * divideByZeroProtection(CGFloat.self, value, maxValue))
+    }
+}

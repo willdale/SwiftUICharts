@@ -48,5 +48,9 @@ public struct RangedBarDataPoint: CTRangedBarDataPoint {
         self.colour = colour
     }
     
+    public var value: Double {
+        return upperValue - lowerValue
+    }
+    
     public typealias ID = UUID
 }
