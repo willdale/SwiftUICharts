@@ -27,16 +27,18 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Cha
     @Published public var viewData: ChartViewData = ChartViewData()
     @Published public var infoView: InfoViewData<BarChartDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
-    
+        
     public var noDataText: Text
     
     public var subscription = Set<AnyCancellable>()
-    public let touchedDataPointPublisher = PassthroughSubject<PublishedTouchData<BarChartDataPoint>,Never>()
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<BarChartDataPoint>],Never>()
     
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (.bar, .single)
     
     private var internalSubscription: AnyCancellable?
-    private var touchPointLocation: CGPoint = .zero
+    private var touchPointLocation: [CGPoint] = []
+    
+    @Published public var touchPointData: [DataPoint] = []
     
     // MARK: Initializer
     /// Initialises a standard Bar Chart.
@@ -72,20 +74,19 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Cha
     
     private func setupInternalCombine() {
         internalSubscription = touchedDataPointPublisher
-            .map(\.location)
-            .assign(to: \.touchPointLocation, on: self)
+            .sink(receiveValue: { self.touchPointLocation = $0.map(\.location) })
     }
     
     // MARK: Labels
     public func getXAxisLabels() -> some View {
         HStack(spacing: 0) {
             ForEach(self.labelsArray.indices, id: \.self) { i in
-                Text(self.labelsArray[i])
+                Text(LocalizedStringKey(self.labelsArray[i]))
                     .font(self.chartStyle.yAxisLabelFont)
                     .foregroundColor(self.chartStyle.yAxisLabelColour)
                     .lineLimit(1)
-                    .accessibilityLabel(Text("Y Axis Label"))
-                    .accessibilityValue(Text(self.labelsArray[i]))
+                    .accessibilityLabel(LocalizedStringKey("Y-Axis-Label"))
+                    .accessibilityValue(LocalizedStringKey(self.labelsArray[i]))
                     .overlay(
                         GeometryReader { geo in
                             Color.clear
@@ -141,7 +142,7 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Cha
                         ForEach(labelArray, id: \.self) { data in
                             Spacer()
                                 .frame(minHeight: 0, maxHeight: 500)
-                            Text(data)
+                            Text(LocalizedStringKey(data))
                                 .font(self.chartStyle.xAxisLabelFont)
                                 .lineLimit(1)
                                 .foregroundColor(self.chartStyle.xAxisLabelColour)
@@ -154,8 +155,8 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Cha
                                             }
                                     }
                                 )
-                                .accessibilityLabel(Text("X Axis Label"))
-                                .accessibilityValue(Text("\(data)"))
+                                .accessibilityLabel(LocalizedStringKey("Y-Axis-Label"))
+                                .accessibilityValue(LocalizedStringKey(data))
                             
                             Spacer()
                                 .frame(minHeight: 0, maxHeight: 500)
@@ -182,17 +183,17 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Cha
         let xSection: CGFloat = chartSize.width / CGFloat(self.maxValue)
         let index: Int = Int((touchLocation.y) / ySection)
         if index >= 0 && index < dataSets.dataPoints.count {
-            
             let datapoint = dataSets.dataPoints[index]
             let location = CGPoint(x: (CGFloat(dataSets.dataPoints[index].value) * xSection),
                                    y: (CGFloat(index) * ySection) + (ySection / 2))
             
-            touchedDataPointPublisher.send(PublishedTouchData(datapoint: datapoint, location: location))
+//            touchedDataPointPublisher.send([PublishedTouchData(datapoint: datapoint, location: location)])
         }
     }
     
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        self.markerSubView(position: touchPointLocation)
+        EmptyView()
+//        self.markerSubView(markerData: [MarkerData(markerType: chartStyle.markerType, location: touchPointLocation)])
 
     }
 

@@ -30,6 +30,36 @@ public struct ExtraLineData: Identifiable {
         self.legendTitle = legendTitle
         
     }
+    
+    internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) -> ExtraLineDataPoint? {
+        let xSection: CGFloat = chartSize.width / CGFloat(dataPoints.count)
+        let index: Int = Int((touchLocation.x) / xSection)
+        if index >= 0 && index < dataPoints.count {
+            return dataPoints[index]
+        }
+        return nil
+    }
+    
+    internal func getPointLocation(touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
+        
+        let minValue: Double = self.minValue
+        let range: Double = self.range
+        
+        let xSection: CGFloat = style.lineSpacing == .line ?
+            chartSize.width / CGFloat(dataPoints.count - 1) :
+            chartSize.width / CGFloat(dataPoints.count)
+        let ySection: CGFloat = chartSize.height / CGFloat(range)
+        
+        let index = Int((touchLocation.x) / xSection)
+        if index >= 0 && index < dataPoints.count {
+            let x = style.lineSpacing == .line ?
+                CGFloat(index) * xSection :
+                (CGFloat(index) * xSection) + (xSection / 2)
+            return CGPoint(x: x,
+                           y: (CGFloat(dataPoints[index].value - minValue) * -ySection) + chartSize.height)
+        }
+        return nil
+    }
 
     internal var range: Double {
         get {

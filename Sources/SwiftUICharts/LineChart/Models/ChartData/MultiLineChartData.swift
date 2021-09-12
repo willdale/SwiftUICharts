@@ -28,16 +28,18 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     @Published public var viewData: ChartViewData = ChartViewData()
     @Published public var infoView: InfoViewData<LineChartDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
-    
+        
     public var noDataText: Text
 
     public var subscription = Set<AnyCancellable>()
-    public let touchedDataPointPublisher = PassthroughSubject<PublishedTouchData<LineChartDataPoint>,Never>()
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<LineChartDataPoint>],Never>()
 
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (.line, .multi)
    
     private var internalSubscription: AnyCancellable?
-    private var touchPointLocation: CGPoint = .zero
+    private var touchPointLocation: [CGPoint] = []
+    
+    @Published public var touchPointData: [DataPoint] = []
     
     // MARK: Initializers
     /// Initialises a Multi Line Chart.
@@ -70,8 +72,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     
     private func setupInternalCombine() {
         internalSubscription = touchedDataPointPublisher
-            .map(\.location)
-            .assign(to: \.touchPointLocation, on: self)
+            .sink(receiveValue: { self.touchPointLocation = $0.map(\.location) })
     }
     
     // MARK: Labels
@@ -178,14 +179,15 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         ZStack {
-            ForEach(self.dataSets.dataSets, id: \.id) { dataSet in
-                self.markerSubView(dataSet: dataSet,
-                                   dataPoints: dataSet.dataPoints,
-                                   lineType: dataSet.style.lineType,
-                                   touchLocation: touchLocation,
-                                   chartSize: chartSize,
-                                   pointLocation: self.touchPointLocation)
-            }
+//            ForEach(self.dataSets.dataSets, id: \.id) { dataSet in
+//                self.markerSubView(dataSet: dataSet,
+//                                   dataPoints: dataSet.dataPoints,
+//                                   lineType: dataSet.style.lineType,
+//                                   touchLocation: touchLocation,
+//                                   chartSize: chartSize,
+//                                   pointLocation: self.touchPointLocation[0])
+//            }
+//            self.extraLineData?.getTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
         }
     }
     
@@ -196,7 +198,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
                 AccessibilityRectangle(dataPointCount: dataSet.dataPoints.count,
                                        dataPointNo: point)
                     .foregroundColor(Color(.gray).opacity(0.000000001))
-                    .accessibilityLabel(Text("\(self.metadata.title)"))
+                    .accessibilityLabel(LocalizedStringKey(self.metadata.title))
                     .accessibilityValue(dataSet.dataPoints[point].getCellAccessibilityValue(specifier: self.infoView.touchSpecifier))
             }
         }

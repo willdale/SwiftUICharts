@@ -37,8 +37,8 @@ internal struct LegendView<T>: View where T: CTChartData {
                 legend.getLegend(width: width, font: font, textColor: textColor)
                     .if(scaleLegendBar(legend: legend)) { $0.scaleEffect(1.2, anchor: .leading) }
                     .if(scaleLegendPie(legend: legend)) { $0.scaleEffect(1.2, anchor: .leading) }
-                    .accessibilityLabel(Text(legend.accessibilityLegendLabel()))
-                    .accessibilityValue(Text(legend.legend))
+                    .accessibilityLabel(LocalizedStringKey(legend.accessibilityLegendLabel()))
+                    .accessibilityValue(LocalizedStringKey(legend.legend))
             }
         }
     }
@@ -96,6 +96,8 @@ extension LegendData {
             } else {
                 return "P O I Marker Legend"
             }
+        case .extraLine:
+            return ""
         }
     }
 }

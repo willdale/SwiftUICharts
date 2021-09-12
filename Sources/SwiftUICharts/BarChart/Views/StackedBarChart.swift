@@ -60,7 +60,8 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
             HStack(alignment: .bottom, spacing: 0) {
                 ForEach(chartData.dataSets.dataSets) { dataSet in
                     StackElementSubView(dataSet: dataSet, specifier: chartData.infoView.touchSpecifier)
-                        .scaleEffect(y: startAnimation ? CGFloat(dataSet.maxValue() / chartData.maxValue) : 0, anchor: .bottom)
+                        .clipShape(RoundedRectangleBarShape(chartData.barStyle.cornerRadius))
+                        .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, dataSet.maxValue(), chartData.maxValue) : 0, anchor: .bottom)
                         .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
                         .background(Color(.gray).opacity(0.000000001))
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
@@ -69,7 +70,7 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
                         .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = false
                         }
-                        .accessibilityLabel( Text("\(chartData.metadata.title)"))
+                        .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
                 }
             }
         } else { CustomNoDataView(chartData: chartData) }

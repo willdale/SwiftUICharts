@@ -22,6 +22,9 @@ public struct RangedBarDataPoint: CTRangedBarDataPoint {
     
     public var _legendTag: String = ""
     
+    internal var _value: Double = 0
+    internal var _valueOnly: Bool = false
+    
     /// Data model for a single data point with colour for use with a ranged bar chart.
     /// - Parameters:
     ///   - lowerValue: Value of the lower range of the data point.

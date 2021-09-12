@@ -26,7 +26,6 @@ public protocol CTChartData: ObservableObject, Identifiable {
     /// A type representing the chart style. -- `CTChartStyle`
     associatedtype CTStyle: CTChartStyle
     
-    
     var id: ID { get }
     
     /**

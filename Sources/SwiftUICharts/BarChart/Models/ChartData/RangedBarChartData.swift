@@ -27,16 +27,18 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol, ChartConfor
     @Published public var viewData: ChartViewData = ChartViewData()
     @Published public var infoView: InfoViewData<RangedBarDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
-    
+        
     public var noDataText: Text
     
     public var subscription = Set<AnyCancellable>()
-    public let touchedDataPointPublisher = PassthroughSubject<PublishedTouchData<RangedBarDataPoint>,Never>()
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<RangedBarDataPoint>],Never>()
     
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (.bar, .single)
     
     private var internalSubscription: AnyCancellable?
-    private var touchPointLocation: CGPoint = .zero
+    private var touchPointLocation: [CGPoint] = []
+    
+    @Published public var touchPointData: [DataPoint] = []
     
     // MARK: Initializer
     /// Initialises a Ranged Bar Chart.
@@ -72,8 +74,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol, ChartConfor
     
     private func setupInternalCombine() {
         internalSubscription = touchedDataPointPublisher
-            .map(\.location)
-            .assign(to: \.touchPointLocation, on: self)
+            .sink(receiveValue: { self.touchPointLocation = $0.map(\.location) })
     }
     
     public var average: Double {
@@ -157,12 +158,13 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol, ChartConfor
             let location = CGPoint(x: (CGFloat(index) * xSection) + (xSection / 2),
                            y: (chartSize.size.height - (value / CGFloat(self.range)) * chartSize.size.height))
             
-            touchedDataPointPublisher.send(PublishedTouchData(datapoint: datapoint, location: location))
+//            touchedDataPointPublisher.send([PublishedTouchData(datapoint: datapoint, location: location)])
         }
     }
     
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        self.markerSubView(position: touchPointLocation)
+        EmptyView()
+//        self.markerSubView(markerData: [MarkerData(markerType: chartStyle.markerType, location: touchPointLocation)])
     }
     
     public typealias SetType = RangedBarDataSet

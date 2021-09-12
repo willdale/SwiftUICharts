@@ -34,16 +34,18 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     
     @Published public var groupSpacing: CGFloat = 0
     @Published public var groups: [GroupingData]
-    
+        
     public var noDataText: Text
     
     public var subscription = Set<AnyCancellable>()
-    public let touchedDataPointPublisher = PassthroughSubject<PublishedTouchData<GroupedBarDataPoint>,Never>()
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<GroupedBarDataPoint>],Never>()
     
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .bar, dataSetType: .multi)
     
     private var internalSubscription: AnyCancellable?
-    private var touchPointLocation: CGPoint = .zero
+    private var touchPointLocation: [CGPoint] = []
+    
+    @Published public var touchPointData: [DataPoint] = []
     
     // MARK: Initializer
     /// Initialises a Grouped Bar Chart.
@@ -82,8 +84,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     
     private func setupInternalCombine() {
         internalSubscription = touchedDataPointPublisher
-            .map(\.location)
-            .assign(to: \.touchPointLocation, on: self)
+            .sink(receiveValue: { self.touchPointLocation = $0.map(\.location) })
     }
     
     // MARK: Labels
@@ -181,13 +182,14 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
                 let location =  CGPoint(x: element + section + spacing,
                                         y: (chartSize.height - CGFloat(subDataSet.dataPoints[subIndex].value) * ySection))
                 let datapoint = dataSets.dataSets[index].dataPoints[subIndex]
-                touchedDataPointPublisher.send(PublishedTouchData<GroupedBarDataPoint>(datapoint: datapoint, location: location))
+//                touchedDataPointPublisher.send([PublishedTouchData<GroupedBarDataPoint>(datapoint: datapoint, location: location)])
             }
         }
     }
     
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        self.markerSubView(position: touchPointLocation)
+        EmptyView()
+//        self.markerSubView(markerData: [MarkerData(markerType: chartStyle.markerType, location: touchPointLocation)])
     }
     
     public typealias SetType = GroupedBarDataSets

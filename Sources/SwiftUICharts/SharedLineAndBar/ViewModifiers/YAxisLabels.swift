@@ -25,6 +25,7 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
         self.specifier = specifier
         self.colourIndicator = colourIndicator
         chartData.viewData.hasYAxisLabels = true
+        chartData.viewData.yAxisSpecifier = specifier
     }
     
     internal func body(content: Content) -> some View {

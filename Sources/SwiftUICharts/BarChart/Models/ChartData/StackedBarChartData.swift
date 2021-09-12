@@ -32,16 +32,18 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     @Published public var extraLineData: ExtraLineData!
     
     @Published public var groups: [GroupingData]
-
+    
     public var noDataText: Text
     
     public var subscription = Set<AnyCancellable>()
-    public let touchedDataPointPublisher = PassthroughSubject<PublishedTouchData<StackedBarDataPoint>,Never>()
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<StackedBarDataPoint>],Never>()
     
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .bar, dataSetType: .multi)
         
     private var internalSubscription: AnyCancellable?
-    private var touchPointLocation: CGPoint = .zero
+    private var touchPointLocation: [CGPoint] = []
+    
+    @Published public var touchPointData: [DataPoint] = []
     
     // MARK: Initializer
     /// Initialises a Stacked Bar Chart.
@@ -80,8 +82,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     
     private func setupInternalCombine() {
         internalSubscription = touchedDataPointPublisher
-            .map(\.location)
-            .assign(to: \.touchPointLocation, on: self)
+            .sink(receiveValue: { self.touchPointLocation = $0.map(\.location) })
     }
     
     // MARK: Labels
@@ -137,6 +138,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
             }
         }
     }
+
     // MARK: - Touch
     public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         self.infoView.isTouchCurrent = true
@@ -158,14 +160,15 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
                     let datapoint = dataSets.dataSets[superIndex].dataPoints[index]
                     let location = CGPoint(x: (CGFloat(superIndex) * superXSection) + (superXSection / 2),
                                            y: (chartSize.height - calculatedIndex.endPointOfElements[index]))
-                    touchedDataPointPublisher.send(PublishedTouchData(datapoint: datapoint, location: location))
+//                    touchedDataPointPublisher.send([PublishedTouchData(datapoint: datapoint, location: location)])
                 }
             }
         }
     }
     
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        self.markerSubView(position: touchPointLocation)
+        EmptyView()
+//        self.markerSubView(markerData: [MarkerData(markerType: chartStyle.markerType, location: touchPointLocation)])
     }
     
     private func calculateIndex(

@@ -28,16 +28,19 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance{
     @Published public var viewData: ChartViewData = ChartViewData()
     @Published public var infoView: InfoViewData<BarChartDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
-    
+        
     public var noDataText: Text
     
     public var subscription = Set<AnyCancellable>()
-    public let touchedDataPointPublisher = PassthroughSubject<PublishedTouchData<BarChartDataPoint>, Never>()
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<BarChartDataPoint>], Never>()
     
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (.bar, .single)
     
     private var internalSubscription: AnyCancellable?
-    private var touchPointLocation: CGPoint = .zero
+    private var markerData: [MarkerData] = []
+    
+    private var internalDataSubscription: AnyCancellable?
+    @Published public var touchPointData: [DataPoint] = []
     
     // MARK: Initializer
     /// Initialises a standard Bar Chart.
@@ -73,8 +76,23 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance{
     
     private func setupInternalCombine() {
         internalSubscription = touchedDataPointPublisher
-            .map(\.location)
-            .assign(to: \.touchPointLocation, on: self)
+            .sink(receiveValue: {
+                let markerData: [MarkerData] = $0.map { data in
+                    var markerType: MarkerType
+                    if data.type == .extraLine,
+                       let extraData = self.extraLineData {
+                        markerType = extraData.style.markerType
+                    } else {
+                        markerType = self.chartStyle.markerType
+                    }
+                    return MarkerData(markerType: markerType,
+                                      location: data.location.convert)
+                }
+                self.markerData = markerData
+            })
+        
+        internalDataSubscription = touchedDataPointPublisher
+            .sink(receiveValue: { self.touchPointData = $0.map(\.datapoint) })
     }
     
     // MARK: Labels
@@ -126,10 +144,10 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance{
             }
         }
     }
+    
     private func getXSection(dataSet: BarDataSet, chartSize: CGRect) -> CGFloat {
         chartSize.width.divide(by: dataSet.dataPoints.count)
     }
-    
     
     // MARK: - Touch
     public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
@@ -144,19 +162,38 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance{
         let ySection: CGFloat = chartSize.height / CGFloat(dataSets.maxValue())
         let index: Int = Int((touchLocation.x) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
-            let data = dataSets.dataPoints[index]
-            let location = CGPoint(x: (CGFloat(index) * xSection) + (xSection / 2),
-                                   y: (chartSize.size.height - CGFloat(dataSets.dataPoints[index].value) * ySection))
+            let chartDataPoint = dataSets.dataPoints[index]
+            let chartDataLocation = CGPoint(x: (CGFloat(index) * xSection) + (xSection / 2),
+                                            y: (chartSize.size.height - CGFloat(dataSets.dataPoints[index].value) * ySection))
             
-            touchedDataPointPublisher.send(PublishedTouchData(datapoint: data, location: location))
+            var values: [PublishedTouchData<DataPoint>] = []
+            values.append(PublishedTouchData(datapoint: chartDataPoint, location: chartDataLocation, type: chartType.chartType))
+            
+            let extraLine = extraLineDataPointAndLocation(touchLocation: touchLocation, chartSize: chartSize)
+            if let datapoint = extraLine.datapoint,
+               let location = extraLine.location {
+                values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
+            }
+            
+            touchedDataPointPublisher.send(values)
         }
     }
     
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        self.markerSubView(position: touchPointLocation)
+    private func extraLineDataPointAndLocation(touchLocation: CGPoint, chartSize: CGRect) -> (datapoint: DataPoint?, location: CGPoint?) {
+        if let extraLineData = self.extraLineData,
+           let point = extraLineData.getDataPoint(touchLocation: touchLocation, chartSize: chartSize) {
+            var dp = BarChartDataPoint(value: point.value, description: point.pointDescription)
+            dp._legendTag = extraLineData.legendTitle
+            
+            let location = extraLineData.getPointLocation(touchLocation: touchLocation, chartSize: chartSize)
+            return (dp, location)
+        }
+        return (nil, nil)
     }
     
-   
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
+        markerSubView(markerData: markerData, touchLocation: touchLocation, chartSize: chartSize)
+    }
     
     public typealias SetType = BarDataSet
     public typealias DataPoint = BarChartDataPoint
@@ -167,4 +204,5 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance{
 public struct PublishedTouchData<DataPoint> {
     public let datapoint: DataPoint
     public let location: CGPoint
+    internal let type: ChartType
 }

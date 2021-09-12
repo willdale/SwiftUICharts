@@ -28,16 +28,18 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     @Published public var viewData: ChartViewData = ChartViewData()
     @Published public var infoView: InfoViewData<LineChartDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
-    
+        
     public var noDataText: Text
 
     public var subscription = Set<AnyCancellable>()
-    public let touchedDataPointPublisher = PassthroughSubject<PublishedTouchData<LineChartDataPoint>,Never>()
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<LineChartDataPoint>],Never>()
 
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .line, dataSetType: .single)
     
     private var internalSubscription: AnyCancellable?
-    private var touchPointLocation: CGPoint = .zero
+    private var touchPointLocation: [CGPoint] = []
+    
+    @Published public var touchPointData: [DataPoint] = []
     
     internal var isFilled: Bool = false
     
@@ -72,8 +74,7 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     
     private func setupInternalCombine() {
         internalSubscription = touchedDataPointPublisher
-            .map(\.location)
-            .assign(to: \.touchPointLocation, on: self)
+            .sink(receiveValue: { self.touchPointLocation = $0.map(\.location) })
     }
     
     // MARK: Labels
@@ -136,7 +137,7 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
                       animation: self.chartStyle.globalAnimation,
                       isFilled: self.isFilled)
     }
-    
+
     // MARK: Touch
     public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         self.infoView.isTouchCurrent = true
@@ -166,16 +167,17 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
                                        y: (CGFloat(dataSets.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
                 }
             }
-            touchedDataPointPublisher.send(PublishedTouchData(datapoint: datapoint, location: location))
+//            touchedDataPointPublisher.send([PublishedTouchData(datapoint: datapoint, location: location)])
         }
     }
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        self.markerSubView(dataSet: dataSets,
-                           dataPoints: dataSets.dataPoints,
-                           lineType: dataSets.style.lineType,
-                           touchLocation: touchLocation,
-                           chartSize: chartSize,
-                           pointLocation: touchPointLocation)
+        EmptyView()
+//        self.markerSubView(dataSet: dataSets,
+//                           dataPoints: dataSets.dataPoints,
+//                           lineType: dataSets.style.lineType,
+//                           touchLocation: touchLocation,
+//                           chartSize: chartSize,
+//                           pointLocation: touchPointLocation[0])
     }
     
     public typealias SetType = LineDataSet

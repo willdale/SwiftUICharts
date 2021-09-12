@@ -28,16 +28,18 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
     @Published public var viewData: ChartViewData = ChartViewData()
     @Published public var infoView: InfoViewData<RangedLineChartDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
-    
+        
     public var noDataText: Text
     
     public var subscription = Set<AnyCancellable>()
-    public let touchedDataPointPublisher = PassthroughSubject<PublishedTouchData<RangedLineChartDataPoint>,Never>()
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<RangedLineChartDataPoint>],Never>()
     
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .line, dataSetType: .single)
     
     private var internalSubscription: AnyCancellable?
-    private var touchPointLocation: CGPoint = .zero
+    private var touchPointLocation: [CGPoint] = []
+    
+    @Published public var touchPointData: [DataPoint] = []
     
     // MARK: Initializer
     /// Initialises a ranged line chart.
@@ -71,8 +73,7 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
     
     private func setupInternalCombine() {
         internalSubscription = touchedDataPointPublisher
-            .map(\.location)
-            .assign(to: \.touchPointLocation, on: self)
+            .sink(receiveValue: { self.touchPointLocation = $0.map(\.location) })
     }
     
     public var average: Double {
@@ -145,6 +146,7 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
                       animation: self.chartStyle.globalAnimation,
                       isFilled: false)
     }
+    
     // MARK: Touch
     public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         self.infoView.isTouchCurrent = true
@@ -171,17 +173,18 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
                                        y: (CGFloat(dataSets.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
                 }
             }
-            touchedDataPointPublisher.send(PublishedTouchData(datapoint: datapoint, location: location))
+//            touchedDataPointPublisher.send([PublishedTouchData(datapoint: datapoint, location: location)])
         }
     }
     
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        self.markerSubView(dataSet: dataSets,
-                           dataPoints: dataSets.dataPoints,
-                           lineType: dataSets.style.lineType,
-                           touchLocation: touchLocation,
-                           chartSize: chartSize,
-                           pointLocation: touchPointLocation)
+        EmptyView()
+//        self.markerSubView(dataSet: dataSets,
+//                           dataPoints: dataSets.dataPoints,
+//                           lineType: dataSets.style.lineType,
+//                           touchLocation: touchLocation,
+//                           chartSize: chartSize,
+//                           pointLocation: touchPointLocation[0])
     }
     
     public typealias SetType = RangedLineDataSet

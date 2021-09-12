@@ -19,6 +19,7 @@ import SwiftUI
  ```
  
  # View Modifiers
+ 
  The order of the view modifiers is some what important
  as the modifiers are various types for stacks that wrap
  around the previous views.
@@ -58,10 +59,10 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
                     switch chartData.barStyle.colourFrom {
                     case .barStyle:
                         BarChartBarStyleSubView(chartData: chartData)
-                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                            .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
                     case .dataPoints:
                         BarChartDataPointSubView(chartData: chartData)
-                            .accessibilityLabel(Text("\(chartData.metadata.title)"))
+                            .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
                     }
                 }
                 // Needed for axes label frames

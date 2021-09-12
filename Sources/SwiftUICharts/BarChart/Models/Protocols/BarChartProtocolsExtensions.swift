@@ -8,32 +8,28 @@
 import SwiftUI
 
 // MARK: - Markers
-extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType, Self: Publishable {
-
-    internal func markerSubView(position: CGPoint) -> some View {
-        Group {
-                switch self.chartStyle.markerType {
-                case .none:
-                    EmptyView()
-                case .vertical(let colour, let style):
-                    MarkerFull(position: position)
-                        .stroke(colour, style: style)
-                case .full(let colour, let style):
-                    MarkerFull(position: position)
-                        .stroke(colour, style: style)
-                case .bottomLeading(let colour, let style):
-                    MarkerBottomLeading(position: position)
-                        .stroke(colour, style: style)
-                case .bottomTrailing(let colour, let style):
-                    MarkerBottomTrailing(position: position)
-                        .stroke(colour, style: style)
-                case .topLeading(let colour, let style):
-                    MarkerTopLeading(position: position)
-                        .stroke(colour, style: style)
-                case .topTrailing(let colour, let style):
-                    MarkerTopTrailing(position: position)
-                        .stroke(colour, style: style)
-                }
+extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType,
+                                       Self: Publishable {
+    internal func markerSubView(
+        markerData: [MarkerData],
+        touchLocation: CGPoint,
+        chartSize: CGRect
+    ) -> some View {
+        ForEach(markerData, id: \.self) { marker in
+            if let barMarker = marker.markerType as? BarMarkerType {
+                MarkerView.bar(barMarker, marker)
+            } else if let lineMarker = marker.markerType as? LineMarkerType {
+                MarkerView.line(lineMarker: lineMarker,
+                               markerData: marker,
+                               chartSize: chartSize,
+                               touchLocation: touchLocation,
+                               dataPoints: self.extraLineData!.dataPoints.map(\.value),
+                               lineType: self.extraLineData!.style.lineType,
+                               lineSpacing: .bar,
+                               minValue: self.extraLineData!.minValue,
+                               range: self.extraLineData!.range,
+                               ignoreZero: false)
+            }
         }
     }
 }

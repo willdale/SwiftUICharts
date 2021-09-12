@@ -23,13 +23,15 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable 
     @Published public var chartStyle: PieChartStyle
     @Published public var legends: [LegendData] = []
     @Published public var infoView: InfoViewData<PieChartDataPoint> = InfoViewData()
-
+    
     public var noDataText: Text
     
     public var subscription = Set<AnyCancellable>()
-    public let touchedDataPointPublisher = PassthroughSubject<PublishedTouchData<PieChartDataPoint>,Never>()
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<PieChartDataPoint>],Never>()
     
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .pie, dataSetType: .single)
+    
+    @Published public var touchPointData: [DataPoint] = []
     
     // MARK: Initializer
     /// Initialises Pie Chart data.
@@ -71,7 +73,7 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable 
         }
         guard let wrappedIndex = index else { return }
         let datapoint = self.dataSets.dataPoints[wrappedIndex]
-        self.touchedDataPointPublisher.send(PublishedTouchData(datapoint: datapoint, location: .zero))
+//        self.touchedDataPointPublisher.send([PublishedTouchData(datapoint: datapoint, location: .zero)])
     }
     
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View { EmptyView() }

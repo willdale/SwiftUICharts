@@ -22,5 +22,7 @@ public protocol Publishable {
      
      Uses Combine
      */
-    var touchedDataPointPublisher: PassthroughSubject<PublishedTouchData<Self.DataPoint>, Never> { get }
+    var touchedDataPointPublisher: PassthroughSubject<[PublishedTouchData<Self.DataPoint>], Never> { get }
+    
+    var touchPointData: [DataPoint] { get set }
 }
