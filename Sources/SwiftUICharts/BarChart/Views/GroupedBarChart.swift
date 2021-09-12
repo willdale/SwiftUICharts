@@ -78,7 +78,7 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
 
 internal struct GroupedBarGroup<ChartData>: View where ChartData: GroupedBarChartData {
     
-    private let chartData: ChartData
+    @ObservedObject private var chartData: ChartData
     private let dataSet: GroupedBarDataSet
     
     init(
@@ -101,7 +101,7 @@ internal struct GroupedBarGroup<ChartData>: View where ChartData: GroupedBarChar
 
 internal struct GroupedBarCell<ChartData>: View where ChartData: GroupedBarChartData {
     
-    private let chartData: ChartData
+    @ObservedObject private var chartData: ChartData
     private let dataPoint: GroupedBarDataPoint
     
     init(

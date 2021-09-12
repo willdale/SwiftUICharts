@@ -144,8 +144,8 @@ extension View {
     public func extraLine<T: CTLineBarChartDataProtocol>(
         chartData: T,
         legendTitle: String,
-        datapoints: @escaping @autoclosure () -> ([ExtraLineDataPoint]),
-        style: @escaping @autoclosure () -> (ExtraLineStyle)
+        datapoints: @autoclosure @escaping () -> ([ExtraLineDataPoint]),
+        style: @autoclosure @escaping () -> (ExtraLineStyle)
     ) -> some View {
         self.modifier(ExtraLine<T>(chartData: chartData,
                                    legendTitle: legendTitle,

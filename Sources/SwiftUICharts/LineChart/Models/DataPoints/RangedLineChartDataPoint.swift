@@ -23,7 +23,7 @@ public struct RangedLineChartDataPoint: CTRangedLineDataPoint, IgnoreMe {
     
     public var ignoreMe: Bool = false
     
-    public var legendTag: String = ""
+    public var _legendTag: String = ""
     
     internal var _valueOnly: Bool = false
     

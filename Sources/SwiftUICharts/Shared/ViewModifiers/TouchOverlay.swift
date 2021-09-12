@@ -11,7 +11,7 @@ import SwiftUI
 /**
  Finds the nearest data point and displays the relevent information.
  */
-internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
+internal struct TouchOverlay<T>: ViewModifier where T: CTChartData & Touchable {
     
     @ObservedObject private var chartData: T
     let minDistance: CGFloat
@@ -36,7 +36,7 @@ internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
                         content
                             .gesture(
                                 DragGesture(minimumDistance: minDistance, coordinateSpace: .local)
-                                    .onChanged { (value) in
+                                    .onChanged { value in
                                         chartData.setTouchInteraction(touchLocation: value.location,
                                                                       chartSize: geo.frame(in: .local))
                                     }
@@ -49,6 +49,7 @@ internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
                             chartData.getTouchInteraction(touchLocation: chartData.infoView.touchLocation,
                                                           chartSize: geo.frame(in: .local))
                         }
+                        
                     }
                 }
             } else { content }
@@ -84,7 +85,7 @@ extension View {
         - minDistance: The distance that the touch event needs to travel to register.
      - Returns: A  new view containing the chart with a touch overlay.
      */
-    public func touchOverlay<T: CTChartData>(
+    public func touchOverlay<T: CTChartData & Touchable>(
         chartData: T,
         specifier: String = "%.0f",
         unit: TouchUnit = .none,
@@ -102,7 +103,7 @@ extension View {
      - Attention:
      Unavailable in tvOS
      */
-    public func touchOverlay<T: CTChartData>(
+    public func touchOverlay<T: CTChartData & Touchable>(
         chartData: T,
         specifier: String = "%.0f",
         unit: TouchUnit = .none,

@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Model for setting up colour styling.
  */
-public struct ColourStyle: CTColourStyle, Hashable {
+public struct ColourStyle: Hashable {
     
     public var colourType: ColourType
     public var colour: Color?

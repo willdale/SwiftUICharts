@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+public typealias ChartConformance = GetDataProtocol & Publishable & PointOfInterestProtocol & Touchable
+
 // MARK: Chart Data
 /**
  Main protocol for passing data around library.
@@ -17,18 +19,12 @@ public protocol CTChartData: ObservableObject, Identifiable {
     
     /// A type representing a  data set. -- `CTDataSetProtocol`
     associatedtype SetType: CTDataSetProtocol
-    
-    /// A type representing a  data set. -- `CTDataSetProtocol`
-    associatedtype SetPoint: CTDataSetProtocol
-    
+
     /// A type representing a data point. -- `CTChartDataPoint`
     associatedtype DataPoint: CTDataPointBaseProtocol
     
     /// A type representing the chart style. -- `CTChartStyle`
     associatedtype CTStyle: CTChartStyle
-    
-    /// A type representing a view for the results of the touch interaction.
-    associatedtype Touch: View
     
     var id: ID { get }
     
@@ -64,63 +60,15 @@ public protocol CTChartData: ObservableObject, Identifiable {
      Customisable `Text` to display when where is not enough data to draw the chart.
      */
     var noDataText: Text { get set }
-    
-    /**
-     Holds data about the charts type.
-     
-     Allows for internal logic based on the type of chart.
-     */
-    var chartType: (chartType: ChartType, dataSetType: DataSetType) { get }
-    
+
     
     /**
      Returns whether there are two or more data points.
      */
     func isGreaterThanTwo() -> Bool
-    
-    // MARK: Touch
-    /**
-     Takes in the required data to set up all the touch interactions.
-     
-     Output via `getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> Touch`
-     
-     - Parameters:
-     - touchLocation: Current location of the touch
-     - chartSize: The size of the chart view as the parent view.
-     */
-    func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect)
-    
-    /**
-     Takes touch location and return a view based on the chart type and configuration.
-     
-     Inputs from `setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect)`
-     
-     - Parameters:
-     - touchLocation: Current location of the touch
-     - chartSize: The size of the chart view as the parent view.
-     - Returns: The relevent view for the chart type and options.
-     */
-    func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> Touch
-    
-    /**
-     Gets the nearest data points to the touch location.
-     - Parameters:
-     - touchLocation: Current location of the touch.
-     - chartSize: The size of the chart view as the parent view.
-     - Returns: Array of data points.
-     */
-    func getDataPoint(touchLocation: CGPoint, chartSize: CGRect)
-    
-    /**
-     Gets the location of the data point in the view.
-     - Parameters:
-     - dataSet: Data set to work with.
-     - touchLocation: Current location of the touch.
-     - chartSize: The size of the chart view as the parent view.
-     - Returns: Array of points with the location on screen of data points.
-     */
-    func getPointLocation(dataSet: SetPoint, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint?
+
 }
+
 
 // MARK: - Data Sets
 /**
@@ -191,7 +139,7 @@ public protocol CTDataPointBaseProtocol: Hashable, Identifiable {
      
      Do __Not__ Use.
      */
-    var legendTag: String { get set }
+    var _legendTag: String { get set }
     
     /**
      Gets the relevant value(s) from the data point.
@@ -289,46 +237,6 @@ public protocol CTChartStyle {
      ```
      */
     var globalAnimation: Animation { get set }
-}
-
-
-/**
- A protocol to set colour styling.
- 
- Allows for single colour, gradient or gradient with stops control.
- */
-public protocol CTColourStyle {
-    
-    /**
-     Selection for the style of colour.
-     */
-    var colourType: ColourType { get set }
-    
-    /**
-     Single Colour
-     */
-    var colour: Color? { get set }
-    /**
-     Array of colours for gradient
-     */
-    var colours: [Color]? { get set }
-    
-    /**
-     Array of Gradient Stops.
-     
-     `GradientStop` is a Hashable version of Gradient.Stop
-     */
-    var stops: [GradientStop]? { get set }
-    
-    /**
-     Start point for the gradient
-     */
-    var startPoint: UnitPoint? { get set }
-    
-    /**
-     End point for the gradient
-     */
-    var endPoint: UnitPoint? { get set }
 }
 
 public protocol CTisRanged {}

@@ -1,0 +1,69 @@
+//
+//  File.swift
+//  
+//
+//  Created by Will Dale on 02/08/2021.
+//
+
+import SwiftUI
+
+/**
+ Displays the data points value with the unit.
+ */
+@available(*, deprecated, message: "Please use `touchedDataPointPublisher` in chart data model.")
+public struct InfoValue<T>: View where T: CTChartData {
+    
+    @ObservedObject private var chartData: T
+    
+    public init(chartData: T) {
+        self.chartData = chartData
+    }
+    
+    public var body: some View {
+        ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
+            chartData.infoValueUnit(info: point)
+        }
+    }
+}
+
+/**
+ Displays the data points description.
+ */
+@available(*, deprecated, message: "Please use `touchedDataPointPublisher` in chart data model.")
+public struct InfoDescription<T>: View where T: CTChartData {
+    
+    @ObservedObject private var chartData: T
+    
+    public init(chartData: T) {
+        self.chartData = chartData
+    }
+    
+    public var body: some View {
+        ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
+            chartData.infoDescription(info: point)
+        }
+    }
+}
+
+/**
+ Option to display a string between the Value and the Description.
+ */
+@available(*, deprecated, message: "Please use `touchedDataPointPublisher` in chart data model.")
+public struct InfoExtra<T>: View where T: CTChartData {
+    
+    @ObservedObject private var chartData: T
+    private let text: String
+    
+    public init(chartData: T, text: String) {
+        self.chartData = chartData
+        self.text = text
+    }
+    
+    public var body: some View {
+        if chartData.infoView.isTouchCurrent {
+            Text(text)
+        } else {
+            EmptyView()
+        }
+    }
+}
