@@ -129,3 +129,15 @@ public struct ExtraLineData: Identifiable {
             .divide(by: Double(self.dataPoints.count))
     }
 }
+
+extension ExtraLineData {
+    internal typealias DataPointAndLocation = (value: Double?, description: String?, _legendTag: String?, location: CGPoint?)
+    
+    internal func pointAndLocation(touchLocation: CGPoint, chartSize: CGRect) -> DataPointAndLocation {
+        if let point = self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize),
+           let location = self.getPointLocation(touchLocation: touchLocation, chartSize: chartSize) {
+            return (value: point.value, description: point.pointDescription, _legendTag: self.legendTitle, location: location)
+        }
+        return (nil, nil, nil, nil)
+    }
+}

@@ -35,7 +35,34 @@ extension CTLineBarChartDataProtocol where Self: isHorizontal {
     }
 }
 
-
+extension CTLineChartDataProtocol {
+    // MARK: - Markers
+    internal func markerSubView(
+        markerData: [MarkerData],
+        chartSize: CGRect,
+        touchLocation: CGPoint,
+        dataPoints: [Double],
+        lineType: LineType
+    ) -> some View {
+        ForEach(markerData, id: \.self) { marker in
+//            if let lineMarker = marker.markerType as? LineMarkerType {
+                EmptyView()
+//                if !marker.isExtra {
+//                    MarkerView.line(lineMarker: lineMarker,
+//                                    markerData: marker,
+//                                    chartSize: chartSize,
+//                                    touchLocation: touchLocation,
+//                                    dataPoints: dataPoints,
+//                                    lineType: ,
+//                                    lineSpacing: T##ExtraLineStyle.SpacingType,
+//                                    minValue: T##Double,
+//                                    range: T##Double,
+//                                    ignoreZero: T##Bool)
+//                }
+//            }
+        }
+    }
+}
 
 // MARK: - Legends
 extension CTLineChartDataProtocol where Self.SetType.ID == UUID,

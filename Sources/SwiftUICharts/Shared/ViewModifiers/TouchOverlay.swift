@@ -11,13 +11,13 @@ import SwiftUI
 /**
  Finds the nearest data point and displays the relevent information.
  */
-internal struct TouchOverlay<T>: ViewModifier where T: CTChartData & Touchable {
+internal struct TouchOverlay<ChartData>: ViewModifier where ChartData: CTChartData & Touchable {
     
-    @ObservedObject private var chartData: T
+    @ObservedObject private var chartData: ChartData
     let minDistance: CGFloat
     
     internal init(
-        chartData: T,
+        chartData: ChartData,
         specifier: String,
         unit: TouchUnit,
         minDistance: CGFloat
@@ -41,8 +41,9 @@ internal struct TouchOverlay<T>: ViewModifier where T: CTChartData & Touchable {
                                                                       chartSize: geo.frame(in: .local))
                                     }
                                     .onEnded { _ in
-                                        chartData.infoView.isTouchCurrent = false
-                                        chartData.infoView.touchOverlayInfo = []
+//                                        chartData.infoView.isTouchCurrent = false
+//                                        chartData.infoView.touchOverlayInfo = []
+                                        chartData.touchDidFinish()
                                     }
                             )
                         if chartData.infoView.isTouchCurrent {
@@ -85,8 +86,8 @@ extension View {
         - minDistance: The distance that the touch event needs to travel to register.
      - Returns: A  new view containing the chart with a touch overlay.
      */
-    public func touchOverlay<T: CTChartData & Touchable>(
-        chartData: T,
+    public func touchOverlay<ChartData: CTChartData & Touchable>(
+        chartData: ChartData,
         specifier: String = "%.0f",
         unit: TouchUnit = .none,
         minDistance: CGFloat = 0
@@ -103,8 +104,8 @@ extension View {
      - Attention:
      Unavailable in tvOS
      */
-    public func touchOverlay<T: CTChartData & Touchable>(
-        chartData: T,
+    public func touchOverlay<ChartData: CTChartData & Touchable>(
+        chartData: ChartData,
         specifier: String = "%.0f",
         unit: TouchUnit = .none,
         minDistance: CGFloat = 0

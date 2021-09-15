@@ -47,8 +47,6 @@ struct MarkerView {
         minValue: Double,
         range: Double,
         ignoreZero: Bool
-        
-        
     ) -> some View {
         
         let indicatorLocation = PositionIndicator.getIndicatorLocation(rect: chartSize,

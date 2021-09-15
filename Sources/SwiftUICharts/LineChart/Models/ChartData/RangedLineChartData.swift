@@ -187,6 +187,11 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
 //                           pointLocation: touchPointLocation[0])
     }
     
+    public func touchDidFinish() {
+        touchPointData = []
+        infoView.isTouchCurrent = false
+    }
+    
     public typealias SetType = RangedLineDataSet
     public typealias DataPoint = RangedLineChartDataPoint
 }

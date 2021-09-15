@@ -51,3 +51,17 @@ public struct RangedBarDataPoint: CTRangedBarDataPoint {
     
     public typealias ID = UUID
 }
+
+extension RangedBarDataPoint {
+    internal init(
+        value: Double,
+        description: String?
+    ) {
+        self._value = value
+        self.description = description
+        
+        self.upperValue = 0
+        self.lowerValue = 0
+        self.colour = ColourStyle(colour: .red)
+    }
+}

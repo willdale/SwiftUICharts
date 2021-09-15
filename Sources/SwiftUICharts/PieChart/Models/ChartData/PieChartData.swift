@@ -78,6 +78,11 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable 
     
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View { EmptyView() }
     
+    public func touchDidFinish() {
+        touchPointData = []
+        infoView.isTouchCurrent = false
+    }
+    
     public typealias SetType = PieDataSet
     public typealias DataPoint = PieChartDataPoint
     public typealias CTStyle = PieChartStyle

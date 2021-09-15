@@ -35,4 +35,9 @@ public protocol Touchable {
      - Returns: The relevent view for the chart type and options.
      */
     func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> Touch
+    
+    
+    /// Informs the data model that touch
+    /// input has finished.
+    func touchDidFinish()
 }

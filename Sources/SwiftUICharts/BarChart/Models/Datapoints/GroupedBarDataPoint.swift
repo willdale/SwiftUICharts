@@ -41,3 +41,12 @@ public struct GroupedBarDataPoint: CTMultiBarDataPoint {
     
     public typealias ID = UUID
 }
+
+extension GroupedBarDataPoint {
+    internal init(
+        value: Double,
+        description: String?
+    ) {
+        self.init(value: value, description: description, group: GroupingData(title: "", colour: ColourStyle()))
+    }
+}

@@ -191,6 +191,11 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
         }
     }
     
+    public func touchDidFinish() {
+        touchPointData = []
+        infoView.isTouchCurrent = false
+    }
+    
     // MARK: Accessibility
     public func getAccessibility() -> some View {
         ForEach(self.dataSets.dataSets, id: \.self) { dataSet in

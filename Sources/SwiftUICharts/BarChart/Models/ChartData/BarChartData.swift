@@ -32,15 +32,14 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance{
     public var noDataText: Text
     
     public var subscription = Set<AnyCancellable>()
-    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<BarChartDataPoint>], Never>()
-    
-    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (.bar, .single)
-    
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<DataPoint>], Never>()
+
     private var internalSubscription: AnyCancellable?
     private var markerData: [MarkerData] = []
-    
     private var internalDataSubscription: AnyCancellable?
     @Published public var touchPointData: [DataPoint] = []
+    
+    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (.bar, .single)
     
     // MARK: Initializer
     /// Initialises a standard Bar Chart.
@@ -162,37 +161,35 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance{
         let ySection: CGFloat = chartSize.height / CGFloat(dataSets.maxValue())
         let index: Int = Int((touchLocation.x) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
-            let chartDataPoint = dataSets.dataPoints[index]
-            let chartDataLocation = CGPoint(x: (CGFloat(index) * xSection) + (xSection / 2),
+            let datapoint = dataSets.dataPoints[index]
+            let location = CGPoint(x: (CGFloat(index) * xSection) + (xSection / 2),
                                             y: (chartSize.size.height - CGFloat(dataSets.dataPoints[index].value) * ySection))
             
             var values: [PublishedTouchData<DataPoint>] = []
-            values.append(PublishedTouchData(datapoint: chartDataPoint, location: chartDataLocation, type: chartType.chartType))
+            values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
             
-            let extraLine = extraLineDataPointAndLocation(touchLocation: touchLocation, chartSize: chartSize)
-            if let datapoint = extraLine.datapoint,
-               let location = extraLine.location {
+            if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
+               let location = extraLine.location,
+               let value = extraLine.value,
+               let description = extraLine.description,
+               let _legendTag = extraLine._legendTag
+            {
+                var datapoint = DataPoint(value: value, description: description)
+                datapoint._legendTag = _legendTag
                 values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
             }
             
             touchedDataPointPublisher.send(values)
         }
     }
-    
-    private func extraLineDataPointAndLocation(touchLocation: CGPoint, chartSize: CGRect) -> (datapoint: DataPoint?, location: CGPoint?) {
-        if let extraLineData = self.extraLineData,
-           let point = extraLineData.getDataPoint(touchLocation: touchLocation, chartSize: chartSize) {
-            var dp = BarChartDataPoint(value: point.value, description: point.pointDescription)
-            dp._legendTag = extraLineData.legendTitle
-            
-            let location = extraLineData.getPointLocation(touchLocation: touchLocation, chartSize: chartSize)
-            return (dp, location)
-        }
-        return (nil, nil)
-    }
-    
+
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         markerSubView(markerData: markerData, touchLocation: touchLocation, chartSize: chartSize)
+    }
+    
+    public func touchDidFinish() {
+        touchPointData = []
+        infoView.isTouchCurrent = false
     }
     
     public typealias SetType = BarDataSet
@@ -200,9 +197,3 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance{
     public typealias CTStyle = BarChartStyle
 }
 
-
-public struct PublishedTouchData<DataPoint> {
-    public let datapoint: DataPoint
-    public let location: CGPoint
-    internal let type: ChartType
-}

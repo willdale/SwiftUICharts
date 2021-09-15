@@ -41,3 +41,14 @@ public struct StackedBarDataPoint: CTMultiBarDataPoint {
     
     public typealias ID = UUID
 }
+
+extension StackedBarDataPoint {
+    internal init (
+        value: Double,
+        description: String?
+    ) {
+        self.value = value
+        self.description = description
+        self.group = GroupingData(title: "", colour: ColourStyle())
+    }
+}

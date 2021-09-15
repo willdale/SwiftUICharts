@@ -10,11 +10,12 @@ import SwiftUI
 /**
  A view that displays information from `TouchOverlay`.
  */
-internal struct FloatingInfoBox<T>: ViewModifier where T: CTLineBarChartDataProtocol {
+internal struct FloatingInfoBox<ChartData>: ViewModifier
+where ChartData: CTLineBarChartDataProtocol & Publishable {
     
-    @ObservedObject private var chartData: T
+    @ObservedObject private var chartData: ChartData
     
-    internal init(chartData: T) {
+    internal init(chartData: ChartData) {
         self.chartData = chartData
     }
     
@@ -51,11 +52,12 @@ internal struct FloatingInfoBox<T>: ViewModifier where T: CTLineBarChartDataProt
 /**
  A view that displays information from `TouchOverlay`.
  */
-internal struct HorizontalFloatingInfoBox<T>: ViewModifier where T: CTLineBarChartDataProtocol & isHorizontal {
+internal struct HorizontalFloatingInfoBox<ChartData>: ViewModifier
+where ChartData: CTLineBarChartDataProtocol & isHorizontal & Publishable {
     
-    @ObservedObject private var chartData: T
+    @ObservedObject private var chartData: ChartData
     
-    internal init(chartData: T) {
+    internal init(chartData: ChartData) {
         self.chartData = chartData
     }
     
@@ -99,7 +101,8 @@ extension View {
      - Returns: A  new view containing the chart with a view to
      display touch overlay information.
      */
-    public func floatingInfoBox<T: CTLineBarChartDataProtocol>(chartData: T) -> some View {
+    public func floatingInfoBox<ChartData>(chartData: ChartData) -> some View
+    where ChartData: CTLineBarChartDataProtocol & Publishable {
         self.modifier(FloatingInfoBox(chartData: chartData))
     }
     
@@ -112,7 +115,8 @@ extension View {
      - Returns: A  new view containing the chart with a view to
      display touch overlay information.
      */
-    public func floatingInfoBox<T: CTLineBarChartDataProtocol & isHorizontal>(chartData: T) -> some View {
+    public func floatingInfoBox<ChartData>(chartData: ChartData) -> some View
+    where ChartData: CTLineBarChartDataProtocol & isHorizontal & Publishable {
         self.modifier(HorizontalFloatingInfoBox(chartData: chartData))
     }
 }

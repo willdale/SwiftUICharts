@@ -31,22 +31,14 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData & Publishable {
     var touchOverlay: some View {
         VStack(alignment: .trailing) {
             if chartData.infoView.isTouchCurrent {
-//                ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
-//                    chartData.infoValueUnit(info: point)
-//                        .font(chartData.chartStyle.infoBoxValueFont)
-//                        .foregroundColor(chartData.chartStyle.infoBoxValueColour)
-//                    chartData.infoDescription(info: point)
-//                        .font(chartData.chartStyle.infoBoxDescriptionFont)
-//                        .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
-//                }
-//                ForEach(chartData.touchPointData, id: \.id) { point in
-//                    chartData.infoValueUnit(info: point)
-//                        .font(chartData.chartStyle.infoBoxValueFont)
-//                        .foregroundColor(chartData.chartStyle.infoBoxValueColour)
-//                    chartData.infoDescription(info: point)
-//                        .font(chartData.chartStyle.infoBoxDescriptionFont)
-//                        .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
-//                }
+                ForEach(chartData.touchPointData, id: \.id) { point in
+                    chartData.infoValueUnit(info: point)
+                        .font(chartData.chartStyle.infoBoxValueFont)
+                        .foregroundColor(chartData.chartStyle.infoBoxValueColour)
+                    chartData.infoDescription(info: point)
+                        .font(chartData.chartStyle.infoBoxDescriptionFont)
+                        .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                }
             } else {
                 Text("")
                     .font(chartData.chartStyle.infoBoxValueFont)

@@ -11,6 +11,7 @@ struct MarkerData: Hashable {
     let id: UUID = UUID()
     let markerType: MarkerType
     let location: CTPoint
+//    let isExtra: Bool
     
     static func == (lhs: MarkerData, rhs: MarkerData) -> Bool {
         lhs.id == rhs.id &&
