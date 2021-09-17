@@ -76,8 +76,8 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Get
                     .font(self.chartStyle.yAxisLabelFont)
                     .foregroundColor(self.chartStyle.yAxisLabelColour)
                     .lineLimit(1)
-                    .accessibilityLabel(LocalizedStringKey("Y-Axis-Label"))
-                    .accessibilityValue(LocalizedStringKey(self.labelsArray[i]))
+                    .ctAccessibilityLabel("Y-Axis-Label")
+                    .ctAccessibilityValue(self.labelsArray[i])
                     .overlay(
                         GeometryReader { geo in
                             Color.clear
@@ -146,8 +146,8 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Get
                                             }
                                     }
                                 )
-                                .accessibilityLabel(LocalizedStringKey("Y-Axis-Label"))
-                                .accessibilityValue(LocalizedStringKey(data))
+                                .ctAccessibilityLabel("Y-Axis-Label")
+                                .ctAccessibilityValue(data)
                             
                             Spacer()
                                 .frame(minHeight: 0, maxHeight: 500)

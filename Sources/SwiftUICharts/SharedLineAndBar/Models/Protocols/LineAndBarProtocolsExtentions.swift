@@ -133,8 +133,8 @@ extension CTLineBarChartDataProtocol where Self: GetDataProtocol {
                                 }
                         }
                     )
-                    .accessibilityLabel(LocalizedStringKey("Y-Axis-Label"))
-                    .accessibilityValue(LocalizedStringKey(self.labelsArray[i]))
+                    .ctAccessibilityLabel("Y-Axis-Label")
+                    .ctAccessibilityValue(self.labelsArray[i])
                 if i != 0 {
                     Spacer()
                         .frame(minHeight: 0, maxHeight: 500)
@@ -324,8 +324,8 @@ extension CTLineBarChartDataProtocol {
                                 }
                         }
                     )
-                    .accessibilityLabel(LocalizedStringKey("Y-Axis-Label"))
-                    .accessibilityValue(LocalizedStringKey(self.extraLabelsArray[i]))
+                    .ctAccessibilityLabel("Y-Axis-Label")
+                    .ctAccessibilityValue(self.extraLabelsArray[i])
                 if i != 0 {
                     Spacer()
                         .frame(minHeight: 0, maxHeight: 500)

@@ -68,8 +68,8 @@ internal struct RotatedText<ChartData>: View where ChartData: CTLineBarChartData
             .rotationEffect(rotation, anchor: .center)
             .frame(width: rotation == .degrees(0) || rotation == .radians(0) ? finalFrame.width : finalFrame.height,
                    height: rotation == .degrees(0) || rotation == .radians(0) ? finalFrame.height : finalFrame.width)
-            .accessibilityLabel(LocalizedStringKey("X-Axis-Label"))
-            .accessibilityValue(LocalizedStringKey(label))
+            .ctAccessibilityLabel("X-Axis-Label")
+            .ctAccessibilityValue(label)
     }
 }
 
@@ -123,8 +123,8 @@ internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTLineBa
                         }
                 }
             )
-            .accessibilityLabel(LocalizedStringKey("X-Axis-Label"))
-            .accessibilityValue(LocalizedStringKey(label))
+            .ctAccessibilityLabel("X-Axis-Label")
+            .ctAccessibilityValue(label)
     }
 }
 
@@ -187,7 +187,7 @@ internal struct TempText<ChartData>: View where ChartData: CTLineBarChartDataPro
             
             .frame(width: rotation == .degrees(0) || rotation == .radians(0) ? finalFrame.width : finalFrame.height,
                    height: rotation == .degrees(0) || rotation == .radians(0) ? finalFrame.height : finalFrame.width)
-            .accessibilityLabel(LocalizedStringKey("X-Axis-Label"))
-            .accessibilityValue(LocalizedStringKey(label))
+            .ctAccessibilityLabel("X-Axis-Label")
+            .ctAccessibilityValue(label)
     }
 }

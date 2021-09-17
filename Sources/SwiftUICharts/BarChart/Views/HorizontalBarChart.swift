@@ -24,16 +24,14 @@ public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBar
                     switch chartData.barStyle.colourFrom {
                     case .barStyle:
                         HorizontalBarChartBarStyleSubView(chartData: chartData)
-                            .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                            .ctAccessibilityLabel(chartData.metadata.title)
                     case .dataPoints:
                         HorizontalBarChartDataPointSubView(chartData: chartData)
-                            .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                            .ctAccessibilityLabel(chartData.metadata.title)
                     }
-                    
                 }
-                // Needed for axes label frames
-                .onChange(of: geo.frame(in: .local)) { value in
-                    self.chartData.viewData.chartSize = value
+                .onAppear {
+                    self.chartData.viewData.chartSize = geo.frame(in: .local)
                 }
             } else { CustomNoDataView(chartData: chartData) }
         }

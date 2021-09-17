@@ -7,9 +7,7 @@
 
 import SwiftUI
 
-/**
- View that displays information from the touch events.
- */
+@available(iOS 13, *)
 internal struct TouchOverlayBox<T: CTChartData>: View {
     
     @ObservedObject private var chartData: T
@@ -56,7 +54,12 @@ internal struct TouchOverlayBox<T: CTChartData>: View {
             }
         }
         .padding(.all, 8)
-        .background(
+        .background(background)
+    }
+    
+    @ViewBuilder
+    var background: some View {
+        if #available(iOS 14, *) {
             GeometryReader { geo in
                 if chartData.infoView.isTouchCurrent {
                     RoundedRectangle(cornerRadius: 5.0, style: .continuous)
@@ -73,6 +76,20 @@ internal struct TouchOverlayBox<T: CTChartData>: View {
                         }
                 }
             }
-        )
+        } else {
+            GeometryReader { geo in
+                if chartData.infoView.isTouchCurrent {
+                    RoundedRectangle(cornerRadius: 5.0, style: .continuous)
+                        .fill(chartData.chartStyle.infoBoxBackgroundColour)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 5.0, style: .continuous)
+                                .stroke(chartData.chartStyle.infoBoxBorderColour, style: chartData.chartStyle.infoBoxBorderStyle)
+                        )
+                        .onAppear {
+                            self.boxFrame = geo.frame(in: .local)
+                        }
+                }
+            }
+        }
     }
 }

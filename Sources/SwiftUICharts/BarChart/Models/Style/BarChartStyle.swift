@@ -110,7 +110,7 @@ public struct BarChartStyle: CTBarChartStyle {
         infoBoxPlacement: InfoBoxPlacement  = .floating,
         infoBoxContentAlignment: InfoBoxAlignment  = .vertical,
         
-        infoBoxValueFont: Font = .title3,
+        infoBoxValueFont: Font = .ctTitle3,
         infoBoxValueColour: Color = Color.primary,
         
         infoBoxDescriptionFont: Font = .caption,

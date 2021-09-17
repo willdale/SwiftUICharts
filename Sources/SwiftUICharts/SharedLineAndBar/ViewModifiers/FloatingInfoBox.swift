@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-/**
- A view that displays information from `TouchOverlay`.
- */
 internal struct FloatingInfoBox<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
     @ObservedObject private var chartData: T
@@ -40,17 +37,14 @@ internal struct FloatingInfoBox<T>: ViewModifier where T: CTLineBarChartDataProt
         TouchOverlayBox(chartData: chartData,
                         boxFrame: $boxFrame)
             .position(x: chartData.setBoxLocation(touchLocation: chartData.infoView.touchLocation.x,
-                                                       boxFrame: boxFrame,
-                                                       chartSize: chartData.infoView.chartSize) - 6, // -6 to compensate for `.padding(.horizontal, 6)`
+                                                  boxFrame: boxFrame,
+                                                  chartSize: chartData.infoView.chartSize) - 6, // -6 to compensate for `.padding(.horizontal, 6)`
                       y: boxFrame.midY - 10)
             .padding(.horizontal, 6)
             .zIndex(1)
     }
 }
 
-/**
- A view that displays information from `TouchOverlay`.
- */
 internal struct HorizontalFloatingInfoBox<T>: ViewModifier where T: CTLineBarChartDataProtocol & isHorizontal {
     
     @ObservedObject private var chartData: T

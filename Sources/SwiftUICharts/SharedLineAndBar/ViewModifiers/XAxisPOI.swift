@@ -86,9 +86,9 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                             .position(chartData.poiAbscissaValueLabelPositionAxis(frame: geo.frame(in: .local),
                                                                                   markerValue: markerValue,
                                                                                   count: dataPointCount))
-                            .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
-                            .accessibilityValue(Text(LocalizedStringKey(String(format: NSLocalizedString("\(self.markerName) %@", comment: ""), "\(markerValue)"))))
-
+                            .ctAccessibilityLabel("P-O-I-Marker")
+                            .ctAccessibilityValue(String(format: NSLocalizedString("\(self.markerName) %@", comment: ""), "\(markerValue)"))
+                                                    
                     case .center:
                         
                         chartData.poiAbscissaLabelCenter(marker: markerName,
@@ -101,10 +101,8 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                                                                                     markerValue: markerValue,
                                                                                     count: dataPointCount))
                             
-                            .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
-                            .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(self.markerName) %@", comment: ""), "\(markerValue)")))
-
-//                            .accessibilityValue(LocalizedStringKey("\(markerName), \(markerValue)"))
+                            .ctAccessibilityLabel("P-O-I-Marker")
+                            .ctAccessibilityValue(String(format: NSLocalizedString("\(self.markerName) %@", comment: ""), "\(markerValue)"))
                     }
                 }
                 .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
@@ -199,4 +197,73 @@ extension View {
     }
 }
 
+extension View {
+    @ViewBuilder
+    func iOS13Support<Content14: View, Content13: View>(
+        if14 ifTransform: (Self) -> Content14,
+        else elseTransform: (Self) -> Content13
+    ) -> some View {
+        if #available(iOS 14, *) {
+            ifTransform(self)
+        } else {
+            elseTransform(self)
+        }
+    }
+}
+/*
+ .iOS13Support(if14: {
+     $0
+ }, else: {
+     $0
+ })
+ */
 
+struct CTAccessibilityLabel: ViewModifier {
+    
+    private var text: String
+    
+    init(_ text: String) {
+        self.text = text
+    }
+    
+    func body(content: Content) -> some View {
+        if #available(iOS 14, *) {
+            content
+                .accessibilityLabel(LocalizedStringKey(text))
+        } else {
+            content
+                .accessibility(label: Text(LocalizedStringKey(text)))
+        }
+    }
+}
+
+extension View {
+    func ctAccessibilityLabel(_ text: String) -> some View {
+        self.modifier(CTAccessibilityLabel(text))
+    }
+}
+
+struct CTAccessibilityValue: ViewModifier {
+    
+    private var text: String
+    
+    init(_ text: String) {
+        self.text = text
+    }
+    
+    func body(content: Content) -> some View {
+        if #available(iOS 14, *) {
+            content
+                .accessibilityValue(LocalizedStringKey(text))
+        } else {
+            content
+                .accessibility(value: Text(LocalizedStringKey(text)))
+        }
+    }
+}
+
+extension View {
+    func ctAccessibilityValue(_ text: String) -> some View {
+        self.modifier(CTAccessibilityValue(text))
+    }
+}

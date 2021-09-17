@@ -48,7 +48,7 @@ internal struct ColourBar<CD: CTBarChartDataProtocol & GetDataProtocol,
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+            .ctAccessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }
 
@@ -97,7 +97,7 @@ internal struct GradientColoursBar<CD: CTBarChartDataProtocol & GetDataProtocol,
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+            .ctAccessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }
 
@@ -147,7 +147,7 @@ internal struct GradientStopsBar<CD: CTBarChartDataProtocol & GetDataProtocol,
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+            .ctAccessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }
 
@@ -179,7 +179,7 @@ internal struct StackElementSubView: View {
                         ColourPartBar(colour, getHeight(height: geo.size.height,
                                                         dataSet: dataSet,
                                                         dataPoint: dataPoint))
-                            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: specifier))
+                            .ctAccessibilityValue(dataPoint.getCellAccessibilityValue(specifier: specifier))
                     } else if dataPoint.group.colour.colourType == .gradientColour,
                               let colours = dataPoint.group.colour.colours,
                               let startPoint = dataPoint.group.colour.startPoint,
@@ -188,7 +188,7 @@ internal struct StackElementSubView: View {
                         GradientColoursPartBar(colours, startPoint, endPoint, getHeight(height: geo.size.height,
                                                                                         dataSet: dataSet,
                                                                                         dataPoint: dataPoint))
-                            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: specifier))
+                            .ctAccessibilityValue(dataPoint.getCellAccessibilityValue(specifier: specifier))
                     } else if dataPoint.group.colour.colourType == .gradientStops,
                               let stops = dataPoint.group.colour.stops,
                               let startPoint = dataPoint.group.colour.startPoint,
@@ -198,7 +198,7 @@ internal struct StackElementSubView: View {
                         GradientStopsPartBar(safeStops, startPoint, endPoint, getHeight(height: geo.size.height,
                                                                                         dataSet: dataSet,
                                                                                         dataPoint: dataPoint))
-                            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: specifier))
+                            .ctAccessibilityValue(dataPoint.getCellAccessibilityValue(specifier: specifier))
                     }
                 }
             }
@@ -358,7 +358,7 @@ internal struct RangedBarChartColourCell<CD:RangedBarChartData>: View {
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+            .ctAccessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }
 
@@ -406,7 +406,7 @@ internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+            .ctAccessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }
 
@@ -454,7 +454,7 @@ internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+            .ctAccessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }
 
@@ -499,7 +499,7 @@ internal struct HorizontalColourBar<CD: CTBarChartDataProtocol & GetDataProtocol
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+            .ctAccessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }
 
@@ -549,7 +549,7 @@ internal struct HorizontalGradientColoursBar<CD: CTBarChartDataProtocol & GetDat
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+            .ctAccessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }
 
@@ -599,6 +599,6 @@ internal struct HorizontalGradientStopsBar<CD: CTBarChartDataProtocol & GetDataP
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+            .ctAccessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
     }
 }

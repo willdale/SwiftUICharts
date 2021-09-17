@@ -59,15 +59,15 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
                     switch chartData.barStyle.colourFrom {
                     case .barStyle:
                         BarChartBarStyleSubView(chartData: chartData)
-                            .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                            .ctAccessibilityLabel(chartData.metadata.title)
                     case .dataPoints:
                         BarChartDataPointSubView(chartData: chartData)
-                            .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                            .ctAccessibilityLabel(chartData.metadata.title)
                     }
                 }
                 // Needed for axes label frames
-                .onChange(of: geo.frame(in: .local)) { value in
-                    self.chartData.viewData.chartSize = value
+                .onAppear {
+                    self.chartData.viewData.chartSize = geo.frame(in: .local)
                 }
             } else { CustomNoDataView(chartData: chartData) }
         }

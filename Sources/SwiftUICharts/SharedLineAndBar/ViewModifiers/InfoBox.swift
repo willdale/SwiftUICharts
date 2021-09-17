@@ -8,9 +8,6 @@
 import SwiftUI
 
 // MARK: Vertical
-/**
- A view that displays information from `TouchOverlay`.
- */
 internal struct InfoBox<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
     @ObservedObject private var chartData: T
@@ -39,9 +36,19 @@ internal struct InfoBox<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                         content
                     }
                 case false:
-                    VStack {
-                        floating
-                        content
+                    if #available(iOS 14, *) {
+                        VStack {
+                            floating
+                            content
+                        }
+                    } else {
+                        VStack {
+                            Spacer().frame(height: height)
+                            ZStack {
+                                floating
+                                content
+                            }
+                        }
                     }
                 }
             case .header:
@@ -50,16 +57,29 @@ internal struct InfoBox<T>: ViewModifier where T: CTLineBarChartDataProtocol {
         }
     }
     
+    @ViewBuilder
     private var floating: some View {
-        TouchOverlayBox(chartData: chartData,
-                        boxFrame: $boxFrame)
-            .position(x: chartData.setBoxLocation(touchLocation: chartData.infoView.touchLocation.x,
-                                                       boxFrame: boxFrame,
-                                                       chartSize: chartData.infoView.chartSize) - 6, // -6 to compensate for `.padding(.horizontal, 6)`
-                      y: 35)
-            .frame(height: height)
-            .padding(.horizontal, 6)
-            .zIndex(1)
+        if #available(iOS 14, *) {
+            TouchOverlayBox(chartData: chartData,
+                            boxFrame: $boxFrame)
+                .position(x: chartData.setBoxLocation(touchLocation: chartData.infoView.touchLocation.x,
+                                                      boxFrame: boxFrame,
+                                                      chartSize: chartData.infoView.chartSize) - 6, // -6 to compensate for `.padding(.horizontal, 6)`
+                          y: 35)
+                .frame(height: height)
+                .padding(.horizontal, 6)
+                .zIndex(1)
+        } else {
+            TouchOverlayBox(chartData: chartData,
+                            boxFrame: $boxFrame)
+                .position(x: chartData.setBoxLocation(touchLocation: chartData.infoView.touchLocation.x,
+                                                      boxFrame: boxFrame,
+                                                      chartSize: chartData.infoView.chartSize) - 6, // -6 to compensate for `.padding(.horizontal, 6)`
+                          y: (-chartData.infoView.chartSize.height / 2) - (height / 2) + 6)
+                .frame(height: height)
+                .padding(.horizontal, 6)
+                .zIndex(1)
+        }
     }
     
     private var fixed: some View {
@@ -72,9 +92,6 @@ internal struct InfoBox<T>: ViewModifier where T: CTLineBarChartDataProtocol {
 }
 
 // MARK: Horizontal
-/**
- A view that displays information from `TouchOverlay`.
- */
 internal struct HorizontalInfoBox<T>: ViewModifier where T: CTLineBarChartDataProtocol & isHorizontal {
     
     @ObservedObject private var chartData: T
@@ -134,6 +151,8 @@ internal struct HorizontalInfoBox<T>: ViewModifier where T: CTLineBarChartDataPr
             .zIndex(1)
     }
 }
+
+// MARK: - Extensions
 extension View {
     /**
      A view that displays information from `TouchOverlay`.

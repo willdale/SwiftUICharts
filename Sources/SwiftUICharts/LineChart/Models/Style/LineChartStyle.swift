@@ -109,7 +109,7 @@ public struct LineChartStyle: CTLineChartStyle {
         infoBoxPlacement: InfoBoxPlacement = .floating,
         infoBoxContentAlignment: InfoBoxAlignment = .vertical,
         
-        infoBoxValueFont: Font = .title3,
+        infoBoxValueFont: Font = .ctTitle3,
         infoBoxValueColour: Color = Color.primary,
         
         infoBoxDescriptionFont: Font = .caption,
@@ -195,5 +195,15 @@ public struct LineChartStyle: CTLineChartStyle {
         self.topLine = topLine
         
         self.globalAnimation = globalAnimation
+    }
+}
+
+extension Font {
+    public static var ctTitle3: Font {
+        if #available(iOS 14, *) {
+            return .title3
+        } else {
+            return .headline
+        }
     }
 }

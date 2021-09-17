@@ -152,8 +152,8 @@ public final class MultiLineChartData: CTLineChartDataProtocol, GetDataProtocol,
                 AccessibilityRectangle(dataPointCount: dataSet.dataPoints.count,
                                        dataPointNo: point)
                     .foregroundColor(Color(.gray).opacity(0.000000001))
-                    .accessibilityLabel(LocalizedStringKey(self.metadata.title))
-                    .accessibilityValue(dataSet.dataPoints[point].getCellAccessibilityValue(specifier: self.infoView.touchSpecifier))
+                    .ctAccessibilityLabel(self.metadata.title)
+                    .ctAccessibilityValue(dataSet.dataPoints[point].getCellAccessibilityValue(specifier: self.infoView.touchSpecifier))
             }
         }
     }

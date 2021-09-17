@@ -7,9 +7,7 @@
 
 import SwiftUI
 
-/**
- Sub view to setup and display the legends.
- */
+@available(iOS 14, *)
 internal struct LegendView<T>: View where T: CTChartData {
     
     @ObservedObject private var chartData: T
@@ -37,8 +35,72 @@ internal struct LegendView<T>: View where T: CTChartData {
                 legend.getLegend(width: width, font: font, textColor: textColor)
                     .if(scaleLegendBar(legend: legend)) { $0.scaleEffect(1.2, anchor: .leading) }
                     .if(scaleLegendPie(legend: legend)) { $0.scaleEffect(1.2, anchor: .leading) }
-                    .accessibilityLabel(LocalizedStringKey(legend.accessibilityLegendLabel()))
-                    .accessibilityValue(LocalizedStringKey(legend.legend))
+                    .ctAccessibilityLabel(legend.accessibilityLegendLabel())
+                    .ctAccessibilityValue(legend.legend)
+            }
+        }
+    }
+    
+    /// Detects whether to run the scale effect on the legend.
+    private func scaleLegendBar(legend: LegendData) -> Bool {
+        if let chartData = chartData as? BarChartData,
+           let datapoint = chartData.infoView.touchOverlayInfo.first {
+            return chartData.infoView.isTouchCurrent && legend.id == datapoint.id
+        }
+        if let chartData = chartData as? GroupedBarChartData,
+           let datapoint = chartData.infoView.touchOverlayInfo.first {
+            return chartData.infoView.isTouchCurrent && legend.colour == datapoint.group.colour
+        }
+        if let chartData = chartData as? StackedBarChartData,
+           let datapoint = chartData.infoView.touchOverlayInfo.first {
+            return chartData.infoView.isTouchCurrent && legend.colour == datapoint.group.colour
+        }
+        return false
+    }
+    
+    /// Detects whether to run the scale effect on the legend.
+    private func scaleLegendPie(legend: LegendData) -> Bool {
+        
+        if chartData is PieChartData || chartData is DoughnutChartData {
+            if let datapointID = chartData.infoView.touchOverlayInfo.first?.id as? UUID {
+                return chartData.infoView.isTouchCurrent && legend.id == datapointID
+            } else {
+                return false
+            }
+        } else {
+            return false
+        }
+    }
+}
+
+@available(iOS, introduced: 13, deprecated: 14, obsoleted: 14)
+internal struct VerticalLegendView<T>: View where T: CTChartData {
+    
+    @ObservedObject private var chartData: T
+    private let width: CGFloat
+    private let font: Font
+    private let textColor: Color
+    
+    internal init(
+        chartData: T,
+        width: CGFloat,
+        font: Font,
+        textColor: Color
+    ) {
+        self.chartData = chartData
+        self.width = width
+        self.font = font
+        self.textColor = textColor
+    }
+    
+    internal var body: some View {
+        VStack(alignment: .leading) {
+            ForEach(chartData.legends, id: \.id) { legend in
+                legend.getLegend(width: width, font: font, textColor: textColor)
+                    .if(scaleLegendBar(legend: legend)) { $0.scaleEffect(1.2, anchor: .leading) }
+                    .if(scaleLegendPie(legend: legend)) { $0.scaleEffect(1.2, anchor: .leading) }
+                    .ctAccessibilityLabel(legend.accessibilityLegendLabel())
+                    .ctAccessibilityValue(legend.legend)
             }
         }
     }

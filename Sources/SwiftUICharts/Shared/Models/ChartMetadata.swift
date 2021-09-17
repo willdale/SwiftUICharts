@@ -38,7 +38,7 @@ public struct ChartMetadata {
     public init(
         title: String = "",
         subtitle: String = "",
-        titleFont: Font = .title3,
+        titleFont: Font = .ctTitle3,
         titleColour: Color = Color.primary,
         subtitleFont: Font = .subheadline,
         subtitleColour: Color = Color.primary

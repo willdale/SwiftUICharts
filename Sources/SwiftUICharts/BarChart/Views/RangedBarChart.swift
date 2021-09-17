@@ -59,10 +59,10 @@ public struct RangedBarChart<ChartData>: View where ChartData: RangedBarChartDat
                     switch chartData.barStyle.colourFrom {
                     case .barStyle:
                         RangedBarChartBarStyleSubView(chartData: chartData)
-                            .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                            .ctAccessibilityLabel(chartData.metadata.title)
                     case .dataPoints:
                         RangedBarChartDataPointSubView(chartData: chartData)
-                            .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                            .ctAccessibilityLabel(chartData.metadata.title)
                     }
                 }
                 // Needed for axes label frames
