@@ -11,24 +11,26 @@ import SwiftUI
 extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType,
                                        Self: Publishable {
     internal func markerSubView(
-        markerData: [MarkerData],
+        markerData: MarkerData,
         touchLocation: CGPoint,
         chartSize: CGRect
     ) -> some View {
-        ForEach(markerData, id: \.self) { marker in
-            if let barMarker = marker.markerType as? BarMarkerType {
-                MarkerView.bar(barMarker, marker)
-            } else if let lineMarker = marker.markerType as? LineMarkerType {
-                MarkerView.line(lineMarker: lineMarker,
-                               markerData: marker,
-                               chartSize: chartSize,
-                               touchLocation: touchLocation,
-                               dataPoints: self.extraLineData!.dataPoints.map(\.value),
-                               lineType: self.extraLineData!.style.lineType,
-                               lineSpacing: .bar,
-                               minValue: self.extraLineData!.minValue,
-                               range: self.extraLineData!.range,
-                               ignoreZero: false)
+        ZStack {
+            ForEach(markerData.barMarkerData, id: \.self) { marker in
+                MarkerView.bar(barMarker: marker.markerType, markerData: marker)
+            }
+            
+            ForEach(markerData.lineMarkerData, id: \.self) { marker in
+                MarkerView.line(lineMarker: marker.markerType,
+                                markerData: marker,
+                                chartSize: chartSize,
+                                touchLocation: touchLocation,
+                                dataPoints: marker.dataPoints,
+                                lineType: marker.lineType,
+                                lineSpacing: marker.lineSpacing,
+                                minValue: marker.minValue,
+                                range: marker.range,
+                                ignoreZero: marker.ignoreZero)
             }
         }
     }

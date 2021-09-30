@@ -41,8 +41,6 @@ internal struct TouchOverlay<ChartData>: ViewModifier where ChartData: CTChartDa
                                                                       chartSize: geo.frame(in: .local))
                                     }
                                     .onEnded { _ in
-//                                        chartData.infoView.isTouchCurrent = false
-//                                        chartData.infoView.touchOverlayInfo = []
                                         chartData.touchDidFinish()
                                     }
                             )

@@ -56,7 +56,7 @@ public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData 
                         .scaleEffect(startAnimation ? 1 : 0)
                         .opacity(startAnimation ? 1 : 0)
                         .animation(Animation.spring().delay(Double(data) * 0.06))
-                        .if(chartData.infoView.touchOverlayInfo == [chartData.dataSets.dataPoints[data]]) {
+                        .if(chartData.touchPointData == [chartData.dataSets.dataPoints[data]]) {
                             $0
                                 .scaleEffect(1.1)
                                 .zIndex(1)

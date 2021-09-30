@@ -13,7 +13,7 @@ import Combine
  
  This model contains the data and styling information for a single line, line chart.
  */
-@available(macOS 11.0, iOS 13, watchOS 7, tvOS 14, *)
+@available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
 public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     
     
@@ -34,11 +34,10 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
 
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .line, dataSetType: .single)
 
-    public var subscription = Set<AnyCancellable>()
     public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<DataPoint>], Never>()
 
     private var internalSubscription: AnyCancellable?
-    private var markerData: [MarkerData] = []
+    private var markerData: MarkerData = MarkerData()
     private var internalDataSubscription: AnyCancellable?
     @Published public var touchPointData: [DataPoint] = []
     
@@ -75,23 +74,35 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     
     private func setupInternalCombine() {
         internalSubscription = touchedDataPointPublisher
-            .sink(receiveValue: {
-                let markerData: [MarkerData] = $0.map { data in
-                    var markerType: MarkerType
+            .sink {
+                let lineMarkerData: [LineMarkerData] = $0.compactMap { data in
                     if data.type == .extraLine,
                        let extraData = self.extraLineData {
-                        markerType = extraData.style.markerType
-                    } else {
-                        markerType = self.chartStyle.markerType
+                        return LineMarkerData(markerType: extraData.style.markerType,
+                                              location: data.location.convert,
+                                              dataPoints: extraData.dataPoints.map(\.value),
+                                              lineType: extraData.style.lineType,
+                                              lineSpacing: extraData.style.lineSpacing,
+                                              minValue: extraData.minValue,
+                                              range: extraData.range,
+                                              ignoreZero: false)
+                    } else if data.type == .line {
+                        return LineMarkerData(markerType: self.chartStyle.markerType,
+                                              location: data.location.convert,
+                                              dataPoints: self.dataSets.dataPoints.map(\.value),
+                                              lineType: self.dataSets.style.lineType,
+                                              lineSpacing: .line,
+                                              minValue: self.minValue,
+                                              range: self.range,
+                                              ignoreZero: false)
                     }
-                    return MarkerData(markerType: markerType,
-                                      location: data.location.convert)
+                    return nil
                 }
-                self.markerData = markerData
-            })
+                self.markerData =  MarkerData(lineMarkerData: lineMarkerData, barMarkerData: [])
+            }
         
         internalDataSubscription = touchedDataPointPublisher
-            .sink(receiveValue: { self.touchPointData = $0.map(\.datapoint) })
+            .sink { self.touchPointData = $0.map(\.datapoint) }
     }
     
     // MARK: Labels
@@ -202,7 +213,9 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     }
     
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        EmptyView()
+        markerSubView(markerData: markerData,
+                      chartSize: chartSize,
+                      touchLocation: touchLocation)
     }
     
     public func touchDidFinish() {

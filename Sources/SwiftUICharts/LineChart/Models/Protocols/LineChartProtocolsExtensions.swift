@@ -35,34 +35,28 @@ extension CTLineBarChartDataProtocol where Self: isHorizontal {
     }
 }
 
+// MARK: - Markers
 extension CTLineChartDataProtocol {
-    // MARK: - Markers
     internal func markerSubView(
-        markerData: [MarkerData],
+        markerData: MarkerData,
         chartSize: CGRect,
-        touchLocation: CGPoint,
-        dataPoints: [Double],
-        lineType: LineType
+        touchLocation: CGPoint
     ) -> some View {
-        ForEach(markerData, id: \.self) { marker in
-//            if let lineMarker = marker.markerType as? LineMarkerType {
-                EmptyView()
-//                if !marker.isExtra {
-//                    MarkerView.line(lineMarker: lineMarker,
-//                                    markerData: marker,
-//                                    chartSize: chartSize,
-//                                    touchLocation: touchLocation,
-//                                    dataPoints: dataPoints,
-//                                    lineType: ,
-//                                    lineSpacing: T##ExtraLineStyle.SpacingType,
-//                                    minValue: T##Double,
-//                                    range: T##Double,
-//                                    ignoreZero: T##Bool)
-//                }
-//            }
+        ForEach(markerData.lineMarkerData, id: \.self) { marker in
+            MarkerView.line(lineMarker: marker.markerType,
+                            markerData: marker,
+                            chartSize: chartSize,
+                            touchLocation: touchLocation,
+                            dataPoints: marker.dataPoints,
+                            lineType: marker.lineType,
+                            lineSpacing: marker.lineSpacing,
+                            minValue: marker.minValue,
+                            range: marker.range,
+                            ignoreZero: marker.ignoreZero)
         }
     }
 }
+
 
 // MARK: - Legends
 extension CTLineChartDataProtocol where Self.SetType.ID == UUID,

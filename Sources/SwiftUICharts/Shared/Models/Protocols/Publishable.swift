@@ -15,8 +15,6 @@ public protocol Publishable {
     
     associatedtype DataPoint: CTDataPointBaseProtocol
     
-    var subscription: Set<AnyCancellable> { get set }
-    
     /**
      Streams the data points from touch overlay.
      

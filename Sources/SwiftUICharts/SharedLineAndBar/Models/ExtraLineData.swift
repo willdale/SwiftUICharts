@@ -32,8 +32,9 @@ public struct ExtraLineData: Identifiable {
     }
     
     internal func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) -> ExtraLineDataPoint? {
-        let xSection: CGFloat = chartSize.width / CGFloat(dataPoints.count)
-        let index: Int = Int((touchLocation.x) / xSection)
+        let xSection: CGFloat = chartSize.width / CGFloat(dataPoints.count - 1)
+//        let index = Int((touchLocation.x) / xSection)
+        let index: Int = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataPoints.count {
             return dataPoints[index]
         }

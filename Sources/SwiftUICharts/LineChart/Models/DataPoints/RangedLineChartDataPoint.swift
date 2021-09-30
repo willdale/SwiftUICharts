@@ -54,3 +54,16 @@ public struct RangedLineChartDataPoint: CTRangedLineDataPoint, IgnoreMe {
         self.pointColour = pointColour
     }
 }
+
+extension RangedLineChartDataPoint {
+    internal init(
+        value: Double,
+        description: String?
+    ) {
+        self.value = value
+        self.description = description
+        
+        self.upperValue = 0
+        self.lowerValue = 0
+    }
+}

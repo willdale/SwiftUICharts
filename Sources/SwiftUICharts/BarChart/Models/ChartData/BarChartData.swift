@@ -11,8 +11,8 @@ import Combine
 /**
  Data for drawing and styling a standard Bar Chart.
  */
-@available(macOS 11.0, iOS 13, watchOS 7, tvOS 14, *)
-public final class BarChartData: CTBarChartDataProtocol, ChartConformance{
+@available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
+public final class BarChartData: CTBarChartDataProtocol, ChartConformance {
     
     // MARK: Properties
     public let id: UUID = UUID()
@@ -31,11 +31,10 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance{
         
     public var noDataText: Text
     
-    public var subscription = Set<AnyCancellable>()
     public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<DataPoint>], Never>()
 
     private var internalSubscription: AnyCancellable?
-    private var markerData: [MarkerData] = []
+    private var markerData: MarkerData = MarkerData()
     private var internalDataSubscription: AnyCancellable?
     @Published public var touchPointData: [DataPoint] = []
     
@@ -75,23 +74,34 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance{
     
     private func setupInternalCombine() {
         internalSubscription = touchedDataPointPublisher
-            .sink(receiveValue: {
-                let markerData: [MarkerData] = $0.map { data in
-                    var markerType: MarkerType
+            .sink {
+                let lineMarkerData: [LineMarkerData] = $0.compactMap { data in
                     if data.type == .extraLine,
                        let extraData = self.extraLineData {
-                        markerType = extraData.style.markerType
-                    } else {
-                        markerType = self.chartStyle.markerType
+                        return LineMarkerData(markerType: extraData.style.markerType,
+                                              location: data.location.convert,
+                                              dataPoints: extraData.dataPoints.map(\.value),
+                                              lineType: extraData.style.lineType,
+                                              lineSpacing: .bar,
+                                              minValue: extraData.minValue,
+                                              range: extraData.range,
+                                              ignoreZero: false)
                     }
-                    return MarkerData(markerType: markerType,
-                                      location: data.location.convert)
+                    return nil
                 }
-                self.markerData = markerData
-            })
+                let barMarkerData: [BarMarkerData] = $0.compactMap { data in
+                    if data.type == .bar {
+                        return BarMarkerData(markerType: self.chartStyle.markerType,
+                                              location: data.location.convert)
+                    }
+                    return nil
+                }
+                self.markerData =  MarkerData(lineMarkerData: lineMarkerData,
+                                              barMarkerData: barMarkerData)
+            }
         
         internalDataSubscription = touchedDataPointPublisher
-            .sink(receiveValue: { self.touchPointData = $0.map(\.datapoint) })
+            .sink { self.touchPointData = $0.map(\.datapoint) }
     }
     
     // MARK: Labels

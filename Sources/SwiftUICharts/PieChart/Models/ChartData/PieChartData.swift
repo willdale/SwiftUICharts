@@ -13,7 +13,7 @@ import Combine
  
  This model contains the data and styling information for a pie chart.
  */
-@available(macOS 11.0, iOS 13, watchOS 7, tvOS 14, *)
+@available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
 public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable {
     
     // MARK: Properties
@@ -25,12 +25,11 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable 
     @Published public var infoView: InfoViewData<PieChartDataPoint> = InfoViewData()
     
     public var noDataText: Text
-    
-    public var subscription = Set<AnyCancellable>()
-    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<PieChartDataPoint>],Never>()
-    
+
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .pie, dataSetType: .single)
     
+    private var internalDataSubscription: AnyCancellable?
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<PieChartDataPoint>],Never>()
     @Published public var touchPointData: [DataPoint] = []
     
     // MARK: Initializer
@@ -54,6 +53,9 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable 
         
         self.setupLegends()
         self.makeDataPoints()
+        
+        internalDataSubscription = touchedDataPointPublisher
+            .sink { self.touchPointData = $0.map(\.datapoint) }
     }
     
     // MARK: - Touch
@@ -73,7 +75,7 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable 
         }
         guard let wrappedIndex = index else { return }
         let datapoint = self.dataSets.dataPoints[wrappedIndex]
-//        self.touchedDataPointPublisher.send([PublishedTouchData(datapoint: datapoint, location: .zero)])
+        self.touchedDataPointPublisher.send([PublishedTouchData(datapoint: datapoint, location: .zero, type: .pie)])
     }
     
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View { EmptyView() }

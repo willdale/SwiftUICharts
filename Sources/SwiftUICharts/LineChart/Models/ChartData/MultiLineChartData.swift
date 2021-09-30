@@ -13,7 +13,7 @@ import Combine
  
  This model contains all the data and styling information for a single line, line chart.
  */
-@available(macOS 11.0, iOS 13, watchOS 7, tvOS 14, *)
+@available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
 public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance {
     
     // MARK: Properties
@@ -30,15 +30,14 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     @Published public var extraLineData: ExtraLineData!
         
     public var noDataText: Text
-
-    public var subscription = Set<AnyCancellable>()
-    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<LineChartDataPoint>],Never>()
-
-    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (.line, .multi)
-   
-    private var internalSubscription: AnyCancellable?
-    private var touchPointLocation: [CGPoint] = []
     
+    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .line, dataSetType: .single)
+    
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<DataPoint>], Never>()
+    
+    private var internalSubscription: AnyCancellable?
+    private var markerData: MarkerData = MarkerData()
+    private var internalDataSubscription: AnyCancellable?
     @Published public var touchPointData: [DataPoint] = []
     
     // MARK: Initializers
@@ -72,7 +71,40 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     
     private func setupInternalCombine() {
         internalSubscription = touchedDataPointPublisher
-            .sink(receiveValue: { self.touchPointLocation = $0.map(\.location) })
+            .sink { published in
+                var lineMarkerData: [LineMarkerData] = []
+                published.forEach { data in
+                    if data.type == .extraLine,
+                       let extraData = self.extraLineData {
+                        let extraLineMarkerData = LineMarkerData(markerType: extraData.style.markerType,
+                                                                 location: data.location.convert,
+                                                                 dataPoints: extraData.dataPoints.map(\.value),
+                                                                 lineType: extraData.style.lineType,
+                                                                 lineSpacing: .bar,
+                                                                 minValue: extraData.minValue,
+                                                                 range: extraData.range,
+                                                                 ignoreZero: false)
+                        lineMarkerData.append(extraLineMarkerData)
+                    } else if data.type == .line {
+                        let location = data.location
+                        let lineData = self.dataSets.dataSets.compactMap { dataSet in
+                            return LineMarkerData(markerType: self.chartStyle.markerType,
+                                                  location: location.convert,
+                                                  dataPoints: dataSet.dataPoints.map(\.value),
+                                                  lineType: dataSet.style.lineType,
+                                                  lineSpacing: .line,
+                                                  minValue: self.minValue,
+                                                  range: self.range,
+                                                  ignoreZero: false)
+                        }
+                        lineMarkerData.append(contentsOf: lineData)
+                    }
+                }
+                self.markerData =  MarkerData(lineMarkerData: lineMarkerData, barMarkerData: [])
+            }
+        
+        internalDataSubscription = touchedDataPointPublisher
+            .sink { self.touchPointData = $0.map(\.datapoint) }
     }
     
     // MARK: Labels
@@ -150,7 +182,8 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     }
     
     private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        let data: [(LineChartDataPoint, CGPoint)] = dataSets.dataSets.compactMap { dataSet in
+        var values: [PublishedTouchData<DataPoint>] = []
+        let data: [PublishedTouchData<LineChartDataPoint>] = dataSets.dataSets.compactMap { dataSet in
             let xSection: CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
             let ySection: CGFloat = chartSize.height / CGFloat(range)
             let index = Int((touchLocation.x + (xSection / 2)) / xSection)
@@ -162,33 +195,37 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
                 
                 if !dataSet.style.ignoreZero {
                     location = CGPoint(x: CGFloat(index) * xSection,
-                                      y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
+                                       y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
                     datapoint = dataSet.dataPoints[index]
                 } else {
                     if dataSet.dataPoints[index].value != 0 {
                         location = CGPoint(x: CGFloat(index) * xSection,
-                                      y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
+                                           y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
                         datapoint = dataSet.dataPoints[index]
-                       
                     }
                 }
             }
-            return (datapoint, location)
+            return PublishedTouchData(datapoint: datapoint, location: location, type: .line)
         }
+        
+        values.append(contentsOf: data)
+        
+        if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
+           let location = extraLine.location,
+           let value = extraLine.value
+        {
+            var datapoint = DataPoint(value: value, description: extraLine.description ?? "")
+            datapoint._legendTag = extraLine._legendTag ?? ""
+            values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
+        }
+        
+        touchedDataPointPublisher.send(values)
     }
     
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        ZStack {
-//            ForEach(self.dataSets.dataSets, id: \.id) { dataSet in
-//                self.markerSubView(dataSet: dataSet,
-//                                   dataPoints: dataSet.dataPoints,
-//                                   lineType: dataSet.style.lineType,
-//                                   touchLocation: touchLocation,
-//                                   chartSize: chartSize,
-//                                   pointLocation: self.touchPointLocation[0])
-//            }
-//            self.extraLineData?.getTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
-        }
+        markerSubView(markerData: markerData,
+                      chartSize: chartSize,
+                      touchLocation: touchLocation)
     }
     
     public func touchDidFinish() {

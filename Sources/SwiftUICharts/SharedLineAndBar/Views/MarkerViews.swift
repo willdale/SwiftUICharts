@@ -9,7 +9,10 @@ import SwiftUI
 
 struct MarkerView {
     
-    internal static func bar(_ barMarker: BarMarkerType, _ markerData: MarkerData) -> some View {
+    internal static func bar(
+        barMarker: BarMarkerType,
+        markerData: BarMarkerData
+    ) -> some View {
         Group {
             switch barMarker {
             case .none:
@@ -38,7 +41,7 @@ struct MarkerView {
     
     internal static func line(
         lineMarker: LineMarkerType,
-        markerData: MarkerData,
+        markerData: LineMarkerData,
         chartSize: CGRect,
         touchLocation: CGPoint,
         dataPoints: [Double],
