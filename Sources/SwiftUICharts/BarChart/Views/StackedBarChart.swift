@@ -59,18 +59,24 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
         if chartData.isGreaterThanTwo() {
             HStack(alignment: .bottom, spacing: 0) {
                 ForEach(chartData.dataSets.dataSets) { dataSet in
-                    StackElementSubView(dataSet: dataSet, specifier: chartData.infoView.touchSpecifier)
-                        .clipShape(RoundedRectangleBarShape(chartData.barStyle.cornerRadius))
-                        .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, dataSet.maxValue(), chartData.maxValue) : 0, anchor: .bottom)
-                        .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
-                        .background(Color(.gray).opacity(0.000000001))
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                            self.startAnimation = true
-                        }
-                        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
-                            self.startAnimation = false
-                        }
-                        .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                    GeometryReader { section in
+                        StackElementSubView(dataSet: dataSet, specifier: chartData.infoView.touchSpecifier)
+                            .clipShape(RoundedRectangleBarShape(chartData.barStyle.cornerRadius))
+                            .frame(startAnimation ?
+                                   chartData.barFrame(section.size, chartData.barStyle.barWidth, dataSet.totalSetValue, chartData.maxValue) :
+                                    chartData.barFrame(section.size, chartData.barStyle.barWidth, 0, 0))
+                            .offset(startAnimation ?
+                                    chartData.barOffset(section.size, chartData.barStyle.barWidth, dataSet.totalSetValue, chartData.maxValue) :
+                                        chartData.barOffset(section.size, chartData.barStyle.barWidth, 0, 0))
+                            .background(Color(.gray).opacity(0.000000001))
+                            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                                self.startAnimation = true
+                            }
+                            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                                self.startAnimation = false
+                            }
+                            .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                    }
                 }
             }
         } else { CustomNoDataView(chartData: chartData) }
