@@ -18,7 +18,8 @@ public struct GroupedBarDataPoint: CTMultiBarDataPoint {
     public var description: String?
     public var date: Date?
     public var group: GroupingData
-    public var legendTag: String = ""
+    
+    public var _legendTag: String = ""
     
     /// Data model for a single data point with colour info for use with a grouped bar chart.
     /// - Parameters:
@@ -39,4 +40,13 @@ public struct GroupedBarDataPoint: CTMultiBarDataPoint {
     }
     
     public typealias ID = UUID
+}
+
+extension GroupedBarDataPoint {
+    internal init(
+        value: Double,
+        description: String?
+    ) {
+        self.init(value: value, description: description, group: GroupingData(title: "", colour: ColourStyle()))
+    }
 }

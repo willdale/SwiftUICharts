@@ -11,28 +11,34 @@ import Combine
 /**
  Data for drawing and styling a standard Bar Chart.
  */
-public final class BarChartData: CTBarChartDataProtocol, GetDataProtocol, Publishable, PointOfInterestProtocol {
+@available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
+public final class BarChartData: CTBarChartDataProtocol, ChartConformance {
+    
     // MARK: Properties
     public let id: UUID = UUID()
     
-    @Published public final var dataSets: BarDataSet
-    @Published public final var metadata: ChartMetadata
-    @Published public final var xAxisLabels: [String]?
-    @Published public final var yAxisLabels: [String]?
-    @Published public final var barStyle: BarStyle
-    @Published public final var chartStyle: BarChartStyle
-    @Published public final var legends: [LegendData]
-    @Published public final var viewData: ChartViewData
-    @Published public final var infoView: InfoViewData<BarChartDataPoint> = InfoViewData()
+    @Published public var dataSets: BarDataSet
+    @Published public var metadata: ChartMetadata
+    @Published public var xAxisLabels: [String]?
+    @Published public var yAxisLabels: [String]?
+    @Published public var barStyle: BarStyle
+    @Published public var chartStyle: BarChartStyle
     
-    @Published public final var extraLineData: ExtraLineData!
+    @Published public var legends: [LegendData] = []
+    @Published public var viewData: ChartViewData = ChartViewData()
+    @Published public var infoView: InfoViewData<BarChartDataPoint> = InfoViewData()
+    @Published public var extraLineData: ExtraLineData!
+        
+    public var noDataText: Text
     
-    // Publishable
-    public var subscription = SubscriptionSet().subscription
-    public let touchedDataPointPublisher = PassthroughSubject<DataPoint,Never>()
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<DataPoint>], Never>()
+
+    private var internalSubscription: AnyCancellable?
+    private var markerData: MarkerData = MarkerData()
+    private var internalDataSubscription: AnyCancellable?
+    @Published public var touchPointData: [DataPoint] = []
     
-    public final var noDataText: Text
-    public final let chartType: (chartType: ChartType, dataSetType: DataSetType)
+    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (.bar, .single)
     
     // MARK: Initializer
     /// Initialises a standard Bar Chart.
@@ -62,14 +68,44 @@ public final class BarChartData: CTBarChartDataProtocol, GetDataProtocol, Publis
         self.chartStyle = chartStyle
         self.noDataText = noDataText
         
-        self.legends = [LegendData]()
-        self.viewData = ChartViewData()
-        self.chartType = (.bar, .single)
         self.setupLegends()
+        self.setupInternalCombine()
+    }
+    
+    private func setupInternalCombine() {
+        internalSubscription = touchedDataPointPublisher
+            .sink {
+                let lineMarkerData: [LineMarkerData] = $0.compactMap { data in
+                    if data.type == .extraLine,
+                       let extraData = self.extraLineData {
+                        return LineMarkerData(markerType: extraData.style.markerType,
+                                              location: data.location.convert,
+                                              dataPoints: extraData.dataPoints.map(\.value),
+                                              lineType: extraData.style.lineType,
+                                              lineSpacing: .bar,
+                                              minValue: extraData.minValue,
+                                              range: extraData.range,
+                                              ignoreZero: false)
+                    }
+                    return nil
+                }
+                let barMarkerData: [BarMarkerData] = $0.compactMap { data in
+                    if data.type == .bar {
+                        return BarMarkerData(markerType: self.chartStyle.markerType,
+                                              location: data.location.convert)
+                    }
+                    return nil
+                }
+                self.markerData =  MarkerData(lineMarkerData: lineMarkerData,
+                                              barMarkerData: barMarkerData)
+            }
+        
+        internalDataSubscription = touchedDataPointPublisher
+            .sink { self.touchPointData = $0.map(\.datapoint) }
     }
     
     // MARK: Labels
-    public final func getXAxisLabels() -> some View {
+    public func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
             case .dataPoint(let angle):
@@ -117,47 +153,57 @@ public final class BarChartData: CTBarChartDataProtocol, GetDataProtocol, Publis
             }
         }
     }
-    private final func getXSection(dataSet: BarDataSet, chartSize: CGRect) -> CGFloat {
+    
+    private func getXSection(dataSet: BarDataSet, chartSize: CGRect) -> CGFloat {
         chartSize.width.divide(by: dataSet.dataPoints.count)
     }
     
-    
     // MARK: - Touch
-    public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        ZStack {
-            self.markerSubView()
-            self.extraLineData?.getTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
-        }
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+        self.infoView.isTouchCurrent = true
+        self.infoView.touchLocation = touchLocation
+        self.infoView.chartSize = chartSize
+        self.processTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
     }
     
-    public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+    private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         let xSection: CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count)
+        let ySection: CGFloat = chartSize.height / CGFloat(dataSets.maxValue())
         let index: Int = Int((touchLocation.x) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
-            dataSets.dataPoints[index].legendTag = dataSets.legendTitle
-            self.infoView.touchOverlayInfo = [dataSets.dataPoints[index]]
-            if let data = self.extraLineData,
-               let point = data.getDataPoint(touchLocation: touchLocation, chartSize: chartSize) {
-                var dp = BarChartDataPoint(value: point.value, description: point.pointDescription)
-                dp.legendTag = data.legendTitle
-                self.infoView.touchOverlayInfo.append(dp)
+            let datapoint = dataSets.dataPoints[index]
+            let location = CGPoint(x: (CGFloat(index) * xSection) + (xSection / 2),
+                                            y: (chartSize.size.height - CGFloat(dataSets.dataPoints[index].value) * ySection))
+            
+            var values: [PublishedTouchData<DataPoint>] = []
+            values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
+            
+            if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
+               let location = extraLine.location,
+               let value = extraLine.value,
+               let description = extraLine.description,
+               let _legendTag = extraLine._legendTag
+            {
+                var datapoint = DataPoint(value: value, description: description)
+                datapoint._legendTag = _legendTag
+                values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
             }
-            touchedDataPointPublisher.send(dataSets.dataPoints[index])
+            
+            touchedDataPointPublisher.send(values)
         }
     }
+
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
+        markerSubView(markerData: markerData, touchLocation: touchLocation, chartSize: chartSize)
+    }
     
-    public final func getPointLocation(dataSet: BarDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
-        let xSection: CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count)
-        let ySection: CGFloat = chartSize.height / CGFloat(self.maxValue)
-        let index: Int = Int((touchLocation.x) / xSection)
-        if index >= 0 && index < dataSet.dataPoints.count {
-            return CGPoint(x: (CGFloat(index) * xSection) + (xSection / 2),
-                           y: (chartSize.size.height - CGFloat(dataSet.dataPoints[index].value) * ySection))
-        }
-        return nil
+    public func touchDidFinish() {
+        touchPointData = []
+        infoView.isTouchCurrent = false
     }
     
     public typealias SetType = BarDataSet
     public typealias DataPoint = BarChartDataPoint
     public typealias CTStyle = BarChartStyle
 }
+

@@ -51,15 +51,6 @@ extension CTChartData where Self: CTBarChartDataProtocol,
     }
 }
 
-// MARK: - Touch
-extension CTChartData {
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent = true
-        self.infoView.touchLocation = touchLocation
-        self.infoView.chartSize = chartSize
-        self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize)
-    }
-}
 
 extension CTChartData {
     
@@ -125,7 +116,8 @@ extension CTChartData {
      */
     @ViewBuilder public func infoLegend(info: DataPoint) -> some View {
         if let legend = self.legends.first(where: {
-            $0.legend == info.legendTag
+            $0.prioity == 1 &&
+                $0.legend == info._legendTag
         }) {
             legend.getLegendAsCircle(textColor: .primary)
         } else {

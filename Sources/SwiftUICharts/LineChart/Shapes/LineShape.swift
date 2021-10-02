@@ -40,14 +40,14 @@ internal struct LineShape<DP>: Shape where DP: CTStandardDataPointProtocol & Ign
         case .curvedLine:
             switch ignoreZero {
             case false:
-                return Path.curvedLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
+                return Path.curvedLine(rect: rect, dataPoints: dataPoints.map(\.value), minValue: minValue, range: range, isFilled: isFilled)
             case true:
                 return Path.curvedLineIgnoreZero(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
             }
         case .line:
             switch ignoreZero {
             case false:
-                return Path.straightLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
+                return Path.straightLine(rect: rect, dataPoints: dataPoints.map(\.value), minValue: minValue, range: range, isFilled: isFilled)
             case true:
                 return Path.straightLineIgnoreZero(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
             }

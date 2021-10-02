@@ -26,6 +26,7 @@ public enum DataSetType {
  case line // Line Chart Type
  case bar // Bar Chart Type
  case pie // Pie Chart Type
+ case extraLine // Extra Line Type
  ```
  */
 public enum ChartType {
@@ -35,6 +36,8 @@ public enum ChartType {
     case bar
     /// Pie Chart Type
     case pie
+    /// Extra Line Type
+    case extraLine
 }
 
 // MARK: - Style

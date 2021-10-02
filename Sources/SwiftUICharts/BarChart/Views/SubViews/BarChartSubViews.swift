@@ -17,7 +17,7 @@ import SwiftUI
  */
 internal struct BarChartBarStyleSubView<CD: BarChartData>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     
     internal init(chartData: CD) {
         self.chartData = chartData
@@ -67,7 +67,7 @@ internal struct BarChartBarStyleSubView<CD: BarChartData>: View {
  */
 internal struct BarChartDataPointSubView<CD: BarChartData>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     
     internal init(chartData: CD) {
         self.chartData = chartData
@@ -118,7 +118,7 @@ internal struct BarChartDataPointSubView<CD: BarChartData>: View {
 // MARK: Bar Style
 internal struct RangedBarChartBarStyleSubView<CD:RangedBarChartData>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     
     internal init(chartData: CD) {
         self.chartData = chartData
@@ -174,7 +174,7 @@ internal struct RangedBarChartBarStyleSubView<CD:RangedBarChartData>: View {
 // MARK: Data Points
 internal struct RangedBarChartDataPointSubView<CD:RangedBarChartData>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     
     internal init(chartData: CD) {
         self.chartData = chartData
@@ -182,37 +182,42 @@ internal struct RangedBarChartDataPointSubView<CD:RangedBarChartData>: View {
     
     internal var body: some View {
         ForEach(chartData.dataSets.dataPoints) { dataPoint in
-            GeometryReader { geo in
-                if dataPoint.colour.colourType == .colour,
-                   let colour = dataPoint.colour.colour
-                {
+            
+            if dataPoint.colour.colourType == .colour,
+               let colour = dataPoint.colour.colour
+            {
+                GeometryReader { geo in
                     RangedBarCell(chartData: chartData,
-                                             dataPoint: dataPoint,
-                                             fill: colour,
-                                             barSize: geo.frame(in: .local))
-                } else if dataPoint.colour.colourType == .gradientColour,
-                          let colours = dataPoint.colour.colours,
-                          let startPoint = dataPoint.colour.startPoint,
-                          let endPoint = dataPoint.colour.endPoint
-                {
-//                    RangedBarCell(chartData: chartData,
-//                               dataPoint: dataPoint,
-//                               fill: LinearGradient(gradient: Gradient(colors: colours),
-//                                                    startPoint: startPoint,
-//                                                    endPoint: endPoint),
-//                               barSize: geo.frame(in: .local))
-                } else if dataPoint.colour.colourType == .gradientStops,
-                          let stops = dataPoint.colour.stops,
-                          let startPoint = dataPoint.colour.startPoint,
-                          let endPoint = dataPoint.colour.endPoint
-                {
-//                    let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
-//                    RangedBarCell(chartData: chartData,
-//                               dataPoint: dataPoint,
-//                               fill: LinearGradient(gradient: Gradient(stops: safeStops),
-//                                                    startPoint: startPoint,
-//                                                    endPoint: endPoint),
-//                               barSize: geo.frame(in: .local))
+                                  dataPoint: dataPoint,
+                                  fill: colour,
+                                  barSize: geo.frame(in: .local))
+                }
+            } else if dataPoint.colour.colourType == .gradientColour,
+                      let colours = dataPoint.colour.colours,
+                      let startPoint = dataPoint.colour.startPoint,
+                      let endPoint = dataPoint.colour.endPoint
+            {
+                GeometryReader { geo in
+                    RangedBarCell(chartData: chartData,
+                                  dataPoint: dataPoint,
+                                  fill: LinearGradient(gradient: Gradient(colors: colours),
+                                                       startPoint: startPoint,
+                                                       endPoint: endPoint),
+                                  barSize: geo.frame(in: .local))
+                }
+            } else if dataPoint.colour.colourType == .gradientStops,
+                      let stops = dataPoint.colour.stops,
+                      let startPoint = dataPoint.colour.startPoint,
+                      let endPoint = dataPoint.colour.endPoint
+            {
+                GeometryReader { geo in
+                    let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
+                    RangedBarCell(chartData: chartData,
+                                  dataPoint: dataPoint,
+                                  fill: LinearGradient(gradient: Gradient(stops: safeStops),
+                                                       startPoint: startPoint,
+                                                       endPoint: endPoint),
+                                  barSize: geo.frame(in: .local))
                 }
             }
         }
@@ -230,7 +235,7 @@ internal struct RangedBarChartDataPointSubView<CD:RangedBarChartData>: View {
 // MARK: Bar Style
 internal struct HorizontalBarChartBarStyleSubView<CD: HorizontalBarChartData>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     
     internal init(chartData: CD) {
         self.chartData = chartData
@@ -277,7 +282,7 @@ internal struct HorizontalBarChartBarStyleSubView<CD: HorizontalBarChartData>: V
 // MARK: Data Points
 internal struct HorizontalBarChartDataPointSubView<CD: HorizontalBarChartData>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     
     internal init(chartData: CD) {
         self.chartData = chartData

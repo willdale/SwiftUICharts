@@ -14,33 +14,38 @@ import Combine
  The grouping data informs the model as to how the datapoints are linked.
  ```
  */
-public final class GroupedBarChartData: CTMultiBarChartDataProtocol, GetDataProtocol, Publishable, PointOfInterestProtocol {
+@available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
+public final class GroupedBarChartData: CTMultiBarChartDataProtocol, ChartConformance {
     
     // MARK: Properties
     public let id: UUID = UUID()
     
-    @Published public final var dataSets: GroupedBarDataSets
-    @Published public final var metadata: ChartMetadata
-    @Published public final var xAxisLabels: [String]?
-    @Published public final var yAxisLabels: [String]?
-    @Published public final var barStyle: BarStyle
-    @Published public final var chartStyle: BarChartStyle
-    @Published public final var legends: [LegendData]
-    @Published public final var viewData: ChartViewData
-    @Published public final var infoView: InfoViewData<GroupedBarDataPoint> = InfoViewData()
-    @Published public final var groups: [GroupingData]
+    @Published public var dataSets: GroupedBarDataSets
+    @Published public var metadata: ChartMetadata
+    @Published public var xAxisLabels: [String]?
+    @Published public var yAxisLabels: [String]?
+    @Published public var barStyle: BarStyle
+    @Published public var chartStyle: BarChartStyle
     
-    @Published public final var extraLineData: ExtraLineData!
+    @Published public var legends: [LegendData] = []
+    @Published public var viewData: ChartViewData = ChartViewData()
+    @Published public var infoView: InfoViewData<GroupedBarDataPoint> = InfoViewData()
+    @Published public var extraLineData: ExtraLineData!
     
-    // Publishable
-    public var subscription = SubscriptionSet().subscription
-    public let touchedDataPointPublisher = PassthroughSubject<DataPoint,Never>()
+    @Published public var groupSpacing: CGFloat = 0
+    @Published public var groups: [GroupingData]
+        
+    public var noDataText: Text
     
-    public final var noDataText: Text
-    public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
-    
-    final var groupSpacing: CGFloat = 0
-    
+    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .bar, dataSetType: .multi)
+
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<DataPoint>], Never>()
+
+    private var internalSubscription: AnyCancellable?
+    private var markerData: MarkerData = MarkerData()
+    private var internalDataSubscription: AnyCancellable?
+    @Published public var touchPointData: [DataPoint] = []
+        
     // MARK: Initializer
     /// Initialises a Grouped Bar Chart.
     ///
@@ -71,14 +76,45 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
         self.barStyle = barStyle
         self.chartStyle = chartStyle
         self.noDataText = noDataText
-        self.legends = [LegendData]()
-        self.viewData = ChartViewData()
-        self.chartType = (chartType: .bar, dataSetType: .multi)
+        
         self.setupLegends()
+        self.setupInternalCombine()
+    }
+    
+    private func setupInternalCombine() {
+        internalSubscription = touchedDataPointPublisher
+            .sink {
+                let lineMarkerData: [LineMarkerData] = $0.compactMap { data in
+                    if data.type == .extraLine,
+                       let extraData = self.extraLineData {
+                        return LineMarkerData(markerType: extraData.style.markerType,
+                                              location: data.location.convert,
+                                              dataPoints: extraData.dataPoints.map(\.value),
+                                              lineType: extraData.style.lineType,
+                                              lineSpacing: .bar,
+                                              minValue: extraData.minValue,
+                                              range: extraData.range,
+                                              ignoreZero: false)
+                    }
+                    return nil
+                }
+                let barMarkerData: [BarMarkerData] = $0.compactMap { data in
+                    if data.type == .bar {
+                        return BarMarkerData(markerType: self.chartStyle.markerType,
+                                              location: data.location.convert)
+                    }
+                    return nil
+                }
+                self.markerData =  MarkerData(lineMarkerData: lineMarkerData,
+                                              barMarkerData: barMarkerData)
+            }
+        
+        internalDataSubscription = touchedDataPointPublisher
+            .sink { self.touchPointData = $0.map(\.datapoint) }
     }
     
     // MARK: Labels
-    public final func getXAxisLabels() -> some View {
+    public func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
             case .dataPoint(let angle):
@@ -131,7 +167,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
         }
     }
     
-    private final func getXSectionForDataPoint(dataSet: GroupedBarDataSets, chartSize: CGRect, groupSpacing: CGFloat) -> CGFloat {
+    private func getXSectionForDataPoint(dataSet: GroupedBarDataSets, chartSize: CGRect, groupSpacing: CGFloat) -> CGFloat {
         let superXSection: CGFloat = (chartSize.width / CGFloat(dataSet.dataSets.count))
         let compensation: CGFloat = ((groupSpacing * CGFloat(dataSets.dataSets.count - 1)) / CGFloat(dataSets.dataSets.count))
         let section = superXSection - compensation
@@ -139,14 +175,14 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
     }
     
     // MARK: Touch
-    public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        ZStack {
-            self.markerSubView()
-            self.extraLineData?.getTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
-        }
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+        self.infoView.isTouchCurrent = true
+        self.infoView.touchLocation = touchLocation
+        self.infoView.chartSize = chartSize
+        self.processTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
     }
     
-    public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+    private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         // Divide the chart into equal sections.
         let superXSection: CGFloat = (chartSize.width / CGFloat(dataSets.dataSets.count))
         let superIndex: Int = Int((touchLocation.x) / superXSection)
@@ -156,52 +192,49 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
         
         // Make those sections take account of spacing between groups.
         let xSection: CGFloat = superXSection - compensation
-        let index: Int = Int((touchLocation.x - CGFloat((groupSpacing * CGFloat(superIndex)))) / xSection)
-        
-        if index >= 0 && index < dataSets.dataSets.count && superIndex == index {
-            let xSubSection: CGFloat = (xSection / CGFloat(dataSets.dataSets[index].dataPoints.count))
-            let subIndex: Int = Int((touchLocation.x - CGFloat((groupSpacing * CGFloat(superIndex)))) / xSubSection) - (dataSets.dataSets[index].dataPoints.count * index)
-            if subIndex >= 0 && subIndex < dataSets.dataSets[index].dataPoints.count {
-                dataSets.dataSets[index].dataPoints[subIndex].legendTag = dataSets.dataSets[index].setTitle
-                self.infoView.touchOverlayInfo = [dataSets.dataSets[index].dataPoints[subIndex]]
-                if let data = self.extraLineData,
-                   let point = data.getDataPoint(touchLocation: touchLocation, chartSize: chartSize) {
-                    var dp = GroupedBarDataPoint(value: point.value, description: point.pointDescription, group: GroupingData(title: data.legendTitle, colour: ColourStyle()))
-                    dp.legendTag = data.legendTitle
-                    self.infoView.touchOverlayInfo.append(dp)
-                }
-                touchedDataPointPublisher.send(dataSets.dataSets[index].dataPoints[subIndex])
-            }
-        }
-    }
-    
-    public final func getPointLocation(dataSet: GroupedBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
-        // Divide the chart into equal sections.
-        let superXSection: CGFloat = (chartSize.width / CGFloat(dataSet.dataSets.count))
-        let superIndex: Int = Int((touchLocation.x) / superXSection)
-        
-        // Work out how much to remove from xSection due to groupSpacing.
-        let compensation: CGFloat = ((groupSpacing * CGFloat(dataSet.dataSets.count - 1)) / CGFloat(dataSet.dataSets.count))
-        
-        // Make those sections take account of spacing between groups.
-        let xSection: CGFloat = superXSection - compensation
         let ySection: CGFloat = chartSize.height / CGFloat(self.maxValue)
         
         let index: Int = Int((touchLocation.x - CGFloat(groupSpacing * CGFloat(superIndex))) / xSection)
         
-        if index >= 0 && index < dataSet.dataSets.count && superIndex == index {
-            let subDataSet = dataSet.dataSets[index]
+        if index >= 0 && index < dataSets.dataSets.count && superIndex == index {
+            let subDataSet = dataSets.dataSets[index]
             let xSubSection: CGFloat = (xSection / CGFloat(subDataSet.dataPoints.count))
             let subIndex: Int = Int((touchLocation.x - CGFloat(groupSpacing * CGFloat(index))) / xSubSection) - (subDataSet.dataPoints.count * index)
             if subIndex >= 0 && subIndex < subDataSet.dataPoints.count {
                 let element: CGFloat = (CGFloat(subIndex) * xSubSection) + (xSubSection / 2)
                 let section: CGFloat = (superXSection * CGFloat(superIndex))
                 let spacing: CGFloat = ((groupSpacing / CGFloat(dataSets.dataSets.count)) * CGFloat(superIndex))
-                return CGPoint(x: element + section + spacing,
-                               y: (chartSize.height - CGFloat(subDataSet.dataPoints[subIndex].value) * ySection))
+                
+                let location =  CGPoint(x: element + section + spacing,
+                                        y: (chartSize.height - CGFloat(subDataSet.dataPoints[subIndex].value) * ySection))
+                let datapoint = dataSets.dataSets[index].dataPoints[subIndex]
+                
+                var values: [PublishedTouchData<DataPoint>] = []
+                values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
+                
+                if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
+                   let location = extraLine.location,
+                   let value = extraLine.value,
+                   let description = extraLine.description,
+                   let _legendTag = extraLine._legendTag
+                {
+                    var datapoint = DataPoint(value: value, description: description)
+                    datapoint._legendTag = _legendTag
+                    values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
+                }
+                
+                touchedDataPointPublisher.send(values)
             }
         }
-        return nil
+    }
+    
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
+        markerSubView(markerData: markerData, touchLocation: touchLocation, chartSize: chartSize)
+    }
+    
+    public func touchDidFinish() {
+        touchPointData = []
+        infoView.isTouchCurrent = false
     }
     
     public typealias SetType = GroupedBarDataSets

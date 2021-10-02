@@ -10,14 +10,14 @@ import SwiftUI
 /**
  View that displays information from the touch events.
  */
-internal struct TouchOverlayBox<T: CTChartData>: View {
+internal struct TouchOverlayBox<ChartData>: View where ChartData: CTChartData & Publishable {
     
-    @ObservedObject private var chartData: T
+    @ObservedObject private var chartData: ChartData
     
     @Binding private var boxFrame: CGRect
     
     internal init(
-        chartData: T,
+        chartData: ChartData,
         boxFrame: Binding<CGRect>
     ) {
         self.chartData = chartData
@@ -28,7 +28,7 @@ internal struct TouchOverlayBox<T: CTChartData>: View {
         Group {
             if chartData.chartStyle.infoBoxContentAlignment == .vertical {
                 VStack(alignment: .leading, spacing: 0) {
-                    ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
+                    ForEach(chartData.touchPointData, id: \.id) { point in
                         chartData.infoDescription(info: point)
                             .font(chartData.chartStyle.infoBoxDescriptionFont)
                             .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
@@ -41,7 +41,7 @@ internal struct TouchOverlayBox<T: CTChartData>: View {
                 }
             } else {
                 HStack {
-                    ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
+                    ForEach(chartData.touchPointData, id: \.id) { point in
                         chartData.infoLegend(info: point)
                             .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
                             .layoutPriority(1)

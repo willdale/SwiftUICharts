@@ -13,30 +13,36 @@ import Combine
  
  The grouping data informs the model as to how the datapoints are linked.
  */
-public final class StackedBarChartData: CTMultiBarChartDataProtocol, GetDataProtocol, Publishable, PointOfInterestProtocol {
+@available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
+public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConformance {
     
     // MARK: Properties
     public let id: UUID = UUID()
     
-    @Published public final var dataSets: StackedBarDataSets
-    @Published public final var metadata: ChartMetadata
-    @Published public final var xAxisLabels: [String]?
-    @Published public final var yAxisLabels: [String]?
-    @Published public final var barStyle: BarStyle
-    @Published public final var chartStyle: BarChartStyle
-    @Published public final var legends: [LegendData]
-    @Published public final var viewData: ChartViewData
-    @Published public final var infoView: InfoViewData<StackedBarDataPoint> = InfoViewData()
-    @Published public final var groups: [GroupingData]
+    @Published public var dataSets: StackedBarDataSets
+    @Published public var metadata: ChartMetadata
+    @Published public var xAxisLabels: [String]?
+    @Published public var yAxisLabels: [String]?
+    @Published public var barStyle: BarStyle
+    @Published public var chartStyle: BarChartStyle
     
-    @Published public final var extraLineData: ExtraLineData!
+    @Published public var legends: [LegendData] = []
+    @Published public var viewData: ChartViewData = ChartViewData()
+    @Published public var infoView: InfoViewData<StackedBarDataPoint> = InfoViewData()
+    @Published public var extraLineData: ExtraLineData!
     
-    // Publishable
-    public var subscription = SubscriptionSet().subscription
-    public let touchedDataPointPublisher = PassthroughSubject<DataPoint,Never>()
+    @Published public var groups: [GroupingData]
     
-    public final var noDataText: Text
-    public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
+    public var noDataText: Text
+
+    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .bar, dataSetType: .multi)
+    
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<DataPoint>], Never>()
+
+    private var internalSubscription: AnyCancellable?
+    private var markerData: MarkerData = MarkerData()
+    private var internalDataSubscription: AnyCancellable?
+    @Published public var touchPointData: [DataPoint] = []
     
     // MARK: Initializer
     /// Initialises a Stacked Bar Chart.
@@ -68,14 +74,45 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
         self.barStyle = barStyle
         self.chartStyle = chartStyle
         self.noDataText = noDataText
-        self.legends = [LegendData]()
-        self.viewData = ChartViewData()
-        self.chartType = (chartType: .bar, dataSetType: .multi)
+        
         self.setupLegends()
+        self.setupInternalCombine()
     }
-
+    
+    private func setupInternalCombine() {
+        internalSubscription = touchedDataPointPublisher
+            .sink {
+                let lineMarkerData: [LineMarkerData] = $0.compactMap { data in
+                    if data.type == .extraLine,
+                       let extraData = self.extraLineData {
+                        return LineMarkerData(markerType: extraData.style.markerType,
+                                              location: data.location.convert,
+                                              dataPoints: extraData.dataPoints.map(\.value),
+                                              lineType: extraData.style.lineType,
+                                              lineSpacing: .bar,
+                                              minValue: extraData.minValue,
+                                              range: extraData.range,
+                                              ignoreZero: false)
+                    }
+                    return nil
+                }
+                let barMarkerData: [BarMarkerData] = $0.compactMap { data in
+                    if data.type == .bar {
+                        return BarMarkerData(markerType: self.chartStyle.markerType,
+                                              location: data.location.convert)
+                    }
+                    return nil
+                }
+                self.markerData =  MarkerData(lineMarkerData: lineMarkerData,
+                                              barMarkerData: barMarkerData)
+            }
+        
+        internalDataSubscription = touchedDataPointPublisher
+            .sink { self.touchPointData = $0.map(\.datapoint) }
+    }
+    
     // MARK: Labels
-    public final func getXAxisLabels() -> some View {
+    public func getXAxisLabels() -> some View {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
             case .dataPoint(let angle):
@@ -127,57 +164,52 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
             }
         }
     }
-    
-    // MARK:  Touch
-    public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        ZStack {
-            self.markerSubView()
-            self.extraLineData?.getTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
-        }
+
+    // MARK: - Touch
+    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+        self.infoView.isTouchCurrent = true
+        self.infoView.touchLocation = touchLocation
+        self.infoView.chartSize = chartSize
+        self.processTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
     }
     
-    public final func getDataPoint(touchLocation: CGPoint, chartSize: CGRect) {
+    private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         // Filter to get the right dataset based on the x axis.
         let superXSection: CGFloat = chartSize.width / CGFloat(dataSets.dataSets.count)
         let superIndex: Int = Int((touchLocation.x) / superXSection)
         if superIndex >= 0 && superIndex < dataSets.dataSets.count {
             // Filter to get the right dataset based on the y axis.
-            let calculatedIndex = calculateIndex(dataSet: dataSets.dataSets[superIndex], touchLocation: touchLocation, chartSize: chartSize)
-            if let index = calculatedIndex.yIndex?.offset {
-                if index >= 0 && index < dataSets.dataSets[superIndex].dataPoints.count {
-                    dataSets.dataSets[superIndex].dataPoints[index].legendTag = dataSets.dataSets[superIndex].setTitle
-                    self.infoView.touchOverlayInfo = [dataSets.dataSets[superIndex].dataPoints[index]]
-                    if let data = self.extraLineData,
-                       let point = data.getDataPoint(touchLocation: touchLocation, chartSize: chartSize) {
-                        var dp = StackedBarDataPoint(value: point.value, description: point.pointDescription, group: GroupingData(title: data.legendTitle, colour: ColourStyle()))
-                        dp.legendTag = data.legendTitle
-                        self.infoView.touchOverlayInfo.append(dp)
-                    }
-                    touchedDataPointPublisher.send(dataSets.dataSets[superIndex].dataPoints[index])
-                }
-            }
-        }
-    }
-    
-    public final func getPointLocation(dataSet: StackedBarDataSets, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
-        // Filter to get the right dataset based on the x axis.
-        let superXSection: CGFloat = chartSize.width / CGFloat(dataSet.dataSets.count)
-        let superIndex: Int = Int((touchLocation.x) / superXSection)
-        if superIndex >= 0 && superIndex < dataSet.dataSets.count {
-            // Filter to get the right dataset based on the y axis.
-            let subDataSet = dataSet.dataSets[superIndex]
+            let subDataSet = dataSets.dataSets[superIndex]
             let calculatedIndex = calculateIndex(dataSet: subDataSet, touchLocation: touchLocation, chartSize: chartSize)
             if let index = calculatedIndex.yIndex?.offset {
                 if index >= 0 && index < subDataSet.dataPoints.count {
-                    return CGPoint(x: (CGFloat(superIndex) * superXSection) + (superXSection / 2),
-                                   y: (chartSize.height - calculatedIndex.endPointOfElements[index]))
-                }
+                    let datapoint = dataSets.dataSets[superIndex].dataPoints[index]
+                    let location = CGPoint(x: (CGFloat(superIndex) * superXSection) + (superXSection / 2),
+                                           y: (chartSize.height - calculatedIndex.endPointOfElements[index]))
+                    var values: [PublishedTouchData<DataPoint>] = []
+                    values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
+                    
+                    if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
+                       let location = extraLine.location,
+                       let value = extraLine.value,
+                       let description = extraLine.description,
+                       let _legendTag = extraLine._legendTag
+                    {
+                        var datapoint = DataPoint(value: value, description: description)
+                        datapoint._legendTag = _legendTag
+                        values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
+                    }
+                    
+                    touchedDataPointPublisher.send(values)                }
             }
         }
-        return nil
     }
     
-    private final func calculateIndex(
+    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
+        markerSubView(markerData: markerData, touchLocation: touchLocation, chartSize: chartSize)
+    }
+    
+    private func calculateIndex(
         dataSet: StackedBarDataSet,
         touchLocation: CGPoint,
         chartSize: CGRect
@@ -211,6 +243,11 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
             .first(where:) { $0.element > abs(touchLocation.y - chartSize.height) }
         
         return (yIndex, endPointOfElements)
+    }
+    
+    public func touchDidFinish() {
+        touchPointData = []
+        infoView.isTouchCurrent = false
     }
     
     public typealias SetType = StackedBarDataSets

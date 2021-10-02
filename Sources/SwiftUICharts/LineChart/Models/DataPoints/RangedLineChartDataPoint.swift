@@ -23,7 +23,7 @@ public struct RangedLineChartDataPoint: CTRangedLineDataPoint, IgnoreMe {
     
     public var ignoreMe: Bool = false
     
-    public var legendTag: String = ""
+    public var _legendTag: String = ""
     
     internal var _valueOnly: Bool = false
     
@@ -52,5 +52,18 @@ public struct RangedLineChartDataPoint: CTRangedLineDataPoint, IgnoreMe {
         self.description = description
         self.date = date
         self.pointColour = pointColour
+    }
+}
+
+extension RangedLineChartDataPoint {
+    internal init(
+        value: Double,
+        description: String?
+    ) {
+        self.value = value
+        self.description = description
+        
+        self.upperValue = 0
+        self.lowerValue = 0
     }
 }

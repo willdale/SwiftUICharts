@@ -8,34 +8,29 @@
 import SwiftUI
 
 // MARK: - Markers
-extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType {
-    internal func markerSubView() -> some View {
-        Group {
-            if let position = self.getPointLocation(dataSet: dataSets as! Self.SetPoint,
-                                                    touchLocation: self.infoView.touchLocation,
-                                                    chartSize: self.infoView.chartSize) {
-                switch self.chartStyle.markerType {
-                case .none:
-                    EmptyView()
-                case .vertical(let colour, let style):
-                    MarkerFull(position: position)
-                        .stroke(colour, style: style)
-                case .full(let colour, let style):
-                    MarkerFull(position: position)
-                        .stroke(colour, style: style)
-                case .bottomLeading(let colour, let style):
-                    MarkerBottomLeading(position: position)
-                        .stroke(colour, style: style)
-                case .bottomTrailing(let colour, let style):
-                    MarkerBottomTrailing(position: position)
-                        .stroke(colour, style: style)
-                case .topLeading(let colour, let style):
-                    MarkerTopLeading(position: position)
-                        .stroke(colour, style: style)
-                case .topTrailing(let colour, let style):
-                    MarkerTopTrailing(position: position)
-                        .stroke(colour, style: style)
-                }
+extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType,
+                                       Self: Publishable {
+    internal func markerSubView(
+        markerData: MarkerData,
+        touchLocation: CGPoint,
+        chartSize: CGRect
+    ) -> some View {
+        ZStack {
+            ForEach(markerData.barMarkerData, id: \.self) { marker in
+                MarkerView.bar(barMarker: marker.markerType, markerData: marker)
+            }
+            
+            ForEach(markerData.lineMarkerData, id: \.self) { marker in
+                MarkerView.line(lineMarker: marker.markerType,
+                                markerData: marker,
+                                chartSize: chartSize,
+                                touchLocation: touchLocation,
+                                dataPoints: marker.dataPoints,
+                                lineType: marker.lineType,
+                                lineSpacing: marker.lineSpacing,
+                                minValue: marker.minValue,
+                                range: marker.range,
+                                ignoreZero: marker.ignoreZero)
             }
         }
     }

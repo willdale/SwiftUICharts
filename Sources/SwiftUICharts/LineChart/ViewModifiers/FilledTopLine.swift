@@ -46,6 +46,7 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                               ignoreZero: chartData.dataSets.style.ignoreZero)
                         .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                         .stroke(colour, style: strokeStyle)
+                        
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }

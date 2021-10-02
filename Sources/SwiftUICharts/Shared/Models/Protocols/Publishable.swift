@@ -15,13 +15,12 @@ public protocol Publishable {
     
     associatedtype DataPoint: CTDataPointBaseProtocol
     
-    
-    var subscription: Set<AnyCancellable> { get set }
-    
     /**
      Streams the data points from touch overlay.
      
      Uses Combine
      */
-    var touchedDataPointPublisher: PassthroughSubject<DataPoint, Never> { get }
+    var touchedDataPointPublisher: PassthroughSubject<[PublishedTouchData<Self.DataPoint>], Never> { get }
+    
+    var touchPointData: [DataPoint] { get set }
 }

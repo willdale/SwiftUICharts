@@ -19,7 +19,8 @@ public struct RangedBarDataPoint: CTRangedBarDataPoint {
     public var description: String?
     public var date: Date?
     public var colour: ColourStyle
-    public var legendTag: String = ""
+    
+    public var _legendTag: String = ""
     
     internal var _value: Double = 0
     internal var _valueOnly: Bool = false
@@ -53,4 +54,18 @@ public struct RangedBarDataPoint: CTRangedBarDataPoint {
     }
     
     public typealias ID = UUID
+}
+
+extension RangedBarDataPoint {
+    internal init(
+        value: Double,
+        description: String?
+    ) {
+        self._value = value
+        self.description = description
+        
+        self.upperValue = 0
+        self.lowerValue = 0
+        self.colour = ColourStyle(colour: .red)
+    }
 }

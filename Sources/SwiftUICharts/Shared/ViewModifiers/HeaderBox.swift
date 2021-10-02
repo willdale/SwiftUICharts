@@ -10,10 +10,10 @@ import SwiftUI
 /**
  Displays the metadata about the chart as well as optionally touch overlay information.
  */
-internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
+internal struct HeaderBox<T>: ViewModifier where T: CTChartData & Publishable {
     
     @ObservedObject private var chartData: T
-    
+            
     init(chartData: T) {
         self.chartData = chartData
     }
@@ -31,7 +31,7 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
     var touchOverlay: some View {
         VStack(alignment: .trailing) {
             if chartData.infoView.isTouchCurrent {
-                ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
+                ForEach(chartData.touchPointData, id: \.id) { point in
                     chartData.infoValueUnit(info: point)
                         .font(chartData.chartStyle.infoBoxValueFont)
                         .foregroundColor(chartData.chartStyle.infoBoxValueColour)
@@ -106,7 +106,7 @@ extension View {
      - Returns: A  new view containing the chart with a view above
      to display metadata.
      */
-    public func headerBox<T:CTChartData>(chartData: T) -> some View {
+    public func headerBox<T:CTChartData & Publishable>(chartData: T) -> some View {
         self.modifier(HeaderBox(chartData: chartData))
     }
 }
