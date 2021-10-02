@@ -124,7 +124,9 @@ public protocol CTStandardBarDataPoint: CTBarDataPointBaseProtocol, CTStandardDa
 /**
  A protocol to extend functionality of `CTBarDataPointBaseProtocol` specifically for standard Bar Charts.
  */
-public protocol CTRangedBarDataPoint: CTBarDataPointBaseProtocol, CTRangeDataPointProtocol, CTBarColourProtocol, CTisRanged {}
+public protocol CTRangedBarDataPoint: CTBarDataPointBaseProtocol, CTRangeDataPointProtocol, CTBarColourProtocol, CTisRanged {
+    var value: Double { get }
+}
 
 /**
  A protocol to extend functionality of `CTBarDataPointBaseProtocol` specifically for multi part Bar Charts.

@@ -28,9 +28,9 @@ internal struct BarChartBarStyleSubView<CD: BarChartData>: View {
            let colour = chartData.barStyle.colour.colour
         {
             ForEach(chartData.dataSets.dataPoints) { dataPoint in
-                ColourBar(chartData: chartData,
+                BarElement(chartData: chartData,
                           dataPoint: dataPoint,
-                          colour: colour)
+                          fill: colour)
             }
         } else if chartData.barStyle.colour.colourType == .gradientColour,
                   let colours = chartData.barStyle.colour.colours,
@@ -38,11 +38,11 @@ internal struct BarChartBarStyleSubView<CD: BarChartData>: View {
                   let endPoint = chartData.barStyle.colour.endPoint
         {
             ForEach(chartData.dataSets.dataPoints) { dataPoint in
-                GradientColoursBar(chartData: chartData,
-                                   dataPoint: dataPoint,
-                                   colours: colours,
-                                   startPoint: startPoint,
-                                   endPoint: endPoint)
+                BarElement(chartData: chartData,
+                          dataPoint: dataPoint,
+                          fill: LinearGradient(gradient: Gradient(colors: colours),
+                                               startPoint: startPoint,
+                                               endPoint: endPoint))
             }
         } else if chartData.barStyle.colour.colourType == .gradientStops,
                   let stops = chartData.barStyle.colour.stops,
@@ -51,17 +51,17 @@ internal struct BarChartBarStyleSubView<CD: BarChartData>: View {
         {
             let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
             ForEach(chartData.dataSets.dataPoints) { dataPoint in
-                GradientStopsBar(chartData: chartData,
-                                 dataPoint: dataPoint,
-                                 stops: safeStops,
-                                 startPoint: startPoint,
-                                 endPoint: endPoint)
+                BarElement(chartData: chartData,
+                          dataPoint: dataPoint,
+                          fill: LinearGradient(gradient: Gradient(stops: safeStops),
+                                               startPoint: startPoint,
+                                               endPoint: endPoint))
             }
         }
     }
 }
 
-// MARK: DataPoints
+// MARK: Data Points
 /**
  Bar segment where the colour information comes from datapoints.
  */
@@ -78,34 +78,34 @@ internal struct BarChartDataPointSubView<CD: BarChartData>: View {
             if dataPoint.colour.colourType == .colour,
                let colour = dataPoint.colour.colour
             {
-                ColourBar(chartData: chartData,
+                BarElement(chartData: chartData,
                           dataPoint: dataPoint,
-                          colour: colour)
+                          fill: colour)
             } else if dataPoint.colour.colourType == .gradientColour,
                       let colours = dataPoint.colour.colours,
                       let startPoint = dataPoint.colour.startPoint,
                       let endPoint = dataPoint.colour.endPoint
             {
-                GradientColoursBar(chartData: chartData,
-                                   dataPoint: dataPoint,
-                                   colours: colours,
-                                   startPoint: startPoint,
-                                   endPoint: endPoint)
+                BarElement(chartData: chartData,
+                          dataPoint: dataPoint,
+                          fill: LinearGradient(gradient: Gradient(colors: colours),
+                                               startPoint: startPoint,
+                                               endPoint: endPoint))
             } else if dataPoint.colour.colourType == .gradientStops,
                       let stops = dataPoint.colour.stops,
                       let startPoint = dataPoint.colour.startPoint,
                       let endPoint = dataPoint.colour.endPoint
             {
                 let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
-                GradientStopsBar(chartData: chartData,
-                                 dataPoint: dataPoint,
-                                 stops: safeStops,
-                                 startPoint: startPoint,
-                                 endPoint: endPoint)
-            } else {
-                ColourBar(chartData: chartData,
+                BarElement(chartData: chartData,
                           dataPoint: dataPoint,
-                          colour: .blue)
+                          fill: LinearGradient(gradient: Gradient(stops: safeStops),
+                                               startPoint: startPoint,
+                                               endPoint: endPoint))
+            } else {
+                BarElement(chartData: chartData,
+                          dataPoint: dataPoint,
+                          fill: Color.blue)
             }
         }
     }
@@ -115,8 +115,7 @@ internal struct BarChartDataPointSubView<CD: BarChartData>: View {
 //
 //
 //
-// MARK: BarStyle
-
+// MARK: Bar Style
 internal struct RangedBarChartBarStyleSubView<CD:RangedBarChartData>: View {
     
     @ObservedObject private var chartData: CD
@@ -131,10 +130,10 @@ internal struct RangedBarChartBarStyleSubView<CD:RangedBarChartData>: View {
         {
             ForEach(chartData.dataSets.dataPoints) { dataPoint in
                 GeometryReader { geo in
-                    RangedBarChartColourCell(chartData: chartData,
-                                             dataPoint: dataPoint,
-                                             colour: colour,
-                                             barSize: geo.frame(in: .local))
+                    RangedBarCell(chartData: chartData,
+                                  dataPoint: dataPoint,
+                                  fill: colour,
+                                  barSize: geo.frame(in: .local))
                 }
             }
         } else if chartData.barStyle.colour.colourType == .gradientColour,
@@ -144,12 +143,12 @@ internal struct RangedBarChartBarStyleSubView<CD:RangedBarChartData>: View {
         {
             ForEach(chartData.dataSets.dataPoints) { dataPoint in
                 GeometryReader { geo in
-                    RangedBarChartColoursCell(chartData: chartData,
-                                              dataPoint: dataPoint,
-                                              colours: colours,
-                                              startPoint: startPoint,
-                                              endPoint: endPoint,
-                                              barSize: geo.frame(in: .local))
+                    RangedBarCell(chartData: chartData,
+                                  dataPoint: dataPoint,
+                                  fill: LinearGradient(gradient: Gradient(colors: colours),
+                                                       startPoint: startPoint,
+                                                       endPoint: endPoint),
+                                  barSize: geo.frame(in: .local))
                 }
             }
         } else if chartData.barStyle.colour.colourType == .gradientStops,
@@ -160,19 +159,19 @@ internal struct RangedBarChartBarStyleSubView<CD:RangedBarChartData>: View {
             let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
             ForEach(chartData.dataSets.dataPoints) { dataPoint in
                 GeometryReader { geo in
-                    RangedBarChartStopsCell(chartData: chartData,
-                                            dataPoint: dataPoint,
-                                            stops: safeStops,
-                                            startPoint: startPoint,
-                                            endPoint: endPoint,
-                                            barSize: geo.frame(in: .local))
+                RangedBarCell(chartData: chartData,
+                              dataPoint: dataPoint,
+                              fill: LinearGradient(gradient: Gradient(stops: safeStops),
+                                                   startPoint: startPoint,
+                                                   endPoint: endPoint),
+                              barSize: geo.frame(in: .local))
                 }
             }
         }
     }
 }
 
-// MARK: DataPoints
+// MARK: Data Points
 internal struct RangedBarChartDataPointSubView<CD:RangedBarChartData>: View {
     
     @ObservedObject private var chartData: CD
@@ -183,37 +182,42 @@ internal struct RangedBarChartDataPointSubView<CD:RangedBarChartData>: View {
     
     internal var body: some View {
         ForEach(chartData.dataSets.dataPoints) { dataPoint in
-            GeometryReader { geo in
-                if dataPoint.colour.colourType == .colour,
-                   let colour = dataPoint.colour.colour
-                {
-                    RangedBarChartColourCell(chartData: chartData,
-                                             dataPoint: dataPoint,
-                                             colour: colour,
-                                             barSize: geo.frame(in: .local))
-                } else if dataPoint.colour.colourType == .gradientColour,
-                          let colours = dataPoint.colour.colours,
-                          let startPoint = dataPoint.colour.startPoint,
-                          let endPoint = dataPoint.colour.endPoint
-                {
-                    RangedBarChartColoursCell(chartData: chartData,
-                                              dataPoint: dataPoint,
-                                              colours: colours,
-                                              startPoint: startPoint,
-                                              endPoint: endPoint,
-                                              barSize: geo.frame(in: .local))
-                } else if dataPoint.colour.colourType == .gradientStops,
-                          let stops = dataPoint.colour.stops,
-                          let startPoint = dataPoint.colour.startPoint,
-                          let endPoint = dataPoint.colour.endPoint
-                {
+            
+            if dataPoint.colour.colourType == .colour,
+               let colour = dataPoint.colour.colour
+            {
+                GeometryReader { geo in
+                    RangedBarCell(chartData: chartData,
+                                  dataPoint: dataPoint,
+                                  fill: colour,
+                                  barSize: geo.frame(in: .local))
+                }
+            } else if dataPoint.colour.colourType == .gradientColour,
+                      let colours = dataPoint.colour.colours,
+                      let startPoint = dataPoint.colour.startPoint,
+                      let endPoint = dataPoint.colour.endPoint
+            {
+                GeometryReader { geo in
+                    RangedBarCell(chartData: chartData,
+                                  dataPoint: dataPoint,
+                                  fill: LinearGradient(gradient: Gradient(colors: colours),
+                                                       startPoint: startPoint,
+                                                       endPoint: endPoint),
+                                  barSize: geo.frame(in: .local))
+                }
+            } else if dataPoint.colour.colourType == .gradientStops,
+                      let stops = dataPoint.colour.stops,
+                      let startPoint = dataPoint.colour.startPoint,
+                      let endPoint = dataPoint.colour.endPoint
+            {
+                GeometryReader { geo in
                     let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
-                    RangedBarChartStopsCell(chartData: chartData,
-                                            dataPoint: dataPoint,
-                                            stops: safeStops,
-                                            startPoint: startPoint,
-                                            endPoint: endPoint,
-                                            barSize: geo.frame(in: .local))
+                    RangedBarCell(chartData: chartData,
+                                  dataPoint: dataPoint,
+                                  fill: LinearGradient(gradient: Gradient(stops: safeStops),
+                                                       startPoint: startPoint,
+                                                       endPoint: endPoint),
+                                  barSize: geo.frame(in: .local))
                 }
             }
         }
@@ -229,9 +233,6 @@ internal struct RangedBarChartDataPointSubView<CD:RangedBarChartData>: View {
 //
 //
 // MARK: Bar Style
-/**
- Bar segment where the colour information comes from chart style.
- */
 internal struct HorizontalBarChartBarStyleSubView<CD: HorizontalBarChartData>: View {
     
     @ObservedObject private var chartData: CD
@@ -245,9 +246,9 @@ internal struct HorizontalBarChartBarStyleSubView<CD: HorizontalBarChartData>: V
            let colour = chartData.barStyle.colour.colour
         {
             ForEach(chartData.dataSets.dataPoints) { dataPoint in
-                HorizontalColourBar(chartData: chartData,
-                                    dataPoint: dataPoint,
-                                    colour: colour)
+                HorizontalBarElement(chartData: chartData,
+                                     dataPoint: dataPoint,
+                                     fill: colour)
             }
         } else if chartData.barStyle.colour.colourType == .gradientColour,
                   let colours = chartData.barStyle.colour.colours,
@@ -255,11 +256,11 @@ internal struct HorizontalBarChartBarStyleSubView<CD: HorizontalBarChartData>: V
                   let endPoint = chartData.barStyle.colour.endPoint
         {
             ForEach(chartData.dataSets.dataPoints) { dataPoint in
-                HorizontalGradientColoursBar(chartData: chartData,
-                                             dataPoint: dataPoint,
-                                             colours: colours,
-                                             startPoint: startPoint,
-                                             endPoint: endPoint)
+                HorizontalBarElement(chartData: chartData,
+                                     dataPoint: dataPoint,
+                                     fill: LinearGradient(gradient: Gradient(colors: colours),
+                                                          startPoint: startPoint,
+                                                          endPoint: endPoint))
             }
         } else if chartData.barStyle.colour.colourType == .gradientStops,
                   let stops = chartData.barStyle.colour.stops,
@@ -268,20 +269,17 @@ internal struct HorizontalBarChartBarStyleSubView<CD: HorizontalBarChartData>: V
         {
             let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
             ForEach(chartData.dataSets.dataPoints) { dataPoint in
-                HorizontalGradientStopsBar(chartData: chartData,
-                                           dataPoint: dataPoint,
-                                           stops: safeStops,
-                                           startPoint: startPoint,
-                                           endPoint: endPoint)
+                HorizontalBarElement(chartData: chartData,
+                                     dataPoint: dataPoint,
+                                     fill: LinearGradient(gradient: Gradient(stops: safeStops),
+                                                          startPoint: startPoint,
+                                                          endPoint: endPoint))
             }
         }
     }
 }
 
-// MARK: DataPoints
-/**
- Bar segment where the colour information comes from datapoints.
- */
+// MARK: Data Points
 internal struct HorizontalBarChartDataPointSubView<CD: HorizontalBarChartData>: View {
     
     @ObservedObject private var chartData: CD
@@ -295,30 +293,30 @@ internal struct HorizontalBarChartDataPointSubView<CD: HorizontalBarChartData>: 
             if dataPoint.colour.colourType == .colour,
                let colour = dataPoint.colour.colour
             {
-                HorizontalColourBar(chartData: chartData,
-                                    dataPoint: dataPoint,
-                                    colour: colour)
+                HorizontalBarElement(chartData: chartData,
+                                     dataPoint: dataPoint,
+                                     fill: colour)
             } else if dataPoint.colour.colourType == .gradientColour,
                       let colours = dataPoint.colour.colours,
                       let startPoint = dataPoint.colour.startPoint,
                       let endPoint = dataPoint.colour.endPoint
             {
-                HorizontalGradientColoursBar(chartData: chartData,
-                                             dataPoint: dataPoint,
-                                             colours: colours,
-                                             startPoint: startPoint,
-                                             endPoint: endPoint)
+                HorizontalBarElement(chartData: chartData,
+                                     dataPoint: dataPoint,
+                                     fill: LinearGradient(gradient: Gradient(colors: colours),
+                                                          startPoint: startPoint,
+                                                          endPoint: endPoint))
             } else if dataPoint.colour.colourType == .gradientStops,
                       let stops = dataPoint.colour.stops,
                       let startPoint = dataPoint.colour.startPoint,
                       let endPoint = dataPoint.colour.endPoint
             {
                 let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
-                HorizontalGradientStopsBar(chartData: chartData,
-                                           dataPoint: dataPoint,
-                                           stops: safeStops,
-                                           startPoint: startPoint,
-                                           endPoint: endPoint)
+                HorizontalBarElement(chartData: chartData,
+                                     dataPoint: dataPoint,
+                                     fill: LinearGradient(gradient: Gradient(stops: safeStops),
+                                                          startPoint: startPoint,
+                                                          endPoint: endPoint))
             }
         }
     }

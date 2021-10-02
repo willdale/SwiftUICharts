@@ -117,20 +117,20 @@ internal struct GroupedBarCell<ChartData>: View where ChartData: GroupedBarChart
             if dataPoint.group.colour.colourType == .colour,
                let colour = dataPoint.group.colour.colour
             {
-                ColourBar(chartData: chartData,
+                BarElement(chartData: chartData,
                           dataPoint: dataPoint,
-                          colour: colour)
+                          fill: colour)
                     .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
             } else if dataPoint.group.colour.colourType == .gradientColour,
                       let colours = dataPoint.group.colour.colours,
                       let startPoint = dataPoint.group.colour.startPoint,
                       let endPoint = dataPoint.group.colour.endPoint
             {
-                GradientColoursBar(chartData: chartData,
-                                   dataPoint: dataPoint,
-                                   colours: colours,
-                                   startPoint: startPoint,
-                                   endPoint: endPoint)
+                BarElement(chartData: chartData,
+                          dataPoint: dataPoint,
+                          fill: LinearGradient(gradient: Gradient(colors: colours),
+                                               startPoint: startPoint,
+                                               endPoint: endPoint))
                     .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
             } else if dataPoint.group.colour.colourType == .gradientStops,
                       let stops = dataPoint.group.colour.stops,
@@ -138,11 +138,11 @@ internal struct GroupedBarCell<ChartData>: View where ChartData: GroupedBarChart
                       let endPoint = dataPoint.group.colour.endPoint
             {
                 let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
-                GradientStopsBar(chartData: chartData,
-                                 dataPoint: dataPoint,
-                                 stops: safeStops,
-                                 startPoint: startPoint,
-                                 endPoint: endPoint)
+                BarElement(chartData: chartData,
+                          dataPoint: dataPoint,
+                          fill: LinearGradient(gradient: Gradient(stops: safeStops),
+                                               startPoint: startPoint,
+                                               endPoint: endPoint))
                     .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
             }
         }
