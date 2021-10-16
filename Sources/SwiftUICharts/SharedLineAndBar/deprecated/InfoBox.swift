@@ -10,7 +10,10 @@ import SwiftUI
 // MARK: Vertical
 /**
  A view that displays information from `TouchOverlay`.
+ 
+ Deprecated -  Use `InfoDisplay` instead
  */
+@available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
 internal struct InfoBox<ChartData>: ViewModifier
 where ChartData: CTLineBarChartDataProtocol & Publishable {
     
@@ -77,7 +80,10 @@ where ChartData: CTLineBarChartDataProtocol & Publishable {
 // MARK: Horizontal
 /**
  A view that displays information from `TouchOverlay`.
+ 
+ Deprecated - Use `InfoDisplay` instead
  */
+@available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
 internal struct HorizontalInfoBox<ChartData>: ViewModifier
 where ChartData: CTLineBarChartDataProtocol & isHorizontal & Publishable {
     
@@ -138,6 +144,7 @@ where ChartData: CTLineBarChartDataProtocol & isHorizontal & Publishable {
             .zIndex(1)
     }
 }
+
 extension View {
     /**
      A view that displays information from `TouchOverlay`.
@@ -146,6 +153,7 @@ extension View {
      - Returns: A  new view containing the chart with a view to
      display touch overlay information.
      */
+    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
     public func infoBox<ChartData>(
         chartData: ChartData,
         height: CGFloat = 70
@@ -163,6 +171,7 @@ extension View {
      - Returns: A  new view containing the chart with a view to
      display touch overlay information.
      */
+    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
     public func infoBox<ChartData>(
         chartData: ChartData,
         width: CGFloat = 70

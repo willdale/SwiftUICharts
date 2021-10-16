@@ -293,7 +293,6 @@ extension CTLineBarChartDataProtocol {
     
     internal var extraLabelsArray: [String] { self.generateExtraYLabels(self.viewData.yAxisSpecifier) }
     private func generateExtraYLabels(_ specifier: String) -> [String] {
-        
         let dataRange: Double = self.extraLineData.range
         let minValue: Double = self.extraLineData.minValue
         let range: Double = dataRange / Double(self.extraLineData.style.yAxisNumberOfLabels-1)

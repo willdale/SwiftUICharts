@@ -9,6 +9,8 @@ import SwiftUI
 
 /**
  Displays the metadata about the chart as well as optionally touch overlay information.
+ 
+ Deprecated - Use "titleBox" instead
  */
 internal struct HeaderBox<T>: ViewModifier where T: CTChartData & Publishable {
     
@@ -106,6 +108,7 @@ extension View {
      - Returns: A  new view containing the chart with a view above
      to display metadata.
      */
+    @available(*, deprecated, message: "Please use \"titleBox\" instead.")
     public func headerBox<T:CTChartData & Publishable>(chartData: T) -> some View {
         self.modifier(HeaderBox(chartData: chartData))
     }

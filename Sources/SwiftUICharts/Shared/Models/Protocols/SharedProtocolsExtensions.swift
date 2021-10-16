@@ -114,7 +114,8 @@ extension CTChartData {
      - Parameter info: A data point
      - Returns: A View of a Legend.
      */
-    @ViewBuilder public func infoLegend(info: DataPoint) -> some View {
+    @ViewBuilder
+    public func infoLegend(info: DataPoint) -> some View {
         if let legend = self.legends.first(where: {
             $0.prioity == 1 &&
                 $0.legend == info._legendTag
@@ -136,7 +137,7 @@ extension CTLineBarChartDataProtocol {
         } else {
             returnPoint = touchLocation
         }
-        return returnPoint + (self.viewData.yAxisLabelWidth.max() ?? 0) + self.viewData.yAxisTitleWidth + (self.viewData.hasYAxisLabels ? 4 : 0) // +4 For Padding
+        return returnPoint + (viewData.yAxisLabelWidth.max() ?? 0) + viewData.yAxisTitleWidth + (viewData.hasYAxisLabels ? 4 : 0) // +4 For Padding
     }
 }
 extension CTLineBarChartDataProtocol where Self: isHorizontal {
@@ -149,7 +150,7 @@ extension CTLineBarChartDataProtocol where Self: isHorizontal {
         } else {
             returnPoint = touchLocation
         }
-        return returnPoint
+        return returnPoint + (viewData.xAxisLabelHeights.max() ?? 0) + viewData.xAxisTitleHeight + (viewData.hasXAxisLabels ? 4 : 0)
     }
 }
 

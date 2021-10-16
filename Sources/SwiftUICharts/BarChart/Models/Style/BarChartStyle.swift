@@ -15,18 +15,23 @@ import SwiftUI
  specific to the data set(s),
  */
 public struct BarChartStyle: CTBarChartStyle {
-    
+    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
     public var infoBoxPlacement: InfoBoxPlacement
+    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
     public var infoBoxContentAlignment: InfoBoxAlignment
-    
+    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
     public var infoBoxValueFont: Font
+    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
     public var infoBoxValueColour: Color
-    
+    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
     public var infoBoxDescriptionFont: Font
+    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
     public var infoBoxDescriptionColour: Color
-    
+    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
     public var infoBoxBackgroundColour: Color
+    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
     public var infoBoxBorderColour: Color
+    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
     public var infoBoxBorderStyle: StrokeStyle
     
     public var markerType: BarMarkerType
@@ -61,65 +66,7 @@ public struct BarChartStyle: CTBarChartStyle {
     
     public var globalAnimation: Animation
     
-    /// Model for controlling the overall aesthetic of the Bar Chart.
-    ///
-    /// - Parameters:
-    ///   - infoBoxPlacement: Placement of the information box that appears on touch input.
-    ///   - infoBoxContentAlignment: Alignment of the content inside of the information box
-    ///
-    ///   - infoBoxValueFont: Font for the value part of the touch info.
-    ///   - infoBoxValueColour: Colour of the value part of the touch info.
-    ///
-    ///   - infoBoxDescriptionFont: Font for the description part of the touch info.
-    ///   - infoBoxDescriptionColour: Colour of the description part of the touch info.
-    ///
-    ///   - infoBoxBackgroundColour: Background colour of touch info.
-    ///   - infoBoxBorderColour: Border colour of the touch info.
-    ///   - infoBoxBorderStyle: Border style of the touch info.
-    ///
-    ///   - markerType: Where the marker lines come from to meet at a specified point.
-    ///
-    ///   - xAxisGridStyle: Style of the vertical lines breaking up the chart.
-    ///
-    ///   - xAxisLabelPosition: Location of the X axis labels - Top or Bottom.
-    ///   - xAxisLabelFont: Font of the labels on the X axis.
-    ///   - xAxisLabelsFrom: Where the label data come from. DataPoint or xAxisLabels.
-    ///   - xAxisLabelColour: Text Colour for the labels on the X axis.
-    ///
-    ///   - xAxisTitle: Label to display next to the chart giving info about the axis.
-    ///   - xAxisTitleFont: Font of the x axis title.
-    ///   - xAxisTitleColour: Colour of the x axis title.
-    ///
-    ///   - yAxisGridStyle: Style of the horizontal lines breaking up the chart.
-    ///
-    ///   - yAxisLabelPosition: Location of the X axis labels - Leading or Trailing.
-    ///   - yAxisLabelFont: Font of the labels on the Y axis.
-    ///   - yAxisLabelColour: Text Colour for the labels on the Y axis.
-    ///   - yAxisNumberOfLabels: Number Of Labels on Y Axis.
-    ///   - yAxisLabelType: Option to choose between auto generated, numeric labels or custum array of strings.
-    ///
-    ///   - yAxisTitle: Label to display next to the chart giving info about the axis.
-    ///   - yAxisTitleFont: Font of the y axis title.
-    ///   - yAxisTitleColour: Colour of the y axis title.
-    ///
-    ///   - baseline: Whether the chart is drawn from baseline of zero or the minimum datapoint value.
-    ///   - topLine: Where to finish drawing the chart from. Data set maximum or custom.
-    ///
-    ///   - globalAnimation: Global control of animations.
     public init(
-        infoBoxPlacement: InfoBoxPlacement  = .floating,
-        infoBoxContentAlignment: InfoBoxAlignment  = .vertical,
-        
-        infoBoxValueFont: Font = .title3,
-        infoBoxValueColour: Color = Color.primary,
-        
-        infoBoxDescriptionFont: Font = .caption,
-        infoBoxDescriptionColour: Color = Color.primary,
-        
-        infoBoxBackgroundColour: Color = Color.systemsBackground,
-        infoBoxBorderColour: Color = Color.clear,
-        infoBoxBorderStyle: StrokeStyle = StrokeStyle(lineWidth: 0),
-        
         markerType: BarMarkerType = .full(),
         
         xAxisGridStyle: GridStyle = GridStyle(),
@@ -150,18 +97,6 @@ public struct BarChartStyle: CTBarChartStyle {
         
         globalAnimation: Animation = Animation.linear(duration: 1)
     ) {
-        self.infoBoxPlacement = infoBoxPlacement
-        self.infoBoxContentAlignment = infoBoxContentAlignment
-        
-        self.infoBoxValueFont = infoBoxValueFont
-        self.infoBoxValueColour = infoBoxValueColour
-        
-        self.infoBoxDescriptionFont = infoBoxDescriptionFont
-        self.infoBoxDescriptionColour = infoBoxDescriptionColour
-        
-        self.infoBoxBackgroundColour = infoBoxBackgroundColour
-        self.infoBoxBorderColour = infoBoxBorderColour
-        self.infoBoxBorderStyle = infoBoxBorderStyle
         
         self.markerType = markerType
         
@@ -192,5 +127,18 @@ public struct BarChartStyle: CTBarChartStyle {
         self.topLine = topLine
         
         self.globalAnimation = globalAnimation
+        
+        
+        
+        
+        self.infoBoxPlacement = .floating
+        self.infoBoxContentAlignment = .vertical
+        self.infoBoxValueFont = .title3
+        self.infoBoxValueColour = Color.primary
+        self.infoBoxDescriptionFont = .caption
+        self.infoBoxDescriptionColour = Color.primary
+        self.infoBoxBackgroundColour = Color.systemsBackground
+        self.infoBoxBorderColour = Color.clear
+        self.infoBoxBorderStyle = StrokeStyle(lineWidth: 0)
     }
 }

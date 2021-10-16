@@ -9,6 +9,8 @@ import SwiftUI
 
 /**
  A view that displays information from `TouchOverlay`.
+ 
+ Deprecated -  Use `InfoDisplay` instead
  */
 internal struct FloatingInfoBox<ChartData>: ViewModifier
 where ChartData: CTLineBarChartDataProtocol & Publishable {
@@ -19,7 +21,7 @@ where ChartData: CTLineBarChartDataProtocol & Publishable {
         self.chartData = chartData
     }
     
-    @State private var boxFrame: CGRect = CGRect(x: 0, y: 0, width: 0, height: 70)
+    @State private var boxFrame = CGRect(x: 0, y: 0, width: 0, height: 70)
     
     internal func body(content: Content) -> some View {
         Group {
@@ -51,6 +53,8 @@ where ChartData: CTLineBarChartDataProtocol & Publishable {
 
 /**
  A view that displays information from `TouchOverlay`.
+ 
+ Deprecated -  Use `InfoDisplay` instead
  */
 internal struct HorizontalFloatingInfoBox<ChartData>: ViewModifier
 where ChartData: CTLineBarChartDataProtocol & isHorizontal & Publishable {
@@ -101,6 +105,7 @@ extension View {
      - Returns: A  new view containing the chart with a view to
      display touch overlay information.
      */
+    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
     public func floatingInfoBox<ChartData>(chartData: ChartData) -> some View
     where ChartData: CTLineBarChartDataProtocol & Publishable {
         self.modifier(FloatingInfoBox(chartData: chartData))
@@ -115,6 +120,7 @@ extension View {
      - Returns: A  new view containing the chart with a view to
      display touch overlay information.
      */
+    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
     public func floatingInfoBox<ChartData>(chartData: ChartData) -> some View
     where ChartData: CTLineBarChartDataProtocol & isHorizontal & Publishable {
         self.modifier(HorizontalFloatingInfoBox(chartData: chartData))

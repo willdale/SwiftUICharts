@@ -206,4 +206,3 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance {
     public typealias DataPoint = BarChartDataPoint
     public typealias CTStyle = BarChartStyle
 }
-

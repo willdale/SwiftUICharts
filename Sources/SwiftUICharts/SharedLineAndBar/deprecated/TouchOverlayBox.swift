@@ -9,6 +9,8 @@ import SwiftUI
 
 /**
  View that displays information from the touch events.
+ 
+ Deprecated -  Use `InfoDisplay` instead
  */
 internal struct TouchOverlayBox<ChartData>: View where ChartData: CTChartData & Publishable {
     
