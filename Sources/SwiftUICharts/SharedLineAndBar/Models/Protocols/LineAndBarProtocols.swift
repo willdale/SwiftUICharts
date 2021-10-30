@@ -77,17 +77,6 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
      Displays a view for the labels on the Y Axis.
      */
     func getYAxisLabels() -> YLabels
-    
-    
-    /**
-     Sets the data point info box location while keeping it within the parent view.
-     
-     - Parameters:
-        - touchLocation: Location the user has pressed.
-        - boxFrame: The size of the point info box.
-        - chartSize: The size of the chart view as the parent view.
-     */
-    func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat
 }
 
 

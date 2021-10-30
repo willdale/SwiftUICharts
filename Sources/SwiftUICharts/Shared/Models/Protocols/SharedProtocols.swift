@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public typealias ChartConformance = GetDataProtocol & Publishable & PointOfInterestProtocol & Touchable
+public typealias ChartConformance = GetDataProtocol & Publishable & PointOfInterestProtocol & Touchable & TouchInfoDisplayable
 
 // MARK: Chart Data
 /**

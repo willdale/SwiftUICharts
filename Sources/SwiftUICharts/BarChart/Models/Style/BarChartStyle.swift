@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 /**
  Control of the overall aesthetic of the bar chart.
  
@@ -15,6 +14,8 @@ import SwiftUI
  specific to the data set(s),
  */
 public struct BarChartStyle: CTBarChartStyle {
+    
+    // MARK: Deprecations
     @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
     public var infoBoxPlacement: InfoBoxPlacement
     @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
@@ -34,6 +35,7 @@ public struct BarChartStyle: CTBarChartStyle {
     @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
     public var infoBoxBorderStyle: StrokeStyle
     
+    // MARK: Properties
     public var markerType: BarMarkerType
     
     public var xAxisGridStyle: GridStyle
@@ -66,6 +68,7 @@ public struct BarChartStyle: CTBarChartStyle {
     
     public var globalAnimation: Animation
     
+    // MARK: Init
     public init(
         markerType: BarMarkerType = .full(),
         
@@ -127,9 +130,6 @@ public struct BarChartStyle: CTBarChartStyle {
         self.topLine = topLine
         
         self.globalAnimation = globalAnimation
-        
-        
-        
         
         self.infoBoxPlacement = .floating
         self.infoBoxContentAlignment = .vertical

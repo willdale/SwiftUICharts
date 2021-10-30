@@ -9,10 +9,11 @@ import SwiftUI
 
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
 public enum InfoBoxType<ChartData>
-where ChartData: CTLineBarChartDataProtocol & InfoData {
+where ChartData: InfoData {
     case verticle(chartData: ChartData)
     case horizontal(chartData: ChartData)
     
+    // Maybe make internal ??
     public func modifier<Content: View, S: Shape>(
         of view: Content,
         with style: InfoBoxStyle,

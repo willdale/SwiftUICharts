@@ -14,8 +14,7 @@ import Combine
  This model contains the data and styling information for a pie chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable {
-    
+public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable, TouchInfoDisplayable {
     // MARK: Properties
     public var id: UUID = UUID()
     @Published public var dataSets: PieDataSet

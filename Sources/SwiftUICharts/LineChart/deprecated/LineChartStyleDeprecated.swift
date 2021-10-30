@@ -1,80 +1,33 @@
 //
-//  LineChartStyle.swift
+//  LineChartStyleDeprecated.swift
 //  
 //
-//  Created by Will Dale on 25/01/2021.
+//  Created by Will Dale on 30/10/2021.
 //
 
 import SwiftUI
 
-/**
- Control of the overall aesthetic of the line chart.
- 
- Controls the look of the chart as a whole, not including any styling
- specific to the data set(s),
- */
-public struct LineChartStyle: CTLineChartStyle {
-    
-    // MARK: Deprecations
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
-    public var infoBoxPlacement: InfoBoxPlacement
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
-    public var infoBoxContentAlignment: InfoBoxAlignment
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
-    public var infoBoxValueFont: Font
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
-    public var infoBoxValueColour: Color
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
-    public var infoBoxDescriptionFont: Font
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
-    public var infoBoxDescriptionColour: Color
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
-    public var infoBoxBackgroundColour: Color
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
-    public var infoBoxBorderColour: Color
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
-    public var infoBoxBorderStyle: StrokeStyle
-    
-    // MARK: Properties
-    public var markerType: LineMarkerType
-    
-    public var xAxisGridStyle: GridStyle
-    
-    public var xAxisLabelPosition: XAxisLabelPosistion
-    public var xAxisLabelFont: Font
-    public var xAxisLabelColour: Color
-    public var xAxisLabelsFrom: LabelsFrom
-    
-    public var xAxisTitle: String?
-    public var xAxisTitleFont: Font
-    public var xAxisTitleColour: Color
-    public var xAxisBorderColour: Color?
-
-    public var yAxisGridStyle: GridStyle
-    
-    public var yAxisLabelPosition: YAxisLabelPosistion
-    public var yAxisLabelFont: Font
-    public var yAxisLabelColour: Color
-    public var yAxisNumberOfLabels: Int
-    public var yAxisLabelType: YAxisLabelType
-    
-    public var yAxisTitle: String?
-    public var yAxisTitleFont: Font
-    public var yAxisTitleColour: Color
-    public var yAxisBorderColour: Color?
-
-    public var baseline: Baseline
-    public var topLine: Topline
-    
-    public var globalAnimation: Animation
-    
-    // MARK: Init
+extension LineChartStyle {
+    @available(*, deprecated, message: "Please use \"other init\" instead.")
     /// Model for controlling the overall aesthetic of the chart.
     /// - Parameters:
+    ///   - infoBoxPlacement: Placement of the information box that appears on touch input.
+    ///   - infoBoxContentAlignment: Placement of the content inside the information box
+    ///
+    ///   - infoBoxValueFont: Font for the value part of the touch info.
+    ///   - infoBoxValueColour: Colour of the value part of the touch info.
+    ///
+    ///   - infoBoxDescriptionFont: Font for the description part of the touch info.
+    ///   - infoBoxDescriptionColour: Colour of the description part of the touch info.
+    ///
+    ///   - infoBoxBackgroundColour: Background colour of touch info.
+    ///   - infoBoxBorderColour: Border colour of the touch info.
+    ///   - infoBoxBorderStyle: Border style of the touch info.
+    ///
     ///   - markerType: Where the marker lines come from to meet at a specified point.
     ///
     ///   - xAxisGridStyle: Style of the vertical lines breaking up the chart.
-    ///   
+    ///
     ///   - xAxisLabelPosition: Location of the X axis labels - Top or Bottom.
     ///   - xAxisLabelFont: Font of the labels on the X axis.
     ///   - xAxisLabelColour: Text Colour for the labels on the X axis.
@@ -103,6 +56,16 @@ public struct LineChartStyle: CTLineChartStyle {
     ///
     ///   - globalAnimation: Global control of animations.
     public init(
+        infoBoxPlacement: InfoBoxPlacement = .floating,
+        infoBoxContentAlignment: InfoBoxAlignment = .vertical,
+        infoBoxValueFont: Font = .title3,
+        infoBoxValueColour: Color = Color.primary,
+        infoBoxDescriptionFont: Font = .caption,
+        infoBoxDescriptionColour: Color = Color.primary,
+        infoBoxBackgroundColour: Color = Color.systemsBackground,
+        infoBoxBorderColour: Color = Color.clear,
+        infoBoxBorderStyle: StrokeStyle = StrokeStyle(lineWidth: 0),
+        
         markerType: LineMarkerType = .indicator(style: DotStyle()),
         
         xAxisGridStyle: GridStyle = GridStyle(),
@@ -135,6 +98,16 @@ public struct LineChartStyle: CTLineChartStyle {
         
         globalAnimation: Animation = Animation.linear(duration: 1)
     ) {
+        self.infoBoxPlacement = infoBoxPlacement
+        self.infoBoxContentAlignment = infoBoxContentAlignment
+        self.infoBoxValueFont = infoBoxValueFont
+        self.infoBoxValueColour = infoBoxValueColour
+        self.infoBoxDescriptionFont = infoBoxDescriptionFont
+        self.infoBoxDescriptionColour = infoBoxDescriptionColour
+        self.infoBoxBackgroundColour = infoBoxBackgroundColour
+        self.infoBoxBorderColour = infoBoxBorderColour
+        self.infoBoxBorderStyle = infoBoxBorderStyle
+        
         self.markerType = markerType
         
         self.xAxisGridStyle = xAxisGridStyle
@@ -166,15 +139,5 @@ public struct LineChartStyle: CTLineChartStyle {
         self.topLine = topLine
         
         self.globalAnimation = globalAnimation
-        
-        self.infoBoxPlacement = .floating
-        self.infoBoxContentAlignment = .vertical
-        self.infoBoxValueFont = .title3
-        self.infoBoxValueColour = Color.primary
-        self.infoBoxDescriptionFont = .caption
-        self.infoBoxDescriptionColour = Color.primary
-        self.infoBoxBackgroundColour = Color.systemsBackground
-        self.infoBoxBorderColour = Color.clear
-        self.infoBoxBorderStyle = StrokeStyle(lineWidth: 0)
     }
 }

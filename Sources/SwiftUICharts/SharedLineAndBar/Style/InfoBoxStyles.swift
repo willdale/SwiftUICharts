@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - Vertical Info Box
 internal struct VerticalInfoBoxViewModifier<ChartData, S: Shape>: ViewModifier
-where ChartData: CTLineBarChartDataProtocol & InfoData {
+where ChartData: InfoData {
     
     @ObservedObject private var chartData: ChartData
     private var style: InfoBoxStyle
@@ -112,7 +112,7 @@ where ChartData: InfoData {
 
 // MARK: - Horizontal Info Box
 internal struct HorizontalInfoBoxViewModifier<ChartData, S: Shape>: ViewModifier
-where ChartData: CTLineBarChartDataProtocol & InfoData {
+where ChartData: InfoData {
     
     @ObservedObject private var chartData: ChartData
     private var style: InfoBoxStyle
@@ -143,15 +143,15 @@ where ChartData: CTLineBarChartDataProtocol & InfoData {
     
     private func setBoxLocation(_ touchLocation: CGPoint, _ chartSize: CGRect) -> CGPoint {
         if chartData is isHorizontal {
+            return CGPoint(x: 35,
+                           y: chartData.setBoxLocation(touchLocation: chartData.infoView.touchLocation.y,
+                                                       boxFrame: boxFrame,
+                                                       chartSize: chartData.infoView.chartSize))
+        } else {
             return CGPoint(x: chartData.setBoxLocation(touchLocation: touchLocation.x,
                                                        boxFrame: boxFrame,
                                                        chartSize: chartSize),
-                           y: boxFrame.midY - 10)
-        } else {
-            return CGPoint(x: chartData.setBoxLocation(touchLocation: touchLocation.y,
-                                                       boxFrame: boxFrame,
-                                                       chartSize: chartSize),
-                           y: 35)
+                           y: boxFrame.midY)
         }
     }
 }

@@ -127,6 +127,21 @@ extension CTChartData {
     }
 }
 
+extension CTChartData where Self == RangedLineChartData {
+    public func infoMainValue(info: DataPoint) -> some View {
+        var info = info
+        info._valueOnly = true
+        switch self.infoView.touchUnit {
+        case .none:
+            return Text(LocalizedStringKey(info.valueAsString(specifier: self.infoView.touchSpecifier)))
+        case .prefix(of: let unit):
+            return Text(LocalizedStringKey(unit + " " + info.valueAsString(specifier: self.infoView.touchSpecifier)))
+        case .suffix(of: let unit):
+            return Text(LocalizedStringKey(info.valueAsString(specifier: self.infoView.touchSpecifier) + " " + unit))
+        }
+    }
+}
+
 extension CTLineBarChartDataProtocol {
     public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
         var returnPoint: CGFloat = .zero
@@ -151,6 +166,12 @@ extension CTLineBarChartDataProtocol where Self: isHorizontal {
             returnPoint = touchLocation
         }
         return returnPoint + (viewData.xAxisLabelHeights.max() ?? 0) + viewData.xAxisTitleHeight + (viewData.hasXAxisLabels ? 4 : 0)
+    }
+}
+
+extension CTPieDoughnutChartDataProtocol {
+    public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
+        touchLocation
     }
 }
 
