@@ -46,15 +46,15 @@ internal struct LegendView<T>: View where T: CTChartData {
     /// Detects whether to run the scale effect on the legend.
     private func scaleLegendBar(legend: LegendData) -> Bool {
         if let chartData = chartData as? BarChartData,
-           let datapoint = chartData.infoView.touchOverlayInfo.first {
+           let datapoint = chartData.touchPointData.first {
             return chartData.infoView.isTouchCurrent && legend.id == datapoint.id
         }
         if let chartData = chartData as? GroupedBarChartData,
-           let datapoint = chartData.infoView.touchOverlayInfo.first {
+           let datapoint = chartData.touchPointData.first {
             return chartData.infoView.isTouchCurrent && legend.colour == datapoint.group.colour
         }
         if let chartData = chartData as? StackedBarChartData,
-           let datapoint = chartData.infoView.touchOverlayInfo.first {
+           let datapoint = chartData.touchPointData.first {
             return chartData.infoView.isTouchCurrent && legend.colour == datapoint.group.colour
         }
         return false
@@ -62,13 +62,12 @@ internal struct LegendView<T>: View where T: CTChartData {
     
     /// Detects whether to run the scale effect on the legend.
     private func scaleLegendPie(legend: LegendData) -> Bool {
-        
-        if chartData is PieChartData || chartData is DoughnutChartData {
-            if let datapointID = chartData.infoView.touchOverlayInfo.first?.id as? UUID {
-                return chartData.infoView.isTouchCurrent && legend.id == datapointID
-            } else {
-                return false
-            }
+        if let chartData = chartData as? PieChartData,
+           let datapointID = chartData.touchPointData.first?.id {
+            return chartData.infoView.isTouchCurrent && legend.id == datapointID
+        } else if let chartData = chartData as? DoughnutChartData,
+                  let datapointID = chartData.touchPointData.first?.id {
+            return chartData.infoView.isTouchCurrent && legend.id == datapointID
         } else {
             return false
         }

@@ -19,8 +19,13 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol, Publishable, 
     // MARK: Properties
     public var id: UUID = UUID()
     
+    public var accessibilityTitle: LocalizedStringKey = ""
+    
     @Published public var dataSets: PieDataSet
-    @Published public var metadata: ChartMetadata
+    
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    @Published public var metadata = ChartMetadata()
+    
     @Published public var chartStyle: DoughnutChartStyle
     @Published public var legends: [LegendData] = []
     @Published public var infoView: InfoViewData<PieChartDataPoint> = InfoViewData()
@@ -38,17 +43,14 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol, Publishable, 
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the chart.
-    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: PieDataSet,
-        metadata: ChartMetadata,
         chartStyle: DoughnutChartStyle = DoughnutChartStyle(),
         noDataText: Text
     ) {
         self.dataSets = dataSets
-        self.metadata = metadata
         self.chartStyle = chartStyle
         self.noDataText = noDataText
         
@@ -88,4 +90,31 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol, Publishable, 
     public typealias SetType = PieDataSet
     public typealias DataPoint = PieChartDataPoint
     public typealias CTStyle = DoughnutChartStyle
+    
+    // MARK: Deprecated
+    /// Initialises Doughnut Chart data.
+    ///
+    /// - Parameters:
+    ///   - dataSets: Data to draw and style the chart.
+    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
+    ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
+    @available(*, deprecated, message: "Please set use other init instead.")
+    public init(
+        dataSets: PieDataSet,
+        metadata: ChartMetadata,
+        chartStyle: DoughnutChartStyle = DoughnutChartStyle(),
+        noDataText: Text
+    ) {
+        self.dataSets = dataSets
+        self.metadata = metadata
+        self.chartStyle = chartStyle
+        self.noDataText = noDataText
+        
+        self.setupLegends()
+        self.makeDataPoints()
+        
+        internalDataSubscription = touchedDataPointPublisher
+            .sink { self.touchPointData = $0.map(\.datapoint) }
+    }
 }

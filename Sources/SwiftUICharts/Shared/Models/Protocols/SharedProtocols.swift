@@ -28,6 +28,11 @@ public protocol CTChartData: ObservableObject, Identifiable {
     
     var id: ID { get }
     
+    /// This is a read out by voice over to make it clear what is being described.
+    ///
+    /// The value count be what the chart title is or screen title.
+    var accessibilityTitle: LocalizedStringKey { get set }
+    
     /**
      Data model containing datapoints and styling information.
      */
@@ -36,6 +41,7 @@ public protocol CTChartData: ObservableObject, Identifiable {
     /**
      Data model containing the charts Title, Subtitle and the Title for Legend.
      */
+    @available(*, deprecated, message: "Please use \"\" instead.")
     var metadata: ChartMetadata { get set }
     
     /**
@@ -187,55 +193,55 @@ public protocol CTChartStyle {
     /**
      Placement of the information box that appears on touch input.
      */
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
+    @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     var infoBoxPlacement: InfoBoxPlacement { get set }
     
     /**
      Placement of the information box that appears on touch input.
      */
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
+    @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     var infoBoxContentAlignment: InfoBoxAlignment { get set }
     
     /**
      Font for the value part of the touch info.
      */
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
+    @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     var infoBoxValueFont: Font { get set }
     
     /**
      Colour of the value part of the touch info.
      */
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
+    @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     var infoBoxValueColour: Color { get set }
     
     /**
      Font for the description part of the touch info.
      */
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
+    @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     var infoBoxDescriptionFont: Font { get set }
     
     /**
      Colour of the description part of the touch info.
      */
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
+    @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     var infoBoxDescriptionColour: Color { get set }
     
     /**
      Colour of the background of the touch info.
      */
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
+    @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     var infoBoxBackgroundColour: Color { get set }
     
     /**
      Border colour of the touch info.
      */
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
+    @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     var infoBoxBorderColour: Color { get set }
     
     /**
      Border style of the touch info.
      */
-    @available(*, deprecated, message: "Please use \"touchDisplay\" instead.")
+    @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     var infoBoxBorderStyle: StrokeStyle { get set }
     
     /**

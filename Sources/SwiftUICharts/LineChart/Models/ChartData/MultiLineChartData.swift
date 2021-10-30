@@ -19,8 +19,13 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     // MARK: Properties
     public let id: UUID = UUID()
     
+    public var accessibilityTitle: LocalizedStringKey = ""
+    
     @Published public var dataSets: MultiLineDataSet
-    @Published public var metadata: ChartMetadata
+    
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    @Published public var metadata = ChartMetadata()
+    
     @Published public var xAxisLabels: [String]?
     @Published public var yAxisLabels: [String]?
     @Published public var chartStyle: LineChartStyle
@@ -45,21 +50,18 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the lines.
-    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: MultiLineDataSet,
-        metadata: ChartMetadata = ChartMetadata(),
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
         chartStyle: LineChartStyle = LineChartStyle(),
         noDataText: Text = Text("No Data")
     ) {
         self.dataSets = dataSets
-        self.metadata = metadata
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
         self.chartStyle = chartStyle
@@ -242,7 +244,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
                 AccessibilityRectangle(dataPointCount: dataSet.dataPoints.count,
                                        dataPointNo: point)
                     .foregroundColor(Color(.gray).opacity(0.000000001))
-                    .accessibilityLabel(LocalizedStringKey(self.metadata.title))
+                    .accessibilityLabel(self.accessibilityTitle)
                     .accessibilityValue(dataSet.dataPoints[point].getCellAccessibilityValue(specifier: self.infoView.touchSpecifier))
             }
         }
@@ -251,4 +253,34 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     public typealias SetType = MultiLineDataSet
     public typealias DataPoint = LineChartDataPoint
     public typealias CTStyle = LineChartStyle
+    
+    // MARK: Deprecated
+    /// Initialises a Multi Line Chart.
+    ///
+    /// - Parameters:
+    ///   - dataSets: Data to draw and style the lines.
+    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
+    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
+    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
+    ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
+    @available(*, deprecated, message: "Please set use other init instead.")
+    public init(
+        dataSets: MultiLineDataSet,
+        metadata: ChartMetadata = ChartMetadata(),
+        xAxisLabels: [String]? = nil,
+        yAxisLabels: [String]? = nil,
+        chartStyle: LineChartStyle = LineChartStyle(),
+        noDataText: Text = Text("No Data")
+    ) {
+        self.dataSets = dataSets
+        self.metadata = metadata
+        self.xAxisLabels = xAxisLabels
+        self.yAxisLabels = yAxisLabels
+        self.chartStyle = chartStyle
+        self.noDataText = noDataText
+        
+        self.setupLegends()
+        self.setupInternalCombine()
+    }
 }

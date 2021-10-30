@@ -35,12 +35,13 @@ public struct LegendData: Hashable, Identifiable {
     ///   - strokeStyle: Stroke Style.
     ///   - prioity: Used to make sure the charts data legend is first.
     ///   - chartType: Type of chart being used.
-    public init(id: UUID,
-                legend: String,
-                colour: ColourStyle,
-                strokeStyle: Stroke?,
-                prioity: Int,
-                chartType: ChartType
+    public init(
+        id: UUID,
+        legend: String,
+        colour: ColourStyle,
+        strokeStyle: Stroke?,
+        prioity: Int,
+        chartType: ChartType
     ) {
         self.id = id
         self.legend = legend

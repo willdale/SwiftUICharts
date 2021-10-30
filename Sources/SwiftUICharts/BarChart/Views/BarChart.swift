@@ -59,10 +59,10 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
                     switch chartData.barStyle.colourFrom {
                     case .barStyle:
                         BarChartBarStyleSubView(chartData: chartData)
-                            .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                            .accessibilityLabel(chartData.accessibilityTitle)
                     case .dataPoints:
                         BarChartDataPointSubView(chartData: chartData)
-                            .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                            .accessibilityLabel(chartData.accessibilityTitle)
                     }
                 }
                 // Needed for axes label frames

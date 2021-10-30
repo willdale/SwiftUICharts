@@ -16,12 +16,16 @@ import Combine
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
 public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     
-    
     // MARK: Properties
     public let id: UUID = UUID()
     
+    public var accessibilityTitle: LocalizedStringKey = ""
+    
     @Published public var dataSets: LineDataSet
-    @Published public var metadata: ChartMetadata
+    
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    @Published public var metadata = ChartMetadata()
+    
     @Published public var xAxisLabels: [String]?
     @Published public var yAxisLabels: [String]?
     @Published public var chartStyle: LineChartStyle
@@ -48,21 +52,18 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style a line.
-    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: LineDataSet,
-        metadata: ChartMetadata = ChartMetadata(),
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
         chartStyle: LineChartStyle = LineChartStyle(),
         noDataText: Text = Text("No Data")
     ) {
         self.dataSets = dataSets
-        self.metadata = metadata
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
         self.chartStyle = chartStyle
@@ -225,4 +226,34 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     
     public typealias SetType = LineDataSet
     public typealias DataPoint = LineChartDataPoint
+    
+    // MARK: Deprecated
+    /// Initialises a Single Line Chart.
+    ///
+    /// - Parameters:
+    ///   - dataSets: Data to draw and style a line.
+    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
+    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
+    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
+    ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
+    @available(*, deprecated, message: "Please set use other init instead.")
+    public init(
+        dataSets: LineDataSet,
+        metadata: ChartMetadata = ChartMetadata(),
+        xAxisLabels: [String]? = nil,
+        yAxisLabels: [String]? = nil,
+        chartStyle: LineChartStyle = LineChartStyle(),
+        noDataText: Text = Text("No Data")
+    ) {
+        self.dataSets = dataSets
+        self.metadata = metadata
+        self.xAxisLabels = xAxisLabels
+        self.yAxisLabels = yAxisLabels
+        self.chartStyle = chartStyle
+        self.noDataText = noDataText
+
+        self.setupLegends()
+        self.setupInternalCombine()
+    }
 }

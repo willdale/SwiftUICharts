@@ -15,10 +15,17 @@ import Combine
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
 public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable, TouchInfoDisplayable {
+   
     // MARK: Properties
     public var id: UUID = UUID()
+    
+    public var accessibilityTitle: LocalizedStringKey = ""
+    
     @Published public var dataSets: PieDataSet
-    @Published public var metadata: ChartMetadata
+    
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    @Published public var metadata = ChartMetadata()
+    
     @Published public var chartStyle: PieChartStyle
     @Published public var legends: [LegendData] = []
     @Published public var infoView: InfoViewData<PieChartDataPoint> = InfoViewData()
@@ -36,17 +43,14 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable,
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the chart.
-    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: PieDataSet,
-        metadata: ChartMetadata,
         chartStyle: PieChartStyle = PieChartStyle(),
         noDataText: Text = Text("No Data")
     ) {
         self.dataSets = dataSets
-        self.metadata = metadata
         self.chartStyle = chartStyle
         self.noDataText = noDataText
         
@@ -87,5 +91,32 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable,
     public typealias SetType = PieDataSet
     public typealias DataPoint = PieChartDataPoint
     public typealias CTStyle = PieChartStyle
+    
+    // MARK: Deprecated
+    /// Initialises Pie Chart data.
+    ///
+    /// - Parameters:
+    ///   - dataSets: Data to draw and style the chart.
+    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
+    ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
+    @available(*, deprecated, message: "Please set use other init instead.")
+    public init(
+        dataSets: PieDataSet,
+        metadata: ChartMetadata,
+        chartStyle: PieChartStyle = PieChartStyle(),
+        noDataText: Text = Text("No Data")
+    ) {
+        self.dataSets = dataSets
+        self.metadata = metadata
+        self.chartStyle = chartStyle
+        self.noDataText = noDataText
+        
+        self.setupLegends()
+        self.makeDataPoints()
+        
+        internalDataSubscription = touchedDataPointPublisher
+            .sink { self.touchPointData = $0.map(\.datapoint) }
+    }
 }
 

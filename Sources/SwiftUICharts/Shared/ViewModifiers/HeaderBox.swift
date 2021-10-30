@@ -7,91 +7,36 @@
 
 import SwiftUI
 
-/**
- Displays the metadata about the chart as well as optionally touch overlay information.
- 
- Deprecated - Use "titleBox" instead
- */
-internal struct HeaderBox<T>: ViewModifier where T: CTChartData & Publishable {
+internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
     
     @ObservedObject private var chartData: T
+    private var title: HeaderBoxText?
+    private var subtitle: HeaderBoxText?
             
-    init(chartData: T) {
+    init(chartData: T,
+         title: HeaderBoxText?,
+         subtitle: HeaderBoxText?
+    ) {
         self.chartData = chartData
+        self.title = title
+        self.subtitle = subtitle
     }
     
     var titleBox: some View {
         VStack(alignment: .leading) {
-            Text(LocalizedStringKey(chartData.metadata.title))
-                .font(chartData.metadata.titleFont)
-                .foregroundColor(chartData.metadata.titleColour)
-            Text(LocalizedStringKey(chartData.metadata.subtitle))
-                .font(chartData.metadata.subtitleFont)
-                .foregroundColor(chartData.metadata.subtitleColour)
-        }
-    }
-    var touchOverlay: some View {
-        VStack(alignment: .trailing) {
-            if chartData.infoView.isTouchCurrent {
-                ForEach(chartData.touchPointData, id: \.id) { point in
-                    chartData.infoValueUnit(info: point)
-                        .font(chartData.chartStyle.infoBoxValueFont)
-                        .foregroundColor(chartData.chartStyle.infoBoxValueColour)
-                    chartData.infoDescription(info: point)
-                        .font(chartData.chartStyle.infoBoxDescriptionFont)
-                        .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
-                }
-            } else {
-                Text("")
-                    .font(chartData.chartStyle.infoBoxValueFont)
-                Text("")
-                    .font(chartData.chartStyle.infoBoxDescriptionFont)
-            }
+            Text(LocalizedStringKey(title?.text ?? ""))
+                .font(title?.font)
+                .foregroundColor(title?.colour)
+            Text(LocalizedStringKey(subtitle?.text ?? ""))
+                .font(subtitle?.font)
+                .foregroundColor(subtitle?.colour)
         }
     }
     
     internal func body(content: Content) -> some View {
-        Group {
-            #if !os(tvOS)
-            if chartData.isGreaterThanTwo() {
-                switch chartData.chartStyle.infoBoxPlacement {
-                case .floating:
-                    VStack(alignment: .leading) {
-                        titleBox
-                        content
-                    }
-                case .infoBox:
-                    VStack(alignment: .leading) {
-                        titleBox
-                        content
-                    }
-                case .header:
-                    VStack(alignment: .leading) {
-                        HStack(spacing: 0) {
-                            HStack(spacing: 0) {
-                                titleBox
-                                Spacer()
-                            }
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            Spacer()
-                            HStack(spacing: 0) {
-                                Spacer()
-                                touchOverlay
-                            }
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                        }
-                        content
-                    }
-                }
-            } else { content }
-            #elseif os(tvOS)
-            if chartData.isGreaterThanTwo() {
-                VStack(alignment: .leading) {
-                    titleBox
-                    content
-                }
-            } else { content }
-            #endif
+        VStack(alignment: .leading) {
+            titleBox
+            content
         }
     }
 }
@@ -100,16 +45,40 @@ extension View {
     /**
      Displays the metadata about the chart.
      
-     Adds a view above the chart that displays the title and subtitle.
-     If infoBoxPlacement is set to .header then the datapoint info will
-     be displayed here as well.
-     
      - Parameter chartData: Chart data model.
      - Returns: A  new view containing the chart with a view above
      to display metadata.
      */
-    @available(*, deprecated, message: "Please use \"titleBox\" instead.")
+    @available(*, deprecated, message: "Please use the other function instead.")
     public func headerBox<T:CTChartData & Publishable>(chartData: T) -> some View {
-        self.modifier(HeaderBox(chartData: chartData))
+        self.modifier(HeaderBox(chartData: chartData,
+                                title: HeaderBoxText(text: ""),
+                                subtitle: HeaderBoxText(text: "")))
+    }
+    
+    public func titleBox<T:CTChartData & Publishable>(
+        chartData: T,
+        title: HeaderBoxText? = nil,
+        subtitle: HeaderBoxText? = nil
+    ) -> some View {
+        self.modifier(HeaderBox(chartData: chartData, title: title, subtitle: subtitle))
+    }
+}
+
+public struct HeaderBoxText {
+    public var text: String
+    /// Font of the title
+    public var font: Font
+    /// Color of the title
+    public var colour: Color
+    
+    public init(
+        text: String,
+        font: Font = .title3,
+        colour: Color = Color.primary
+    ) {
+        self.text = text
+        self.font = font
+        self.colour = colour
     }
 }

@@ -75,7 +75,7 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
                             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                                 self.startAnimation = false
                             }
-                            .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                            .accessibilityLabel(chartData.accessibilityTitle)
                     }
                 }
             }
