@@ -20,8 +20,13 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     // MARK: Properties
     public let id: UUID = UUID()
     
+    public var accessibilityTitle: LocalizedStringKey = ""
+    
     @Published public var dataSets: GroupedBarDataSets
-    @Published public var metadata: ChartMetadata
+    
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    @Published public var metadata = ChartMetadata()
+    
     @Published public var xAxisLabels: [String]?
     @Published public var yAxisLabels: [String]?
     @Published public var barStyle: BarStyle
@@ -52,7 +57,6 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     /// - Parameters:
     ///   - dataSets: Data to draw and style the bars.
     ///   - groups: Information for how to group the data points.
-    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
     ///   - barStyle: Control for the aesthetic of the bar chart.
@@ -61,7 +65,6 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     public init(
         dataSets: GroupedBarDataSets,
         groups: [GroupingData],
-        metadata: ChartMetadata = ChartMetadata(),
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
         barStyle: BarStyle = BarStyle(),
@@ -70,7 +73,6 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     ) {
         self.dataSets = dataSets
         self.groups = groups
-        self.metadata = metadata
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
         self.barStyle = barStyle
@@ -240,4 +242,40 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     public typealias SetType = GroupedBarDataSets
     public typealias DataPoint = GroupedBarDataPoint
     public typealias CTStyle = BarChartStyle
+    
+    // MARK: Deprecated
+    /// Initialises a Grouped Bar Chart.
+    ///
+    /// - Parameters:
+    ///   - dataSets: Data to draw and style the bars.
+    ///   - groups: Information for how to group the data points.
+    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
+    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
+    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
+    ///   - barStyle: Control for the aesthetic of the bar chart.
+    ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
+    @available(*, deprecated, message: "Please set use other init instead.")
+    public init(
+        dataSets: GroupedBarDataSets,
+        groups: [GroupingData],
+        metadata: ChartMetadata = ChartMetadata(),
+        xAxisLabels: [String]? = nil,
+        yAxisLabels: [String]? = nil,
+        barStyle: BarStyle = BarStyle(),
+        chartStyle: BarChartStyle = BarChartStyle(),
+        noDataText: Text = Text("No Data")
+    ) {
+        self.dataSets = dataSets
+        self.groups = groups
+        self.metadata = metadata
+        self.xAxisLabels = xAxisLabels
+        self.yAxisLabels = yAxisLabels
+        self.barStyle = barStyle
+        self.chartStyle = chartStyle
+        self.noDataText = noDataText
+        
+        self.setupLegends()
+        self.setupInternalCombine()
+    }
 }

@@ -152,12 +152,10 @@ extension CTLineChartDataProtocol where Self.SetType.ID == UUID,
 extension CTLineChartDataProtocol where SetType: CTLineChartDataSet {
     public func getAccessibility() -> some View {
         ForEach(dataSets.dataPoints.indices, id: \.self) { point in
-            
             AccessibilityRectangle(dataPointCount: self.dataSets.dataPoints.count,
                                    dataPointNo: point)
-                
                 .foregroundColor(Color(.gray).opacity(0.000000001))
-                .accessibilityLabel(LocalizedStringKey(self.metadata.title))
+                .accessibilityLabel(self.accessibilityTitle)
                 .accessibilityValue(self.dataSets.dataPoints[point].getCellAccessibilityValue(specifier: self.infoView.touchSpecifier))
         }
     }

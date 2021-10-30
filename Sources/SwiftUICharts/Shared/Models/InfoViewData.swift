@@ -19,7 +19,7 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
      
      Used by `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
      */
-    var isTouchCurrent: Bool = false
+    public var isTouchCurrent: Bool = false
     
     /**
      Closest data points to input.
@@ -28,6 +28,7 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
      
      Used by `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
      */
+    @available(*, deprecated, message: "Please use \"Combine\" instead.")
     var touchOverlayInfo: [DP] = []
     
     /**

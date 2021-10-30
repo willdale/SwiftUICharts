@@ -114,7 +114,8 @@ extension CTChartData {
      - Parameter info: A data point
      - Returns: A View of a Legend.
      */
-    @ViewBuilder public func infoLegend(info: DataPoint) -> some View {
+    @ViewBuilder
+    public func infoLegend(info: DataPoint) -> some View {
         if let legend = self.legends.first(where: {
             $0.prioity == 1 &&
                 $0.legend == info._legendTag
@@ -122,6 +123,21 @@ extension CTChartData {
             legend.getLegendAsCircle(textColor: .primary)
         } else {
             EmptyView()
+        }
+    }
+}
+
+extension CTChartData where Self == RangedLineChartData {
+    public func infoMainValue(info: DataPoint) -> some View {
+        var info = info
+        info._valueOnly = true
+        switch self.infoView.touchUnit {
+        case .none:
+            return Text(LocalizedStringKey(info.valueAsString(specifier: self.infoView.touchSpecifier)))
+        case .prefix(of: let unit):
+            return Text(LocalizedStringKey(unit + " " + info.valueAsString(specifier: self.infoView.touchSpecifier)))
+        case .suffix(of: let unit):
+            return Text(LocalizedStringKey(info.valueAsString(specifier: self.infoView.touchSpecifier) + " " + unit))
         }
     }
 }
@@ -136,7 +152,7 @@ extension CTLineBarChartDataProtocol {
         } else {
             returnPoint = touchLocation
         }
-        return returnPoint + (self.viewData.yAxisLabelWidth.max() ?? 0) + self.viewData.yAxisTitleWidth + (self.viewData.hasYAxisLabels ? 4 : 0) // +4 For Padding
+        return returnPoint + (viewData.yAxisLabelWidth.max() ?? 0) + viewData.yAxisTitleWidth + (viewData.hasYAxisLabels ? 4 : 0) // +4 For Padding
     }
 }
 extension CTLineBarChartDataProtocol where Self: isHorizontal {
@@ -149,7 +165,13 @@ extension CTLineBarChartDataProtocol where Self: isHorizontal {
         } else {
             returnPoint = touchLocation
         }
-        return returnPoint
+        return returnPoint + (viewData.xAxisLabelHeights.max() ?? 0) + viewData.xAxisTitleHeight + (viewData.hasXAxisLabels ? 4 : 0)
+    }
+}
+
+extension CTPieDoughnutChartDataProtocol {
+    public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
+        touchLocation
     }
 }
 

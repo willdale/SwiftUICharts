@@ -120,7 +120,7 @@ internal struct GroupedBarCell<ChartData>: View where ChartData: GroupedBarChart
                 BarElement(chartData: chartData,
                           dataPoint: dataPoint,
                           fill: colour)
-                    .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                    .accessibilityLabel(chartData.accessibilityTitle)
             } else if dataPoint.group.colour.colourType == .gradientColour,
                       let colours = dataPoint.group.colour.colours,
                       let startPoint = dataPoint.group.colour.startPoint,
@@ -131,7 +131,7 @@ internal struct GroupedBarCell<ChartData>: View where ChartData: GroupedBarChart
                           fill: LinearGradient(gradient: Gradient(colors: colours),
                                                startPoint: startPoint,
                                                endPoint: endPoint))
-                    .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                    .accessibilityLabel(chartData.accessibilityTitle)
             } else if dataPoint.group.colour.colourType == .gradientStops,
                       let stops = dataPoint.group.colour.stops,
                       let startPoint = dataPoint.group.colour.startPoint,
@@ -143,7 +143,7 @@ internal struct GroupedBarCell<ChartData>: View where ChartData: GroupedBarChart
                           fill: LinearGradient(gradient: Gradient(stops: safeStops),
                                                startPoint: startPoint,
                                                endPoint: endPoint))
-                    .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                    .accessibilityLabel(chartData.accessibilityTitle)
             }
         }
     }

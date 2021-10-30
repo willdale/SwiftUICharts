@@ -67,6 +67,7 @@ public enum ColourType {
  case header // Fix in the Header box. Must have .headerBox().
  ```
  */
+@available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
 public enum InfoBoxPlacement {
     /// Follows input across the chart.
     case floating
@@ -85,8 +86,11 @@ public enum InfoBoxPlacement {
  case horizontal // Puts the legend, value and description horizontaly
  ```
  */
+@available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
 public enum InfoBoxAlignment {
+    /// Puts the legend, value and description verticaly
     case vertical
+    /// Puts the legend, value and description horizontaly
     case horizontal
 }
 
