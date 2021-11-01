@@ -49,6 +49,6 @@ extension StackedBarDataPoint {
     ) {
         self.value = value
         self.description = description
-        self.group = GroupingData(title: "", colour: ColourStyle())
+        self.group = GroupingData(title: "", colour: .colour(colour: .red))
     }
 }

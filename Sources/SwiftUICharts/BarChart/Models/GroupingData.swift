@@ -14,7 +14,7 @@ public struct GroupingData: CTBarColourProtocol, Hashable, Identifiable {
     
     public let id: UUID = UUID()
     public var title: String
-    public var colour: ColourStyle
+    public var colour: BarColour
     
     /// Group with single colour
     /// - Parameters:
@@ -22,7 +22,7 @@ public struct GroupingData: CTBarColourProtocol, Hashable, Identifiable {
     ///   - colour: Colour styling for the bars.
     public init(
         title: String,
-        colour: ColourStyle
+        colour: BarColour
     ) {
         self.title = title
         self.colour = colour

@@ -64,38 +64,38 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     }
     
     private func lineLegendSetup() {
-        if self.chartData.extraLineData.style.lineColour.colourType == .colour,
-           let colour = self.chartData.extraLineData.style.lineColour.colour
-        {
-            chartData.legends.append(LegendData(id: self.chartData.extraLineData.id,
-                                                legend: self.chartData.extraLineData.legendTitle,
-                                                colour: ColourStyle(colour: colour),
-                                                strokeStyle: self.chartData.extraLineData.style.strokeStyle,
-                                                prioity: 3,
-                                                chartType: .line))
-        } else if self.chartData.extraLineData.style.lineColour.colourType == .gradientColour,
-                  let colours = self.chartData.extraLineData.style.lineColour.colours
-        {
-            chartData.legends.append(LegendData(id: self.chartData.extraLineData.id,
-                                                legend: self.chartData.extraLineData.legendTitle,
-                                                colour: ColourStyle(colours: colours,
-                                                                    startPoint: .leading,
-                                                                    endPoint: .trailing),
-                                                strokeStyle: self.chartData.extraLineData.style.strokeStyle,
-                                                prioity: 3,
-                                                chartType: .line))
-        } else if self.chartData.extraLineData.style.lineColour.colourType == .gradientStops,
-                  let stops = self.chartData.extraLineData.style.lineColour.stops
-        {
-            chartData.legends.append(LegendData(id: self.chartData.extraLineData.id,
-                                                legend: self.chartData.extraLineData.legendTitle,
-                                                colour: ColourStyle(stops: stops,
-                                                                    startPoint: .leading,
-                                                                    endPoint: .trailing),
-                                                strokeStyle: self.chartData.extraLineData.style.strokeStyle,
-                                                prioity: 3,
-                                                chartType: .line))
-        }
+//        if self.chartData.extraLineData.style.lineColour.colourType == .colour,
+//           let colour = self.chartData.extraLineData.style.lineColour.colour
+//        {
+//            chartData.legends.append(LegendData(id: self.chartData.extraLineData.id,
+//                                                legend: self.chartData.extraLineData.legendTitle,
+//                                                colour: ColourStyle(colour: colour),
+//                                                strokeStyle: self.chartData.extraLineData.style.strokeStyle,
+//                                                prioity: 3,
+//                                                chartType: .line))
+//        } else if self.chartData.extraLineData.style.lineColour.colourType == .gradientColour,
+//                  let colours = self.chartData.extraLineData.style.lineColour.colours
+//        {
+//            chartData.legends.append(LegendData(id: self.chartData.extraLineData.id,
+//                                                legend: self.chartData.extraLineData.legendTitle,
+//                                                colour: ColourStyle(colours: colours,
+//                                                                    startPoint: .leading,
+//                                                                    endPoint: .trailing),
+//                                                strokeStyle: self.chartData.extraLineData.style.strokeStyle,
+//                                                prioity: 3,
+//                                                chartType: .line))
+//        } else if self.chartData.extraLineData.style.lineColour.colourType == .gradientStops,
+//                  let stops = self.chartData.extraLineData.style.lineColour.stops
+//        {
+//            chartData.legends.append(LegendData(id: self.chartData.extraLineData.id,
+//                                                legend: self.chartData.extraLineData.legendTitle,
+//                                                colour: ColourStyle(stops: stops,
+//                                                                    startPoint: .leading,
+//                                                                    endPoint: .trailing),
+//                                                strokeStyle: self.chartData.extraLineData.style.strokeStyle,
+//                                                prioity: 3,
+//                                                chartType: .line))
+//        }
     }
 }
 

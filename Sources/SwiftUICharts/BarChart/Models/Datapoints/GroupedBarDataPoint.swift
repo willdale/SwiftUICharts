@@ -47,6 +47,6 @@ extension GroupedBarDataPoint {
         value: Double,
         description: String?
     ) {
-        self.init(value: value, description: description, group: GroupingData(title: "", colour: ColourStyle()))
+        self.init(value: value, description: description, group: GroupingData(title: "", colour: .colour(colour: .red)))
     }
 }

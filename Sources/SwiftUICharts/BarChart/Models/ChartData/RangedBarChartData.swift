@@ -32,6 +32,8 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol, ChartConfor
     @Published public var viewData: ChartViewData = ChartViewData()
     @Published public var infoView: InfoViewData<RangedBarDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
+    
+    @Published public var shouldAnimate: Bool = false
         
     public var noDataText: Text
     

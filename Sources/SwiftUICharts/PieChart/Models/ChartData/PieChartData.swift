@@ -30,6 +30,8 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable,
     @Published public var legends: [LegendData] = []
     @Published public var infoView: InfoViewData<PieChartDataPoint> = InfoViewData()
     
+    @Published public var shouldAnimate: Bool = false
+    
     public var noDataText: Text
 
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .pie, dataSetType: .single)

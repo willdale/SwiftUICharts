@@ -36,6 +36,8 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     @Published public var infoView: InfoViewData<StackedBarDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
     
+    @Published public var shouldAnimate: Bool = false
+    
     @Published public var groups: [GroupingData]
     
     public var noDataText: Text

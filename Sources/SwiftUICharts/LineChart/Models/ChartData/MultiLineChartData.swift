@@ -33,6 +33,8 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     @Published public var viewData: ChartViewData = ChartViewData()
     @Published public var infoView: InfoViewData<LineChartDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
+    
+    @Published public var shouldAnimate: Bool = false
         
     public var noDataText: Text
     

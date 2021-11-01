@@ -113,39 +113,11 @@ internal struct GroupedBarCell<ChartData>: View where ChartData: GroupedBarChart
     }
     
     internal var body: some View {
-        Group {
-            if dataPoint.group.colour.colourType == .colour,
-               let colour = dataPoint.group.colour.colour
-            {
-                BarElement(chartData: chartData,
-                          dataPoint: dataPoint,
-                          fill: colour)
-                    .accessibilityLabel(chartData.accessibilityTitle)
-            } else if dataPoint.group.colour.colourType == .gradientColour,
-                      let colours = dataPoint.group.colour.colours,
-                      let startPoint = dataPoint.group.colour.startPoint,
-                      let endPoint = dataPoint.group.colour.endPoint
-            {
-                BarElement(chartData: chartData,
-                          dataPoint: dataPoint,
-                          fill: LinearGradient(gradient: Gradient(colors: colours),
-                                               startPoint: startPoint,
-                                               endPoint: endPoint))
-                    .accessibilityLabel(chartData.accessibilityTitle)
-            } else if dataPoint.group.colour.colourType == .gradientStops,
-                      let stops = dataPoint.group.colour.stops,
-                      let startPoint = dataPoint.group.colour.startPoint,
-                      let endPoint = dataPoint.group.colour.endPoint
-            {
-                let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
-                BarElement(chartData: chartData,
-                          dataPoint: dataPoint,
-                          fill: LinearGradient(gradient: Gradient(stops: safeStops),
-                                               startPoint: startPoint,
-                                               endPoint: endPoint))
-                    .accessibilityLabel(chartData.accessibilityTitle)
-            }
-        }
+        BarElement(chartData: chartData,
+                   dataPoint: dataPoint,
+                   fill: dataPoint.group.colour,
+                   index: 0) // <<----- Hard Coded
+            .accessibilityLabel(chartData.accessibilityTitle)
     }
-    
 }
+

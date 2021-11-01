@@ -163,49 +163,50 @@ extension CTLineBarChartDataProtocol {
      can be calculated.
      */
     public func getYAxisTitle(colour: AxisColour) -> some View {
-        Group {
-            if let title = self.chartStyle.yAxisTitle {
-                VStack {
-                    if self.chartStyle.xAxisLabelPosition == .top {
-                        Spacer()
-                            .frame(height: yAxisPaddingHeight)
-                    }
-                    VStack(spacing: 0) {
-                        Text(LocalizedStringKey(title))
-                            .font(self.chartStyle.yAxisTitleFont)
-                            .foregroundColor(self.chartStyle.yAxisTitleColour)
-                            .background(
-                                GeometryReader { geo in
-                                    Rectangle()
-                                        .foregroundColor(Color.clear)
-                                        .onAppear {
-                                            self.viewData.yAxisTitleWidth = geo.size.height + 10 // 10 to add padding
-                                            self.viewData.yAxisTitleHeight = geo.size.width
-                                        }
-                                }
-                            )
-                            .rotationEffect(Angle.init(degrees: -90), anchor: .center)
-                            .fixedSize()
-                            .frame(width: self.viewData.yAxisTitleWidth)
-                        Group {
-                            switch colour {
-                            case .none:
-                                EmptyView()
-                            case .style(let size):
-                                self.getAxisColourAsCircle(customColour: self.getColour(), width: size)
-                            case .custom(let colour, let size):
-                                self.getAxisColourAsCircle(customColour: colour, width: size)
-                            }
-                        }
-                        .offset(x: 0, y: self.viewData.yAxisTitleHeight / 2)
-                    }
-                    if self.chartStyle.xAxisLabelPosition == .bottom {
-                        Spacer()
-                            .frame(height: yAxisPaddingHeight)
-                    }
-                }
-            }
-        }
+        EmptyView()
+//        Group {
+//            if let title = self.chartStyle.yAxisTitle {
+//                VStack {
+//                    if self.chartStyle.xAxisLabelPosition == .top {
+//                        Spacer()
+//                            .frame(height: yAxisPaddingHeight)
+//                    }
+//                    VStack(spacing: 0) {
+//                        Text(LocalizedStringKey(title))
+//                            .font(self.chartStyle.yAxisTitleFont)
+//                            .foregroundColor(self.chartStyle.yAxisTitleColour)
+//                            .background(
+//                                GeometryReader { geo in
+//                                    Rectangle()
+//                                        .foregroundColor(Color.clear)
+//                                        .onAppear {
+//                                            self.viewData.yAxisTitleWidth = geo.size.height + 10 // 10 to add padding
+//                                            self.viewData.yAxisTitleHeight = geo.size.width
+//                                        }
+//                                }
+//                            )
+//                            .rotationEffect(Angle.init(degrees: -90), anchor: .center)
+//                            .fixedSize()
+//                            .frame(width: self.viewData.yAxisTitleWidth)
+//                        Group {
+//                            switch colour {
+//                            case .none:
+//                                EmptyView()
+//                            case .style(let size):
+//                                self.getAxisColourAsCircle(customColour: self.getColour(), width: size)
+//                            case .custom(let colour, let size):
+//                                self.getAxisColourAsCircle(customColour: colour, width: size)
+//                            }
+//                        }
+//                        .offset(x: 0, y: self.viewData.yAxisTitleHeight / 2)
+//                    }
+//                    if self.chartStyle.xAxisLabelPosition == .bottom {
+//                        Spacer()
+//                            .frame(height: yAxisPaddingHeight)
+//                    }
+//                }
+//            }
+//        }
     }
     
     /**
@@ -282,7 +283,7 @@ extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol,
     }
 }
 extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol {
-    public func getColour() -> ColourStyle {
+    public func getColour() -> BarColour {
         barStyle.colour
     }
 }

@@ -120,14 +120,14 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
     }
     
     private func setupPOILegends() {
-        if addToLegends && !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
-            chartData.legends.append(LegendData(id: uuid,
-                                                legend: markerName,
-                                                colour: ColourStyle(colour: lineColour),
-                                                strokeStyle: strokeStyle.toStroke(),
-                                                prioity: 2,
-                                                chartType: .line))
-        }
+//        if addToLegends && !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
+//            chartData.legends.append(LegendData(id: uuid,
+//                                                legend: markerName,
+//                                                colour: ColourStyle(colour: lineColour),
+//                                                strokeStyle: strokeStyle.toStroke(),
+//                                                prioity: 2,
+//                                                chartType: .line))
+//        }
     }
 }
 

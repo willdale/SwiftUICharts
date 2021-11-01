@@ -45,19 +45,20 @@ internal struct LegendView<T>: View where T: CTChartData {
     
     /// Detects whether to run the scale effect on the legend.
     private func scaleLegendBar(legend: LegendData) -> Bool {
-        if let chartData = chartData as? BarChartData,
-           let datapoint = chartData.touchPointData.first {
-            return chartData.infoView.isTouchCurrent && legend.id == datapoint.id
-        }
-        if let chartData = chartData as? GroupedBarChartData,
-           let datapoint = chartData.touchPointData.first {
-            return chartData.infoView.isTouchCurrent && legend.colour == datapoint.group.colour
-        }
-        if let chartData = chartData as? StackedBarChartData,
-           let datapoint = chartData.touchPointData.first {
-            return chartData.infoView.isTouchCurrent && legend.colour == datapoint.group.colour
-        }
-        return false
+//        if let chartData = chartData as? BarChartData,
+//           let datapoint = chartData.touchPointData.first {
+//            return chartData.infoView.isTouchCurrent && legend.id == datapoint.id
+//        }
+//        if let chartData = chartData as? GroupedBarChartData,
+//           let datapoint = chartData.touchPointData.first {
+//            return chartData.infoView.isTouchCurrent && legend.colour == datapoint.group.colour
+//        }
+//        if let chartData = chartData as? StackedBarChartData,
+//           let datapoint = chartData.touchPointData.first {
+//            return chartData.infoView.isTouchCurrent && legend.colour == datapoint.group.colour
+//        }
+//        return false
+        false
     }
     
     /// Detects whether to run the scale effect on the legend.

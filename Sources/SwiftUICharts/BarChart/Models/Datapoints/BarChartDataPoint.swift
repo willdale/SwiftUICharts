@@ -19,7 +19,7 @@ public struct BarChartDataPoint: CTStandardBarDataPoint {
     public var xAxisLabel: String?
     public var description: String?
     public var date: Date?
-    public var colour: ColourStyle
+    public var colour: BarColour
     
     public var _legendTag: String = ""
     
@@ -36,7 +36,7 @@ public struct BarChartDataPoint: CTStandardBarDataPoint {
         xAxisLabel: String? = nil,
         description: String? = nil,
         date: Date? = nil,
-        colour: ColourStyle = ColourStyle(colour: .red)
+        colour: BarColour = .colour(colour: .red)
     ) {
         self.value = value
         self.xAxisLabel = xAxisLabel

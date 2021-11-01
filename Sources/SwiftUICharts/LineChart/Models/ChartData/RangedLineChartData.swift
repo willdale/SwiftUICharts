@@ -33,7 +33,9 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
     @Published public var viewData: ChartViewData = ChartViewData()
     @Published public var infoView: InfoViewData<RangedLineChartDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
-        
+    
+    @Published public var shouldAnimate: Bool = false
+    
     public var noDataText: Text
     
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .line, dataSetType: .single)

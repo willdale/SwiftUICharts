@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Model for setting up colour styling.
  */
-public struct ColourStyle: Hashable {
+public struct ColourStyle: Colourable, Hashable {
     
     public var colourType: ColourType
     public var colour: Color?
@@ -69,4 +69,10 @@ public struct ColourStyle: Hashable {
         self.startPoint = startPoint
         self.endPoint = endPoint
     }
+}
+
+public enum BarColour: Colourable, Hashable, Equatable {
+    case colour(colour: Color)
+    case gradient(colours: [Color], startPoint: UnitPoint, endPoint: UnitPoint)
+    case gradientStops(stops: [GradientStop], startPoint: UnitPoint, endPoint: UnitPoint)
 }

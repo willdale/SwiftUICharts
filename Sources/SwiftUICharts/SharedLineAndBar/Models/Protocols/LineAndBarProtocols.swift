@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+public protocol Colourable: Equatable {}
+
 // MARK: - Chart Data
 /**
  A protocol to extend functionality of `CTChartData` specifically for Line and Bar Charts.
@@ -50,10 +52,11 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
     */
     func getExtraYAxisLabels() -> ExtraYLabels
     
-    /**
-     Get the relevant colour indicator for the y axis labels.
-    */
-    func getColour() -> ColourStyle
+//    associatedtype MyColour: Colourable
+//    /**
+//     Get the relevant colour indicator for the y axis labels.
+//    */
+//    func getColour() -> Colourable
     
     
     

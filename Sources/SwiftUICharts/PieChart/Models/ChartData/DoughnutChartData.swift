@@ -29,6 +29,8 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol, Publishable, 
     @Published public var chartStyle: DoughnutChartStyle
     @Published public var legends: [LegendData] = []
     @Published public var infoView: InfoViewData<PieChartDataPoint> = InfoViewData()
+    
+    @Published public var shouldAnimate: Bool = false
         
     public var noDataText: Text
 

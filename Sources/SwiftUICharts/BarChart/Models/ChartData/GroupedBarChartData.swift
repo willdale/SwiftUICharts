@@ -37,6 +37,8 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     @Published public var infoView: InfoViewData<GroupedBarDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
     
+    @Published public var shouldAnimate: Bool = false
+    
     @Published public var groupSpacing: CGFloat = 0
     @Published public var groups: [GroupingData]
         

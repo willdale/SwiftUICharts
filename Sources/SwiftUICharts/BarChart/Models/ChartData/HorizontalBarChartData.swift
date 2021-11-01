@@ -31,6 +31,8 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Cha
     @Published public var viewData: ChartViewData = ChartViewData()
     @Published public var infoView: InfoViewData<BarChartDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
+    
+    @Published public var shouldAnimate: Bool = false
         
     public var noDataText: Text
     

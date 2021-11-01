@@ -7,23 +7,35 @@
 
 import SwiftUI
 
+public struct BarElementAnimation {
+    var fill: Animation = .linear(duration: 2)
+    var width: Animation = .linear(duration: 2)
+    var height: Animation = .linear(duration: 2)
+    
+    var delayFactor: Double = 0.2
+}
+
 // MARK: - Standard
 internal struct BarElement<CD: CTBarChartDataProtocol & GetDataProtocol,
-                           DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol,
-                           S: ShapeStyle>: View {
+                           DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
-    private let chartData: CD
-    private let fill: S
-    private let dataPoint: DP
+    @ObservedObject var chartData: CD
+    var dataPoint: DP
+    var fill: BarColour
+    var index: Double
+    
+    var animations = BarElementAnimation()
     
     internal init(
         chartData: CD,
         dataPoint: DP,
-        fill: S
+        fill: BarColour,
+        index: Int
     ) {
         self.chartData = chartData
         self.dataPoint = dataPoint
         self.fill = fill
+        self.index = Double(index)
     }
     
     @State private var startAnimation: Bool = false
@@ -32,20 +44,49 @@ internal struct BarElement<CD: CTBarChartDataProtocol & GetDataProtocol,
         GeometryReader { section in
             RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
                 .fill(fill)
-                .frame(startAnimation ?
-                        chartData.barFrame(section.size, chartData.barStyle.barWidth, dataPoint.value, chartData.maxValue) :
-                        chartData.barFrame(section.size, chartData.barStyle.barWidth, 0, 0))
+                .animation(animations.fill.delay(index * animations.delayFactor),
+                           value: fill)
+            
+                .frame(width: chartData.barWidth(section.size.width, chartData.barStyle.barWidth))
+                .animation(animations.width.delay(index * animations.delayFactor),
+                           value: chartData.barStyle.barWidth)
+            
+                .frame(height: startAnimation ?
+                       chartData.barHeight(section.size.height, dataPoint.value, chartData.maxValue) :
+                       chartData.barHeight(section.size.height, 0, 0))
                 .offset(startAnimation ?
-                            chartData.barOffset(section.size, chartData.barStyle.barWidth, dataPoint.value, chartData.maxValue) :
-                            chartData.barOffset(section.size, chartData.barStyle.barWidth, 0, 0))
-                .background(Color(.gray).opacity(0.000000001))
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                        chartData.barOffset(section.size, chartData.barStyle.barWidth, dataPoint.value, chartData.maxValue) :
+                        chartData.barOffset(section.size, chartData.barStyle.barWidth, 0, 0))
+                .animation(animations.height.delay(index * animations.delayFactor),
+                           value: dataPoint.value)
+                
+                .animateOnAppear(using: chartData.chartStyle.globalAnimation.delay(index * animations.delayFactor)) {
                     self.startAnimation = true
                 }
                 .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = false
                 }
-                .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+        }
+        .background(Color(.gray).opacity(0.000000001))
+        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+    }
+}
+
+extension Shape {
+    func fill(_ color: BarColour) -> some View {
+        Group {
+            switch color {
+            case .colour(let colour):
+                self.fill(colour)
+            case .gradient(let colours, let startPoint, let endPoint):
+                self.fill(LinearGradient(gradient: Gradient(colors: colours),
+                                         startPoint: startPoint,
+                                         endPoint: endPoint))
+            case .gradientStops(let stops, let startPoint, let endPoint):
+                self.fill(LinearGradient(gradient: Gradient(stops: GradientStop.convertToGradientStopsArray(stops: stops)),
+                                         startPoint: startPoint,
+                                         endPoint: endPoint))
+            }
         }
     }
 }
@@ -68,39 +109,10 @@ internal struct StackElementSubView: View {
         GeometryReader { geo in
             VStack(spacing: 0) {
                 ForEach(dataSet.dataPoints.reversed()) { dataPoint in
-                    if dataPoint.group.colour.colourType == .colour,
-                       let colour = dataPoint.group.colour.colour
-                    {
-                        StackBarElement(colour, elementHeight(height: geo.size.height,
-                                                              dataSet: dataSet,
-                                                              dataPoint: dataPoint))
-                            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: specifier))
-                    } else if dataPoint.group.colour.colourType == .gradientColour,
-                              let colours = dataPoint.group.colour.colours,
-                              let startPoint = dataPoint.group.colour.startPoint,
-                              let endPoint = dataPoint.group.colour.endPoint
-                    {
-                        StackBarElement(LinearGradient(gradient: Gradient(colors: colours),
-                                                       startPoint: startPoint,
-                                                       endPoint: endPoint),
-                                        elementHeight(height: geo.size.height,
-                                                      dataSet: dataSet,
-                                                      dataPoint: dataPoint))
-                            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: specifier))
-                    } else if dataPoint.group.colour.colourType == .gradientStops,
-                              let stops = dataPoint.group.colour.stops,
-                              let startPoint = dataPoint.group.colour.startPoint,
-                              let endPoint = dataPoint.group.colour.endPoint
-                    {
-                        let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
-                        StackBarElement(LinearGradient(gradient: Gradient(stops: safeStops),
-                                                       startPoint: startPoint,
-                                                       endPoint: endPoint),
-                                        elementHeight(height: geo.size.height,
-                                                      dataSet: dataSet,
-                                                      dataPoint: dataPoint))
-                            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: specifier))
-                    }
+                    StackBarElement(dataPoint.group.colour, elementHeight(height: geo.size.height,
+                                                                          dataSet: dataSet,
+                                                                          dataPoint: dataPoint))
+                        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: specifier))
                 }
             }
         }
@@ -127,13 +139,13 @@ internal struct StackElementSubView: View {
 }
 
 // MARK: Stacked Element
-internal struct StackBarElement<S>: View where S: ShapeStyle {
+internal struct StackBarElement: View {
     
-    private let fill: S
+    private let fill: BarColour
     private let height: CGFloat
     
     internal init(
-        _ fill: S,
+        _ fill: BarColour,
         _ height: CGFloat
     ) {
         self.fill = fill
@@ -148,18 +160,17 @@ internal struct StackBarElement<S>: View where S: ShapeStyle {
 }
 
 // MARK: - Ranged
-internal struct RangedBarCell<CD, S>: View where CD: RangedBarChartData,
-                                                 S: ShapeStyle {
+internal struct RangedBarCell<CD>: View where CD: RangedBarChartData {
     
     private let chartData: CD
     private let dataPoint: CD.SetType.DataPoint
-    private let fill: S
+    private let fill: BarColour
     private let barSize: CGRect
     
     internal init(
         chartData: CD,
         dataPoint: CD.SetType.DataPoint,
-        fill: S,
+        fill: BarColour,
         barSize: CGRect
     ) {
         self.chartData = chartData
@@ -193,16 +204,15 @@ internal struct RangedBarCell<CD, S>: View where CD: RangedBarChartData,
 
 // MARK: - Horizontal
 internal struct HorizontalBarElement<CD: CTBarChartDataProtocol & GetDataProtocol,
-                                     DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol,
-                                     S: ShapeStyle>: View {
+                                     DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     private let chartData: CD
-    private let fill: S
+    private let fill: BarColour
     private let dataPoint: DP
     
     internal init(
         chartData: CD,
         dataPoint: DP,
-        fill: S
+        fill: BarColour
     ) {
         self.chartData = chartData
         self.dataPoint = dataPoint
