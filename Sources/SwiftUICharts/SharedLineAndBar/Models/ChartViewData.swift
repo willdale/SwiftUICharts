@@ -65,6 +65,9 @@ public struct ChartViewData {
      */
     var yAxisSpecifier: String = "%.0f"
     
+    /// Optional number formatter for the y axis labels when they are `.numeric`.
+    var yAxisNumberFormatter: NumberFormatter? = nil
+    
     /**
      Width of the y axis title label once
      it has been rotated.

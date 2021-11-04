@@ -73,7 +73,10 @@ extension CTLineBarChartDataProtocol where Self: GetDataProtocol {
      They are either auto calculated numbers
      or array of strings.
      */
-    internal var labelsArray: [String] { self.generateYLabels(self.viewData.yAxisSpecifier) }
+    internal var labelsArray: [String] {
+        self.generateYLabels(self.viewData.yAxisSpecifier,
+                             numberFormatter: self.viewData.yAxisNumberFormatter)
+    }
     
     /**
      Labels to display on the Y axis
@@ -89,14 +92,29 @@ extension CTLineBarChartDataProtocol where Self: GetDataProtocol {
         - specifier: Decimal precision of the labels.
      - Returns: Array of labels.
      */
-    private func generateYLabels(_ specifier: String) -> [String] {
+    private func generateYLabels(_ specifier: String, numberFormatter: NumberFormatter?) -> [String] {
         switch self.chartStyle.yAxisLabelType {
         case .numeric:
             let dataRange: Double = self.range
             let minValue: Double = self.minValue
             let range: Double = dataRange / Double(self.chartStyle.yAxisNumberOfLabels-1)
-            let firstLabel = [String(format: specifier, minValue)]
-            let otherLabels = (1...self.chartStyle.yAxisNumberOfLabels-1).map { String(format: specifier, minValue + range * Double($0)) }
+            let firstLabel: [String] = {
+                if let formatter = numberFormatter,
+                   let formattedNumber = formatter.string(from: NSNumber(value:minValue)) {
+                    return [formattedNumber]
+                } else {
+                    return [String(format: specifier, minValue)]
+                }
+            }()
+            let otherLabels: [String] = (1...self.chartStyle.yAxisNumberOfLabels-1).map {
+                let value = minValue + range * Double($0)
+                if let formatter = numberFormatter,
+                   let formattedNumber = formatter.string(from: NSNumber(value: value)) {
+                    return formattedNumber
+                } else {
+                    return String(format: specifier, value)
+                }
+            }
             let labels = firstLabel + otherLabels
             return labels
         case .custom:
