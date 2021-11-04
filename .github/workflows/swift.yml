@@ -10,7 +10,7 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: macOS 11
-              run: xcodebuild -scheme "SwiftUICharts" -destination "platform=macOS" clean test | xcpretty
+              run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=macOS,name=arch:x86_64" clean test | xcpretty
 
     iOS_15:
         name: Test iOS 15
@@ -21,7 +21,7 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: iOS 15
-              run: xcodebuild -scheme "SwiftUICharts" -destination "platform=iOS Simulator,name=iPhone 11,OS=15.0" clean test | xcpretty
+              run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=iOS Simulator,name=iPhone 11,OS=15.0" clean test | xcpretty
     iOS_14:
         name: Test iOS 14
         runs-on: macOS-11
@@ -31,7 +31,7 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: iOS 14
-              run: xcodebuild -scheme "SwiftUICharts" -destination "platform=iOS Simulator,name=iPhone 11,OS=14.4" clean test | xcpretty
+              run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=iOS Simulator,name=iPhone 11,OS=14.4" clean test | xcpretty
 
     tvOS_15:
         name: Test tvOS 15
@@ -42,7 +42,7 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: tvOS 15
-              run: xcodebuild -scheme "SwiftUICharts" -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation),OS=15.0" clean test | xcpretty
+              run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation),OS=15.0" clean test | xcpretty
     tvOS_14:
         name: Test tvOS 14
         runs-on: macOS-11
@@ -52,7 +52,7 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: tvOS 14
-              run: xcodebuild -scheme "SwiftUICharts" -destination "platform=tvOS Simulator,name=Apple TV 4K,OS=14.3" clean test | xcpretty
+              run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=tvOS Simulator,name=Apple TV 4K,OS=14.3" clean test | xcpretty
 
     watchOS_8:
         name: Test watchOS 8
@@ -63,7 +63,7 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: watchOS 8.0
-              run: xcodebuild -scheme "SwiftUICharts" -destination "platform=watchOS Simulator,name=Apple Watch Series 7 - 45mm,OS=8.0" clean test | xcpretty
+              run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=watchOS Simulator,name=Apple Watch Series 7 - 45mm,OS=8.0" clean test | xcpretty
     watchOS_7:
         name: Test watchOS 7
         runs-on: macOS-11
@@ -73,4 +73,4 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: watchOS 7.2
-              run: xcodebuild -scheme "SwiftUICharts" -destination "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm,OS=7.2" clean test | xcpretty
+              run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm,OS=7.2" clean test | xcpretty
