@@ -19,6 +19,7 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
     internal init(
         chartData: T,
         specifier: String,
+        formatter: NumberFormatter?,
         colourIndicator: AxisColour
     ) {
         self.chartData = chartData
@@ -26,6 +27,7 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
         self.colourIndicator = colourIndicator
         chartData.viewData.hasYAxisLabels = true
         chartData.viewData.yAxisSpecifier = specifier
+        chartData.viewData.yAxisNumberFormatter = formatter
     }
     
     internal func body(content: Content) -> some View {
@@ -81,8 +83,9 @@ extension View {
     public func yAxisLabels<T: CTLineBarChartDataProtocol>(
         chartData: T,
         specifier: String = "%.0f",
+        formatter: NumberFormatter? = nil,
         colourIndicator: AxisColour = .none
     ) -> some View {
-        self.modifier(YAxisLabels(chartData: chartData, specifier: specifier, colourIndicator: colourIndicator))
+        self.modifier(YAxisLabels(chartData: chartData, specifier: specifier, formatter: formatter, colourIndicator: colourIndicator))
     }
 }
