@@ -1,4 +1,4 @@
-name: Test all on Push and Pull
+name: CI
 on: [push, pull_request]
 jobs:
     macOS_11:
@@ -10,7 +10,7 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: macOS 11
-              run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=macOS,name=arch:x86_64" clean test | xcpretty
+              run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=macOS" clean test | xcpretty
 
     iOS_15:
         name: Test iOS 15
@@ -64,13 +64,3 @@ jobs:
             - uses: actions/checkout@v2
             - name: watchOS 8.0
               run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=watchOS Simulator,name=Apple Watch Series 7 - 45mm,OS=8.0" clean test | xcpretty
-    watchOS_7:
-        name: Test watchOS 7
-        runs-on: macOS-11
-        env:
-            DEVELOPER_DIR: /Applications/Xcode_12.4.app/Contents/Developer
-        timeout-minutes: 10
-        steps:
-            - uses: actions/checkout@v2
-            - name: watchOS 7.2
-              run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm,OS=7.2" clean test | xcpretty
