@@ -29,6 +29,8 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
     
     private let addToLegends: Bool
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: T,
         markerName: String,
@@ -59,10 +61,10 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
         
         self.addToLegends = addToLegends
         
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
+        
         self.setupPOILegends()
     }
-    
-    @State private var startAnimation: Bool = false
     
     internal func body(content: Content) -> some View {
         ZStack {

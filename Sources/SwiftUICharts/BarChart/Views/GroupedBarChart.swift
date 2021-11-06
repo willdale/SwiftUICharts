@@ -44,6 +44,8 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
     
     @ObservedObject private var chartData: ChartData
     private let groupSpacing: CGFloat
+
+    @State private var startAnimation: Bool
     
     /// Initialises a grouped bar chart view.
     /// - Parameters:
@@ -55,10 +57,11 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
     ) {
         self.chartData = chartData
         self.groupSpacing = groupSpacing
-        self.chartData.groupSpacing = groupSpacing
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
+
+        self.chartData.groupSpacing = groupSpacing        
     }
     
-    @State private var startAnimation: Bool = false
     
     public var body: some View {
         GeometryReader { geo in

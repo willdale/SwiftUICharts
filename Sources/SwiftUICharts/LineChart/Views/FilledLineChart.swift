@@ -48,16 +48,19 @@ public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
     private let minValue: Double
     private let range: Double
     
+    @State private var startAnimation: Bool
+    
     /// Initialises a filled line chart
     /// - Parameter chartData: Must be LineChartData model.
     public init(chartData: ChartData) {
         self.chartData = chartData
         self.minValue = chartData.minValue
         self.range = chartData.range
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
+
         self.chartData.isFilled = true
     }
     
-    @State private var startAnimation: Bool = false
     
     public var body: some View {
         GeometryReader { geo in

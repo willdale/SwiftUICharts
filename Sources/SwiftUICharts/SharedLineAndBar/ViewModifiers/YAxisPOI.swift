@@ -32,6 +32,8 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
     private let minValue: Double
     private let maxValue: Double
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: T,
         markerName: String,
@@ -61,11 +63,10 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
         self.maxValue = chartData.maxValue
         self.range = chartData.range
         self.minValue = chartData.minValue
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
         
         self.setupPOILegends()
     }
-    
-    @State private var startAnimation: Bool = false
     
     internal func body(content: Content) -> some View {
         ZStack {

@@ -12,6 +12,8 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
     @ObservedObject private var chartData: T
     
+    @State private var startAnimation: Bool
+    
     init(
         chartData: T,
         legendTitle: String,
@@ -19,13 +21,13 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
         style: @escaping ()->(ExtraLineStyle)
     ) {
         self.chartData = chartData
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
+
         self.chartData.extraLineData = ExtraLineData(legendTitle: legendTitle,
                                                      dataPoints: datapoints,
                                                      style: style)
         self.lineLegendSetup()
     }
-    
-    @State private var startAnimation: Bool = false
     
     internal func body(content: Content) -> some View {
         Group {
@@ -161,15 +163,16 @@ internal struct ColourExtraLineView<ChartData>: View where ChartData: CTLineBarC
     @ObservedObject private var chartData: ChartData
     let colour: Color
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: ChartData,
         colour: Color
     ) {
         self.chartData = chartData
         self.colour = colour
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     var body: some View {
         
@@ -203,6 +206,8 @@ internal struct ColoursExtraLineView<ChartData>: View where ChartData: CTLineBar
     let startPoint: UnitPoint
     let endPoint: UnitPoint
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: ChartData,
         colours: [Color],
@@ -213,9 +218,8 @@ internal struct ColoursExtraLineView<ChartData>: View where ChartData: CTLineBar
         self.colours = colours
         self.startPoint = startPoint
         self.endPoint = endPoint
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     var body: some View {
         ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints.map(\.value),
@@ -254,6 +258,8 @@ internal struct StopsExtraLineView<ChartData>: View where ChartData: CTLineBarCh
     let startPoint: UnitPoint
     let endPoint: UnitPoint
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: ChartData,
         stops: [GradientStop],
@@ -264,9 +270,8 @@ internal struct StopsExtraLineView<ChartData>: View where ChartData: CTLineBarCh
         self.stops = GradientStop.convertToGradientStopsArray(stops: stops)
         self.startPoint = startPoint
         self.endPoint = endPoint
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     var body: some View {
         ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints.map(\.value),
@@ -302,13 +307,14 @@ internal struct PointsExtraLineView<ChartData>: View where ChartData: CTLineBarC
     
     @ObservedObject private var chartData: ChartData
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: ChartData
     ) {
         self.chartData = chartData
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     internal var body: some View {
         
@@ -357,6 +363,8 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
     private let dataPoint: ExtraLineDataPoint
     private let index: Int
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: ChartData,
         dataPoint: ExtraLineDataPoint,
@@ -365,9 +373,8 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
         self.chartData = chartData
         self.dataPoint = dataPoint
         self.index = index
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     internal var body: some View {
         
@@ -431,6 +438,8 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
     private let dataPoint: ExtraLineDataPoint
     private let index: Int
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: ChartData,
         dataPoint: ExtraLineDataPoint,
@@ -439,9 +448,8 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
         self.chartData = chartData
         self.dataPoint = dataPoint
         self.index = index
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     internal var body: some View {
         

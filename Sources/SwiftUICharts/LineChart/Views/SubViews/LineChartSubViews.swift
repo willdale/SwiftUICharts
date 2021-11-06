@@ -23,6 +23,8 @@ internal struct LineChartColourSubView<CD, DS>: View where CD: CTLineChartDataPr
     private let colour: Color
     private let isFilled: Bool
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: CD,
         dataSet: DS,
@@ -37,9 +39,9 @@ internal struct LineChartColourSubView<CD, DS>: View where CD: CTLineChartDataPr
         self.range = range
         self.colour = colour
         self.isFilled = isFilled
+        
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     internal var body: some View {
         LineShape(dataPoints: dataSet.dataPoints,
@@ -87,6 +89,8 @@ internal struct LineChartColoursSubView<CD, DS>: View where CD: CTLineChartDataP
     private let endPoint: UnitPoint
     private let isFilled: Bool
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: CD,
         dataSet: DS,
@@ -105,9 +109,9 @@ internal struct LineChartColoursSubView<CD, DS>: View where CD: CTLineChartDataP
         self.startPoint = startPoint
         self.endPoint = endPoint
         self.isFilled = isFilled
+        
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     internal var body: some View {
         LineShape(dataPoints: dataSet.dataPoints,
@@ -160,6 +164,8 @@ internal struct LineChartStopsSubView<CD, DS>: View where CD: CTLineChartDataPro
     private let endPoint: UnitPoint
     private let isFilled: Bool
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: CD,
         dataSet: DS,
@@ -178,9 +184,9 @@ internal struct LineChartStopsSubView<CD, DS>: View where CD: CTLineChartDataPro
         self.startPoint = startPoint
         self.endPoint = endPoint
         self.isFilled = isFilled
+        
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     internal var body: some View {
         LineShape(dataPoints: dataSet.dataPoints,

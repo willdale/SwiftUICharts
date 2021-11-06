@@ -46,14 +46,17 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
     
     @ObservedObject private var chartData: ChartData
     
+    @State private var startAnimation = false
+    
     /// Initialises a stacked bar chart view.
     /// - Parameters:
     ///   - chartData: Must be StackedBarChartData model.
     public init(chartData: ChartData) {
         self.chartData = chartData
+        
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
     
-    @State private var startAnimation: Bool = false
     
     public var body: some View {
         if chartData.isGreaterThanTwo() {

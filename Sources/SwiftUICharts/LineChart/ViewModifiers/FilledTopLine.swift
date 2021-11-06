@@ -18,6 +18,8 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
     private let minValue: Double
     private let range: Double
     
+    @State private var startAnimation: Bool
+
     internal init(
         chartData: T,
         lineColour: ColourStyle,
@@ -28,9 +30,9 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
         self.strokeStyle = strokeStyle
         self.minValue = chartData.minValue
         self.range = chartData.range
+        
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     internal func body(content: Content) -> some View {
         ZStack {

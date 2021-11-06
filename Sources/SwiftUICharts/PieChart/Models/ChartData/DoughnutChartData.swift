@@ -30,7 +30,7 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol, Publishable, 
     @Published public var legends: [LegendData] = []
     @Published public var infoView: InfoViewData<PieChartDataPoint> = InfoViewData()
     
-    @Published public var shouldAnimate: Bool = false
+    @Published public var shouldAnimate: Bool
         
     public var noDataText: Text
 
@@ -46,14 +46,17 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol, Publishable, 
     /// - Parameters:
     ///   - dataSets: Data to draw and style the chart.
     ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - shouldAnimate: Whether the chart should be animated.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: PieDataSet,
         chartStyle: DoughnutChartStyle = DoughnutChartStyle(),
+        shouldAnimate: Bool = true,
         noDataText: Text
     ) {
         self.dataSets = dataSets
         self.chartStyle = chartStyle
+        self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         
         self.setupLegends()
@@ -111,6 +114,7 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol, Publishable, 
         self.dataSets = dataSets
         self.metadata = metadata
         self.chartStyle = chartStyle
+        self.shouldAnimate = true
         self.noDataText = noDataText
         
         self.setupLegends()

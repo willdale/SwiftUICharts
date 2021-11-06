@@ -14,11 +14,12 @@ internal struct HorizontalGridView<T>: View where T: CTLineBarChartDataProtocol 
     
     @ObservedObject private var chartData: T
     
+    @State private var startAnimation: Bool
+    
     internal init(chartData: T) {
         self.chartData = chartData
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     var body: some View {
         HorizontalGridShape()

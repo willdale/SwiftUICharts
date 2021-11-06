@@ -34,7 +34,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     @Published public var infoView: InfoViewData<LineChartDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
     
-    @Published public var shouldAnimate: Bool = false
+    @Published public var shouldAnimate: Bool
         
     public var noDataText: Text
     
@@ -55,18 +55,21 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
     ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - shouldAnimate: Whether the chart should be animated.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: MultiLineDataSet,
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
         chartStyle: LineChartStyle = LineChartStyle(),
+        shouldAnimate: Bool = true,
         noDataText: Text = Text("No Data")
     ) {
         self.dataSets = dataSets
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
         self.chartStyle = chartStyle
+        self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         
         self.setupLegends()
@@ -169,7 +172,8 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     // MARK: Points
     public func getPointMarker() -> some View {
         ForEach(self.dataSets.dataSets, id: \.id) { dataSet in
-            PointsSubView(dataSets: dataSet,
+            PointsSubView(chartData: self,
+                          dataSets: dataSet,
                           minValue: self.minValue,
                           range: self.range,
                           animation: self.chartStyle.globalAnimation,
@@ -269,7 +273,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     @available(*, deprecated, message: "Please set use other init instead.")
     public init(
         dataSets: MultiLineDataSet,
-        metadata: ChartMetadata = ChartMetadata(),
+        metadata: ChartMetadata,
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
         chartStyle: LineChartStyle = LineChartStyle(),
@@ -280,6 +284,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
         self.chartStyle = chartStyle
+        self.shouldAnimate = true
         self.noDataText = noDataText
         
         self.setupLegends()

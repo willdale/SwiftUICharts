@@ -33,13 +33,14 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
     
     @ObservedObject private var chartData: ChartData
     
+    @State private var startAnimation: Bool
+    
     /// Initialises a bar chart view.
     /// - Parameter chartData: Must be PieChartData.
     public init(chartData: ChartData) {
         self.chartData = chartData
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     public var body: some View {
         GeometryReader { geo in

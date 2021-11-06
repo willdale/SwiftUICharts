@@ -11,8 +11,6 @@ public struct BarElementAnimation {
     var fill: Animation = .linear(duration: 2)
     var width: Animation = .linear(duration: 2)
     var height: Animation = .linear(duration: 2)
-    
-    var delayFactor: Double = 0.2
 }
 
 // MARK: - Standard
@@ -23,8 +21,9 @@ internal struct BarElement<CD: CTBarChartDataProtocol & GetDataProtocol,
     var dataPoint: DP
     var fill: BarColour
     var index: Double
-    
     var animations = BarElementAnimation()
+    
+    @State private var startAnimation: Bool
     
     internal init(
         chartData: CD,
@@ -36,20 +35,18 @@ internal struct BarElement<CD: CTBarChartDataProtocol & GetDataProtocol,
         self.dataPoint = dataPoint
         self.fill = fill
         self.index = Double(index)
+        
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     internal var body: some View {
         GeometryReader { section in
             RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
                 .fill(fill)
-                .animation(animations.fill.delay(index * animations.delayFactor),
-                           value: fill)
+                .animation(animations.fill, value: fill)
             
                 .frame(width: chartData.barWidth(section.size.width, chartData.barStyle.barWidth))
-                .animation(animations.width.delay(index * animations.delayFactor),
-                           value: chartData.barStyle.barWidth)
+                .animation(animations.width, value: chartData.barStyle.barWidth)
             
                 .frame(height: startAnimation ?
                        chartData.barHeight(section.size.height, dataPoint.value, chartData.maxValue) :
@@ -57,10 +54,9 @@ internal struct BarElement<CD: CTBarChartDataProtocol & GetDataProtocol,
                 .offset(startAnimation ?
                         chartData.barOffset(section.size, chartData.barStyle.barWidth, dataPoint.value, chartData.maxValue) :
                         chartData.barOffset(section.size, chartData.barStyle.barWidth, 0, 0))
-                .animation(animations.height.delay(index * animations.delayFactor),
-                           value: dataPoint.value)
+                .animation(animations.height, value: dataPoint.value)
                 
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation.delay(index * animations.delayFactor)) {
+                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
                 .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
@@ -69,25 +65,6 @@ internal struct BarElement<CD: CTBarChartDataProtocol & GetDataProtocol,
         }
         .background(Color(.gray).opacity(0.000000001))
         .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
-    }
-}
-
-extension Shape {
-    func fill(_ color: BarColour) -> some View {
-        Group {
-            switch color {
-            case .colour(let colour):
-                self.fill(colour)
-            case .gradient(let colours, let startPoint, let endPoint):
-                self.fill(LinearGradient(gradient: Gradient(colors: colours),
-                                         startPoint: startPoint,
-                                         endPoint: endPoint))
-            case .gradientStops(let stops, let startPoint, let endPoint):
-                self.fill(LinearGradient(gradient: Gradient(stops: GradientStop.convertToGradientStopsArray(stops: stops)),
-                                         startPoint: startPoint,
-                                         endPoint: endPoint))
-            }
-        }
     }
 }
 
@@ -166,6 +143,7 @@ internal struct RangedBarCell<CD>: View where CD: RangedBarChartData {
     private let dataPoint: CD.SetType.DataPoint
     private let fill: BarColour
     private let barSize: CGRect
+    @State private var startAnimation: Bool
     
     internal init(
         chartData: CD,
@@ -177,9 +155,10 @@ internal struct RangedBarCell<CD>: View where CD: RangedBarChartData {
         self.dataPoint = dataPoint
         self.fill = fill
         self.barSize = barSize
+        
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
     
-    @State private var startAnimation: Bool = false
     
     internal var body: some View {
         GeometryReader { section in
@@ -208,6 +187,7 @@ internal struct HorizontalBarElement<CD: CTBarChartDataProtocol & GetDataProtoco
     private let chartData: CD
     private let fill: BarColour
     private let dataPoint: DP
+    @State private var startAnimation: Bool
     
     internal init(
         chartData: CD,
@@ -217,9 +197,10 @@ internal struct HorizontalBarElement<CD: CTBarChartDataProtocol & GetDataProtoco
         self.chartData = chartData
         self.dataPoint = dataPoint
         self.fill = fill
+        
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
     
-    @State private var startAnimation: Bool = false
     
     internal var body: some View {
         GeometryReader { section in
