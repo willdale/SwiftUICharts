@@ -292,7 +292,10 @@ extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProto
 // MARK: - Data Point
 extension CTDataPointBaseProtocol  {
     /// Returns information about the data point for use in accessibility tags.
-    func getCellAccessibilityValue(specifier: String, formatter: NumberFormatter?) -> Text {
+    func getCellAccessibilityValue(
+        specifier: String,
+        formatter: NumberFormatter?
+    ) -> Text {
         Text(String(format: NSLocalizedString("%@ \(wrappedDescription)", comment: ""), "\(valueAsString(specifier: specifier, formatter: formatter))"))
     }
 }

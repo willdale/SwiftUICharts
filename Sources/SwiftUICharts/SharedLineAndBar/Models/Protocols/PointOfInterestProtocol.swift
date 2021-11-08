@@ -42,7 +42,7 @@ public protocol PointOfInterestProtocol {
      In standard charts this will display leading or trailing.
      In horizontal charts this will display bottom or top.
      */
-    func poiLabelAxis(markerValue: Double, specifier: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color) -> LabelAxis
+    func poiLabelAxis(markerValue: Double, specifier: String, formatter: NumberFormatter?, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color) -> LabelAxis
     
     /**
      A type representing a View for displaying a label
@@ -56,7 +56,7 @@ public protocol PointOfInterestProtocol {
      In standard charts this will display leading or trailing.
      In horizontal charts this will display bottom or top.
      */
-    func poiLabelCenter(markerValue: Double, specifier: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color, strokeStyle: StrokeStyle) -> LabelCenter
+    func poiLabelCenter(markerValue: Double, specifier: String, formatter: NumberFormatter?, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color, strokeStyle: StrokeStyle) -> LabelCenter
     
     
     /**
@@ -173,11 +173,29 @@ public protocol PointOfInterestProtocol {
 //
 // MARK: - Ordinate
 extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
+    
+    func poiLabel(value: Double, specifier: String, formatter: NumberFormatter?) -> LocalizedStringKey {
+        if let formatter = formatter {
+            return LocalizedStringKey(formatter.string(from: NSNumber(floatLiteral: value)) ?? "")
+        } else {
+            return LocalizedStringKey("\(value, specifier: specifier)")
+        }
+    }
+    
     public func poiMarker(value: Double, range: Double, minValue: Double) -> some Shape {
         HorizontalMarker(chartData: self, value: value, range: range, minValue: minValue)
     }
-    public func poiLabelAxis(markerValue: Double, specifier: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color) -> some View {
-        Text(LocalizedStringKey("\(markerValue, specifier: specifier)"))
+    
+    public func poiLabelAxis(
+        markerValue: Double,
+        specifier: String,
+        formatter: NumberFormatter?,
+        labelFont: Font,
+        labelColour: Color,
+        labelBackground: Color,
+        lineColour: Color
+    ) -> some View {
+        Text(poiLabel(value: markerValue, specifier: specifier, formatter: formatter))
             .font(labelFont)
             .foregroundColor(labelColour)
             .padding(4)
@@ -197,8 +215,17 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
             })
     }
     
-   public func poiLabelCenter(markerValue: Double, specifier: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color, strokeStyle: StrokeStyle) -> some View {
-        Text(LocalizedStringKey("\(markerValue, specifier: specifier)"))
+   public func poiLabelCenter(
+    markerValue: Double,
+    specifier: String,
+    formatter: NumberFormatter?,
+    labelFont: Font,
+    labelColour: Color,
+    labelBackground: Color,
+    lineColour: Color,
+    strokeStyle: StrokeStyle
+   ) -> some View {
+        Text(poiLabel(value: markerValue, specifier: specifier, formatter: formatter))
             .font(labelFont)
             .foregroundColor(labelColour)
             .padding()
