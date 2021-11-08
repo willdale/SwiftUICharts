@@ -199,7 +199,7 @@ public protocol CTDataPointBaseProtocol: Hashable, Identifiable {
      - Parameter specifier: Specifier
      - Returns: Value as a string.
      */
-    func valueAsString(specifier: String) -> String
+    func valueAsString(specifier: String, formatter: NumberFormatter?) -> String
 }
 
 /**

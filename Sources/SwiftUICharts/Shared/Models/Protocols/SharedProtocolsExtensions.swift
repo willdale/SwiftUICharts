@@ -72,11 +72,14 @@ extension CTChartData {
     public func infoValueUnit(info: DataPoint) -> some View {
         switch self.infoView.touchUnit {
         case .none:
-            return Text(LocalizedStringKey(info.valueAsString(specifier: self.infoView.touchSpecifier)))
+            return Text(LocalizedStringKey(info.valueAsString(specifier: infoView.touchSpecifier,
+                                                              formatter: infoView.touchFormatter)))
         case .prefix(of: let unit):
-            return Text(LocalizedStringKey(unit + " " + info.valueAsString(specifier: self.infoView.touchSpecifier)))
+            return Text(LocalizedStringKey(unit + " " + info.valueAsString(specifier: infoView.touchSpecifier,
+                                                                           formatter: infoView.touchFormatter)))
         case .suffix(of: let unit):
-            return Text(LocalizedStringKey(info.valueAsString(specifier: self.infoView.touchSpecifier) + " " + unit))
+            return Text(LocalizedStringKey(info.valueAsString(specifier: infoView.touchSpecifier,
+                                                              formatter: infoView.touchFormatter) + " " + unit))
         }
     }
     
@@ -87,7 +90,7 @@ extension CTChartData {
      - Returns: Text View with the value with relevent info.
      */
     public func infoValue(info: DataPoint) -> some View {
-        Text(LocalizedStringKey(info.valueAsString(specifier: self.infoView.touchSpecifier)))
+        Text(LocalizedStringKey(info.valueAsString(specifier: infoView.touchSpecifier, formatter: infoView.touchFormatter)))
     }
     
     /**
@@ -289,8 +292,8 @@ extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProto
 // MARK: - Data Point
 extension CTDataPointBaseProtocol  {
     /// Returns information about the data point for use in accessibility tags.
-    func getCellAccessibilityValue(specifier: String) -> Text {
-        Text(String(format: NSLocalizedString("%@ \(self.wrappedDescription)", comment: ""), "\(self.valueAsString(specifier: specifier))"))
+    func getCellAccessibilityValue(specifier: String, formatter: NumberFormatter?) -> Text {
+        Text(String(format: NSLocalizedString("%@ \(wrappedDescription)", comment: ""), "\(valueAsString(specifier: specifier, formatter: formatter))"))
     }
 }
 
@@ -303,45 +306,65 @@ extension CTDataPointBaseProtocol {
 
 extension CTStandardDataPointProtocol where Self: CTBarDataPointBaseProtocol {
     /// Data point's value as a string
-    public func valueAsString(specifier: String) -> String {
-            return String(format: specifier, self.value)
+    public func valueAsString(specifier: String, formatter: NumberFormatter?) -> String {
+        if let formatter = formatter {
+            return formatter.string(from: NSNumber(floatLiteral: value)) ?? ""
+        } else {
+            return String(format: specifier, value)
+        }
     }
 }
 extension CTStandardDataPointProtocol where Self: CTLineDataPointProtocol & IgnoreMe {
     /// Data point's value as a string
-    public func valueAsString(specifier: String) -> String {
-        if !self.ignoreMe {
-            return String(format: specifier, self.value)
+    public func valueAsString(specifier: String, formatter: NumberFormatter?) -> String {
+        if let formatter = formatter {
+            return formatter.string(from: NSNumber(floatLiteral: value)) ?? ""
         } else {
-            return String("")
+            if !self.ignoreMe {
+                return String(format: specifier, value)
+            } else {
+                return String("")
+            }
         }
     }
 }
 extension CTStandardDataPointProtocol where Self: CTPieDataPoint {
     /// Data point's value as a string
-    public func valueAsString(specifier: String) -> String {
-            return String(format: specifier, self.value)
+    public func valueAsString(specifier: String, formatter: NumberFormatter?) -> String {
+        if let formatter = formatter {
+            return formatter.string(from: NSNumber(floatLiteral: value)) ?? ""
+        } else {
+            return String(format: specifier, value)
+        }
     }
 }
 
 extension CTRangeDataPointProtocol where Self == RangedBarDataPoint {
     /// Data point's value as a string
-    public func valueAsString(specifier: String) -> String {
-        if !self._valueOnly {
-            return String(format: specifier, self.lowerValue) + "-" + String(format: specifier, self.upperValue)
+    public func valueAsString(specifier: String, formatter: NumberFormatter?) -> String {
+        if let formatter = formatter {
+            return (formatter.string(from: NSNumber(floatLiteral: lowerValue)) ?? "") + "-" + (formatter.string(from: NSNumber(floatLiteral: upperValue)) ?? "")
         } else {
-            return String(format: specifier, self._value)
+            if !self._valueOnly {
+                return String(format: specifier, lowerValue) + "-" + String(format: specifier, upperValue)
+            } else {
+                return String(format: specifier, self._value)
+            }
         }
     }
 }
 
 extension CTRangedLineDataPoint where Self == RangedLineChartDataPoint {
     /// Data point's value as a string
-    public func valueAsString(specifier: String) -> String {
-        if !self._valueOnly {
-            return String(format: specifier, self.lowerValue) + "-" + String(format: specifier, self.upperValue)
+    public func valueAsString(specifier: String, formatter: NumberFormatter?) -> String {
+        if let formatter = formatter {
+            return formatter.string(from: NSNumber(floatLiteral: value)) ?? ""
         } else {
-            return String(format: specifier, self.value)
+            if !self._valueOnly {
+                return String(format: specifier, lowerValue) + "-" + String(format: specifier, upperValue)
+            } else {
+                return String(format: specifier, value)
+            }
         }
     }
 }

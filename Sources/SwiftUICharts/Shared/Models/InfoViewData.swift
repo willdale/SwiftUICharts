@@ -39,6 +39,9 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
      */
     var touchSpecifier: String = "%.0f"
     
+    /// Optional number formatter for the touch overlay.
+    var touchFormatter: NumberFormatter? = nil
+    
     /**
      X axis posistion of the overlay box.
      
