@@ -285,6 +285,23 @@ extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProto
     }
 }
 
+extension CTMultiDataSetProtocol where Self.DataSet: CTLineChartDataSet,
+                                       Self.DataSet.DataPoint: CTStandardDataPointProtocol {
+    public func minValue() -> Double {
+        dataSets.compactMap { dataSet in
+            if !dataSet.style.ignoreZero {
+                return  dataSet.dataPoints
+                    .map(\.value)
+                    .min()
+            } else {
+                return dataSet.dataPoints
+                    .filter { $0.value != 0 }
+                    .map(\.value)
+                    .min()
+            }
+        }.min() ?? 100
+    }
+}
 
 // MARK: - Data Point
 extension CTDataPointBaseProtocol  {
