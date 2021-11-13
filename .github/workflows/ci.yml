@@ -1,9 +1,9 @@
 name: CI
 on: [push, pull_request]
 
-concurrency:
-    group: ${{ github.head_ref }}
-    cancel-in-progress: true
+concurrency: 
+  group: ci
+  cancel-in-progress: true
     
 jobs:
     macOS_11:
