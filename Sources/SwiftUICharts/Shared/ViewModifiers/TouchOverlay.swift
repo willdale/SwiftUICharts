@@ -19,12 +19,14 @@ internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
     internal init(
         chartData: T,
         specifier: String,
+        formatter: NumberFormatter?,
         unit: TouchUnit,
         minDistance: CGFloat
     ) {
         self.chartData = chartData
         self.minDistance = minDistance
         self.chartData.infoView.touchSpecifier = specifier
+        self.chartData.infoView.touchFormatter = formatter
         self.chartData.infoView.touchUnit = unit
     }
     
@@ -87,11 +89,13 @@ extension View {
     public func touchOverlay<T: CTChartData>(
         chartData: T,
         specifier: String = "%.0f",
+        formatter: NumberFormatter? = nil,
         unit: TouchUnit = .none,
         minDistance: CGFloat = 0
     ) -> some View {
         self.modifier(TouchOverlay(chartData: chartData,
                                    specifier: specifier,
+                                   formatter: formatter,
                                    unit: unit,
                                    minDistance: minDistance))
     }
@@ -105,6 +109,7 @@ extension View {
     public func touchOverlay<T: CTChartData>(
         chartData: T,
         specifier: String = "%.0f",
+        formatter: NumberFormatter? = nil,
         unit: TouchUnit = .none,
         minDistance: CGFloat = 0
     ) -> some View {

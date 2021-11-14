@@ -81,10 +81,11 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                     switch labelPosition {
                     case .none:
                         EmptyView()
-                    case .yAxis(let specifier):
+                    case .yAxis(let specifier, let formatter):
                         
                         chartData.poiLabelAxis(markerValue: markerValue,
                                                specifier: specifier,
+                                               formatter: formatter,
                                                labelFont: labelFont,
                                                labelColour: labelColour,
                                                labelBackground: labelBackground,
@@ -94,10 +95,11 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                             .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
                             .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(markerName) %@", comment: ""), String(format: specifier, markerValue))))
                         
-                    case .center(let specifier):
+                    case .center(let specifier, let formatter):
                         
                         chartData.poiLabelCenter(markerValue: markerValue,
                                                  specifier: specifier,
+                                                 formatter: formatter,
                                                  labelFont: labelFont,
                                                  labelColour: labelColour,
                                                  labelBackground: labelBackground,

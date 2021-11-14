@@ -56,17 +56,17 @@ public enum YAxisLabelPosistion {
  
  ```
  case none // No label.
- case yAxis(specifier: String) // Places the label in the yAxis labels.
- case center(specifier: String) // Places the label in the center of chart.
+ case yAxis(specifier: String, formatter: NumberFormatter? = nil) // Places the label in the yAxis labels.
+ case center(specifier: String, formatter: NumberFormatter? = nil) // Places the label in the center of chart.
  ```
  */
 public enum DisplayValue {
     /// No label.
     case none
     /// Places the label in the yAxis labels.
-    case yAxis(specifier: String)
+    case yAxis(specifier: String, formatter: NumberFormatter? = nil)
     /// Places the label in the center of chart.
-    case center(specifier: String)
+    case center(specifier: String, formatter: NumberFormatter? = nil)
 }
 
 /**

@@ -631,7 +631,8 @@ extension CTLineChartDataProtocol where SetType: CTLineChartDataSet {
                 
                 .foregroundColor(Color(.gray).opacity(0.000000001))
                 .accessibilityLabel(LocalizedStringKey(self.metadata.title))
-                .accessibilityValue(self.dataSets.dataPoints[point].getCellAccessibilityValue(specifier: self.infoView.touchSpecifier))
+                .accessibilityValue(self.dataSets.dataPoints[point].getCellAccessibilityValue(specifier: self.infoView.touchSpecifier,
+                                                                                              formatter: self.infoView.touchFormatter))
         }
     }
 }
