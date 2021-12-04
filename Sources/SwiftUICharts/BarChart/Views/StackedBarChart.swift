@@ -66,11 +66,11 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
                         StackElementSubView(dataSet: dataSet, specifier: chartData.infoView.touchSpecifier)
                             .clipShape(RoundedRectangleBarShape(chartData.barStyle.cornerRadius))
                             .frame(startAnimation ?
-                                   chartData.barFrame(section.size, chartData.barStyle.barWidth, dataSet.totalSetValue, chartData.maxValue) :
-                                    chartData.barFrame(section.size, chartData.barStyle.barWidth, 0, 0))
+                                   BarLayout.barFrame(section.size, chartData.barStyle.barWidth, dataSet.totalSetValue, chartData.maxValue) :
+                                    BarLayout.barFrame(section.size, chartData.barStyle.barWidth, 0, 0))
                             .offset(startAnimation ?
-                                    chartData.barOffset(section.size, chartData.barStyle.barWidth, dataSet.totalSetValue, chartData.maxValue) :
-                                        chartData.barOffset(section.size, chartData.barStyle.barWidth, 0, 0))
+                                    BarLayout.barOffset(section.size, chartData.barStyle.barWidth, dataSet.totalSetValue, chartData.maxValue) :
+                                        BarLayout.barOffset(section.size, chartData.barStyle.barWidth, 0, 0))
                             .background(Color(.gray).opacity(0.000000001))
                             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                                 self.startAnimation = true
