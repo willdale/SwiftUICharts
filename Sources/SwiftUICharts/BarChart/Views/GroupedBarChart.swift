@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: Chart
 /**
  View for creating a grouped bar chart.
  
@@ -27,7 +28,6 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
     @ObservedObject private var chartData: ChartData
     private let groupSpacing: CGFloat
 
-    @State private var startAnimation: Bool
     
     /// Initialises a grouped bar chart view.
     /// - Parameters:
@@ -39,9 +39,7 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
     ) {
         self.chartData = chartData
         self.groupSpacing = groupSpacing
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
-
-        self.chartData.groupSpacing = groupSpacing        
+        self.chartData.groupSpacing = groupSpacing
     }
     
     
@@ -53,7 +51,7 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                         GroupedBarGroup(chartData: chartData, dataSet: dataSet)
                     }
                 }
-                .onAppear {
+                .onAppear { // Needed for axes label frames
                     self.chartData.viewData.chartSize = geo.frame(in: .local)
                 }
             } else { CustomNoDataView(chartData: chartData) }
@@ -66,7 +64,7 @@ internal struct GroupedBarGroup<ChartData>: View where ChartData: GroupedBarChar
     @ObservedObject private var chartData: ChartData
     private let dataSet: GroupedBarDataSet
     
-    init(
+    internal init(
         chartData: ChartData,
         dataSet: GroupedBarDataSet
     ) {
@@ -74,35 +72,15 @@ internal struct GroupedBarGroup<ChartData>: View where ChartData: GroupedBarChar
         self.dataSet = dataSet
     }
     
-    var body: some View {
+    internal var body: some View {
         HStack(spacing: 0) {
-            ForEach(dataSet.dataPoints) { dataPoint in
-                GroupedBarCell(chartData: chartData, dataPoint: dataPoint)
+            ForEach(dataSet.dataPoints.indices, id: \.self) { index in
+                BarElement(chartData: chartData,
+                                dataPoint: dataSet.dataPoints[index],
+                                fill: dataSet.dataPoints[index].group.colour,
+                                index: index)
+                    .accessibilityLabel(chartData.accessibilityTitle)
             }
         }
     }
 }
-
-
-internal struct GroupedBarCell<ChartData>: View where ChartData: GroupedBarChartData {
-    
-    @ObservedObject private var chartData: ChartData
-    private let dataPoint: GroupedBarDataPoint
-    
-    init(
-        chartData: ChartData,
-        dataPoint: GroupedBarDataPoint
-    ) {
-        self.chartData = chartData
-        self.dataPoint = dataPoint
-    }
-    
-    internal var body: some View {
-        BarElement(chartData: chartData,
-                   dataPoint: dataPoint,
-                   fill: dataPoint.group.colour,
-                   index: 0) // <<----- Hard Coded
-            .accessibilityLabel(chartData.accessibilityTitle)
-    }
-}
-

@@ -67,10 +67,10 @@ internal struct BarElement<CD: CTBarChartDataProtocol & GetDataProtocol,
                            DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
     
     @ObservedObject private var chartData: CD
-    private var dataPoint: DP
-    private var fill: BarColour
-    private var animations = BarElementAnimation()
-    private var index: Double
+    private let dataPoint: DP
+    private let fill: BarColour
+    private let animations = BarElementAnimation()
+    private let index: Double
     
     @State private var fillAnimation: Bool = false
     @State private var heightAnimation: Bool = false
