@@ -23,24 +23,6 @@ import SwiftUI
  The order of the view modifiers is some what important
  as the modifiers are various types for stacks that wrap
  around the previous views.
- ```
- .touchOverlay(chartData: data)
- .averageLine(chartData: data,
-              strokeStyle: StrokeStyle(lineWidth: 3,dash: [5,10]))
- .yAxisPOI(chartData: data,
-           markerName: "50",
-           markerValue: 50,
-           lineColour: Color.blue,
-           strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
- .xAxisGrid(chartData: data)
- .yAxisGrid(chartData: data)
- .xAxisLabels(chartData: data)
- .yAxisLabels(chartData: data)
- .infoBox(chartData: data)
- .floatingInfoBox(chartData: data)
- .headerBox(chartData: data)
- .legends(chartData: data)
- ```
  */
 public struct RangedBarChart<ChartData>: View where ChartData: RangedBarChartData {
     
@@ -56,17 +38,10 @@ public struct RangedBarChart<ChartData>: View where ChartData: RangedBarChartDat
         GeometryReader { geo in
             if chartData.isGreaterThanTwo() {
                 HStack(spacing: 0) {
-                    switch chartData.barStyle.colourFrom {
-                    case .barStyle:
-                        RangedBarChartBarStyleSubView(chartData: chartData)
-                            .accessibilityLabel(chartData.accessibilityTitle)
-                    case .dataPoints:
-                        RangedBarChartDataPointSubView(chartData: chartData)
-                            .accessibilityLabel(chartData.accessibilityTitle)
-                    }
+                    RangedBarSubView(chartData: chartData)
+                        .accessibilityLabel(chartData.accessibilityTitle)
                 }
-                // Needed for axes label frames
-                .onAppear {
+                .onAppear { // Needed for axes label frames
                     self.chartData.viewData.chartSize = geo.frame(in: .local)
                 }
             } else { CustomNoDataView(chartData: chartData) }

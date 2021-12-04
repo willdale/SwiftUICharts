@@ -8,11 +8,7 @@
 import SwiftUI
 
 // MARK: - Standard
-//
-//
-//
-// MARK: Bar Style
-internal struct BarChartBarStyleSubView<CD: BarChartData>: View {
+internal struct BarChartSubView<CD: BarChartData>: View {
     
     @ObservedObject private var chartData: CD
     
@@ -21,17 +17,27 @@ internal struct BarChartBarStyleSubView<CD: BarChartData>: View {
     }
     
     internal var body: some View {
-        ForEach(chartData.dataSets.dataPoints.indices, id: \.self) { index in
-            BarElement(chartData: chartData,
-                       dataPoint: chartData.dataSets.dataPoints[index],
-                       fill: chartData.barStyle.colour,
-                       index: index)
+        switch chartData.barStyle.colourFrom {
+        case .barStyle:
+            ForEach(chartData.dataSets.dataPoints.indices, id: \.self) { i in
+                BarElement(chartData: chartData,
+                           dataPoint: chartData.dataSets.dataPoints[i],
+                           fill: chartData.barStyle.colour,
+                           index: i)
+            }
+        case .dataPoints:
+            ForEach(chartData.dataSets.dataPoints.indices, id: \.self) { i in
+                BarElement(chartData: chartData,
+                           dataPoint: chartData.dataSets.dataPoints[i],
+                           fill: chartData.dataSets.dataPoints[i].colour,
+                           index: i)
+            }
         }
     }
 }
 
-// MARK: Data Points
-internal struct BarChartDataPointSubView<CD: BarChartData>: View {
+// MARK: - Horizontal
+internal struct HorizontalBarChartSubView<CD: HorizontalBarChartData>: View {
     
     @ObservedObject private var chartData: CD
     
@@ -40,21 +46,25 @@ internal struct BarChartDataPointSubView<CD: BarChartData>: View {
     }
     
     internal var body: some View {
-        ForEach(chartData.dataSets.dataPoints.indices, id: \.self) { index in
-            BarElement(chartData: chartData,
-                       dataPoint: chartData.dataSets.dataPoints[index],
-                       fill: chartData.dataSets.dataPoints[index].colour,
-                       index: index)
+        switch chartData.barStyle.colourFrom {
+        case .barStyle:
+            ForEach(chartData.dataSets.dataPoints, id: \.id) { dataPoint in
+                HorizontalBarElement(chartData: chartData,
+                                     dataPoint: dataPoint,
+                                     fill: chartData.barStyle.colour)
+            }
+        case .dataPoints:
+            ForEach(chartData.dataSets.dataPoints, id: \.id) { dataPoint in
+                HorizontalBarElement(chartData: chartData,
+                                     dataPoint: dataPoint,
+                                     fill: dataPoint.colour)
+            }
         }
     }
 }
 
 // MARK: - Ranged
-//
-//
-//
-// MARK: Bar Style
-internal struct RangedBarChartBarStyleSubView<CD:RangedBarChartData>: View {
+internal struct RangedBarSubView<CD:RangedBarChartData>: View {
     
     @ObservedObject private var chartData: CD
     
@@ -63,74 +73,25 @@ internal struct RangedBarChartBarStyleSubView<CD:RangedBarChartData>: View {
     }
     
     var body: some View {
-        ForEach(chartData.dataSets.dataPoints) { dataPoint in
-            GeometryReader { geo in
-                RangedBarCell(chartData: chartData,
-                              dataPoint: dataPoint,
-                              fill: chartData.barStyle.colour,
-                              barSize: geo.frame(in: .local))
+        switch chartData.barStyle.colourFrom {
+        case .barStyle:
+            ForEach(chartData.dataSets.dataPoints, id: \.id) { dataPoint in
+                GeometryReader { geo in
+                    RangedBarCell(chartData: chartData,
+                                  dataPoint: dataPoint,
+                                  fill: chartData.barStyle.colour,
+                                  barSize: geo.frame(in: .local))
+                }
             }
-        }
-    }
-}
-
-// MARK: Data Points
-internal struct RangedBarChartDataPointSubView<CD:RangedBarChartData>: View {
-    
-    @ObservedObject private var chartData: CD
-    
-    internal init(chartData: CD) {
-        self.chartData = chartData
-    }
-    
-    internal var body: some View {
-        ForEach(chartData.dataSets.dataPoints) { dataPoint in
-            GeometryReader { geo in
-                RangedBarCell(chartData: chartData,
-                              dataPoint: dataPoint,
-                              fill: dataPoint.colour,
-                              barSize: geo.frame(in: .local))
+        case .dataPoints:
+            ForEach(chartData.dataSets.dataPoints, id: \.id) { dataPoint in
+                GeometryReader { geo in
+                    RangedBarCell(chartData: chartData,
+                                  dataPoint: dataPoint,
+                                  fill: dataPoint.colour,
+                                  barSize: geo.frame(in: .local))
+                }
             }
-        }
-    }
-}
-
-// MARK: - Horizontal
-//
-//
-//
-// MARK: Bar Style
-internal struct HorizontalBarChartBarStyleSubView<CD: HorizontalBarChartData>: View {
-    
-    @ObservedObject private var chartData: CD
-    
-    internal init(chartData: CD) {
-        self.chartData = chartData
-    }
-    
-    internal var body: some View {
-        ForEach(chartData.dataSets.dataPoints) { dataPoint in
-            HorizontalBarElement(chartData: chartData,
-                                 dataPoint: dataPoint,
-                                 fill: chartData.barStyle.colour)
-        }
-    }
-}
-
-// MARK: Data Points
-internal struct HorizontalBarChartDataPointSubView<CD: HorizontalBarChartData>: View {
-    
-    @ObservedObject private var chartData: CD
-    
-    internal init(chartData: CD) {
-        self.chartData = chartData
-    }
-    
-    internal var body: some View {
-        ForEach(chartData.dataSets.dataPoints) { dataPoint in
-            HorizontalBarElement(chartData: chartData,
-                                 dataPoint: dataPoint,
-                                 fill: dataPoint.colour)
         }
     }
 }

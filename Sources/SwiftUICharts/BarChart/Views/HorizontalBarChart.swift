@@ -21,18 +21,10 @@ public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBar
         GeometryReader { geo in
             if chartData.isGreaterThanTwo() {
                 VStack(spacing: 0) {
-                    switch chartData.barStyle.colourFrom {
-                    case .barStyle:
-                        HorizontalBarChartBarStyleSubView(chartData: chartData)
-                            .accessibilityLabel(chartData.accessibilityTitle)
-                    case .dataPoints:
-                        HorizontalBarChartDataPointSubView(chartData: chartData)
-                            .accessibilityLabel(chartData.accessibilityTitle)
-                    }
-                    
+                    HorizontalBarChartSubView(chartData: chartData)
+                        .accessibilityLabel(chartData.accessibilityTitle)
                 }
-                // Needed for axes label frames
-                .onAppear {
+                .onAppear { // Needed for axes label frames
                     self.chartData.viewData.chartSize = geo.frame(in: .local)
                 }
             } else { CustomNoDataView(chartData: chartData) }

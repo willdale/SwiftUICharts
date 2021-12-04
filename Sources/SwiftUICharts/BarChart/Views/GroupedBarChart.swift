@@ -21,24 +21,6 @@ import SwiftUI
  The order of the view modifiers is some what important
  as the modifiers are various types for stacks that wrap
  around the previous views.
- ```
- .touchOverlay(chartData: data)
- .averageLine(chartData: data,
- strokeStyle: StrokeStyle(lineWidth: 3,dash: [5,10]))
- .yAxisPOI(chartData: data,
-           markerName: "50",
-           markerValue: 50,
-           lineColour: Color.blue,
-           strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
- .xAxisGrid(chartData: data)
- .yAxisGrid(chartData: data)
- .xAxisLabels(chartData: data)
- .yAxisLabels(chartData: data)
- .infoBox(chartData: data)
- .floatingInfoBox(chartData: data)
- .headerBox(chartData: data)
- .legends(chartData: data)
- ```
  */
 public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartData {
     
