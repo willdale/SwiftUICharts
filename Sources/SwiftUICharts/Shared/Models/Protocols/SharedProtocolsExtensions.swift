@@ -299,15 +299,6 @@ extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProto
     }
 }
 
-extension CTSingleDataSetProtocol where DataPoint: CTStandardDataPointProtocol {
-    var totalSetValue: Double {
-        self.dataPoints
-            .lazy
-            .map(\.value)
-            .reduce(0, +)
-    }
-}
-
 // MARK: - Data Point
 extension CTDataPointBaseProtocol  {
     /// Returns information about the data point for use in accessibility tags.

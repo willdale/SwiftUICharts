@@ -69,7 +69,7 @@ internal struct HorizontalBarElement<CD: CTBarChartDataProtocol & GetDataProtoco
     @ObservedObject private var chartData: CD
     private var dataPoint: DP
     private var fill: BarColour
-    private var animations = HorizontalBarChartAnimation()
+    private var animations = BarElementAnimation()
     private var index: Double
     
     @State private var fillAnimation: Bool = false
@@ -113,9 +113,9 @@ internal struct HorizontalBarElement<CD: CTBarChartDataProtocol & GetDataProtoco
                        0)
                 .offset(CGSize(width: 0,
                                height: BarLayout.barXOffset(section.size.height, chartData.barStyle.barWidth)))
-                .animation(animations.lengthAnimation(index),
+                .animation(animations.heightAnimation(index),
                            value: dataPoint.value)
-                .animateOnAppear(using: animations.lengthAnimationStart(index)) {
+                .animateOnAppear(using: animations.heightAnimationStart(index)) {
                     self.lengthAnimation = true
                 }
         }
@@ -126,53 +126,5 @@ internal struct HorizontalBarElement<CD: CTBarChartDataProtocol & GetDataProtoco
         .background(Color(.gray).opacity(0.000000001))
         .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
         .id(chartData.id)
-    }
-}
-
-// MARK: - Animation
-public struct HorizontalBarChartAnimation {
-
-    public var fill = Fill()
-    public var length = Length()
-    public var width = Width()
-
-    public struct Fill {
-        var startState: BarColour = .colour(colour: .clear)
-        var start: Animation = .linear(duration: 0.0)
-        var startDelay: Double = 0.0
-
-        var transition: Animation = .linear(duration: 2.0)
-        var transitionDelay: Double = 0.0
-    }
-
-    public struct Length {
-        var start: Animation = .linear(duration: 2.0)
-        var startDelay: Double = 0.0
-
-        var transition: Animation = .linear(duration: 2.0)
-        var transitionDelay: Double = 0.0
-    }
-
-    public struct Width {
-        var transition: Animation = .linear(duration: 2.0)
-        var transitionDelay: Double = 0.0
-    }
-    
-    internal func fillAnimationStart(_ index: Double) -> Animation {
-        fill.start.delay(index * fill.startDelay)
-    }
-    internal func fillAnimation(_ index: Double) -> Animation {
-        fill.transition.delay(index * fill.transitionDelay)
-    }
-    
-    internal func lengthAnimationStart(_ index: Double) -> Animation {
-        length.start.delay(index * length.startDelay)
-    }
-    internal func lengthAnimation(_ index: Double) -> Animation {
-        length.transition.delay(index * length.transitionDelay)
-    }
-    
-    internal func widthAnimation(_ index: Double) -> Animation {
-        width.transition.delay(index * width.transitionDelay)
     }
 }

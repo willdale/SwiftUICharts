@@ -257,7 +257,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol, ChartConfor
     }
 }
 
-
+// MARK: Position
 extension RangedBarChartData {
     func getBarPositionX(dataPoint: RangedBarDataPoint, height: CGFloat) -> CGFloat {
         let value = CGFloat((dataPoint.upperValue + dataPoint.lowerValue) / 2) - CGFloat(self.minValue)

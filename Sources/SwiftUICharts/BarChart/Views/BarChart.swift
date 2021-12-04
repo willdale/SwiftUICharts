@@ -34,11 +34,11 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
 }
 
 // MARK: - Sub View
-internal struct BarChartSubView<CD: BarChartData>: View {
+internal struct BarChartSubView<ChartData>: View where ChartData: BarChartData {
     
-    @ObservedObject private var chartData: CD
+    @ObservedObject private var chartData: ChartData
     
-    internal init(chartData: CD) {
+    internal init(chartData: ChartData) {
         self.chartData = chartData
     }
     
@@ -63,11 +63,11 @@ internal struct BarChartSubView<CD: BarChartData>: View {
 }
 
 // MARK: - Element
-internal struct BarElement<CD: CTBarChartDataProtocol & GetDataProtocol,
-                           DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol>: View {
+internal struct BarElement<ChartData: CTBarChartDataProtocol & GetDataProtocol/*,
+                           DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol*/>: View {
     
-    @ObservedObject private var chartData: CD
-    private let dataPoint: DP
+    @ObservedObject private var chartData: ChartData
+    private let dataPoint: BarChartDataPoint
     private let fill: BarColour
     private let animations = BarElementAnimation()
     private let index: Double
@@ -76,8 +76,8 @@ internal struct BarElement<CD: CTBarChartDataProtocol & GetDataProtocol,
     @State private var heightAnimation: Bool = false
     
     internal init(
-        chartData: CD,
-        dataPoint: DP,
+        chartData: ChartData,
+        dataPoint: BarChartDataPoint,
         fill: BarColour,
         index: Int
     ) {
