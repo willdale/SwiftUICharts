@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MarkerView {
+internal struct MarkerView {
     
     internal static func bar(
         barMarker: BarMarkerType,

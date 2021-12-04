@@ -42,7 +42,6 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
         self.chartData.groupSpacing = groupSpacing
     }
     
-    
     public var body: some View {
         GeometryReader { geo in
             if chartData.isGreaterThanTwo() {

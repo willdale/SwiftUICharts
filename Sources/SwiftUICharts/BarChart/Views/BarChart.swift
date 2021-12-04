@@ -63,8 +63,7 @@ internal struct BarChartSubView<ChartData>: View where ChartData: BarChartData {
 }
 
 // MARK: - Element
-internal struct BarElement<ChartData: CTBarChartDataProtocol & GetDataProtocol/*,
-                           DP: CTStandardDataPointProtocol & CTBarDataPointBaseProtocol*/>: View {
+internal struct BarElement<ChartData>: View where ChartData: CTBarChartDataProtocol & GetDataProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let dataPoint: BarChartDataPoint
