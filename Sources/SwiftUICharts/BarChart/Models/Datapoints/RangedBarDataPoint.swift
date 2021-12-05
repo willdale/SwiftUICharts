@@ -18,7 +18,7 @@ public struct RangedBarDataPoint: CTRangedBarDataPoint {
     public var xAxisLabel: String?
     public var description: String?
     public var date: Date?
-    public var colour: BarColour
+    public var colour: ChartColour
     
     public var _legendTag: String = ""
     
@@ -39,7 +39,7 @@ public struct RangedBarDataPoint: CTRangedBarDataPoint {
         xAxisLabel: String? = nil,
         description: String? = nil,
         date: Date? = nil,
-        colour: BarColour = .colour(colour: .red)
+        colour: ChartColour = .colour(colour: .red)
     ) {
         self.upperValue = upperValue
         self.lowerValue = lowerValue

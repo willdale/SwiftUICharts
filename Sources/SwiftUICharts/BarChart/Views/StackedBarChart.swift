@@ -141,7 +141,7 @@ internal struct StackSingleBarView: View {
 // MARK: Stacked Element
 internal struct StackBarElement: View {
     
-    private let fill: BarColour
+    private let fill: ChartColour
     private let height: CGFloat
     private let animations: BarElementAnimation
     private let index: Double
@@ -149,7 +149,7 @@ internal struct StackBarElement: View {
     @State private var fillAnimation: Bool = false
     
     internal init(
-        fill: BarColour,
+        fill: ChartColour,
         height: CGFloat,
         animations: BarElementAnimation,
         index: Double

@@ -23,25 +23,6 @@ import SwiftUI
  The order of the view modifiers is some what important
  as the modifiers are various types for stacks that wrap
  around the previous views.
- ```
- .touchOverlay(chartData: data)
- .pointMarkers(chartData: data)
- .averageLine(chartData: data,
-              strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
- .yAxisPOI(chartData: data,
-           markerName: "50",
-           markerValue: 50,
-           lineColour: Color.blue,
-           strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
- .xAxisGrid(chartData: data)
- .yAxisGrid(chartData: data)
- .xAxisLabels(chartData: data)
- .yAxisLabels(chartData: data)
- .infoBox(chartData: data)
- .floatingInfoBox(chartData: data)
- .headerBox(chartData: data)
- .legends(chartData: data)
- ```
  */
 public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartData {
     
@@ -67,47 +48,39 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
                 ZStack {
                     chartData.getAccessibility()
                     ForEach(chartData.dataSets.dataSets, id: \.id) { dataSet in
-                        if dataSet.style.lineColour.colourType == .colour,
-                           let colour = dataSet.style.lineColour.colour
-                        {
-                            LineChartColourSubView(chartData: chartData,
-                                                   dataSet: dataSet,
-                                                   minValue: minValue,
-                                                   range: range,
-                                                   colour: colour,
-                                                   isFilled: false)
-                        } else if dataSet.style.lineColour.colourType == .gradientColour,
-                                  let colours = dataSet.style.lineColour.colours,
-                                  let startPoint = dataSet.style.lineColour.startPoint,
-                                  let endPoint = dataSet.style.lineColour.endPoint
-                        {
-                            LineChartColoursSubView(chartData: chartData,
-                                                    dataSet: dataSet,
-                                                    minValue: minValue,
-                                                    range: range,
-                                                    colours: colours,
-                                                    startPoint: startPoint,
-                                                    endPoint: endPoint,
-                                                    isFilled: false)
-                        } else if dataSet.style.lineColour.colourType == .gradientStops,
-                                  let stops = dataSet.style.lineColour.stops,
-                                  let startPoint = dataSet.style.lineColour.startPoint,
-                                  let endPoint = dataSet.style.lineColour.endPoint
-                        {
-                            let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-                            LineChartStopsSubView(chartData: chartData,
-                                                  dataSet: dataSet,
-                                                  minValue: minValue,
-                                                  range: range,
-                                                  stops: stops,
-                                                  startPoint: startPoint,
-                                                  endPoint: endPoint,
-                                                  isFilled: false)
+                        Group {
+                            switch dataSet.style.lineColour {
+                            case let .colour(colour):
+                                LineChartColourSubView(chartData: chartData,
+                                                       dataSet: dataSet,
+                                                       minValue: minValue,
+                                                       range: range,
+                                                       colour: colour,
+                                                       isFilled: false)
+                            case let .gradient(colours, startPoint, endPoint):
+                                LineChartColoursSubView(chartData: chartData,
+                                                        dataSet: dataSet,
+                                                        minValue: minValue,
+                                                        range: range,
+                                                        colours: colours,
+                                                        startPoint: startPoint,
+                                                        endPoint: endPoint,
+                                                        isFilled: false)
+                            case let .gradientStops(stops, startPoint, endPoint):
+                                let stops = GradientStop.convertToGradientStopsArray(stops: stops)
+                                LineChartStopsSubView(chartData: chartData,
+                                                      dataSet: dataSet,
+                                                      minValue: minValue,
+                                                      range: range,
+                                                      stops: stops,
+                                                      startPoint: startPoint,
+                                                      endPoint: endPoint,
+                                                      isFilled: false)
+                            }
                         }
                     }
                 }
-                // Needed for axes label frames
-                .onAppear {
+                .onAppear { // Needed for axes label frames
                     self.chartData.viewData.chartSize = geo.frame(in: .local)
                 }
             } else { CustomNoDataView(chartData: chartData) }

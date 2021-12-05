@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension Shape {
-    func fill(_ color: BarColour) -> some View {
+    func fill(_ color: ChartColour) -> some View {
         Group {
             switch color {
             case .colour(let colour):

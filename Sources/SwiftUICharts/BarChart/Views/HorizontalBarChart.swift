@@ -67,7 +67,7 @@ internal struct HorizontalBarElement<ChartData>: View where ChartData: CTBarChar
     
     @ObservedObject private var chartData: ChartData
     private let dataPoint: BarChartDataPoint
-    private let fill: BarColour
+    private let fill: ChartColour
     private let animations = BarElementAnimation()
     private let index: Double
     
@@ -77,7 +77,7 @@ internal struct HorizontalBarElement<ChartData>: View where ChartData: CTBarChar
     internal init(
         chartData: ChartData,
         dataPoint: BarChartDataPoint,
-        fill: BarColour,
+        fill: ChartColour,
         index: Int
     ) {
         self.chartData = chartData

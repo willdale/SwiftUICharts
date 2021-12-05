@@ -63,7 +63,7 @@ public protocol CTBarStyle: CTBarColourProtocol, Hashable {
     var colourFrom: ColourFrom { get set }
     
     /// Drawing style of the fill.
-    var colour: BarColour { get set }
+    var colour: ChartColour { get set }
 }
 
 
@@ -116,7 +116,7 @@ public protocol CTBarDataPointBaseProtocol: CTLineBarDataPointProtocol {}
  */
 public protocol CTBarColourProtocol {
     /// Drawing style of the range fill.
-    var colour: BarColour { get set }
+    var colour: ChartColour { get set }
 }
 
 /**

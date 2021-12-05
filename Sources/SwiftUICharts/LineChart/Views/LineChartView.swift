@@ -62,20 +62,16 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
             if chartData.isGreaterThanTwo() {
                 ZStack {
                     chartData.getAccessibility()
-                    if chartData.dataSets.style.lineColour.colourType == .colour,
-                       let colour = chartData.dataSets.style.lineColour.colour
-                    {
+                    
+                    switch chartData.dataSets.style.lineColour {
+                    case let .colour(colour):
                         LineChartColourSubView(chartData: chartData,
                                                dataSet: chartData.dataSets,
                                                minValue: chartData.minValue,
                                                range: chartData.range,
                                                colour: colour,
                                                isFilled: false)
-                    } else if chartData.dataSets.style.lineColour.colourType == .gradientColour,
-                              let colours = chartData.dataSets.style.lineColour.colours,
-                              let startPoint = chartData.dataSets.style.lineColour.startPoint,
-                              let endPoint = chartData.dataSets.style.lineColour.endPoint
-                    {
+                    case let .gradient(colours, startPoint, endPoint):
                         LineChartColoursSubView(chartData: chartData,
                                                 dataSet: chartData.dataSets,
                                                 minValue: chartData.minValue,
@@ -84,11 +80,7 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
                                                 startPoint: startPoint,
                                                 endPoint: endPoint,
                                                 isFilled: false)
-                    } else if chartData.dataSets.style.lineColour.colourType == .gradientStops,
-                              let stops = chartData.dataSets.style.lineColour.stops,
-                              let startPoint = chartData.dataSets.style.lineColour.startPoint,
-                              let endPoint = chartData.dataSets.style.lineColour.endPoint
-                    {
+                    case let .gradientStops(stops, startPoint, endPoint):
                         let stops = GradientStop.convertToGradientStopsArray(stops: stops)
                         LineChartStopsSubView(chartData: chartData,
                                               dataSet: chartData.dataSets,

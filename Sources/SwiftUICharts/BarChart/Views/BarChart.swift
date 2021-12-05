@@ -67,7 +67,7 @@ internal struct BarElement<ChartData>: View where ChartData: CTBarChartDataProto
     
     @ObservedObject private var chartData: ChartData
     private let dataPoint: BarChartDataPoint
-    private let fill: BarColour
+    private let fill: ChartColour
     private let animations = BarElementAnimation()
     private let index: Double
     
@@ -77,7 +77,7 @@ internal struct BarElement<ChartData>: View where ChartData: CTBarChartDataProto
     internal init(
         chartData: ChartData,
         dataPoint: BarChartDataPoint,
-        fill: BarColour,
+        fill: ChartColour,
         index: Int
     ) {
         self.chartData = chartData
@@ -135,7 +135,7 @@ public struct BarElementAnimation {
     public var width = Width()
 
     public struct Fill {
-        var startState: BarColour = .colour(colour: .clear)
+        var startState: ChartColour = .colour(colour: .clear)
         var start: Animation = .linear(duration: 0.0)
         var startDelay: Double = 0.0
 

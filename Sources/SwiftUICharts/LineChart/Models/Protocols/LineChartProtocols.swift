@@ -48,7 +48,7 @@ public protocol CTLineStyle {
     var lineType: LineType { get set }
     
     /// Colour styling of the line.
-    var lineColour: ColourStyle { get set }
+    var lineColour: ChartColour { get set }
     
     /**
      Styling for stroke 
@@ -72,7 +72,7 @@ public protocol CTLineStyle {
  */
 public protocol CTRangedLineStyle: CTLineStyle {
     /// Drawing style of the range fill.
-    var fillColour: ColourStyle { get set }
+    var fillColour: ChartColour { get set }
 }
 
 

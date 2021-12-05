@@ -10,6 +10,7 @@ import SwiftUI
 /**
  ViewModifier for for laying out point markers.
  */
+@available(*, deprecated, message: "Build in to Filled Line Chart now.")
 internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
     
     @ObservedObject private var chartData: T
@@ -138,6 +139,7 @@ extension View {
      - Returns: A  new view containing the chart with point markers.
      
      */
+    @available(*, deprecated, message: "Build in to Filled Line Chart now.")
     public func filledTopLine<T: LineChartData>(
         chartData: T,
         lineColour: ColourStyle = ColourStyle(),

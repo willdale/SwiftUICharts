@@ -89,7 +89,7 @@ internal struct GroupBarElement<ChartData>: View where ChartData: CTBarChartData
     
     @ObservedObject private var chartData: ChartData
     private let dataPoint: GroupedBarDataPoint
-    private let fill: BarColour
+    private let fill: ChartColour
     private let animations = BarElementAnimation()
     private let index: Double
     
@@ -99,7 +99,7 @@ internal struct GroupBarElement<ChartData>: View where ChartData: CTBarChartData
     internal init(
         chartData: ChartData,
         dataPoint: GroupedBarDataPoint,
-        fill: BarColour,
+        fill: ChartColour,
         index: Int
     ) {
         self.chartData = chartData

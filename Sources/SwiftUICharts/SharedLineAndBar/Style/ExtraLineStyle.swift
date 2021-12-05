@@ -12,7 +12,7 @@ import SwiftUI
  */
 public struct ExtraLineStyle {
     
-    public var lineColour: ColourStyle
+    public var lineColour: ChartColour
     public var lineType: LineType
     public var lineSpacing: SpacingType
     
@@ -31,7 +31,7 @@ public struct ExtraLineStyle {
     public var topLine: Topline
 
     public init(
-        lineColour: ColourStyle = ColourStyle(colour: .red),
+        lineColour: ChartColour = .colour(colour: .red),
         lineType: LineType = .curvedLine,
         lineSpacing: SpacingType = .line,
         markerType: LineMarkerType = .indicator(style: DotStyle()),

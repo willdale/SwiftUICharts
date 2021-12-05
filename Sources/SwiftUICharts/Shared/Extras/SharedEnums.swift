@@ -49,6 +49,7 @@ public enum ChartType {
  case gradientStops // Colour Gradient with stop control
  ```
  */
+@available(*, deprecated, message: "Please use \"ChartColour\" instead.")
 public enum ColourType {
     /// Single Colour
     case colour

@@ -90,7 +90,7 @@ internal struct RangedBarElement<ChartData>: View where ChartData: RangedBarChar
 
     @ObservedObject private var chartData: ChartData
     private let dataPoint: RangedBarDataPoint
-    private let fill: BarColour
+    private let fill: ChartColour
     private let animations = BarElementAnimation()
     private let index: Double
     private let barSize: CGRect
@@ -101,7 +101,7 @@ internal struct RangedBarElement<ChartData>: View where ChartData: RangedBarChar
     internal init(
         chartData: ChartData,
         dataPoint: RangedBarDataPoint,
-        fill: BarColour,
+        fill: ChartColour,
         index: Int,
         barSize: CGRect
     ) {
