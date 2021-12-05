@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreGraphics.CGGeometry
 
 internal struct MarkerData: Hashable {
     internal let id: UUID = UUID()
@@ -29,7 +30,7 @@ internal struct MarkerData: Hashable {
 struct LineMarkerData: Hashable {
     let id: UUID = UUID()
     let markerType: LineMarkerType
-    let location: CTPoint
+    let location: CGPoint
     let dataPoints: [Double]
     let lineType: LineType
     let lineSpacing: ExtraLineStyle.SpacingType
@@ -51,7 +52,7 @@ struct LineMarkerData: Hashable {
 struct BarMarkerData: Hashable {
     let id: UUID = UUID()
     let markerType: BarMarkerType
-    let location: CTPoint
+    let location: CGPoint
     
     static func == (lhs: BarMarkerData, rhs: BarMarkerData) -> Bool {
         lhs.id == rhs.id &&

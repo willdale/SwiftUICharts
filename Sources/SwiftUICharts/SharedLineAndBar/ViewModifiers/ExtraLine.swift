@@ -255,12 +255,12 @@ internal struct StopsExtraLineView<ChartData>: View where ChartData: CTLineBarCh
     
     internal init(
         chartData: ChartData,
-        stops: [GradientStop],
+        stops: [Gradient.Stop],
         startPoint: UnitPoint,
         endPoint: UnitPoint
     ) {
         self.chartData = chartData
-        self.stops = stops.convert
+        self.stops = stops
         self.startPoint = startPoint
         self.endPoint = endPoint
         self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)

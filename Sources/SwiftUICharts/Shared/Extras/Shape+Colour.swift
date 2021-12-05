@@ -18,28 +18,28 @@ extension Shape {
                                          startPoint: startPoint,
                                          endPoint: endPoint))
             case .gradientStops(let stops, let startPoint, let endPoint):
-                self.fill(LinearGradient(gradient: Gradient(stops: stops.convert),
+                self.fill(LinearGradient(gradient: Gradient(stops: stops),
                                          startPoint: startPoint,
                                          endPoint: endPoint))
             }
         }
     }
     
-    func stroke(_ color: ChartColour, strokeStyle: Stroke) -> some View {
+    func stroke(_ color: ChartColour, strokeStyle: StrokeStyle) -> some View {
         Group {
             switch color {
             case .colour(let colour):
-                self.stroke(colour, style: strokeStyle.strokeToStrokeStyle())
+                self.stroke(colour, style: strokeStyle)
             case .gradient(let colours, let startPoint, let endPoint):
                 self.stroke(LinearGradient(gradient: Gradient(colors: colours),
                                            startPoint: startPoint,
                                            endPoint: endPoint),
-                            style: strokeStyle.strokeToStrokeStyle())
+                            style: strokeStyle)
             case .gradientStops(let stops, let startPoint, let endPoint):
-                self.stroke(LinearGradient(gradient: Gradient(stops: stops.convert),
+                self.stroke(LinearGradient(gradient: Gradient(stops: stops),
                                            startPoint: startPoint,
                                            endPoint: endPoint),
-                            style: strokeStyle.strokeToStrokeStyle())
+                            style: strokeStyle)
             }
         }
     }

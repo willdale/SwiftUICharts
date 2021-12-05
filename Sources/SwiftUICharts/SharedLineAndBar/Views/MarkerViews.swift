@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 internal struct MarkerView {
     
     internal static func bar(
@@ -18,22 +19,22 @@ internal struct MarkerView {
             case .none:
                 EmptyView()
             case .vertical(let colour, let style):
-                MarkerFull(position: markerData.location.converted)
+                MarkerFull(position: markerData.location)
                     .stroke(colour, style: style)
             case .full(let colour, let style):
-                MarkerFull(position: markerData.location.converted)
+                MarkerFull(position: markerData.location)
                     .stroke(colour, style: style)
             case .bottomLeading(let colour, let style):
-                MarkerBottomLeading(position: markerData.location.converted)
+                MarkerBottomLeading(position: markerData.location)
                     .stroke(colour, style: style)
             case .bottomTrailing(let colour, let style):
-                MarkerBottomTrailing(position: markerData.location.converted)
+                MarkerBottomTrailing(position: markerData.location)
                     .stroke(colour, style: style)
             case .topLeading(let colour, let style):
-                MarkerTopLeading(position: markerData.location.converted)
+                MarkerTopLeading(position: markerData.location)
                     .stroke(colour, style: style)
             case .topTrailing(let colour, let style):
-                MarkerTopTrailing(position: markerData.location.converted)
+                MarkerTopTrailing(position: markerData.location)
                     .stroke(colour, style: style)
             }
         }
@@ -80,7 +81,7 @@ internal struct MarkerView {
                     Vertical(position: indicatorLocation).stroke(colour, style: style)
                     IndicatorSwitch(indicator: indicator, location: indicatorLocation)
                 case .point:
-                    Vertical(position: markerData.location.converted).stroke(colour, style: style)
+                    Vertical(position: markerData.location).stroke(colour, style: style)
                 }
                 
             case .full(attachment: let attach, let colour, let style):
@@ -90,7 +91,7 @@ internal struct MarkerView {
                     MarkerFull(position: indicatorLocation).stroke(colour, style: style)
                     IndicatorSwitch(indicator: indicator, location: indicatorLocation)
                 case .point:
-                    MarkerFull(position: markerData.location.converted).stroke(colour, style: style)
+                    MarkerFull(position: markerData.location).stroke(colour, style: style)
                 }
                 
             case .bottomLeading(attachment: let attach, let colour, let style):
@@ -100,7 +101,7 @@ internal struct MarkerView {
                     MarkerBottomLeading(position: indicatorLocation).stroke(Color.primary, lineWidth: 2)
                     IndicatorSwitch(indicator: indicator, location: indicatorLocation)
                 case .point:
-                    MarkerBottomLeading(position: markerData.location.converted).stroke(colour, style: style)
+                    MarkerBottomLeading(position: markerData.location).stroke(colour, style: style)
                 }
                 
             case .bottomTrailing(attachment: let attach, let colour, let style):
@@ -110,7 +111,7 @@ internal struct MarkerView {
                     MarkerBottomTrailing(position: indicatorLocation).stroke(colour, style: style)
                     IndicatorSwitch(indicator: indicator, location: indicatorLocation)
                 case .point:
-                    MarkerBottomTrailing(position: markerData.location.converted).stroke(colour, style: style)
+                    MarkerBottomTrailing(position: markerData.location).stroke(colour, style: style)
                 }
                 
             case .topLeading(attachment: let attach, let colour, let style):
@@ -120,7 +121,7 @@ internal struct MarkerView {
                     MarkerTopLeading(position: indicatorLocation).stroke(colour, style: style)
                     IndicatorSwitch(indicator: indicator, location: indicatorLocation)
                 case .point:
-                    MarkerTopLeading(position: markerData.location.converted).stroke(colour, style: style)
+                    MarkerTopLeading(position: markerData.location).stroke(colour, style: style)
                 }
                 
             case .topTrailing(attachment: let attach, let colour, let style):
@@ -130,7 +131,7 @@ internal struct MarkerView {
                     MarkerTopTrailing(position: indicatorLocation).stroke(colour, style: style)
                     IndicatorSwitch(indicator: indicator, location: indicatorLocation)
                 case .point:
-                    MarkerTopTrailing(position: markerData.location.converted).stroke(colour, style: style)
+                    MarkerTopTrailing(position: markerData.location).stroke(colour, style: style)
                 }
             }
         }

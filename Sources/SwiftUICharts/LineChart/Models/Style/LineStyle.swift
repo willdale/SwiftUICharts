@@ -14,7 +14,7 @@ public struct LineStyle: CTLineStyle, Hashable {
 
     public var lineColour: ChartColour
     public var lineType: LineType
-    public var strokeStyle: Stroke
+    public var strokeStyle: StrokeStyle
     
     /// Style of the line.
     ///
@@ -25,7 +25,7 @@ public struct LineStyle: CTLineStyle, Hashable {
     public init(
         lineColour: ChartColour = .colour(colour: .red),
         lineType: LineType = .curvedLine,
-        strokeStyle: Stroke = Stroke()
+        strokeStyle: StrokeStyle = StrokeStyle()
     ) {
         self.lineColour = lineColour
         self.lineType = lineType

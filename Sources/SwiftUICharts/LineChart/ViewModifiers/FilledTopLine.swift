@@ -84,7 +84,7 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                               minValue: self.minValue,
                               range: self.range)
                         .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                        .stroke(LinearGradient(gradient: Gradient(stops: stops.convert),
+                        .stroke(LinearGradient(gradient: Gradient(stops: stops),
                                                startPoint: startPoint,
                                                endPoint: endPoint),
                                 style: strokeStyle)

@@ -16,7 +16,7 @@ public struct ColourStyle: Colourable, Hashable {
     public var colourType: ColourType
     public var colour: Color?
     public var colours: [Color]?
-    public var stops: [GradientStop]?
+    public var stops: [Gradient.Stop]?
     public var startPoint: UnitPoint?
     public var endPoint: UnitPoint?
     
@@ -59,7 +59,7 @@ public struct ColourStyle: Colourable, Hashable {
     ///   - startPoint: Start point for Gradient.
     ///   - endPoint: End point for Gradient.
     public init(
-        stops: [GradientStop] = [GradientStop(color: Color(.red), location: 0.0)],
+        stops: [Gradient.Stop] = [Gradient.Stop(color: Color(.red), location: 0.0)],
         startPoint: UnitPoint = .leading,
         endPoint: UnitPoint = .trailing
     ) {
@@ -75,5 +75,5 @@ public struct ColourStyle: Colourable, Hashable {
 public enum ChartColour: Colourable, Hashable, Equatable {
     case colour(colour: Color)
     case gradient(colours: [Color], startPoint: UnitPoint, endPoint: UnitPoint)
-    case gradientStops(stops: [GradientStop], startPoint: UnitPoint, endPoint: UnitPoint)
+    case gradientStops(stops: [Gradient.Stop], startPoint: UnitPoint, endPoint: UnitPoint)
 }

@@ -14,7 +14,7 @@ public struct RangedLineStyle: CTRangedLineStyle, Hashable {
     public var lineColour: ChartColour
     public var fillColour: ChartColour
     public var lineType: LineType
-    public var strokeStyle: Stroke
+    public var strokeStyle: StrokeStyle
     public var ignoreZero: Bool
     
     // MARK: Initializer
@@ -28,7 +28,7 @@ public struct RangedLineStyle: CTRangedLineStyle, Hashable {
     public init(lineColour: ChartColour = .colour(colour: .red),
                 fillColour: ChartColour = .colour(colour: .red),
                 lineType: LineType = .curvedLine,
-                strokeStyle: Stroke = Stroke(),
+                strokeStyle: StrokeStyle = StrokeStyle(),
                 ignoreZero: Bool = false
     ) {
         self.lineColour  = lineColour

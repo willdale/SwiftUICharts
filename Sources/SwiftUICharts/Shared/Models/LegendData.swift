@@ -21,7 +21,7 @@ public struct LegendData: Hashable, Identifiable {
     public var legend: String
     
     /// Style of the stroke
-    public var strokeStyle: Stroke?
+    public var strokeStyle: StrokeStyle?
     
     /// Used to make sure the charts data legend is first
     public let prioity: Int
@@ -39,7 +39,7 @@ public struct LegendData: Hashable, Identifiable {
         id: UUID,
         legend: String,
         colour: Color,
-        strokeStyle: Stroke?,
+        strokeStyle: StrokeStyle?,
         prioity: Int,
         chartType: ChartType
     ) {

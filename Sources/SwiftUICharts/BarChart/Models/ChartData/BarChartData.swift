@@ -86,7 +86,7 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance {
                     if data.type == .extraLine,
                        let extraData = self.extraLineData {
                         return LineMarkerData(markerType: extraData.style.markerType,
-                                              location: data.location.convert,
+                                              location: data.location,
                                               dataPoints: extraData.dataPoints.map(\.value),
                                               lineType: extraData.style.lineType,
                                               lineSpacing: .bar,
@@ -99,7 +99,7 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance {
                 let barMarkerData: [BarMarkerData] = $0.compactMap { data in
                     if data.type == .bar {
                         return BarMarkerData(markerType: self.chartStyle.markerType,
-                                              location: data.location.convert)
+                                              location: data.location)
                     }
                     return nil
                 }

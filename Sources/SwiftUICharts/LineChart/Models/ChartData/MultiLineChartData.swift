@@ -84,7 +84,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
                     if data.type == .extraLine,
                        let extraData = self.extraLineData {
                         let extraLineMarkerData = LineMarkerData(markerType: extraData.style.markerType,
-                                                                 location: data.location.convert,
+                                                                 location: data.location,
                                                                  dataPoints: extraData.dataPoints.map(\.value),
                                                                  lineType: extraData.style.lineType,
                                                                  lineSpacing: .bar,
@@ -96,7 +96,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
                         let location = data.location
                         let lineData = self.dataSets.dataSets.compactMap { dataSet in
                             return LineMarkerData(markerType: self.chartStyle.markerType,
-                                                  location: location.convert,
+                                                  location: location,
                                                   dataPoints: dataSet.dataPoints.map(\.value),
                                                   lineType: dataSet.style.lineType,
                                                   lineSpacing: .line,

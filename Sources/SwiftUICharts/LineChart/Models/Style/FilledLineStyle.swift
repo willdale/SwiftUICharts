@@ -12,7 +12,7 @@ public struct FilledLineStyle: CTLineStyle, Hashable {
     public var lineColour: ChartColour
     public var fillColour: ChartColour
     public var lineType: LineType
-    public var strokeStyle: Stroke
+    public var strokeStyle: StrokeStyle
     
     /// Style of the line.
     ///
@@ -24,7 +24,7 @@ public struct FilledLineStyle: CTLineStyle, Hashable {
         lineColour: ChartColour = .colour(colour: .red),
         fillColour: ChartColour = .gradient(colours: [Color.red.opacity(0.50),Color.red.opacity(0.00)], startPoint: .top, endPoint: .bottom),
         lineType: LineType = .curvedLine,
-        strokeStyle: Stroke = Stroke()
+        strokeStyle: StrokeStyle = StrokeStyle()
     ) {
         self.lineColour = lineColour
         self.fillColour = fillColour

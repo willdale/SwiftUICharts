@@ -18,7 +18,7 @@ public struct ExtraLineStyle {
     
     public var markerType: LineMarkerType
     
-    public var strokeStyle: Stroke
+    public var strokeStyle: StrokeStyle
     
     public var pointStyle: PointStyle
     
@@ -36,7 +36,7 @@ public struct ExtraLineStyle {
         lineSpacing: SpacingType = .line,
         markerType: LineMarkerType = .indicator(style: DotStyle()),
         
-        strokeStyle: Stroke = Stroke(),
+        strokeStyle: StrokeStyle = StrokeStyle(),
         pointStyle: PointStyle = PointStyle(pointSize: 0, borderColour: .clear, fillColour: .clear),
         
         yAxisTitle: String? = nil,
