@@ -137,7 +137,7 @@ extension ExtraLineData {
     internal func pointAndLocation(touchLocation: CGPoint, chartSize: CGRect) -> DataPointAndLocation {
         if let point = self.getDataPoint(touchLocation: touchLocation, chartSize: chartSize),
            let location = self.getPointLocation(touchLocation: touchLocation, chartSize: chartSize) {
-            return (value: point.value, description: point.pointDescription, _legendTag: self.legendTitle, location: location)
+            return (value: point.value, description: point.description, _legendTag: self.legendTitle, location: location)
         }
         return (nil, nil, nil, nil)
     }

@@ -94,7 +94,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
                        let extraData = self.extraLineData {
                         return LineMarkerData(markerType: extraData.style.markerType,
                                               location: data.location,
-                                              dataPoints: extraData.dataPoints.map(\.value),
+                                              dataPoints: extraData.dataPoints.map { LineChartDataPoint($0) },
                                               lineType: extraData.style.lineType,
                                               lineSpacing: .bar,
                                               minValue: extraData.minValue,

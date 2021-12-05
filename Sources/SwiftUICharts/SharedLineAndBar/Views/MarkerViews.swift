@@ -45,7 +45,7 @@ internal struct MarkerView {
         markerData: LineMarkerData,
         chartSize: CGRect,
         touchLocation: CGPoint,
-        dataPoints: [Double],
+        dataPoints: [LineChartDataPoint],
         lineType: LineType,
         lineSpacing: ExtraLineStyle.SpacingType,
         minValue: Double,

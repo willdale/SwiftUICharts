@@ -31,7 +31,7 @@ struct LineMarkerData: Hashable {
     let id: UUID = UUID()
     let markerType: LineMarkerType
     let location: CGPoint
-    let dataPoints: [Double]
+    let dataPoints: [LineChartDataPoint]
     let lineType: LineType
     let lineSpacing: ExtraLineStyle.SpacingType
     let minValue: Double
@@ -62,5 +62,23 @@ struct BarMarkerData: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
         hasher.combine(location)
+    }
+}
+
+extension LineChartDataPoint {
+    init(_ datapoint: ExtraLineDataPoint) {
+        self.init(value: datapoint.value,
+                  description: datapoint.description,
+                  pointColour: datapoint.pointColour,
+                  ignore: datapoint.ignore)
+    }
+}
+
+extension LineChartDataPoint {
+    init(_ datapoint: RangedLineChartDataPoint) {
+        self.init(value: datapoint.value,
+                  description: datapoint.description,
+                  pointColour: datapoint.pointColour,
+                  ignore: datapoint.ignore)
     }
 }

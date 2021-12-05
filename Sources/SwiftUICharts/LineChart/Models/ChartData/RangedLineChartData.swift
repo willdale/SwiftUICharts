@@ -85,7 +85,7 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
                        let extraData = self.extraLineData {
                         return LineMarkerData(markerType: extraData.style.markerType,
                                               location: data.location,
-                                              dataPoints: extraData.dataPoints.map(\.value),
+                                              dataPoints: extraData.dataPoints.map { LineChartDataPoint($0) },
                                               lineType: extraData.style.lineType,
                                               lineSpacing: .bar,
                                               minValue: extraData.minValue,
@@ -94,7 +94,7 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
                     } else if data.type == .line {
                         return LineMarkerData(markerType: self.chartStyle.markerType,
                                               location: data.location,
-                                              dataPoints: self.dataSets.dataPoints.map(\.value),
+                                              dataPoints: self.dataSets.dataPoints.map { LineChartDataPoint($0) },
                                               lineType: self.dataSets.style.lineType,
                                               lineSpacing: .line,
                                               minValue: self.minValue,

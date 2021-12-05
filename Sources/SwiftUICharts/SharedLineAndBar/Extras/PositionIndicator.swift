@@ -13,7 +13,7 @@ struct PositionIndicator {
      */
     internal static func getIndicatorLocation(
         rect: CGRect,
-        dataPoints: [Double],
+        dataPoints: [LineChartDataPoint],
         touchLocation: CGPoint,
         lineType: LineType,
         lineSpacing: ExtraLineStyle.SpacingType?,
@@ -58,25 +58,23 @@ struct PositionIndicator {
     static func getPath(
         lineType: LineType,
         rect: CGRect,
-        dataPoints: [Double],
+        dataPoints: [LineChartDataPoint],
         minValue: Double,
         range: Double,
         isFilled: Bool,
         ignoreZero: Bool
     ) -> Path {
         switch lineType {
-        case .line: return Path()
-//            return Path.straightLine(rect: rect,
-//                                     dataPoints: dataPoints,
-//                                     minValue: minValue,
-//                                     range: range,
-//                                     isFilled: isFilled)
-        case .curvedLine: return Path()
-//            return Path.curvedLine(rect: rect,
-//                                   dataPoints: dataPoints,
-//                                   minValue: minValue,
-//                                   range: range,
-//                                   isFilled: isFilled)
+        case .line:
+            return Path.straightLine(rect: rect,
+                                     dataPoints: dataPoints,
+                                     minValue: minValue,
+                                     range: range)
+        case .curvedLine:
+            return Path.curvedLine(rect: rect,
+                                   dataPoints: dataPoints,
+                                   minValue: minValue,
+                                   range: range)
         }
     }
     
@@ -98,19 +96,19 @@ struct PositionIndicator {
         lineType: LineType,
         lineSpacing: ExtraLineStyle.SpacingType,
         rect: CGRect,
-        dataPoints: [Double],
+        dataPoints: [LineChartDataPoint],
         minValue: Double,
         range: Double
     ) -> Path {
         switch (lineType, lineSpacing) {
         case (.curvedLine, .line):
-            return Path.extraLineCurved(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            return Path.extraLineCurved(rect: rect, dataPoints: dataPoints.map(\.value), minValue: minValue, range: range)
         case (.line, .line):
-            return Path.extraLineStraight(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            return Path.extraLineStraight(rect: rect, dataPoints: dataPoints.map(\.value), minValue: minValue, range: range)
         case (.curvedLine, .bar):
-            return Path.extraLineCurvedBarSpacing(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            return Path.extraLineCurvedBarSpacing(rect: rect, dataPoints: dataPoints.map(\.value), minValue: minValue, range: range)
         case (.line, .bar):
-            return Path.extraLineStraightBarSpacing(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            return Path.extraLineStraightBarSpacing(rect: rect, dataPoints: dataPoints.map(\.value), minValue: minValue, range: range)
         }
     }
     
