@@ -65,46 +65,18 @@ struct PositionIndicator {
         ignoreZero: Bool
     ) -> Path {
         switch lineType {
-        case .line:
-            switch ignoreZero {
-            case false:
-                return Path.straightLine(rect: rect,
-                                         dataPoints: dataPoints,
-                                         minValue: minValue,
-                                         range: range,
-                                         isFilled: isFilled)
-            case true:
-//                return Path.straightLineIgnoreZero(rect: rect,
-//                                                   dataPoints: dataPoints,
-//                                                   minValue: minValue,
-//                                                   range: range,
-//                                                   isFilled: isFilled)
-                return Path.straightLine(rect: rect,
-                                         dataPoints: dataPoints,
-                                         minValue: minValue,
-                                         range: range,
-                                         isFilled: isFilled)
-            }
-        case .curvedLine:
-            switch ignoreZero {
-            case false:
-                return Path.curvedLine(rect: rect,
-                                       dataPoints: dataPoints,
-                                       minValue: minValue,
-                                       range: range,
-                                       isFilled: isFilled)
-            case true:
-//                return Path.curvedLineIgnoreZero(rect: rect,
-//                                                 dataPoints: dataPoints,
-//                                                 minValue: minValue,
-//                                                 range: range,
-//                                                 isFilled: isFilled)
-                return Path.curvedLine(rect: rect,
-                                       dataPoints: dataPoints,
-                                       minValue: minValue,
-                                       range: range,
-                                       isFilled: isFilled)
-            }
+        case .line: return Path()
+//            return Path.straightLine(rect: rect,
+//                                     dataPoints: dataPoints,
+//                                     minValue: minValue,
+//                                     range: range,
+//                                     isFilled: isFilled)
+        case .curvedLine: return Path()
+//            return Path.curvedLine(rect: rect,
+//                                   dataPoints: dataPoints,
+//                                   minValue: minValue,
+//                                   range: range,
+//                                   isFilled: isFilled)
         }
     }
     

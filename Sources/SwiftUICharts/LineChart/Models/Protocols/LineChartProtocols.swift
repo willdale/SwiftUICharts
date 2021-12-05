@@ -56,15 +56,6 @@ public protocol CTLineStyle {
      Replica of Apple’s StrokeStyle that conforms to Hashable
      */
     var strokeStyle: Stroke { get set }
-    
-    /**
-     Whether the chart should skip data points who's value is 0.
-     
-     This might be useful when showing trends over time but each day does not necessarily have data.
-     
-     The default is false.
-     */
-    var ignoreZero: Bool { get set }
 }
 
 /**

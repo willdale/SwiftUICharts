@@ -21,7 +21,7 @@ public final class FilledLineChartData: CTLineChartDataProtocol, ChartConformanc
     
     public var accessibilityTitle: LocalizedStringKey = ""
     
-    @Published public var dataSets: LineDataSet
+    @Published public var dataSets: FilledLineDataSet
     
     @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
     @Published public var metadata = ChartMetadata()
@@ -40,12 +40,12 @@ public final class FilledLineChartData: CTLineChartDataProtocol, ChartConformanc
 
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .line, dataSetType: .single)
 
-    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<DataPoint>], Never>()
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<LineChartDataPoint>], Never>()
 
     private var internalSubscription: AnyCancellable?
     private var markerData: MarkerData = MarkerData()
     private var internalDataSubscription: AnyCancellable?
-    @Published public var touchPointData: [DataPoint] = []
+    @Published public var touchPointData: [LineChartDataPoint] = []
     
     // MARK: Initializer
     /// Initialises a Single Line Chart.
@@ -58,7 +58,7 @@ public final class FilledLineChartData: CTLineChartDataProtocol, ChartConformanc
     ///   - shouldAnimate: Whether the chart should be animated.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
-        dataSets: LineDataSet,
+        dataSets: FilledLineDataSet,
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
         chartStyle: LineChartStyle = LineChartStyle(),
@@ -157,7 +157,7 @@ public final class FilledLineChartData: CTLineChartDataProtocol, ChartConformanc
             }
         }
     }
-    private func getXSection(dataSet: LineDataSet, chartSize: CGRect) -> CGFloat {
+    private func getXSection(dataSet: FilledLineDataSet, chartSize: CGRect) -> CGFloat {
          chartSize.width / CGFloat(dataSet.dataPoints.count)
     }
     
@@ -180,7 +180,7 @@ public final class FilledLineChartData: CTLineChartDataProtocol, ChartConformanc
     }
     
     private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        
+        var values: [PublishedTouchData<DataPoint>] = []
         let minValue: Double = self.minValue
         let range: Double = self.range
         
@@ -190,19 +190,11 @@ public final class FilledLineChartData: CTLineChartDataProtocol, ChartConformanc
         let index: Int = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
             let datapoint = dataSets.dataPoints[index]
-            var location: CGPoint = .zero
-            if !dataSets.style.ignoreZero {
-                location = CGPoint(x: CGFloat(index) * xSection,
-                                   y: (CGFloat(dataSets.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
-            } else {
-                if dataSets.dataPoints[index].value != 0 {
-                    location = CGPoint(x: CGFloat(index) * xSection,
-                                       y: (CGFloat(dataSets.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
-                }
+            if !datapoint.ignore {
+                let location = CGPoint(x: CGFloat(index) * xSection,
+                                   y: (CGFloat(datapoint.value - minValue) * -ySection) + chartSize.height)
+                values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
             }
-            
-            var values: [PublishedTouchData<DataPoint>] = []
-            values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
             
             if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
                let location = extraLine.location,
@@ -228,9 +220,6 @@ public final class FilledLineChartData: CTLineChartDataProtocol, ChartConformanc
         infoView.isTouchCurrent = false
     }
     
-    public typealias SetType = LineDataSet
-    public typealias DataPoint = LineChartDataPoint
-    
     // MARK: Deprecated
     /// Initialises a Single Line Chart.
     ///
@@ -250,7 +239,7 @@ public final class FilledLineChartData: CTLineChartDataProtocol, ChartConformanc
         chartStyle: LineChartStyle = LineChartStyle(),
         noDataText: Text = Text("No Data")
     ) {
-        self.dataSets = dataSets
+        self.dataSets = FilledLineDataSet(dataPoints: [LineChartDataPoint(value: 0)])
         self.metadata = metadata
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels

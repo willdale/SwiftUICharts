@@ -43,10 +43,8 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                 {
                     LineShape(dataPoints: chartData.dataSets.dataPoints,
                               lineType: chartData.dataSets.style.lineType,
-                              isFilled: false,
                               minValue: self.minValue,
-                              range: self.range,
-                              ignoreZero: chartData.dataSets.style.ignoreZero)
+                              range: self.range)
                         .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                         .stroke(colour, style: strokeStyle)
                         
@@ -63,10 +61,8 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                 {
                     LineShape(dataPoints: chartData.dataSets.dataPoints,
                               lineType: chartData.dataSets.style.lineType,
-                              isFilled: false,
                               minValue: self.minValue,
-                              range: self.range,
-                              ignoreZero: chartData.dataSets.style.ignoreZero)
+                              range: self.range)
                         .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                         .stroke(LinearGradient(gradient: Gradient(colors: colours),
                                                startPoint: startPoint,
@@ -85,10 +81,8 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                 {
                     LineShape(dataPoints: chartData.dataSets.dataPoints,
                               lineType: chartData.dataSets.style.lineType,
-                              isFilled: false,
                               minValue: self.minValue,
-                              range: self.range,
-                              ignoreZero: chartData.dataSets.style.ignoreZero)
+                              range: self.range)
                         .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                         .stroke(LinearGradient(gradient: Gradient(stops: stops.convert),
                                                startPoint: startPoint,

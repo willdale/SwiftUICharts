@@ -283,21 +283,21 @@ extension CTMultiBarChartDataSet where Self == StackedBarDataSet {
 }
 
 
-extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProtocol & CTnotRanged,
-                                        Self: CTLineChartDataSet {
-    public func minValue() -> Double  {
-        if !self.style.ignoreZero {
-            return self.dataPoints
-                .map(\.value)
-                .min() ?? 0
-        } else {
-            return self.dataPoints
-                .map(\.value)
-                .filter({ $0 != 0 })
-                .min() ?? 0
-        }
-    }
-}
+//extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProtocol & CTnotRanged,
+//                                        Self: CTLineChartDataSet {
+//    public func minValue() -> Double  {
+//        if !self.style.ignoreZero {
+//            return self.dataPoints
+//                .map(\.value)
+//                .min() ?? 0
+//        } else {
+//            return self.dataPoints
+//                .map(\.value)
+//                .filter({ $0 != 0 })
+//                .min() ?? 0
+//        }
+//    }
+//}
 
 // MARK: - Data Point
 extension CTDataPointBaseProtocol  {

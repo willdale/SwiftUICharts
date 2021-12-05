@@ -200,19 +200,13 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
             var datapoint: LineChartDataPoint = LineChartDataPoint(value: 0)
             
             if index >= 0 && index < dataSet.dataPoints.count {
-                
-                if !dataSet.style.ignoreZero {
+                if !dataSet.dataPoints[index].ignore {
                     location = CGPoint(x: CGFloat(index) * xSection,
                                        y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
                     datapoint = dataSet.dataPoints[index]
                     datapoint._legendTag = dataSet.legendTitle
                 } else {
-                    if dataSet.dataPoints[index].value != 0 {
-                        location = CGPoint(x: CGFloat(index) * xSection,
-                                           y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
-                        datapoint = dataSet.dataPoints[index]
-                        datapoint._legendTag = dataSet.legendTitle
-                    }
+                    return nil
                 }
             }
             return PublishedTouchData(datapoint: datapoint, location: location, type: .line)

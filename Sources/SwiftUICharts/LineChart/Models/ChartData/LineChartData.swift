@@ -180,6 +180,7 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     }
     
     private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+        var values: [PublishedTouchData<DataPoint>] = []
         
         let minValue: Double = self.minValue
         let range: Double = self.range
@@ -190,19 +191,11 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
         let index: Int = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
             let datapoint = dataSets.dataPoints[index]
-            var location: CGPoint = .zero
-            if !dataSets.style.ignoreZero {
-                location = CGPoint(x: CGFloat(index) * xSection,
-                                   y: (CGFloat(dataSets.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
-            } else {
-                if dataSets.dataPoints[index].value != 0 {
-                    location = CGPoint(x: CGFloat(index) * xSection,
-                                       y: (CGFloat(dataSets.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
-                }
+            if !datapoint.ignore {
+                let location = CGPoint(x: CGFloat(index) * xSection,
+                                   y: (CGFloat(datapoint.value - minValue) * -ySection) + chartSize.height)
+                values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
             }
-            
-            var values: [PublishedTouchData<DataPoint>] = []
-            values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
             
             if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
                let location = extraLine.location,

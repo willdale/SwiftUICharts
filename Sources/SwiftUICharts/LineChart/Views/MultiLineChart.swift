@@ -28,17 +28,12 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
     
     @ObservedObject private var chartData: ChartData
     
-    private let minValue: Double
-    private let range: Double
-    
     @State private var startAnimation: Bool
     
     /// Initialises a multi-line, line chart.
     /// - Parameter chartData: Must be MultiLineChartData model.
     public init(chartData: ChartData) {
         self.chartData = chartData
-        self.minValue = chartData.minValue
-        self.range = chartData.range
         self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
     
@@ -48,11 +43,9 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
                 ZStack {
                     chartData.getAccessibility()
                     ForEach(chartData.dataSets.dataSets, id: \.id) { dataSet in
-                        LineChartSubView(chartData: chartData,
-                                         dataSet: dataSet,
-                                         minValue: minValue,
-                                         range: range,
-                                         colour: dataSet.style.lineColour)
+                        SingleLineChartSubView(chartData: chartData,
+                                               dataSet: dataSet,
+                                               colour: dataSet.style.lineColour)
                     }
                 }
                 .onAppear { // Needed for axes label frames
@@ -60,5 +53,42 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
                 }
             } else { CustomNoDataView(chartData: chartData) }
         }
+    }
+}
+
+internal struct SingleLineChartSubView<ChartData>: View where ChartData: MultiLineChartData {
+    @ObservedObject private var chartData: ChartData
+    private let dataSet: LineDataSet
+    private let colour: ChartColour
+    
+    @State private var startAnimation: Bool
+    
+    internal init(
+        chartData: ChartData,
+        dataSet: LineDataSet,
+        colour: ChartColour
+    ) {
+        self.chartData = chartData
+        self.dataSet = dataSet
+        self.colour = colour
+        
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
+    }
+    
+    internal var body: some View {
+        LineShape(dataPoints: dataSet.dataPoints,
+                  lineType: dataSet.style.lineType,
+                  minValue: chartData.minValue,
+                  range: chartData.range)
+            .trim(to: startAnimation ? 1 : 0)
+            .stroke(colour, strokeStyle: dataSet.style.strokeStyle)
+        
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .background(Color(.gray).opacity(0.000000001))
+            .onDisappear {
+                self.startAnimation = false
+            }
     }
 }

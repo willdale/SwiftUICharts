@@ -50,7 +50,7 @@ internal struct PointsSubView<ChartData, DS>: View where ChartData: CTChartData,
                        range: range,
                        datapointCount: dataSets.dataPoints.count,
                        pointSize: dataSets.pointStyle.pointSize,
-                       ignoreZero: dataSets.style.ignoreZero,
+                       ignoreZero: false,
                        pointStyle: dataSets.pointStyle.pointShape)
                     .ifElse(!isFilled, if: {
                         $0.trim(to: startAnimation ? 1 : 0)
@@ -74,7 +74,7 @@ internal struct PointsSubView<ChartData, DS>: View where ChartData: CTChartData,
                        range: range,
                        datapointCount: dataSets.dataPoints.count,
                        pointSize: dataSets.pointStyle.pointSize,
-                       ignoreZero: dataSets.style.ignoreZero,
+                       ignoreZero: false,
                        pointStyle: dataSets.pointStyle.pointShape)
                     .ifElse(!isFilled, if: {
                         $0.trim(to: startAnimation ? 1 : 0)
@@ -100,7 +100,7 @@ internal struct PointsSubView<ChartData, DS>: View where ChartData: CTChartData,
                        range: range,
                        datapointCount: dataSets.dataPoints.count,
                        pointSize: dataSets.pointStyle.pointSize,
-                       ignoreZero: dataSets.style.ignoreZero,
+                       ignoreZero: false,
                        pointStyle: dataSets.pointStyle.pointShape)
                     .ifElse(!isFilled, if: {
                         $0.trim(to: startAnimation ? 1 : 0)
@@ -117,7 +117,7 @@ internal struct PointsSubView<ChartData, DS>: View where ChartData: CTChartData,
                                        range: range,
                                        datapointCount: dataSets.dataPoints.count,
                                        pointSize: dataSets.pointStyle.pointSize,
-                                       ignoreZero: dataSets.style.ignoreZero,
+                                       ignoreZero: false,
                                        pointStyle: dataSets.pointStyle.pointShape)
                                     .foregroundColor(dataSets.dataPoints[index].pointColour?.fill ?? dataSets.pointStyle.fillColour)
                     )
