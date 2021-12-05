@@ -26,11 +26,9 @@ public struct GradientStop: Hashable {
     }
 }
 
-extension GradientStop {
-    /// Convert an array of GradientStop into and array of Gradient.Stop
-    /// - Parameter stops: Array of GradientStop
-    /// - Returns: Array of Gradient.Stop
-    static func convertToGradientStopsArray(stops: [GradientStop]) -> [Gradient.Stop] {
-        stops.map { Gradient.Stop(color: $0.color, location: $0.location) }
+extension Gradient.Stop {
+    internal init(_ gradientStop: GradientStop) {
+        self.init(color: gradientStop.color,
+                  location: gradientStop.location)
     }
 }

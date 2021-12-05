@@ -83,7 +83,6 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                           let startPoint = lineColour.startPoint,
                           let endPoint = lineColour.endPoint
                 {
-                    let stops = GradientStop.convertToGradientStopsArray(stops: stops)
                     LineShape(dataPoints: chartData.dataSets.dataPoints,
                               lineType: chartData.dataSets.style.lineType,
                               isFilled: false,
@@ -91,7 +90,7 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                               range: self.range,
                               ignoreZero: chartData.dataSets.style.ignoreZero)
                         .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                        .stroke(LinearGradient(gradient: Gradient(stops: stops),
+                        .stroke(LinearGradient(gradient: Gradient(stops: stops.convert),
                                                startPoint: startPoint,
                                                endPoint: endPoint),
                                 style: strokeStyle)

@@ -320,10 +320,10 @@ extension CTStandardDataPointProtocol where Self: CTBarDataPointBaseProtocol {
             return String(format: specifier, self.value)
     }
 }
-extension CTStandardDataPointProtocol where Self: CTLineDataPointProtocol & IgnoreMe {
+extension CTStandardDataPointProtocol where Self: CTLineDataPointProtocol & Ignorable {
     /// Data point's value as a string
     public func valueAsString(specifier: String) -> String {
-        if !self.ignoreMe {
+        if !self.ignore {
             return String(format: specifier, self.value)
         } else {
             return String("")

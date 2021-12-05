@@ -136,7 +136,7 @@ public protocol CTDataPointBaseProtocol: Hashable, Identifiable {
     /**
      Date can be used for optionally performing additional calculations.
      */
-    var date: Date? { get set }
+//    var date: Date? { get set }
     
     /**
      Internal property that has to be exposed publicly through the protocol.

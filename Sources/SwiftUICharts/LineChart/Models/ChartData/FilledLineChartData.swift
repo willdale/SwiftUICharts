@@ -1,8 +1,8 @@
 //
-//  LineChartData.swift
+//  FilledLineChartData.swift
 //  
 //
-//  Created by Will Dale on 23/01/2021.
+//  Created by Will Dale on 05/12/2021.
 //
 
 import SwiftUI
@@ -14,7 +14,7 @@ import Combine
  This model contains the data and styling information for a single line, line chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
+public final class FilledLineChartData: CTLineChartDataProtocol, ChartConformance {
     
     // MARK: Properties
     public let id: UUID = UUID()
@@ -46,7 +46,7 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     private var markerData: MarkerData = MarkerData()
     private var internalDataSubscription: AnyCancellable?
     @Published public var touchPointData: [DataPoint] = []
-        
+    
     // MARK: Initializer
     /// Initialises a Single Line Chart.
     ///
@@ -168,7 +168,7 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
                       minValue: self.minValue,
                       range: self.range,
                       animation: self.chartStyle.globalAnimation,
-                      isFilled: false)
+                      isFilled: true)
     }
 
     // MARK: Touch

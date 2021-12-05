@@ -36,74 +36,50 @@ public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartD
     
     public var body: some View {
         GeometryReader { geo in
-        if chartData.isGreaterThanTwo() {
-            ZStack {
-                chartData.getAccessibility()
-                // MARK: Ranged Box
-                switch chartData.dataSets.style.lineColour {
-                case let .colour(colour):
-                    RangedLineFillShape(dataPoints: chartData.dataSets.dataPoints,
-                                        lineType: chartData.dataSets.style.lineType,
-                                        minValue: chartData.minValue,
-                                        range: chartData.range,
-                                        ignoreZero: chartData.dataSets.style.ignoreZero)
-                        .fill(colour)
-                case let .gradient(colours, startPoint, endPoint):
-                    RangedLineFillShape(dataPoints: chartData.dataSets.dataPoints,
-                                        lineType: chartData.dataSets.style.lineType,
-                                        minValue: chartData.minValue,
-                                        range: chartData.range,
-                                        ignoreZero: chartData.dataSets.style.ignoreZero)
-                        .fill(LinearGradient(gradient: Gradient(colors: colours),
-                                             startPoint: startPoint,
-                                             endPoint: endPoint))
-                case let .gradientStops(stops, startPoint, endPoint):
-                    let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-                    RangedLineFillShape(dataPoints: chartData.dataSets.dataPoints,
-                                        lineType: chartData.dataSets.style.lineType,
-                                        minValue: chartData.minValue,
-                                        range: chartData.range,
-                                        ignoreZero: chartData.dataSets.style.ignoreZero)
-                        .fill(LinearGradient(gradient: Gradient(stops: stops),
-                                             startPoint: startPoint,
-                                             endPoint: endPoint))
-                }
-                
-                // MARK: Main Line
-                switch chartData.dataSets.style.lineColour {
-                case let .colour(colour):
-                    LineChartColourSubView(chartData: chartData,
-                                           dataSet: chartData.dataSets,
-                                           minValue: chartData.minValue,
-                                           range: chartData.range,
-                                           colour: colour,
-                                           isFilled: false)
-                case let .gradient(colours, startPoint, endPoint):
-                    LineChartColoursSubView(chartData: chartData,
-                                            dataSet: chartData.dataSets,
+            if chartData.isGreaterThanTwo() {
+                ZStack {
+                    chartData.getAccessibility()
+                    // MARK: Ranged Box
+                    switch chartData.dataSets.style.lineColour {
+                    case let .colour(colour):
+                        RangedLineFillShape(dataPoints: chartData.dataSets.dataPoints,
+                                            lineType: chartData.dataSets.style.lineType,
                                             minValue: chartData.minValue,
                                             range: chartData.range,
-                                            colours: colours,
-                                            startPoint: startPoint,
-                                            endPoint: endPoint,
-                                            isFilled: false)
-                case let .gradientStops(stops, startPoint, endPoint):
-                    let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-                    LineChartStopsSubView(chartData: chartData,
-                                          dataSet: chartData.dataSets,
-                                          minValue: chartData.minValue,
-                                          range: chartData.range,
-                                          stops: stops,
-                                          startPoint: startPoint,
-                                          endPoint: endPoint,
-                                          isFilled: false)
+                                            ignoreZero: chartData.dataSets.style.ignoreZero)
+                            .fill(colour)
+                    case let .gradient(colours, startPoint, endPoint):
+                        RangedLineFillShape(dataPoints: chartData.dataSets.dataPoints,
+                                            lineType: chartData.dataSets.style.lineType,
+                                            minValue: chartData.minValue,
+                                            range: chartData.range,
+                                            ignoreZero: chartData.dataSets.style.ignoreZero)
+                            .fill(LinearGradient(gradient: Gradient(colors: colours),
+                                                 startPoint: startPoint,
+                                                 endPoint: endPoint))
+                    case let .gradientStops(stops, startPoint, endPoint):
+                        RangedLineFillShape(dataPoints: chartData.dataSets.dataPoints,
+                                            lineType: chartData.dataSets.style.lineType,
+                                            minValue: chartData.minValue,
+                                            range: chartData.range,
+                                            ignoreZero: chartData.dataSets.style.ignoreZero)
+                            .fill(LinearGradient(gradient: Gradient(stops: stops.convert),
+                                                 startPoint: startPoint,
+                                                 endPoint: endPoint))
+                    }
+                    
+                    // MARK: Main Line
+                    LineChartSubView(chartData: chartData,
+                                     dataSet: chartData.dataSets,
+                                     minValue: chartData.minValue,
+                                     range: chartData.range,
+                                     colour: chartData.dataSets.style.lineColour)
                 }
-            }
-            // Needed for axes label frames
-            .onAppear {
-                self.chartData.viewData.chartSize = geo.frame(in: .local)
-            }
-        } else { CustomNoDataView(chartData: chartData) }
-    }
+                // Needed for axes label frames
+                .onAppear {
+                    self.chartData.viewData.chartSize = geo.frame(in: .local)
+                }
+            } else { CustomNoDataView(chartData: chartData) }
+        }
     }
 }

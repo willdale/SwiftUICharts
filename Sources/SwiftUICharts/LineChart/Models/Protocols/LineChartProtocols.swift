@@ -144,6 +144,6 @@ public protocol CTRangedLineDataPoint: CTLineDataPointProtocol, CTStandardDataPo
 
 
 
-public protocol IgnoreMe {
-    var ignoreMe: Bool { get set }
+public protocol Ignorable {
+    var ignore: Bool { get set }
 }

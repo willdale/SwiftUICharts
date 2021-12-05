@@ -181,7 +181,7 @@ extension Path {
 // MARK: Line
 extension Path {
     /// Draws straight lines between data points ignoring any values of zero.
-    static func straightLineIgnoreZero<DP:CTStandardDataPointProtocol & IgnoreMe>(
+    static func straightLineIgnoreZero<DP:CTStandardDataPointProtocol & Ignorable>(
         rect: CGRect,
         dataPoints: [DP],
         minValue: Double,
@@ -207,7 +207,7 @@ extension Path {
                 let nextPoint = CGPoint(x: CGFloat(index) * x,
                                         y: (CGFloat(dataPoints[index].value - minValue) * -y) + rect.height)
                 
-                if dataPoints[index].value != 0 && !dataPoints[index].ignoreMe {
+                if dataPoints[index].value != 0 && !dataPoints[index].ignore {
                     path.addLine(to: nextPoint)
                 }
             }
@@ -221,7 +221,7 @@ extension Path {
     }
     
     /// Draws cubic Bézier curved lines between data points.
-    static func curvedLineIgnoreZero<DP:CTStandardDataPointProtocol & IgnoreMe>(
+    static func curvedLineIgnoreZero<DP:CTStandardDataPointProtocol & Ignorable>(
         rect: CGRect,
         dataPoints: [DP],
         minValue: Double,
@@ -251,7 +251,7 @@ extension Path {
             let nextPoint = CGPoint(x: CGFloat(index) * x,
                                     y: (CGFloat(dataPoints[index].value - minValue) * -y) + rect.height)
             
-            if dataPoints[index].value != 0 && !dataPoints[index].ignoreMe {
+            if dataPoints[index].value != 0 && !dataPoints[index].ignore {
                 path.addCurve(to: nextPoint,
                               control1: CGPoint(x: previousPoint.x + (nextPoint.x - previousPoint.x) / 2,
                                                 y: previousPoint.y),
@@ -274,7 +274,7 @@ extension Path {
     
     // MARK: Box
     /// Draws straight lines between data points.
-    static func straightLineBoxIgnoreZero<DP:CTRangedLineDataPoint & IgnoreMe>(
+    static func straightLineBoxIgnoreZero<DP:CTRangedLineDataPoint & Ignorable>(
         rect: CGRect,
         dataPoints: [DP],
         minValue: Double,
@@ -315,7 +315,7 @@ extension Path {
     }
     
     /// Draws straight lines between data points.
-    static func curvedLineBoxIgnoreZero<DP:CTRangedLineDataPoint & IgnoreMe>(
+    static func curvedLineBoxIgnoreZero<DP:CTRangedLineDataPoint & Ignorable>(
         rect: CGRect,
         dataPoints: [DP],
         minValue: Double,

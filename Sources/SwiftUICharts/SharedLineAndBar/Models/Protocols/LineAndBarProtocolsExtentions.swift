@@ -258,7 +258,7 @@ extension CTLineBarChartDataProtocol {
                         .frame(width: width, height: width)
                 }
             case let .gradientStops(stops, _, _):
-                let stops = GradientStop.convertToGradientStopsArray(stops: stops)
+                let stops = stops.convert
                 HStack {
                     Circle()
                         .fill(LinearGradient(gradient: Gradient(stops: stops),

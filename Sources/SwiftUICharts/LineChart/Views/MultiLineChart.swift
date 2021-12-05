@@ -48,36 +48,11 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
                 ZStack {
                     chartData.getAccessibility()
                     ForEach(chartData.dataSets.dataSets, id: \.id) { dataSet in
-                        Group {
-                            switch dataSet.style.lineColour {
-                            case let .colour(colour):
-                                LineChartColourSubView(chartData: chartData,
-                                                       dataSet: dataSet,
-                                                       minValue: minValue,
-                                                       range: range,
-                                                       colour: colour,
-                                                       isFilled: false)
-                            case let .gradient(colours, startPoint, endPoint):
-                                LineChartColoursSubView(chartData: chartData,
-                                                        dataSet: dataSet,
-                                                        minValue: minValue,
-                                                        range: range,
-                                                        colours: colours,
-                                                        startPoint: startPoint,
-                                                        endPoint: endPoint,
-                                                        isFilled: false)
-                            case let .gradientStops(stops, startPoint, endPoint):
-                                let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-                                LineChartStopsSubView(chartData: chartData,
-                                                      dataSet: dataSet,
-                                                      minValue: minValue,
-                                                      range: range,
-                                                      stops: stops,
-                                                      startPoint: startPoint,
-                                                      endPoint: endPoint,
-                                                      isFilled: false)
-                            }
-                        }
+                        LineChartSubView(chartData: chartData,
+                                         dataSet: dataSet,
+                                         minValue: minValue,
+                                         range: range,
+                                         colour: dataSet.style.lineColour)
                     }
                 }
                 .onAppear { // Needed for axes label frames

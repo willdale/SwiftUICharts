@@ -7,10 +7,7 @@
 
 import SwiftUI
 
-/**
- Main line shape
- */
-internal struct LineShape<DP>: Shape where DP: CTStandardDataPointProtocol & IgnoreMe {
+internal struct LineShape<DP>: Shape where DP: CTStandardDataPointProtocol & Ignorable {
     
     private let dataPoints: [DP]
     private let lineType: LineType
@@ -59,7 +56,7 @@ internal struct LineShape<DP>: Shape where DP: CTStandardDataPointProtocol & Ign
  Background fill based on the upper and lower values
  for a Ranged Line Chart.
  */
-internal struct RangedLineFillShape<DP>: Shape where DP: CTRangedLineDataPoint & IgnoreMe {
+internal struct RangedLineFillShape<DP>: Shape where DP: CTRangedLineDataPoint & Ignorable {
     
     private let dataPoints: [DP]
     private let lineType: LineType
