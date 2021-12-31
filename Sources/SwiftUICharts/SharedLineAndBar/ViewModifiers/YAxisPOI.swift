@@ -113,7 +113,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                 .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .onDisappear {
                     self.startAnimation = false
                 }
             } else { content }

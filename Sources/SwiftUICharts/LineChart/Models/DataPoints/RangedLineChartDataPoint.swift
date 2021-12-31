@@ -43,7 +43,8 @@ public struct RangedLineChartDataPoint: CTRangedLineDataPoint, Ignorable {
         xAxisLabel: String? = nil,
         description: String? = nil,
         date: Date? = nil,
-        pointColour: PointColour? = nil
+        pointColour: PointColour? = nil,
+        ignore: Bool = false
     ) {
         self.value = value
         self.upperValue = upperValue
@@ -52,6 +53,7 @@ public struct RangedLineChartDataPoint: CTRangedLineDataPoint, Ignorable {
         self.description = description
         self.date = date
         self.pointColour = pointColour
+        self.ignore = ignore
     }
 }
 

@@ -32,7 +32,7 @@ internal struct VerticalGridView<T>: View where T: CTLineBarChartDataProtocol {
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .onDisappear {
                 self.startAnimation = false
             }
     }

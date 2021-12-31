@@ -51,7 +51,7 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
-                        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                        .onDisappear {
                             self.startAnimation = false
                         }
                 } else if lineColour.colourType == .gradientColour,
@@ -71,7 +71,7 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
-                        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                        .onDisappear {
                             self.startAnimation = false
                         }
                 } else if lineColour.colourType == .gradientStops,
@@ -91,7 +91,7 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
-                        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                        .onDisappear {
                             self.startAnimation = false
                         }
                 }

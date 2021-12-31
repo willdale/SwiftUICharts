@@ -99,8 +99,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
                                               lineType: extraData.style.lineType,
                                               lineSpacing: .bar,
                                               minValue: extraData.minValue,
-                                              range: extraData.range,
-                                              ignoreZero: false)
+                                              range: extraData.range)
                     }
                     return nil
                 }

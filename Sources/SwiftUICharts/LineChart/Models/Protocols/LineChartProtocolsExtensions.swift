@@ -51,8 +51,7 @@ extension CTLineChartDataProtocol {
                             lineType: marker.lineType,
                             lineSpacing: marker.lineSpacing,
                             minValue: marker.minValue,
-                            range: marker.range,
-                            ignoreZero: marker.ignoreZero)
+                            range: marker.range)
         }
     }
 }

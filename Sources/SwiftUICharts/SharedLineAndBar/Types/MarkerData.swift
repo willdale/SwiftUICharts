@@ -36,7 +36,6 @@ struct LineMarkerData: Hashable {
     let lineSpacing: ExtraLineStyle.SpacingType
     let minValue: Double
     let range: Double
-    let ignoreZero: Bool
     
     static func == (lhs: LineMarkerData, rhs: LineMarkerData) -> Bool {
         lhs.id == rhs.id &&

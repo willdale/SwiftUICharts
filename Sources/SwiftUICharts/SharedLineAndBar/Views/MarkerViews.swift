@@ -49,8 +49,7 @@ internal struct MarkerView {
         lineType: LineType,
         lineSpacing: ExtraLineStyle.SpacingType,
         minValue: Double,
-        range: Double,
-        ignoreZero: Bool
+        range: Double
     ) -> some View {
         
         let indicatorLocation = PositionIndicator.getIndicatorLocation(rect: chartSize,
@@ -59,8 +58,7 @@ internal struct MarkerView {
                                                                        lineType: lineType,
                                                                        lineSpacing: lineSpacing,
                                                                        minValue: minValue,
-                                                                       range: range,
-                                                                       ignoreZero: ignoreZero)
+                                                                       range: range)
         
         return Group {
             switch lineMarker {

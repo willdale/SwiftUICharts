@@ -89,8 +89,7 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Cha
                                               lineType: extraData.style.lineType,
                                               lineSpacing: .bar,
                                               minValue: extraData.minValue,
-                                              range: extraData.range,
-                                              ignoreZero: false)
+                                              range: extraData.range)
                     }
                     return nil
                 }

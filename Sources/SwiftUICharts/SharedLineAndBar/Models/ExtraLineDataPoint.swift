@@ -10,8 +10,8 @@ import SwiftUI
 /**
  Data point for Extra line View Modifier.
  */
-public struct ExtraLineDataPoint: Hashable, Identifiable, Ignorable {
-    
+public struct ExtraLineDataPoint: CTStandardLineDataPoint, Hashable, Identifiable, Ignorable {
+
     public let id: UUID = UUID()
     public var value: Double
     public var pointColour: PointColour?
@@ -29,5 +29,8 @@ public struct ExtraLineDataPoint: Hashable, Identifiable, Ignorable {
         self.description = description
         self.ignore = ignore
     }
+    
+    public var xAxisLabel: String? = ""
+    public var _legendTag: String = ""
 }
 

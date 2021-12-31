@@ -88,8 +88,7 @@ public final class FilledLineChartData: CTLineChartDataProtocol, ChartConformanc
                                               lineType: extraData.style.lineType,
                                               lineSpacing: extraData.style.lineSpacing,
                                               minValue: extraData.minValue,
-                                              range: extraData.range,
-                                              ignoreZero: false)
+                                              range: extraData.range)
                     } else if data.type == .line {
                         return LineMarkerData(markerType: self.chartStyle.markerType,
                                               location: data.location,
@@ -97,8 +96,7 @@ public final class FilledLineChartData: CTLineChartDataProtocol, ChartConformanc
                                               lineType: self.dataSets.style.lineType,
                                               lineSpacing: .line,
                                               minValue: self.minValue,
-                                              range: self.range,
-                                              ignoreZero: false)
+                                              range: self.range)
                     }
                     return nil
                 }
@@ -167,8 +165,7 @@ public final class FilledLineChartData: CTLineChartDataProtocol, ChartConformanc
                       dataSets: dataSets,
                       minValue: self.minValue,
                       range: self.range,
-                      animation: self.chartStyle.globalAnimation,
-                      isFilled: true)
+                      animation: self.chartStyle.globalAnimation)
     }
 
     // MARK: Touch
@@ -181,20 +178,18 @@ public final class FilledLineChartData: CTLineChartDataProtocol, ChartConformanc
     
     private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
-        let minValue: Double = self.minValue
-        let range: Double = self.range
         
-        let xSection: CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
-        let ySection: CGFloat = chartSize.height / CGFloat(range)
+        let xSection = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
+        let ySection = chartSize.height / CGFloat(range)
         
-        let index: Int = Int((touchLocation.x + (xSection / 2)) / xSection)
+        let index = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
             let datapoint = dataSets.dataPoints[index]
-            if !datapoint.ignore {
+//            if !datapoint.ignore {
                 let location = CGPoint(x: CGFloat(index) * xSection,
-                                   y: (CGFloat(datapoint.value - minValue) * -ySection) + chartSize.height)
+                                       y: (CGFloat(datapoint.value - minValue) * -ySection) + chartSize.height)
                 values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
-            }
+//            }
             
             if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
                let location = extraLine.location,

@@ -71,7 +71,7 @@ public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData 
         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
             self.startAnimation = true
         }
-        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+        .onDisappear {
             self.startAnimation = false
         }
     }

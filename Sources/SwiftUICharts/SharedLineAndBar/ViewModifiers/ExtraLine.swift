@@ -169,7 +169,7 @@ internal struct ColourExtraLineView<ChartData>: View where ChartData: CTLineBarC
     
     var body: some View {
         
-        ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints.map(\.value),
+        ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints,
                        lineType: chartData.extraLineData.style.lineType,
                        lineSpacing: chartData.extraLineData.style.lineSpacing,
                        range: chartData.extraLineData.range,
@@ -184,7 +184,7 @@ internal struct ColourExtraLineView<ChartData>: View where ChartData: CTLineBarC
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .onDisappear {
                 self.startAnimation = false
             }
             .zIndex(1)
@@ -215,7 +215,7 @@ internal struct ColoursExtraLineView<ChartData>: View where ChartData: CTLineBar
     }
     
     var body: some View {
-        ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints.map(\.value),
+        ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints,
                        lineType: chartData.extraLineData.style.lineType,
                        lineSpacing: chartData.extraLineData.style.lineSpacing,
                        range: chartData.extraLineData.range,
@@ -237,7 +237,7 @@ internal struct ColoursExtraLineView<ChartData>: View where ChartData: CTLineBar
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .onDisappear {
                 self.startAnimation = false
             }
     }
@@ -267,7 +267,7 @@ internal struct StopsExtraLineView<ChartData>: View where ChartData: CTLineBarCh
     }
     
     var body: some View {
-        ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints.map(\.value),
+        ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints,
                        lineType: chartData.extraLineData.style.lineType,
                        lineSpacing: chartData.extraLineData.style.lineSpacing,
                        range: chartData.extraLineData.range,
@@ -288,7 +288,7 @@ internal struct StopsExtraLineView<ChartData>: View where ChartData: CTLineBarCh
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .onDisappear {
                 self.startAnimation = false
             }
             .zIndex(1)
@@ -332,13 +332,12 @@ internal struct PointsExtraLineView<ChartData>: View where ChartData: CTLineBarC
                     FilledDataPointExtraLineView(chartData: chartData,
                                                  dataPoint: chartData.extraLineData.dataPoints[index],
                                                  index: index)
-                        .background(Point(value: chartData.extraLineData.dataPoints[index].value,
+                        .background(Point(datapoint: chartData.extraLineData.dataPoints[index],
                                           index: index,
                                           minValue: chartData.extraLineData.minValue,
                                           range: chartData.extraLineData.range,
                                           datapointCount: chartData.extraLineData.dataPoints.count,
                                           pointSize: chartData.extraLineData.style.pointStyle.pointSize,
-                                          ignoreZero: false,
                                           pointStyle: chartData.extraLineData.style.pointStyle.pointShape)
                                         .foregroundColor(chartData.extraLineData.dataPoints[index].pointColour?.fill ?? chartData.extraLineData.style.pointStyle.fillColour)
                         )
@@ -373,13 +372,12 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
         
         switch chartData.extraLineData.style.lineSpacing {
         case .line:
-            Point(value: dataPoint.value,
+            Point(datapoint: dataPoint,
                   index: index,
                   minValue: chartData.extraLineData.minValue,
                   range: chartData.extraLineData.range,
                   datapointCount: chartData.extraLineData.dataPoints.count,
                   pointSize: chartData.extraLineData.style.pointStyle.pointSize,
-                  ignoreZero: false,
                   pointStyle: chartData.extraLineData.style.pointStyle.pointShape)
                 .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
                     $0
@@ -393,7 +391,7 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
                 .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .onDisappear {
                     self.startAnimation = false
                 }
         case .bar:
@@ -417,7 +415,7 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
                 .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .onDisappear {
                     self.startAnimation = false
                 }
         }
@@ -448,13 +446,12 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
         
         switch chartData.extraLineData.style.lineSpacing {
         case .line:
-            Point(value: dataPoint.value,
+            Point(datapoint: dataPoint,
                   index: index,
                   minValue: chartData.extraLineData.minValue,
                   range: chartData.extraLineData.range,
                   datapointCount: chartData.extraLineData.dataPoints.count,
                   pointSize: chartData.extraLineData.style.pointStyle.pointSize,
-                  ignoreZero: false,
                   pointStyle: chartData.extraLineData.style.pointStyle.pointShape)
                 .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
                     $0.trim(to: startAnimation ? 1 : 0)
@@ -468,7 +465,7 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
                 .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .onDisappear {
                     self.startAnimation = false
                 }
         case .bar:
@@ -492,7 +489,7 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
                 .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .onDisappear {
                     self.startAnimation = false
                 }
         }

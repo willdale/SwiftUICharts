@@ -29,8 +29,7 @@ extension CTBarChartDataProtocol where Self.CTStyle.Mark == BarMarkerType,
                                 lineType: marker.lineType,
                                 lineSpacing: marker.lineSpacing,
                                 minValue: marker.minValue,
-                                range: marker.range,
-                                ignoreZero: marker.ignoreZero)
+                                range: marker.range)
             }
         }
     }

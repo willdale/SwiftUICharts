@@ -90,8 +90,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol, ChartConfor
                                               lineType: extraData.style.lineType,
                                               lineSpacing: .bar,
                                               minValue: extraData.minValue,
-                                              range: extraData.range,
-                                              ignoreZero: false)
+                                              range: extraData.range)
                     }
                     return nil
                 }

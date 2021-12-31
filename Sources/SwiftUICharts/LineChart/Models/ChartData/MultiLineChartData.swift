@@ -89,8 +89,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
                                                                  lineType: extraData.style.lineType,
                                                                  lineSpacing: .bar,
                                                                  minValue: extraData.minValue,
-                                                                 range: extraData.range,
-                                                                 ignoreZero: false)
+                                                                 range: extraData.range)
                         lineMarkerData.append(extraLineMarkerData)
                     } else if data.type == .line {
                         let location = data.location
@@ -101,8 +100,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
                                                   lineType: dataSet.style.lineType,
                                                   lineSpacing: .line,
                                                   minValue: self.minValue,
-                                                  range: self.range,
-                                                  ignoreZero: false)
+                                                  range: self.range)
                         }
                         lineMarkerData.append(contentsOf: lineData)
                     }
@@ -176,8 +174,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
                           dataSets: dataSet,
                           minValue: self.minValue,
                           range: self.range,
-                          animation: self.chartStyle.globalAnimation,
-                          isFilled: false)
+                          animation: self.chartStyle.globalAnimation)
         }
     }
     
@@ -192,8 +189,8 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
         let data: [PublishedTouchData<LineChartDataPoint>] = dataSets.dataSets.compactMap { dataSet in
-            let xSection: CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
-            let ySection: CGFloat = chartSize.height / CGFloat(range)
+            let xSection = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
+            let ySection = chartSize.height / CGFloat(range)
             let index = Int((touchLocation.x + (xSection / 2)) / xSection)
             
             var location: CGPoint = .zero

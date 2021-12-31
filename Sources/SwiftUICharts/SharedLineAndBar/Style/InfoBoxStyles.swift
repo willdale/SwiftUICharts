@@ -30,10 +30,11 @@ where ChartData: InfoData {
     internal func body(content: Content) -> some View {
         content
             .infoDisplay(chartData: chartData,
-                          infoView: VerticalInfoBoxView(chartData: chartData,
-                                                        style: style,
-                                                        shape: shape,
-                                                        boxFrame: $boxFrame)) {
+                         infoView: VerticalInfoBoxView(chartData: chartData,
+                                                       style: style,
+                                                       shape: shape,
+                                                       boxFrame: $boxFrame)
+            ) {
                 setBoxLocation($0, $1)
             }
     }
@@ -75,23 +76,30 @@ where ChartData: InfoData {
         self._boxFrame = boxFrame
     }
     
+    @State private var ignorePoint = false
+    
     internal var content: some View {
         VStack(alignment: .leading, spacing: 0) {
             ForEach(chartData.touchPointData, id: \.id) { point in
-                chartData.infoDescription(info: point)
-                    .font(style.descriptionFont)
-                    .foregroundColor(style.descriptionColour)
-                chartData.infoValueUnit(info: point)
-                    .font(style.valueFont)
-                    .foregroundColor(style.valueColour)
-                chartData.infoLegend(info: point)
-                    .foregroundColor(style.descriptionColour)
+                Group {
+                    chartData.infoDescription(info: point)
+                        .font(style.descriptionFont)
+                        .foregroundColor(style.descriptionColour)
+                    chartData.infoValueUnit(info: point)
+                        .font(style.valueFont)
+                        .foregroundColor(style.valueColour)
+                    chartData.infoLegend(info: point)
+                        .foregroundColor(style.descriptionColour)
+                }
+                .onAppear {
+                    ignorePoint = shouldIgnore(point: point)
+                }
             }
         }
         .padding(.all, 8)
         .background(
             GeometryReader { geo in
-                if chartData.infoView.isTouchCurrent {
+                if chartData.infoView.isTouchCurrent && !ignorePoint {
                     shape
                         .fill(style.backgroundColour)
                         .overlay(
@@ -107,6 +115,19 @@ where ChartData: InfoData {
                 }
             }
         )
+    }
+    
+    private func shouldIgnore(point: ChartData.DataPoint) -> Bool {
+        if let point = point as? Ignorable {
+            return point.ignore
+        }
+        return false
+    }
+    
+    private func shouldShowBox(point: ChartData.DataPoint) -> Bool {
+        var ignorePoint = shouldIgnore(point: point)
+        let isTouchCurrent = chartData.infoView.isTouchCurrent
+        return isTouchCurrent && ignorePoint
     }
 }
 

@@ -88,8 +88,7 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
                                               lineType: extraData.style.lineType,
                                               lineSpacing: extraData.style.lineSpacing,
                                               minValue: extraData.minValue,
-                                              range: extraData.range,
-                                              ignoreZero: false)
+                                              range: extraData.range)
                     } else if data.type == .line {
                         return LineMarkerData(markerType: self.chartStyle.markerType,
                                               location: data.location,
@@ -97,16 +96,13 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
                                               lineType: self.dataSets.style.lineType,
                                               lineSpacing: .line,
                                               minValue: self.minValue,
-                                              range: self.range,
-                                              ignoreZero: false)
+                                              range: self.range)
                     }
                     return nil
                 }
                 self.markerData =  MarkerData(lineMarkerData: lineMarkerData, barMarkerData: [])
+                self.touchPointData = $0.map(\.datapoint)
             }
-        
-        internalDataSubscription = touchedDataPointPublisher
-            .sink { self.touchPointData = $0.map(\.datapoint) }
     }
     
     // MARK: Labels
@@ -165,10 +161,9 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     public func getPointMarker() -> some View {
         PointsSubView(chartData: self,
                       dataSets: dataSets,
-                      minValue: self.minValue,
-                      range: self.range,
-                      animation: self.chartStyle.globalAnimation,
-                      isFilled: false)
+                      minValue: minValue,
+                      range: range,
+                      animation: chartStyle.globalAnimation)
     }
 
     // MARK: Touch
@@ -181,22 +176,17 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     
     private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
-        
-        let minValue: Double = self.minValue
-        let range: Double = self.range
-        
-        let xSection: CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
-        let ySection: CGFloat = chartSize.height / CGFloat(range)
-        
-        let index: Int = Int((touchLocation.x + (xSection / 2)) / xSection)
+
+        let xSection = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
+        let ySection = chartSize.height / CGFloat(range)
+
+        let index = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
             let datapoint = dataSets.dataPoints[index]
-            if !datapoint.ignore {
-                let location = CGPoint(x: CGFloat(index) * xSection,
+            let location = CGPoint(x: CGFloat(index) * xSection,
                                    y: (CGFloat(datapoint.value - minValue) * -ySection) + chartSize.height)
-                values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
-            }
-            
+            values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
+
             if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
                let location = extraLine.location,
                let value = extraLine.value
@@ -205,11 +195,11 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
                 datapoint._legendTag = extraLine._legendTag ?? ""
                 values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
             }
-            
+
             touchedDataPointPublisher.send(values)
         }
     }
-    
+
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         markerSubView(markerData: markerData,
                       chartSize: chartSize,
@@ -255,3 +245,12 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
         self.setupInternalCombine()
     }
 }
+
+//extension Collection where Element: Ignorable {
+//    var firstNonIgnored: Element? {
+//        self.first(where: { !$0.ignore } )
+//    }
+//    var lastNonIgnored: Element? {
+//        self.lastIndex(where: { !$0.ignore })
+//    }
+//}
