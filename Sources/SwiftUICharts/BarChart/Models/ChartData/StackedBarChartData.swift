@@ -33,7 +33,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, StandardCha
     
     @Published public var legends: [LegendData] = []
     
-    @Published public var viewData: ChartViewData = ChartViewData()
+    @Published public var chartSize: CGRect = .zero
     @Published public var xAxisViewData = XAxisViewData()
     @Published public var yAxisViewData = YAxisViewData()
     

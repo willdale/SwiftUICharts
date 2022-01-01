@@ -31,7 +31,7 @@ public final class BarChartData: CTBarChartDataProtocol, StandardChartConformanc
     
     @Published public var legends: [LegendData] = []
     
-    @Published public var viewData: ChartViewData = ChartViewData()
+    @Published public var chartSize: CGRect = .zero
     @Published public var xAxisViewData = XAxisViewData()
     @Published public var yAxisViewData = YAxisViewData()
     
@@ -132,7 +132,7 @@ public final class BarChartData: CTBarChartDataProtocol, StandardChartConformanc
                                 RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
                             }
                         }
-                        .frame(width: self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize),
+                        .frame(width: self.getXSection(dataSet: self.dataSets, chartSize: self.chartSize),
                                height: self.xAxisViewData.xAxisLabelHeights.max())
                         Spacer()
                             .frame(minWidth: 0, maxWidth: 500)

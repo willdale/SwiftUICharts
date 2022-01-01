@@ -34,34 +34,34 @@ final class BarChartTests: XCTestCase {
     }
     
     // MARK: - Labels
-    func testBarGetYLabels() {
-        
-        let chartData = BarChartData(dataSets: BarDataSet(dataPoints: dataPoints),
-                                     chartStyle: BarChartStyle(yAxisNumberOfLabels: 3))
-        chartData.viewData.yAxisSpecifier = "%.2f"
-        
-        chartData.chartStyle.topLine  = .maximumValue
-        chartData.chartStyle.baseline = .zero
-        XCTAssertEqual(chartData.labelsArray[0], "0.00")
-        XCTAssertEqual(chartData.labelsArray[1], "30.00")
-        XCTAssertEqual(chartData.labelsArray[2], "60.00")
-        
-        chartData.chartStyle.baseline = .minimumValue
-        XCTAssertEqual(chartData.labelsArray[0], "10.00")
-        XCTAssertEqual(chartData.labelsArray[1], "35.00")
-        XCTAssertEqual(chartData.labelsArray[2], "60.00")
-        
-        chartData.chartStyle.baseline = .minimumWithMaximum(of: 5)
-        XCTAssertEqual(chartData.labelsArray[0], "5.00" )
-        XCTAssertEqual(chartData.labelsArray[1], "32.50")
-        XCTAssertEqual(chartData.labelsArray[2], "60.00")
-        
-        chartData.chartStyle.topLine  = .maximum(of: 100)
-        chartData.chartStyle.baseline = .zero
-        XCTAssertEqual(chartData.labelsArray[0], "0.00"  )
-        XCTAssertEqual(chartData.labelsArray[1], "50.00" )
-        XCTAssertEqual(chartData.labelsArray[2], "100.00")
-    }
+//    func testBarGetYLabels() {
+//        
+//        let chartData = BarChartData(dataSets: BarDataSet(dataPoints: dataPoints),
+//                                     chartStyle: BarChartStyle(yAxisNumberOfLabels: 3))
+//        chartData.viewData.yAxisSpecifier = "%.2f"
+//        
+//        chartData.chartStyle.topLine  = .maximumValue
+//        chartData.chartStyle.baseline = .zero
+//        XCTAssertEqual(chartData.labelsArray[0], "0.00")
+//        XCTAssertEqual(chartData.labelsArray[1], "30.00")
+//        XCTAssertEqual(chartData.labelsArray[2], "60.00")
+//        
+//        chartData.chartStyle.baseline = .minimumValue
+//        XCTAssertEqual(chartData.labelsArray[0], "10.00")
+//        XCTAssertEqual(chartData.labelsArray[1], "35.00")
+//        XCTAssertEqual(chartData.labelsArray[2], "60.00")
+//        
+//        chartData.chartStyle.baseline = .minimumWithMaximum(of: 5)
+//        XCTAssertEqual(chartData.labelsArray[0], "5.00" )
+//        XCTAssertEqual(chartData.labelsArray[1], "32.50")
+//        XCTAssertEqual(chartData.labelsArray[2], "60.00")
+//        
+//        chartData.chartStyle.topLine  = .maximum(of: 100)
+//        chartData.chartStyle.baseline = .zero
+//        XCTAssertEqual(chartData.labelsArray[0], "0.00"  )
+//        XCTAssertEqual(chartData.labelsArray[1], "50.00" )
+//        XCTAssertEqual(chartData.labelsArray[2], "100.00")
+//    }
     
     // MARK: - Touch
 //    func testBarGetDataPoint() {

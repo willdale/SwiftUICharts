@@ -31,7 +31,7 @@ public final class LineChartData: CTLineChartDataProtocol, StandardChartConforma
     @Published public var chartStyle: LineChartStyle
     @Published public var legends: [LegendData] = []
     
-    @Published public var viewData: ChartViewData = ChartViewData()
+    @Published public var chartSize: CGRect = .zero
     @Published public var xAxisViewData = XAxisViewData()
     @Published public var yAxisViewData = YAxisViewData()
     
@@ -121,7 +121,7 @@ public final class LineChartData: CTLineChartDataProtocol, StandardChartConforma
                             if let label = self.dataSets.dataPoints[i].xAxisLabel {
                                 if label != "" {
                                     TempText(chartData: self, label: label, rotation: angle)
-                                        .frame(width: min(self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize),
+                                        .frame(width: min(self.getXSection(dataSet: self.dataSets, chartSize: self.chartSize),
                                                           self.xAxisViewData.xAxislabelWidths.min() ?? 0),
                                                height: self.xAxisViewData.xAxisLabelHeights.max() ?? 0)
                                         .offset(x: CGFloat(i) * (geo.frame(in: .local).width / CGFloat(self.dataSets.dataPoints.count - 1)),

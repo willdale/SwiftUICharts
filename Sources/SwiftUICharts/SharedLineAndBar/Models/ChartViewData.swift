@@ -84,29 +84,3 @@ public struct YAxisViewData {
      */
     var yAxisLabelWidth: [CGFloat] = []
 }
-
-/**
- Data model to pass view information internally so the layout can configure its self.
- */
-public struct ChartViewData {
-    
-    // MARK: Chart
-    /**
-     Size of the main chart.
-     
-     This does not include any view
-     modifiers such as axis labels.
-     */
-    var chartSize: CGRect = .zero
-    
-    /**
-     Experimental
-     */
-    var extraYAxisTitleWidth: CGFloat = 0
-    /**
-     Experimental
-     */
-    var extraYAxisTitleHeight: CGFloat = 0
-    
-    
-}

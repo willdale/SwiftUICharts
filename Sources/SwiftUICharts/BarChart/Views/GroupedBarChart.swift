@@ -51,7 +51,7 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                     }
                 }
                 .onAppear { // Needed for axes label frames
-                    self.chartData.viewData.chartSize = geo.frame(in: .local)
+                    self.chartData.chartSize = geo.frame(in: .local)
                 }
             } else { CustomNoDataView(chartData: chartData) }
         }

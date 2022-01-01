@@ -52,7 +52,7 @@ public struct FilledLineChart<ChartData>: View where ChartData: FilledLineChartD
                                       colour: chartData.dataSets.style.fillColour)
                 }
                 .onAppear { // Needed for axes label frames
-                    self.chartData.viewData.chartSize = geo.frame(in: .local)
+                    self.chartData.chartSize = geo.frame(in: .local)
                 }
             } else { CustomNoDataView(chartData: chartData) }
         }

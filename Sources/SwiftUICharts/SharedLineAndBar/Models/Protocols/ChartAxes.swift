@@ -7,32 +7,9 @@
 
 import SwiftUI
 
-public typealias ViewDataProtocol = XAxisViewDataProtocol & YAxisViewDataProtocol
-
-public protocol XAxisViewDataProtocol: ObservableObject {
-    var xAxisViewData: XAxisViewData { get set }
-}
-
-extension XAxisViewDataProtocol {
-    var axisPadding: CGFloat {
-        (xAxisViewData.xAxisLabelHeights.max() ?? 0) + xAxisViewData.xAxisTitleHeight + (xAxisViewData.hasXAxisLabels ? 4 : 0)
-    }
-}
-
-public protocol YAxisViewDataProtocol: ObservableObject {
-    var yAxisViewData: YAxisViewData { get set }
-}
-
-extension YAxisViewDataProtocol {
-    var axisPadding: CGFloat {
-        (yAxisViewData.yAxisLabelWidth.max() ?? 0) + yAxisViewData.yAxisTitleWidth + (yAxisViewData.hasYAxisLabels ? 4 : 0)
-    }
-}
-
-
-
 public typealias ChartAxes = AxisX & AxisY
 
+// MARK: - AxisY
 public protocol AxisY: ObservableObject {
     /**
      Array of strings for the labels on the Y Axis instead of the labels generated
@@ -135,6 +112,7 @@ extension AxisY where Self: CTLineBarChartDataProtocol & GetDataProtocol & ViewD
     }
 }
 
+// MARK: - AxisX
 public protocol AxisX: AnyObject {
     /**
      Array of strings for the labels on the X Axis instead of the labels in the data points.

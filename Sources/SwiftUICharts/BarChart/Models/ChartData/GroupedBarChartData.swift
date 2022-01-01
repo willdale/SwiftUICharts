@@ -33,7 +33,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, StandardCha
     
     @Published public var legends: [LegendData] = []
     
-    @Published public var viewData: ChartViewData = ChartViewData()
+    @Published public var chartSize: CGRect = .zero
     @Published public var xAxisViewData = XAxisViewData()
     @Published public var yAxisViewData = YAxisViewData()
     
@@ -141,7 +141,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, StandardCha
                                 RotatedText(chartData: self, label: self.dataSets.dataSets[i].setTitle, rotation: angle)
                             }
                         }
-                        .frame(width: self.getXSectionForDataPoint(dataSet: self.dataSets, chartSize: self.viewData.chartSize, groupSpacing: self.groupSpacing),
+                        .frame(width: self.getXSectionForDataPoint(dataSet: self.dataSets, chartSize: self.chartSize, groupSpacing: self.groupSpacing),
                                height: self.xAxisViewData.xAxisLabelHeights.max())
                         if i < self.dataSets.dataSets.count - 1 {
                             Spacer().frame(minWidth: 0, maxWidth: 500)

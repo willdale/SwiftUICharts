@@ -14,16 +14,6 @@ public protocol Colourable: Equatable {}
  A protocol to extend functionality of `CTChartData` specifically for Line and Bar Charts.
  */
 public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBarChartStyle {
-    
-    /**
-     Data model to hold data about the Views layout.
-     
-     This informs some `ViewModifiers` whether the chart has X and/or Y
-     axis labels so they can configure thier layouts appropriately.
-     */
-    var viewData: ChartViewData { get set }
-    
-    
     /**
      A data model for the `ExtraLine` View Modifier
     */
@@ -38,12 +28,6 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
      View for displaying second set of labels on the Y axis.
     */
     func getExtraYAxisLabels() -> ExtraYLabels
-    
-//    associatedtype MyColour: Colourable
-//    /**
-//     Get the relevant colour indicator for the y axis labels.
-//    */
-//    func getColour() -> Colourable
 }
 
 

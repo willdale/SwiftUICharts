@@ -43,7 +43,7 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
                                 colour: chartData.dataSets.style.lineColour)
                 }
                 .onAppear { // Needed for axes label frames
-                    self.chartData.viewData.chartSize = geo.frame(in: .local)
+                    self.chartData.chartSize = geo.frame(in: .local)
                 }
             } else { CustomNoDataView(chartData: chartData) }
         }

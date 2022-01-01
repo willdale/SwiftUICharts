@@ -58,33 +58,33 @@ final class MultiLineChartTest: XCTestCase {
     }
     
     // MARK: - Labels
-    func testMultiLineGetYLabels() {
-        let chartData = MultiLineChartData(dataSets: dataSet,
-                                           chartStyle: LineChartStyle(yAxisNumberOfLabels: 3))
-        chartData.viewData.yAxisSpecifier = "%.2f"
-        
-        chartData.chartStyle.topLine  = .maximumValue
-        chartData.chartStyle.baseline = .zero
-        XCTAssertEqual(chartData.labelsArray[0], "0.00")
-        XCTAssertEqual(chartData.labelsArray[1], "50.00")
-        XCTAssertEqual(chartData.labelsArray[2], "100.00")
-        
-        chartData.chartStyle.baseline = .minimumValue
-        XCTAssertEqual(chartData.labelsArray[0], "10.00")
-        XCTAssertEqual(chartData.labelsArray[1], "55.00")
-        XCTAssertEqual(chartData.labelsArray[2], "100.00")
-        
-        chartData.chartStyle.baseline = .minimumWithMaximum(of: 5)
-        XCTAssertEqual(chartData.labelsArray[0], "5.00")
-        XCTAssertEqual(chartData.labelsArray[1], "52.50")
-        XCTAssertEqual(chartData.labelsArray[2], "100.00")
-        
-        chartData.chartStyle.topLine  = .maximum(of: 100)
-        chartData.chartStyle.baseline = .zero
-        XCTAssertEqual(chartData.labelsArray[0], "0.00")
-        XCTAssertEqual(chartData.labelsArray[1], "50.00")
-        XCTAssertEqual(chartData.labelsArray[2], "100.00")
-    }
+//    func testMultiLineGetYLabels() {
+//        let chartData = MultiLineChartData(dataSets: dataSet,
+//                                           chartStyle: LineChartStyle(yAxisNumberOfLabels: 3))
+//        chartData.viewData.yAxisSpecifier = "%.2f"
+//        
+//        chartData.chartStyle.topLine  = .maximumValue
+//        chartData.chartStyle.baseline = .zero
+//        XCTAssertEqual(chartData.labelsArray[0], "0.00")
+//        XCTAssertEqual(chartData.labelsArray[1], "50.00")
+//        XCTAssertEqual(chartData.labelsArray[2], "100.00")
+//        
+//        chartData.chartStyle.baseline = .minimumValue
+//        XCTAssertEqual(chartData.labelsArray[0], "10.00")
+//        XCTAssertEqual(chartData.labelsArray[1], "55.00")
+//        XCTAssertEqual(chartData.labelsArray[2], "100.00")
+//        
+//        chartData.chartStyle.baseline = .minimumWithMaximum(of: 5)
+//        XCTAssertEqual(chartData.labelsArray[0], "5.00")
+//        XCTAssertEqual(chartData.labelsArray[1], "52.50")
+//        XCTAssertEqual(chartData.labelsArray[2], "100.00")
+//        
+//        chartData.chartStyle.topLine  = .maximum(of: 100)
+//        chartData.chartStyle.baseline = .zero
+//        XCTAssertEqual(chartData.labelsArray[0], "0.00")
+//        XCTAssertEqual(chartData.labelsArray[1], "50.00")
+//        XCTAssertEqual(chartData.labelsArray[2], "100.00")
+//    }
     
     // MARK: - Touch
 //    func testMultiLineGetDataPoint() {

@@ -31,7 +31,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, StandardChartCon
     @Published public var chartStyle: LineChartStyle
     @Published public var legends: [LegendData] = []
     
-    @Published public var viewData: ChartViewData = ChartViewData()
+    @Published public var chartSize: CGRect = .zero
     @Published public var xAxisViewData = XAxisViewData()
     @Published public var yAxisViewData = YAxisViewData()
     
@@ -133,7 +133,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, StandardChartCon
                                 RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
                             }
                         }
-                        .frame(width: min(self.getXSection(dataSet: self.dataSets.dataSets[0], chartSize: self.viewData.chartSize),
+                        .frame(width: min(self.getXSection(dataSet: self.dataSets.dataSets[0], chartSize: self.chartSize),
                                           self.xAxisViewData.xAxislabelWidths.min() ?? 0),
                                height: self.xAxisViewData.xAxisLabelHeights.max())
                         if data != self.dataSets.dataSets[0].dataPoints[self.dataSets.dataSets[0].dataPoints.count - 1] {

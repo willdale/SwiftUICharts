@@ -26,7 +26,7 @@ public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBar
                         .accessibilityLabel(chartData.accessibilityTitle)
                 }
                 .onAppear { // Needed for axes label frames
-                    self.chartData.viewData.chartSize = geo.frame(in: .local)
+                    self.chartData.chartSize = geo.frame(in: .local)
                 }
             } else { CustomNoDataView(chartData: chartData) }
         }

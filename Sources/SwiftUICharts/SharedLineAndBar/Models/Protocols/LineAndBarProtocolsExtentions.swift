@@ -64,9 +64,6 @@ extension CTLineBarChartDataProtocol where Self: GetDataProtocol,
     }
 }
 
-// MARK: - Y Axis
-
-
 // MARK: - Axes Titles
 extension CTLineBarChartDataProtocol where Self: ViewDataProtocol {
     /**
@@ -280,19 +277,6 @@ extension CTLineBarChartDataProtocol where Self: YAxisViewDataProtocol {
 //                                            self.viewData.extraYAxisTitleHeight = geo.size.width
 //                                        }
 //                                }
-//                            )
-//                            .rotationEffect(Angle.init(degrees: -90), anchor: .center)
-//                            .fixedSize()
-//                            .frame(width: self.viewData.extraYAxisTitleWidth)
-//                        Group {
-//                            switch colour {
-//                            case .none:
-//                                EmptyView()
-//                            case .style(let size):
-//                                self.getAxisColourAsCircle(customColour: self.extraLineData.style.lineColour, width: size)
-//                            case .custom(let colour, let size):
-//                                self.getAxisColourAsCircle(customColour: colour, width: size)
-//                            }
 //                        }
 //                        .offset(x: 0, y: self.viewData.extraYAxisTitleHeight / 2)
 //                    }

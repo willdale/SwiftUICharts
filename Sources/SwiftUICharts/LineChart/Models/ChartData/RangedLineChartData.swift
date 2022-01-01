@@ -31,7 +31,7 @@ public final class RangedLineChartData: CTLineChartDataProtocol, StandardChartCo
     @Published public var chartStyle: LineChartStyle
     @Published public var legends: [LegendData] = []
     
-    @Published public var viewData: ChartViewData = ChartViewData()
+    @Published public var chartSize: CGRect = .zero
     @Published public var xAxisViewData = XAxisViewData()
     @Published public var yAxisViewData = YAxisViewData()
     
@@ -136,7 +136,7 @@ public final class RangedLineChartData: CTLineChartDataProtocol, StandardChartCo
                                 RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
                             }
                         }
-                        .frame(width: min(self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize),
+                        .frame(width: min(self.getXSection(dataSet: self.dataSets, chartSize: self.chartSize),
                                           self.xAxisViewData.xAxislabelWidths.min() ?? 0),
                                height: self.xAxisViewData.xAxisLabelHeights.max())
                         if data != self.dataSets.dataPoints[self.dataSets.dataPoints.count - 1] {
