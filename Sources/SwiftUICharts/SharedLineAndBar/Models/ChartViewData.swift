@@ -6,21 +6,7 @@
 
 import SwiftUI
 
-/**
- Data model to pass view information internally so the layout can configure its self.
- */
-public struct ChartViewData {
-    
-    // MARK: Chart
-    /**
-     Size of the main chart.
-     
-     This does not include any view
-     modifiers such as axis labels.
-     */
-    var chartSize: CGRect = .zero
-    
-    // MARK: X Axis
+public struct XAxisViewData {
     /**
      If the chart has labels on the X
      axis, the Y axis needs a different layout
@@ -49,9 +35,9 @@ public struct ChartViewData {
      of the layout system.
      */
     var xAxislabelWidths: [CGFloat] = []
-    
-    
-    // MARK: Y Axis
+}
+
+public struct YAxisViewData {
     /**
      If the chart has labels on the Y axis,
      the X axis needs a different layout.
@@ -82,15 +68,6 @@ public struct ChartViewData {
     var yAxisTitleHeight: CGFloat = 0
     
     /**
-     Experimental
-     */
-    var extraYAxisTitleWidth: CGFloat = 0
-    /**
-     Experimental
-     */
-    var extraYAxisTitleHeight: CGFloat = 0
-    
-    /**
      Width of the y axis labels once
      they have been rotated.
      
@@ -106,4 +83,30 @@ public struct ChartViewData {
      
      */
     var yAxisLabelWidth: [CGFloat] = []
+}
+
+/**
+ Data model to pass view information internally so the layout can configure its self.
+ */
+public struct ChartViewData {
+    
+    // MARK: Chart
+    /**
+     Size of the main chart.
+     
+     This does not include any view
+     modifiers such as axis labels.
+     */
+    var chartSize: CGRect = .zero
+    
+    /**
+     Experimental
+     */
+    var extraYAxisTitleWidth: CGFloat = 0
+    /**
+     Experimental
+     */
+    var extraYAxisTitleHeight: CGFloat = 0
+    
+    
 }

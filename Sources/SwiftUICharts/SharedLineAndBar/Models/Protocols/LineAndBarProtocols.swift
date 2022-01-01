@@ -16,25 +16,12 @@ public protocol Colourable: Equatable {}
 public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBarChartStyle {
     
     /**
-     Array of strings for the labels on the X Axis instead of the labels in the data points.
-     */
-    var xAxisLabels: [String]? { get set }
-    
-    /**
-     Array of strings for the labels on the Y Axis instead of the labels generated
-     from data point values.
-     */
-    var yAxisLabels: [String]? { get set }
-    
-    /**
      Data model to hold data about the Views layout.
      
      This informs some `ViewModifiers` whether the chart has X and/or Y
      axis labels so they can configure thier layouts appropriately.
      */
     var viewData: ChartViewData { get set }
-    
-    
     
     
     /**
@@ -57,29 +44,6 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
 //     Get the relevant colour indicator for the y axis labels.
 //    */
 //    func getColour() -> Colourable
-    
-    
-    
-    
-    
-    /**
-     A type representing a View for displaying labels on the X axis.
-     */
-    associatedtype XLabels: View
-    /**
-     Displays a view for the labels on the X Axis.
-     */
-    func getXAxisLabels() -> XLabels
-    
-    /**
-     A type representing a View for displaying labels on the X axis.
-     */
-    associatedtype YLabels: View
-    
-    /**
-     Displays a view for the labels on the Y Axis.
-     */
-    func getYAxisLabels() -> YLabels
 }
 
 

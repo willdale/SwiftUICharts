@@ -12,7 +12,7 @@ import Combine
  Data for drawing and styling a ranged Bar Chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class RangedBarChartData: CTRangedBarChartDataProtocol, ChartConformance {
+public final class RangedBarChartData: CTRangedBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
     // MARK: Properties
     public let id: UUID = UUID()
     
@@ -29,7 +29,11 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol, ChartConfor
     @Published public var chartStyle: BarChartStyle
     
     @Published public var legends: [LegendData] = []
+    
     @Published public var viewData: ChartViewData = ChartViewData()
+    @Published public var xAxisViewData = XAxisViewData()
+    @Published public var yAxisViewData = YAxisViewData()
+    
     @Published public var infoView: InfoViewData<RangedBarDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
     
@@ -134,7 +138,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol, ChartConfor
                                 if label != "" {
                                     TempText(chartData: self, label: label, rotation: angle)
                                         .frame(width: self.getXSection(dataSet: self.dataSets, chartSize: geo.frame(in: .local)),
-                                               height: self.viewData.xAxisLabelHeights.max() ?? 0)
+                                               height: self.xAxisViewData.xAxisLabelHeights.max() ?? 0)
                                         .offset(x: CGFloat(i) * (geo.frame(in: .local).width / CGFloat(self.dataSets.dataPoints.count)),
                                                 y: 0)
                                 }
@@ -142,7 +146,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol, ChartConfor
                         }
                     }
                 }
-                .frame(height: self.viewData.xAxisLabelHeights.max())
+                .frame(height: self.xAxisViewData.xAxisLabelHeights.max())
                 
             case .chartData(let angle):
                 if let labelArray = self.xAxisLabels {
@@ -157,8 +161,8 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol, ChartConfor
                                     RotatedText(chartData: self, label: labelArray[i], rotation: angle)
                                 }
                             }
-                            .frame(width: self.viewData.xAxislabelWidths.max(),
-                                   height: self.viewData.xAxisLabelHeights.max())
+                            .frame(width: self.xAxisViewData.xAxislabelWidths.max(),
+                                   height: self.xAxisViewData.xAxisLabelHeights.max())
                             if i != labelArray.count - 1 {
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)

@@ -14,7 +14,7 @@ import Combine
  This model contains all the data and styling information for a single line, line chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance {
+public final class MultiLineChartData: CTLineChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
     
     // MARK: Properties
     public let id: UUID = UUID()
@@ -30,7 +30,11 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     @Published public var yAxisLabels: [String]?
     @Published public var chartStyle: LineChartStyle
     @Published public var legends: [LegendData] = []
+    
     @Published public var viewData: ChartViewData = ChartViewData()
+    @Published public var xAxisViewData = XAxisViewData()
+    @Published public var yAxisViewData = YAxisViewData()
+    
     @Published public var infoView: InfoViewData<LineChartDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
     
@@ -129,8 +133,9 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
                                 RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
                             }
                         }
-                        .frame(width: min(self.getXSection(dataSet: self.dataSets.dataSets[0], chartSize: self.viewData.chartSize), self.viewData.xAxislabelWidths.min() ?? 0),
-                               height: self.viewData.xAxisLabelHeights.max())
+                        .frame(width: min(self.getXSection(dataSet: self.dataSets.dataSets[0], chartSize: self.viewData.chartSize),
+                                          self.xAxisViewData.xAxislabelWidths.min() ?? 0),
+                               height: self.xAxisViewData.xAxisLabelHeights.max())
                         if data != self.dataSets.dataSets[0].dataPoints[self.dataSets.dataSets[0].dataPoints.count - 1] {
                             Spacer()
                                 .frame(minWidth: 0, maxWidth: 500)
@@ -151,8 +156,8 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
                                     RotatedText(chartData: self, label: labelArray[i], rotation: angle)
                                 }
                             }
-                            .frame(width: self.viewData.xAxislabelWidths.min(),
-                                   height: self.viewData.xAxisLabelHeights.max())
+                            .frame(width: self.xAxisViewData.xAxislabelWidths.min(),
+                                   height: self.xAxisViewData.xAxisLabelHeights.max())
                             if i != labelArray.count - 1 {
                                 Spacer()
                                     .frame(minWidth: 0, maxWidth: 500)

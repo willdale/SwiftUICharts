@@ -17,7 +17,7 @@ import SwiftUI
  This gets used higher up the view hierarchy
  to set the frame of the of the text after rotation.
  */
-internal struct RotatedText<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
+internal struct RotatedText<ChartData>: View where ChartData: CTLineBarChartDataProtocol & XAxisViewDataProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let label: String
@@ -55,11 +55,11 @@ internal struct RotatedText<ChartData>: View where ChartData: CTLineBarChartData
                     Color.clear
                         .onAppear {
                             finalFrame = geo.frame(in: .local)
-                            chartData.viewData.xAxisLabelHeights.append(geo.frame(in: .local).width)
+                            chartData.xAxisViewData.xAxisLabelHeights.append(geo.frame(in: .local).width)
                             if rotation == .degrees(0) || rotation == .radians(0) {
-                                chartData.viewData.xAxislabelWidths.append(geo.frame(in: .local).width)
+                                chartData.xAxisViewData.xAxislabelWidths.append(geo.frame(in: .local).width)
                             } else {
-                                chartData.viewData.xAxislabelWidths.append(geo.frame(in: .local).height)
+                                chartData.xAxisViewData.xAxislabelWidths.append(geo.frame(in: .local).height)
                             }
                         }
                 }
@@ -85,7 +85,7 @@ internal struct RotatedText<ChartData>: View where ChartData: CTLineBarChartData
  This gets used higher up the view hierarchy
  to set the frame of the of the text after rotation.
  */
-internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTLineBarChartDataProtocol & isHorizontal {
+internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTLineBarChartDataProtocol & isHorizontal & YAxisViewDataProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let label: String
@@ -119,7 +119,7 @@ internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTLineBa
                     Rectangle()
                         .foregroundColor(Color.clear)
                         .onAppear {
-                            chartData.viewData.yAxisLabelWidth.append(geo.frame(in: .local).width + 10)
+                            chartData.yAxisViewData.yAxisLabelWidth.append(geo.frame(in: .local).width + 10)
                         }
                 }
             )
@@ -131,7 +131,7 @@ internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTLineBa
 
 
 
-internal struct TempText<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
+internal struct TempText<ChartData>: View where ChartData: CTLineBarChartDataProtocol & XAxisViewDataProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let label: String
@@ -169,15 +169,15 @@ internal struct TempText<ChartData>: View where ChartData: CTLineBarChartDataPro
                     Color.clear
                         .onAppear {
                             if rotation == .degrees(0) {
-                                chartData.viewData.xAxisLabelHeights.append(geo.frame(in: .local).height)
+                                chartData.xAxisViewData.xAxisLabelHeights.append(geo.frame(in: .local).height)
                             } else {
-                                chartData.viewData.xAxisLabelHeights.append(geo.frame(in: .local).width)
+                                chartData.xAxisViewData.xAxisLabelHeights.append(geo.frame(in: .local).width)
                             }
                             
                             if rotation == .degrees(0) || rotation == .radians(0) {
-                                chartData.viewData.xAxislabelWidths.append(geo.frame(in: .local).width)
+                                chartData.xAxisViewData.xAxislabelWidths.append(geo.frame(in: .local).width)
                             } else {
-                                chartData.viewData.xAxislabelWidths.append(geo.frame(in: .local).height)
+                                chartData.xAxisViewData.xAxislabelWidths.append(geo.frame(in: .local).height)
                             }
                         }
                 }

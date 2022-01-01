@@ -51,7 +51,8 @@ extension CTChartData where Self: CTBarChartDataProtocol,
     }
 }
 
-extension CTLineBarChartDataProtocol {
+extension CTLineBarChartDataProtocol where Self: YAxisViewDataProtocol,
+                                           Self: isStandard {
     public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
         var returnPoint: CGFloat = .zero
         if touchLocation < chartSize.minX + (boxFrame.width / 2) {
@@ -61,10 +62,12 @@ extension CTLineBarChartDataProtocol {
         } else {
             returnPoint = touchLocation
         }
-        return returnPoint + (viewData.yAxisLabelWidth.max() ?? 0) + viewData.yAxisTitleWidth + (viewData.hasYAxisLabels ? 4 : 0) // +4 For Padding
+        return returnPoint + axisPadding
     }
 }
-extension CTLineBarChartDataProtocol where Self: isHorizontal {
+
+extension CTLineBarChartDataProtocol where Self: XAxisViewDataProtocol,
+                                           Self: isHorizontal {
     public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
         var returnPoint: CGFloat = .zero
         if touchLocation < chartSize.minY + (boxFrame.height / 2) {
@@ -74,7 +77,7 @@ extension CTLineBarChartDataProtocol where Self: isHorizontal {
         } else {
             returnPoint = touchLocation
         }
-        return returnPoint + (viewData.xAxisLabelHeights.max() ?? 0) + viewData.xAxisTitleHeight + (viewData.hasXAxisLabels ? 4 : 0)
+        return returnPoint + axisPadding
     }
 }
 

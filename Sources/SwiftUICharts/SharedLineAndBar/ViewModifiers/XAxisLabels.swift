@@ -10,34 +10,30 @@ import SwiftUI
 /**
  Labels for the X axis.
  */
-internal struct XAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol {
+internal struct XAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol & ChartAxes & ViewDataProtocol {
     
     @ObservedObject private var chartData: T
     
     internal init(chartData: T) {
         self.chartData = chartData
-        self.chartData.viewData.hasXAxisLabels = true
+        self.chartData.xAxisViewData.hasXAxisLabels = true
     }
     
     internal func body(content: Content) -> some View {
         Group {
             switch chartData.chartStyle.xAxisLabelPosition {
             case .bottom:
-                if chartData.isGreaterThanTwo() {
-                    VStack {
-                        content
-                        chartData.getXAxisLabels().padding(.top, 2)
-                        chartData.getXAxisTitle()
-                    }
-                } else { content }
+                VStack {
+                    content
+                    chartData.getXAxisLabels().padding(.top, 2)
+                    chartData.getXAxisTitle()
+                }
             case .top:
-                if chartData.isGreaterThanTwo() {
-                    VStack {
-                        chartData.getXAxisTitle()
-                        chartData.getXAxisLabels().padding(.bottom, 2)
-                        content
-                    }
-                } else { content }
+                VStack {
+                    chartData.getXAxisTitle()
+                    chartData.getXAxisLabels().padding(.bottom, 2)
+                    content
+                }
             }
         }
     }
@@ -73,7 +69,7 @@ extension View {
      - Parameter chartData: Chart data model.
      - Returns: A  new view containing the chart with labels marking the x axis.
      */
-    public func xAxisLabels<T: CTLineBarChartDataProtocol>(chartData: T) -> some View {
+    public func xAxisLabels<T: CTLineBarChartDataProtocol & ChartAxes & ViewDataProtocol>(chartData: T) -> some View {
         self.modifier(XAxisLabels(chartData: chartData))
     }
 }

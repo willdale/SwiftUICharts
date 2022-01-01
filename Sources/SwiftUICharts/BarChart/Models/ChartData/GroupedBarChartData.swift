@@ -14,7 +14,7 @@ import Combine
  The grouping data informs the model as to how the datapoints are linked.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class GroupedBarChartData: CTMultiBarChartDataProtocol, ChartConformance {
+public final class GroupedBarChartData: CTMultiBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
     
     // MARK: Properties
     public let id: UUID = UUID()
@@ -32,7 +32,11 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     @Published public var chartStyle: BarChartStyle
     
     @Published public var legends: [LegendData] = []
+    
     @Published public var viewData: ChartViewData = ChartViewData()
+    @Published public var xAxisViewData = XAxisViewData()
+    @Published public var yAxisViewData = YAxisViewData()
+    
     @Published public var infoView: InfoViewData<GroupedBarDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
   
@@ -138,7 +142,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
                             }
                         }
                         .frame(width: self.getXSectionForDataPoint(dataSet: self.dataSets, chartSize: self.viewData.chartSize, groupSpacing: self.groupSpacing),
-                               height: self.viewData.xAxisLabelHeights.max())
+                               height: self.xAxisViewData.xAxisLabelHeights.max())
                         if i < self.dataSets.dataSets.count - 1 {
                             Spacer().frame(minWidth: 0, maxWidth: 500)
                         }
@@ -160,8 +164,8 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
                                     RotatedText(chartData: self, label: labelArray[i], rotation: angle)
                                 }
                             }
-                            .frame(width: self.viewData.xAxislabelWidths.max(),
-                                   height: self.viewData.xAxisLabelHeights.max())
+                            .frame(width: self.xAxisViewData.xAxislabelWidths.max(),
+                                   height: self.xAxisViewData.xAxisLabelHeights.max())
                             if i < labelArray.count - 1 {
                                 Spacer().frame(minWidth: 0, maxWidth: 500)
                             }

@@ -12,7 +12,7 @@ import Combine
  Data for drawing and styling a standard Bar Chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, ChartConformance {
+public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, HorizontalChartConformance, ChartAxes, ViewDataProtocol {
     // MARK: Properties
     public let id: UUID = UUID()
     
@@ -28,7 +28,11 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Cha
     @Published public var chartStyle: BarChartStyle
     
     @Published public var legends: [LegendData] = []
+    
     @Published public var viewData: ChartViewData = ChartViewData()
+    @Published public var xAxisViewData = XAxisViewData()
+    @Published public var yAxisViewData = YAxisViewData()
+    
     @Published public var infoView: InfoViewData<BarChartDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
 
@@ -122,7 +126,7 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Cha
                         GeometryReader { geo in
                             Color.clear
                                 .onAppear {
-                                    self.viewData.xAxisLabelHeights.append(geo.size.height)
+                                    self.xAxisViewData.xAxisLabelHeights.append(geo.size.height)
                                 }
                         }
                     )
@@ -156,7 +160,7 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Cha
                                 Spacer()
                             }
                         }
-                        .frame(width: self.viewData.yAxisLabelWidth.max())
+                        .frame(width: self.yAxisViewData.yAxisLabelWidth.max())
                         Spacer()
                             .frame(minHeight: 0, maxHeight: 500)
                     }
@@ -182,7 +186,7 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Cha
                                         Rectangle()
                                             .foregroundColor(Color.clear)
                                             .onAppear {
-                                                self.viewData.yAxisLabelWidth.append(geo.size.width)
+                                                self.yAxisViewData.yAxisLabelWidth.append(geo.size.width)
                                             }
                                     }
                                 )
@@ -195,7 +199,7 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Cha
                         Spacer()
                             .frame(height: yAxisPaddingHeight + 8) // Why 8 ?
                     }
-                    .frame(width: self.viewData.yAxisLabelWidth.max())
+                    .frame(width: self.yAxisViewData.yAxisLabelWidth.max())
                 }
             }
         }

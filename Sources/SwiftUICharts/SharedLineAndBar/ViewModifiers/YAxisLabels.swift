@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Automatically generated labels for the Y axis.
  */
-internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol {
+internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol & AxisY & ViewDataProtocol {
     
     @ObservedObject private var chartData: T
     private let specifier: String
@@ -25,9 +25,10 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
         self.chartData = chartData
         self.specifier = specifier
         self.colourIndicator = colourIndicator
-        chartData.viewData.hasYAxisLabels = true
-        chartData.viewData.yAxisSpecifier = specifier
-        chartData.viewData.yAxisNumberFormatter = formatter
+        
+        self.chartData.yAxisViewData.hasYAxisLabels = true
+        self.chartData.yAxisViewData.yAxisSpecifier = specifier
+        self.chartData.yAxisViewData.yAxisNumberFormatter = formatter
     }
     
     internal func body(content: Content) -> some View {
@@ -80,7 +81,7 @@ extension View {
         - specifier: Decimal precision specifier
      - Returns: HStack of labels
      */
-    public func yAxisLabels<T: CTLineBarChartDataProtocol>(
+    public func yAxisLabels<T: CTLineBarChartDataProtocol & AxisY & ViewDataProtocol>(
         chartData: T,
         specifier: String = "%.0f",
         formatter: NumberFormatter? = nil,

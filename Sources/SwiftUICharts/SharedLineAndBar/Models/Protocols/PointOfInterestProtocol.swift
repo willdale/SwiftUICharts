@@ -242,13 +242,14 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol & isHor
 //
 //
 // MARK: Line Charts
-extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol & PointOfInterestProtocol {
+extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol & PointOfInterestProtocol & YAxisViewDataProtocol,
+                                            Self: isStandard {
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        let leading: CGFloat = -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - 4 // -4 for padding at the root view.
-        let trailing: CGFloat = frame.width + ((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) + 4 // +4 for padding at the root view.
+        let leading: CGFloat = -((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) - 4 // -4 for padding at the root view.
+        let trailing: CGFloat = frame.width + ((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) + 4 // +4 for padding at the root view.
         let value: CGFloat = CGFloat(markerValue - minValue)
         let sizing: CGFloat = -(frame.height / CGFloat(range))
-        return CGPoint(x: self.chartStyle.yAxisLabelPosition == .leading ? leading : trailing,
+        return CGPoint(x: chartStyle.yAxisLabelPosition == .leading ? leading : trailing,
                        y: value * sizing + frame.height)
     }
     public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
@@ -258,12 +259,13 @@ extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol & Point
 }
 
 // MARK: Vertical Bar Charts
-extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointOfInterestProtocol {
+extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointOfInterestProtocol & YAxisViewDataProtocol,
+                                            Self: isStandard {
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        let leading: CGFloat = -((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) - 4 // -4 for padding at the root view.
-        let trailing: CGFloat = frame.width + ((self.viewData.yAxisLabelWidth.max() ?? 0) / 2) + 4 // +4 for padding at the root view.
+        let leading: CGFloat = -((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) - 4 // -4 for padding at the root view.
+        let trailing: CGFloat = frame.width + ((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) + 4 // +4 for padding at the root view.
         let value: CGFloat = divideByZeroProtection(CGFloat.self, (markerValue - minValue), range)
-        return CGPoint(x: self.chartStyle.yAxisLabelPosition == .leading ? leading : trailing,
+        return CGPoint(x: chartStyle.yAxisLabelPosition == .leading ? leading : trailing,
                        y: frame.height - value * frame.height)
     }
     public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
@@ -273,14 +275,14 @@ extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointO
 }
 
 // MARK: Horizontal Bar Charts
-extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointOfInterestProtocol,
+extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointOfInterestProtocol & XAxisViewDataProtocol,
                                            Self: isHorizontal {
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        let bottom: CGFloat = frame.height + ((self.viewData.xAxisLabelHeights.max() ?? 0) / 2) + 4  // +4 for padding at the root view
-        let top: CGFloat = -((self.viewData.xAxisLabelHeights.max() ?? 0) / 2) - 4  // -4 for padding at the root view
+        let bottom: CGFloat = frame.height + ((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) + 4  // +4 for padding at the root view
+        let top: CGFloat = -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - 4  // -4 for padding at the root view
         let value: CGFloat = divideByZeroProtection(CGFloat.self, (markerValue - minValue), range)
         return CGPoint(x: value * frame.width,
-                y: self.chartStyle.xAxisLabelPosition == .bottom ? bottom : top)
+                       y: self.chartStyle.xAxisLabelPosition == .bottom ? bottom : top)
     }
     public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         CGPoint(x: divideByZeroProtection(CGFloat.self, (markerValue - minValue), range) * frame.width,
@@ -356,12 +358,13 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol & isHor
 //
 //
 // MARK: Line Charts
-extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol & PointOfInterestProtocol {
+extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol & PointOfInterestProtocol & XAxisViewDataProtocol,
+                                           Self: isStandard {
     public func poiAbscissaValueLabelPositionAxis(frame: CGRect, markerValue: Int, count: Int) -> CGPoint {
-        let bottom: CGFloat = frame.height + ((self.viewData.xAxisLabelHeights.max() ?? 0) / 2) + 10  // +4 for padding at the root view
-        let top: CGFloat = -((self.viewData.xAxisLabelHeights.max() ?? 0) / 2) - 10  // -4 for padding at the root view
+        let bottom: CGFloat = frame.height + ((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) + 10  // +4 for padding at the root view
+        let top: CGFloat = -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - 10  // -4 for padding at the root view
         return CGPoint(x: (frame.width / CGFloat(count-1)) * CGFloat(markerValue),
-                       y: self.chartStyle.xAxisLabelPosition == .bottom ? bottom : top)
+                       y: chartStyle.xAxisLabelPosition == .bottom ? bottom : top)
     }
     public func poiAbscissaValueLabelPositionCenter(frame: CGRect, markerValue: Int, count: Int) -> CGPoint {
         CGPoint(x: (frame.width / CGFloat(count-1)) * CGFloat(markerValue),
@@ -370,12 +373,13 @@ extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol & Point
 }
 
 // MARK: Vertical Bar Charts
-extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointOfInterestProtocol {
+extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointOfInterestProtocol & XAxisViewDataProtocol,
+                                           Self: isStandard {
     public func poiAbscissaValueLabelPositionAxis(frame: CGRect, markerValue: Int, count: Int) -> CGPoint {
-        let bottom: CGFloat = frame.height + ((self.viewData.xAxisLabelHeights.max() ?? 0) / 2) + 10  // +4 for padding at the root view
-        let top: CGFloat = -((self.viewData.xAxisLabelHeights.max() ?? 0) / 2) - 10  // -4 for padding at the root view
+        let bottom: CGFloat = frame.height + ((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) + 10  // +4 for padding at the root view
+        let top: CGFloat = -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - 10  // -4 for padding at the root view
         return CGPoint(x: (frame.width / CGFloat(count-1)) * CGFloat(markerValue),
-                       y: self.chartStyle.xAxisLabelPosition == .bottom ? bottom : top)
+                       y: chartStyle.xAxisLabelPosition == .bottom ? bottom : top)
     }
     public func poiAbscissaValueLabelPositionCenter(frame: CGRect, markerValue: Int, count: Int) -> CGPoint {
         CGPoint(x: (frame.width / CGFloat(count)) * CGFloat(markerValue) + ((frame.width / CGFloat(count)) / 2),
@@ -384,12 +388,12 @@ extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointO
 }
 
 // MARK: Horizontal Bar Charts
-extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointOfInterestProtocol,
+extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointOfInterestProtocol & XAxisViewDataProtocol,
                                            Self: isHorizontal {
     public func poiAbscissaValueLabelPositionAxis(frame: CGRect, markerValue: Int, count: Int) -> CGPoint {
-        let leading: CGFloat = -((self.viewData.xAxisLabelHeights.max() ?? 0) / 2) - 8  // -4 for padding at the root view
-        let trailing: CGFloat = frame.width + ((self.viewData.xAxislabelWidths.max() ?? 0) / 2) + 8  // +4 for padding at the root view
-        return CGPoint(x: self.chartStyle.yAxisLabelPosition == .leading ? leading : trailing,
+        let leading: CGFloat = -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - 8  // -4 for padding at the root view
+        let trailing: CGFloat = frame.width + ((xAxisViewData.xAxislabelWidths.max() ?? 0) / 2) + 8  // +4 for padding at the root view
+        return CGPoint(x: chartStyle.yAxisLabelPosition == .leading ? leading : trailing,
                        y: ((frame.height / CGFloat(count)) * CGFloat(markerValue) + ((frame.height / CGFloat(count)) / 2)))
     }
     public func poiAbscissaValueLabelPositionCenter(frame: CGRect, markerValue: Int, count: Int) -> CGPoint {

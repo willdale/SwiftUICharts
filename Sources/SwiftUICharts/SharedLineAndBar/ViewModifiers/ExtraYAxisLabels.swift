@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-internal struct ExtraYAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol {
+internal struct ExtraYAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol & YAxisViewDataProtocol {
     
     @ObservedObject private var chartData: T
     private let specifier: String
@@ -21,27 +21,25 @@ internal struct ExtraYAxisLabels<T>: ViewModifier where T: CTLineBarChartDataPro
         self.chartData = chartData
         self.specifier = specifier
         self.colourIndicator = colourIndicator
-        chartData.viewData.hasYAxisLabels = true
+        chartData.yAxisViewData.hasYAxisLabels = true
     }
     
     internal func body(content: Content) -> some View {
         Group {
-            if chartData.isGreaterThanTwo() {
-                switch chartData.chartStyle.yAxisLabelPosition {
-                case .leading:
-                    HStack(spacing: 0) {
-                        content
-                        chartData.getExtraYAxisLabels().padding(.leading, 4)
-                        chartData.getExtraYAxisTitle(colour: colourIndicator)
-                    }
-                case .trailing:
-                    HStack(spacing: 0) {
-                        chartData.getExtraYAxisTitle(colour: colourIndicator)
-                        chartData.getExtraYAxisLabels().padding(.trailing, 4)
-                        content
-                    }
+            switch chartData.chartStyle.yAxisLabelPosition {
+            case .leading:
+                HStack(spacing: 0) {
+                    content
+                    chartData.getExtraYAxisLabels().padding(.leading, 4)
+                    chartData.getExtraYAxisTitle(colour: colourIndicator)
                 }
-            } else { content }
+            case .trailing:
+                HStack(spacing: 0) {
+                    chartData.getExtraYAxisTitle(colour: colourIndicator)
+                    chartData.getExtraYAxisLabels().padding(.trailing, 4)
+                    content
+                }
+            }
         }
     }
 }
@@ -56,7 +54,7 @@ extension View {
         - colourIndicator: Second Y Axis style.
      - Returns: A View with second set of Y axis labels.
      */
-    public func extraYAxisLabels<T: CTLineBarChartDataProtocol>(
+    public func extraYAxisLabels<T: CTLineBarChartDataProtocol & YAxisViewDataProtocol>(
         chartData: T,
         specifier: String = "%.0f",
         colourIndicator: AxisColour = .none

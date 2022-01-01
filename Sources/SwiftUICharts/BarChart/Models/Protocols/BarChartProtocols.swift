@@ -44,6 +44,7 @@ public protocol CTRangedBarChartDataProtocol: CTBarChartDataProtocol {}
  */
 public protocol CTHorizontalBarChartDataProtocol: CTBarChartDataProtocol, isHorizontal {}
 
+public protocol isStandard {}
 public protocol isHorizontal {}
 
 // MARK: - Style

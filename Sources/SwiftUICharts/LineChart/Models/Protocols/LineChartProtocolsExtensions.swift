@@ -8,7 +8,7 @@
 import SwiftUI
 
 // MARK: - Box Location
-extension CTLineBarChartDataProtocol {
+extension CTLineBarChartDataProtocol where Self: YAxisViewDataProtocol {
     public func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {        
         var returnPoint: CGFloat = .zero
         if touchLocation < chartSize.minX + (boxFrame.width / 2) {
@@ -18,9 +18,10 @@ extension CTLineBarChartDataProtocol {
         } else {
             returnPoint = touchLocation
         }
-        return returnPoint + (self.viewData.yAxisLabelWidth.max() ?? 0) + self.viewData.yAxisTitleWidth + (self.viewData.hasYAxisLabels ? 4 : 0) // +4 For Padding
+        return returnPoint + (yAxisViewData.yAxisLabelWidth.max() ?? 0) + yAxisViewData.yAxisTitleWidth + (yAxisViewData.hasYAxisLabels ? 4 : 0) // +4 For Padding
     }
 }
+
 extension CTLineBarChartDataProtocol where Self: isHorizontal {
     public func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
         var returnPoint: CGFloat = .zero
