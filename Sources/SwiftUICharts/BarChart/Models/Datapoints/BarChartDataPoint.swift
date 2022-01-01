@@ -12,7 +12,7 @@ import SwiftUI
  
  Colour can be solid or gradient.
  */
-public struct BarChartDataPoint: CTStandardBarDataPoint {
+public struct BarChartDataPoint: CTStandardBarDataPoint, DataPointDisplayable {
     
     public let id = UUID()
     public var value: Double

@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Data for a single stacked chart data point.
  */
-public struct StackedBarDataPoint: CTMultiBarDataPoint {
+public struct StackedBarDataPoint: CTMultiBarDataPoint, DataPointDisplayable {
     
     public let id: UUID = UUID()
     public var value: Double

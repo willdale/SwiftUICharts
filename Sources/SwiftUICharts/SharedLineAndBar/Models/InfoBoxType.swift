@@ -9,22 +9,26 @@ import SwiftUI
 
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
 public enum InfoBoxType<ChartData>
-where ChartData: InfoData {
-    case verticle(chartData: ChartData)
-    case horizontal(chartData: ChartData)
-    
-    // Maybe make internal ??
-    public func modifier<Content: View, S: Shape>(
+where ChartData: InfoData,
+      ChartData.DataPoint: DataPointDisplayable
+{
+    case verticle(chartData: ChartData, numberFormat: NumberFormatter = .default)
+    case horizontal(chartData: ChartData, numberFormat: NumberFormatter = .default)
+}
+
+extension InfoBoxType {
+    @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
+    internal func modifier<Content: View, S: Shape>(
         of view: Content,
         with style: InfoBoxStyle,
         and shape: S
     ) -> some View {
         Group {
             switch self {
-            case .verticle(let data):
-                view.modifier(VerticalInfoBoxViewModifier(chartData: data, style: style, shape: shape))
-            case .horizontal(let data):
-                view.modifier(HorizontalInfoBoxViewModifier(chartData: data, style: style, shape: shape))
+            case let .verticle(data, numberFormat):
+                view.modifier(VerticalInfoBoxViewModifier(chartData: data, style: style, shape: shape, numberFormat: numberFormat))
+            case let .horizontal(data, numberFormat):
+                view.modifier(HorizontalInfoBoxViewModifier(chartData: data, style: style, shape: shape, numberFormat: numberFormat))
             }
         }
     }

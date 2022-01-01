@@ -60,6 +60,7 @@ extension CTChartData {
      - Parameter info: A data point
      - Returns: Text View with the value with relevent info.
      */
+    @available(*, deprecated, message: "")
     public func infoValueUnit(info: DataPoint) -> some View {
         switch self.infoView.touchUnit {
         case .none:
@@ -77,6 +78,7 @@ extension CTChartData {
      - Parameter info: A data point
      - Returns: Text View with the value with relevent info.
      */
+    @available(*, deprecated, message: "")
     public func infoValue(info: DataPoint) -> some View {
         Text(LocalizedStringKey(info.valueAsString(specifier: self.infoView.touchSpecifier)))
     }
@@ -87,6 +89,7 @@ extension CTChartData {
      - Parameter info: A data point
      - Returns: Text View of the unit.
      */
+    @available(*, deprecated, message: "")
     public func infoUnit() -> some View {
         switch self.infoView.touchUnit {
         case .none:
@@ -104,6 +107,7 @@ extension CTChartData {
      - Parameter info: A data point
      - Returns: Text View with the points description.
      */
+    @available(*, deprecated, message: "Please use `infoDescription` property in data point.")
     public func infoDescription(info: DataPoint) -> some View {
         Text(LocalizedStringKey(info.wrappedDescription))
     }
@@ -114,6 +118,7 @@ extension CTChartData {
      - Parameter info: A data point
      - Returns: A View of a Legend.
      */
+    @available(*, deprecated, message: "")
     @ViewBuilder
     public func infoLegend(info: DataPoint) -> some View {
         if let legend = self.legends.first(where: {
@@ -128,6 +133,7 @@ extension CTChartData {
 }
 
 extension CTChartData where Self == RangedLineChartData {
+    @available(*, deprecated, message: "")
     public func infoMainValue(info: DataPoint) -> some View {
         var info = info
         info._valueOnly = true
@@ -316,12 +322,14 @@ extension CTDataPointBaseProtocol {
 
 extension CTStandardDataPointProtocol where Self: CTBarDataPointBaseProtocol {
     /// Data point's value as a string
+    @available(*, deprecated, message: "")
     public func valueAsString(specifier: String) -> String {
             return String(format: specifier, self.value)
     }
 }
 extension CTStandardDataPointProtocol where Self: CTLineDataPointProtocol & Ignorable {
     /// Data point's value as a string
+    @available(*, deprecated, message: "")
     public func valueAsString(specifier: String) -> String {
         if !self.ignore {
             return String(format: specifier, self.value)
@@ -332,6 +340,7 @@ extension CTStandardDataPointProtocol where Self: CTLineDataPointProtocol & Igno
 }
 extension CTStandardDataPointProtocol where Self: CTPieDataPoint {
     /// Data point's value as a string
+    @available(*, deprecated, message: "")
     public func valueAsString(specifier: String) -> String {
             return String(format: specifier, self.value)
     }
@@ -339,6 +348,7 @@ extension CTStandardDataPointProtocol where Self: CTPieDataPoint {
 
 extension CTRangeDataPointProtocol where Self == RangedBarDataPoint {
     /// Data point's value as a string
+    @available(*, deprecated, message: "")
     public func valueAsString(specifier: String) -> String {
         if !self._valueOnly {
             return String(format: specifier, self.lowerValue) + "-" + String(format: specifier, self.upperValue)
@@ -350,6 +360,7 @@ extension CTRangeDataPointProtocol where Self == RangedBarDataPoint {
 
 extension CTRangedLineDataPoint where Self == RangedLineChartDataPoint {
     /// Data point's value as a string
+    @available(*, deprecated, message: "")
     public func valueAsString(specifier: String) -> String {
         if !self._valueOnly {
             return String(format: specifier, self.lowerValue) + "-" + String(format: specifier, self.upperValue)

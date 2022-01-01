@@ -155,6 +155,7 @@ public protocol CTDataPointBaseProtocol: Hashable, Identifiable {
      - Parameter specifier: Specifier
      - Returns: Value as a string.
      */
+    @available(*, deprecated, message: "")
     func valueAsString(specifier: String) -> String
 }
 

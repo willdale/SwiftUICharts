@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Data for a single data point.
  */
-public struct LineChartDataPoint: CTStandardLineDataPoint, Ignorable {
+public struct LineChartDataPoint: CTStandardLineDataPoint, Ignorable, DataPointDisplayable {
     
     public let id: UUID = UUID()
     public var value: Double

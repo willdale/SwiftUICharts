@@ -9,22 +9,26 @@ import SwiftUI
 
 // MARK: - Vertical Info Box
 internal struct VerticalInfoBoxViewModifier<ChartData, S: Shape>: ViewModifier
-where ChartData: InfoData {
+where ChartData: InfoData,
+      ChartData.DataPoint: DataPointDisplayable {
     
     @ObservedObject private var chartData: ChartData
     private var style: InfoBoxStyle
     private var shape: S
+    private var numberFormat: NumberFormatter
     
     @State private var boxFrame: CGRect = .zero
     
     internal init(
         chartData: ChartData,
         style: InfoBoxStyle,
-        shape: S
+        shape: S,
+        numberFormat: NumberFormatter
     ) {
         self.chartData = chartData
         self.style = style
         self.shape = shape
+        self.numberFormat = numberFormat
     }
     
     internal func body(content: Content) -> some View {
@@ -33,6 +37,7 @@ where ChartData: InfoData {
                          infoView: VerticalInfoBoxView(chartData: chartData,
                                                        style: style,
                                                        shape: shape,
+                                                       numberFormat: numberFormat,
                                                        boxFrame: $boxFrame)
             ) {
                 setBoxLocation($0, $1)
@@ -54,13 +59,14 @@ where ChartData: InfoData {
     }
 }
 
-
 internal struct VerticalInfoBoxView<ChartData, S: Shape>: InfoDisplayable
-where ChartData: InfoData {
+where ChartData: InfoData,
+      ChartData.DataPoint: DataPointDisplayable {
 
     @ObservedObject internal var chartData: ChartData
     private var style: InfoBoxStyle
     private var shape: S
+    private var numberFormat: NumberFormatter
     
     @Binding private var boxFrame: CGRect
     
@@ -68,38 +74,35 @@ where ChartData: InfoData {
         chartData: ChartData,
         style: InfoBoxStyle,
         shape: S,
+        numberFormat: NumberFormatter,
         boxFrame: Binding<CGRect>
     ) {
         self.chartData = chartData
         self.style = style
         self.shape = shape
         self._boxFrame = boxFrame
+        self.numberFormat = numberFormat
     }
-    
-    @State private var ignorePoint = false
-    
+        
     internal var content: some View {
         VStack(alignment: .leading, spacing: 0) {
             ForEach(chartData.touchPointData, id: \.id) { point in
                 Group {
-                    chartData.infoDescription(info: point)
+                    Text(LocalizedStringKey(point.wrappedDescription))
                         .font(style.descriptionFont)
                         .foregroundColor(style.descriptionColour)
-                    chartData.infoValueUnit(info: point)
+                    Text(point.formattedValue(from: numberFormat))
                         .font(style.valueFont)
                         .foregroundColor(style.valueColour)
-                    chartData.infoLegend(info: point)
-                        .foregroundColor(style.descriptionColour)
-                }
-                .onAppear {
-                    ignorePoint = shouldIgnore(point: point)
+//                    chartData.infoLegend(info: point)
+//                        .foregroundColor(style.descriptionColour)
                 }
             }
         }
         .padding(.all, 8)
         .background(
             GeometryReader { geo in
-                if chartData.infoView.isTouchCurrent && !ignorePoint {
+                if chartData.infoView.isTouchCurrent {
                     shape
                         .fill(style.backgroundColour)
                         .overlay(
@@ -116,39 +119,30 @@ where ChartData: InfoData {
             }
         )
     }
-    
-    private func shouldIgnore(point: ChartData.DataPoint) -> Bool {
-        if let point = point as? Ignorable {
-            return point.ignore
-        }
-        return false
-    }
-    
-    private func shouldShowBox(point: ChartData.DataPoint) -> Bool {
-        var ignorePoint = shouldIgnore(point: point)
-        let isTouchCurrent = chartData.infoView.isTouchCurrent
-        return isTouchCurrent && ignorePoint
-    }
 }
 
 // MARK: - Horizontal Info Box
 internal struct HorizontalInfoBoxViewModifier<ChartData, S: Shape>: ViewModifier
-where ChartData: InfoData {
+where ChartData: InfoData,
+      ChartData.DataPoint: DataPointDisplayable {
     
     @ObservedObject private var chartData: ChartData
     private var style: InfoBoxStyle
     private var shape: S
+    private var numberFormat: NumberFormatter
     
     @State private var boxFrame: CGRect = .zero
     
     internal init(
         chartData: ChartData,
         style: InfoBoxStyle,
-        shape: S
+        shape: S,
+        numberFormat: NumberFormatter
     ) {
         self.chartData = chartData
         self.style = style
         self.shape = shape
+        self.numberFormat = numberFormat
     }
     
     internal func body(content: Content) -> some View {
@@ -157,6 +151,7 @@ where ChartData: InfoData {
                           infoView: HorizontalInfoBoxView(chartData: chartData,
                                                           style: style,
                                                           shape: shape,
+                                                          numberFormat: numberFormat,
                                                           boxFrame: $boxFrame)) {
                 setBoxLocation($0, $1)
             }
@@ -179,11 +174,13 @@ where ChartData: InfoData {
 
 
 internal struct HorizontalInfoBoxView<ChartData, S: Shape>: InfoDisplayable
-where ChartData: InfoData {
+where ChartData: InfoData,
+      ChartData.DataPoint: DataPointDisplayable {
 
     @ObservedObject internal var chartData: ChartData
     private var style: InfoBoxStyle
     private var shape: S
+    private var numberFormat: NumberFormatter
     
     @Binding private var boxFrame: CGRect
     
@@ -191,24 +188,26 @@ where ChartData: InfoData {
         chartData: ChartData,
         style: InfoBoxStyle,
         shape: S,
+        numberFormat: NumberFormatter,
         boxFrame: Binding<CGRect>
     ) {
         self.chartData = chartData
         self.style = style
         self.shape = shape
         self._boxFrame = boxFrame
+        self.numberFormat = numberFormat
     }
-    
+
     internal var content: some View {
         HStack {
             ForEach(chartData.touchPointData, id: \.id) { point in
-                chartData.infoLegend(info: point)
-                    .foregroundColor(style.descriptionColour)
-                    .layoutPriority(1)
-                chartData.infoDescription(info: point)
+//                chartData.infoLegend(info: point)
+//                    .foregroundColor(style.descriptionColour)
+//                    .layoutPriority(1)
+                Text(LocalizedStringKey(point.wrappedDescription))
                     .font(style.descriptionFont)
                     .foregroundColor(style.descriptionColour)
-                chartData.infoValueUnit(info: point)
+                Text(point.formattedValue(from: numberFormat))
                     .font(style.valueFont)
                     .foregroundColor(style.valueColour)
             }

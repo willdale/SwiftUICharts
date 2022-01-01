@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Data for a single grouped bar chart data point.
  */
-public struct GroupedBarDataPoint: CTMultiBarDataPoint {
+public struct GroupedBarDataPoint: CTMultiBarDataPoint, DataPointDisplayable {
     
     public let id: UUID = UUID()
     public var value: Double
