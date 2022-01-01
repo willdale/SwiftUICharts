@@ -36,6 +36,8 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     @Published public var infoView: InfoViewData<StackedBarDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
     
+    @Published public var shouldAnimate: Bool
+    
     @Published public var groups: [GroupingData]
     
     public var noDataText: Text
@@ -59,6 +61,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
     ///   - barStyle: Control for the aesthetic of the bar chart.
     ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - shouldAnimate: Whether the chart should be animated.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: StackedBarDataSets,
@@ -67,6 +70,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
         yAxisLabels: [String]? = nil,
         barStyle: BarStyle = BarStyle(),
         chartStyle: BarChartStyle = BarChartStyle(),
+        shouldAnimate: Bool = true,
         noDataText: Text = Text("No Data")
     ) {
         self.dataSets = dataSets
@@ -75,6 +79,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
         self.yAxisLabels = yAxisLabels
         self.barStyle = barStyle
         self.chartStyle = chartStyle
+        self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         
         self.setupLegends()
@@ -88,20 +93,19 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
                     if data.type == .extraLine,
                        let extraData = self.extraLineData {
                         return LineMarkerData(markerType: extraData.style.markerType,
-                                              location: data.location.convert,
-                                              dataPoints: extraData.dataPoints.map(\.value),
+                                              location: data.location,
+                                              dataPoints: extraData.dataPoints.map { LineChartDataPoint($0) },
                                               lineType: extraData.style.lineType,
                                               lineSpacing: .bar,
                                               minValue: extraData.minValue,
-                                              range: extraData.range,
-                                              ignoreZero: false)
+                                              range: extraData.range)
                     }
                     return nil
                 }
                 let barMarkerData: [BarMarkerData] = $0.compactMap { data in
                     if data.type == .bar {
                         return BarMarkerData(markerType: self.chartStyle.markerType,
-                                              location: data.location.convert)
+                                              location: data.location)
                     }
                     return nil
                 }
@@ -272,7 +276,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     public init(
         dataSets: StackedBarDataSets,
         groups: [GroupingData],
-        metadata: ChartMetadata = ChartMetadata(),
+        metadata: ChartMetadata,
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
         barStyle: BarStyle = BarStyle(),
@@ -286,6 +290,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
         self.yAxisLabels = yAxisLabels
         self.barStyle = barStyle
         self.chartStyle = chartStyle
+        self.shouldAnimate = true
         self.noDataText = noDataText
         
         self.setupLegends()

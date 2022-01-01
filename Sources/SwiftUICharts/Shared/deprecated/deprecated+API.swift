@@ -67,3 +67,34 @@ public struct InfoExtra<T>: View where T: CTChartData {
         }
     }
 }
+
+extension LegendData {
+    /**
+     Get the legend as a view.
+     
+     - Parameter textColor: Colour of the text
+     - Returns: The relevent legend as a view.
+     */
+    @available(*, deprecated, message: "")
+    public func getLegend(
+        width: CGFloat = 40,
+        font: Font = .caption,
+        textColor: Color = .primary
+    ) -> some View {
+        EmptyView()
+    }
+    /**
+     Get the legend as a view where the colour is indicated by a Circle.
+     
+     - Parameter textColor: Colour of the text
+     - Returns: The relevent legend as a view.
+     */
+    @available(*, deprecated, message: "")
+    public func getLegendAsCircle(
+        width: CGFloat = 12,
+        font: Font = .caption,
+        textColor: Color
+    ) -> some View {
+        EmptyView()
+    }
+}

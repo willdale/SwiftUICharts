@@ -13,13 +13,12 @@ struct PositionIndicator {
      */
     internal static func getIndicatorLocation(
         rect: CGRect,
-        dataPoints: [Double],
+        dataPoints: [LineChartDataPoint],
         touchLocation: CGPoint,
         lineType: LineType,
         lineSpacing: ExtraLineStyle.SpacingType?,
         minValue: Double,
-        range: Double,
-        ignoreZero: Bool
+        range: Double
     ) -> CGPoint {
         var path: Path
         if let lineSpacing = lineSpacing {
@@ -31,124 +30,59 @@ struct PositionIndicator {
                                 range: range)
         } else {
             path = Self.getPath(lineType: lineType,
-                                    rect: rect,
-                                    dataPoints: dataPoints,
-                                    minValue: minValue,
-                                    range: range,
-                                    isFilled: false,
-                                    ignoreZero: ignoreZero)
+                                rect: rect,
+                                dataPoints: dataPoints,
+                                minValue: minValue,
+                                range: range)
         }
         return Self.locationOnPath(Self.getPercentageOfPath(path: path, touchLocation: touchLocation), path)
     }
     
-    /**
-     Returns the relevent path based on the line type.
-     
-     - Parameters:
-      - lineType: Drawing style of the line.
-      - rect: Frame the line will be in.
-      - dataPoints: Data points to draw the line.
-      - minValue: Lowest value in the dataset.
-      - range: Difference between the highest and lowest numbers in the dataset.
-      - touchLocation: Location of the touch or pointer input.
-      - isFilled: Whether it is a normal or filled line.
-      - ignoreZero: Whether or not Zeros should be drawn.
-     - Returns: The relevent path based on the line type
-     */
+    /// Returns the relevent path based on the line type.
     static func getPath(
         lineType: LineType,
         rect: CGRect,
-        dataPoints: [Double],
+        dataPoints: [LineChartDataPoint],
         minValue: Double,
-        range: Double,
-        isFilled: Bool,
-        ignoreZero: Bool
+        range: Double
     ) -> Path {
         switch lineType {
         case .line:
-            switch ignoreZero {
-            case false:
-                return Path.straightLine(rect: rect,
-                                         dataPoints: dataPoints,
-                                         minValue: minValue,
-                                         range: range,
-                                         isFilled: isFilled)
-            case true:
-//                return Path.straightLineIgnoreZero(rect: rect,
-//                                                   dataPoints: dataPoints,
-//                                                   minValue: minValue,
-//                                                   range: range,
-//                                                   isFilled: isFilled)
-                return Path.straightLine(rect: rect,
-                                         dataPoints: dataPoints,
-                                         minValue: minValue,
-                                         range: range,
-                                         isFilled: isFilled)
-            }
+            return Path.straightLine(rect: rect,
+                                     dataPoints: dataPoints,
+                                     minValue: minValue,
+                                     range: range)
         case .curvedLine:
-            switch ignoreZero {
-            case false:
-                return Path.curvedLine(rect: rect,
-                                       dataPoints: dataPoints,
-                                       minValue: minValue,
-                                       range: range,
-                                       isFilled: isFilled)
-            case true:
-//                return Path.curvedLineIgnoreZero(rect: rect,
-//                                                 dataPoints: dataPoints,
-//                                                 minValue: minValue,
-//                                                 range: range,
-//                                                 isFilled: isFilled)
-                return Path.curvedLine(rect: rect,
-                                       dataPoints: dataPoints,
-                                       minValue: minValue,
-                                       range: range,
-                                       isFilled: isFilled)
-            }
+            return Path.curvedLine(rect: rect,
+                                   dataPoints: dataPoints,
+                                   minValue: minValue,
+                                   range: range)
         }
     }
     
-    /**
-     Returns the relevent path based on the line type.
-     
-     - Parameters:
-        - lineType: Drawing style of the line.
-        - rect: Frame the line will be in.
-        - dataPoints: Data points to draw the line.
-        - minValue: Lowest value in the dataset.
-        - range: Difference between the highest and lowest numbers in the dataset.
-        - touchLocation: Location of the touch or pointer input.
-        - isFilled: Whether it is a normal or filled line.
-        - ignoreZero: Whether or not Zeros should be drawn.
-     - Returns: The relevent path based on the line type
-     */
+    /// Returns the relevent path based on the line type.
     static func getPath(
         lineType: LineType,
         lineSpacing: ExtraLineStyle.SpacingType,
         rect: CGRect,
-        dataPoints: [Double],
+        dataPoints: [LineChartDataPoint],
         minValue: Double,
         range: Double
     ) -> Path {
         switch (lineType, lineSpacing) {
         case (.curvedLine, .line):
-            return Path.extraLineCurved(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            return Path.curvedLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
         case (.line, .line):
-            return Path.extraLineStraight(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            return Path.straightLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
         case (.curvedLine, .bar):
-            return Path.extraLineCurvedBarSpacing(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            return Path.curvedLineBarSpacing(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
         case (.line, .bar):
-            return Path.extraLineStraightBarSpacing(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            return Path.straightLineBarSpacing(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
         }
     }
     
-    /**
-     How far along the path the touch or pointer is as a percent of the total.
-     - Parameters:
-     - path: Path being acted on.
-     - touchLocation: Location of the touch or pointer input.
-     - Returns: How far along the path the touch is.
-     */
+    
+    /// How far along the path the touch or pointer is as a percent of the total.
     static func getPercentageOfPath(path: Path, touchLocation: CGPoint) -> CGFloat {
         let totalLength = self.getTotalLength(of: path)
         let lengthToTouch = self.getLength(to: touchLocation, on: path)

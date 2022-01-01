@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Data for a single stacked chart data point.
  */
-public struct StackedBarDataPoint: CTMultiBarDataPoint {
+public struct StackedBarDataPoint: CTMultiBarDataPoint, DataPointDisplayable {
     
     public let id: UUID = UUID()
     public var value: Double
@@ -49,6 +49,6 @@ extension StackedBarDataPoint {
     ) {
         self.value = value
         self.description = description
-        self.group = GroupingData(title: "", colour: ColourStyle())
+        self.group = GroupingData(title: "", colour: .colour(colour: .red))
     }
 }

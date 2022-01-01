@@ -125,7 +125,7 @@ public enum YAxisLabelType {
  ```
  case none // No colour marker.
  case style(size: CGFloat) // Get style from data model.
- case custom(colour: ColourStyle, size: CGFloat) // Set custom style.
+ case custom(colour: ChartColour, size: CGFloat) // Set custom style.
  ```
  */
 public enum AxisColour {
@@ -134,5 +134,5 @@ public enum AxisColour {
     /// Get style from data model.
     case style(size: CGFloat)
     /// Set custom style.
-    case custom(colour: ColourStyle, size: CGFloat)
+    case custom(colour: ChartColour, size: CGFloat)
 }

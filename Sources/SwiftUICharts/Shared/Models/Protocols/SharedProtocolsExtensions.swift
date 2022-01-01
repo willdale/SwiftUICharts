@@ -51,97 +51,6 @@ extension CTChartData where Self: CTBarChartDataProtocol,
     }
 }
 
-
-extension CTChartData {
-    
-    /**
-     Displays the data points value with the unit.
-     
-     - Parameter info: A data point
-     - Returns: Text View with the value with relevent info.
-     */
-    public func infoValueUnit(info: DataPoint) -> some View {
-        switch self.infoView.touchUnit {
-        case .none:
-            return Text(LocalizedStringKey(info.valueAsString(specifier: self.infoView.touchSpecifier)))
-        case .prefix(of: let unit):
-            return Text(LocalizedStringKey(unit + " " + info.valueAsString(specifier: self.infoView.touchSpecifier)))
-        case .suffix(of: let unit):
-            return Text(LocalizedStringKey(info.valueAsString(specifier: self.infoView.touchSpecifier) + " " + unit))
-        }
-    }
-    
-    /**
-     Displays the data points value without the unit.
-     
-     - Parameter info: A data point
-     - Returns: Text View with the value with relevent info.
-     */
-    public func infoValue(info: DataPoint) -> some View {
-        Text(LocalizedStringKey(info.valueAsString(specifier: self.infoView.touchSpecifier)))
-    }
-    
-    /**
-     Displays the unit.
-     
-     - Parameter info: A data point
-     - Returns: Text View of the unit.
-     */
-    public func infoUnit() -> some View {
-        switch self.infoView.touchUnit {
-        case .none:
-            return Text("")
-        case .prefix(of: let unit):
-            return Text(LocalizedStringKey("\(unit)"))
-        case .suffix(of: let unit):
-            return Text(LocalizedStringKey("\(unit)"))
-        }
-    }
-    
-    /**
-     Displays the data points description.
-     
-     - Parameter info: A data point
-     - Returns: Text View with the points description.
-     */
-    public func infoDescription(info: DataPoint) -> some View {
-        Text(LocalizedStringKey(info.wrappedDescription))
-    }
-    
-    /**
-     Displays the relevent Legend for the data point.
-     
-     - Parameter info: A data point
-     - Returns: A View of a Legend.
-     */
-    @ViewBuilder
-    public func infoLegend(info: DataPoint) -> some View {
-        if let legend = self.legends.first(where: {
-            $0.prioity == 1 &&
-                $0.legend == info._legendTag
-        }) {
-            legend.getLegendAsCircle(textColor: .primary)
-        } else {
-            EmptyView()
-        }
-    }
-}
-
-extension CTChartData where Self == RangedLineChartData {
-    public func infoMainValue(info: DataPoint) -> some View {
-        var info = info
-        info._valueOnly = true
-        switch self.infoView.touchUnit {
-        case .none:
-            return Text(LocalizedStringKey(info.valueAsString(specifier: self.infoView.touchSpecifier)))
-        case .prefix(of: let unit):
-            return Text(LocalizedStringKey(unit + " " + info.valueAsString(specifier: self.infoView.touchSpecifier)))
-        case .suffix(of: let unit):
-            return Text(LocalizedStringKey(info.valueAsString(specifier: self.infoView.touchSpecifier) + " " + unit))
-        }
-    }
-}
-
 extension CTLineBarChartDataProtocol {
     public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
         var returnPoint: CGFloat = .zero
@@ -283,31 +192,6 @@ extension CTMultiBarChartDataSet where Self == StackedBarDataSet {
 }
 
 
-extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProtocol & CTnotRanged,
-                                        Self: CTLineChartDataSet {
-    public func minValue() -> Double  {
-        if !self.style.ignoreZero {
-            return self.dataPoints
-                .map(\.value)
-                .min() ?? 0
-        } else {
-            return self.dataPoints
-                .map(\.value)
-                .filter({ $0 != 0 })
-                .min() ?? 0
-        }
-    }
-}
-
-extension CTSingleDataSetProtocol where DataPoint: CTStandardDataPointProtocol {
-    var totalSetValue: Double {
-        self.dataPoints
-            .lazy
-            .map(\.value)
-            .reduce(0, +)
-    }
-}
-
 // MARK: - Data Point
 extension CTDataPointBaseProtocol  {
     /// Returns information about the data point for use in accessibility tags.
@@ -320,50 +204,5 @@ extension CTDataPointBaseProtocol {
     /// Unwraps description
     public var wrappedDescription: String {
         self.description ?? ""
-    }
-}
-
-extension CTStandardDataPointProtocol where Self: CTBarDataPointBaseProtocol {
-    /// Data point's value as a string
-    public func valueAsString(specifier: String) -> String {
-            return String(format: specifier, self.value)
-    }
-}
-extension CTStandardDataPointProtocol where Self: CTLineDataPointProtocol & IgnoreMe {
-    /// Data point's value as a string
-    public func valueAsString(specifier: String) -> String {
-        if !self.ignoreMe {
-            return String(format: specifier, self.value)
-        } else {
-            return String("")
-        }
-    }
-}
-extension CTStandardDataPointProtocol where Self: CTPieDataPoint {
-    /// Data point's value as a string
-    public func valueAsString(specifier: String) -> String {
-            return String(format: specifier, self.value)
-    }
-}
-
-extension CTRangeDataPointProtocol where Self == RangedBarDataPoint {
-    /// Data point's value as a string
-    public func valueAsString(specifier: String) -> String {
-        if !self._valueOnly {
-            return String(format: specifier, self.lowerValue) + "-" + String(format: specifier, self.upperValue)
-        } else {
-            return String(format: specifier, self._value)
-        }
-    }
-}
-
-extension CTRangedLineDataPoint where Self == RangedLineChartDataPoint {
-    /// Data point's value as a string
-    public func valueAsString(specifier: String) -> String {
-        if !self._valueOnly {
-            return String(format: specifier, self.lowerValue) + "-" + String(format: specifier, self.upperValue)
-        } else {
-            return String(format: specifier, self.value)
-        }
     }
 }

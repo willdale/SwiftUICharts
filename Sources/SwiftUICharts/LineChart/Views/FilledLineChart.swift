@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - Chart
 /**
  View for creating a filled line chart.
  
@@ -21,32 +22,15 @@ import SwiftUI
  The order of the view modifiers is some what important
  as the modifiers are various types for stacks that wrap
  around the previous views.
- ```
- .touchOverlay(chartData: data)
- .pointMarkers(chartData: data)
- .averageLine(chartData: data,
-              strokeStyle: StrokeStyle(lineWidth: 3,dash: [5,10]))
- .yAxisPOI(chartData: data,
-           markerName: "50",
-           markerValue: 50,
-           lineColour: Color.blue,
-           strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
- .xAxisGrid(chartData: data)
- .yAxisGrid(chartData: data)
- .xAxisLabels(chartData: data)
- .yAxisLabels(chartData: data)
- .infoBox(chartData: data)
- .floatingInfoBox(chartData: data)
- .headerBox(chartData: data)
- .legends(chartData: data)
- ```
  */
-public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
+public struct FilledLineChart<ChartData>: View where ChartData: FilledLineChartData {
     
     @ObservedObject private var chartData: ChartData
     
     private let minValue: Double
     private let range: Double
+    
+    @State private var startAnimation: Bool
     
     /// Initialises a filled line chart
     /// - Parameter chartData: Must be LineChartData model.
@@ -54,59 +38,94 @@ public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
         self.chartData = chartData
         self.minValue = chartData.minValue
         self.range = chartData.range
-        self.chartData.isFilled = true
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     public var body: some View {
         GeometryReader { geo in
             if chartData.isGreaterThanTwo() {
                 ZStack {
                     chartData.getAccessibility()
-                    if chartData.dataSets.style.lineColour.colourType == .colour,
-                       let colour = chartData.dataSets.style.lineColour.colour
-                    {
-                        LineChartColourSubView(chartData: chartData,
-                                               dataSet: chartData.dataSets,
-                                               minValue: minValue,
-                                               range: range,
-                                               colour: colour,
-                                               isFilled: true)
-                    } else if chartData.dataSets.style.lineColour.colourType == .gradientColour,
-                              let colours = chartData.dataSets.style.lineColour.colours,
-                              let startPoint = chartData.dataSets.style.lineColour.startPoint,
-                              let endPoint = chartData.dataSets.style.lineColour.endPoint
-                    {
-                        LineChartColoursSubView(chartData: chartData,
-                                                dataSet: chartData.dataSets,
-                                                minValue: minValue,
-                                                range: range,
-                                                colours: colours,
-                                                startPoint: startPoint,
-                                                endPoint: endPoint,
-                                                isFilled: true)
-                    } else if chartData.dataSets.style.lineColour.colourType == .gradientStops,
-                              let stops = chartData.dataSets.style.lineColour.stops,
-                              let startPoint = chartData.dataSets.style.lineColour.startPoint,
-                              let endPoint = chartData.dataSets.style.lineColour.endPoint
-                    {
-                        let stops = GradientStop.convertToGradientStopsArray(stops: stops)
-                        LineChartStopsSubView(chartData: chartData,
-                                              dataSet: chartData.dataSets,
-                                              minValue: minValue,
-                                              range: range,
-                                              stops: stops,
-                                              startPoint: startPoint,
-                                              endPoint: endPoint,
-                                              isFilled: true)
-                    }
+                    TopLineSubView(chartData: chartData,
+                                   colour: chartData.dataSets.style.lineColour)
+                    FilledLineSubView(chartData: chartData,
+                                      colour: chartData.dataSets.style.fillColour)
                 }
-                // Needed for axes label frames
-                .onAppear {
+                .onAppear { // Needed for axes label frames
                     self.chartData.viewData.chartSize = geo.frame(in: .local)
                 }
             } else { CustomNoDataView(chartData: chartData) }
         }
+    }
+}
+
+ // MARK: - Top Line
+internal struct TopLineSubView<ChartData>: View where ChartData: FilledLineChartData {
+    @ObservedObject private var chartData: ChartData
+    private let colour: ChartColour
+    
+    @State private var startAnimation: Bool = false
+    
+    internal init(
+        chartData: ChartData,
+        colour: ChartColour
+    ) {
+        self.chartData = chartData
+        self.colour = colour
+        
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
+    }
+    
+    internal var body: some View {
+        LineShape(dataPoints: chartData.dataSets.dataPoints,
+                  lineType: chartData.dataSets.style.lineType,
+                  minValue: chartData.minValue,
+                  range: chartData.range)
+            .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+            .stroke(colour, strokeStyle: chartData.dataSets.style.strokeStyle)
+        
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .background(Color(.gray).opacity(0.000000001))
+            .onDisappear {
+                self.startAnimation = false
+            }
+    }
+}
+
+// MARK: - Fill
+internal struct FilledLineSubView<ChartData>: View where ChartData: FilledLineChartData {
+    
+    @ObservedObject private var chartData: ChartData
+    private let colour: ChartColour
+    
+    @State private var startAnimation: Bool = false
+    
+    internal init(
+        chartData: ChartData,
+        colour: ChartColour
+    ) {
+        self.chartData = chartData
+        self.colour = colour
+        
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
+    }
+    
+    internal var body: some View {
+        FilledLine(dataPoints: chartData.dataSets.dataPoints,
+                   lineType: chartData.dataSets.style.lineType,
+                   minValue: chartData.minValue,
+                   range: chartData.range)
+            .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+            .fill(colour)
+        
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .background(Color(.gray).opacity(0.000000001))
+            .onDisappear {
+                self.startAnimation = false
+            }
     }
 }

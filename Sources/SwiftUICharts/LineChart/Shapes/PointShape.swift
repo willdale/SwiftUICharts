@@ -10,34 +10,31 @@ import SwiftUI
 /**
  Draws point markers over the data point locations.
  */
-internal struct Point: Shape {
+internal struct Point<DataPoint>: Shape where DataPoint: CTStandardDataPointProtocol & Ignorable {
     
-    private let value: Double
+    private let datapoint: DataPoint
     private let index: Int
     private let minValue: Double
     private let range: Double
     private let datapointCount: Int
     private let pointSize: CGFloat
-    private let ignoreZero: Bool
     private let pointStyle: PointShape
     
     internal init(
-        value: Double,
+        datapoint: DataPoint,
         index: Int,
         minValue: Double,
         range: Double,
         datapointCount: Int,
         pointSize: CGFloat,
-        ignoreZero: Bool,
         pointStyle: PointShape
     ) {
-        self.value = value
+        self.datapoint = datapoint
         self.index = index
         self.minValue = minValue
         self.range = range
         self.datapointCount = datapointCount
         self.pointSize = pointSize
-        self.ignoreZero = ignoreZero
         self.pointStyle = pointStyle
     }
     
@@ -49,14 +46,10 @@ internal struct Point: Shape {
         let offset: CGFloat = pointSize / CGFloat(2)
         
         let pointX: CGFloat = (CGFloat(index) * x) - offset
-        let pointY: CGFloat = ((CGFloat(value - minValue) * -y) + rect.height) - offset
+        let pointY: CGFloat = ((CGFloat(datapoint.value - minValue) * -y) + rect.height) - offset
         let point: CGRect = CGRect(x: pointX, y: pointY, width: pointSize, height: pointSize)
-        if !ignoreZero {
+        if !datapoint.ignore {
             pointSwitch(&path, point)
-        } else {
-            if value != 0 {
-                pointSwitch(&path, point)
-            }
         }
         return path
     }

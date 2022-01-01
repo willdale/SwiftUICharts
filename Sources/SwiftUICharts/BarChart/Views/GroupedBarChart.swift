@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: Chart
 /**
  View for creating a grouped bar chart.
  
@@ -21,29 +22,12 @@ import SwiftUI
  The order of the view modifiers is some what important
  as the modifiers are various types for stacks that wrap
  around the previous views.
- ```
- .touchOverlay(chartData: data)
- .averageLine(chartData: data,
- strokeStyle: StrokeStyle(lineWidth: 3,dash: [5,10]))
- .yAxisPOI(chartData: data,
-           markerName: "50",
-           markerValue: 50,
-           lineColour: Color.blue,
-           strokeStyle: StrokeStyle(lineWidth: 3, dash: [5,10]))
- .xAxisGrid(chartData: data)
- .yAxisGrid(chartData: data)
- .xAxisLabels(chartData: data)
- .yAxisLabels(chartData: data)
- .infoBox(chartData: data)
- .floatingInfoBox(chartData: data)
- .headerBox(chartData: data)
- .legends(chartData: data)
- ```
  */
 public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartData {
     
     @ObservedObject private var chartData: ChartData
     private let groupSpacing: CGFloat
+
     
     /// Initialises a grouped bar chart view.
     /// - Parameters:
@@ -58,8 +42,6 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
         self.chartData.groupSpacing = groupSpacing
     }
     
-    @State private var startAnimation: Bool = false
-    
     public var body: some View {
         GeometryReader { geo in
             if chartData.isGreaterThanTwo() {
@@ -68,7 +50,7 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                         GroupedBarGroup(chartData: chartData, dataSet: dataSet)
                     }
                 }
-                .onAppear {
+                .onAppear { // Needed for axes label frames
                     self.chartData.viewData.chartSize = geo.frame(in: .local)
                 }
             } else { CustomNoDataView(chartData: chartData) }
@@ -81,7 +63,7 @@ internal struct GroupedBarGroup<ChartData>: View where ChartData: GroupedBarChar
     @ObservedObject private var chartData: ChartData
     private let dataSet: GroupedBarDataSet
     
-    init(
+    internal init(
         chartData: ChartData,
         dataSet: GroupedBarDataSet
     ) {
@@ -89,63 +71,80 @@ internal struct GroupedBarGroup<ChartData>: View where ChartData: GroupedBarChar
         self.dataSet = dataSet
     }
     
-    var body: some View {
+    internal var body: some View {
         HStack(spacing: 0) {
-            ForEach(dataSet.dataPoints) { dataPoint in
-                GroupedBarCell(chartData: chartData, dataPoint: dataPoint)
+            ForEach(dataSet.dataPoints.indices, id: \.self) { index in
+                GroupBarElement(chartData: chartData,
+                                dataPoint: dataSet.dataPoints[index],
+                                fill: dataSet.dataPoints[index].group.colour,
+                                index: index)
+                    .accessibilityLabel(chartData.accessibilityTitle)
             }
         }
     }
 }
 
-
-internal struct GroupedBarCell<ChartData>: View where ChartData: GroupedBarChartData {
+// MARK: - Element
+internal struct GroupBarElement<ChartData>: View where ChartData: CTBarChartDataProtocol & GetDataProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let dataPoint: GroupedBarDataPoint
+    private let fill: ChartColour
+    private let animations = BarElementAnimation()
+    private let index: Double
     
-    init(
+    @State private var fillAnimation: Bool = false
+    @State private var heightAnimation: Bool = false
+    
+    internal init(
         chartData: ChartData,
-        dataPoint: GroupedBarDataPoint
+        dataPoint: GroupedBarDataPoint,
+        fill: ChartColour,
+        index: Int
     ) {
         self.chartData = chartData
         self.dataPoint = dataPoint
+        self.fill = fill
+        self.index = Double(index)
+        
+        let shouldAnimate = chartData.shouldAnimate ? false : true
+        self._heightAnimation = State<Bool>(initialValue: shouldAnimate)
+        self._fillAnimation = State<Bool>(initialValue: shouldAnimate)
     }
     
     internal var body: some View {
-        Group {
-            if dataPoint.group.colour.colourType == .colour,
-               let colour = dataPoint.group.colour.colour
-            {
-                BarElement(chartData: chartData,
-                          dataPoint: dataPoint,
-                          fill: colour)
-                    .accessibilityLabel(chartData.accessibilityTitle)
-            } else if dataPoint.group.colour.colourType == .gradientColour,
-                      let colours = dataPoint.group.colour.colours,
-                      let startPoint = dataPoint.group.colour.startPoint,
-                      let endPoint = dataPoint.group.colour.endPoint
-            {
-                BarElement(chartData: chartData,
-                          dataPoint: dataPoint,
-                          fill: LinearGradient(gradient: Gradient(colors: colours),
-                                               startPoint: startPoint,
-                                               endPoint: endPoint))
-                    .accessibilityLabel(chartData.accessibilityTitle)
-            } else if dataPoint.group.colour.colourType == .gradientStops,
-                      let stops = dataPoint.group.colour.stops,
-                      let startPoint = dataPoint.group.colour.startPoint,
-                      let endPoint = dataPoint.group.colour.endPoint
-            {
-                let safeStops = GradientStop.convertToGradientStopsArray(stops: stops)
-                BarElement(chartData: chartData,
-                          dataPoint: dataPoint,
-                          fill: LinearGradient(gradient: Gradient(stops: safeStops),
-                                               startPoint: startPoint,
-                                               endPoint: endPoint))
-                    .accessibilityLabel(chartData.accessibilityTitle)
-            }
+        GeometryReader { section in
+            RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
+                // Fill
+                .fill(fillAnimation ? fill : animations.fill.startState)
+                .animation(animations.fillAnimation(index),
+                           value: fill)
+                .animateOnAppear(using: animations.fillAnimationStart(index)) {
+                    self.fillAnimation = true
+                }
+
+                // Width
+                .frame(width: BarLayout.barWidth(section.size.width, chartData.barStyle.barWidth))
+                .animation(animations.widthAnimation(index),
+                           value: chartData.barStyle.barWidth)
+            
+                // Height
+                .frame(height: heightAnimation ? BarLayout.barHeight(section.size.height, dataPoint.value, chartData.maxValue) : 0)
+                .offset(heightAnimation ?
+                        BarLayout.barOffset(section.size, chartData.barStyle.barWidth, dataPoint.value, chartData.maxValue) :
+                        BarLayout.barOffset(section.size, chartData.barStyle.barWidth, 0, 0))
+                .animation(animations.heightAnimation(index),
+                           value: dataPoint.value)
+                .animateOnAppear(using: animations.heightAnimationStart(index)) {
+                    self.heightAnimation = true
+                }
         }
+        .onDisappear {
+            self.heightAnimation = false
+            self.fillAnimation = false
+        }
+        .background(Color(.gray).opacity(0.000000001))
+        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+        .id(chartData.id)
     }
-    
 }

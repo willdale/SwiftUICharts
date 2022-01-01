@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreGraphics.CGGeometry
 
 internal struct MarkerData: Hashable {
     internal let id: UUID = UUID()
@@ -29,13 +30,12 @@ internal struct MarkerData: Hashable {
 struct LineMarkerData: Hashable {
     let id: UUID = UUID()
     let markerType: LineMarkerType
-    let location: CTPoint
-    let dataPoints: [Double]
+    let location: CGPoint
+    let dataPoints: [LineChartDataPoint]
     let lineType: LineType
     let lineSpacing: ExtraLineStyle.SpacingType
     let minValue: Double
     let range: Double
-    let ignoreZero: Bool
     
     static func == (lhs: LineMarkerData, rhs: LineMarkerData) -> Bool {
         lhs.id == rhs.id &&
@@ -51,7 +51,7 @@ struct LineMarkerData: Hashable {
 struct BarMarkerData: Hashable {
     let id: UUID = UUID()
     let markerType: BarMarkerType
-    let location: CTPoint
+    let location: CGPoint
     
     static func == (lhs: BarMarkerData, rhs: BarMarkerData) -> Bool {
         lhs.id == rhs.id &&
@@ -61,5 +61,23 @@ struct BarMarkerData: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
         hasher.combine(location)
+    }
+}
+
+extension LineChartDataPoint {
+    init(_ datapoint: ExtraLineDataPoint) {
+        self.init(value: datapoint.value,
+                  description: datapoint.description,
+                  pointColour: datapoint.pointColour,
+                  ignore: datapoint.ignore)
+    }
+}
+
+extension LineChartDataPoint {
+    init(_ datapoint: RangedLineChartDataPoint) {
+        self.init(value: datapoint.value,
+                  description: datapoint.description,
+                  pointColour: datapoint.pointColour,
+                  ignore: datapoint.ignore)
     }
 }

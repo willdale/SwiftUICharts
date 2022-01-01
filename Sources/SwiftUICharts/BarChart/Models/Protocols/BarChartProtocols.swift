@@ -55,12 +55,15 @@ public protocol CTBarChartStyle: CTLineBarChartStyle {}
 public protocol CTBarStyle: CTBarColourProtocol, Hashable {
     /// How much of the available width to use. 0...1
     var barWidth: CGFloat { get set }
+    
     /// Corner radius of the bar shape.
     var cornerRadius: CornerRadius { get set }
+    
     /// Where to get the colour data from.
     var colourFrom: ColourFrom { get set }
+    
     /// Drawing style of the fill.
-    var colour: ColourStyle { get set }
+    var colour: ChartColour { get set }
 }
 
 
@@ -113,7 +116,7 @@ public protocol CTBarDataPointBaseProtocol: CTLineBarDataPointProtocol {}
  */
 public protocol CTBarColourProtocol {
     /// Drawing style of the range fill.
-    var colour: ColourStyle { get set }
+    var colour: ChartColour { get set }
 }
 
 /**

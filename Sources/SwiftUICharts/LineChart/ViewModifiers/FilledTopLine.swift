@@ -10,6 +10,7 @@ import SwiftUI
 /**
  ViewModifier for for laying out point markers.
  */
+@available(*, deprecated, message: "Build in to Filled Line Chart now.")
 internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
     
     @ObservedObject private var chartData: T
@@ -18,6 +19,8 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
     private let minValue: Double
     private let range: Double
     
+    @State private var startAnimation: Bool
+
     internal init(
         chartData: T,
         lineColour: ColourStyle,
@@ -28,9 +31,9 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
         self.strokeStyle = strokeStyle
         self.minValue = chartData.minValue
         self.range = chartData.range
+        
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     internal func body(content: Content) -> some View {
         ZStack {
@@ -40,17 +43,15 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                 {
                     LineShape(dataPoints: chartData.dataSets.dataPoints,
                               lineType: chartData.dataSets.style.lineType,
-                              isFilled: false,
                               minValue: self.minValue,
-                              range: self.range,
-                              ignoreZero: chartData.dataSets.style.ignoreZero)
+                              range: self.range)
                         .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                         .stroke(colour, style: strokeStyle)
                         
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
-                        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                        .onDisappear {
                             self.startAnimation = false
                         }
                 } else if lineColour.colourType == .gradientColour,
@@ -60,10 +61,8 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                 {
                     LineShape(dataPoints: chartData.dataSets.dataPoints,
                               lineType: chartData.dataSets.style.lineType,
-                              isFilled: false,
                               minValue: self.minValue,
-                              range: self.range,
-                              ignoreZero: chartData.dataSets.style.ignoreZero)
+                              range: self.range)
                         .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                         .stroke(LinearGradient(gradient: Gradient(colors: colours),
                                                startPoint: startPoint,
@@ -72,7 +71,7 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
-                        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                        .onDisappear {
                             self.startAnimation = false
                         }
                 } else if lineColour.colourType == .gradientStops,
@@ -80,13 +79,10 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                           let startPoint = lineColour.startPoint,
                           let endPoint = lineColour.endPoint
                 {
-                    let stops = GradientStop.convertToGradientStopsArray(stops: stops)
                     LineShape(dataPoints: chartData.dataSets.dataPoints,
                               lineType: chartData.dataSets.style.lineType,
-                              isFilled: false,
                               minValue: self.minValue,
-                              range: self.range,
-                              ignoreZero: chartData.dataSets.style.ignoreZero)
+                              range: self.range)
                         .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                         .stroke(LinearGradient(gradient: Gradient(stops: stops),
                                                startPoint: startPoint,
@@ -95,7 +91,7 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                         .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
-                        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                        .onDisappear {
                             self.startAnimation = false
                         }
                 }
@@ -136,6 +132,7 @@ extension View {
      - Returns: A  new view containing the chart with point markers.
      
      */
+    @available(*, deprecated, message: "Build in to Filled Line Chart now.")
     public func filledTopLine<T: LineChartData>(
         chartData: T,
         lineColour: ColourStyle = ColourStyle(),

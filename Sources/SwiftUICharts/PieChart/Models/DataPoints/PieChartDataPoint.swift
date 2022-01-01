@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Data for a single segement of a pie chart.
  */
-public struct PieChartDataPoint: CTPieDataPoint {
+public struct PieChartDataPoint: CTPieDataPoint, DataPointDisplayable {
     
     public var id: UUID = UUID()
     public var value: Double

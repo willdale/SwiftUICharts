@@ -1,80 +1,77 @@
 //
-//  BarChartData.swift
+//  FilledLineChartData.swift
 //  
 //
-//  Created by Will Dale on 23/01/2021.
+//  Created by Will Dale on 05/12/2021.
 //
 
 import SwiftUI
 import Combine
 
 /**
- Data for drawing and styling a standard Bar Chart.
+ Data for drawing and styling a single line, line chart.
+ 
+ This model contains the data and styling information for a single line, line chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class BarChartData: CTBarChartDataProtocol, ChartConformance {
+public final class FilledLineChartData: CTLineChartDataProtocol, ChartConformance {
     
     // MARK: Properties
     public let id: UUID = UUID()
     
     public var accessibilityTitle: LocalizedStringKey = ""
     
-    @Published public var dataSets: BarDataSet
+    @Published public var dataSets: FilledLineDataSet
     
     @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
     @Published public var metadata = ChartMetadata()
     
     @Published public var xAxisLabels: [String]?
     @Published public var yAxisLabels: [String]?
-    @Published public var barStyle: BarStyle
-    @Published public var chartStyle: BarChartStyle
-    
+    @Published public var chartStyle: LineChartStyle
     @Published public var legends: [LegendData] = []
     @Published public var viewData: ChartViewData = ChartViewData()
-    @Published public var infoView: InfoViewData<BarChartDataPoint> = InfoViewData()
+    @Published public var infoView: InfoViewData<LineChartDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
     
     @Published public var shouldAnimate: Bool
-        
-    public var noDataText: Text
     
-    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<DataPoint>], Never>()
+    public var noDataText: Text
+
+    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .line, dataSetType: .single)
+
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<LineChartDataPoint>], Never>()
 
     private var internalSubscription: AnyCancellable?
     private var markerData: MarkerData = MarkerData()
     private var internalDataSubscription: AnyCancellable?
-    @Published public var touchPointData: [DataPoint] = []
-    
-    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (.bar, .single)
+    @Published public var touchPointData: [LineChartDataPoint] = []
     
     // MARK: Initializer
-    /// Initialises a standard Bar Chart.
+    /// Initialises a Single Line Chart.
     ///
     /// - Parameters:
-    ///   - dataSets: Data to draw and style the bars.
+    ///   - dataSets: Data to draw and style a line.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
-    ///   - barStyle: Control for the aesthetic of the bar chart.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - shouldAnimate: Whether the chart should be animated.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
-        dataSets: BarDataSet,
+        dataSets: FilledLineDataSet,
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
-        barStyle: BarStyle = BarStyle(),
-        chartStyle: BarChartStyle = BarChartStyle(),
+        chartStyle: LineChartStyle = LineChartStyle(),
         shouldAnimate: Bool = true,
         noDataText: Text = Text("No Data")
     ) {
         self.dataSets = dataSets
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
-        self.barStyle = barStyle
         self.chartStyle = chartStyle
         self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
-                
+
         self.setupLegends()
         self.setupInternalCombine()
     }
@@ -89,21 +86,21 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance {
                                               location: data.location,
                                               dataPoints: extraData.dataPoints.map { LineChartDataPoint($0) },
                                               lineType: extraData.style.lineType,
-                                              lineSpacing: .bar,
+                                              lineSpacing: extraData.style.lineSpacing,
                                               minValue: extraData.minValue,
                                               range: extraData.range)
+                    } else if data.type == .line {
+                        return LineMarkerData(markerType: self.chartStyle.markerType,
+                                              location: data.location,
+                                              dataPoints: self.dataSets.dataPoints,
+                                              lineType: self.dataSets.style.lineType,
+                                              lineSpacing: .line,
+                                              minValue: self.minValue,
+                                              range: self.range)
                     }
                     return nil
                 }
-                let barMarkerData: [BarMarkerData] = $0.compactMap { data in
-                    if data.type == .bar {
-                        return BarMarkerData(markerType: self.chartStyle.markerType,
-                                              location: data.location)
-                    }
-                    return nil
-                }
-                self.markerData =  MarkerData(lineMarkerData: lineMarkerData,
-                                              barMarkerData: barMarkerData)
+                self.markerData =  MarkerData(lineMarkerData: lineMarkerData, barMarkerData: [])
             }
         
         internalDataSubscription = touchedDataPointPublisher
@@ -115,25 +112,24 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance {
         Group {
             switch self.chartStyle.xAxisLabelsFrom {
             case .dataPoint(let angle):
-                HStack(spacing: 0) {
-                    ForEach(dataSets.dataPoints, id: \.id) { data in
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
-                        VStack {
-                            if self.chartStyle.xAxisLabelPosition == .bottom {
-                                RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
-                                Spacer()
-                            } else {
-                                Spacer()
-                                RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
+                
+                GeometryReader { geo in
+                    ZStack {
+                        ForEach(self.dataSets.dataPoints.indices) { i in
+                            if let label = self.dataSets.dataPoints[i].xAxisLabel {
+                                if label != "" {
+                                    TempText(chartData: self, label: label, rotation: angle)
+                                        .frame(width: min(self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize), self.viewData.xAxislabelWidths.min() ?? 0),
+                                               height: self.viewData.xAxisLabelHeights.max() ?? 0)
+                                        .offset(x: CGFloat(i) * (geo.frame(in: .local).width / CGFloat(self.dataSets.dataPoints.count - 1)),
+                                                y: 0)
+                                }
                             }
                         }
-                        .frame(width: self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize),
-                               height: self.viewData.xAxisLabelHeights.max())
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
                     }
                 }
+                .frame(height: self.viewData.xAxisLabelHeights.max())
+                
             case .chartData(let angle):
                 if let labelArray = self.xAxisLabels {
                     HStack(spacing: 0) {
@@ -147,7 +143,7 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance {
                                     RotatedText(chartData: self, label: labelArray[i], rotation: angle)
                                 }
                             }
-                            .frame(width: self.viewData.xAxislabelWidths.max(),
+                            .frame(width: self.viewData.xAxislabelWidths.min(),
                                    height: self.viewData.xAxisLabelHeights.max())
                             if i != labelArray.count - 1 {
                                 Spacer()
@@ -159,12 +155,20 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance {
             }
         }
     }
-    
-    private func getXSection(dataSet: BarDataSet, chartSize: CGRect) -> CGFloat {
-        chartSize.width.divide(by: dataSet.dataPoints.count)
+    private func getXSection(dataSet: FilledLineDataSet, chartSize: CGRect) -> CGFloat {
+         chartSize.width / CGFloat(dataSet.dataPoints.count)
     }
     
-    // MARK: - Touch
+    // MARK: Points
+    public func getPointMarker() -> some View {
+        PointsSubView(chartData: self,
+                      dataSets: dataSets,
+                      minValue: self.minValue,
+                      range: self.range,
+                      animation: self.chartStyle.globalAnimation)
+    }
+
+    // MARK: Touch
     public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         self.infoView.isTouchCurrent = true
         self.infoView.touchLocation = touchLocation
@@ -173,34 +177,37 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance {
     }
     
     private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        let xSection: CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count)
-        let ySection: CGFloat = chartSize.height / CGFloat(dataSets.maxValue())
-        let index: Int = Int((touchLocation.x) / xSection)
+        var values: [PublishedTouchData<DataPoint>] = []
+        
+        let xSection = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
+        let ySection = chartSize.height / CGFloat(range)
+        
+        let index = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
             let datapoint = dataSets.dataPoints[index]
-            let location = CGPoint(x: (CGFloat(index) * xSection) + (xSection / 2),
-                                            y: (chartSize.size.height - CGFloat(dataSets.dataPoints[index].value) * ySection))
-            
-            var values: [PublishedTouchData<DataPoint>] = []
-            values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
+//            if !datapoint.ignore {
+                let location = CGPoint(x: CGFloat(index) * xSection,
+                                       y: (CGFloat(datapoint.value - minValue) * -ySection) + chartSize.height)
+                values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
+//            }
             
             if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
                let location = extraLine.location,
-               let value = extraLine.value,
-               let description = extraLine.description,
-               let _legendTag = extraLine._legendTag
+               let value = extraLine.value
             {
-                var datapoint = DataPoint(value: value, description: description)
-                datapoint._legendTag = _legendTag
+                var datapoint = DataPoint(value: value, description: extraLine.description ?? "")
+                datapoint._legendTag = extraLine._legendTag ?? ""
                 values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
             }
             
             touchedDataPointPublisher.send(values)
         }
     }
-
+    
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        markerSubView(markerData: markerData, touchLocation: touchLocation, chartSize: chartSize)
+        markerSubView(markerData: markerData,
+                      chartSize: chartSize,
+                      touchLocation: touchLocation)
     }
     
     public func touchDidFinish() {
@@ -208,40 +215,33 @@ public final class BarChartData: CTBarChartDataProtocol, ChartConformance {
         infoView.isTouchCurrent = false
     }
     
-    public typealias SetType = BarDataSet
-    public typealias DataPoint = BarChartDataPoint
-    public typealias CTStyle = BarChartStyle
-    
     // MARK: Deprecated
-    /// Initialises a standard Bar Chart.
+    /// Initialises a Single Line Chart.
     ///
     /// - Parameters:
-    ///   - dataSets: Data to draw and style the bars.
+    ///   - dataSets: Data to draw and style a line.
     ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
-    ///   - barStyle: Control for the aesthetic of the bar chart.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     @available(*, deprecated, message: "Please set use other init instead.")
     public init(
-        dataSets: BarDataSet,
+        dataSets: LineDataSet,
         metadata: ChartMetadata,
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
-        barStyle: BarStyle = BarStyle(),
-        chartStyle: BarChartStyle = BarChartStyle(),
+        chartStyle: LineChartStyle = LineChartStyle(),
         noDataText: Text = Text("No Data")
     ) {
-        self.dataSets = dataSets
+        self.dataSets = FilledLineDataSet(dataPoints: [LineChartDataPoint(value: 0)])
         self.metadata = metadata
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
-        self.barStyle = barStyle
         self.chartStyle = chartStyle
         self.shouldAnimate = true
         self.noDataText = noDataText
-        
+
         self.setupLegends()
         self.setupInternalCombine()
     }

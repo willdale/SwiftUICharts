@@ -15,7 +15,7 @@ public struct BarStyle: CTBarStyle {
     public var barWidth: CGFloat
     public var cornerRadius: CornerRadius
     public var colourFrom: ColourFrom
-    public var colour: ColourStyle
+    public var colour: ChartColour
     
     // MARK: - Single colour
     /// Bar Chart with single colour
@@ -28,7 +28,7 @@ public struct BarStyle: CTBarStyle {
         barWidth: CGFloat = 1,
         cornerRadius: CornerRadius = CornerRadius(top: 5.0, bottom: 0.0),
         colourFrom: ColourFrom = .barStyle,
-        colour: ColourStyle = ColourStyle(colour: .red)
+        colour: ChartColour = .colour(colour: .red)
     ) {
         self.barWidth = barWidth
         self.cornerRadius = cornerRadius

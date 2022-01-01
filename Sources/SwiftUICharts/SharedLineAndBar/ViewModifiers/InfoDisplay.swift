@@ -7,18 +7,22 @@
 
 import SwiftUI
 
+// MARK: - Protocols
+/// Required chart data protocols for displaying touched data
 public typealias InfoData = CTChartData & Publishable & TouchInfoDisplayable
 
+/// Type for creating a View to display data when touched
 public protocol InfoDisplayable {
+    associatedtype ChartData: InfoData
     associatedtype Content: View
-    associatedtype Data: InfoData
     
-    var chartData: Data { get set }
+    var chartData: ChartData { get set }
     var content: Content { get }
 }
 
 internal struct InfoDisplay<ChartData, Info>: ViewModifier
-where ChartData: InfoData, Info: InfoDisplayable {
+where ChartData: InfoData,
+      Info: InfoDisplayable {
     
     @ObservedObject private var chartData: ChartData
     internal var infoView: Info
@@ -113,7 +117,9 @@ extension View {
         infoView: Info,
         position: @escaping (_ touchLocation: CGPoint, _ chartSize: CGRect) -> CGPoint
     ) -> some View
-    where ChartData: InfoData, Info: InfoDisplayable {
+    where ChartData: InfoData,
+          Info: InfoDisplayable
+    {
         self.modifier(InfoDisplay(chartData: chartData, infoView: infoView, position: position))
     }
     
@@ -137,12 +143,13 @@ extension View {
     /// - Returns: A  view to display data corresponding to the location of touch input.
     @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
     public func infoDisplay<ChartData, S>(
-       _ infoBox: InfoBoxType<ChartData>,
-       style: InfoBoxStyle = .bordered,
-       shape: S = RoundedRectangle(cornerRadius: 5.0, style: .continuous) as! S
+        _ infoBox: InfoBoxType<ChartData>,
+        style: InfoBoxStyle = .bordered,
+        shape: S = RoundedRectangle(cornerRadius: 5.0, style: .continuous) as! S
     ) -> some View
     where ChartData: InfoData,
-          S: Shape {
+          S: Shape
+    {
         infoBox.modifier(of: self, with: style, and: shape)
     }
     

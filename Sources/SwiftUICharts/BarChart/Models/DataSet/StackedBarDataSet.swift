@@ -39,6 +39,12 @@ public struct StackedBarDataSet: CTMultiBarChartDataSet {
         self.setTitle = setTitle
     }
     
+    var totalSetValue: Double {
+        self.dataPoints
+            .map(\.value)
+            .reduce(0, +)
+    }
+    
     public typealias ID = UUID
     public typealias DataPoint = StackedBarDataPoint
 }
