@@ -1,6 +1,6 @@
 //
-//  Extensions.swift
-//  LineChart
+//  View+Helper.swift
+//  SwiftUI Charts
 //
 //  Created by Will Dale on 02/01/2021.
 //
