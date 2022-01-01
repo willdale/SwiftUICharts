@@ -8,7 +8,7 @@
 import SwiftUI
 
 // MARK: - View
-internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
+internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol & ExtraLineProtocol {
     
     @ObservedObject private var chartData: T
     
@@ -110,7 +110,7 @@ extension View {
         - style: Styling data for the line.
      - Returns: The chart with an extra line stacked on top.
      */
-    public func extraLine<T: CTLineBarChartDataProtocol>(
+    public func extraLine<T: CTLineBarChartDataProtocol & ExtraLineProtocol>(
         chartData: T,
         legendTitle: String,
         datapoints: @escaping () -> ([ExtraLineDataPoint]),
@@ -136,7 +136,7 @@ extension View {
         - style: Styling data for the line.
      - Returns: The chart with an extra line stacked on top.
      */
-    public func extraLine<T: CTLineBarChartDataProtocol>(
+    public func extraLine<T: CTLineBarChartDataProtocol & ExtraLineProtocol>(
         chartData: T,
         legendTitle: String,
         datapoints: @autoclosure @escaping () -> ([ExtraLineDataPoint]),
@@ -151,7 +151,7 @@ extension View {
 }
 
 // MARK: - Colour
-internal struct ColourExtraLineView<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
+internal struct ColourExtraLineView<ChartData>: View where ChartData: CTLineBarChartDataProtocol & ExtraLineProtocol {
     
     @ObservedObject private var chartData: ChartData
     let colour: Color
@@ -192,7 +192,7 @@ internal struct ColourExtraLineView<ChartData>: View where ChartData: CTLineBarC
 }
 
 // MARK: - Colours
-internal struct ColoursExtraLineView<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
+internal struct ColoursExtraLineView<ChartData>: View where ChartData: CTLineBarChartDataProtocol & ExtraLineProtocol {
     
     @ObservedObject private var chartData: ChartData
     let colours: [Color]
@@ -244,7 +244,7 @@ internal struct ColoursExtraLineView<ChartData>: View where ChartData: CTLineBar
 }
 
 // MARK: - Stops
-internal struct StopsExtraLineView<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
+internal struct StopsExtraLineView<ChartData>: View where ChartData: CTLineBarChartDataProtocol & ExtraLineProtocol {
     
     @ObservedObject private var chartData: ChartData
     let stops: [Gradient.Stop]
@@ -296,7 +296,7 @@ internal struct StopsExtraLineView<ChartData>: View where ChartData: CTLineBarCh
 }
 
 // MARK: - Points
-internal struct PointsExtraLineView<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
+internal struct PointsExtraLineView<ChartData>: View where ChartData: CTLineBarChartDataProtocol & ExtraLineProtocol {
     
     @ObservedObject private var chartData: ChartData
     
@@ -349,7 +349,7 @@ internal struct PointsExtraLineView<ChartData>: View where ChartData: CTLineBarC
 }
 
 // MARK: - Filled Data Point
-internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
+internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: CTLineBarChartDataProtocol & ExtraLineProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let dataPoint: ExtraLineDataPoint
@@ -423,7 +423,7 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
 }
 
 // MARK: - OutLine DataPoint
-internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: CTLineBarChartDataProtocol {
+internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: CTLineBarChartDataProtocol & ExtraLineProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let dataPoint: ExtraLineDataPoint

@@ -10,32 +10,10 @@ import SwiftUI
 public protocol Colourable: Equatable {}
 
 // MARK: - Chart Data
-/**
- A protocol to extend functionality of `CTChartData` specifically for Line and Bar Charts.
- */
-public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBarChartStyle {
-    /**
-     A data model for the `ExtraLine` View Modifier
-    */
-    var extraLineData: ExtraLineData! { get set }
-    
-    /**
-     A type representing a View for displaying second set of labels on the Y axis.
-    */
-    associatedtype ExtraYLabels: View
-    
-    /**
-     View for displaying second set of labels on the Y axis.
-    */
-    func getExtraYAxisLabels() -> ExtraYLabels
-}
-
-
+public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBarChartStyle {}
 
 // MARK: - Style
-/**
- A protocol to get the correct touch overlay marker.
- */
+/// A protocol to get the correct touch overlay marker.
 public protocol MarkerType {}
 
 /**

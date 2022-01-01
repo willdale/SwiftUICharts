@@ -33,4 +33,3 @@ public struct ExtraLineDataPoint: CTStandardLineDataPoint, Hashable, Identifiabl
     public var xAxisLabel: String? = ""
     public var _legendTag: String = ""
 }
-

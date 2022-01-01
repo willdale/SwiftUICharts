@@ -30,13 +30,13 @@ internal struct ExtraYAxisLabels<T>: ViewModifier where T: CTLineBarChartDataPro
             case .leading:
                 HStack(spacing: 0) {
                     content
-                    chartData.getExtraYAxisLabels().padding(.leading, 4)
-                    chartData.getExtraYAxisTitle(colour: colourIndicator)
+//                    chartData.getExtraYAxisLabels().padding(.leading, 4)
+//                    chartData.getExtraYAxisTitle(colour: colourIndicator)
                 }
             case .trailing:
                 HStack(spacing: 0) {
-                    chartData.getExtraYAxisTitle(colour: colourIndicator)
-                    chartData.getExtraYAxisLabels().padding(.trailing, 4)
+//                    chartData.getExtraYAxisTitle(colour: colourIndicator)
+//                    chartData.getExtraYAxisLabels().padding(.trailing, 4)
                     content
                 }
             }
