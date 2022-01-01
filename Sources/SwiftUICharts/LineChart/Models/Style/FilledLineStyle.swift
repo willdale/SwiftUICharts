@@ -1,18 +1,16 @@
 //
-//  LineStyle.swift
-//  LineChart
+//  FilledLineStyle.swift
+//  
 //
-//  Created by Will Dale on 31/12/2020.
+//  Created by Will Dale on 05/12/2021.
 //
 
 import SwiftUI
 
-/**
- Model for controlling the styling for individual lines.
- */
-public struct LineStyle: CTLineStyle, Hashable {
+public struct FilledLineStyle: CTLineStyle, Hashable {
 
     public var lineColour: ChartColour
+    public var fillColour: ChartColour
     public var lineType: LineType
     public var strokeStyle: StrokeStyle
     
@@ -24,10 +22,12 @@ public struct LineStyle: CTLineStyle, Hashable {
     ///   - strokeStyle: Stroke Style
     public init(
         lineColour: ChartColour = .colour(colour: .red),
+        fillColour: ChartColour = .gradient(colours: [Color.red.opacity(0.50),Color.red.opacity(0.00)], startPoint: .top, endPoint: .bottom),
         lineType: LineType = .curvedLine,
         strokeStyle: StrokeStyle = StrokeStyle()
     ) {
         self.lineColour = lineColour
+        self.fillColour = fillColour
         self.lineType = lineType
         self.strokeStyle = strokeStyle
     }

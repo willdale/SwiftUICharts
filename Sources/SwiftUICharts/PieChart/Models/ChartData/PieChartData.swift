@@ -30,6 +30,8 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable,
     @Published public var legends: [LegendData] = []
     @Published public var infoView: InfoViewData<PieChartDataPoint> = InfoViewData()
     
+    @Published public var shouldAnimate: Bool
+    
     public var noDataText: Text
 
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .pie, dataSetType: .single)
@@ -44,14 +46,18 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable,
     /// - Parameters:
     ///   - dataSets: Data to draw and style the chart.
     ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - shouldAnimate: Whether the chart should be animated.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: PieDataSet,
         chartStyle: PieChartStyle = PieChartStyle(),
+        shouldAnimate: Bool = true,
         noDataText: Text = Text("No Data")
     ) {
         self.dataSets = dataSets
         self.chartStyle = chartStyle
+        self.shouldAnimate = shouldAnimate
+        self.shouldAnimate = true
         self.noDataText = noDataText
         
         self.setupLegends()
@@ -110,6 +116,7 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable,
         self.dataSets = dataSets
         self.metadata = metadata
         self.chartStyle = chartStyle
+        self.shouldAnimate = true
         self.noDataText = noDataText
         
         self.setupLegends()

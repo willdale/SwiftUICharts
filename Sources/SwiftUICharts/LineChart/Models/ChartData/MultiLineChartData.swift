@@ -33,6 +33,8 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     @Published public var viewData: ChartViewData = ChartViewData()
     @Published public var infoView: InfoViewData<LineChartDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
+    
+    @Published public var shouldAnimate: Bool
         
     public var noDataText: Text
     
@@ -53,18 +55,21 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
     ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - shouldAnimate: Whether the chart should be animated.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: MultiLineDataSet,
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
         chartStyle: LineChartStyle = LineChartStyle(),
+        shouldAnimate: Bool = true,
         noDataText: Text = Text("No Data")
     ) {
         self.dataSets = dataSets
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
         self.chartStyle = chartStyle
+        self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         
         self.setupLegends()
@@ -79,25 +84,23 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
                     if data.type == .extraLine,
                        let extraData = self.extraLineData {
                         let extraLineMarkerData = LineMarkerData(markerType: extraData.style.markerType,
-                                                                 location: data.location.convert,
-                                                                 dataPoints: extraData.dataPoints.map(\.value),
+                                                                 location: data.location,
+                                                                 dataPoints: extraData.dataPoints.map { LineChartDataPoint($0) },
                                                                  lineType: extraData.style.lineType,
                                                                  lineSpacing: .bar,
                                                                  minValue: extraData.minValue,
-                                                                 range: extraData.range,
-                                                                 ignoreZero: false)
+                                                                 range: extraData.range)
                         lineMarkerData.append(extraLineMarkerData)
                     } else if data.type == .line {
                         let location = data.location
                         let lineData = self.dataSets.dataSets.compactMap { dataSet in
                             return LineMarkerData(markerType: self.chartStyle.markerType,
-                                                  location: location.convert,
-                                                  dataPoints: dataSet.dataPoints.map(\.value),
+                                                  location: location,
+                                                  dataPoints: dataSet.dataPoints,
                                                   lineType: dataSet.style.lineType,
                                                   lineSpacing: .line,
                                                   minValue: self.minValue,
-                                                  range: self.range,
-                                                  ignoreZero: false)
+                                                  range: self.range)
                         }
                         lineMarkerData.append(contentsOf: lineData)
                     }
@@ -167,11 +170,11 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     // MARK: Points
     public func getPointMarker() -> some View {
         ForEach(self.dataSets.dataSets, id: \.id) { dataSet in
-            PointsSubView(dataSets: dataSet,
+            PointsSubView(chartData: self,
+                          dataSets: dataSet,
                           minValue: self.minValue,
                           range: self.range,
-                          animation: self.chartStyle.globalAnimation,
-                          isFilled: false)
+                          animation: self.chartStyle.globalAnimation)
         }
     }
     
@@ -186,27 +189,21 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
         let data: [PublishedTouchData<LineChartDataPoint>] = dataSets.dataSets.compactMap { dataSet in
-            let xSection: CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
-            let ySection: CGFloat = chartSize.height / CGFloat(range)
+            let xSection = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
+            let ySection = chartSize.height / CGFloat(range)
             let index = Int((touchLocation.x + (xSection / 2)) / xSection)
             
             var location: CGPoint = .zero
             var datapoint: LineChartDataPoint = LineChartDataPoint(value: 0)
             
             if index >= 0 && index < dataSet.dataPoints.count {
-                
-                if !dataSet.style.ignoreZero {
+                if !dataSet.dataPoints[index].ignore {
                     location = CGPoint(x: CGFloat(index) * xSection,
                                        y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
                     datapoint = dataSet.dataPoints[index]
                     datapoint._legendTag = dataSet.legendTitle
                 } else {
-                    if dataSet.dataPoints[index].value != 0 {
-                        location = CGPoint(x: CGFloat(index) * xSection,
-                                           y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
-                        datapoint = dataSet.dataPoints[index]
-                        datapoint._legendTag = dataSet.legendTitle
-                    }
+                    return nil
                 }
             }
             return PublishedTouchData(datapoint: datapoint, location: location, type: .line)
@@ -267,7 +264,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
     @available(*, deprecated, message: "Please set use other init instead.")
     public init(
         dataSets: MultiLineDataSet,
-        metadata: ChartMetadata = ChartMetadata(),
+        metadata: ChartMetadata,
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
         chartStyle: LineChartStyle = LineChartStyle(),
@@ -278,6 +275,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, ChartConformance
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
         self.chartStyle = chartStyle
+        self.shouldAnimate = true
         self.noDataText = noDataText
         
         self.setupLegends()

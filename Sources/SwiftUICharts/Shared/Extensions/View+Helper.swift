@@ -1,6 +1,6 @@
 //
-//  Extensions.swift
-//  LineChart
+//  View+Helper.swift
+//  SwiftUI Charts
 //
 //  Created by Will Dale on 02/01/2021.
 //
@@ -57,22 +57,6 @@ extension View {
             }
         }
     }
-    
-    /**
-     Reverse animation when the view disappears.
-     
-     [HWS](https://www.hackingwithswift.com/quick-start/swiftui/how-to-start-an-animation-immediately-after-a-view-appears)
-     */
-    func animateOnDisappear(
-        using animation: Animation = Animation.easeInOut(duration: 1),
-        _ action: @escaping () -> Void
-    ) -> some View {
-        return onDisappear {
-            withAnimation(animation) {
-                action()
-            }
-        }
-    }
 }
 
 extension Double {
@@ -117,6 +101,10 @@ extension Color {
         return Color(.windowBackgroundColor)
         #endif
     }
+}
+
+extension Collection {
+    func distance(to index: Index) -> Int { distance(from: startIndex, to: index) }
 }
 
 // MARK: - Global Functions

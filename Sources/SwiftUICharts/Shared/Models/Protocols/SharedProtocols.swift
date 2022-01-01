@@ -66,6 +66,8 @@ public protocol CTChartData: ObservableObject, Identifiable {
      Customisable `Text` to display when where is not enough data to draw the chart.
      */
     var noDataText: Text { get set }
+    
+    var shouldAnimate: Bool { get set }
 
     
     /**
@@ -134,7 +136,7 @@ public protocol CTDataPointBaseProtocol: Hashable, Identifiable {
     /**
      Date can be used for optionally performing additional calculations.
      */
-    var date: Date? { get set }
+//    var date: Date? { get set }
     
     /**
      Internal property that has to be exposed publicly through the protocol.
@@ -153,6 +155,7 @@ public protocol CTDataPointBaseProtocol: Hashable, Identifiable {
      - Parameter specifier: Specifier
      - Returns: Value as a string.
      */
+    @available(*, deprecated, message: "")
     func valueAsString(specifier: String) -> String
 }
 

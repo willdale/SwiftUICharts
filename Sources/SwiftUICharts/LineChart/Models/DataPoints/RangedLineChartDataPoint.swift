@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Data for a single ranged data point.
  */
-public struct RangedLineChartDataPoint: CTRangedLineDataPoint, IgnoreMe {
+public struct RangedLineChartDataPoint: CTRangedLineDataPoint, Ignorable, DataPointDisplayable {
     
     public let id: UUID = UUID()
     public var value: Double
@@ -21,7 +21,7 @@ public struct RangedLineChartDataPoint: CTRangedLineDataPoint, IgnoreMe {
     public var date: Date?
     public var pointColour: PointColour?
     
-    public var ignoreMe: Bool = false
+    public var ignore: Bool = false
     
     public var _legendTag: String = ""
     
@@ -43,7 +43,8 @@ public struct RangedLineChartDataPoint: CTRangedLineDataPoint, IgnoreMe {
         xAxisLabel: String? = nil,
         description: String? = nil,
         date: Date? = nil,
-        pointColour: PointColour? = nil
+        pointColour: PointColour? = nil,
+        ignore: Bool = false
     ) {
         self.value = value
         self.upperValue = upperValue
@@ -52,6 +53,7 @@ public struct RangedLineChartDataPoint: CTRangedLineDataPoint, IgnoreMe {
         self.description = description
         self.date = date
         self.pointColour = pointColour
+        self.ignore = ignore
     }
 }
 

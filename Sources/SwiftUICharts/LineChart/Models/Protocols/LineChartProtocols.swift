@@ -48,23 +48,14 @@ public protocol CTLineStyle {
     var lineType: LineType { get set }
     
     /// Colour styling of the line.
-    var lineColour: ColourStyle { get set }
+    var lineColour: ChartColour { get set }
     
     /**
      Styling for stroke 
      
      Replica of Apple’s StrokeStyle that conforms to Hashable
      */
-    var strokeStyle: Stroke { get set }
-    
-    /**
-     Whether the chart should skip data points who's value is 0.
-     
-     This might be useful when showing trends over time but each day does not necessarily have data.
-     
-     The default is false.
-     */
-    var ignoreZero: Bool { get set }
+    var strokeStyle: StrokeStyle { get set }
 }
 
 /**
@@ -72,7 +63,7 @@ public protocol CTLineStyle {
  */
 public protocol CTRangedLineStyle: CTLineStyle {
     /// Drawing style of the range fill.
-    var fillColour: ColourStyle { get set }
+    var fillColour: ChartColour { get set }
 }
 
 
@@ -144,6 +135,6 @@ public protocol CTRangedLineDataPoint: CTLineDataPointProtocol, CTStandardDataPo
 
 
 
-public protocol IgnoreMe {
-    var ignoreMe: Bool { get set }
+public protocol Ignorable {
+    var ignore: Bool { get set }
 }

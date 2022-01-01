@@ -10,16 +10,15 @@ import SwiftUI
 /**
  Data for a single data point.
  */
-public struct LineChartDataPoint: CTStandardLineDataPoint, IgnoreMe {
+public struct LineChartDataPoint: CTStandardLineDataPoint, Ignorable, DataPointDisplayable {
     
     public let id: UUID = UUID()
     public var value: Double
     public var xAxisLabel: String?
     public var description: String?
-    public var date: Date?
     public var pointColour: PointColour?
     
-    public var ignoreMe: Bool = false
+    public var ignore: Bool
     
     public var _legendTag: String = ""
         
@@ -34,13 +33,13 @@ public struct LineChartDataPoint: CTStandardLineDataPoint, IgnoreMe {
         value: Double,
         xAxisLabel: String? = nil,
         description: String? = nil,
-        date: Date? = nil,
-        pointColour: PointColour? = nil
+        pointColour: PointColour? = nil,
+        ignore: Bool = false
     ) {
         self.value = value
         self.xAxisLabel = xAxisLabel
         self.description = description
-        self.date = date
         self.pointColour = pointColour
+        self.ignore = ignore
     }
 }

@@ -12,14 +12,14 @@ import SwiftUI
  
  Colour can be solid or gradient.
  */
-public struct BarChartDataPoint: CTStandardBarDataPoint {
+public struct BarChartDataPoint: CTStandardBarDataPoint, DataPointDisplayable {
     
     public let id = UUID()
     public var value: Double
     public var xAxisLabel: String?
     public var description: String?
     public var date: Date?
-    public var colour: ColourStyle
+    public var colour: ChartColour
     
     public var _legendTag: String = ""
     
@@ -36,7 +36,7 @@ public struct BarChartDataPoint: CTStandardBarDataPoint {
         xAxisLabel: String? = nil,
         description: String? = nil,
         date: Date? = nil,
-        colour: ColourStyle = ColourStyle(colour: .red)
+        colour: ChartColour = .colour(colour: .red)
     ) {
         self.value = value
         self.xAxisLabel = xAxisLabel

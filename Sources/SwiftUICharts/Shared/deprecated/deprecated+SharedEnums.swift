@@ -1,44 +1,11 @@
 //
-//  Enums.swift
+//  deprecated+SharedEnums.swift
 //  
 //
 //  Created by Will Dale on 10/01/2021.
 //
 
 import Foundation
-
-// MARK: - ChartViewData
-/**
- The type of `DataSet` being used
- ```
- case single // Single data set - i.e LineDataSet
- case multi // Multi data set - i.e MultiLineDataSet
- ```
- */
-public enum DataSetType {
-    case single
-    case multi
-}
-
-/**
- The type of chart being used.
- ```
- case line // Line Chart Type
- case bar // Bar Chart Type
- case pie // Pie Chart Type
- case extraLine // Extra Line Type
- ```
- */
-public enum ChartType {
-    /// Line Chart Type
-    case line
-    /// Bar Chart Type
-    case bar
-    /// Pie Chart Type
-    case pie
-    /// Extra Line Type
-    case extraLine
-}
 
 // MARK: - Style
 /**
@@ -49,6 +16,7 @@ public enum ChartType {
  case gradientStops // Colour Gradient with stop control
  ```
  */
+@available(*, deprecated, message: "Please use \"ChartColour\" instead.")
 public enum ColourType {
     /// Single Colour
     case colour
@@ -104,6 +72,7 @@ public enum InfoBoxAlignment {
  case suffix(of: String) // After value
  ```
  */
+@available(*, deprecated, message: "Now done using Number Formatter")
 public enum TouchUnit {
     /// No units
     case none

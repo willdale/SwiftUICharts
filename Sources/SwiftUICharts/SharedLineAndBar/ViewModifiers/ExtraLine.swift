@@ -12,6 +12,8 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     
     @ObservedObject private var chartData: T
     
+    @State private var startAnimation: Bool
+    
     init(
         chartData: T,
         legendTitle: String,
@@ -19,42 +21,35 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
         style: @escaping ()->(ExtraLineStyle)
     ) {
         self.chartData = chartData
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
+
         self.chartData.extraLineData = ExtraLineData(legendTitle: legendTitle,
                                                      dataPoints: datapoints,
                                                      style: style)
         self.lineLegendSetup()
     }
     
-    @State private var startAnimation: Bool = false
-    
     internal func body(content: Content) -> some View {
         Group {
             if chartData.isGreaterThanTwo() {
                 ZStack {
-                    if chartData.extraLineData.style.lineColour.colourType == .colour,
-                       let colour = chartData.extraLineData.style.lineColour.colour
-                    {
-                        Group {
-                            ColourExtraLineView(chartData: chartData, colour: colour)
-                            PointsExtraLineView(chartData: chartData)
-                        }
-                    } else if chartData.extraLineData.style.lineColour.colourType == .gradientColour,
-                              let colours = chartData.extraLineData.style.lineColour.colours,
-                              let startPoint = chartData.extraLineData.style.lineColour.startPoint,
-                              let endPoint = chartData.extraLineData.style.lineColour.endPoint
-                    {
-                        Group {
-                            ColoursExtraLineView(chartData: chartData, colours: colours, startPoint: startPoint, endPoint: endPoint)
-                            PointsExtraLineView(chartData: chartData)
-                        }
-                    } else if chartData.extraLineData.style.lineColour.colourType == .gradientStops,
-                              let stops = chartData.extraLineData.style.lineColour.stops,
-                              let startPoint = chartData.extraLineData.style.lineColour.startPoint,
-                              let endPoint = chartData.extraLineData.style.lineColour.endPoint
-                    {
-                        Group {
-                            StopsExtraLineView(chartData: chartData, stops: stops, startPoint: startPoint, endPoint: endPoint)
-                            PointsExtraLineView(chartData: chartData)
+                    Group {
+                        switch chartData.extraLineData.style.lineColour {
+                        case let .colour(colour):
+                            Group {
+                                ColourExtraLineView(chartData: chartData, colour: colour)
+                                PointsExtraLineView(chartData: chartData)
+                            }
+                        case let .gradient(colours, startPoint, endPoint):
+                            Group {
+                                ColoursExtraLineView(chartData: chartData, colours: colours, startPoint: startPoint, endPoint: endPoint)
+                                PointsExtraLineView(chartData: chartData)
+                            }
+                        case let .gradientStops(stops, startPoint, endPoint):
+                            Group {
+                                StopsExtraLineView(chartData: chartData, stops: stops, startPoint: startPoint, endPoint: endPoint)
+                                PointsExtraLineView(chartData: chartData)
+                            }
                         }
                     }
                     content
@@ -64,38 +59,38 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
     }
     
     private func lineLegendSetup() {
-        if self.chartData.extraLineData.style.lineColour.colourType == .colour,
-           let colour = self.chartData.extraLineData.style.lineColour.colour
-        {
-            chartData.legends.append(LegendData(id: self.chartData.extraLineData.id,
-                                                legend: self.chartData.extraLineData.legendTitle,
-                                                colour: ColourStyle(colour: colour),
-                                                strokeStyle: self.chartData.extraLineData.style.strokeStyle,
-                                                prioity: 3,
-                                                chartType: .line))
-        } else if self.chartData.extraLineData.style.lineColour.colourType == .gradientColour,
-                  let colours = self.chartData.extraLineData.style.lineColour.colours
-        {
-            chartData.legends.append(LegendData(id: self.chartData.extraLineData.id,
-                                                legend: self.chartData.extraLineData.legendTitle,
-                                                colour: ColourStyle(colours: colours,
-                                                                    startPoint: .leading,
-                                                                    endPoint: .trailing),
-                                                strokeStyle: self.chartData.extraLineData.style.strokeStyle,
-                                                prioity: 3,
-                                                chartType: .line))
-        } else if self.chartData.extraLineData.style.lineColour.colourType == .gradientStops,
-                  let stops = self.chartData.extraLineData.style.lineColour.stops
-        {
-            chartData.legends.append(LegendData(id: self.chartData.extraLineData.id,
-                                                legend: self.chartData.extraLineData.legendTitle,
-                                                colour: ColourStyle(stops: stops,
-                                                                    startPoint: .leading,
-                                                                    endPoint: .trailing),
-                                                strokeStyle: self.chartData.extraLineData.style.strokeStyle,
-                                                prioity: 3,
-                                                chartType: .line))
-        }
+//        if self.chartData.extraLineData.style.lineColour.colourType == .colour,
+//           let colour = self.chartData.extraLineData.style.lineColour.colour
+//        {
+//            chartData.legends.append(LegendData(id: self.chartData.extraLineData.id,
+//                                                legend: self.chartData.extraLineData.legendTitle,
+//                                                colour: ColourStyle(colour: colour),
+//                                                strokeStyle: self.chartData.extraLineData.style.strokeStyle,
+//                                                prioity: 3,
+//                                                chartType: .line))
+//        } else if self.chartData.extraLineData.style.lineColour.colourType == .gradientColour,
+//                  let colours = self.chartData.extraLineData.style.lineColour.colours
+//        {
+//            chartData.legends.append(LegendData(id: self.chartData.extraLineData.id,
+//                                                legend: self.chartData.extraLineData.legendTitle,
+//                                                colour: ColourStyle(colours: colours,
+//                                                                    startPoint: .leading,
+//                                                                    endPoint: .trailing),
+//                                                strokeStyle: self.chartData.extraLineData.style.strokeStyle,
+//                                                prioity: 3,
+//                                                chartType: .line))
+//        } else if self.chartData.extraLineData.style.lineColour.colourType == .gradientStops,
+//                  let stops = self.chartData.extraLineData.style.lineColour.stops
+//        {
+//            chartData.legends.append(LegendData(id: self.chartData.extraLineData.id,
+//                                                legend: self.chartData.extraLineData.legendTitle,
+//                                                colour: ColourStyle(stops: stops,
+//                                                                    startPoint: .leading,
+//                                                                    endPoint: .trailing),
+//                                                strokeStyle: self.chartData.extraLineData.style.strokeStyle,
+//                                                prioity: 3,
+//                                                chartType: .line))
+//        }
     }
 }
 
@@ -161,19 +156,20 @@ internal struct ColourExtraLineView<ChartData>: View where ChartData: CTLineBarC
     @ObservedObject private var chartData: ChartData
     let colour: Color
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: ChartData,
         colour: Color
     ) {
         self.chartData = chartData
         self.colour = colour
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     var body: some View {
         
-        ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints.map(\.value),
+        ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints,
                        lineType: chartData.extraLineData.style.lineType,
                        lineSpacing: chartData.extraLineData.style.lineSpacing,
                        range: chartData.extraLineData.range,
@@ -188,7 +184,7 @@ internal struct ColourExtraLineView<ChartData>: View where ChartData: CTLineBarC
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .onDisappear {
                 self.startAnimation = false
             }
             .zIndex(1)
@@ -203,6 +199,8 @@ internal struct ColoursExtraLineView<ChartData>: View where ChartData: CTLineBar
     let startPoint: UnitPoint
     let endPoint: UnitPoint
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: ChartData,
         colours: [Color],
@@ -213,12 +211,11 @@ internal struct ColoursExtraLineView<ChartData>: View where ChartData: CTLineBar
         self.colours = colours
         self.startPoint = startPoint
         self.endPoint = endPoint
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
     
-    @State private var startAnimation: Bool = false
-    
     var body: some View {
-        ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints.map(\.value),
+        ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints,
                        lineType: chartData.extraLineData.style.lineType,
                        lineSpacing: chartData.extraLineData.style.lineSpacing,
                        range: chartData.extraLineData.range,
@@ -240,7 +237,7 @@ internal struct ColoursExtraLineView<ChartData>: View where ChartData: CTLineBar
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .onDisappear {
                 self.startAnimation = false
             }
     }
@@ -254,22 +251,23 @@ internal struct StopsExtraLineView<ChartData>: View where ChartData: CTLineBarCh
     let startPoint: UnitPoint
     let endPoint: UnitPoint
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: ChartData,
-        stops: [GradientStop],
+        stops: [Gradient.Stop],
         startPoint: UnitPoint,
         endPoint: UnitPoint
     ) {
         self.chartData = chartData
-        self.stops = GradientStop.convertToGradientStopsArray(stops: stops)
+        self.stops = stops
         self.startPoint = startPoint
         self.endPoint = endPoint
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
     
-    @State private var startAnimation: Bool = false
-    
     var body: some View {
-        ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints.map(\.value),
+        ExtraLineShape(dataPoints: chartData.extraLineData.dataPoints,
                        lineType: chartData.extraLineData.style.lineType,
                        lineSpacing: chartData.extraLineData.style.lineSpacing,
                        range: chartData.extraLineData.range,
@@ -290,7 +288,7 @@ internal struct StopsExtraLineView<ChartData>: View where ChartData: CTLineBarCh
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .onDisappear {
                 self.startAnimation = false
             }
             .zIndex(1)
@@ -302,13 +300,14 @@ internal struct PointsExtraLineView<ChartData>: View where ChartData: CTLineBarC
     
     @ObservedObject private var chartData: ChartData
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: ChartData
     ) {
         self.chartData = chartData
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     internal var body: some View {
         
@@ -333,13 +332,12 @@ internal struct PointsExtraLineView<ChartData>: View where ChartData: CTLineBarC
                     FilledDataPointExtraLineView(chartData: chartData,
                                                  dataPoint: chartData.extraLineData.dataPoints[index],
                                                  index: index)
-                        .background(Point(value: chartData.extraLineData.dataPoints[index].value,
+                        .background(Point(datapoint: chartData.extraLineData.dataPoints[index],
                                           index: index,
                                           minValue: chartData.extraLineData.minValue,
                                           range: chartData.extraLineData.range,
                                           datapointCount: chartData.extraLineData.dataPoints.count,
                                           pointSize: chartData.extraLineData.style.pointStyle.pointSize,
-                                          ignoreZero: false,
                                           pointStyle: chartData.extraLineData.style.pointStyle.pointShape)
                                         .foregroundColor(chartData.extraLineData.dataPoints[index].pointColour?.fill ?? chartData.extraLineData.style.pointStyle.fillColour)
                         )
@@ -357,6 +355,8 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
     private let dataPoint: ExtraLineDataPoint
     private let index: Int
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: ChartData,
         dataPoint: ExtraLineDataPoint,
@@ -365,21 +365,19 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
         self.chartData = chartData
         self.dataPoint = dataPoint
         self.index = index
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     internal var body: some View {
         
         switch chartData.extraLineData.style.lineSpacing {
         case .line:
-            Point(value: dataPoint.value,
+            Point(datapoint: dataPoint,
                   index: index,
                   minValue: chartData.extraLineData.minValue,
                   range: chartData.extraLineData.range,
                   datapointCount: chartData.extraLineData.dataPoints.count,
                   pointSize: chartData.extraLineData.style.pointStyle.pointSize,
-                  ignoreZero: false,
                   pointStyle: chartData.extraLineData.style.pointStyle.pointShape)
                 .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
                     $0
@@ -393,7 +391,7 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
                 .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .onDisappear {
                     self.startAnimation = false
                 }
         case .bar:
@@ -417,7 +415,7 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
                 .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .onDisappear {
                     self.startAnimation = false
                 }
         }
@@ -431,6 +429,8 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
     private let dataPoint: ExtraLineDataPoint
     private let index: Int
     
+    @State private var startAnimation: Bool
+    
     internal init(
         chartData: ChartData,
         dataPoint: ExtraLineDataPoint,
@@ -439,21 +439,19 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
         self.chartData = chartData
         self.dataPoint = dataPoint
         self.index = index
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
-    
-    @State private var startAnimation: Bool = false
     
     internal var body: some View {
         
         switch chartData.extraLineData.style.lineSpacing {
         case .line:
-            Point(value: dataPoint.value,
+            Point(datapoint: dataPoint,
                   index: index,
                   minValue: chartData.extraLineData.minValue,
                   range: chartData.extraLineData.range,
                   datapointCount: chartData.extraLineData.dataPoints.count,
                   pointSize: chartData.extraLineData.style.pointStyle.pointSize,
-                  ignoreZero: false,
                   pointStyle: chartData.extraLineData.style.pointStyle.pointShape)
                 .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
                     $0.trim(to: startAnimation ? 1 : 0)
@@ -467,7 +465,7 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
                 .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .onDisappear {
                     self.startAnimation = false
                 }
         case .bar:
@@ -491,7 +489,7 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
                 .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .onDisappear {
                     self.startAnimation = false
                 }
         }

@@ -33,7 +33,9 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
     @Published public var viewData: ChartViewData = ChartViewData()
     @Published public var infoView: InfoViewData<RangedLineChartDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
-        
+    
+    @Published public var shouldAnimate: Bool
+    
     public var noDataText: Text
     
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .line, dataSetType: .single)
@@ -53,18 +55,21 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
     ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - shouldAnimate: Whether the chart should be animated.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: RangedLineDataSet,
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
         chartStyle: LineChartStyle = LineChartStyle(),
+        shouldAnimate: Bool = true,
         noDataText: Text = Text("No Data")
     ) {
         self.dataSets = dataSets
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
         self.chartStyle = chartStyle
+        self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         
         self.setupLegends()
@@ -79,22 +84,20 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
                     if data.type == .extraLine,
                        let extraData = self.extraLineData {
                         return LineMarkerData(markerType: extraData.style.markerType,
-                                              location: data.location.convert,
-                                              dataPoints: extraData.dataPoints.map(\.value),
+                                              location: data.location,
+                                              dataPoints: extraData.dataPoints.map { LineChartDataPoint($0) },
                                               lineType: extraData.style.lineType,
                                               lineSpacing: .bar,
                                               minValue: extraData.minValue,
-                                              range: extraData.range,
-                                              ignoreZero: false)
+                                              range: extraData.range)
                     } else if data.type == .line {
                         return LineMarkerData(markerType: self.chartStyle.markerType,
-                                              location: data.location.convert,
-                                              dataPoints: self.dataSets.dataPoints.map(\.value),
+                                              location: data.location,
+                                              dataPoints: self.dataSets.dataPoints.map { LineChartDataPoint($0) },
                                               lineType: self.dataSets.style.lineType,
                                               lineSpacing: .line,
                                               minValue: self.minValue,
-                                              range: self.range,
-                                              ignoreZero: false)
+                                              range: self.range)
                     }
                     return nil
                 }
@@ -169,11 +172,11 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
     
     // MARK: Points
     public func getPointMarker() -> some View {
-        PointsSubView(dataSets: dataSets,
+        PointsSubView(chartData: self,
+                      dataSets: dataSets,
                       minValue: self.minValue,
                       range: self.range,
-                      animation: self.chartStyle.globalAnimation,
-                      isFilled: false)
+                      animation: self.chartStyle.globalAnimation)
     }
     
     // MARK: Touch
@@ -185,11 +188,9 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
     }
     
     private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        let minValue: Double = self.minValue
-        let range: Double = self.range
-        let xSection: CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
-        let ySection: CGFloat = chartSize.height / CGFloat(range)
-        let index: Int = Int((touchLocation.x + (xSection / 2)) / xSection)
+        let xSection = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
+        let ySection = chartSize.height / CGFloat(range)
+        let index = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
             var values: [PublishedTouchData<DataPoint>] = []
             let datapoint = dataSets.dataPoints[index]
@@ -246,7 +247,7 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
     @available(*, deprecated, message: "Please set use other init instead.")
     public init(
         dataSets: RangedLineDataSet,
-        metadata: ChartMetadata = ChartMetadata(),
+        metadata: ChartMetadata,
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
         chartStyle: LineChartStyle = LineChartStyle(),
@@ -257,6 +258,7 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
         self.chartStyle = chartStyle
+        self.shouldAnimate = true
         self.noDataText = noDataText
         
         self.setupLegends()

@@ -33,7 +33,9 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     @Published public var viewData: ChartViewData = ChartViewData()
     @Published public var infoView: InfoViewData<LineChartDataPoint> = InfoViewData()
     @Published public var extraLineData: ExtraLineData!
-        
+    
+    @Published public var shouldAnimate: Bool
+    
     public var noDataText: Text
 
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .line, dataSetType: .single)
@@ -44,9 +46,7 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     private var markerData: MarkerData = MarkerData()
     private var internalDataSubscription: AnyCancellable?
     @Published public var touchPointData: [DataPoint] = []
-    
-    internal var isFilled: Bool = false
-    
+        
     // MARK: Initializer
     /// Initialises a Single Line Chart.
     ///
@@ -55,18 +55,21 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
     ///   - chartStyle: The style data for the aesthetic of the chart.
+    ///   - shouldAnimate: Whether the chart should be animated.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: LineDataSet,
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
         chartStyle: LineChartStyle = LineChartStyle(),
+        shouldAnimate: Bool = true,
         noDataText: Text = Text("No Data")
     ) {
         self.dataSets = dataSets
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
         self.chartStyle = chartStyle
+        self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
 
         self.setupLegends()
@@ -80,30 +83,26 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
                     if data.type == .extraLine,
                        let extraData = self.extraLineData {
                         return LineMarkerData(markerType: extraData.style.markerType,
-                                              location: data.location.convert,
-                                              dataPoints: extraData.dataPoints.map(\.value),
+                                              location: data.location,
+                                              dataPoints: extraData.dataPoints.map { LineChartDataPoint($0) },
                                               lineType: extraData.style.lineType,
                                               lineSpacing: extraData.style.lineSpacing,
                                               minValue: extraData.minValue,
-                                              range: extraData.range,
-                                              ignoreZero: false)
+                                              range: extraData.range)
                     } else if data.type == .line {
                         return LineMarkerData(markerType: self.chartStyle.markerType,
-                                              location: data.location.convert,
-                                              dataPoints: self.dataSets.dataPoints.map(\.value),
+                                              location: data.location,
+                                              dataPoints: self.dataSets.dataPoints,
                                               lineType: self.dataSets.style.lineType,
                                               lineSpacing: .line,
                                               minValue: self.minValue,
-                                              range: self.range,
-                                              ignoreZero: false)
+                                              range: self.range)
                     }
                     return nil
                 }
                 self.markerData =  MarkerData(lineMarkerData: lineMarkerData, barMarkerData: [])
+                self.touchPointData = $0.map(\.datapoint)
             }
-        
-        internalDataSubscription = touchedDataPointPublisher
-            .sink { self.touchPointData = $0.map(\.datapoint) }
     }
     
     // MARK: Labels
@@ -160,11 +159,11 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     
     // MARK: Points
     public func getPointMarker() -> some View {
-        PointsSubView(dataSets: dataSets,
-                      minValue: self.minValue,
-                      range: self.range,
-                      animation: self.chartStyle.globalAnimation,
-                      isFilled: self.isFilled)
+        PointsSubView(chartData: self,
+                      dataSets: dataSets,
+                      minValue: minValue,
+                      range: range,
+                      animation: chartStyle.globalAnimation)
     }
 
     // MARK: Touch
@@ -176,30 +175,18 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     }
     
     private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        
-        let minValue: Double = self.minValue
-        let range: Double = self.range
-        
-        let xSection: CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
-        let ySection: CGFloat = chartSize.height / CGFloat(range)
-        
-        let index: Int = Int((touchLocation.x + (xSection / 2)) / xSection)
+        var values: [PublishedTouchData<DataPoint>] = []
+
+        let xSection = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
+        let ySection = chartSize.height / CGFloat(range)
+
+        let index = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
             let datapoint = dataSets.dataPoints[index]
-            var location: CGPoint = .zero
-            if !dataSets.style.ignoreZero {
-                location = CGPoint(x: CGFloat(index) * xSection,
-                                   y: (CGFloat(dataSets.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
-            } else {
-                if dataSets.dataPoints[index].value != 0 {
-                    location = CGPoint(x: CGFloat(index) * xSection,
-                                       y: (CGFloat(dataSets.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
-                }
-            }
-            
-            var values: [PublishedTouchData<DataPoint>] = []
+            let location = CGPoint(x: CGFloat(index) * xSection,
+                                   y: (CGFloat(datapoint.value - minValue) * -ySection) + chartSize.height)
             values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
-            
+
             if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
                let location = extraLine.location,
                let value = extraLine.value
@@ -208,11 +195,11 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
                 datapoint._legendTag = extraLine._legendTag ?? ""
                 values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
             }
-            
+
             touchedDataPointPublisher.send(values)
         }
     }
-    
+
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
         markerSubView(markerData: markerData,
                       chartSize: chartSize,
@@ -240,7 +227,7 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
     @available(*, deprecated, message: "Please set use other init instead.")
     public init(
         dataSets: LineDataSet,
-        metadata: ChartMetadata = ChartMetadata(),
+        metadata: ChartMetadata,
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
         chartStyle: LineChartStyle = LineChartStyle(),
@@ -251,9 +238,19 @@ public final class LineChartData: CTLineChartDataProtocol, ChartConformance {
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
         self.chartStyle = chartStyle
+        self.shouldAnimate = true
         self.noDataText = noDataText
 
         self.setupLegends()
         self.setupInternalCombine()
     }
 }
+
+//extension Collection where Element: Ignorable {
+//    var firstNonIgnored: Element? {
+//        self.first(where: { !$0.ignore } )
+//    }
+//    var lastNonIgnored: Element? {
+//        self.lastIndex(where: { !$0.ignore })
+//    }
+//}
