@@ -37,25 +37,23 @@ public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartD
     
     public var body: some View {
         GeometryReader { geo in
-            if chartData.isGreaterThanTwo() {
-                ZStack {
-                    chartData.getAccessibility()
-                    RangedBoxSubView(chartData: chartData,
-                                     dataSet: chartData.dataSets,
-                                     minValue: chartData.minValue,
-                                     range: chartData.range,
-                                     colour: chartData.dataSets.style.fillColour)
-                    
-                    RangedLineSubView(chartData: chartData,
-                                     dataSet: chartData.dataSets,
-                                     minValue: chartData.minValue,
-                                     range: chartData.range,
-                                     colour: chartData.dataSets.style.lineColour)
-                }
-                .onAppear { // Needed for axes label frames
-                    self.chartData.chartSize = geo.frame(in: .local)
-                }
-            } else { CustomNoDataView(chartData: chartData) }
+            ZStack {
+                chartData.getAccessibility()
+                RangedBoxSubView(chartData: chartData,
+                                 dataSet: chartData.dataSets,
+                                 minValue: chartData.minValue,
+                                 range: chartData.range,
+                                 colour: chartData.dataSets.style.fillColour)
+                
+                RangedLineSubView(chartData: chartData,
+                                  dataSet: chartData.dataSets,
+                                  minValue: chartData.minValue,
+                                  range: chartData.range,
+                                  colour: chartData.dataSets.style.lineColour)
+            }
+            .onAppear { // Needed for axes label frames
+                self.chartData.chartSize = geo.frame(in: .local)
+            }
         }
     }
 }

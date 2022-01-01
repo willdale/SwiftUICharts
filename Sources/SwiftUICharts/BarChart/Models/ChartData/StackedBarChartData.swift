@@ -14,7 +14,7 @@ import Combine
  The grouping data informs the model as to how the datapoints are linked.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class StackedBarChartData: CTMultiBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
+public final class StackedBarChartData: CTChartData, CTBarChartDataProtocol, CTMultiBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
     
     // MARK: Properties
     public let id: UUID = UUID()
@@ -86,7 +86,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, StandardCha
         self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         
-        self.setupLegends()
+//        self.setupLegends()
         self.setupInternalCombine()
     }
     
@@ -297,7 +297,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, StandardCha
         self.shouldAnimate = true
         self.noDataText = noDataText
         
-        self.setupLegends()
+//        self.setupLegends()
         self.setupInternalCombine()
     }
 }

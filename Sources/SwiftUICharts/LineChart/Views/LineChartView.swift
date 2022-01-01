@@ -36,16 +36,14 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
     
     public var body: some View {
         GeometryReader { geo in
-            if chartData.isGreaterThanTwo() {
-                ZStack {
-                    chartData.getAccessibility()
-                    LineSubView(chartData: chartData,
-                                colour: chartData.dataSets.style.lineColour)
-                }
-                .onAppear { // Needed for axes label frames
-                    self.chartData.chartSize = geo.frame(in: .local)
-                }
-            } else { CustomNoDataView(chartData: chartData) }
+            ZStack {
+                chartData.getAccessibility()
+                LineSubView(chartData: chartData,
+                            colour: chartData.dataSets.style.lineColour)
+            }
+            .onAppear { // Needed for axes label frames
+                self.chartData.chartSize = geo.frame(in: .local)
+            }
         }
     }
 }

@@ -7,16 +7,14 @@
 
 import SwiftUI
 
-/**
- Sub view of the X axis grid view modifier.
- */
-internal struct VerticalGridView<T>: View where T: CTLineBarChartDataProtocol {
+internal struct VerticalGridView<ChartData>: View where ChartData: CTChartData,
+                                                        ChartData.CTStyle: CTLineBarChartStyle {
     
-    @ObservedObject private var chartData: T
+    @ObservedObject private var chartData: ChartData
     
     @State private var startAnimation: Bool
     
-    internal init(chartData: T) {
+    internal init(chartData: ChartData) {
         self.chartData = chartData
         self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }

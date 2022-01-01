@@ -23,9 +23,9 @@ public protocol PointOfInterestProtocol {
      In horizontal charts this will return a vertical line.
      
      - Parameters:
-        - value: Value of of the POI.
-        - range: Difference between the highest and lowest values in the data set.
-        - minValue: Lowest value in the data set.
+     - value: Value of of the POI.
+     - range: Difference between the highest and lowest values in the data set.
+     - minValue: Lowest value in the data set.
      - Returns: A line shape at a specified point.
      */
     func poiMarker(value: Double, range: Double, minValue: Double) -> MarkerShape
@@ -64,10 +64,10 @@ public protocol PointOfInterestProtocol {
      one of the axes.
      
      - Parameters:
-        - frame: Size of the chart.
-        - markerValue: Value of the POI marker.
-        - minValue: Lowest value in the data set.
-        - range: Difference between the highest and lowest values in the data set.
+     - frame: Size of the chart.
+     - markerValue: Value of the POI marker.
+     - minValue: Lowest value in the data set.
+     - range: Difference between the highest and lowest values in the data set.
      - Returns: Position of label.
      */
     func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint
@@ -77,10 +77,10 @@ public protocol PointOfInterestProtocol {
      the center of the view.
      
      - Parameters:
-        - frame: Size of the chart.
-        - markerValue: Value of the POI marker.
-        - minValue: Lowest value in the data set.
-        - range: Difference between the highest and lowest values in the data set.
+     - frame: Size of the chart.
+     - markerValue: Value of the POI marker.
+     - minValue: Lowest value in the data set.
+     - range: Difference between the highest and lowest values in the data set.
      - Returns: Position of label.
      */
     func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint
@@ -89,7 +89,7 @@ public protocol PointOfInterestProtocol {
     
     
     
-   // MARK: Abscissa
+    // MARK: Abscissa
     /**
      A type representing a Shape for displaying a line
      as a POI.
@@ -103,9 +103,9 @@ public protocol PointOfInterestProtocol {
      In horizontal charts this will return a vertical line.
      
      - Parameters:
-        - value: Value of of the POI.
-        - range: Difference between the highest and lowest values in the data set.
-        - minValue: Lowest value in the data set.
+     - value: Value of of the POI.
+     - range: Difference between the highest and lowest values in the data set.
+     - minValue: Lowest value in the data set.
      - Returns: A line shape at a specified point.
      */
     func poiAbscissaMarker(markerValue: Int, dataPointCount: Int) -> AbscissaMarkerShape
@@ -144,10 +144,10 @@ public protocol PointOfInterestProtocol {
      one of the axes.
      
      - Parameters:
-        - frame: Size of the chart.
-        - markerValue: Value of the POI marker.
-        - minValue: Lowest value in the data set.
-        - range: Difference between the highest and lowest values in the data set.
+     - frame: Size of the chart.
+     - markerValue: Value of the POI marker.
+     - minValue: Lowest value in the data set.
+     - range: Difference between the highest and lowest values in the data set.
      - Returns: Position of label.
      */
     func poiAbscissaValueLabelPositionAxis(frame: CGRect, markerValue: Int, count: Int) -> CGPoint
@@ -157,10 +157,10 @@ public protocol PointOfInterestProtocol {
      the center of the view.
      
      - Parameters:
-        - frame: Size of the chart.
-        - markerValue: Value of the POI marker.
-        - minValue: Lowest value in the data set.
-        - range: Difference between the highest and lowest values in the data set.
+     - frame: Size of the chart.
+     - markerValue: Value of the POI marker.
+     - minValue: Lowest value in the data set.
+     - range: Difference between the highest and lowest values in the data set.
      - Returns: Position of label.
      */
     func poiAbscissaValueLabelPositionCenter(frame: CGRect, markerValue: Int, count: Int) -> CGPoint
@@ -172,7 +172,7 @@ public protocol PointOfInterestProtocol {
 //
 //
 // MARK: - Ordinate
-extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
+extension PointOfInterestProtocol where Self: CTChartData, CTStyle: CTLineBarChartStyle {
     public func poiMarker(value: Double, range: Double, minValue: Double) -> some Shape {
         HorizontalMarker(chartData: self, value: value, range: range, minValue: minValue)
     }
@@ -196,8 +196,7 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
                     )
             })
     }
-    
-   public func poiLabelCenter(markerValue: Double, specifier: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color, strokeStyle: StrokeStyle) -> some View {
+    public func poiLabelCenter(markerValue: Double, specifier: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color, strokeStyle: StrokeStyle) -> some View {
         Text(LocalizedStringKey("\(markerValue, specifier: specifier)"))
             .font(labelFont)
             .foregroundColor(labelColour)
@@ -208,95 +207,7 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
                         .stroke(lineColour, style: strokeStyle)
             )
     }
-}
-extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol & isHorizontal {
-    public func poiMarker(value: Double, range: Double, minValue: Double) -> some Shape {
-        VerticalMarker(chartData: self, value: value, range: range, minValue: minValue)
-    }
-    public func poiLabelAxis(markerValue: Double, specifier: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color) -> some View {
-        Text(LocalizedStringKey("\(markerValue, specifier: specifier)"))
-            .font(labelFont)
-            .foregroundColor(labelColour)
-            .padding(4)
-            .background(labelBackground)
-            .ifElse(self.chartStyle.xAxisLabelPosition == .bottom, if: {
-                $0
-                    .clipShape(BottomLabelShape())
-                    .overlay(BottomLabelShape()
-                                .stroke(lineColour)
-                    )
-            }, else: {
-                $0
-                    .clipShape(TopLabelShape())
-                    .overlay(TopLabelShape()
-                                .stroke(lineColour)
-                    )
-            })
-    }
-}
-
-
-
-// MARK: - Position
-//
-//
-//
-// MARK: Line Charts
-extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol & PointOfInterestProtocol & YAxisViewDataProtocol,
-                                            Self: isStandard {
-    public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        let leading: CGFloat = -((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) - 4 // -4 for padding at the root view.
-        let trailing: CGFloat = frame.width + ((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) + 4 // +4 for padding at the root view.
-        let value: CGFloat = CGFloat(markerValue - minValue)
-        let sizing: CGFloat = -(frame.height / CGFloat(range))
-        return CGPoint(x: chartStyle.yAxisLabelPosition == .leading ? leading : trailing,
-                       y: value * sizing + frame.height)
-    }
-    public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        CGPoint(x: frame.width / 2,
-                y: CGFloat(markerValue - minValue) * -(frame.height / CGFloat(range)) + frame.height)
-    }
-}
-
-// MARK: Vertical Bar Charts
-extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointOfInterestProtocol & YAxisViewDataProtocol,
-                                            Self: isStandard {
-    public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        let leading: CGFloat = -((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) - 4 // -4 for padding at the root view.
-        let trailing: CGFloat = frame.width + ((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) + 4 // +4 for padding at the root view.
-        let value: CGFloat = divideByZeroProtection(CGFloat.self, (markerValue - minValue), range)
-        return CGPoint(x: chartStyle.yAxisLabelPosition == .leading ? leading : trailing,
-                       y: frame.height - value * frame.height)
-    }
-    public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        CGPoint(x: frame.width / 2,
-                y: frame.height - divideByZeroProtection(CGFloat.self, (markerValue - minValue), range) * frame.height)
-    }
-}
-
-// MARK: Horizontal Bar Charts
-extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointOfInterestProtocol & XAxisViewDataProtocol,
-                                           Self: isHorizontal {
-    public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        let bottom: CGFloat = frame.height + ((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) + 4  // +4 for padding at the root view
-        let top: CGFloat = -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - 4  // -4 for padding at the root view
-        let value: CGFloat = divideByZeroProtection(CGFloat.self, (markerValue - minValue), range)
-        return CGPoint(x: value * frame.width,
-                       y: self.chartStyle.xAxisLabelPosition == .bottom ? bottom : top)
-    }
-    public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
-        CGPoint(x: divideByZeroProtection(CGFloat.self, (markerValue - minValue), range) * frame.width,
-                y: frame.height / 2)
-    }
-}
-
-
-
-
-
-
-// MARK: - Abscissa
-extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
+    // ---
     public func poiAbscissaMarker(markerValue: Int, dataPointCount: Int) -> some Shape {
         VerticalAbscissaMarker(chartData: self, markerValue: markerValue, dataPointCount: dataPointCount)
     }
@@ -324,8 +235,31 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
             )
     }
 }
-
-extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol & isHorizontal {
+extension PointOfInterestProtocol where Self: CTChartData & isHorizontal, CTStyle: CTLineBarChartStyle {
+    public func poiMarker(value: Double, range: Double, minValue: Double) -> some Shape {
+        VerticalMarker(chartData: self, value: value, range: range, minValue: minValue)
+    }
+    public func poiLabelAxis(markerValue: Double, specifier: String, labelFont: Font, labelColour: Color, labelBackground: Color, lineColour: Color) -> some View {
+        Text(LocalizedStringKey("\(markerValue, specifier: specifier)"))
+            .font(labelFont)
+            .foregroundColor(labelColour)
+            .padding(4)
+            .background(labelBackground)
+            .ifElse(self.chartStyle.xAxisLabelPosition == .bottom, if: {
+                $0
+                    .clipShape(BottomLabelShape())
+                    .overlay(BottomLabelShape()
+                                .stroke(lineColour)
+                    )
+            }, else: {
+                $0
+                    .clipShape(TopLabelShape())
+                    .overlay(TopLabelShape()
+                                .stroke(lineColour)
+                    )
+            })
+    }
+    // ---
     public func poiAbscissaMarker(markerValue: Int, dataPointCount: Int) -> some Shape {
         HorizontalAbscissaMarker(chartData: self, markerValue: markerValue, dataPointCount: dataPointCount)
     }
@@ -358,8 +292,21 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol & isHor
 //
 //
 // MARK: Line Charts
-extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol & PointOfInterestProtocol & XAxisViewDataProtocol,
-                                           Self: isStandard {
+extension PointOfInterestProtocol where Self: CTChartData & PointOfInterestProtocol & ViewDataProtocol,
+                                        CTStyle: CTLineChartStyle {
+    public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
+        let leading: CGFloat = -((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) - 4 // -4 for padding at the root view.
+        let trailing: CGFloat = frame.width + ((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) + 4 // +4 for padding at the root view.
+        let value: CGFloat = CGFloat(markerValue - minValue)
+        let sizing: CGFloat = -(frame.height / CGFloat(range))
+        return CGPoint(x: chartStyle.yAxisLabelPosition == .leading ? leading : trailing,
+                       y: value * sizing + frame.height)
+    }
+    public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
+        CGPoint(x: frame.width / 2,
+                y: CGFloat(markerValue - minValue) * -(frame.height / CGFloat(range)) + frame.height)
+    }
+    // ---
     public func poiAbscissaValueLabelPositionAxis(frame: CGRect, markerValue: Int, count: Int) -> CGPoint {
         let bottom: CGFloat = frame.height + ((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) + 10  // +4 for padding at the root view
         let top: CGFloat = -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - 10  // -4 for padding at the root view
@@ -373,8 +320,21 @@ extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol & Point
 }
 
 // MARK: Vertical Bar Charts
-extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointOfInterestProtocol & XAxisViewDataProtocol,
-                                           Self: isStandard {
+extension PointOfInterestProtocol where Self: CTChartData & PointOfInterestProtocol & ViewDataProtocol,
+                                        CTStyle: CTBarChartStyle,
+                                        Self: isStandard {
+    public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
+        let leading: CGFloat = -((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) - 4 // -4 for padding at the root view.
+        let trailing: CGFloat = frame.width + ((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) + 4 // +4 for padding at the root view.
+        let value: CGFloat = divideByZeroProtection(CGFloat.self, (markerValue - minValue), range)
+        return CGPoint(x: chartStyle.yAxisLabelPosition == .leading ? leading : trailing,
+                       y: frame.height - value * frame.height)
+    }
+    public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
+        CGPoint(x: frame.width / 2,
+                y: frame.height - divideByZeroProtection(CGFloat.self, (markerValue - minValue), range) * frame.height)
+    }
+    // ---
     public func poiAbscissaValueLabelPositionAxis(frame: CGRect, markerValue: Int, count: Int) -> CGPoint {
         let bottom: CGFloat = frame.height + ((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) + 10  // +4 for padding at the root view
         let top: CGFloat = -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - 10  // -4 for padding at the root view
@@ -388,8 +348,21 @@ extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointO
 }
 
 // MARK: Horizontal Bar Charts
-extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointOfInterestProtocol & XAxisViewDataProtocol,
-                                           Self: isHorizontal {
+extension PointOfInterestProtocol where Self: CTChartData & PointOfInterestProtocol & XAxisViewDataProtocol,
+                                        CTStyle: CTBarChartStyle,
+                                        Self: isHorizontal {
+    public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
+        let bottom: CGFloat = frame.height + ((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) + 4  // +4 for padding at the root view
+        let top: CGFloat = -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - 4  // -4 for padding at the root view
+        let value: CGFloat = divideByZeroProtection(CGFloat.self, (markerValue - minValue), range)
+        return CGPoint(x: value * frame.width,
+                       y: self.chartStyle.xAxisLabelPosition == .bottom ? bottom : top)
+    }
+    public func poiValueLabelPositionCenter(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
+        CGPoint(x: divideByZeroProtection(CGFloat.self, (markerValue - minValue), range) * frame.width,
+                y: frame.height / 2)
+    }
+    // ---
     public func poiAbscissaValueLabelPositionAxis(frame: CGRect, markerValue: Int, count: Int) -> CGPoint {
         let leading: CGFloat = -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - 8  // -4 for padding at the root view
         let trailing: CGFloat = frame.width + ((xAxisViewData.xAxislabelWidths.max() ?? 0) / 2) + 8  // +4 for padding at the root view

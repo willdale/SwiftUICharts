@@ -31,30 +31,28 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol &
     
     internal func body(content: Content) -> some View {
         Group {
-            if chartData.isGreaterThanTwo() {
-                ZStack {
-                    Group {
-                        switch chartData.extraLineData.style.lineColour {
-                        case let .colour(colour):
-                            Group {
-                                ColourExtraLineView(chartData: chartData, colour: colour)
-                                PointsExtraLineView(chartData: chartData)
-                            }
-                        case let .gradient(colours, startPoint, endPoint):
-                            Group {
-                                ColoursExtraLineView(chartData: chartData, colours: colours, startPoint: startPoint, endPoint: endPoint)
-                                PointsExtraLineView(chartData: chartData)
-                            }
-                        case let .gradientStops(stops, startPoint, endPoint):
-                            Group {
-                                StopsExtraLineView(chartData: chartData, stops: stops, startPoint: startPoint, endPoint: endPoint)
-                                PointsExtraLineView(chartData: chartData)
-                            }
+            ZStack {
+                Group {
+                    switch chartData.extraLineData.style.lineColour {
+                    case let .colour(colour):
+                        Group {
+                            ColourExtraLineView(chartData: chartData, colour: colour)
+                            PointsExtraLineView(chartData: chartData)
+                        }
+                    case let .gradient(colours, startPoint, endPoint):
+                        Group {
+                            ColoursExtraLineView(chartData: chartData, colours: colours, startPoint: startPoint, endPoint: endPoint)
+                            PointsExtraLineView(chartData: chartData)
+                        }
+                    case let .gradientStops(stops, startPoint, endPoint):
+                        Group {
+                            StopsExtraLineView(chartData: chartData, stops: stops, startPoint: startPoint, endPoint: endPoint)
+                            PointsExtraLineView(chartData: chartData)
                         }
                     }
-                    content
                 }
-            } else { content }
+                content
+            }
         }
     }
     

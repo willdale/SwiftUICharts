@@ -30,28 +30,26 @@ internal struct TouchOverlay<ChartData>: ViewModifier where ChartData: CTChartDa
     
     internal func body(content: Content) -> some View {
         Group {
-            if chartData.isGreaterThanTwo() {
-                GeometryReader { geo in
-                    ZStack {
-                        content
-                            .gesture(
-                                DragGesture(minimumDistance: minDistance, coordinateSpace: .local)
-                                    .onChanged { value in
-                                        chartData.setTouchInteraction(touchLocation: value.location,
-                                                                      chartSize: geo.frame(in: .local))
-                                    }
-                                    .onEnded { _ in
-                                        chartData.touchDidFinish()
-                                    }
-                            )
-                        if chartData.infoView.isTouchCurrent {
-                            chartData.getTouchInteraction(touchLocation: chartData.infoView.touchLocation,
-                                                          chartSize: geo.frame(in: .local))
-                        }
-                        
+            GeometryReader { geo in
+                ZStack {
+                    content
+                        .gesture(
+                            DragGesture(minimumDistance: minDistance, coordinateSpace: .local)
+                                .onChanged { value in
+                                    chartData.setTouchInteraction(touchLocation: value.location,
+                                                                  chartSize: geo.frame(in: .local))
+                                }
+                                .onEnded { _ in
+                                    chartData.touchDidFinish()
+                                }
+                        )
+                    if chartData.infoView.isTouchCurrent {
+                        chartData.getTouchInteraction(touchLocation: chartData.infoView.touchLocation,
+                                                      chartSize: geo.frame(in: .local))
                     }
+                    
                 }
-            } else { content }
+            }
         }
     }
 }

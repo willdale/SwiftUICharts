@@ -19,10 +19,8 @@ internal struct PointMarkers<T>: ViewModifier where T: CTLineChartDataProtocol &
     }
     internal func body(content: Content) -> some View {
         ZStack {
-            if chartData.isGreaterThanTwo() {
-                content
-                chartData.getPointMarker()
-            } else { content }
+            content
+            chartData.getPointMarker()
         }
     }
 }

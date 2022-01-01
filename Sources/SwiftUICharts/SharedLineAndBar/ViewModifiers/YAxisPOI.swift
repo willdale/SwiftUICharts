@@ -10,9 +10,9 @@ import SwiftUI
 /**
  Configurable Point of interest
  */
-internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & GetDataProtocol & PointOfInterestProtocol {
+internal struct YAxisPOI<ChartData>: ViewModifier where ChartData: CTChartData & GetDataProtocol & PointOfInterestProtocol {
     
-    @ObservedObject private var chartData: T
+    @ObservedObject private var chartData: ChartData
     
     private let uuid: UUID = UUID()
     
@@ -35,7 +35,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
     @State private var startAnimation: Bool
     
     internal init(
-        chartData: T,
+        chartData: ChartData,
         markerName: String,
         markerValue: Double = 0,
         labelPosition: DisplayValue,
@@ -70,53 +70,51 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
     
     internal func body(content: Content) -> some View {
         ZStack {
-            if chartData.isGreaterThanTwo() {
-                content
-                chartData.poiMarker(value: markerValue,
-                                    range: range,
-                                    minValue: minValue)
-                    .trim(to: startAnimation ? 1 : 0)
-                    .stroke(lineColour, style: strokeStyle)
-                
-                GeometryReader { geo in
-                    switch labelPosition {
-                    case .none:
-                        EmptyView()
-                    case .yAxis(let specifier):
-                        
-                        chartData.poiLabelAxis(markerValue: markerValue,
-                                               specifier: specifier,
-                                               labelFont: labelFont,
-                                               labelColour: labelColour,
-                                               labelBackground: labelBackground,
-                                               lineColour: lineColour)
-                            .position(chartData.poiValueLabelPositionAxis(frame: geo.frame(in: .local), markerValue: markerValue, minValue: minValue, range: range))
-                            
-                            .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
-                            .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(markerName) %@", comment: ""), String(format: specifier, markerValue))))
-                        
-                    case .center(let specifier):
-                        
-                        chartData.poiLabelCenter(markerValue: markerValue,
-                                                 specifier: specifier,
-                                                 labelFont: labelFont,
-                                                 labelColour: labelColour,
-                                                 labelBackground: labelBackground,
-                                                 lineColour: lineColour,
-                                                 strokeStyle: strokeStyle)
-                            .position(chartData.poiValueLabelPositionCenter(frame: geo.frame(in: .local), markerValue: markerValue, minValue: minValue, range: range))
-                            
-                            .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
-                            .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(markerName) %@", comment: ""), String(format: specifier, markerValue))))
-                    }
+            content
+            chartData.poiMarker(value: markerValue,
+                                range: range,
+                                minValue: minValue)
+                .trim(to: startAnimation ? 1 : 0)
+                .stroke(lineColour, style: strokeStyle)
+            
+            GeometryReader { geo in
+                switch labelPosition {
+                case .none:
+                    EmptyView()
+                case .yAxis(let specifier):
+                    
+                    chartData.poiLabelAxis(markerValue: markerValue,
+                                           specifier: specifier,
+                                           labelFont: labelFont,
+                                           labelColour: labelColour,
+                                           labelBackground: labelBackground,
+                                           lineColour: lineColour)
+                        .position(chartData.poiValueLabelPositionAxis(frame: geo.frame(in: .local), markerValue: markerValue, minValue: minValue, range: range))
+                    
+                        .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
+                        .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(markerName) %@", comment: ""), String(format: specifier, markerValue))))
+                    
+                case .center(let specifier):
+                    
+                    chartData.poiLabelCenter(markerValue: markerValue,
+                                             specifier: specifier,
+                                             labelFont: labelFont,
+                                             labelColour: labelColour,
+                                             labelBackground: labelBackground,
+                                             lineColour: lineColour,
+                                             strokeStyle: strokeStyle)
+                        .position(chartData.poiValueLabelPositionCenter(frame: geo.frame(in: .local), markerValue: markerValue, minValue: minValue, range: range))
+                    
+                        .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
+                        .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(markerName) %@", comment: ""), String(format: specifier, markerValue))))
                 }
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                    self.startAnimation = true
-                }
-                .onDisappear {
-                    self.startAnimation = false
-                }
-            } else { content }
+            }
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .onDisappear {
+                self.startAnimation = false
+            }
         }
     }
     
@@ -190,8 +188,8 @@ extension View {
         - addToLegends: Whether or not to add this to the legends.
      - Returns: A  new view containing the chart with a marker line at a specified value.
      */
-    public func yAxisPOI<T:CTLineBarChartDataProtocol & GetDataProtocol & PointOfInterestProtocol>(
-        chartData: T,
+    public func yAxisPOI<ChartData>(
+        chartData: ChartData,
         markerName: String,
         markerValue: Double,
         labelPosition: DisplayValue = .center(specifier: "%.0f"),
@@ -201,7 +199,9 @@ extension View {
         lineColour: Color = Color(.blue),
         strokeStyle: StrokeStyle = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0),
         addToLegends: Bool = true
-    ) -> some View {
+    ) -> some View
+    where ChartData: CTChartData & GetDataProtocol & PointOfInterestProtocol
+    {
         self.modifier(YAxisPOI(chartData: chartData,
                                markerName: markerName,
                                markerValue: markerValue,
@@ -271,8 +271,8 @@ extension View {
         - addToLegends: Whether or not to add this to the legends.
      - Returns: A  new view containing the chart with a marker line at the average.
      */
-    public func averageLine<T:CTLineBarChartDataProtocol & GetDataProtocol & PointOfInterestProtocol>(
-        chartData: T,
+    public func averageLine<ChartData>(
+        chartData: ChartData,
         markerName: String = "Average",
         labelPosition: DisplayValue = .yAxis(specifier: "%.0f"),
         labelFont: Font = .caption,
@@ -281,7 +281,9 @@ extension View {
         lineColour: Color = Color.primary,
         strokeStyle: StrokeStyle = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0),
         addToLegends: Bool = true
-    ) -> some View {
+    ) -> some View
+    where ChartData: CTChartData & GetDataProtocol & PointOfInterestProtocol
+    {
         self.modifier(YAxisPOI(chartData: chartData,
                                markerName: markerName,
                                labelPosition: labelPosition,

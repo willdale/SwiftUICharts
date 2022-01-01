@@ -10,11 +10,12 @@ import SwiftUI
 /**
  Configurable Point of interest
  */
-internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & GetDataProtocol & PointOfInterestProtocol {
+internal struct XAxisPOI<ChartData>: ViewModifier
+where ChartData: CTChartData & GetDataProtocol & PointOfInterestProtocol {
     
     private let uuid: UUID = UUID()
     
-    @ObservedObject private var chartData: T
+    @ObservedObject private var chartData: ChartData
     private let markerName: String
     private let markerValue: Int
     private let dataPointCount: Int
@@ -32,7 +33,7 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
     @State private var startAnimation: Bool
     
     internal init(
-        chartData: T,
+        chartData: ChartData,
         markerName: String,
         markerValue: Int,
         dataPointCount: Int,
@@ -68,54 +69,50 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
     
     internal func body(content: Content) -> some View {
         ZStack {
-            if chartData.isGreaterThanTwo() {
-                content
-                chartData.poiAbscissaMarker(markerValue: markerValue, dataPointCount: dataPointCount)
-                    .trim(to: startAnimation ? 1 : 0)
-                    .stroke(lineColour, style: strokeStyle)
-                
-                GeometryReader { geo in
-                    switch labelPosition {
-                    case .none:
-                        EmptyView()
-                    case .yAxis:
-                        
-                        chartData.poiAbscissaLabelAxis(marker: markerName,
-                                                       labelFont: labelFont,
-                                                       labelColour: labelColour,
-                                                       labelBackground: labelBackground,
-                                                       lineColour: lineColour)
-                            .position(chartData.poiAbscissaValueLabelPositionAxis(frame: geo.frame(in: .local),
-                                                                                  markerValue: markerValue,
-                                                                                  count: dataPointCount))
-                            .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
-                            .accessibilityValue(Text(LocalizedStringKey(String(format: NSLocalizedString("\(self.markerName) %@", comment: ""), "\(markerValue)"))))
-
-                    case .center:
-                        
-                        chartData.poiAbscissaLabelCenter(marker: markerName,
-                                                         labelFont: labelFont,
-                                                         labelColour: labelColour,
-                                                         labelBackground: labelBackground,
-                                                         lineColour: lineColour,
-                                                         strokeStyle: strokeStyle)
-                            .position(chartData.poiAbscissaValueLabelPositionCenter(frame: geo.frame(in: .local),
-                                                                                    markerValue: markerValue,
-                                                                                    count: dataPointCount))
-                            
-                            .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
-                            .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(self.markerName) %@", comment: ""), "\(markerValue)")))
-
-//                            .accessibilityValue(LocalizedStringKey("\(markerName), \(markerValue)"))
-                    }
+            content
+            chartData.poiAbscissaMarker(markerValue: markerValue, dataPointCount: dataPointCount)
+                .trim(to: startAnimation ? 1 : 0)
+                .stroke(lineColour, style: strokeStyle)
+            
+            GeometryReader { geo in
+                switch labelPosition {
+                case .none:
+                    EmptyView()
+                case .yAxis:
+                    
+                    chartData.poiAbscissaLabelAxis(marker: markerName,
+                                                   labelFont: labelFont,
+                                                   labelColour: labelColour,
+                                                   labelBackground: labelBackground,
+                                                   lineColour: lineColour)
+                        .position(chartData.poiAbscissaValueLabelPositionAxis(frame: geo.frame(in: .local),
+                                                                              markerValue: markerValue,
+                                                                              count: dataPointCount))
+                        .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
+                        .accessibilityValue(Text(LocalizedStringKey(String(format: NSLocalizedString("\(self.markerName) %@", comment: ""), "\(markerValue)"))))
+                    
+                case .center:
+                    
+                    chartData.poiAbscissaLabelCenter(marker: markerName,
+                                                     labelFont: labelFont,
+                                                     labelColour: labelColour,
+                                                     labelBackground: labelBackground,
+                                                     lineColour: lineColour,
+                                                     strokeStyle: strokeStyle)
+                        .position(chartData.poiAbscissaValueLabelPositionCenter(frame: geo.frame(in: .local),
+                                                                                markerValue: markerValue,
+                                                                                count: dataPointCount))
+                    
+                        .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
+                        .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(self.markerName) %@", comment: ""), "\(markerValue)")))
                 }
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                    self.startAnimation = true
-                }
-                .onDisappear {
-                    self.startAnimation = false
-                }
-            } else { content }
+            }
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .onDisappear {
+                self.startAnimation = false
+            }
         }
     }
     
@@ -174,8 +171,8 @@ extension View {
         - addToLegends: Whether or not to add this to the legends.
      - Returns: A  new view containing the chart with a marker line at a specified value.
      */
-    public func xAxisPOI<T:CTLineBarChartDataProtocol & GetDataProtocol & PointOfInterestProtocol>(
-        chartData: T,
+    public func xAxisPOI<ChartData>(
+        chartData: ChartData,
         markerName: String,
         markerValue: Int,
         dataPointCount: Int,
@@ -186,7 +183,9 @@ extension View {
         labelColour: Color = Color.primary,
         labelBackground: Color = Color.systemsBackground,
         addToLegends: Bool = true
-    ) -> some View {
+    ) -> some View
+    where ChartData: CTChartData & GetDataProtocol & PointOfInterestProtocol
+    {
         self.modifier(XAxisPOI(chartData: chartData,
                                markerName: markerName,
                                markerValue: markerValue,

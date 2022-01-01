@@ -28,10 +28,6 @@ final class BarChartTests: XCTestCase {
         let chartData = BarChartData(dataSets: BarDataSet(dataPoints: dataPoints))
         XCTAssertEqual(chartData.range, 50.001)
     }
-    func testBarIsGreaterThanTwoTrue() {
-        let chartData = BarChartData(dataSets: BarDataSet(dataPoints: dataPoints))
-        XCTAssertTrue(chartData.isGreaterThanTwo())
-    }
     
     // MARK: - Labels
 //    func testBarGetYLabels() {

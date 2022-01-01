@@ -10,29 +10,28 @@ import SwiftUI
 /**
  Adds vertical lines along the X axis.
  */
-internal struct XAxisGrid<T>: ViewModifier where T: CTLineBarChartDataProtocol {
+internal struct XAxisGrid<ChartData>: ViewModifier where ChartData: CTChartData,
+                                                         ChartData.CTStyle: CTLineBarChartStyle {
     
-    @ObservedObject private var chartData: T
+    @ObservedObject private var chartData: ChartData
     
-    internal init(chartData: T) {
+    internal init(chartData: ChartData) {
         self.chartData = chartData
     }
     
     internal func body(content: Content) -> some View {
         ZStack {
-            if chartData.isGreaterThanTwo() {
-                HStack {
-                    ForEach((0...chartData.chartStyle.xAxisGridStyle.numberOfLines-1), id: \.self) { index in
-                        if index != 0 {
-                            VerticalGridView(chartData: chartData)
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
-                        }
+            HStack {
+                ForEach((0...chartData.chartStyle.xAxisGridStyle.numberOfLines-1), id: \.self) { index in
+                    if index != 0 {
+                        VerticalGridView(chartData: chartData)
+                        Spacer()
+                            .frame(minWidth: 0, maxWidth: 500)
                     }
-                    VerticalGridView(chartData: chartData)
                 }
-                content
-            } else { content }
+                VerticalGridView(chartData: chartData)
+            }
+            content
         }
     }
 }
@@ -63,7 +62,10 @@ extension View {
      - Parameter chartData: Chart data model.
      - Returns: A  new view containing the chart with vertical lines under it.
      */
-    public func xAxisGrid<T: CTLineBarChartDataProtocol>(chartData: T) -> some View {
+    public func xAxisGrid<ChartData>(chartData: ChartData) -> some View
+    where ChartData: CTChartData,
+          ChartData.CTStyle: CTLineBarChartStyle
+    {
         self.modifier(XAxisGrid(chartData: chartData))
     }
 }

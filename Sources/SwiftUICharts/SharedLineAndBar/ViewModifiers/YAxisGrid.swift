@@ -10,29 +10,28 @@ import SwiftUI
 /**
  Adds horizontal lines along the X axis.
  */
-internal struct YAxisGrid<T>: ViewModifier where T: CTLineBarChartDataProtocol {
+internal struct YAxisGrid<ChartData>: ViewModifier where ChartData: CTChartData,
+                                                         ChartData.CTStyle: CTLineBarChartStyle {
     
-    @ObservedObject private var chartData: T
+    @ObservedObject private var chartData: ChartData
     
-    internal init(chartData: T) {
+    internal init(chartData: ChartData) {
         self.chartData = chartData
     }
     
     internal func body(content: Content) -> some View {
         ZStack {
-            if chartData.isGreaterThanTwo() {
-                VStack {
-                    ForEach((0...chartData.chartStyle.yAxisGridStyle.numberOfLines-1), id: \.self) { index in
-                        if index != 0 {
-                            HorizontalGridView(chartData: chartData)
-                            Spacer()
-                                .frame(minHeight: 0, maxHeight: 500)
-                        }
+            VStack {
+                ForEach((0...chartData.chartStyle.yAxisGridStyle.numberOfLines-1), id: \.self) { index in
+                    if index != 0 {
+                        HorizontalGridView(chartData: chartData)
+                        Spacer()
+                            .frame(minHeight: 0, maxHeight: 500)
                     }
-                    HorizontalGridView(chartData: chartData)
                 }
-                content
-            } else { content }
+                HorizontalGridView(chartData: chartData)
+            }
+            content
         }
     }
 }
@@ -63,7 +62,10 @@ extension View {
      - Parameter chartData: Chart data model.
      - Returns: A  new view containing the chart with horizontal lines under it.
      */
-    public func yAxisGrid<T: CTLineBarChartDataProtocol>(chartData: T) -> some View {
-        self.modifier(YAxisGrid<T>(chartData: chartData))
+    public func yAxisGrid<ChartData>(chartData: ChartData) -> some View
+    where ChartData: CTChartData,
+          ChartData.CTStyle: CTLineBarChartStyle
+    {
+        self.modifier(YAxisGrid<ChartData>(chartData: chartData))
     }
 }

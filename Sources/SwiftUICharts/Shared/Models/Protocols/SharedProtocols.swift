@@ -69,13 +69,6 @@ public protocol CTChartData: ObservableObject, Identifiable {
     var noDataText: Text { get set }
     
     var shouldAnimate: Bool { get set }
-
-    
-    /**
-     Returns whether there are two or more data points.
-     */
-    func isGreaterThanTwo() -> Bool
-
 }
 
 

@@ -12,7 +12,7 @@ import Combine
  Data for drawing and styling a standard Bar Chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class BarChartData: CTBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
+public final class BarChartData: CTChartData, CTBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
     
     // MARK: Properties
     public let id: UUID = UUID()
@@ -79,7 +79,7 @@ public final class BarChartData: CTBarChartDataProtocol, StandardChartConformanc
         self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
                 
-        self.setupLegends()
+//        self.setupLegends()
         self.setupInternalCombine()
     }
     
@@ -246,7 +246,7 @@ public final class BarChartData: CTBarChartDataProtocol, StandardChartConformanc
         self.shouldAnimate = true
         self.noDataText = noDataText
         
-        self.setupLegends()
+//        self.setupLegends()
         self.setupInternalCombine()
     }
 }

@@ -8,10 +8,7 @@
 import SwiftUI
 
 // MARK: - Chart Data
-/**
- A protocol to extend functionality of `CTLineBarChartDataProtocol` specifically for Bar Charts.
- */
-public protocol CTBarChartDataProtocol: CTLineBarChartDataProtocol {
+public protocol CTBarChartDataProtocol {
     
     associatedtype BarStyle: CTBarStyle
     
@@ -21,28 +18,13 @@ public protocol CTBarChartDataProtocol: CTLineBarChartDataProtocol {
     var barStyle: BarStyle { get set }
 }
 
-
-
-/**
- A protocol to extend functionality of `CTBarChartDataProtocol` specifically for Multi Part Bar Charts.
- */
-public protocol CTMultiBarChartDataProtocol: CTBarChartDataProtocol {
+public protocol CTMultiBarChartDataProtocol {
     
     /**
      Grouping data to inform the chart about the relationship between the datapoints.
      */
     var groups: [GroupingData] { get set }
 }
-
-/**
- A protocol to extend functionality of `CTBarChartDataProtocol` specifically for Multi Part Bar Charts.
- */
-public protocol CTRangedBarChartDataProtocol: CTBarChartDataProtocol {}
-
-/**
- A protocol to extend functionality of `CTBarChartDataProtocol` specifically for Horizontal Bar Charts.
- */
-public protocol CTHorizontalBarChartDataProtocol: CTBarChartDataProtocol, isHorizontal {}
 
 public protocol isStandard {}
 public protocol isHorizontal {}

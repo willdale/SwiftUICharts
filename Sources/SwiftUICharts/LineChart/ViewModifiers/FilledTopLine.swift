@@ -37,66 +37,64 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
     
     internal func body(content: Content) -> some View {
         ZStack {
-            if chartData.isGreaterThanTwo() {
-                if lineColour.colourType == .colour,
-                   let colour = lineColour.colour
-                {
-                    LineShape(dataPoints: chartData.dataSets.dataPoints,
-                              lineType: chartData.dataSets.style.lineType,
-                              minValue: self.minValue,
-                              range: self.range)
-                        .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                        .stroke(colour, style: strokeStyle)
-                        
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                            self.startAnimation = true
-                        }
-                        .onDisappear {
-                            self.startAnimation = false
-                        }
-                } else if lineColour.colourType == .gradientColour,
-                          let colours = lineColour.colours,
-                          let startPoint = lineColour.startPoint,
-                          let endPoint = lineColour.endPoint
-                {
-                    LineShape(dataPoints: chartData.dataSets.dataPoints,
-                              lineType: chartData.dataSets.style.lineType,
-                              minValue: self.minValue,
-                              range: self.range)
-                        .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                        .stroke(LinearGradient(gradient: Gradient(colors: colours),
-                                               startPoint: startPoint,
-                                               endPoint: endPoint),
-                                style: strokeStyle)
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                            self.startAnimation = true
-                        }
-                        .onDisappear {
-                            self.startAnimation = false
-                        }
-                } else if lineColour.colourType == .gradientStops,
-                          let stops = lineColour.stops,
-                          let startPoint = lineColour.startPoint,
-                          let endPoint = lineColour.endPoint
-                {
-                    LineShape(dataPoints: chartData.dataSets.dataPoints,
-                              lineType: chartData.dataSets.style.lineType,
-                              minValue: self.minValue,
-                              range: self.range)
-                        .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                        .stroke(LinearGradient(gradient: Gradient(stops: stops),
-                                               startPoint: startPoint,
-                                               endPoint: endPoint),
-                                style: strokeStyle)
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                            self.startAnimation = true
-                        }
-                        .onDisappear {
-                            self.startAnimation = false
-                        }
-                }
-                content
-            } else { content }
+            if lineColour.colourType == .colour,
+               let colour = lineColour.colour
+            {
+                LineShape(dataPoints: chartData.dataSets.dataPoints,
+                          lineType: chartData.dataSets.style.lineType,
+                          minValue: self.minValue,
+                          range: self.range)
+                    .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                    .stroke(colour, style: strokeStyle)
+                
+                    .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                        self.startAnimation = true
+                    }
+                    .onDisappear {
+                        self.startAnimation = false
+                    }
+            } else if lineColour.colourType == .gradientColour,
+                      let colours = lineColour.colours,
+                      let startPoint = lineColour.startPoint,
+                      let endPoint = lineColour.endPoint
+            {
+                LineShape(dataPoints: chartData.dataSets.dataPoints,
+                          lineType: chartData.dataSets.style.lineType,
+                          minValue: self.minValue,
+                          range: self.range)
+                    .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                    .stroke(LinearGradient(gradient: Gradient(colors: colours),
+                                           startPoint: startPoint,
+                                           endPoint: endPoint),
+                            style: strokeStyle)
+                    .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                        self.startAnimation = true
+                    }
+                    .onDisappear {
+                        self.startAnimation = false
+                    }
+            } else if lineColour.colourType == .gradientStops,
+                      let stops = lineColour.stops,
+                      let startPoint = lineColour.startPoint,
+                      let endPoint = lineColour.endPoint
+            {
+                LineShape(dataPoints: chartData.dataSets.dataPoints,
+                          lineType: chartData.dataSets.style.lineType,
+                          minValue: self.minValue,
+                          range: self.range)
+                    .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                    .stroke(LinearGradient(gradient: Gradient(stops: stops),
+                                           startPoint: startPoint,
+                                           endPoint: endPoint),
+                            style: strokeStyle)
+                    .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                        self.startAnimation = true
+                    }
+                    .onDisappear {
+                        self.startAnimation = false
+                    }
+            }
+            content
         }
     }
 }

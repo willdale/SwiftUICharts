@@ -10,11 +10,12 @@ import SwiftUI
 /**
  Labels for the X axis.
  */
-internal struct XAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol & ChartAxes & ViewDataProtocol {
+internal struct XAxisLabels<ChartData>: ViewModifier where ChartData: CTChartData & ChartAxes & ViewDataProtocol,
+                                                           ChartData.CTStyle: CTLineBarChartStyle {
     
-    @ObservedObject private var chartData: T
+    @ObservedObject private var chartData: ChartData
     
-    internal init(chartData: T) {
+    internal init(chartData: ChartData) {
         self.chartData = chartData
         self.chartData.xAxisViewData.hasXAxisLabels = true
     }
@@ -69,7 +70,10 @@ extension View {
      - Parameter chartData: Chart data model.
      - Returns: A  new view containing the chart with labels marking the x axis.
      */
-    public func xAxisLabels<T: CTLineBarChartDataProtocol & ChartAxes & ViewDataProtocol>(chartData: T) -> some View {
+    public func xAxisLabels<ChartData>(chartData: ChartData) -> some View
+    where ChartData: CTChartData & ChartAxes & ViewDataProtocol,
+          ChartData.CTStyle: CTLineBarChartStyle
+    {
         self.modifier(XAxisLabels(chartData: chartData))
     }
 }

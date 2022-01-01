@@ -37,17 +37,15 @@ internal struct Legends<T>: ViewModifier where T: CTChartData {
     
     internal func body(content: Content) -> some View {
         Group {
-            if chartData.isGreaterThanTwo() {
-                VStack {
-                    content
-                    LegendView(chartData: chartData,
-                               columns: columns,
-                               width: width,
-                               font: font,
-                               textColor: textColor)
-                        .padding(.top, topPadding)
-                }
-            } else { content }
+            VStack {
+                content
+                LegendView(chartData: chartData,
+                           columns: columns,
+                           width: width,
+                           font: font,
+                           textColor: textColor)
+                    .padding(.top, topPadding)
+            }
         }
     }
 }

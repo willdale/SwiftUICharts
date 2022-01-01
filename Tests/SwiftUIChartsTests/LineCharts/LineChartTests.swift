@@ -29,17 +29,6 @@ final class LineChartTests: XCTestCase {
         let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints))
         XCTAssertEqual(chartData.range, 70.001)
     }
-    func testLineIsGreaterThanTwoTrue() {
-        let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints))
-        XCTAssertTrue(chartData.isGreaterThanTwo())
-    }
-    func testLineIsGreaterThanTwoFalse() {
-        let dataPoints = [
-            LineChartDataPoint(value: 10)
-        ]
-        let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints))
-        XCTAssertFalse(chartData.isGreaterThanTwo())
-    }
     
     // MARK: - Labels
 //    func testLineGetYLabels() {

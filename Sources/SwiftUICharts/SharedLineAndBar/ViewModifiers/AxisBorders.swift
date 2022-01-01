@@ -24,7 +24,6 @@ import SwiftUI
 //
 //    internal func body(content: Content) -> some View {
 //        Group {
-//            if chartData.isGreaterThanTwo() {
 //                if labelsAndBottom {
 //                    VStack {
 //                        ZStack(alignment: .bottom) {
@@ -42,7 +41,6 @@ import SwiftUI
 //                } else {
 //                    content
 //                }
-//            } else { content }
 //        }
 //    }
 //}

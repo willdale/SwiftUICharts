@@ -7,52 +7,8 @@
 
 import SwiftUI
 
-// MARK: - Is Greater Than
-extension CTChartData where Self: CTLineChartDataProtocol,
-                            SetType: CTSingleDataSetProtocol {
-    public func isGreaterThanTwo() -> Bool {
-        return dataSets.dataPoints.count >= 2
-    }
-}
-
-extension CTChartData where Self: CTBarChartDataProtocol,
-                            SetType: CTSingleDataSetProtocol {
-    public func isGreaterThanTwo() -> Bool {
-        return dataSets.dataPoints.count >= 1
-    }
-}
-
-extension CTChartData where Self: CTPieDoughnutChartDataProtocol,
-                            SetType: CTSingleDataSetProtocol {
-    public func isGreaterThanTwo() -> Bool {
-        return dataSets.dataPoints.count >= 1
-    }
-}
-
-extension CTChartData where Self: CTLineChartDataProtocol,
-                            SetType: CTMultiDataSetProtocol {
-    public func isGreaterThanTwo() -> Bool {
-        var returnValue: [Bool] = []
-        dataSets.dataSets.forEach { dataSet in
-            returnValue.append(dataSet.dataPoints.count >= 2)
-        }
-        return returnValue.first(where: { $0 == true }) ?? false
-    }
-}
-
-extension CTChartData where Self: CTBarChartDataProtocol,
-                            SetType: CTMultiDataSetProtocol {
-    public func isGreaterThanTwo() -> Bool {
-        var returnValue: [Bool] = []
-        dataSets.dataSets.forEach { dataSet in
-            returnValue.append(dataSet.dataPoints.count >= 1)
-        }
-        return returnValue.first(where: { $0 == true }) ?? false
-    }
-}
-
-extension CTLineBarChartDataProtocol where Self: YAxisViewDataProtocol,
-                                           Self: isStandard {
+extension TouchInfoDisplayable where Self: YAxisViewDataProtocol,
+                                     Self: isStandard {
     public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
         var returnPoint: CGFloat = .zero
         if touchLocation < chartSize.minX + (boxFrame.width / 2) {
@@ -66,8 +22,8 @@ extension CTLineBarChartDataProtocol where Self: YAxisViewDataProtocol,
     }
 }
 
-extension CTLineBarChartDataProtocol where Self: XAxisViewDataProtocol,
-                                           Self: isHorizontal {
+extension TouchInfoDisplayable where Self: XAxisViewDataProtocol,
+                                     Self: isHorizontal {
     public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
         var returnPoint: CGFloat = .zero
         if touchLocation < chartSize.minY + (boxFrame.height / 2) {
@@ -81,7 +37,7 @@ extension CTLineBarChartDataProtocol where Self: XAxisViewDataProtocol,
     }
 }
 
-extension CTPieDoughnutChartDataProtocol {
+extension TouchInfoDisplayable {
     public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
         touchLocation
     }

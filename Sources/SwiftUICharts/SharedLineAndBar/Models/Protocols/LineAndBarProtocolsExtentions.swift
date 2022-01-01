@@ -8,8 +8,9 @@
 import SwiftUI
 
 // MARK: - Data Set
-extension CTLineBarChartDataProtocol where Self: GetDataProtocol,
-                                           SetType: DataFunctionsProtocol {
+extension GetDataProtocol where Self: CTChartData,
+                                SetType: DataFunctionsProtocol,
+                                CTStyle: CTLineBarChartStyle {
     public var range: Double {
         get {
             var _lowestValue: Double
@@ -65,7 +66,8 @@ extension CTLineBarChartDataProtocol where Self: GetDataProtocol,
 }
 
 // MARK: - Axes Titles
-extension CTLineBarChartDataProtocol where Self: ViewDataProtocol {
+extension AxisY where Self: CTChartData & ViewDataProtocol,
+                      CTStyle: CTLineBarChartStyle {
     /**
      Returns the title for y axis.
      
@@ -119,7 +121,10 @@ extension CTLineBarChartDataProtocol where Self: ViewDataProtocol {
 //            }
 //        }
     }
-    
+}
+
+extension AxisX where Self: CTChartData & ViewDataProtocol,
+                      CTStyle: CTLineBarChartStyle {
     /**
      Returns the title for x axis.
      
@@ -181,21 +186,3 @@ extension CTLineBarChartDataProtocol where Self: ViewDataProtocol {
         }
     }
 }
-//extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol,
-//                                           Self.SetType: CTLineChartDataSet {
-//    public func getColour() -> ColourStyle {
-//        dataSets.style.lineColour
-//    }
-//}
-//extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol,
-//                                           Self.SetType: CTMultiLineChartDataSet,
-//                                           Self.SetType.DataSet: CTLineChartDataSet {
-//    public func getColour() -> ColourStyle {
-//        dataSets.dataSets.first?.style.lineColour ?? ColourStyle()
-//    }
-//}
-//extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol {
-//    public func getColour() -> ChartColour {
-//        barStyle.colour
-//    }
-//}

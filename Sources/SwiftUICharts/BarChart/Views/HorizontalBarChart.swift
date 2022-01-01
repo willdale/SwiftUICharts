@@ -20,15 +20,13 @@ public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBar
     
     public var body: some View {
         GeometryReader { geo in
-            if chartData.isGreaterThanTwo() {
-                VStack(spacing: 0) {
-                    HorizontalBarChartSubView(chartData: chartData)
-                        .accessibilityLabel(chartData.accessibilityTitle)
-                }
-                .onAppear { // Needed for axes label frames
-                    self.chartData.chartSize = geo.frame(in: .local)
-                }
-            } else { CustomNoDataView(chartData: chartData) }
+            VStack(spacing: 0) {
+                HorizontalBarChartSubView(chartData: chartData)
+                    .accessibilityLabel(chartData.accessibilityTitle)
+            }
+            .onAppear { // Needed for axes label frames
+                self.chartData.chartSize = geo.frame(in: .local)
+            }
         }
     }
 }
@@ -63,7 +61,7 @@ internal struct HorizontalBarChartSubView<ChartData>: View where ChartData: Hori
 }
 
 // MARK: - Element
-internal struct HorizontalBarElement<ChartData>: View where ChartData: CTBarChartDataProtocol & GetDataProtocol {
+internal struct HorizontalBarElement<ChartData>: View where ChartData: CTChartData & CTBarChartDataProtocol & GetDataProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let dataPoint: BarChartDataPoint

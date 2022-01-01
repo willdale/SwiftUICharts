@@ -39,19 +39,17 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
     
     public var body: some View {
         GeometryReader { geo in
-            if chartData.isGreaterThanTwo() {
-                ZStack {
-                    chartData.getAccessibility()
-                    ForEach(chartData.dataSets.dataSets, id: \.id) { dataSet in
-                        SingleLineChartSubView(chartData: chartData,
-                                               dataSet: dataSet,
-                                               colour: dataSet.style.lineColour)
-                    }
+            ZStack {
+                chartData.getAccessibility()
+                ForEach(chartData.dataSets.dataSets, id: \.id) { dataSet in
+                    SingleLineChartSubView(chartData: chartData,
+                                           dataSet: dataSet,
+                                           colour: dataSet.style.lineColour)
                 }
-                .onAppear { // Needed for axes label frames
-                    self.chartData.chartSize = geo.frame(in: .local)
-                }
-            } else { CustomNoDataView(chartData: chartData) }
+            }
+            .onAppear { // Needed for axes label frames
+                self.chartData.chartSize = geo.frame(in: .local)
+            }
         }
     }
 }

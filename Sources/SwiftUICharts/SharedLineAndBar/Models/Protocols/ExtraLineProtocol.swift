@@ -28,7 +28,8 @@ public protocol ExtraLineProtocol {
     func getExtraYAxisTitle(colour: AxisColour) -> ExtraYTitle
 }
 
-extension ExtraLineProtocol where Self: CTLineBarChartDataProtocol & YAxisViewDataProtocol {
+extension ExtraLineProtocol where Self: CTChartData & YAxisViewDataProtocol,
+                                  CTStyle: CTLineBarChartStyle {
     
     internal var extraLabelsArray: [String] { self.generateExtraYLabels(yAxisViewData.yAxisSpecifier) }
     private func generateExtraYLabels(_ specifier: String) -> [String] {

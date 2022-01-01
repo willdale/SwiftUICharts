@@ -75,13 +75,6 @@ import SwiftUI
 //        XCTAssertEqual(chartData.range, 210.001)
 //    }
 //
-//    // MARK: Greater
-//    func testStackedBarIsGreaterThanTwoTrue() {
-//        let chartData = StackedBarChartData(dataSets: data, groups: groups)
-//
-//        XCTAssertTrue(chartData.isGreaterThanTwo())
-//    }
-//
     // MARK: Labels
 //    func testStackedBarGetYLabels() {
 //        let chartData = StackedBarChartData(dataSets: data,

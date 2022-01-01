@@ -20,15 +20,13 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
     
     public var body: some View {
         GeometryReader { geo in
-            if chartData.isGreaterThanTwo() {
-                HStack(spacing: 0) {
-                    BarChartSubView(chartData: chartData)
-                        .accessibilityLabel(chartData.accessibilityTitle)
-                }
-                .onAppear { // Needed for axes label frames
-                    self.chartData.chartSize = geo.frame(in: .local)
-                }
-            } else { CustomNoDataView(chartData: chartData) }
+            HStack(spacing: 0) {
+                BarChartSubView(chartData: chartData)
+                    .accessibilityLabel(chartData.accessibilityTitle)
+            }
+            .onAppear { // Needed for axes label frames
+                self.chartData.chartSize = geo.frame(in: .local)
+            }
         }
     }
 }
@@ -63,7 +61,7 @@ internal struct BarChartSubView<ChartData>: View where ChartData: BarChartData {
 }
 
 // MARK: - Element
-internal struct BarElement<ChartData>: View where ChartData: CTBarChartDataProtocol & GetDataProtocol {
+internal struct BarElement<ChartData>: View where ChartData: BarChartData {
     
     @ObservedObject private var chartData: ChartData
     private let dataPoint: BarChartDataPoint

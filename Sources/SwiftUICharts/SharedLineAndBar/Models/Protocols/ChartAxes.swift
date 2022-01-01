@@ -10,7 +10,7 @@ import SwiftUI
 public typealias ChartAxes = AxisX & AxisY
 
 // MARK: - AxisY
-public protocol AxisY: ObservableObject {
+public protocol AxisY: AnyObject {
     /**
      Array of strings for the labels on the Y Axis instead of the labels generated
      from data point values.
@@ -28,7 +28,8 @@ public protocol AxisY: ObservableObject {
     func getYAxisLabels() -> YLabels
 }
 
-extension AxisY where Self: CTLineBarChartDataProtocol & GetDataProtocol & ViewDataProtocol {
+extension AxisY where Self: CTChartData & GetDataProtocol & ViewDataProtocol,
+                      CTStyle: CTLineBarChartStyle {
     internal var labelsArray: [String] {
         self.generateYLabels(yAxisViewData.yAxisSpecifier,
                              numberFormatter: yAxisViewData.yAxisNumberFormatter)
@@ -65,13 +66,14 @@ extension AxisY where Self: CTLineBarChartDataProtocol & GetDataProtocol & ViewD
     }
 }
 
-extension AxisY where Self: CTLineBarChartDataProtocol & ViewDataProtocol {
+extension AxisY where Self: ViewDataProtocol {
    internal var yAxisPaddingHeight: CGFloat {
        (xAxisViewData.xAxisLabelHeights.max() ?? 0) + xAxisViewData.xAxisTitleHeight
     }
 }
 
-extension AxisY where Self: CTLineBarChartDataProtocol & GetDataProtocol & ViewDataProtocol {
+extension AxisY where Self: CTChartData & GetDataProtocol & ViewDataProtocol,
+                      CTStyle: CTLineBarChartStyle {
     public func getYAxisLabels() -> some View {
         VStack {
             if self.chartStyle.xAxisLabelPosition == .top {

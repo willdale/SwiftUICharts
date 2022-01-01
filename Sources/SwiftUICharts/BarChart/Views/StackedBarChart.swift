@@ -20,15 +20,13 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
     }
     
     public var body: some View {
-        if chartData.isGreaterThanTwo() {
-            HStack(alignment: .bottom, spacing: 0) {
-                ForEach(chartData.dataSets.dataSets.indices) { index in
-                    StackSubView(chartData: chartData,
-                                 dataSet: chartData.dataSets.dataSets[index],
-                                 index: index)
-                }
+        HStack(alignment: .bottom, spacing: 0) {
+            ForEach(chartData.dataSets.dataSets.indices) { index in
+                StackSubView(chartData: chartData,
+                             dataSet: chartData.dataSets.dataSets[index],
+                             index: index)
             }
-        } else { CustomNoDataView(chartData: chartData) }
+        }
     }
 }
 

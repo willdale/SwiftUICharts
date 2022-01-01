@@ -17,7 +17,8 @@ import SwiftUI
  This gets used higher up the view hierarchy
  to set the frame of the of the text after rotation.
  */
-internal struct RotatedText<ChartData>: View where ChartData: CTLineBarChartDataProtocol & XAxisViewDataProtocol {
+internal struct RotatedText<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol,
+                                                   ChartData.CTStyle: CTLineBarChartStyle {
     
     @ObservedObject private var chartData: ChartData
     private let label: String
@@ -85,7 +86,8 @@ internal struct RotatedText<ChartData>: View where ChartData: CTLineBarChartData
  This gets used higher up the view hierarchy
  to set the frame of the of the text after rotation.
  */
-internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTLineBarChartDataProtocol & isHorizontal & YAxisViewDataProtocol {
+internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTChartData & isHorizontal & YAxisViewDataProtocol,
+                                                             ChartData.CTStyle: CTLineBarChartStyle {
     
     @ObservedObject private var chartData: ChartData
     private let label: String
@@ -131,7 +133,8 @@ internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTLineBa
 
 
 
-internal struct TempText<ChartData>: View where ChartData: CTLineBarChartDataProtocol & XAxisViewDataProtocol {
+internal struct TempText<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol,
+                                                ChartData.CTStyle: CTLineBarChartStyle {
     
     @ObservedObject private var chartData: ChartData
     private let label: String

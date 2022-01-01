@@ -10,14 +10,15 @@ import SwiftUI
 /**
  Automatically generated labels for the Y axis.
  */
-internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol & AxisY & ViewDataProtocol {
+internal struct YAxisLabels<ChartData>: ViewModifier where ChartData: CTChartData & AxisY & ViewDataProtocol,
+                                                           ChartData.CTStyle: CTLineBarChartStyle {
     
-    @ObservedObject private var chartData: T
+    @ObservedObject private var chartData: ChartData
     private let specifier: String
     private let colourIndicator: AxisColour
     
     internal init(
-        chartData: T,
+        chartData: ChartData,
         specifier: String,
         formatter: NumberFormatter?,
         colourIndicator: AxisColour
@@ -33,22 +34,20 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
     
     internal func body(content: Content) -> some View {
         Group {
-            if chartData.isGreaterThanTwo() {
-                switch chartData.chartStyle.yAxisLabelPosition {
-                case .leading:
-                    HStack(spacing: 0) {
-                        chartData.getYAxisTitle(colour: colourIndicator)
-                        chartData.getYAxisLabels().padding(.trailing, 4)
-                        content
-                    }
-                case .trailing:
-                    HStack(spacing: 0) {
-                        content
-                        chartData.getYAxisLabels().padding(.leading, 4)
-                        chartData.getYAxisTitle(colour: colourIndicator)
-                    }
+            switch chartData.chartStyle.yAxisLabelPosition {
+            case .leading:
+                HStack(spacing: 0) {
+                    chartData.getYAxisTitle(colour: colourIndicator)
+                    chartData.getYAxisLabels().padding(.trailing, 4)
+                    content
                 }
-            } else { content }
+            case .trailing:
+                HStack(spacing: 0) {
+                    content
+                    chartData.getYAxisLabels().padding(.leading, 4)
+                    chartData.getYAxisTitle(colour: colourIndicator)
+                }
+            }
         }
     }
 }
@@ -81,12 +80,15 @@ extension View {
         - specifier: Decimal precision specifier
      - Returns: HStack of labels
      */
-    public func yAxisLabels<T: CTLineBarChartDataProtocol & AxisY & ViewDataProtocol>(
-        chartData: T,
+    public func yAxisLabels<ChartData>(
+        chartData: ChartData,
         specifier: String = "%.0f",
         formatter: NumberFormatter? = nil,
         colourIndicator: AxisColour = .none
-    ) -> some View {
+    ) -> some View
+    where ChartData: CTChartData & AxisY & ViewDataProtocol,
+          ChartData.CTStyle: CTLineBarChartStyle
+    {
         self.modifier(YAxisLabels(chartData: chartData, specifier: specifier, formatter: formatter, colourIndicator: colourIndicator))
     }
 }

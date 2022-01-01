@@ -38,24 +38,6 @@ final class MultiLineChartTest: XCTestCase {
         let chartData = MultiLineChartData(dataSets: dataSet)
         XCTAssertEqual(chartData.range, 90.001)
     }
-    // MARK: Greater
-    func testMultiIsGreaterThanTwoTrue() {
-        let chartData = MultiLineChartData(dataSets: dataSet)
-        XCTAssertTrue(chartData.isGreaterThanTwo())
-    }
-    
-    func testMultiIsGreaterThanTwoFalse() {
-        let chartData = MultiLineChartData(dataSets:
-                                            MultiLineDataSet(dataSets: [
-                                                LineDataSet(dataPoints: [
-                                                    LineChartDataPoint(value: 10),
-                                                ]),
-                                                LineDataSet(dataPoints: [
-                                                    LineChartDataPoint(value: 50)
-                                                ])
-                                            ]))
-        XCTAssertFalse(chartData.isGreaterThanTwo())
-    }
     
     // MARK: - Labels
 //    func testMultiLineGetYLabels() {
