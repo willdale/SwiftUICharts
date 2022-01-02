@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  deprecated+LineBarAPI.swift
 //  
 //
 //  Created by Will Dale on 30/10/2021.
@@ -32,7 +32,7 @@ extension View {
      */
     @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     public func floatingInfoBox<ChartData>(chartData: ChartData) -> some View
-    where ChartData: CTLineBarChartDataProtocol & isHorizontal & Publishable {
+    where ChartData: CTLineBarChartDataProtocol & HorizontalChart & Publishable {
         EmptyView()
     }
 }
@@ -66,7 +66,7 @@ extension View {
         chartData: ChartData,
         width: CGFloat = 70
     ) -> some View
-    where ChartData: CTLineBarChartDataProtocol & isHorizontal & Publishable {
+    where ChartData: CTLineBarChartDataProtocol & HorizontalChart & Publishable {
         EmptyView()
     }
 }

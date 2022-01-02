@@ -12,7 +12,7 @@ import Combine
  Data for drawing and styling a standard Bar Chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class BarChartData: CTChartData, CTBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
+public final class BarChartData: BarChartType, CTChartData, CTBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
     
     // MARK: Properties
     public let id: UUID = UUID()
@@ -204,7 +204,7 @@ public final class BarChartData: CTChartData, CTBarChartDataProtocol, StandardCh
     }
 
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        markerSubView(markerData: markerData, touchLocation: touchLocation, chartSize: chartSize)
+        markerSubView(markerData: markerData, chartSize: chartSize, touchLocation: touchLocation)
     }
     
     public func touchDidFinish() {

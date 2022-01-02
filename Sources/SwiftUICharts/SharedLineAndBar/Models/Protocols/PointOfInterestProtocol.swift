@@ -235,7 +235,7 @@ extension PointOfInterestProtocol where Self: CTChartData, CTStyle: CTLineBarCha
             )
     }
 }
-extension PointOfInterestProtocol where Self: CTChartData & isHorizontal, CTStyle: CTLineBarChartStyle {
+extension PointOfInterestProtocol where Self: CTChartData & HorizontalChart, CTStyle: CTLineBarChartStyle {
     public func poiMarker(value: Double, range: Double, minValue: Double) -> some Shape {
         VerticalMarker(chartData: self, value: value, range: range, minValue: minValue)
     }
@@ -322,7 +322,7 @@ extension PointOfInterestProtocol where Self: CTChartData & PointOfInterestProto
 // MARK: Vertical Bar Charts
 extension PointOfInterestProtocol where Self: CTChartData & PointOfInterestProtocol & ViewDataProtocol,
                                         CTStyle: CTBarChartStyle,
-                                        Self: isStandard {
+                                        Self: VerticalChart {
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         let leading: CGFloat = -((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) - 4 // -4 for padding at the root view.
         let trailing: CGFloat = frame.width + ((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) + 4 // +4 for padding at the root view.
@@ -350,7 +350,7 @@ extension PointOfInterestProtocol where Self: CTChartData & PointOfInterestProto
 // MARK: Horizontal Bar Charts
 extension PointOfInterestProtocol where Self: CTChartData & PointOfInterestProtocol & XAxisViewDataProtocol,
                                         CTStyle: CTBarChartStyle,
-                                        Self: isHorizontal {
+                                        Self: HorizontalChart {
     public func poiValueLabelPositionAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         let bottom: CGFloat = frame.height + ((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) + 4  // +4 for padding at the root view
         let top: CGFloat = -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - 4  // -4 for padding at the root view

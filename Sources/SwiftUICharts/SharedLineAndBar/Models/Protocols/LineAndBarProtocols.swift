@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-public protocol Colourable: Equatable {}
-
-// MARK: - Chart Data
-public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBarChartStyle {}
-
 // MARK: - Style
 /// A protocol to get the correct touch overlay marker.
 public protocol MarkerType {}

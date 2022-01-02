@@ -11,7 +11,7 @@ import SwiftUI
  Model for setting up colour styling.
  */
 @available(*, deprecated, message: "Please use \"ChartColour\" instead.")
-public struct ColourStyle: Colourable, Hashable {
+public struct ColourStyle: Hashable {
     
     public var colourType: ColourType
     public var colour: Color?
@@ -70,10 +70,4 @@ public struct ColourStyle: Colourable, Hashable {
         self.startPoint = startPoint
         self.endPoint = endPoint
     }
-}
-/// Was ColourStyle
-public enum ChartColour: Colourable, Hashable, Equatable {
-    case colour(colour: Color)
-    case gradient(colours: [Color], startPoint: UnitPoint, endPoint: UnitPoint)
-    case gradientStops(stops: [Gradient.Stop], startPoint: UnitPoint, endPoint: UnitPoint)
 }

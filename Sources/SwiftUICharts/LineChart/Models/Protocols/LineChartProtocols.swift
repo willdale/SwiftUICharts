@@ -7,11 +7,10 @@
 
 import SwiftUI
 
+public protocol LineChartType {}
+
 // MARK: - Chart Data
-/**
- A protocol to extend functionality of `CTLineBarChartDataProtocol` specifically for Line Charts.
- */
-public protocol CTLineChartDataProtocol: CTLineBarChartDataProtocol {
+public protocol CTLineChartDataProtocol {
     
     /// A type representing opaque View
     associatedtype Points: View
@@ -33,6 +32,19 @@ public protocol CTLineChartDataProtocol: CTLineBarChartDataProtocol {
      */
     func getAccessibility() -> Access
 }
+
+extension CTLineChartDataProtocol where Self: CTChartData, SetType: CTLineChartDataSet {
+    public func getAccessibility() -> some View {
+        ForEach(dataSets.dataPoints.indices, id: \.self) { point in
+            AccessibilityRectangle(dataPointCount: self.dataSets.dataPoints.count,
+                                   dataPointNo: point)
+                .foregroundColor(Color(.gray).opacity(0.000000001))
+                .accessibilityLabel(self.accessibilityTitle)
+                .accessibilityValue(self.dataSets.dataPoints[point].getCellAccessibilityValue(specifier: self.infoView.touchSpecifier))
+        }
+    }
+}
+
 
 // MARK: - Style
 /**

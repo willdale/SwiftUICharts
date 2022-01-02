@@ -14,7 +14,7 @@ import Combine
  This model contains all the data and styling information for a single line, line chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class MultiLineChartData: CTLineChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
+public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
     
     // MARK: Properties
     public let id: UUID = UUID()
@@ -76,7 +76,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, StandardChartCon
         self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         
-        self.setupLegends()
+//        self.setupLegends()
         self.setupInternalCombine()
     }
     
@@ -283,7 +283,7 @@ public final class MultiLineChartData: CTLineChartDataProtocol, StandardChartCon
         self.shouldAnimate = true
         self.noDataText = noDataText
         
-        self.setupLegends()
+//        self.setupLegends()
         self.setupInternalCombine()
     }
 }

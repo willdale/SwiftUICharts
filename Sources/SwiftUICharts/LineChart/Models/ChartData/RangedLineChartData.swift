@@ -14,7 +14,7 @@ import Combine
  This model contains the data and styling information for a ranged line chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class RangedLineChartData: CTLineChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
+public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
     
     // MARK: Properties
     public let id: UUID  = UUID()
@@ -76,8 +76,8 @@ public final class RangedLineChartData: CTLineChartDataProtocol, StandardChartCo
         self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         
-        self.setupLegends()
-        self.setupRangeLegends()
+//        self.setupLegends()
+//        self.setupRangeLegends()
         self.setupInternalCombine()
     }
     
@@ -266,8 +266,8 @@ public final class RangedLineChartData: CTLineChartDataProtocol, StandardChartCo
         self.shouldAnimate = true
         self.noDataText = noDataText
         
-        self.setupLegends()
-        self.setupRangeLegends()
+//        self.setupLegends()
+//        self.setupRangeLegends()
         self.setupInternalCombine()
     }
 }

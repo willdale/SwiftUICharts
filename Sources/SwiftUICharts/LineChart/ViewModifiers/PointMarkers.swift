@@ -7,14 +7,12 @@
 
 import SwiftUI
 
-/**
- ViewModifier for for laying out point markers.
- */
-internal struct PointMarkers<T>: ViewModifier where T: CTLineChartDataProtocol & GetDataProtocol {
+internal struct PointMarkers<ChartData>: ViewModifier
+where ChartData: CTChartData & CTLineChartDataProtocol & GetDataProtocol {
     
-    @ObservedObject private var chartData: T
+    @ObservedObject private var chartData: ChartData
     
-    internal init(chartData: T) {
+    internal init(chartData: ChartData) {
         self.chartData = chartData
     }
     internal func body(content: Content) -> some View {
@@ -54,7 +52,7 @@ extension View {
      - Returns: A  new view containing the chart with point markers.
      
      */
-    public func pointMarkers<T: CTLineChartDataProtocol & GetDataProtocol>(chartData: T) -> some View {
+    public func pointMarkers<ChartData: CTChartData & CTLineChartDataProtocol & GetDataProtocol>(chartData: ChartData) -> some View {
         self.modifier(PointMarkers(chartData: chartData))
     }
 }

@@ -7,14 +7,15 @@
 
 import SwiftUI
 
-internal struct ExtraYAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol & YAxisViewDataProtocol {
+internal struct ExtraYAxisLabels<ChartData>: ViewModifier where ChartData: CTChartData & YAxisViewDataProtocol,
+                                                                ChartData.CTStyle: CTLineBarChartStyle {
     
-    @ObservedObject private var chartData: T
+    @ObservedObject private var chartData: ChartData
     private let specifier: String
     private let colourIndicator: AxisColour
     
     internal init(
-        chartData: T,
+        chartData: ChartData,
         specifier: String,
         colourIndicator: AxisColour
     ) {
@@ -54,11 +55,14 @@ extension View {
         - colourIndicator: Second Y Axis style.
      - Returns: A View with second set of Y axis labels.
      */
-    public func extraYAxisLabels<T: CTLineBarChartDataProtocol & YAxisViewDataProtocol>(
-        chartData: T,
+    public func extraYAxisLabels<ChartData>(
+        chartData: ChartData,
         specifier: String = "%.0f",
         colourIndicator: AxisColour = .none
-    ) -> some View {
+    ) -> some View
+    where ChartData: CTChartData & YAxisViewDataProtocol,
+          ChartData.CTStyle: CTLineBarChartStyle
+    {
         self.modifier(ExtraYAxisLabels(chartData: chartData, specifier: specifier, colourIndicator: colourIndicator))
     }
 }

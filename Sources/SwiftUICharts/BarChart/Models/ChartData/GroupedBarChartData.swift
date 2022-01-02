@@ -14,7 +14,7 @@ import Combine
  The grouping data informs the model as to how the datapoints are linked.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class GroupedBarChartData: CTChartData, CTMultiBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
+public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
     
     // MARK: Properties
     public let id: UUID = UUID()
@@ -238,7 +238,7 @@ public final class GroupedBarChartData: CTChartData, CTMultiBarChartDataProtocol
     }
     
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        markerSubView(markerData: markerData, touchLocation: touchLocation, chartSize: chartSize)
+        markerSubView(markerData: markerData, chartSize: chartSize, touchLocation: touchLocation)
     }
     
     public func touchDidFinish() {

@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-public typealias StandardChartConformance = GetDataProtocol & Publishable & PointOfInterestProtocol & Touchable & TouchInfoDisplayable & ExtraLineProtocol & isStandard
-public typealias HorizontalChartConformance = GetDataProtocol & Publishable & PointOfInterestProtocol & Touchable & TouchInfoDisplayable & ExtraLineProtocol & isHorizontal
+public typealias ChartConformance = GetDataProtocol & Publishable & PointOfInterestProtocol & Touchable & TouchInfoDisplayable & ExtraLineProtocol
+public typealias StandardChartConformance = AxisCharts & ChartConformance & VerticalChart
+public typealias HorizontalChartConformance = AxisCharts & ChartConformance & HorizontalChart
 
 // MARK: Chart Data
 /**
@@ -34,40 +35,28 @@ public protocol CTChartData: ObservableObject, Identifiable {
     /// The value count be what the chart title is or screen title.
     var accessibilityTitle: LocalizedStringKey { get set }
     
-    /**
-     Data model containing datapoints and styling information.
-     */
+    /// Data model containing datapoints and styling information.
     var dataSets: SetType { get set }
     
-    /**
-     Data model containing the charts Title, Subtitle and the Title for Legend.
-     */
+    /// Data model containing the charts Title, Subtitle and the Title for Legend.
     @available(*, deprecated, message: "Please use \"\" instead.")
     var metadata: ChartMetadata { get set }
     
-    /**
-     Array of `LegendData` to populate the charts legend.
-     
-     This is populated automatically from within each view.
-     */
+    /// Array of `LegendData` to populate the charts legend.
+    /// This is populated automatically from within each view.
     var legends: [LegendData] { get set }
     
-    /**
-     Data model pass data from `TouchOverlay` ViewModifier to
-     `HeaderBox` or `InfoBox` for display.
-     */
+    /// Data model pass data from `TouchOverlay` ViewModifier to
+    /// `HeaderBox` or `InfoBox` for display.
     var infoView: InfoViewData<DataPoint> { get set }
     
-    /**
-     Data model conatining the style data for the chart.
-     */
+    /// Data model conatining the style data for the chart.
     var chartStyle: CTStyle { get set }
     
-    /**
-     Customisable `Text` to display when where is not enough data to draw the chart.
-     */
+    /// Customisable `Text` to display when where is not enough data to draw the chart.
     var noDataText: Text { get set }
     
+    /// A global control to disable animations
     var shouldAnimate: Bool { get set }
 }
 

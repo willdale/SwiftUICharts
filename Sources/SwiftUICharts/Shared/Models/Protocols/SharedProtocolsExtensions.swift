@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension TouchInfoDisplayable where Self: YAxisViewDataProtocol,
-                                     Self: isStandard {
+                                     Self: VerticalChart {
     public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
         var returnPoint: CGFloat = .zero
         if touchLocation < chartSize.minX + (boxFrame.width / 2) {
@@ -23,7 +23,7 @@ extension TouchInfoDisplayable where Self: YAxisViewDataProtocol,
 }
 
 extension TouchInfoDisplayable where Self: XAxisViewDataProtocol,
-                                     Self: isHorizontal {
+                                     Self: HorizontalChart {
     public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
         var returnPoint: CGFloat = .zero
         if touchLocation < chartSize.minY + (boxFrame.height / 2) {

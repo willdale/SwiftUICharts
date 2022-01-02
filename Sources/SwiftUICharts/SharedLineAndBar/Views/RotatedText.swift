@@ -86,7 +86,7 @@ internal struct RotatedText<ChartData>: View where ChartData: CTChartData & XAxi
  This gets used higher up the view hierarchy
  to set the frame of the of the text after rotation.
  */
-internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTChartData & isHorizontal & YAxisViewDataProtocol,
+internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTChartData & HorizontalChart & YAxisViewDataProtocol,
                                                              ChartData.CTStyle: CTLineBarChartStyle {
     
     @ObservedObject private var chartData: ChartData

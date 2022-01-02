@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+public protocol BarChartType {}
+
 // MARK: - Chart Data
 public protocol CTBarChartDataProtocol {
     
@@ -26,8 +28,8 @@ public protocol CTMultiBarChartDataProtocol {
     var groups: [GroupingData] { get set }
 }
 
-public protocol isStandard {}
-public protocol isHorizontal {}
+public protocol VerticalChart {}
+public protocol HorizontalChart {}
 
 // MARK: - Style
 /**

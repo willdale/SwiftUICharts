@@ -45,7 +45,7 @@ where ChartData: InfoData,
     }
     
     private func setBoxLocation(_ touchLocation: CGPoint, _ chartSize: CGRect) -> CGPoint {
-        if chartData is isHorizontal {
+        if chartData is HorizontalChart {
             return CGPoint(x: 35,
                            y: chartData.setBoxLocation(touchLocation: chartData.infoView.touchLocation.y,
                                                        boxFrame: boxFrame,
@@ -158,7 +158,7 @@ where ChartData: InfoData,
     }
     
     private func setBoxLocation(_ touchLocation: CGPoint, _ chartSize: CGRect) -> CGPoint {
-        if chartData is isHorizontal {
+        if chartData is HorizontalChart {
             return CGPoint(x: 35,
                            y: chartData.setBoxLocation(touchLocation: chartData.infoView.touchLocation.y,
                                                        boxFrame: boxFrame,
