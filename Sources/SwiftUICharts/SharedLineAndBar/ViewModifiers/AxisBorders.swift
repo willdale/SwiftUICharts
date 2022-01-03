@@ -7,6 +7,61 @@
 
 import SwiftUI
 
+internal struct AxisBorder<ChartData>: ViewModifier where ChartData: CTChartData {
+    
+    @ObservedObject private var chartData: ChartData
+    private var border: ChartBorder
+    
+    internal init(
+        chartData: ChartData,
+        side: ChartBorder.Side,
+        style: ChartBorder.Style
+    ) {
+        self.chartData = chartData
+        self.border = ChartBorder(side: side, style: style)
+    }
+    
+    internal func body(content: Content) -> some View {
+        Group {
+            switch border.side {
+            case .top:
+                ZStack(alignment: .top) {
+                    HorizontalBorderView(chartData: chartData, style: border.style)
+                    content
+                }
+            case .leading:
+                ZStack(alignment: .leading) {
+                    VerticalBorderView(chartData: chartData, style: border.style)
+                    content
+                }
+            case .trailing:
+                ZStack(alignment: .trailing) {
+                    content
+                    VerticalBorderView(chartData: chartData, style: border.style)
+                }
+            case .bottom:
+                ZStack(alignment: .bottom) {
+                    content
+                    HorizontalBorderView(chartData: chartData, style: border.style)
+                }
+            }
+        }
+    }
+}
+// MARK: - Extension
+extension View {
+    public func axisBorder<ChartData>(
+        chartData: ChartData,
+        side: ChartBorder.Side,
+        style: ChartBorder.Style
+    ) -> some View
+    where ChartData: CTChartData
+    {
+        self.modifier(AxisBorder(chartData: chartData, side: side, style: style))
+    }
+}
+
+// MARK: - ChartBorder
 public struct ChartBorder {
     public var side: Side
     public var style: Style
@@ -59,68 +114,7 @@ extension ChartBorder.Style {
     public static let primary = ChartBorder.Style(lineColour: Color.primary)
 }
 
-internal struct AxisBorder<ChartData>: ViewModifier where ChartData: CTChartData {
-    
-    @ObservedObject private var chartData: ChartData
-    private var border: ChartBorder
-    
-    internal init(
-        chartData: ChartData,
-        side: ChartBorder.Side,
-        style: ChartBorder.Style
-    ) {
-        self.chartData = chartData
-        self.border = ChartBorder(side: side, style: style)
-    }
-    
-    internal func body(content: Content) -> some View {
-        Group {
-            switch border.side {
-            case .top:
-                VStack {
-                    ZStack(alignment: .top) {
-                        HorizontalBorderView(chartData: chartData, style: border.style)
-                        content
-                    }
-                }
-            case .leading:
-//                HStack {
-                    ZStack(alignment: .leading) {
-                        VerticalBorderView(chartData: chartData, style: border.style)
-                        content
-                    }
-//                }
-            case .trailing:
-                HStack {
-                    ZStack(alignment: .trailing) {
-                        content
-                        VerticalBorderView(chartData: chartData, style: border.style)
-                    }
-                }
-            case .bottom:
-                VStack {
-                    ZStack(alignment: .bottom) {
-                        content
-                        HorizontalBorderView(chartData: chartData, style: border.style)
-                    }
-                }
-            }
-        }
-    }
-}
-
-extension View {
-    public func axisBorder<ChartData>(
-        chartData: ChartData,
-        side: ChartBorder.Side,
-        style: ChartBorder.Style
-    ) -> some View
-    where ChartData: CTChartData
-    {
-        self.modifier(AxisBorder(chartData: chartData, side: side, style: style))
-    }
-}
-
+// MARK: - HorizontalBorderView
 internal struct HorizontalBorderView<ChartData>: View where ChartData: CTChartData {
     
     @ObservedObject private var chartData: ChartData
@@ -154,6 +148,7 @@ internal struct HorizontalBorderView<ChartData>: View where ChartData: CTChartDa
     }
 }
 
+// MARK: - VerticalBorderView
 internal struct VerticalBorderView<ChartData>: View where ChartData: CTChartData {
     
     @ObservedObject private var chartData: ChartData

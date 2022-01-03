@@ -15,6 +15,7 @@ import SwiftUI
  case bottom
  ```
  */
+@available(*, deprecated, message: "")
 public enum XAxisLabelPosistion {
     case top
     case bottom

@@ -66,16 +66,21 @@ public struct BarChartStyle: CTBarChartStyle {
     @available(*, deprecated, message: "Moved to view \".axisBorder\"")
     public var yAxisBorderColour: Color?
     
+    @available(*, deprecated, message: "Moved to view \".axisTitle\"")
+    public var xAxisTitle: String?
+    @available(*, deprecated, message: "Moved to view \".axisTitle\"")
+    public var xAxisTitleFont: Font
+    @available(*, deprecated, message: "Moved to view \".axisTitle\"")
+    public var xAxisTitleColour: Color
+    @available(*, deprecated, message: "Moved to view \".axisTitle\"")
+    public var yAxisTitle: String?
+    @available(*, deprecated, message: "Moved to view \".axisTitle\"")
+    public var yAxisTitleFont: Font
+    @available(*, deprecated, message: "Moved to view \".axisTitle\"")
+    public var yAxisTitleColour: Color
+    
     // MARK: Properties
     public var markerType: BarMarkerType
-    
-    public var xAxisTitle: String?
-    public var xAxisTitleFont: Font
-    public var xAxisTitleColour: Color
-    
-    public var yAxisTitle: String?
-    public var yAxisTitleFont: Font
-    public var yAxisTitleColour: Color
 
     public var baseline: Baseline
     public var topLine: Topline
