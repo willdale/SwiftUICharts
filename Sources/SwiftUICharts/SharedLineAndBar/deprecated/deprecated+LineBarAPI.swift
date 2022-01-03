@@ -84,7 +84,7 @@ extension View {
      - Returns: A  new view containing the chart with a trend line.
      */
     @available(*, deprecated, message: "Please use `.extraLine` instead.")
-    public func linearTrendLine<T: CTLineBarChartDataProtocol & GetDataProtocol>(
+    public func linearTrendLine<T: CTLineBarChartDataProtocol & DataHelper>(
         chartData: T,
         firstValue: Double,
         lastValue: Double,

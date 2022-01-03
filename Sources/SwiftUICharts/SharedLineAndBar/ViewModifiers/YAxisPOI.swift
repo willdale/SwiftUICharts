@@ -10,7 +10,7 @@ import SwiftUI
 /**
  Configurable Point of interest
  */
-internal struct YAxisPOI<ChartData>: ViewModifier where ChartData: CTChartData & GetDataProtocol & PointOfInterestProtocol {
+internal struct YAxisPOI<ChartData>: ViewModifier where ChartData: CTChartData & DataHelper & PointOfInterestProtocol {
     
     @ObservedObject private var chartData: ChartData
     
@@ -200,7 +200,7 @@ extension View {
         strokeStyle: StrokeStyle = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0),
         addToLegends: Bool = true
     ) -> some View
-    where ChartData: CTChartData & GetDataProtocol & PointOfInterestProtocol
+    where ChartData: CTChartData & DataHelper & PointOfInterestProtocol
     {
         self.modifier(YAxisPOI(chartData: chartData,
                                markerName: markerName,
@@ -282,7 +282,7 @@ extension View {
         strokeStyle: StrokeStyle = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0),
         addToLegends: Bool = true
     ) -> some View
-    where ChartData: CTChartData & GetDataProtocol & PointOfInterestProtocol
+    where ChartData: CTChartData & DataHelper & PointOfInterestProtocol
     {
         self.modifier(YAxisPOI(chartData: chartData,
                                markerName: markerName,

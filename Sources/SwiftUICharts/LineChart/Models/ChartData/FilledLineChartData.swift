@@ -15,43 +15,49 @@ import Combine
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
 public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
-    
     // MARK: Properties
     public let id: UUID = UUID()
-    
-    public var accessibilityTitle: LocalizedStringKey = ""
-    
     @Published public var dataSets: FilledLineDataSet
-    
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    @Published public var metadata = ChartMetadata()
-    
-    @Published public var xAxisLabels: [String]?
-    @Published public var yAxisLabels: [String]?
-    @Published public var chartStyle: LineChartStyle
     @Published public var legends: [LegendData] = []
-    
-    @Published public var chartSize: CGRect = .zero
+    @Published public var infoView = InfoViewData<LineChartDataPoint>()
+    @Published public var shouldAnimate: Bool
+    public var noDataText: Text
+    public var accessibilityTitle: LocalizedStringKey = ""
+
+    // MARK: ViewDataProtocol
     @Published public var xAxisViewData = XAxisViewData()
     @Published public var yAxisViewData = YAxisViewData()
     
-    @Published public var infoView: InfoViewData<LineChartDataPoint> = InfoViewData()
+    // MARK: ChartAxes
+    @Published public var xAxisLabels: [String]?
+    @Published public var yAxisLabels: [String]?
+    
+    // MARK: Publishable
+    @Published public var touchPointData: [LineChartDataPoint] = []
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<LineChartDataPoint>], Never>()
+    
+    // MARK: Touchable
+    public var touchMarkerType: LineMarkerType = defualtTouchMarker
+    
+    // MARK: DataHelper
+    public var baseline: Baseline
+    public var topLine: Topline
+    
+    // MARK: ExtraLineDataProtocol
     @Published public var extraLineData: ExtraLineData!
     
-    @Published public var shouldAnimate: Bool
-    
-    public var noDataText: Text
-
-    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .line, dataSetType: .single)
-
-    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<LineChartDataPoint>], Never>()
-
+    // MARK: Non-Protocol
+    @Published public var chartSize: CGRect = .zero
     private var internalSubscription: AnyCancellable?
     private var markerData: MarkerData = MarkerData()
     private var internalDataSubscription: AnyCancellable?
-    @Published public var touchPointData: [LineChartDataPoint] = []
+    internal let chartType: CTChartType = (chartType: .line, dataSetType: .single)
     
-    public var touchMarkerType: LineMarkerType = defualtTouchMarker
+    // MARK: Deprecated
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    @Published public var metadata = ChartMetadata()
+    @available(*, deprecated, message: "")
+    @Published public var chartStyle = LineChartStyle()
     
     // MARK: Initializer
     /// Initialises a Single Line Chart.
@@ -67,16 +73,18 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
         dataSets: FilledLineDataSet,
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
-        chartStyle: LineChartStyle = LineChartStyle(),
         shouldAnimate: Bool = true,
-        noDataText: Text = Text("No Data")
+        noDataText: Text = Text("No Data"),
+        baseline: Baseline = .minimumValue,
+        topLine: Topline = .maximumValue
     ) {
         self.dataSets = dataSets
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
-        self.chartStyle = chartStyle
         self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
+        self.baseline = baseline
+        self.topLine = topLine
 
 //        self.setupLegends()
         self.setupInternalCombine()
@@ -225,35 +233,4 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
     public typealias SetType = FilledLineDataSet
     public typealias DataPoint = LineChartDataPoint
     public typealias Marker = LineMarkerType
-    
-    // MARK: Deprecated
-    /// Initialises a Single Line Chart.
-    ///
-    /// - Parameters:
-    ///   - dataSets: Data to draw and style a line.
-    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
-    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
-    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
-    ///   - chartStyle: The style data for the aesthetic of the chart.
-    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    @available(*, deprecated, message: "Please set use other init instead.")
-    public init(
-        dataSets: LineDataSet,
-        metadata: ChartMetadata,
-        xAxisLabels: [String]? = nil,
-        yAxisLabels: [String]? = nil,
-        chartStyle: LineChartStyle = LineChartStyle(),
-        noDataText: Text = Text("No Data")
-    ) {
-        self.dataSets = FilledLineDataSet(dataPoints: [LineChartDataPoint(value: 0)])
-        self.metadata = metadata
-        self.xAxisLabels = xAxisLabels
-        self.yAxisLabels = yAxisLabels
-        self.chartStyle = chartStyle
-        self.shouldAnimate = true
-        self.noDataText = noDataText
-
-//        self.setupLegends()
-        self.setupInternalCombine()
-    }
 }

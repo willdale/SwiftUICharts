@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Convenience functions for data sets
 public protocol DataFunctionsProtocol {
     /**
      Returns the highest value in the data set.
@@ -27,7 +28,7 @@ public protocol DataFunctionsProtocol {
     func average() -> Double
 }
 
-public protocol GetDataProtocol {
+public protocol DataHelper {
     /**
      Returns the difference between the highest and lowest numbers in the data set or data sets.
      */
@@ -47,4 +48,10 @@ public protocol GetDataProtocol {
      Returns the average value from the data set or data sets.
      */
     var average: Double { get }
+    
+    /// Where to start drawing the line chart from. Zero, data set minium or custom.
+    var baseline: Baseline { get set }
+    
+    /// Where to finish drawing the chart from. Data set maximum or custom.
+    var topLine: Topline { get set }
 }

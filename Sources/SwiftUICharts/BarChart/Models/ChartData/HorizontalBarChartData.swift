@@ -15,41 +15,48 @@ import Combine
 public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChartDataProtocol, HorizontalChartConformance, ChartAxes, ViewDataProtocol {
     // MARK: Properties
     public let id: UUID = UUID()
-    
+    @Published public var dataSets: BarDataSet
+    @Published public var barStyle: BarStyle
+    @Published public var legends: [LegendData] = []
+    @Published public var infoView = InfoViewData<BarChartDataPoint>()
+    @Published public var shouldAnimate: Bool
+    public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     
-    @Published public var dataSets: BarDataSet
-    
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    @Published public var metadata = ChartMetadata()
-    @Published public var xAxisLabels: [String]?
-    @Published public var yAxisLabels: [String]?
-    @Published public var barStyle: BarStyle
-    @Published public var chartStyle: BarChartStyle
-    
-    @Published public var legends: [LegendData] = []
-    
-    @Published public var chartSize: CGRect = .zero
+    // MARK: ViewDataProtocol
     @Published public var xAxisViewData = XAxisViewData()
     @Published public var yAxisViewData = YAxisViewData()
     
-    @Published public var infoView: InfoViewData<BarChartDataPoint> = InfoViewData()
-    @Published public var extraLineData: ExtraLineData!
-
-    @Published public var shouldAnimate: Bool
-        
-    public var noDataText: Text
+    // MARK: ChartAxes
+    @Published public var xAxisLabels: [String]?
+    @Published public var yAxisLabels: [String]?
     
-    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (.bar, .single)
-
+    // MARK: Publishable
+    @Published public var touchPointData: [DataPoint] = []
     public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<DataPoint>], Never>()
 
+    // MARK: Touchable
+    public var touchMarkerType: BarMarkerType = defualtTouchMarker
+    
+    // MARK: DataHelper
+    public var baseline: Baseline
+    public var topLine: Topline
+    
+    // MARK: ExtraLineDataProtocol
+    @Published public var extraLineData: ExtraLineData!
+    
+    // MARK: Non-Protocol
+    @Published public var chartSize: CGRect = .zero
     private var internalSubscription: AnyCancellable?
     private var markerData: MarkerData = MarkerData()
     private var internalDataSubscription: AnyCancellable?
-    @Published public var touchPointData: [DataPoint] = []
+    internal let chartType: CTChartType = (.bar, .single)
     
-    public var touchMarkerType: BarMarkerType = defualtTouchMarker
+    // MARK: Deprecated
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    @Published public var metadata = ChartMetadata()
+    @available(*, deprecated, message: "")
+    @Published public var chartStyle = BarChartStyle()
     
     // MARK: Initializer
     /// Initialises a standard Bar Chart.
@@ -67,17 +74,19 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
         barStyle: BarStyle = BarStyle(),
-        chartStyle: BarChartStyle = BarChartStyle(),
         shouldAnimate: Bool = true,
-        noDataText: Text = Text("No Data")
+        noDataText: Text = Text("No Data"),
+        baseline: Baseline = .minimumValue,
+        topLine: Topline = .maximumValue
     ) {
         self.dataSets = dataSets
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
         self.barStyle = barStyle
-        self.chartStyle = chartStyle
         self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
+        self.baseline = baseline
+        self.topLine = topLine
         
 //        self.setupLegends()
         self.setupInternalCombine()
@@ -253,40 +262,5 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
     
     public typealias SetType = BarDataSet
     public typealias DataPoint = BarChartDataPoint
-    public typealias CTStyle = BarChartStyle
     public typealias Marker = BarMarkerType
-    
-    // MARK: Deprecated
-    /// Initialises a standard Bar Chart.
-    ///
-    /// - Parameters:
-    ///   - dataSets: Data to draw and style the bars.
-    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
-    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
-    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
-    ///   - barStyle: Control for the aesthetic of the bar chart.
-    ///   - chartStyle: The style data for the aesthetic of the chart.
-    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    @available(*, deprecated, message: "Please set use other init instead.")
-    public init(
-        dataSets: BarDataSet,
-        metadata: ChartMetadata,
-        xAxisLabels: [String]? = nil,
-        yAxisLabels: [String]? = nil,
-        barStyle: BarStyle = BarStyle(),
-        chartStyle: BarChartStyle = BarChartStyle(),
-        noDataText: Text = Text("No Data")
-    ) {
-        self.dataSets = dataSets
-        self.metadata = metadata
-        self.xAxisLabels = xAxisLabels
-        self.yAxisLabels = yAxisLabels
-        self.barStyle = barStyle
-        self.chartStyle = chartStyle
-        self.shouldAnimate = true
-        self.noDataText = noDataText
-        
-//        self.setupLegends()
-        self.setupInternalCombine()
-    }
 }

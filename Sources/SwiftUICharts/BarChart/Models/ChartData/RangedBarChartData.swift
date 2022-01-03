@@ -15,42 +15,48 @@ import Combine
 public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
     // MARK: Properties
     public let id: UUID = UUID()
-    
-    public var accessibilityTitle: LocalizedStringKey = ""
-    
     @Published public var dataSets: RangedBarDataSet
-    
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    @Published public var metadata = ChartMetadata()
-    
-    @Published public var xAxisLabels: [String]?
-    @Published public var yAxisLabels: [String]?
     @Published public var barStyle: BarStyle
-    @Published public var chartStyle: BarChartStyle
-    
     @Published public var legends: [LegendData] = []
-    
-    @Published public var chartSize: CGRect = .zero
+    @Published public var infoView = InfoViewData<RangedBarDataPoint>()
+    @Published public var shouldAnimate: Bool
+    public var noDataText: Text
+    public var accessibilityTitle: LocalizedStringKey = ""
+        
+    // MARK: ViewDataProtocol
     @Published public var xAxisViewData = XAxisViewData()
     @Published public var yAxisViewData = YAxisViewData()
     
-    @Published public var infoView: InfoViewData<RangedBarDataPoint> = InfoViewData()
+    // MARK: ChartAxes
+    @Published public var xAxisLabels: [String]?
+    @Published public var yAxisLabels: [String]?
+    
+    // MARK: Publishable
+    @Published public var touchPointData: [DataPoint] = []
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<DataPoint>], Never>()
+    
+    // MARK: Touchable
+    public var touchMarkerType: BarMarkerType = defualtTouchMarker
+    
+    // MARK: DataHelper
+    public var baseline: Baseline
+    public var topLine: Topline
+    
+    // MARK: ExtraLineDataProtocol
     @Published public var extraLineData: ExtraLineData!
     
-    @Published public var shouldAnimate: Bool
-        
-    public var noDataText: Text
-    
-    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (.bar, .single)
-
-    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<DataPoint>], Never>()
-
+    // MARK: Non-Protocol
+    @Published public var chartSize: CGRect = .zero
     private var internalSubscription: AnyCancellable?
     private var markerData: MarkerData = MarkerData()
     private var internalDataSubscription: AnyCancellable?
-    @Published public var touchPointData: [DataPoint] = []
+    internal let chartType: CTChartType = (.bar, .single)
     
-    public var touchMarkerType: BarMarkerType = defualtTouchMarker
+    // MARK: Deprecated
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    @Published public var metadata = ChartMetadata()
+    @available(*, deprecated, message: "")
+    @Published public var chartStyle = BarChartStyle()
     
     // MARK: Initializer
     /// Initialises a Ranged Bar Chart.
@@ -68,17 +74,19 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
         barStyle: BarStyle = BarStyle(),
-        chartStyle: BarChartStyle = BarChartStyle(),
         shouldAnimate: Bool = true,
-        noDataText: Text = Text("No Data")
+        noDataText: Text = Text("No Data"),
+        baseline: Baseline = .minimumValue,
+        topLine: Topline = .maximumValue
     ) {
         self.dataSets = dataSets
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
         self.barStyle = barStyle
-        self.chartStyle = chartStyle
         self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
+        self.baseline = baseline
+        self.topLine = topLine
         
 //        self.setupLegends()
         self.setupInternalCombine()
@@ -225,42 +233,7 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
     
     public typealias SetType = RangedBarDataSet
     public typealias DataPoint = RangedBarDataPoint
-    public typealias CTStyle = BarChartStyle
     public typealias Marker = BarMarkerType
-    
-    // MARK: Deprecated
-    /// Initialises a Ranged Bar Chart.
-    ///
-    /// - Parameters:
-    ///   - dataSets: Data to draw and style the bars.
-    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
-    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
-    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
-    ///   - barStyle: Control for the aesthetic of the bar chart.
-    ///   - chartStyle: The style data for the aesthetic of the chart.
-    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    @available(*, deprecated, message: "Please set use other init instead.")
-    public init(
-        dataSets: RangedBarDataSet,
-        metadata: ChartMetadata,
-        xAxisLabels: [String]? = nil,
-        yAxisLabels: [String]? = nil,
-        barStyle: BarStyle = BarStyle(),
-        chartStyle: BarChartStyle = BarChartStyle(),
-        noDataText: Text = Text("No Data")
-    ) {
-        self.dataSets = dataSets
-        self.metadata = metadata
-        self.xAxisLabels = xAxisLabels
-        self.yAxisLabels = yAxisLabels
-        self.barStyle = barStyle
-        self.chartStyle = chartStyle
-        self.shouldAnimate = true
-        self.noDataText = noDataText
-        
-//        self.setupLegends()
-        self.setupInternalCombine()
-    }
 }
 
 // MARK: Position

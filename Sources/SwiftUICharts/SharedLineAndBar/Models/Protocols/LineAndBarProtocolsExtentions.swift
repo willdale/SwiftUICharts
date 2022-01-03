@@ -8,28 +8,27 @@
 import SwiftUI
 
 // MARK: - Data Set
-extension GetDataProtocol where Self: CTChartData,
-                                SetType: DataFunctionsProtocol,
-                                CTStyle: CTLineBarChartStyle {
+extension DataHelper where Self: CTChartData,
+                           SetType: DataFunctionsProtocol {
     public var range: Double {
         get {
             var _lowestValue: Double
             var _highestValue: Double
             
-            switch self.chartStyle.baseline {
+            switch baseline {
             case .minimumValue:
-                _lowestValue = self.dataSets.minValue()
+                _lowestValue = dataSets.minValue()
             case .minimumWithMaximum(of: let value):
-                _lowestValue = min(self.dataSets.minValue(), value)
+                _lowestValue = min(dataSets.minValue(), value)
             case .zero:
                 _lowestValue = 0
             }
             
-            switch self.chartStyle.topLine {
+            switch topLine {
             case .maximumValue:
-                _highestValue = self.dataSets.maxValue()
+                _highestValue = dataSets.maxValue()
             case .maximum(of: let value):
-                _highestValue = max(self.dataSets.maxValue(), value)
+                _highestValue = max(dataSets.maxValue(), value)
             }
             
             return (_highestValue - _lowestValue) + 0.001
@@ -38,11 +37,11 @@ extension GetDataProtocol where Self: CTChartData,
     
     public var minValue: Double {
         get {
-            switch self.chartStyle.baseline {
+            switch baseline {
             case .minimumValue:
-                return self.dataSets.minValue()
+                return dataSets.minValue()
             case .minimumWithMaximum(of: let value):
-                return min(self.dataSets.minValue(), value)
+                return min(dataSets.minValue(), value)
             case .zero:
                 return 0
             }
@@ -51,17 +50,17 @@ extension GetDataProtocol where Self: CTChartData,
     
     public var maxValue: Double {
         get {
-            switch self.chartStyle.topLine {
+            switch topLine {
             case .maximumValue:
-                return self.dataSets.maxValue()
+                return dataSets.maxValue()
             case .maximum(of: let value):
-                return max(self.dataSets.maxValue(), value)
+                return max(dataSets.maxValue(), value)
             }
         }
     }
     
     public var average: Double {
-        return self.dataSets.average()
+        return dataSets.average()
     }
 }
 

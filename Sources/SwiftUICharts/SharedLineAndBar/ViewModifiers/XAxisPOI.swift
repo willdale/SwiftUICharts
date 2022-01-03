@@ -11,7 +11,7 @@ import SwiftUI
  Configurable Point of interest
  */
 internal struct XAxisPOI<ChartData>: ViewModifier
-where ChartData: CTChartData & GetDataProtocol & PointOfInterestProtocol {
+where ChartData: CTChartData & DataHelper & PointOfInterestProtocol {
     
     private let uuid: UUID = UUID()
     
@@ -184,7 +184,7 @@ extension View {
         labelBackground: Color = Color.systemsBackground,
         addToLegends: Bool = true
     ) -> some View
-    where ChartData: CTChartData & GetDataProtocol & PointOfInterestProtocol
+    where ChartData: CTChartData & DataHelper & PointOfInterestProtocol
     {
         self.modifier(XAxisPOI(chartData: chartData,
                                markerName: markerName,

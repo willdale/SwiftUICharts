@@ -28,7 +28,7 @@ public protocol AxisY: AnyObject {
     func getYAxisLabels() -> YLabels
 }
 
-extension AxisY where Self: CTChartData & GetDataProtocol & ViewDataProtocol,
+extension AxisY where Self: CTChartData & DataHelper & ViewDataProtocol,
                       CTStyle: CTLineBarChartStyle {
     internal var labelsArray: [String] {
         self.generateYLabels(yAxisViewData.yAxisSpecifier,
@@ -72,7 +72,7 @@ extension AxisY where Self: ViewDataProtocol {
     }
 }
 
-extension AxisY where Self: CTChartData & GetDataProtocol & ViewDataProtocol,
+extension AxisY where Self: CTChartData & DataHelper & ViewDataProtocol,
                       CTStyle: CTLineBarChartStyle {
     public func getYAxisLabels() -> some View {
         VStack {

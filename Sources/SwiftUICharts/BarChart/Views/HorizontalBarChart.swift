@@ -61,7 +61,7 @@ internal struct HorizontalBarChartSubView<ChartData>: View where ChartData: Hori
 }
 
 // MARK: - Element
-internal struct HorizontalBarElement<ChartData>: View where ChartData: CTChartData & CTBarChartDataProtocol & GetDataProtocol {
+internal struct HorizontalBarElement<ChartData>: View where ChartData: CTChartData & CTBarChartDataProtocol & DataHelper {
     
     @ObservedObject private var chartData: ChartData
     private let dataPoint: BarChartDataPoint

@@ -15,32 +15,28 @@ import Combine
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
 public final class DoughnutChartData: CTDoughnutChartDataProtocol, Publishable, Touchable, TouchInfoDisplayable {
-    
     // MARK: Properties
     public var id: UUID = UUID()
-    
-    public var accessibilityTitle: LocalizedStringKey = ""
-    
     @Published public var dataSets: PieDataSet
-    
     @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
     @Published public var metadata = ChartMetadata()
-    
     @Published public var chartStyle: DoughnutChartStyle
     @Published public var legends: [LegendData] = []
-    @Published public var infoView: InfoViewData<PieChartDataPoint> = InfoViewData()
-    
+    @Published public var infoView = InfoViewData<PieChartDataPoint>()
     @Published public var shouldAnimate: Bool
-        
     public var noDataText: Text
+    public var accessibilityTitle: LocalizedStringKey = ""
 
-    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .pie, dataSetType: .single)
-    
-    private var internalDataSubscription: AnyCancellable?
-    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<PieChartDataPoint>],Never>()
+    // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
+    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<PieChartDataPoint>],Never>()
     
+    // MARK: Touchable
     public var touchMarkerType: PieMarkerType = defualtTouchMarker
+    
+    // MARK: Non-Protocol
+    private var internalDataSubscription: AnyCancellable?
+    internal let chartType: CTChartType = (chartType: .pie, dataSetType: .single)
     
     // MARK: Initializer
     /// Initialises Doughnut Chart data.
@@ -98,32 +94,4 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol, Publishable, 
     public typealias DataPoint = PieChartDataPoint
     public typealias CTStyle = DoughnutChartStyle
     public typealias Marker = PieMarkerType
-    
-    // MARK: Deprecated
-    /// Initialises Doughnut Chart data.
-    ///
-    /// - Parameters:
-    ///   - dataSets: Data to draw and style the chart.
-    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
-    ///   - chartStyle: The style data for the aesthetic of the chart.
-    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    @available(*, deprecated, message: "Please set use other init instead.")
-    public init(
-        dataSets: PieDataSet,
-        metadata: ChartMetadata,
-        chartStyle: DoughnutChartStyle = DoughnutChartStyle(),
-        noDataText: Text
-    ) {
-        self.dataSets = dataSets
-        self.metadata = metadata
-        self.chartStyle = chartStyle
-        self.shouldAnimate = true
-        self.noDataText = noDataText
-        
-        self.setupLegends()
-        self.makeDataPoints()
-        
-        internalDataSubscription = touchedDataPointPublisher
-            .sink { self.touchPointData = $0.map(\.datapoint) }
-    }
 }

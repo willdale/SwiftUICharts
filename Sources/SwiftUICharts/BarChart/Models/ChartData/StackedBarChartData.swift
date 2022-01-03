@@ -15,47 +15,53 @@ import Combine
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
 public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDataProtocol, CTMultiBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
-    
     // MARK: Properties
     public let id: UUID = UUID()
-    
+    @Published public var dataSets: StackedBarDataSets
+    @Published public var barStyle: BarStyle
+    @Published public var legends: [LegendData] = []
+    @Published public var infoView = InfoViewData<StackedBarDataPoint>()
+    @Published public var shouldAnimate: Bool
+    public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     
-    @Published public var dataSets: StackedBarDataSets
+    // MARK: Multi
+    @Published public var groups: [GroupingData]
     
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    @Published public var metadata = ChartMetadata()
-    
-    @Published public var xAxisLabels: [String]?
-    @Published public var yAxisLabels: [String]?
-    @Published public var barStyle: BarStyle
-    @Published public var chartStyle: BarChartStyle
-    
-    @Published public var legends: [LegendData] = []
-    
-    @Published public var chartSize: CGRect = .zero
+    // MARK: ViewDataProtocol
     @Published public var xAxisViewData = XAxisViewData()
     @Published public var yAxisViewData = YAxisViewData()
     
-    @Published public var infoView: InfoViewData<StackedBarDataPoint> = InfoViewData()
-    @Published public var extraLineData: ExtraLineData!
+    // MARK: ChartAxes
+    @Published public var xAxisLabels: [String]?
+    @Published public var yAxisLabels: [String]?
     
-    @Published public var shouldAnimate: Bool
-    
-    @Published public var groups: [GroupingData]
-    
-    public var noDataText: Text
-
-    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .bar, dataSetType: .multi)
-    
+    // MARK: Publishable
+    @Published public var touchPointData: [DataPoint] = []
     public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<DataPoint>], Never>()
 
+    // MARK: Touchable
+    public var touchMarkerType: BarMarkerType = defualtTouchMarker
+    
+    // MARK: DataHelper
+    public var baseline: Baseline
+    public var topLine: Topline
+    
+    // MARK: ExtraLineDataProtocol
+    @Published public var extraLineData: ExtraLineData!
+    
+    // MARK: Non-Protocol
+    @Published public var chartSize: CGRect = .zero
     private var internalSubscription: AnyCancellable?
     private var markerData: MarkerData = MarkerData()
     private var internalDataSubscription: AnyCancellable?
-    @Published public var touchPointData: [DataPoint] = []
+    internal let chartType: CTChartType = (chartType: .bar, dataSetType: .multi)
     
-    public var touchMarkerType: BarMarkerType = defualtTouchMarker
+    // MARK: Deprecated
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    @Published public var metadata = ChartMetadata()
+    @available(*, deprecated, message: "")
+    @Published public var chartStyle = BarChartStyle()
     
     // MARK: Initializer
     /// Initialises a Stacked Bar Chart.
@@ -75,18 +81,20 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
         xAxisLabels: [String]? = nil,
         yAxisLabels: [String]? = nil,
         barStyle: BarStyle = BarStyle(),
-        chartStyle: BarChartStyle = BarChartStyle(),
         shouldAnimate: Bool = true,
-        noDataText: Text = Text("No Data")
+        noDataText: Text = Text("No Data"),
+        baseline: Baseline = .minimumValue,
+        topLine: Topline = .maximumValue
     ) {
         self.dataSets = dataSets
         self.groups = groups
         self.xAxisLabels = xAxisLabels
         self.yAxisLabels = yAxisLabels
         self.barStyle = barStyle
-        self.chartStyle = chartStyle
         self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
+        self.baseline = baseline
+        self.topLine = topLine
         
 //        self.setupLegends()
         self.setupInternalCombine()
@@ -264,43 +272,5 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     
     public typealias SetType = StackedBarDataSets
     public typealias DataPoint = StackedBarDataPoint
-    public typealias CTStyle = BarChartStyle
     public typealias Marker = BarMarkerType
-    
-    // MARK: Deprecated
-    /// Initialises a Stacked Bar Chart.
-    ///
-    /// - Parameters:
-    ///   - dataSets: Data to draw and style the bars.
-    ///   - groups: Information for how to group the data points.
-    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
-    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
-    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
-    ///   - barStyle: Control for the aesthetic of the bar chart.
-    ///   - chartStyle: The style data for the aesthetic of the chart.
-    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    @available(*, deprecated, message: "Please set use other init instead.")
-    public init(
-        dataSets: StackedBarDataSets,
-        groups: [GroupingData],
-        metadata: ChartMetadata,
-        xAxisLabels: [String]? = nil,
-        yAxisLabels: [String]? = nil,
-        barStyle: BarStyle = BarStyle(),
-        chartStyle: BarChartStyle = BarChartStyle(),
-        noDataText: Text = Text("No Data")
-    ) {
-        self.dataSets = dataSets
-        self.groups = groups
-        self.metadata = metadata
-        self.xAxisLabels = xAxisLabels
-        self.yAxisLabels = yAxisLabels
-        self.barStyle = barStyle
-        self.chartStyle = chartStyle
-        self.shouldAnimate = true
-        self.noDataText = noDataText
-        
-//        self.setupLegends()
-        self.setupInternalCombine()
-    }
 }
