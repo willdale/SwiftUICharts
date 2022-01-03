@@ -7,45 +7,56 @@
 
 import SwiftUI
 
-/**
- Automatically generated labels for the Y axis.
- */
-internal struct YAxisLabels<ChartData>: ViewModifier where ChartData: CTChartData & AxisY & ViewDataProtocol,
-                                                           ChartData.CTStyle: CTLineBarChartStyle {
+public struct YAxisLabelStyle {
+    var position: YAxisLabelPosistion
+    var font: Font
+    var fontColour: Color
+    var number: Int
+    var type: YAxisLabelType
+    var colourIndicator: AxisColour
+    var formatter: NumberFormatter
+}
+
+extension YAxisLabelStyle {
+    public static let standard = YAxisLabelStyle(position: .leading,
+                                                 font: .caption,
+                                                 fontColour: .primary,
+                                                 number: 10,
+                                                 type: .numeric,
+                                                 colourIndicator: .none,
+                                                 formatter: .default)
+}
+
+
+internal struct YAxisLabels<ChartData>: ViewModifier where ChartData: CTChartData & AxisY & ViewDataProtocol {
     
     @ObservedObject private var chartData: ChartData
-    private let specifier: String
-    private let colourIndicator: AxisColour
+    private var style: YAxisLabelStyle
     
     internal init(
         chartData: ChartData,
-        specifier: String,
-        formatter: NumberFormatter?,
-        colourIndicator: AxisColour
+        style: YAxisLabelStyle
     ) {
         self.chartData = chartData
-        self.specifier = specifier
-        self.colourIndicator = colourIndicator
-        
+        self.style = style
         self.chartData.yAxisViewData.hasYAxisLabels = true
-        self.chartData.yAxisViewData.yAxisSpecifier = specifier
-        self.chartData.yAxisViewData.yAxisNumberFormatter = formatter
+        self.chartData.yAxisViewData.yAxisNumberFormatter = style.formatter
     }
     
     internal func body(content: Content) -> some View {
         Group {
-            switch chartData.chartStyle.yAxisLabelPosition {
+            switch style.position {
             case .leading:
                 HStack(spacing: 0) {
-                    chartData.getYAxisTitle(colour: colourIndicator)
-                    chartData.getYAxisLabels().padding(.trailing, 4)
+                    chartData.getYAxisLabels()
+                        .padding(.trailing, 4)
                     content
                 }
             case .trailing:
                 HStack(spacing: 0) {
                     content
-                    chartData.getYAxisLabels().padding(.leading, 4)
-                    chartData.getYAxisTitle(colour: colourIndicator)
+                    chartData.getYAxisLabels()
+                        .padding(.leading, 4)
                 }
             }
         }
@@ -53,42 +64,40 @@ internal struct YAxisLabels<ChartData>: ViewModifier where ChartData: CTChartDat
 }
 
 extension View {
-    /**
-     Automatically generated labels for the Y axis.
-     
-     Controls are in ChartData --> ChartStyle
-     
-     - Requires:
-     Chart Data to conform to CTLineBarChartDataProtocol.
-     
-     # Available for:
-     - Line Chart
-     - Multi Line Chart
-     - Filled Line Chart
-     - Ranged Line Chart
-     - Bar Chart
-     - Grouped Bar Chart
-     - Stacked Bar Chart
-     - Ranged Bar Chart
-     
-     # Unavailable for:
-     - Pie Chart
-     - Doughnut Chart
-     
-     - Parameters:
-        - chartData: Data that conforms to CTLineBarChartDataProtocol
-        - specifier: Decimal precision specifier
-     - Returns: HStack of labels
-     */
+    /// Labels for the X axis.
+    ///
+    /// Verbose method
     public func yAxisLabels<ChartData>(
         chartData: ChartData,
-        specifier: String = "%.0f",
-        formatter: NumberFormatter? = nil,
-        colourIndicator: AxisColour = .none
+        position: YAxisLabelPosistion,
+        font: Font,
+        fontColour: Color,
+        number: Int,
+        type: YAxisLabelType,
+        colourIndicator: AxisColour,
+        formatter: NumberFormatter
     ) -> some View
-    where ChartData: CTChartData & AxisY & ViewDataProtocol,
-          ChartData.CTStyle: CTLineBarChartStyle
+    where ChartData: CTChartData & AxisY & ViewDataProtocol
     {
-        self.modifier(YAxisLabels(chartData: chartData, specifier: specifier, formatter: formatter, colourIndicator: colourIndicator))
+        self.modifier(
+            YAxisLabels(
+                chartData: chartData,
+                style: YAxisLabelStyle(position: position, font: font, fontColour: fontColour, number: number, type: type, colourIndicator: colourIndicator, formatter: formatter)
+            )
+        )
+    }
+    
+    /// Labels for the X axis.
+    ///
+    /// Convenience method
+    public func yAxisLabels<ChartData>(
+        chartData: ChartData,
+        style: YAxisLabelStyle = .standard
+    ) -> some View
+    where ChartData: CTChartData & AxisY & ViewDataProtocol
+    {
+        self.modifier(YAxisLabels(chartData: chartData,
+                                  style: style)
+        )
     }
 }

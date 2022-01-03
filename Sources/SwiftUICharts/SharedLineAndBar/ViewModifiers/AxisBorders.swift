@@ -7,88 +7,182 @@
 
 import SwiftUI
 
-/**
- Dividing line drawn between the X axis labels and the chart.
- */
-//internal struct XAxisBorder<T>: ViewModifier where T: CTLineBarChartDataProtocol {
-//
-//    @ObservedObject private var chartData: T
-//    private let labelsAndTop: Bool
-//    private let labelsAndBottom: Bool
-//
-//    init(chartData: T) {
-//        self.chartData = chartData
-//        self.labelsAndTop = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .top
-//        self.labelsAndBottom = chartData.viewData.hasXAxisLabels && chartData.chartStyle.xAxisLabelPosition == .bottom
-//    }
-//
-//    internal func body(content: Content) -> some View {
-//        Group {
-//                if labelsAndBottom {
-//                    VStack {
-//                        ZStack(alignment: .bottom) {
-//                            content
-//                            Divider().if(chartData.chartStyle.xAxisBorderColour != nil) { $0.background(chartData.chartStyle.xAxisBorderColour) }
-//                        }
-//                    }
-//                } else if labelsAndTop {
-//                    VStack {
-//                        ZStack(alignment: .top) {
-//                            content
-//                            Divider().if(chartData.chartStyle.xAxisBorderColour != nil) { $0.background(chartData.chartStyle.xAxisBorderColour) }
-//                        }
-//                    }
-//                } else {
-//                    content
-//                }
-//        }
-//    }
-//}
+public struct ChartBorder {
+    public var side: Side
+    public var style: Style
+    
+    public enum Side {
+        case top
+        case leading
+        case trailing
+        case bottom
+    }
+    
+    public struct Style: Hashable {
+        /// Line Colour
+        public var lineColour: Color
+        
+        /// Line Width
+        public var lineWidth: CGFloat
+        
+        /// Dash
+        public var dash: [CGFloat]
+        
+        /// Dash Phase
+        public var dashPhase: CGFloat
+        
+        /// Model for controlling the look of the Grid
+        /// - Parameters:
+        ///   - lineColour: Line Colour
+        ///   - lineWidth: Line Width
+        ///   - dash: Dash
+        ///   - dashPhase: Dash Phase
+        public init(
+            lineColour: Color = Color(.gray).opacity(0.25),
+            lineWidth: CGFloat = 1,
+            dash: [CGFloat] = [],
+            dashPhase: CGFloat = 0
+        ) {
+            self.lineColour = lineColour
+            self.lineWidth = lineWidth
+            self.dash = dash
+            self.dashPhase = dashPhase
+        }
+    }
+}
 
-/**
- Dividing line drawn between the Y axis labels and the chart.
- */
-//internal struct YAxisBorder<T>: ViewModifier where T: CTLineBarChartDataProtocol {
-//
-//    @ObservedObject private var chartData: T
-//    private let labelsAndLeading: Bool
-//    private let labelsAndTrailing: Bool
-//
-//    internal init(chartData: T) {
-//        self.chartData = chartData
-//        self.labelsAndLeading = chartData.viewData.hasYAxisLabels && chartData.chartStyle.yAxisLabelPosition == .leading
-//        self.labelsAndTrailing = chartData.viewData.hasYAxisLabels && chartData.chartStyle.yAxisLabelPosition == .trailing
-//    }
-//
-//    internal func body(content: Content) -> some View {
-//        Group {
-//            if labelsAndLeading {
-//                HStack {
-//                    ZStack(alignment: .leading) {
-//                        content
-//                        Divider().if(chartData.chartStyle.yAxisBorderColour != nil) { $0.background(chartData.chartStyle.yAxisBorderColour) }
-//                    }
-//                }
-//            } else if labelsAndTrailing {
-//                HStack {
-//                    ZStack(alignment: .trailing) {
-//                        content
-//                        Divider().if(chartData.chartStyle.yAxisBorderColour != nil) { $0.background(chartData.chartStyle.yAxisBorderColour) }
-//                    }
-//                }
-//            } else {
-//                content
-//            }
-//        }
-//    }
-//}
+extension ChartBorder.Style {
+    public static let white = ChartBorder.Style(lineColour: Color(.white))
+    public static let lightGray = ChartBorder.Style(lineColour: Color(.gray).opacity(0.50))
+    public static let gray = ChartBorder.Style(lineColour: Color(.gray))
+    public static let black = ChartBorder.Style(lineColour: Color(.black))
+    public static let primary = ChartBorder.Style(lineColour: Color.primary)
+}
 
-//extension View {
-//    internal func xAxisBorder<T: CTLineBarChartDataProtocol>(chartData: T) -> some View {
-//        self.modifier(XAxisBorder(chartData: chartData))
-//    }
-//
-//    internal func yAxisBorder<T: CTLineBarChartDataProtocol>(chartData: T) -> some View {
-//        self.modifier(YAxisBorder(chartData: chartData))
-//    }
-//}
+internal struct AxisBorder<ChartData>: ViewModifier where ChartData: CTChartData {
+    
+    @ObservedObject private var chartData: ChartData
+    private var border: ChartBorder
+    
+    internal init(
+        chartData: ChartData,
+        side: ChartBorder.Side,
+        style: ChartBorder.Style
+    ) {
+        self.chartData = chartData
+        self.border = ChartBorder(side: side, style: style)
+    }
+    
+    internal func body(content: Content) -> some View {
+        Group {
+            switch border.side {
+            case .top:
+                VStack {
+                    ZStack(alignment: .top) {
+                        HorizontalBorderView(chartData: chartData, style: border.style)
+                        content
+                    }
+                }
+            case .leading:
+//                HStack {
+                    ZStack(alignment: .leading) {
+                        VerticalBorderView(chartData: chartData, style: border.style)
+                        content
+                    }
+//                }
+            case .trailing:
+                HStack {
+                    ZStack(alignment: .trailing) {
+                        content
+                        VerticalBorderView(chartData: chartData, style: border.style)
+                    }
+                }
+            case .bottom:
+                VStack {
+                    ZStack(alignment: .bottom) {
+                        content
+                        HorizontalBorderView(chartData: chartData, style: border.style)
+                    }
+                }
+            }
+        }
+    }
+}
+
+extension View {
+    public func axisBorder<ChartData>(
+        chartData: ChartData,
+        side: ChartBorder.Side,
+        style: ChartBorder.Style
+    ) -> some View
+    where ChartData: CTChartData
+    {
+        self.modifier(AxisBorder(chartData: chartData, side: side, style: style))
+    }
+}
+
+internal struct HorizontalBorderView<ChartData>: View where ChartData: CTChartData {
+    
+    @ObservedObject private var chartData: ChartData
+    private var style: ChartBorder.Style
+    
+    @State private var startAnimation: Bool
+    
+    internal init(
+        chartData: ChartData,
+        style: ChartBorder.Style
+    ) {
+        self.chartData = chartData
+        self.style = style
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
+    }
+    
+    var body: some View {
+        HorizontalGridShape()
+            .trim(to: startAnimation ? 1 : 0)
+            .stroke(style.lineColour,
+                    style: StrokeStyle(lineWidth: style.lineWidth,
+                                       dash: style.dash,
+                                       dashPhase: style.dashPhase))
+            .frame(height: style.lineWidth)
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .onDisappear {
+                self.startAnimation = false
+            }
+    }
+}
+
+internal struct VerticalBorderView<ChartData>: View where ChartData: CTChartData {
+    
+    @ObservedObject private var chartData: ChartData
+    private var style: ChartBorder.Style
+    
+    @State private var startAnimation: Bool
+    
+    internal init(
+        chartData: ChartData,
+        style: ChartBorder.Style
+    ) {
+        self.chartData = chartData
+        self.style = style
+        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
+    }
+    
+    var body: some View {
+        VerticalGridShape()
+            .trim(to: startAnimation ? 1 : 0)
+            .stroke(style.lineColour,
+                    style: StrokeStyle(lineWidth: style.lineWidth,
+                                       dash: style.dash,
+                                       dashPhase: style.dashPhase))
+            .frame(width: style.lineWidth)
+            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                self.startAnimation = true
+            }
+            .onDisappear {
+                self.startAnimation = false
+            }
+    }
+}

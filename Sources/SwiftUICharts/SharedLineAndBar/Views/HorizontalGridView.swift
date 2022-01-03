@@ -7,26 +7,30 @@
 
 import SwiftUI
 
-internal struct HorizontalGridView<ChartData>: View where ChartData: CTChartData,
-                                                          ChartData.CTStyle: CTLineBarChartStyle {
+internal struct HorizontalGridView<ChartData>: View where ChartData: CTChartData {
     
     @ObservedObject private var chartData: ChartData
+    private var style: GridStyle
     
     @State private var startAnimation: Bool
     
-    internal init(chartData: ChartData) {
+    internal init(
+        chartData: ChartData,
+        style: GridStyle
+    ) {
         self.chartData = chartData
+        self.style = style
         self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
     
     var body: some View {
         HorizontalGridShape()
             .trim(to: startAnimation ? 1 : 0)
-            .stroke(chartData.chartStyle.yAxisGridStyle.lineColour,
-                    style: StrokeStyle(lineWidth: chartData.chartStyle.yAxisGridStyle.lineWidth,
-                                       dash: chartData.chartStyle.yAxisGridStyle.dash,
-                                       dashPhase: chartData.chartStyle.yAxisGridStyle.dashPhase))
-            .frame(height: chartData.chartStyle.yAxisGridStyle.lineWidth)
+            .stroke(style.lineColour,
+                    style: StrokeStyle(lineWidth: style.lineWidth,
+                                       dash: style.dash,
+                                       dashPhase: style.dashPhase))
+            .frame(height: style.lineWidth)
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }

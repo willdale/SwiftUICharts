@@ -35,33 +35,47 @@ public struct BarChartStyle: CTBarChartStyle {
     @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     public var infoBoxBorderStyle: StrokeStyle = StrokeStyle(lineWidth: 0)
     
+    @available(*, deprecated, message: "Move to view \".xAxisLabels\"")
+    public var xAxisLabelPosition: XAxisLabelPosistion
+    @available(*, deprecated, message: "Move to view \".xAxisLabels\"")
+    public var xAxisLabelFont: Font
+    @available(*, deprecated, message: "Move to view \".xAxisLabels\"")
+    public var xAxisLabelColour: Color
+    @available(*, deprecated, message: "Move to view \".xAxisLabels\"")
+    public var xAxisLabelsFrom: LabelsFrom
+    @available(*, deprecated, message: "Move to view \".xAxisLabels\"")
+    
+    @available(*, deprecated, message: "Move to view \".yAxisLabels\"")
+    public var yAxisLabelPosition: YAxisLabelPosistion
+    @available(*, deprecated, message: "Move to view \".yAxisLabels\"")
+    public var yAxisLabelFont: Font
+    @available(*, deprecated, message: "Move to view \".yAxisLabels\"")
+    public var yAxisLabelColour: Color
+    @available(*, deprecated, message: "Move to view \".yAxisLabels\"")
+    public var yAxisNumberOfLabels: Int
+    @available(*, deprecated, message: "Move to view \".yAxisLabels\"")
+    public var yAxisLabelType: YAxisLabelType
+    
+    @available(*, deprecated, message: "Move to view \".xAxisGrid\"")
+    public var xAxisGridStyle: GridStyle
+    @available(*, deprecated, message: "Move to view \".xAxisGrid\"")
+    public var yAxisGridStyle: GridStyle
+    
+    @available(*, deprecated, message: "Moved to view \".axisBorder\"")
+    public var xAxisBorderColour: Color?
+    @available(*, deprecated, message: "Moved to view \".axisBorder\"")
+    public var yAxisBorderColour: Color?
+    
     // MARK: Properties
     public var markerType: BarMarkerType
-    
-    public var xAxisGridStyle: GridStyle
-    
-    public var xAxisLabelPosition: XAxisLabelPosistion
-    public var xAxisLabelFont: Font
-    public var xAxisLabelColour: Color
-    public var xAxisLabelsFrom: LabelsFrom
     
     public var xAxisTitle: String?
     public var xAxisTitleFont: Font
     public var xAxisTitleColour: Color
-    public var xAxisBorderColour: Color?
-
-    public var yAxisGridStyle: GridStyle
-    
-    public var yAxisLabelPosition: YAxisLabelPosistion
-    public var yAxisLabelFont: Font
-    public var yAxisLabelColour: Color
-    public var yAxisNumberOfLabels: Int
-    public var yAxisLabelType: YAxisLabelType
     
     public var yAxisTitle: String?
     public var yAxisTitleFont: Font
     public var yAxisTitleColour: Color
-    public var yAxisBorderColour: Color?
 
     public var baseline: Baseline
     public var topLine: Topline

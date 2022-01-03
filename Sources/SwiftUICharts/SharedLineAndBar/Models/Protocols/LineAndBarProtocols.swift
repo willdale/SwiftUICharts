@@ -11,95 +11,78 @@ import SwiftUI
 /// A protocol to get the correct touch overlay marker.
 public protocol MarkerType {}
 
-/**
- A protocol to extend functionality of `CTChartStyle` specifically for  Line and Bar Charts.
- */
+/// A protocol to extend functionality of `CTChartStyle` specifically for  Line and Bar Charts.
 public protocol CTLineBarChartStyle: CTChartStyle {
+    /// Location of the X axis labels - Top or Bottom.
+    @available(*, deprecated, message: "Moved to view \".xAxisLabels\"")
+    var xAxisLabelPosition: XAxisLabelPosistion { get set }
+    
+    /// Font of the labels on the X axis.
+    @available(*, deprecated, message: "Moved to view \".xAxisLabels\"")
+    var xAxisLabelFont: Font { get set }
+    
+    /// Text Colour for the labels on the X axis.
+    @available(*, deprecated, message: "Moved to view \".xAxisLabels\"")
+    var xAxisLabelColour: Color { get set }
+    
+    /// Where the label data come from. DataPoint or ChartData.
+    @available(*, deprecated, message: "Moved to view \".xAxisLabels\"")
+    var xAxisLabelsFrom: LabelsFrom { get set }
+    
+    /// Location of the X axis labels - Leading or Trailing.
+    @available(*, deprecated, message: "Moved to view \".yAxisLabels\"")
+    var yAxisLabelPosition: YAxisLabelPosistion { get set }
+    
+    /// Font of the labels on the Y axis.
+    @available(*, deprecated, message: "Moved to view \".yAxisLabels\"")
+    var yAxisLabelFont: Font { get set }
+    
+    /// Text Colour for the labels on the Y axis.
+    @available(*, deprecated, message: "Moved to view \".yAxisLabels\"")
+    var yAxisLabelColour: Color { get set }
+    
+    /// Number Of Labels on Y Axis.
+    @available(*, deprecated, message: "Moved to view \".yAxisLabels\"")
+    var yAxisNumberOfLabels: Int { get set }
+    
+    /// Option to add custom Strings to Y axis rather than auto generated numbers.
+    @available(*, deprecated, message: "Moved to view \".yAxisLabels\"")
+    var yAxisLabelType: YAxisLabelType { get set }
+    
+    /// Style of the vertical lines breaking up the chart.
+    @available(*, deprecated, message: "Moved to view \".xAxisGrid\"")
+    var xAxisGridStyle: GridStyle { get set }
+    
+    /// Style of the horizontal lines breaking up the chart.
+    @available(*, deprecated, message: "Moved to view \".yAxisGrid\"")
+    var yAxisGridStyle: GridStyle { get set }
+    
+    // Colour of the x axis border.
+    @available(*, deprecated, message: "Moved to view \".axisBorder\"")
+    var xAxisBorderColour: Color? { get set }
+    /// Colour of the y axis border.
+    @available(*, deprecated, message: "Moved to view \".axisBorder\"")
+    var yAxisBorderColour: Color? { get set }
+    
+    
     
     /// A type representing touch overlay marker type. -- `MarkerType`
     associatedtype Mark: MarkerType
     
-    /**
-     Where the marker lines come from to meet at a specified point.
-     */
+    /// Where the marker lines come from to meet at a specified point.
     var markerType: Mark { get set }
     
-    /**
-     Style of the vertical lines breaking up the chart.
-     */
-    var xAxisGridStyle: GridStyle { get set }
+
     
-    /**
-     Location of the X axis labels - Top or Bottom.
-     */
-    var xAxisLabelPosition: XAxisLabelPosistion { get set }
-    
-    /**
-     Font of the labels on the X axis.
-     */
-    var xAxisLabelFont: Font { get set }
-    
-    /**
-     Text Colour for the labels on the X axis.
-     */
-    var xAxisLabelColour: Color { get set }
-    
-    /**
-     Where the label data come from. DataPoint or ChartData.
-     */
-    var xAxisLabelsFrom: LabelsFrom { get set }
-    
-    /**
-     Label to display next to the chart giving info about the axis.
-     */
+    /// Label to display next to the chart giving info about the axis.
     var xAxisTitle: String? { get set }
     
-    /**
-     Font of the x axis title.
-     */
+    /// Font of the x axis title.
     var xAxisTitleFont: Font { get set }
     
-    /**
-     Colour of the x axis title.
-     */
+    /// Colour of the x axis title.
     var xAxisTitleColour: Color { get set }
-    
-    /**
-     Colour of the x axis border.
-     */
-    var xAxisBorderColour: Color? { get set }
-    
-    /**
-     Style of the horizontal lines breaking up the chart.
-     */
-    var yAxisGridStyle: GridStyle { get set }
-    
-    /**
-     Location of the X axis labels - Leading or Trailing.
-     */
-    var yAxisLabelPosition: YAxisLabelPosistion { get set }
-    
-    /**
-     Font of the labels on the Y axis.
-     */
-    var yAxisLabelFont: Font { get set }
-    
-    /**
-     Text Colour for the labels on the Y axis.
-     */
-    var yAxisLabelColour: Color { get set }
-    
-    /**
-     Number Of Labels on Y Axis.
-     */
-    var yAxisNumberOfLabels: Int { get set }
-    
-    /**
-     Option to add custom Strings to Y axis rather than
-     auto generated numbers.
-     */
-    var yAxisLabelType: YAxisLabelType { get set }
-    
+
     /**
      Label to display next to the chart giving info about the axis.
      */
@@ -115,10 +98,6 @@ public protocol CTLineBarChartStyle: CTChartStyle {
      */
     var yAxisTitleColour: Color { get set }
     
-    /**
-     Colour of the y axis border.
-     */
-    var yAxisBorderColour: Color? { get set }
     
     /**
      Where to start drawing the line chart from. Zero, data set minium or custom.

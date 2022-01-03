@@ -7,34 +7,21 @@
 
 import SwiftUI
 
-/**
- Control for the look of the Grid
- */
 public struct GridStyle {
     
-    /**
-     Number of lines to break up the axis
-     */
+    /// Number of lines to break up the axis
     public var numberOfLines: Int
     
-    /**
-     Line Colour
-     */
+    /// Line Colour
     public var lineColour: Color
     
-    /**
-     Line Width
-     */
+    /// Line Width
     public var lineWidth: CGFloat
     
-    /**
-     Dash
-     */
+    /// Dash
     public var dash: [CGFloat]
     
-    /**
-     Dash Phase
-     */
+    /// Dash Phase
     public var dashPhase: CGFloat
     
     /// Model for controlling the look of the Grid
@@ -57,4 +44,12 @@ public struct GridStyle {
         self.dash = dash
         self.dashPhase = dashPhase
     }
+}
+
+extension GridStyle {
+    public static let standard = GridStyle(numberOfLines: 10,
+                                           lineColour: Color(.gray).opacity(0.25),
+                                           lineWidth: 1,
+                                           dash:  [10],
+                                           dashPhase: 10)
 }

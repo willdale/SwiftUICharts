@@ -7,29 +7,30 @@
 
 import SwiftUI
 
-/**
- Adds horizontal lines along the X axis.
- */
-internal struct YAxisGrid<ChartData>: ViewModifier where ChartData: CTChartData,
-                                                         ChartData.CTStyle: CTLineBarChartStyle {
+internal struct YAxisGrid<ChartData>: ViewModifier where ChartData: CTChartData {
     
     @ObservedObject private var chartData: ChartData
+    private var style: GridStyle
     
-    internal init(chartData: ChartData) {
+    internal init(
+        chartData: ChartData,
+        style: GridStyle
+    ) {
         self.chartData = chartData
+        self.style = style
     }
-    
+
     internal func body(content: Content) -> some View {
         ZStack {
             VStack {
-                ForEach((0...chartData.chartStyle.yAxisGridStyle.numberOfLines-1), id: \.self) { index in
+                ForEach((0...style.numberOfLines-1), id: \.self) { index in
                     if index != 0 {
-                        HorizontalGridView(chartData: chartData)
+                        HorizontalGridView(chartData: chartData, style: style)
                         Spacer()
                             .frame(minHeight: 0, maxHeight: 500)
                     }
                 }
-                HorizontalGridView(chartData: chartData)
+                HorizontalGridView(chartData: chartData, style: style)
             }
             content
         }
@@ -37,35 +38,41 @@ internal struct YAxisGrid<ChartData>: ViewModifier where ChartData: CTChartData,
 }
 
 extension View {
-    /**
-     Adds horizontal lines along the X axis.
-     
-     The style is set in ChartData --> LineChartStyle --> yAxisGridStyle
-     
-     - Requires:
-     Chart Data to conform to CTLineBarChartDataProtocol.
-     
-     # Available for:
-     - Line Chart
-     - Multi Line Chart
-     - Filled Line Chart
-     - Ranged Line Chart
-     - Bar Chart
-     - Grouped Bar Chart
-     - Stacked Bar Chart
-     - Ranged Bar Chart
-     
-     # Unavailable for:
-     - Pie Chart
-     - Doughnut Chart
-     
-     - Parameter chartData: Chart data model.
-     - Returns: A  new view containing the chart with horizontal lines under it.
-     */
-    public func yAxisGrid<ChartData>(chartData: ChartData) -> some View
-    where ChartData: CTChartData,
-          ChartData.CTStyle: CTLineBarChartStyle
+    /// Adds horizontal lines along the Y axis.
+    ///
+    /// Verbose method
+    public func yAxisGrid<ChartData>(
+        chartData: ChartData,
+        numberOfLines: Int,
+        lineColour: Color,
+        lineWidth: CGFloat,
+        dash: [CGFloat],
+        dashPhase: CGFloat
+    ) -> some View
+    where ChartData: CTChartData
     {
-        self.modifier(YAxisGrid<ChartData>(chartData: chartData))
+        self.modifier(
+            YAxisGrid(
+                chartData: chartData,
+                style: GridStyle(numberOfLines: numberOfLines, lineColour: lineColour, lineWidth: lineWidth, dash: dash, dashPhase: dashPhase)
+            )
+        )
+    }
+    
+    /// Adds horizontal lines along the Y axis.
+    ///
+    /// Convenience method
+    public func yAxisGrid<ChartData>(
+        chartData: ChartData,
+        style: GridStyle = .standard
+    ) -> some View
+    where ChartData: CTChartData
+    {
+        self.modifier(
+            YAxisGrid(
+                chartData: chartData,
+                style: style
+            )
+        )
     }
 }

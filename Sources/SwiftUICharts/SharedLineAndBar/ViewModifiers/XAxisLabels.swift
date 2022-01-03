@@ -7,32 +7,48 @@
 
 import SwiftUI
 
-/**
- Labels for the X axis.
- */
-internal struct XAxisLabels<ChartData>: ViewModifier where ChartData: CTChartData & ChartAxes & ViewDataProtocol,
-                                                           ChartData.CTStyle: CTLineBarChartStyle {
+public struct XAxisLabelStyle {
+    var position: XAxisLabelPosistion
+    var font: Font
+    var fontColour: Color
+    var dataFrom: LabelsFrom
+}
+
+extension XAxisLabelStyle {
+    public static let standard = XAxisLabelStyle(position: .bottom,
+                                                 font: .caption,
+                                                 fontColour: .primary,
+                                                 dataFrom: .dataPoint(rotation: .degrees(0)))
+}
+
+internal struct XAxisLabels<ChartData>: ViewModifier where ChartData: CTChartData & AxisX & ViewDataProtocol {
     
     @ObservedObject private var chartData: ChartData
+    private var style: XAxisLabelStyle
     
-    internal init(chartData: ChartData) {
+    internal init(
+        chartData: ChartData,
+        style: XAxisLabelStyle
+    ) {
         self.chartData = chartData
+        self.style = style
+        
         self.chartData.xAxisViewData.hasXAxisLabels = true
     }
     
     internal func body(content: Content) -> some View {
         Group {
-            switch chartData.chartStyle.xAxisLabelPosition {
+            switch style.position {
             case .bottom:
                 VStack {
                     content
-                    chartData.getXAxisLabels().padding(.top, 2)
-                    chartData.getXAxisTitle()
+                    chartData.getXAxisLabels()
+                        .padding(.top, 2)
                 }
             case .top:
                 VStack {
-                    chartData.getXAxisTitle()
-                    chartData.getXAxisLabels().padding(.bottom, 2)
+                    chartData.getXAxisLabels()
+                        .padding(.bottom, 2)
                     content
                 }
             }
@@ -41,39 +57,40 @@ internal struct XAxisLabels<ChartData>: ViewModifier where ChartData: CTChartDat
 }
 
 extension View {
-    /**
-     Labels for the X axis.
-     
-     The labels can either come from ChartData -->  xAxisLabels
-     or ChartData --> DataSets --> DataPoints
-     
-     - Requires:
-     Chart Data to conform to CTLineBarChartDataProtocol.
-     
-     - Requires:
-     Chart Data to conform to CTLineBarChartDataProtocol.
-     
-     # Available for:
-     - Line Chart
-     - Multi Line Chart
-     - Filled Line Chart
-     - Ranged Line Chart
-     - Bar Chart
-     - Grouped Bar Chart
-     - Stacked Bar Chart
-     - Ranged Bar Chart
-     
-     # Unavailable for:
-     - Pie Chart
-     - Doughnut Chart
-     
-     - Parameter chartData: Chart data model.
-     - Returns: A  new view containing the chart with labels marking the x axis.
-     */
-    public func xAxisLabels<ChartData>(chartData: ChartData) -> some View
-    where ChartData: CTChartData & ChartAxes & ViewDataProtocol,
-          ChartData.CTStyle: CTLineBarChartStyle
+    /// Labels for the X axis.
+    ///
+    /// Verbose method
+    public func xAxisLabels<ChartData>(
+        chartData: ChartData,
+        position: XAxisLabelPosistion,
+        font: Font,
+        fontColour: Color,
+        dataFrom: LabelsFrom
+    ) -> some View
+    where ChartData: CTChartData & ChartAxes & ViewDataProtocol
     {
-        self.modifier(XAxisLabels(chartData: chartData))
+        self.modifier(
+            XAxisLabels(
+                chartData: chartData,
+                style: XAxisLabelStyle(position: position, font: font, fontColour: fontColour, dataFrom: dataFrom)
+            )
+        )
+    }
+    
+    /// Labels for the X axis.
+    ///
+    /// Convenience method
+    public func xAxisLabels<ChartData>(
+        chartData: ChartData,
+        style: XAxisLabelStyle = .standard
+    ) -> some View
+    where ChartData: CTChartData & ChartAxes & ViewDataProtocol
+    {
+        self.modifier(
+            XAxisLabels(
+                chartData: chartData,
+                style: style
+            )
+        )
     }
 }
