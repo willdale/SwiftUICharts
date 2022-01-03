@@ -50,6 +50,8 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
     private var internalDataSubscription: AnyCancellable?
     @Published public var touchPointData: [DataPoint] = []
     
+    public var touchMarkerType: BarMarkerType = defualtTouchMarker
+    
     // MARK: Initializer
     /// Initialises a Ranged Bar Chart.
     ///
@@ -100,7 +102,7 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
                 }
                 let barMarkerData: [BarMarkerData] = $0.compactMap { data in
                     if data.type == .bar {
-                        return BarMarkerData(markerType: self.chartStyle.markerType,
+                        return BarMarkerData(markerType: self.touchMarkerType,
                                               location: data.location)
                     }
                     return nil
@@ -224,6 +226,7 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
     public typealias SetType = RangedBarDataSet
     public typealias DataPoint = RangedBarDataPoint
     public typealias CTStyle = BarChartStyle
+    public typealias Marker = BarMarkerType
     
     // MARK: Deprecated
     /// Initialises a Ranged Bar Chart.

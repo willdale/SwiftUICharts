@@ -55,6 +55,8 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     private var markerData: MarkerData = MarkerData()
     private var internalDataSubscription: AnyCancellable?
     @Published public var touchPointData: [DataPoint] = []
+    
+    public var touchMarkerType: BarMarkerType = defualtTouchMarker
         
     // MARK: Initializer
     /// Initialises a Grouped Bar Chart.
@@ -109,7 +111,7 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
                 }
                 let barMarkerData: [BarMarkerData] = $0.compactMap { data in
                     if data.type == .bar {
-                        return BarMarkerData(markerType: self.chartStyle.markerType,
+                        return BarMarkerData(markerType: self.touchMarkerType,
                                               location: data.location)
                     }
                     return nil
@@ -249,6 +251,7 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     public typealias SetType = GroupedBarDataSets
     public typealias DataPoint = GroupedBarDataPoint
     public typealias CTStyle = BarChartStyle
+    public typealias Marker = BarMarkerType
     
     // MARK: Deprecated
     /// Initialises a Grouped Bar Chart.

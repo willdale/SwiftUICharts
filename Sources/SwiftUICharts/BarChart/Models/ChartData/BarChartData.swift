@@ -13,7 +13,6 @@ import Combine
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
 public final class BarChartData: BarChartType, CTChartData, CTBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
-    
     // MARK: Properties
     public let id: UUID = UUID()
     
@@ -48,6 +47,8 @@ public final class BarChartData: BarChartType, CTChartData, CTBarChartDataProtoc
     private var markerData: MarkerData = MarkerData()
     private var internalDataSubscription: AnyCancellable?
     @Published public var touchPointData: [DataPoint] = []
+    
+    public var touchMarkerType: BarMarkerType = defualtTouchMarker
     
     internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (.bar, .single)
     
@@ -101,7 +102,7 @@ public final class BarChartData: BarChartType, CTChartData, CTBarChartDataProtoc
                 }
                 let barMarkerData: [BarMarkerData] = $0.compactMap { data in
                     if data.type == .bar {
-                        return BarMarkerData(markerType: self.chartStyle.markerType,
+                        return BarMarkerData(markerType: self.touchMarkerType,
                                               location: data.location)
                     }
                     return nil
@@ -215,6 +216,7 @@ public final class BarChartData: BarChartType, CTChartData, CTBarChartDataProtoc
     public typealias SetType = BarDataSet
     public typealias DataPoint = BarChartDataPoint
     public typealias CTStyle = BarChartStyle
+    public typealias Marker = BarMarkerType
     
     // MARK: Deprecated
     /// Initialises a standard Bar Chart.

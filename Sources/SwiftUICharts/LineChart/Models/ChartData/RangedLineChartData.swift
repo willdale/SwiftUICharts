@@ -15,7 +15,6 @@ import Combine
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
 public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
-    
     // MARK: Properties
     public let id: UUID  = UUID()
     
@@ -50,6 +49,8 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
     private var markerData: MarkerData = MarkerData()
     private var internalDataSubscription: AnyCancellable?
     @Published public var touchPointData: [DataPoint] = []
+    
+    public var touchMarkerType: LineMarkerType = defualtTouchMarker
     
     // MARK: Initializer
     /// Initialises a ranged line chart.
@@ -95,7 +96,7 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
                                               minValue: extraData.minValue,
                                               range: extraData.range)
                     } else if data.type == .line {
-                        return LineMarkerData(markerType: self.chartStyle.markerType,
+                        return LineMarkerData(markerType: self.touchMarkerType,
                                               location: data.location,
                                               dataPoints: self.dataSets.dataPoints.map { LineChartDataPoint($0) },
                                               lineType: self.dataSets.style.lineType,
@@ -238,6 +239,7 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
     
     public typealias SetType = RangedLineDataSet
     public typealias DataPoint = RangedLineChartDataPoint
+    public typealias MarkerType = LineMarkerType
     
     // MARK: Deprecated
     /// Initialises a ranged line chart.

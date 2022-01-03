@@ -40,6 +40,8 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable,
     public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<PieChartDataPoint>],Never>()
     @Published public var touchPointData: [DataPoint] = []
     
+    public var touchMarkerType: PieMarkerType = defualtTouchMarker
+    
     // MARK: Initializer
     /// Initialises Pie Chart data.
     ///
@@ -97,6 +99,7 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable,
     public typealias SetType = PieDataSet
     public typealias DataPoint = PieChartDataPoint
     public typealias CTStyle = PieChartStyle
+    public typealias Marker = PieMarkerType
     
     // MARK: Deprecated
     /// Initialises Pie Chart data.

@@ -15,6 +15,7 @@ import Combine
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
 public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
+    
     // MARK: Properties
     public let id: UUID = UUID()
     
@@ -49,6 +50,8 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
     private var markerData: MarkerData = MarkerData()
     private var internalDataSubscription: AnyCancellable?
     @Published public var touchPointData: [LineChartDataPoint] = []
+    
+    public var touchMarkerType: LineMarkerType = defualtTouchMarker
     
     // MARK: Initializer
     /// Initialises a Single Line Chart.
@@ -93,7 +96,7 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
                                               minValue: extraData.minValue,
                                               range: extraData.range)
                     } else if data.type == .line {
-                        return LineMarkerData(markerType: self.chartStyle.markerType,
+                        return LineMarkerData(markerType: self.touchMarkerType,
                                               location: data.location,
                                               dataPoints: self.dataSets.dataPoints,
                                               lineType: self.dataSets.style.lineType,
@@ -218,6 +221,10 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
         touchPointData = []
         infoView.isTouchCurrent = false
     }
+    
+    public typealias SetType = FilledLineDataSet
+    public typealias DataPoint = LineChartDataPoint
+    public typealias Marker = LineMarkerType
     
     // MARK: Deprecated
     /// Initialises a Single Line Chart.

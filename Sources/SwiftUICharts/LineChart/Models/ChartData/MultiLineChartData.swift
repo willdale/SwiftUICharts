@@ -51,6 +51,8 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
     private var internalDataSubscription: AnyCancellable?
     @Published public var touchPointData: [DataPoint] = []
     
+    public var touchMarkerType: LineMarkerType = defualtTouchMarker
+    
     // MARK: Initializers
     /// Initialises a Multi Line Chart.
     ///
@@ -98,7 +100,7 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
                     } else if data.type == .line {
                         let location = data.location
                         let lineData = self.dataSets.dataSets.compactMap { dataSet in
-                            return LineMarkerData(markerType: self.chartStyle.markerType,
+                            return LineMarkerData(markerType: self.touchMarkerType,
                                                   location: location,
                                                   dataPoints: dataSet.dataPoints,
                                                   lineType: dataSet.style.lineType,
@@ -255,6 +257,7 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
     public typealias SetType = MultiLineDataSet
     public typealias DataPoint = LineChartDataPoint
     public typealias CTStyle = LineChartStyle
+    public typealias Marker = LineMarkerType
     
     // MARK: Deprecated
     /// Initialises a Multi Line Chart.

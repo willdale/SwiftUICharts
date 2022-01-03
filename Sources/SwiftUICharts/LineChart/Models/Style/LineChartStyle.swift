@@ -16,6 +16,9 @@ import SwiftUI
 public struct LineChartStyle: CTLineChartStyle {
     
     // MARK: Deprecations
+    @available(*, deprecated, message: "Moved to view \".infoDisplay\"")
+    public var markerType: LineMarkerType
+    
     @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     public var infoBoxPlacement: InfoBoxPlacement = .floating
     @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
@@ -35,34 +38,50 @@ public struct LineChartStyle: CTLineChartStyle {
     @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     public var infoBoxBorderStyle: StrokeStyle = StrokeStyle(lineWidth: 0)
     
-    // MARK: Properties
-    public var markerType: LineMarkerType
-    
-    public var xAxisGridStyle: GridStyle
-    
+    @available(*, deprecated, message: "Moved to view \".xAxisLabels\"")
     public var xAxisLabelPosition: XAxisLabelPosistion
+    @available(*, deprecated, message: "Moved to view \".xAxisLabels\"")
     public var xAxisLabelFont: Font
+    @available(*, deprecated, message: "Moved to view \".xAxisLabels\"")
     public var xAxisLabelColour: Color
+    @available(*, deprecated, message: "Moved to view \".xAxisLabels\"")
     public var xAxisLabelsFrom: LabelsFrom
     
+    @available(*, deprecated, message: "Moved to view \".axisTitle\"")
     public var xAxisTitle: String?
+    @available(*, deprecated, message: "Moved to view \".axisTitle\"")
     public var xAxisTitleFont: Font
+    @available(*, deprecated, message: "Moved to view \".axisTitle\"")
     public var xAxisTitleColour: Color
+    @available(*, deprecated, message: "Moved to view \".axisTitle\"")
     public var xAxisBorderColour: Color?
 
+    @available(*, deprecated, message: "Moved to view \".xAxisGrid\"")
+    public var xAxisGridStyle: GridStyle
+    @available(*, deprecated, message: "Moved to view \".xAxisGrid\"")
     public var yAxisGridStyle: GridStyle
     
+    @available(*, deprecated, message: "Moved to view \".yAxisLabels\"")
     public var yAxisLabelPosition: YAxisLabelPosistion
+    @available(*, deprecated, message: "Moved to view \".yAxisLabels\"")
     public var yAxisLabelFont: Font
+    @available(*, deprecated, message: "Moved to view \".yAxisLabels\"")
     public var yAxisLabelColour: Color
+    @available(*, deprecated, message: "Moved to view \".yAxisLabels\"")
     public var yAxisNumberOfLabels: Int
+    @available(*, deprecated, message: "Moved to view \".yAxisLabels\"")
     public var yAxisLabelType: YAxisLabelType
     
+    @available(*, deprecated, message: "Moved to view \".axisTitle\"")
     public var yAxisTitle: String?
+    @available(*, deprecated, message: "Moved to view \".axisTitle\"")
     public var yAxisTitleFont: Font
+    @available(*, deprecated, message: "Moved to view \".axisTitle\"")
     public var yAxisTitleColour: Color
+    @available(*, deprecated, message: "Moved to view \".axisTitle\"")
     public var yAxisBorderColour: Color?
 
+    // MARK: Properties
     public var baseline: Baseline
     public var topLine: Topline
     

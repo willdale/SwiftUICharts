@@ -7,11 +7,16 @@
 
 import SwiftUI
 
+/// A protocol to get the correct touch overlay marker.
+public protocol MarkerType {}
+
 // MARK: - Touch
 public protocol Touchable {
     
-    /// A type representing a view for the results of the touch interaction.
-    associatedtype Touch: View
+    associatedtype Marker = MarkerType
+        
+    var touchMarkerType: Marker { get set }
+    static var defualtTouchMarker: Marker { get }
     
     /**
      Takes in the required data to set up all the touch interactions.
@@ -23,6 +28,9 @@ public protocol Touchable {
      - chartSize: The size of the chart view as the parent view.
      */
     func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect)
+    
+    /// A type representing a view for the results of the touch interaction.
+    associatedtype Touch: View
     
     /**
      Takes touch location and return a view based on the chart type and configuration.
@@ -40,4 +48,16 @@ public protocol Touchable {
     /// Informs the data model that touch
     /// input has finished.
     func touchDidFinish()
+}
+
+extension Touchable where Marker == LineMarkerType {
+    public static var defualtTouchMarker: LineMarkerType { .full(attachment: .line(dot: .style(DotStyle()))) }
+}
+
+extension Touchable where Marker == BarMarkerType {
+    public static var defualtTouchMarker: BarMarkerType { .full() }
+}
+
+extension Touchable where Marker == PieMarkerType {
+    public static var defualtTouchMarker: PieMarkerType { .none }
 }

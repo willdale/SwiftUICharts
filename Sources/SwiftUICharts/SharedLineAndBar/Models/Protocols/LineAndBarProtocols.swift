@@ -8,8 +8,6 @@
 import SwiftUI
 
 // MARK: - Style
-/// A protocol to get the correct touch overlay marker.
-public protocol MarkerType {}
 
 /// A protocol to extend functionality of `CTChartStyle` specifically for  Line and Bar Charts.
 public protocol CTLineBarChartStyle: CTChartStyle {
@@ -88,12 +86,11 @@ public protocol CTLineBarChartStyle: CTChartStyle {
     @available(*, deprecated, message: "Moved to view \".axisTitle\"")
     var yAxisTitleColour: Color { get set }
     
-    
-    
     /// A type representing touch overlay marker type. -- `MarkerType`
     associatedtype Mark: MarkerType
     
     /// Where the marker lines come from to meet at a specified point.
+    @available(*, deprecated, message: "")
     var markerType: Mark { get set }
     
 

@@ -14,8 +14,11 @@ import SwiftUI
  specific to the data set(s),
  */
 public struct BarChartStyle: CTBarChartStyle {
-    
     // MARK: Deprecations
+    
+    @available(*, deprecated, message: "Moved to view \".infoDisplay\"")
+    public var markerType: BarMarkerType
+    
     @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     public var infoBoxPlacement: InfoBoxPlacement = .floating
     @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
@@ -35,30 +38,30 @@ public struct BarChartStyle: CTBarChartStyle {
     @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     public var infoBoxBorderStyle: StrokeStyle = StrokeStyle(lineWidth: 0)
     
-    @available(*, deprecated, message: "Move to view \".xAxisLabels\"")
+    @available(*, deprecated, message: "Moved to view \".xAxisLabels\"")
     public var xAxisLabelPosition: XAxisLabelPosistion
-    @available(*, deprecated, message: "Move to view \".xAxisLabels\"")
+    @available(*, deprecated, message: "Moved to view \".xAxisLabels\"")
     public var xAxisLabelFont: Font
-    @available(*, deprecated, message: "Move to view \".xAxisLabels\"")
+    @available(*, deprecated, message: "Moved to view \".xAxisLabels\"")
     public var xAxisLabelColour: Color
-    @available(*, deprecated, message: "Move to view \".xAxisLabels\"")
+    @available(*, deprecated, message: "Moved to view \".xAxisLabels\"")
     public var xAxisLabelsFrom: LabelsFrom
-    @available(*, deprecated, message: "Move to view \".xAxisLabels\"")
+    @available(*, deprecated, message: "Moved to view \".xAxisLabels\"")
     
-    @available(*, deprecated, message: "Move to view \".yAxisLabels\"")
+    @available(*, deprecated, message: "Moved to view \".yAxisLabels\"")
     public var yAxisLabelPosition: YAxisLabelPosistion
-    @available(*, deprecated, message: "Move to view \".yAxisLabels\"")
+    @available(*, deprecated, message: "Moved to view \".yAxisLabels\"")
     public var yAxisLabelFont: Font
-    @available(*, deprecated, message: "Move to view \".yAxisLabels\"")
+    @available(*, deprecated, message: "Moved to view \".yAxisLabels\"")
     public var yAxisLabelColour: Color
-    @available(*, deprecated, message: "Move to view \".yAxisLabels\"")
+    @available(*, deprecated, message: "Moved to view \".yAxisLabels\"")
     public var yAxisNumberOfLabels: Int
-    @available(*, deprecated, message: "Move to view \".yAxisLabels\"")
+    @available(*, deprecated, message: "Moved to view \".yAxisLabels\"")
     public var yAxisLabelType: YAxisLabelType
     
-    @available(*, deprecated, message: "Move to view \".xAxisGrid\"")
+    @available(*, deprecated, message: "Moved to view \".xAxisGrid\"")
     public var xAxisGridStyle: GridStyle
-    @available(*, deprecated, message: "Move to view \".xAxisGrid\"")
+    @available(*, deprecated, message: "Moved to view \".xAxisGrid\"")
     public var yAxisGridStyle: GridStyle
     
     @available(*, deprecated, message: "Moved to view \".axisBorder\"")
@@ -80,7 +83,6 @@ public struct BarChartStyle: CTBarChartStyle {
     public var yAxisTitleColour: Color
     
     // MARK: Properties
-    public var markerType: BarMarkerType
 
     public var baseline: Baseline
     public var topLine: Topline

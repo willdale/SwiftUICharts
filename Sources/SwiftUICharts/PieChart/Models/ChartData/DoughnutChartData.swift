@@ -40,6 +40,8 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol, Publishable, 
     public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<PieChartDataPoint>],Never>()
     @Published public var touchPointData: [DataPoint] = []
     
+    public var touchMarkerType: PieMarkerType = defualtTouchMarker
+    
     // MARK: Initializer
     /// Initialises Doughnut Chart data.
     ///
@@ -95,6 +97,7 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol, Publishable, 
     public typealias SetType = PieDataSet
     public typealias DataPoint = PieChartDataPoint
     public typealias CTStyle = DoughnutChartStyle
+    public typealias Marker = PieMarkerType
     
     // MARK: Deprecated
     /// Initialises Doughnut Chart data.

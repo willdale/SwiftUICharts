@@ -50,7 +50,9 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     private var markerData: MarkerData = MarkerData()
     private var internalDataSubscription: AnyCancellable?
     @Published public var touchPointData: [DataPoint] = []
-        
+    
+    public var touchMarkerType: LineMarkerType = defualtTouchMarker
+    
     // MARK: Initializer
     /// Initialises a Single Line Chart.
     ///
@@ -94,7 +96,7 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
                                               minValue: extraData.minValue,
                                               range: extraData.range)
                     } else if data.type == .line {
-                        return LineMarkerData(markerType: self.chartStyle.markerType,
+                        return LineMarkerData(markerType: self.touchMarkerType,
                                               location: data.location,
                                               dataPoints: self.dataSets.dataPoints,
                                               lineType: self.dataSets.style.lineType,
@@ -218,6 +220,7 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     
     public typealias SetType = LineDataSet
     public typealias DataPoint = LineChartDataPoint
+    public typealias Marker = LineMarkerType
     
     // MARK: Deprecated
     /// Initialises a Single Line Chart.

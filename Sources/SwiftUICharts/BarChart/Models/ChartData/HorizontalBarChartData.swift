@@ -49,6 +49,8 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
     private var internalDataSubscription: AnyCancellable?
     @Published public var touchPointData: [DataPoint] = []
     
+    public var touchMarkerType: BarMarkerType = defualtTouchMarker
+    
     // MARK: Initializer
     /// Initialises a standard Bar Chart.
     ///
@@ -99,7 +101,7 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
                 }
                 let barMarkerData: [BarMarkerData] = $0.compactMap { data in
                     if data.type == .bar {
-                        return BarMarkerData(markerType: self.chartStyle.markerType,
+                        return BarMarkerData(markerType: self.touchMarkerType,
                                               location: data.location)
                     }
                     return nil
@@ -252,6 +254,7 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
     public typealias SetType = BarDataSet
     public typealias DataPoint = BarChartDataPoint
     public typealias CTStyle = BarChartStyle
+    public typealias Marker = BarMarkerType
     
     // MARK: Deprecated
     /// Initialises a standard Bar Chart.

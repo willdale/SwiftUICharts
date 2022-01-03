@@ -18,14 +18,13 @@ internal struct TouchOverlay<ChartData>: ViewModifier where ChartData: CTChartDa
     
     internal init(
         chartData: ChartData,
-        specifier: String,
-        unit: TouchUnit,
+        markerType: ChartData.Marker,
         minDistance: CGFloat
     ) {
         self.chartData = chartData
         self.minDistance = minDistance
-        self.chartData.infoView.touchSpecifier = specifier
-        self.chartData.infoView.touchUnit = unit
+        
+        self.chartData.touchMarkerType = markerType
     }
     
     internal func body(content: Content) -> some View {
@@ -56,57 +55,53 @@ internal struct TouchOverlay<ChartData>: ViewModifier where ChartData: CTChartDa
 #endif
 
 extension View {
-    #if !os(tvOS)
+    
     /**
      Adds touch interaction with the chart.
      
      Adds an overlay to detect touch and display the relivent information from the nearest data point.
      
-     - Requires:
-     If  ChartStyle --> infoBoxPlacement is set to .header
-     then `.headerBox` is required.
-     
-     If  ChartStyle --> infoBoxPlacement is set to .infoBox
-     then `.infoBox` is required.
-     
-     If  ChartStyle --> infoBoxPlacement is set to .floating
-     then `.floatingInfoBox` is required.
-     
      - Attention:
      Unavailable in tvOS
-     
-     - Parameters:
-        - chartData: Chart data model.
-        - specifier: Decimal precision for labels.
-        - unit: Unit to put before or after the value.
-        - minDistance: The distance that the touch event needs to travel to register.
-     - Returns: A  new view containing the chart with a touch overlay.
      */
-    public func touchOverlay<ChartData: CTChartData & Touchable>(
+    public func touch<ChartData: CTChartData & Touchable>(
         chartData: ChartData,
-        specifier: String = "%.0f",
-        unit: TouchUnit = .none,
+        markerType: ChartData.Marker = ChartData.defualtTouchMarker,
         minDistance: CGFloat = 0
     ) -> some View {
+        #if !os(tvOS)
         self.modifier(TouchOverlay(chartData: chartData,
-                                   specifier: specifier,
-                                   unit: unit,
+                                   markerType: markerType,
                                    minDistance: minDistance))
+        #elseif os(tvOS)
+        self.modifier(EmptyModifier())
+        #endif
     }
-    #elseif os(tvOS)
+}
+
+extension View {
+    
     /**
      Adds touch interaction with the chart.
      
+     Adds an overlay to detect touch and display the relivent information from the nearest data point.
+     
      - Attention:
      Unavailable in tvOS
      */
+    @available(*, deprecated, message: "Please use \".touch\" instead")
     public func touchOverlay<ChartData: CTChartData & Touchable>(
         chartData: ChartData,
         specifier: String = "%.0f",
         unit: TouchUnit = .none,
         minDistance: CGFloat = 0
     ) -> some View {
+        #if !os(tvOS)
+        self.modifier(TouchOverlay(chartData: chartData,
+                                   markerType: ChartData.defualtTouchMarker,
+                                   minDistance: minDistance))
+        #elseif os(tvOS)
         self.modifier(EmptyModifier())
+        #endif
     }
-    #endif
 }
