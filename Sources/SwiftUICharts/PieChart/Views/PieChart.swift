@@ -67,7 +67,7 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
                 }
             }
         }
-        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+        .animateOnAppear(using: .linear) {
             self.startAnimation = true
         }
         .onDisappear {

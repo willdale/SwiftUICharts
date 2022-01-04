@@ -47,6 +47,7 @@ public enum LabelsFrom {
  case trailing
  ```
  */
+@available(*, deprecated, message: "Please use \"\" instead.")
 public enum YAxisLabelPosistion {
     case leading
     case trailing
@@ -61,6 +62,7 @@ public enum YAxisLabelPosistion {
  case center(specifier: String) // Places the label in the center of chart.
  ```
  */
+@available(*, deprecated, message: "Please use \"\" instead.")
 public enum DisplayValue {
     /// No label.
     case none

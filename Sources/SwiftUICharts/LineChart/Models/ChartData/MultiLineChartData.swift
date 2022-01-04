@@ -66,7 +66,6 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
     ///   - dataSets: Data to draw and style the lines.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
-    ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - shouldAnimate: Whether the chart should be animated.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(

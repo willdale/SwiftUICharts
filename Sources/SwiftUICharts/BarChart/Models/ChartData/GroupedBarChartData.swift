@@ -73,7 +73,6 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
     ///   - barStyle: Control for the aesthetic of the bar chart.
-    ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - shouldAnimate: Whether the chart should be animated.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(

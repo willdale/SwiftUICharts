@@ -82,7 +82,7 @@ internal struct TopLineSubView<ChartData>: View where ChartData: FilledLineChart
             .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
             .stroke(colour, strokeStyle: chartData.dataSets.style.strokeStyle)
         
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .background(Color(.gray).opacity(0.000000001))
@@ -118,7 +118,7 @@ internal struct FilledLineSubView<ChartData>: View where ChartData: FilledLineCh
             .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
             .fill(colour)
         
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .background(Color(.gray).opacity(0.000000001))

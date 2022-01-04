@@ -72,7 +72,7 @@ internal struct LineSubView<ChartData>: View where ChartData: LineChartData {
             .trim(to: startAnimation ? 1 : 0)
             .stroke(colour, strokeStyle: chartData.dataSets.style.strokeStyle)
         
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .background(Color(.gray).opacity(0.000000001))

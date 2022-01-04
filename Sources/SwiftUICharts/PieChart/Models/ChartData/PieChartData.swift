@@ -18,9 +18,6 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable,
     // MARK: Properties
     public var id: UUID = UUID()
     @Published public var dataSets: PieDataSet
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    @Published public var metadata = ChartMetadata()
-    @Published public var chartStyle: PieChartStyle
     @Published public var legends: [LegendData] = []
     @Published public var infoView = InfoViewData<PieChartDataPoint>()
     @Published public var shouldAnimate: Bool
@@ -35,25 +32,29 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable,
     public var touchMarkerType: PieMarkerType = defualtTouchMarker
     
     // MARK: Non-Protocol
+    @Published public var chartSize: CGRect = .zero
     private var internalDataSubscription: AnyCancellable?
     internal let chartType: CTChartType = (chartType: .pie, dataSetType: .single)
+    
+    // MARK: Deprecated
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    @Published public var metadata = ChartMetadata()
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    @Published public var chartStyle = PieChartStyle()
     
     // MARK: Initializer
     /// Initialises Pie Chart data.
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the chart.
-    ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - shouldAnimate: Whether the chart should be animated.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: PieDataSet,
-        chartStyle: PieChartStyle = PieChartStyle(),
         shouldAnimate: Bool = true,
         noDataText: Text = Text("No Data")
     ) {
         self.dataSets = dataSets
-        self.chartStyle = chartStyle
         self.shouldAnimate = shouldAnimate
         self.shouldAnimate = true
         self.noDataText = noDataText
@@ -94,7 +95,6 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable,
     
     public typealias SetType = PieDataSet
     public typealias DataPoint = PieChartDataPoint
-    public typealias CTStyle = PieChartStyle
     public typealias Marker = PieMarkerType
 }
 

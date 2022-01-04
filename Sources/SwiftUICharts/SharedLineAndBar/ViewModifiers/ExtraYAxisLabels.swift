@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-internal struct ExtraYAxisLabels<ChartData>: ViewModifier where ChartData: CTChartData & YAxisViewDataProtocol,
-                                                                ChartData.CTStyle: CTLineBarChartStyle {
+internal struct ExtraYAxisLabels<ChartData>: ViewModifier where ChartData: CTChartData & YAxisViewDataProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let specifier: String
@@ -26,22 +25,22 @@ internal struct ExtraYAxisLabels<ChartData>: ViewModifier where ChartData: CTCha
     }
     
     internal func body(content: Content) -> some View {
-        Group {
-            switch chartData.chartStyle.yAxisLabelPosition {
-            case .leading:
-                HStack(spacing: 0) {
+//        Group {
+//            switch chartData.chartStyle.yAxisLabelPosition {
+//            case .leading:
+//                HStack(spacing: 0) {
                     content
 //                    chartData.getExtraYAxisLabels().padding(.leading, 4)
 //                    chartData.getExtraYAxisTitle(colour: colourIndicator)
-                }
-            case .trailing:
-                HStack(spacing: 0) {
+//                }
+//            case .trailing:
+//                HStack(spacing: 0) {
 //                    chartData.getExtraYAxisTitle(colour: colourIndicator)
 //                    chartData.getExtraYAxisLabels().padding(.trailing, 4)
-                    content
-                }
-            }
-        }
+//                    content
+//                }
+//            }
+//        }
     }
 }
 
@@ -60,8 +59,7 @@ extension View {
         specifier: String = "%.0f",
         colourIndicator: AxisColour = .none
     ) -> some View
-    where ChartData: CTChartData & YAxisViewDataProtocol,
-          ChartData.CTStyle: CTLineBarChartStyle
+    where ChartData: CTChartData & YAxisViewDataProtocol
     {
         self.modifier(ExtraYAxisLabels(chartData: chartData, specifier: specifier, colourIndicator: colourIndicator))
     }

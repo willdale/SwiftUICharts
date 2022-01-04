@@ -1,5 +1,5 @@
 //
-//  DoughnutChartStyle.swift
+//  deprecated+DoughnutChartStyle.swift
 //  
 //
 //  Created by Will Dale on 02/02/2021.
@@ -7,9 +7,17 @@
 
 import SwiftUI
 
+/// A protocol to extend functionality of `CTPieAndDoughnutChartStyle` specifically for Doughnut Charts.
+@available(*, deprecated, message: "")
+public protocol CTDoughnutChartStyle {
+    /// Width / Delta of the Doughnut Chart
+    var strokeWidth: CGFloat { get set }
+}
+
 /**
  Model for controlling the overall aesthetic of the chart.
  */
+@available(*, deprecated, message: "")
 public struct DoughnutChartStyle: CTDoughnutChartStyle {
     @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     public var infoBoxPlacement: InfoBoxPlacement = .floating
@@ -30,8 +38,10 @@ public struct DoughnutChartStyle: CTDoughnutChartStyle {
     @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     public var infoBoxBorderStyle: StrokeStyle = StrokeStyle(lineWidth: 0)
     
+    @available(*, deprecated, message: "")
     public var globalAnimation: Animation
     
+    @available(*, deprecated, message: "Moved to data model")
     public var strokeWidth: CGFloat
     
     /// Model for controlling the overall aesthetic of the chart.

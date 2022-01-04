@@ -107,7 +107,7 @@ where ChartData: CTChartData & DataHelper & PointOfInterestProtocol {
                         .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(self.markerName) %@", comment: ""), "\(markerValue)")))
                 }
             }
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .onDisappear {

@@ -30,7 +30,7 @@ internal struct VerticalGridView<ChartData>: View where ChartData: CTChartData {
                                        dash: style.dash,
                                        dashPhase: style.dashPhase))
             .frame(width: style.lineWidth)
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .onDisappear {

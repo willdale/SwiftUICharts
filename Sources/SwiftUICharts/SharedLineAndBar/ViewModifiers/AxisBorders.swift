@@ -139,7 +139,7 @@ internal struct HorizontalBorderView<ChartData>: View where ChartData: CTChartDa
                                        dash: style.dash,
                                        dashPhase: style.dashPhase))
             .frame(height: style.lineWidth)
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .onDisappear {
@@ -173,7 +173,7 @@ internal struct VerticalBorderView<ChartData>: View where ChartData: CTChartData
                                        dash: style.dash,
                                        dashPhase: style.dashPhase))
             .frame(width: style.lineWidth)
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .onDisappear {

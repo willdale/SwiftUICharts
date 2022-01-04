@@ -81,7 +81,7 @@ internal struct SingleLineChartSubView<ChartData>: View where ChartData: MultiLi
             .trim(to: startAnimation ? 1 : 0)
             .stroke(colour, strokeStyle: dataSet.style.strokeStyle)
         
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .background(Color(.gray).opacity(0.000000001))

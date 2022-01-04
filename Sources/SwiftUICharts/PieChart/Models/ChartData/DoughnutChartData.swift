@@ -18,14 +18,13 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol, Publishable, 
     // MARK: Properties
     public var id: UUID = UUID()
     @Published public var dataSets: PieDataSet
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    @Published public var metadata = ChartMetadata()
-    @Published public var chartStyle: DoughnutChartStyle
     @Published public var legends: [LegendData] = []
     @Published public var infoView = InfoViewData<PieChartDataPoint>()
     @Published public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
+    
+    public var strokeWidth: CGFloat = 1
 
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
@@ -35,25 +34,29 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol, Publishable, 
     public var touchMarkerType: PieMarkerType = defualtTouchMarker
     
     // MARK: Non-Protocol
+    @Published public var chartSize: CGRect = .zero
     private var internalDataSubscription: AnyCancellable?
     internal let chartType: CTChartType = (chartType: .pie, dataSetType: .single)
+    
+    // MARK: Deprecated
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    @Published public var metadata = ChartMetadata()
+    @available(*, deprecated, message: "")
+    @Published public var chartStyle = DoughnutChartStyle()
     
     // MARK: Initializer
     /// Initialises Doughnut Chart data.
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the chart.
-    ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - shouldAnimate: Whether the chart should be animated.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: PieDataSet,
-        chartStyle: DoughnutChartStyle = DoughnutChartStyle(),
         shouldAnimate: Bool = true,
         noDataText: Text
     ) {
         self.dataSets = dataSets
-        self.chartStyle = chartStyle
         self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         
@@ -92,6 +95,5 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol, Publishable, 
     
     public typealias SetType = PieDataSet
     public typealias DataPoint = PieChartDataPoint
-    public typealias CTStyle = DoughnutChartStyle
     public typealias Marker = PieMarkerType
 }

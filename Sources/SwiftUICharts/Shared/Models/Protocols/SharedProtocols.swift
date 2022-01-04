@@ -55,14 +55,20 @@ public protocol CTChartData: ObservableObject, Identifiable {
     /// A global control to disable animations
     var shouldAnimate: Bool { get set }
     
-    
-    /// A type representing the chart style. -- `CTChartStyle`
-    associatedtype CTStyle: CTChartStyle
+    var chartSize: CGRect { get set }
     
     /// Data model conatining the style data for the chart.
     @available(*, deprecated, message: "Please use \"\" instead.")
-    var chartStyle: CTStyle { get set }
+    var chartStyle: DeprecatedCTStyle { get }
 }
+
+extension CTChartData {
+    public var chartStyle: DeprecatedCTStyle {
+        DeprecatedCTStyle()
+    }
+}
+
+public struct DeprecatedCTStyle {}
 
 // MARK: - Data Sets
 /**

@@ -68,7 +68,7 @@ public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData 
                 }
             }
         }
-        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+        .animateOnAppear(using: .linear) {
             self.startAnimation = true
         }
         .onDisappear {

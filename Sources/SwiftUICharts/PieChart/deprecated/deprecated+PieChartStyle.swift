@@ -1,5 +1,5 @@
 //
-//  PieChartStyle.swift
+//  deprecated+PieChartStyle.swift
 //  
 //
 //  Created by Will Dale on 25/01/2021.
@@ -7,9 +7,12 @@
 
 import SwiftUI
 
-/**
- Model for controlling the overall aesthetic of the chart.
- */
+/// A protocol to extend functionality of `CTPieAndDoughnutChartStyle` specifically for  Pie Charts.
+@available(*, deprecated, message: "")
+public protocol CTPieChartStyle {}
+
+/// Model for controlling the overall aesthetic of the chart.
+@available(*, deprecated, message: "")
 public struct PieChartStyle: CTPieChartStyle {
     
     // MARK: Deprecations
@@ -32,7 +35,7 @@ public struct PieChartStyle: CTPieChartStyle {
     @available(*, deprecated, message: "Please use \"infoDisplay\" instead.")
     public var infoBoxBorderStyle: StrokeStyle = StrokeStyle(lineWidth: 0)
     
-    // MARK: Properties
+    @available(*, deprecated, message: "")
     public var globalAnimation: Animation
     
     // MARK: Init

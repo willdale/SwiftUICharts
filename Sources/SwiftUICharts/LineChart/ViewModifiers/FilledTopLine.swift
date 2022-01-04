@@ -47,7 +47,7 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                     .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                     .stroke(colour, style: strokeStyle)
                 
-                    .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                    .animateOnAppear(using: .linear) {
                         self.startAnimation = true
                     }
                     .onDisappear {
@@ -67,7 +67,7 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                                            startPoint: startPoint,
                                            endPoint: endPoint),
                             style: strokeStyle)
-                    .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                    .animateOnAppear(using: .linear) {
                         self.startAnimation = true
                     }
                     .onDisappear {
@@ -87,7 +87,7 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                                            startPoint: startPoint,
                                            endPoint: endPoint),
                             style: strokeStyle)
-                    .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                    .animateOnAppear(using: .linear) {
                         self.startAnimation = true
                     }
                     .onDisappear {

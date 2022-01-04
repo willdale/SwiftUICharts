@@ -31,7 +31,7 @@ internal struct HorizontalGridView<ChartData>: View where ChartData: CTChartData
                                        dash: style.dash,
                                        dashPhase: style.dashPhase))
             .frame(height: style.lineWidth)
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .onDisappear {

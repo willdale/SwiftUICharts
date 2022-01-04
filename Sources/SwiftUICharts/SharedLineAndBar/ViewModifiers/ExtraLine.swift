@@ -179,7 +179,7 @@ internal struct ColourExtraLineView<ChartData>: View where ChartData: CTChartDat
                 $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                     .stroke(colour, style: StrokeStyle(lineWidth: 3))
             })
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .onDisappear {
@@ -232,7 +232,7 @@ internal struct ColoursExtraLineView<ChartData>: View where ChartData: CTChartDa
                             style: StrokeStyle(lineWidth: 3))
             })
             
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .onDisappear {
@@ -283,7 +283,7 @@ internal struct StopsExtraLineView<ChartData>: View where ChartData: CTChartData
                                            endPoint: endPoint),
                             style: StrokeStyle(lineWidth: 3))
             })
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .onDisappear {
@@ -386,7 +386,7 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
                         .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                         .fill(dataPoint.pointColour?.fill ?? chartData.extraLineData.style.pointStyle.fillColour)
                 })
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnAppear(using: .linear) {
                     self.startAnimation = true
                 }
                 .onDisappear {
@@ -410,7 +410,7 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
                         .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                         .fill(dataPoint.pointColour?.fill ?? chartData.extraLineData.style.pointStyle.fillColour)
                 })
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnAppear(using: .linear) {
                     self.startAnimation = true
                 }
                 .onDisappear {
@@ -460,7 +460,7 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
                         .stroke(dataPoint.pointColour?.border ?? chartData.extraLineData.style.pointStyle.borderColour,
                                 lineWidth: chartData.extraLineData.style.pointStyle.lineWidth)
                 })
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnAppear(using: .linear) {
                     self.startAnimation = true
                 }
                 .onDisappear {
@@ -484,7 +484,7 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
                         .stroke(dataPoint.pointColour?.border ?? chartData.extraLineData.style.pointStyle.borderColour,
                                 lineWidth: chartData.extraLineData.style.pointStyle.lineWidth)
                 })
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnAppear(using: .linear) {
                     self.startAnimation = true
                 }
                 .onDisappear {

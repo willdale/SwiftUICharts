@@ -17,8 +17,7 @@ import SwiftUI
  This gets used higher up the view hierarchy
  to set the frame of the of the text after rotation.
  */
-internal struct RotatedText<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol,
-                                                   ChartData.CTStyle: CTLineBarChartStyle {
+internal struct RotatedText<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let label: String
@@ -48,8 +47,8 @@ internal struct RotatedText<ChartData>: View where ChartData: CTChartData & XAxi
     
     internal var body: some View {
         Text(LocalizedStringKey(label))
-            .font(chartData.chartStyle.xAxisLabelFont)
-            .foregroundColor(chartData.chartStyle.xAxisLabelColour)
+//            .font(chartData.chartStyle.xAxisLabelFont)
+//            .foregroundColor(chartData.chartStyle.xAxisLabelColour)
             .lineLimit(1)
             .overlay(
                 GeometryReader { geo in
@@ -86,8 +85,7 @@ internal struct RotatedText<ChartData>: View where ChartData: CTChartData & XAxi
  This gets used higher up the view hierarchy
  to set the frame of the of the text after rotation.
  */
-internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTChartData & HorizontalChart & YAxisViewDataProtocol,
-                                                             ChartData.CTStyle: CTLineBarChartStyle {
+internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTChartData & HorizontalChart & YAxisViewDataProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let label: String
@@ -113,9 +111,9 @@ internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTChartD
     
     internal var body: some View {
         Text(LocalizedStringKey(label))
-            .font(chartData.chartStyle.xAxisLabelFont)
+//            .font(chartData.chartStyle.xAxisLabelFont)
             .lineLimit(1)
-            .foregroundColor(chartData.chartStyle.xAxisLabelColour)
+//            .foregroundColor(chartData.chartStyle.xAxisLabelColour)
             .overlay(
                 GeometryReader { geo in
                     Rectangle()
@@ -133,8 +131,7 @@ internal struct HorizontalRotatedText<ChartData>: View where ChartData: CTChartD
 
 
 
-internal struct TempText<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol,
-                                                ChartData.CTStyle: CTLineBarChartStyle {
+internal struct TempText<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let label: String
@@ -164,8 +161,8 @@ internal struct TempText<ChartData>: View where ChartData: CTChartData & XAxisVi
     
     internal var body: some View {
         Text(LocalizedStringKey(label))
-            .font(chartData.chartStyle.xAxisLabelFont)
-            .foregroundColor(chartData.chartStyle.xAxisLabelColour)
+//            .font(chartData.chartStyle.xAxisLabelFont)
+//            .foregroundColor(chartData.chartStyle.xAxisLabelColour)
             .lineLimit(1)
             .overlay(
                 GeometryReader { geo in

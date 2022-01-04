@@ -8,4 +8,4 @@
 import Foundation
 
 @available(*, deprecated, message: "No longer required")
-public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBarChartStyle {}
+public protocol CTLineBarChartDataProtocol: CTChartData {}

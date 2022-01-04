@@ -7,42 +7,6 @@
 
 import SwiftUI
 
-extension TouchInfoDisplayable where Self: YAxisViewDataProtocol,
-                                     Self: VerticalChart {
-    public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
-        var returnPoint: CGFloat = .zero
-        if touchLocation < chartSize.minX + (boxFrame.width / 2) {
-            returnPoint = chartSize.minX + (boxFrame.width / 2)
-        } else if touchLocation > chartSize.maxX - (boxFrame.width / 2) {
-            returnPoint = chartSize.maxX - (boxFrame.width / 2)
-        } else {
-            returnPoint = touchLocation
-        }
-        return returnPoint + axisPadding
-    }
-}
-
-extension TouchInfoDisplayable where Self: XAxisViewDataProtocol,
-                                     Self: HorizontalChart {
-    public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
-        var returnPoint: CGFloat = .zero
-        if touchLocation < chartSize.minY + (boxFrame.height / 2) {
-            returnPoint = chartSize.minY + (boxFrame.height / 2)
-        } else if touchLocation > chartSize.maxY - (boxFrame.height / 2) {
-            returnPoint = chartSize.maxY - (boxFrame.height / 2)
-        } else {
-            returnPoint = touchLocation
-        }
-        return returnPoint + axisPadding
-    }
-}
-
-extension TouchInfoDisplayable {
-    public func setBoxLocation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
-        touchLocation
-    }
-}
-
 // MARK: - Data Set
 extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProtocol & CTnotRanged {
     public func maxValue() -> Double {
