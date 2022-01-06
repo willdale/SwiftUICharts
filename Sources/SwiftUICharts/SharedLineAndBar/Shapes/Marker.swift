@@ -23,7 +23,7 @@ internal struct HorizontalMarker<ChartData>: Shape where ChartData: CTChartData 
     
     internal func path(in rect: CGRect) -> Path {
         
-        let pointY: CGFloat = chartData.poiValueLabelPosition(value: value, position: YAxisPOIStyle.HorizontalPosition.center, chartSize: rect.size).y
+        let pointY: CGFloat = chartData.yAxisPOIMarkerPosition(value: value, position: PoiStyle.HorizontalPosition.center, chartSize: rect.size).y
         
         let firstPoint = CGPoint(x: 0, y: pointY)
         let nextPoint = CGPoint(x: rect.width, y: pointY)
@@ -50,7 +50,7 @@ internal struct VerticalMarker<ChartData>: Shape where ChartData: CTChartData & 
     }
     
     internal func path(in rect: CGRect) -> Path {
-        let pointX: CGFloat = chartData.poiValueLabelPosition(value: value, position: YAxisPOIStyle.VerticalPosition.center, chartSize: rect.size).x
+        let pointX: CGFloat = chartData.yAxisPOIMarkerPosition(value: value, position: PoiStyle.VerticalPosition.center, chartSize: rect.size).x
         
         let firstPoint = CGPoint(x: pointX, y: 0)
         let nextPoint = CGPoint(x: pointX, y: rect.height)
@@ -67,21 +67,21 @@ internal struct VerticalMarker<ChartData>: Shape where ChartData: CTChartData & 
 internal struct VerticalAbscissaMarker<ChartData>: Shape where ChartData: CTChartData & PointOfInterestProtocol {
     
     @ObservedObject private var chartData: ChartData
-    private let markerValue: Int
-    private let dataPointCount: Int
+    private let value: Int
+    private let total: Int
     
     internal init(
         chartData: ChartData,
-        markerValue: Int,
-        dataPointCount: Int
+        value: Int,
+        total: Int
     ) {
         self.chartData = chartData
-        self.markerValue = markerValue
-        self.dataPointCount = dataPointCount
+        self.value = value
+        self.total = total
     }
     
     internal func path(in rect: CGRect) -> Path {
-        let pointX: CGFloat = chartData.poiAbscissaValueLabelPositionCenter(frame: rect, markerValue: markerValue, count: dataPointCount).x
+        let pointX: CGFloat = chartData.xAxisPOIMarkerPosition(value: value, count: total, position: PoiStyle.VerticalPosition.center, chartSize: rect).x
         let firstPoint = CGPoint(x: pointX, y: 0)
         let nextPoint = CGPoint(x: pointX, y: rect.height)
         
@@ -96,21 +96,21 @@ internal struct VerticalAbscissaMarker<ChartData>: Shape where ChartData: CTChar
 internal struct HorizontalAbscissaMarker<ChartData>: Shape where ChartData: CTChartData & PointOfInterestProtocol {
     
     @ObservedObject private var chartData: ChartData
-    private let markerValue: Int
-    private let dataPointCount: Int
+    private let value: Int
+    private let total: Int
     
     internal init(
         chartData: ChartData,
-        markerValue: Int,
-        dataPointCount: Int
+        value: Int,
+        total: Int
     ) {
         self.chartData = chartData
-        self.markerValue = markerValue
-        self.dataPointCount = dataPointCount
+        self.value = value
+        self.total = total
     }
     
     internal func path(in rect: CGRect) -> Path {
-        let pointY: CGFloat = chartData.poiAbscissaValueLabelPositionCenter(frame: rect, markerValue: markerValue, count: dataPointCount).y
+        let pointY: CGFloat = chartData.xAxisPOIMarkerPosition(value: value, count: total, position: PoiStyle.HorizontalPosition.center, chartSize: rect).y
         let firstPoint = CGPoint(x: 0, y: pointY)
         let nextPoint = CGPoint(x: rect.width, y: pointY)
         

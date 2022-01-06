@@ -7,16 +7,16 @@
 
 import SwiftUI
 
-public protocol YAxisPositionable {
+public protocol PoiPositionable {
     var padding: CGFloat { get }
 }
 
-extension YAxisPositionable {
-    internal var type: YAxisPOIPositionType {
+extension PoiPositionable {
+    internal var type: _POIPositionType {
         switch self {
-        case is YAxisPOIStyle.HorizontalPosition:
+        case is PoiStyle.HorizontalPosition:
             return .horizontal
-        case is YAxisPOIStyle.VerticalPosition:
+        case is PoiStyle.VerticalPosition:
             return .vertical
         default:
             return .none
@@ -24,13 +24,13 @@ extension YAxisPositionable {
     }
 }
 
-internal enum YAxisPOIPositionType {
+internal enum _POIPositionType {
     case none
     case horizontal
     case vertical
 }
 
-public struct YAxisPOIStyle {
+public struct PoiStyle {
     public var lineColour: Color
     public var strokeStyle: StrokeStyle
     public var font: Font
@@ -38,7 +38,7 @@ public struct YAxisPOIStyle {
     public var background: Color
     public var addToLegends: Bool
     
-    public enum HorizontalPosition: YAxisPositionable {
+    public enum HorizontalPosition: PoiPositionable {
         case none
         case leading
         case trailing
@@ -56,7 +56,7 @@ public struct YAxisPOIStyle {
         }
     }
     
-    public enum VerticalPosition: YAxisPositionable {
+    public enum VerticalPosition: PoiPositionable {
         case none
         case top
         case bottom
@@ -75,13 +75,13 @@ public struct YAxisPOIStyle {
     }
 }
 
-extension YAxisPOIStyle {
-    public static let red = YAxisPOIStyle(lineColour: Color(red: 1.0, green: 0.75, blue: 0.25),
-                                          strokeStyle: StrokeStyle(lineWidth: 1, dash: [5,10]),
-                                          font: .caption,
-                                          textColour: .black,
-                                          background: Color(red: 1.0, green: 0.75, blue: 0.25),
-                                          addToLegends: true)
+extension PoiStyle {
+    public static let amber = PoiStyle(lineColour: Color(red: 1.0, green: 0.75, blue: 0.25),
+                                       strokeStyle: StrokeStyle(lineWidth: 2, dash: [5,10]),
+                                       font: .caption,
+                                       textColour: .black,
+                                       background: Color(red: 1.0, green: 0.75, blue: 0.25),
+                                       addToLegends: true)
 }
 
 /**
@@ -92,8 +92,8 @@ internal struct YAxisPOI<ChartData>: ViewModifier where ChartData: CTChartData &
     @ObservedObject private var chartData: ChartData
     private let label: String
     private let value: Double
-    private let position: YAxisPositionable
-    private let style: YAxisPOIStyle
+    private let position: PoiPositionable
+    private let style: PoiStyle
     
     @State private var startAnimation: Bool
     
@@ -101,8 +101,8 @@ internal struct YAxisPOI<ChartData>: ViewModifier where ChartData: CTChartData &
         chartData: ChartData,
         label: String,
         value: Double,
-        position: YAxisPositionable,
-        style: YAxisPOIStyle,
+        position: PoiPositionable,
+        style: PoiStyle,
         addToLegends: Bool,
         isAverage: Bool
     ) {
@@ -118,7 +118,7 @@ internal struct YAxisPOI<ChartData>: ViewModifier where ChartData: CTChartData &
     internal func body(content: Content) -> some View {
         ZStack {
             content
-            chartData.poiMarker(value: value)
+            chartData.yAxisPOIMarker(value: value)
                 .trim(to: startAnimation ? 1 : 0)
                 .stroke(style.lineColour, style: style.strokeStyle)
             _AxisLabel(chartData: chartData, label: label, value: value, position: position, style: style)
@@ -143,11 +143,11 @@ extension View {
         chartData: ChartData,
         label: String,
         value: Double,
-        position: YAxisPOIStyle.HorizontalPosition,
-        style: YAxisPOIStyle,
+        position: PoiStyle.HorizontalPosition,
+        style: PoiStyle,
         addToLegends: Bool = true
     ) -> some View
-    where ChartData: CTChartData & DataHelper & PointOfInterestProtocol & ViewDataProtocol & VerticalChart
+    where ChartData: CTChartData & DataHelper & PointOfInterestProtocol & ViewDataProtocol
     {
         self.modifier(YAxisPOI(chartData: chartData,
                                label: label,
@@ -162,8 +162,8 @@ extension View {
         chartData: ChartData,
         label: String,
         value: Double,
-        position: YAxisPOIStyle.VerticalPosition,
-        style: YAxisPOIStyle,
+        position: PoiStyle.VerticalPosition,
+        style: PoiStyle,
         addToLegends: Bool = true
     ) -> some View
     where ChartData: CTChartData & DataHelper & PointOfInterestProtocol & ViewDataProtocol & HorizontalChart
@@ -177,7 +177,6 @@ extension View {
                                isAverage: false))
     }
     
-    
     /**
      Horizontal line marking the average.
      
@@ -187,8 +186,8 @@ extension View {
     public func averageLine<ChartData>(
         chartData: ChartData,
         label: String,
-        position: YAxisPOIStyle.HorizontalPosition,
-        style: YAxisPOIStyle,
+        position: PoiStyle.HorizontalPosition,
+        style: PoiStyle,
         addToLegends: Bool = true
     ) -> some View
     where ChartData: CTChartData & DataHelper & PointOfInterestProtocol & ViewDataProtocol & VerticalChart
@@ -208,15 +207,15 @@ fileprivate struct _AxisLabel<ChartData>: View where ChartData: CTChartData & Da
     @ObservedObject private var chartData: ChartData
     private let label: String
     private let value: Double
-    private let position: YAxisPositionable
-    private let style: YAxisPOIStyle
+    private let position: PoiPositionable
+    private let style: PoiStyle
     
     internal init(
         chartData: ChartData,
         label: String,
         value: Double,
-        position: YAxisPositionable,
-        style: YAxisPOIStyle
+        position: PoiPositionable,
+        style: PoiStyle
     ) {
         self.chartData = chartData
         self.label = label
@@ -233,7 +232,7 @@ fileprivate struct _AxisLabel<ChartData>: View where ChartData: CTChartData & Da
                 .padding(position.padding)
                 .background(style.background)
                 .modifier(_AxisLabel_Shape(position: position, style: style))
-                .position(chartData.poiValueLabelPosition(value: value, position: position, chartSize: geo.size))
+                .position(chartData.yAxisPOIMarkerPosition(value: value, position: position, chartSize: geo.size))
                 .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
                 .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString(label, comment: ""))))
         }
@@ -242,19 +241,19 @@ fileprivate struct _AxisLabel<ChartData>: View where ChartData: CTChartData & Da
 
 fileprivate struct _AxisLabel_Shape: ViewModifier {
     
-    let position: YAxisPositionable
-    let style: YAxisPOIStyle
+    let position: PoiPositionable
+    let style: PoiStyle
     
     func body(content: Content) -> some View {
         Group {
             switch position.type {
             case .horizontal:
                 _AxisLabel_Shape_Horizontal(content: content,
-                                            position: position as? YAxisPOIStyle.HorizontalPosition,
+                                            position: position as? PoiStyle.HorizontalPosition,
                                             style: style)
             case .vertical:
                 _AxisLabel_Shape_Vertical(content: content,
-                                          position: position as? YAxisPOIStyle.VerticalPosition,
+                                          position: position as? PoiStyle.VerticalPosition,
                                           style: style)
             default:
                 content
@@ -266,8 +265,8 @@ fileprivate struct _AxisLabel_Shape: ViewModifier {
 fileprivate struct _AxisLabel_Shape_Horizontal<Content: View>: View {
     
     let content: Content
-    let position: YAxisPOIStyle.HorizontalPosition?
-    let style: YAxisPOIStyle
+    let position: PoiStyle.HorizontalPosition?
+    let style: PoiStyle
     
     var body: some View {
         Group {
@@ -295,8 +294,8 @@ fileprivate struct _AxisLabel_Shape_Horizontal<Content: View>: View {
 fileprivate struct _AxisLabel_Shape_Vertical<Content: View>: View {
     
     let content: Content
-    let position: YAxisPOIStyle.VerticalPosition?
-    let style: YAxisPOIStyle
+    let position: PoiStyle.VerticalPosition?
+    let style: PoiStyle
     
     var body: some View {
         Group {

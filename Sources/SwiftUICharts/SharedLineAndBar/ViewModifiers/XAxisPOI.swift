@@ -11,102 +11,46 @@ import SwiftUI
  Configurable Point of interest
  */
 internal struct XAxisPOI<ChartData>: ViewModifier
-where ChartData: CTChartData & DataHelper & PointOfInterestProtocol {
-    
-    private let uuid: UUID = UUID()
-    
+where ChartData: CTChartData & DataHelper & PointOfInterestProtocol & ViewDataProtocol {
+   
     @ObservedObject private var chartData: ChartData
-    private let markerName: String
-    private let markerValue: Int
-    private let dataPointCount: Int
-    
-    private let lineColour: Color
-    private let strokeStyle: StrokeStyle
-    
-    private let labelPosition: DisplayValue
-    private let labelFont: Font
-    private let labelColour: Color
-    private let labelBackground: Color
-    
-    private let addToLegends: Bool
+    private let label: String
+    private let value: Int
+    private let total: Int
+    private let position: PoiPositionable
+    private let style: PoiStyle
     
     @State private var startAnimation: Bool
     
     internal init(
         chartData: ChartData,
-        markerName: String,
-        markerValue: Int,
-        dataPointCount: Int,
-        lineColour: Color,
-        strokeStyle: StrokeStyle,
-        
-        labelPosition: DisplayValue,
-        labelFont: Font,
-        labelColour: Color,
-        labelBackground: Color,
-        
+        label: String,
+        value: Int,
+        total: Int,
+        position: PoiPositionable,
+        style: PoiStyle,
         addToLegends: Bool
     ) {
         self.chartData = chartData
-        self.markerName = markerName
-        self.markerValue = markerValue
-        self.dataPointCount = dataPointCount
-        
-        self.lineColour = lineColour
-        self.strokeStyle = strokeStyle
-        
-        self.labelPosition = labelPosition
-        self.labelFont = labelFont
-        self.labelColour = labelColour
-        self.labelBackground = labelBackground
-        
-        self.addToLegends = addToLegends
+        self.label = label
+        self.value = value
+        self.total = total
+        self.position = position
+        self.style = style
         
         self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
-        
-        self.setupPOILegends()
     }
     
     internal func body(content: Content) -> some View {
         ZStack {
             content
-            chartData.poiAbscissaMarker(markerValue: markerValue, dataPointCount: dataPointCount)
+            chartData.xAxisPOIMarker(value: value, total: total)
                 .trim(to: startAnimation ? 1 : 0)
-                .stroke(lineColour, style: strokeStyle)
+                .stroke(style.lineColour, style: style.strokeStyle)
+            _X_AxisLabel(chartData: chartData, label: label, value: value, total: total, position: position, style: style)
             
-            GeometryReader { geo in
-                switch labelPosition {
-                case .none:
-                    EmptyView()
-                case .yAxis:
-                    
-                    chartData.poiAbscissaLabelAxis(marker: markerName,
-                                                   labelFont: labelFont,
-                                                   labelColour: labelColour,
-                                                   labelBackground: labelBackground,
-                                                   lineColour: lineColour)
-                        .position(chartData.poiAbscissaValueLabelPositionAxis(frame: geo.frame(in: .local),
-                                                                              markerValue: markerValue,
-                                                                              count: dataPointCount))
-                        .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
-                        .accessibilityValue(Text(LocalizedStringKey(String(format: NSLocalizedString("\(self.markerName) %@", comment: ""), "\(markerValue)"))))
-                    
-                case .center:
-                    
-                    chartData.poiAbscissaLabelCenter(marker: markerName,
-                                                     labelFont: labelFont,
-                                                     labelColour: labelColour,
-                                                     labelBackground: labelBackground,
-                                                     lineColour: lineColour,
-                                                     strokeStyle: strokeStyle)
-                        .position(chartData.poiAbscissaValueLabelPositionCenter(frame: geo.frame(in: .local),
-                                                                                markerValue: markerValue,
-                                                                                count: dataPointCount))
-                    
-                        .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
-                        .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(self.markerName) %@", comment: ""), "\(markerValue)")))
-                }
-            }
+            .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
+            .accessibilityValue(LocalizedStringKey(label))
             .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
@@ -114,17 +58,6 @@ where ChartData: CTChartData & DataHelper & PointOfInterestProtocol {
                 self.startAnimation = false
             }
         }
-    }
-    
-    private func setupPOILegends() {
-//        if addToLegends && !chartData.legends.contains(where: { $0.legend == markerName }) { // init twice
-//            chartData.legends.append(LegendData(id: uuid,
-//                                                legend: markerName,
-//                                                colour: ColourStyle(colour: lineColour),
-//                                                strokeStyle: strokeStyle.toStroke(),
-//                                                prioity: 2,
-//                                                chartType: .line))
-//        }
     }
 }
 
@@ -137,67 +70,168 @@ extension View {
      Shows a marker line at a specified value.
      
      
-     - Requires:
-     
-     Chart Data to conform to CTLineBarChartDataProtocol.
-     
-     # Available for:
-     
-     - Line Chart
-     - Multi Line Chart
-     - Filled Line Chart
-     - Ranged Line Chart
-     - Bar Chart
-     - Grouped Bar Chart
-     - Stacked Bar Chart
-     - Ranged Bar Chart
-     
-     # Unavailable for:
-     
-     - Pie Chart
-     - Doughnut Chart
-     
-     - Parameters:
-        - chartData: Chart data model.
-        - markerName: Title of marker, for the legend.
-        - markerValue: Value to mark.
-        - dataPointCount: Total number of data points in data set.
-        - labelPosition: Option to display the markers’ value inline with the marker.
-        - labelFont: Font for the label.
-        - labelColour: Colour of the `Text`.
-        - labelBackground: Colour of the background.
-        - lineColour: Line Colour.
-        - strokeStyle: Style of Stroke.
-        - addToLegends: Whether or not to add this to the legends.
-     - Returns: A  new view containing the chart with a marker line at a specified value.
      */
     public func xAxisPOI<ChartData>(
         chartData: ChartData,
-        markerName: String,
-        markerValue: Int,
-        dataPointCount: Int,
-        lineColour: Color = Color(.blue),
-        strokeStyle: StrokeStyle = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0),
-        labelPosition: DisplayValue = .center(specifier: "%.0f"),
-        labelFont: Font = .caption,
-        labelColour: Color = Color.primary,
-        labelBackground: Color = Color.systemsBackground,
+        label: String,
+        value: Int,
+        total: Int,
+        position: PoiStyle.VerticalPosition,
+        style: PoiStyle,
         addToLegends: Bool = true
     ) -> some View
-    where ChartData: CTChartData & DataHelper & PointOfInterestProtocol
+    where ChartData: CTChartData & DataHelper & PointOfInterestProtocol & ViewDataProtocol
     {
         self.modifier(XAxisPOI(chartData: chartData,
-                               markerName: markerName,
-                               markerValue: markerValue,
-                               dataPointCount: dataPointCount,
-                               lineColour: lineColour,
-                               strokeStyle: strokeStyle,
-                               labelPosition: labelPosition,
-                               labelFont: labelFont,
-                               labelColour: labelColour,
-                               labelBackground: labelBackground,
+                               label: label,
+                               value: value,
+                               total: total,
+                               position: position,
+                               style: style,
+                               addToLegends: addToLegends))
+    }
+    
+    public func xAxisPOI<ChartData>(
+        chartData: ChartData,
+        label: String,
+        value: Int,
+        total: Int,
+        position: PoiStyle.HorizontalPosition,
+        style: PoiStyle,
+        addToLegends: Bool = true
+    ) -> some View
+    where ChartData: CTChartData & DataHelper & PointOfInterestProtocol & ViewDataProtocol & HorizontalChart
+    {
+        self.modifier(XAxisPOI(chartData: chartData,
+                               label: label,
+                               value: value,
+                               total: total,
+                               position: position,
+                               style: style,
                                addToLegends: addToLegends))
     }
 }
 
 
+fileprivate struct _X_AxisLabel<ChartData>: View
+where ChartData: CTChartData & DataHelper & PointOfInterestProtocol & ViewDataProtocol {
+    
+    @ObservedObject private var chartData: ChartData
+    private let label: String
+    private let value: Int
+    private let total: Int
+    private let position: PoiPositionable
+    private let style: PoiStyle
+    
+    internal init(
+        chartData: ChartData,
+        label: String,
+        value: Int,
+        total: Int,
+        position: PoiPositionable,
+        style: PoiStyle
+    ) {
+        self.chartData = chartData
+        self.label = label
+        self.value = value
+        self.total = total
+        self.position = position
+        self.style = style
+    }
+    
+    var body: some View {
+        GeometryReader { geo in
+            Text(LocalizedStringKey(label))
+                .font(style.font)
+                .foregroundColor(style.textColour)
+                .padding(4)
+                .padding(.vertical, 4)
+                .background(style.background)
+                .modifier(_X_AxisLabel_Shape(position: position, style: style))
+                .position(chartData.xAxisPOIMarkerPosition(value: value,
+                                                           count: total,
+                                                           position: position,
+                                                           chartSize: geo.frame(in: .local)))
+        }
+    }
+}
+
+fileprivate struct _X_AxisLabel_Shape: ViewModifier {
+    
+    let position: PoiPositionable
+    let style: PoiStyle
+    
+    func body(content: Content) -> some View {
+        Group {
+            switch position.type {
+            case .horizontal:
+                _X_AxisLabel_Shape_Horizontal(content: content,
+                                              position: position as? PoiStyle.HorizontalPosition,
+                                              style: style)
+            case .vertical:
+                _X_AxisLabel_Shape_Vertical(content: content,
+                                            position: position as? PoiStyle.VerticalPosition,
+                                            style: style)
+            default:
+                content
+            }
+        }
+    }
+}
+
+fileprivate struct _X_AxisLabel_Shape_Horizontal<Content: View>: View {
+    
+    let content: Content
+    let position: PoiStyle.HorizontalPosition?
+    let style: PoiStyle
+    
+    var body: some View {
+        Group {
+            switch position {
+            case .leading:
+                content
+                    .clipShape(LeadingLabelShape())
+                    .overlay(LeadingLabelShape().stroke(style.lineColour))
+            case .center:
+                content
+                    .clipShape(DiamondShape())
+                    .overlay(DiamondShape().stroke(style.lineColour, style: style.strokeStyle))
+            case .trailing:
+                content
+                    .clipShape(TrailingLabelShape())
+                    .overlay(TrailingLabelShape().stroke(style.lineColour))
+            default:
+                content
+            }
+        }
+    }
+}
+
+
+fileprivate struct _X_AxisLabel_Shape_Vertical<Content: View>: View {
+    
+    let content: Content
+    let position: PoiStyle.VerticalPosition?
+    let style: PoiStyle
+    
+    var body: some View {
+        Group {
+            switch position {
+            case .top:
+                content
+                    .clipShape(TopLabelShape())
+                    .overlay(TopLabelShape().stroke(style.lineColour))
+            case .center:
+                content
+                    .clipShape(DiamondShape())
+                    .overlay(DiamondShape().stroke(style.lineColour, style: style.strokeStyle))
+            case .bottom:
+                content
+                    .clipShape(BottomLabelShape())
+                    .overlay(BottomLabelShape().stroke(style.lineColour))
+            default:
+                content
+            }
+        }
+    }
+}
