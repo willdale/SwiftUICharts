@@ -12,7 +12,7 @@ public protocol YAxisPositionable {
 }
 
 extension YAxisPositionable {
-    var type: YAxisPOIPositionType {
+    internal var type: YAxisPOIPositionType {
         switch self {
         case is YAxisPOIStyle.HorizontalPosition:
             return .horizontal
@@ -24,7 +24,7 @@ extension YAxisPositionable {
     }
 }
 
-enum YAxisPOIPositionType {
+internal enum YAxisPOIPositionType {
     case none
     case horizontal
     case vertical
@@ -122,7 +122,6 @@ internal struct YAxisPOI<ChartData>: ViewModifier where ChartData: CTChartData &
                 .trim(to: startAnimation ? 1 : 0)
                 .stroke(style.lineColour, style: style.strokeStyle)
             _AxisLabel(chartData: chartData, label: label, value: value, position: position, style: style)
-//                .border(.blue, width: 3)
         }
         .animateOnAppear(using: .linear) {
             self.startAnimation = true
