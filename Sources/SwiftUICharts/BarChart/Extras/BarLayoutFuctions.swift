@@ -6,6 +6,7 @@
 //
 
 import CoreGraphics
+import ChartMath
 
 internal struct BarLayout {
     internal static func barWidth(_ totalWidth: CGFloat, _ widthFactor: CGFloat) -> CGFloat {

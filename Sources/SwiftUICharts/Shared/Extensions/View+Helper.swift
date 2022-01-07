@@ -106,21 +106,3 @@ extension Color {
 extension Collection {
     func distance(to index: Index) -> Int { distance(from: startIndex, to: index) }
 }
-
-// MARK: - Global Functions
-/// Protects against divide by zero.
-///
-/// Return zero in the case of divide by zero.
-/// 
-/// ```
-/// divideByZeroProtection(CGFloat.self, value, maxValue)
-/// ```
-///
-/// - Parameters:
-///   - outputType: The numeric type required as an output.
-///   - lhs: Dividend
-///   - rhs: Divisor
-/// - Returns: If rhs is not zero it returns the quotient otherwise it returns zero.
-func divideByZeroProtection<T: BinaryFloatingPoint, U: BinaryFloatingPoint>(_ outputType: U.Type, _ lhs: T, _ rhs: T) -> U {
-    U(rhs != 0 ? (lhs / rhs) : 0)
-}

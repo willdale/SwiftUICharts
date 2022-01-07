@@ -8,39 +8,51 @@
 import Foundation
 import CoreGraphics
 
-public func plotPointX<T: BinaryFloatingPoint>(w: T, i: Int, c: Int) -> T {
-    let xSize = (w / T(c-1))
-    let x = T(i) * xSize
-    return x
+public func plotPointX<T: BinaryFloatingPoint>(_ index: Int, _ count: Int, _ width: T) -> T {
+    let xSize = (width / T(count - 1))
+    return T(index) * xSize
 }
 
-public func plotPoint<T: BinaryFloatingPoint>(v: T, m: T, r: T, i: Int, c: Int, w: T, h: T) -> CGPoint {
-    let xSize = (w / T(c-1))
-    let x = T(i) * xSize
+public func plotPointY<T: BinaryFloatingPoint>(_ value: T, _ min: T, _ range: T, _ height: T) -> T {
+    let yValue = value - min
+    let ySizing = -(height / range)
+    return (yValue * ySizing) + height
+}
+
+public func plotPoint<T: BinaryFloatingPoint>(_ value: T, _ min: T, _ range: T, _ index: Int, _ count: Int, _ width: T, _ height: T) -> CGPoint {
+    let xSize = (width / T(count - 1))
+    let x = T(index) * xSize
     
-    let yValue = v - m
-    let ySizing = -(h / r)
-    let y = (yValue * ySizing) + h
+    let yValue = value - min
+    let ySizing = -(height / range)
+    let y = (yValue * ySizing) + height
     return CGPoint(x: CGFloat(x), y: CGFloat(y))
 }
 
-public func plotPointWithBarOffset<T: BinaryFloatingPoint>(v: T, m: T, r: T, i: Int, c: Int, w: T, h: T) -> CGPoint {
-    let xSize = (w / T(c-1))
-    let x = T(i) * xSize
-    let os = x / 2
+public func plotPointWithBarOffset<T: BinaryFloatingPoint>(_ value: T, _ min: T, _ range: T, _ index: Int, _ count: Int, _ width: T, _ height: T) -> CGPoint {
+    let xSize = (width / T(count - 1))
+    let x = T(index) * xSize
+    let offset = x / 2
     
-    let yValue = v - m
-    let ySizing = -(h / r)
-    let y = (yValue * ySizing) + h
-    return CGPoint(x: CGFloat(x + os), y: CGFloat(y))
+    let yValue = value - min
+    let ySizing = -(height / range)
+    let y = (yValue * ySizing) + height
+    return CGPoint(x: CGFloat(x + offset), y: CGFloat(y))
 }
 
-public func cubicBezierC1(pp: CGPoint, np: CGPoint) -> CGPoint {
-    return CGPoint(x: pp.x + (np.x - pp.x) / 2,
-                   y: pp.y)
+public func cubicBezierC1(_ previousPoint: CGPoint, _ nextPoint: CGPoint) -> CGPoint {
+    return CGPoint(x: previousPoint.x + (nextPoint.x - previousPoint.x) / 2,
+                   y: previousPoint.y)
 }
 
-public func cubicBezierC2(pp: CGPoint, np: CGPoint) -> CGPoint {
-    CGPoint(x: np.x - (np.x - pp.x) / 2,
-            y: np.y)
+public func cubicBezierC2(_ previousPoint: CGPoint, _ nextPoint: CGPoint) -> CGPoint {
+    CGPoint(x: nextPoint.x - (nextPoint.x - previousPoint.x) / 2,
+            y: nextPoint.y)
 }
+
+
+// MARK: Axis
+public func lineXAxisPOIMarkerX<T: BinaryInteger, U: BinaryFloatingPoint>(_ value: T, _ count: T, _ width: U) -> U {
+    return divideByZeroProtection(U.self, width, U(count - 1)) * U(value)
+}
+

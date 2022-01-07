@@ -1,0 +1,25 @@
+//
+//  Shared.swift
+//  
+//
+//  Created by Will Dale on 06/01/2022.
+//
+
+import Foundation
+
+/// Protects against divide by zero.
+///
+/// Return zero in the case of divide by zero.
+///
+/// ```
+/// divideByZeroProtection(CGFloat.self, value, maxValue)
+/// ```
+///
+/// - Parameters:
+///   - outputType: The numeric type required as an output.
+///   - lhs: Dividend
+///   - rhs: Divisor
+/// - Returns: If rhs is not zero it returns the quotient otherwise it returns zero.
+public func divideByZeroProtection<T: BinaryFloatingPoint, U: BinaryFloatingPoint>(_ outputType: U.Type, _ lhs: T, _ rhs: T) -> U {
+    U(rhs != 0 ? (lhs / rhs) : 0)
+}

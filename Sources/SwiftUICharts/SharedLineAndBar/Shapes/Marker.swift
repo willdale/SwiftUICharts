@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Generic line, drawn horizontally across the chart.
-internal struct HorizontalMarker<ChartData>: Shape where ChartData: CTChartData & PointOfInterestProtocol {
+internal struct YAxisHorizontalMarker<ChartData>: Shape where ChartData: CTChartData & PointOfInterestProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let value: Double
@@ -36,7 +36,7 @@ internal struct HorizontalMarker<ChartData>: Shape where ChartData: CTChartData 
 }
 
 /// Generic line, drawn vertically across the chart.
-internal struct VerticalMarker<ChartData>: Shape where ChartData: CTChartData & PointOfInterestProtocol {
+internal struct YAxisVerticalMarker<ChartData>: Shape where ChartData: CTChartData & PointOfInterestProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let value: Double
@@ -64,7 +64,7 @@ internal struct VerticalMarker<ChartData>: Shape where ChartData: CTChartData & 
 
 
 /// Generic line, drawn vertically across the chart.
-internal struct VerticalAbscissaMarker<ChartData>: Shape where ChartData: CTChartData & PointOfInterestProtocol {
+internal struct XAxisVerticalMarker<ChartData>: Shape where ChartData: CTChartData & PointOfInterestProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let value: Int
@@ -93,7 +93,7 @@ internal struct VerticalAbscissaMarker<ChartData>: Shape where ChartData: CTChar
 }
 
 /// Generic line, drawn horizontally across the chart.
-internal struct HorizontalAbscissaMarker<ChartData>: Shape where ChartData: CTChartData & PointOfInterestProtocol {
+internal struct XAxisHorizontalMarker<ChartData>: Shape where ChartData: CTChartData & PointOfInterestProtocol {
     
     @ObservedObject private var chartData: ChartData
     private let value: Int

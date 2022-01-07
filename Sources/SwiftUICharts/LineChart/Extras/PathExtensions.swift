@@ -19,25 +19,25 @@ extension Path {
         var path = Path()
         guard let firstIndex = dataPoints.firstIndex(where: { !$0.ignore }) else { return path }
         let firstDataPoint = dataPoints[firstIndex]
-        let firstPoint = plotPoint(v: firstDataPoint.value,
-                                   m: minValue,
-                                   r: range,
-                                   i: firstIndex,
-                                   c: dataPoints.count,
-                                   w: rect.width,
-                                   h: rect.height)
+        let firstPoint = plotPoint(firstDataPoint.value,
+                                   minValue,
+                                   range,
+                                   firstIndex,
+                                   dataPoints.count,
+                                   rect.width,
+                                   rect.height)
         path.move(to: firstPoint)
         
         for index in firstIndex ..< dataPoints.count {
             let datapoint = dataPoints[index]
             if datapoint.ignore { continue }
-            let nextPoint = plotPoint(v: datapoint.value,
-                                      m: minValue,
-                                      r: range,
-                                      i: index,
-                                      c: dataPoints.count,
-                                      w: rect.width,
-                                      h: rect.height)
+            let nextPoint = plotPoint(datapoint.value,
+                                      minValue,
+                                      range,
+                                      index,
+                                      dataPoints.count,
+                                      rect.width,
+                                      rect.height)
             path.addLine(to: nextPoint)
         }
         return path
@@ -52,28 +52,28 @@ extension Path {
         var path = Path()
         guard let firstIndex = dataPoints.firstIndex(where: { !$0.ignore }) else { return path }
         let firstDataPoint = dataPoints[firstIndex]
-        let firstPoint = plotPoint(v: firstDataPoint.value,
-                                   m: minValue,
-                                   r: range,
-                                   i: firstIndex,
-                                   c: dataPoints.count,
-                                   w: rect.width,
-                                   h: rect.height)
+        let firstPoint = plotPoint(firstDataPoint.value,
+                                   minValue,
+                                   range,
+                                   firstIndex,
+                                   dataPoints.count,
+                                   rect.width,
+                                   rect.height)
         path.move(to: firstPoint)
         var previousPoint = firstPoint
         for index in firstIndex ..< dataPoints.count {
             let datapoint = dataPoints[index]
             if datapoint.ignore { continue }
-            let nextPoint = plotPoint(v: datapoint.value,
-                                      m: minValue,
-                                      r: range,
-                                      i: index,
-                                      c: dataPoints.count,
-                                      w: rect.width,
-                                      h: rect.height)
+            let nextPoint = plotPoint(datapoint.value,
+                                      minValue,
+                                      range,
+                                      index,
+                                      dataPoints.count,
+                                      rect.width,
+                                      rect.height)
             path.addCurve(to: nextPoint,
-                          control1: cubicBezierC1(pp: previousPoint, np: nextPoint),
-                          control2: cubicBezierC2(pp: previousPoint, np: nextPoint))
+                          control1: cubicBezierC1(previousPoint, nextPoint),
+                          control2: cubicBezierC2(previousPoint, nextPoint))
             previousPoint = nextPoint
         }
         
@@ -93,32 +93,32 @@ extension Path {
         var path = Path()
         guard let firstIndex = dataPoints.firstIndex(where: { !$0.ignore }) else { return path }
         let firstDataPoint = dataPoints[firstIndex]
-        let firstPoint = plotPoint(v: firstDataPoint.value,
-                                   m: minValue,
-                                   r: range,
-                                   i: firstIndex,
-                                   c: dataPoints.count,
-                                   w: rect.width,
-                                   h: rect.height)
+        let firstPoint = plotPoint(firstDataPoint.value,
+                                   minValue,
+                                   range,
+                                   firstIndex,
+                                   dataPoints.count,
+                                   rect.width,
+                                   rect.height)
         path.move(to: firstPoint)
         
         for index in firstIndex ..< dataPoints.count {
             let datapoint = dataPoints[index]
             if datapoint.ignore { continue }
-            let nextPoint = plotPoint(v: datapoint.value,
-                                      m: minValue,
-                                      r: range,
-                                      i: index,
-                                      c: dataPoints.count,
-                                      w: rect.width,
-                                      h: rect.height)
+            let nextPoint = plotPoint(datapoint.value,
+                                      minValue,
+                                      range,
+                                      index,
+                                      dataPoints.count,
+                                      rect.width,
+                                      rect.height)
             path.addLine(to: nextPoint)
             lastIndex = index
         }
         
-        path.addLine(to: CGPoint(x: plotPointX(w: rect.width, i: lastIndex, c: dataPoints.count),
+        path.addLine(to: CGPoint(x: plotPointX(lastIndex, dataPoints.count, rect.width),
                                  y: rect.height))
-        path.addLine(to: CGPoint(x: plotPointX(w: rect.width, i: dataPoints.distance(to: firstIndex), c: dataPoints.count),
+        path.addLine(to: CGPoint(x: plotPointX(dataPoints.distance(to: firstIndex), dataPoints.count, rect.width),
                                  y: rect.height))
         path.addLine(to: firstPoint)
         return path
@@ -134,13 +134,13 @@ extension Path {
         var path = Path()
         guard let firstIndex = dataPoints.firstIndex(where: { !$0.ignore }) else { return path }
         let firstDataPoint = dataPoints[firstIndex]
-        let firstPoint = plotPoint(v: firstDataPoint.value,
-                                   m: minValue,
-                                   r: range,
-                                   i: firstIndex,
-                                   c: dataPoints.count,
-                                   w: rect.width,
-                                   h: rect.height)
+        let firstPoint = plotPoint(firstDataPoint.value,
+                                   minValue,
+                                   range,
+                                   firstIndex,
+                                   dataPoints.count,
+                                   rect.width,
+                                   rect.height)
         path.move(to: firstPoint)
         
         var previousPoint = firstPoint
@@ -149,22 +149,22 @@ extension Path {
             let datapoint = dataPoints[index]
             if datapoint.ignore { continue }
             
-            let nextPoint = plotPoint(v: datapoint.value,
-                                      m: minValue,
-                                      r: range,
-                                      i: index,
-                                      c: dataPoints.count,
-                                      w: rect.width,
-                                      h: rect.height)
+            let nextPoint = plotPoint(datapoint.value,
+                                      minValue,
+                                      range,
+                                      index,
+                                      dataPoints.count,
+                                      rect.width,
+                                      rect.height)
             path.addCurve(to: nextPoint,
-                          control1: cubicBezierC1(pp: previousPoint, np: nextPoint),
-                          control2: cubicBezierC2(pp: previousPoint, np: nextPoint))
+                          control1: cubicBezierC1(previousPoint, nextPoint),
+                          control2: cubicBezierC2(previousPoint, nextPoint))
             previousPoint = nextPoint
             lastIndex = index
         }
-        path.addLine(to: CGPoint(x: plotPointX(w: rect.width, i: lastIndex, c: dataPoints.count),
+        path.addLine(to: CGPoint(x: plotPointX(lastIndex, dataPoints.count, rect.width),
                                  y: rect.height))
-        path.addLine(to: CGPoint(x: plotPointX(w: rect.width, i: dataPoints.distance(to: firstIndex), c: dataPoints.count),
+        path.addLine(to: CGPoint(x: plotPointX(dataPoints.distance(to: firstIndex), dataPoints.count, rect.width),
                                  y: rect.height))
         path.addLine(to: firstPoint)
         return path
@@ -182,26 +182,26 @@ extension Path {
         var path = Path()
         guard let firstIndex = dataPoints.firstIndex(where: { !$0.ignore }) else { return path }
         let firstDataPoint = dataPoints[firstIndex]
-        let firstPointUpper = plotPoint(v: firstDataPoint.upperValue,
-                                        m: minValue,
-                                        r: range,
-                                        i: firstIndex,
-                                        c: dataPoints.count,
-                                        w: rect.width,
-                                        h: rect.height)
+        let firstPointUpper = plotPoint(firstDataPoint.upperValue,
+                                        minValue,
+                                        range,
+                                        firstIndex,
+                                        dataPoints.count,
+                                        rect.width,
+                                        rect.height)
         path.move(to: firstPointUpper)
         
         // Upper Path
         for indexUpper in firstIndex ..< dataPoints.count {
             let datapoint = dataPoints[indexUpper]
             if datapoint.ignore { continue }
-            let nextPointUpper = plotPoint(v: datapoint.upperValue,
-                                           m: minValue,
-                                           r: range,
-                                           i: indexUpper,
-                                           c: dataPoints.count,
-                                           w: rect.width,
-                                           h: rect.height)
+            let nextPointUpper = plotPoint(datapoint.upperValue,
+                                           minValue,
+                                           range,
+                                           indexUpper,
+                                           dataPoints.count,
+                                           rect.width,
+                                           rect.height)
             path.addLine(to: nextPointUpper)
         }
         
@@ -209,13 +209,13 @@ extension Path {
         for indexLower in (firstIndex ..< dataPoints.count).reversed() {
             let datapoint = dataPoints[indexLower]
             if datapoint.ignore { continue }
-            let nextPointLower = plotPoint(v: datapoint.lowerValue,
-                                           m: minValue,
-                                           r: range,
-                                           i: indexLower,
-                                           c: dataPoints.count,
-                                           w: rect.width,
-                                           h: rect.height)
+            let nextPointLower = plotPoint(datapoint.lowerValue,
+                                           minValue,
+                                           range,
+                                           indexLower,
+                                           dataPoints.count,
+                                           rect.width,
+                                           rect.height)
             path.addLine(to: nextPointLower)
         }
         
@@ -232,13 +232,13 @@ extension Path {
         var path = Path()
         guard let firstIndex = dataPoints.firstIndex(where: { !$0.ignore }) else { return path }
         let firstDataPoint = dataPoints[firstIndex]
-        let firstPointUpper = plotPoint(v: firstDataPoint.upperValue,
-                                        m: minValue,
-                                        r: range,
-                                        i: firstIndex,
-                                        c: dataPoints.count,
-                                        w: rect.width,
-                                        h: rect.height)
+        let firstPointUpper = plotPoint(firstDataPoint.upperValue,
+                                        minValue,
+                                        range,
+                                        firstIndex,
+                                        dataPoints.count,
+                                        rect.width,
+                                        rect.height)
         path.move(to: firstPointUpper)
         
         var previousPoint = firstPointUpper
@@ -247,17 +247,17 @@ extension Path {
         for indexUpper in firstIndex ..< dataPoints.count {
             let datapoint = dataPoints[indexUpper]
             if datapoint.ignore { continue }
-            let nextPoint = plotPoint(v: datapoint.upperValue,
-                                      m: minValue,
-                                      r: range,
-                                      i: indexUpper,
-                                      c: dataPoints.count,
-                                      w: rect.width,
-                                      h: rect.height)
+            let nextPoint = plotPoint(datapoint.upperValue,
+                                      minValue,
+                                      range,
+                                      indexUpper,
+                                      dataPoints.count,
+                                      rect.width,
+                                      rect.height)
             
             path.addCurve(to: nextPoint,
-                          control1: cubicBezierC1(pp: previousPoint, np: nextPoint),
-                          control2: cubicBezierC2(pp: previousPoint, np: nextPoint))
+                          control1: cubicBezierC1(previousPoint, nextPoint),
+                          control2: cubicBezierC2(previousPoint, nextPoint))
             previousPoint = nextPoint
         }
         
@@ -265,17 +265,17 @@ extension Path {
         for indexLower in (firstIndex ..< dataPoints.count).reversed() {
             let datapoint = dataPoints[indexLower]
             if datapoint.ignore { continue }
-            let nextPoint = plotPoint(v: datapoint.lowerValue,
-                                      m: minValue,
-                                      r: range,
-                                      i: indexLower,
-                                      c: dataPoints.count,
-                                      w: rect.width,
-                                      h: rect.height)
+            let nextPoint = plotPoint(datapoint.lowerValue,
+                                      minValue,
+                                      range,
+                                      indexLower,
+                                      dataPoints.count,
+                                      rect.width,
+                                      rect.height)
             
             path.addCurve(to: nextPoint,
-                          control1: cubicBezierC1(pp: previousPoint, np: nextPoint),
-                          control2: cubicBezierC2(pp: previousPoint, np: nextPoint))
+                          control1: cubicBezierC1(previousPoint, nextPoint),
+                          control2: cubicBezierC2(previousPoint, nextPoint))
             previousPoint = nextPoint
         }
         
@@ -296,26 +296,26 @@ extension Path {
         var path = Path()
         guard let firstIndex = dataPoints.firstIndex(where: { !$0.ignore }) else { return path }
         let firstDataPoint = dataPoints[firstIndex]
-        let firstPoint = plotPointWithBarOffset(v: firstDataPoint.value,
-                                                m: minValue,
-                                                r: range,
-                                                i: firstIndex,
-                                                c: dataPoints.count,
-                                                w: rect.width,
-                                                h: rect.height)
+        let firstPoint = plotPointWithBarOffset(firstDataPoint.value,
+                                                minValue,
+                                                range,
+                                                firstIndex,
+                                                dataPoints.count,
+                                                rect.width,
+                                                rect.height)
         path.move(to: firstPoint)
         
         for index in firstIndex ..< dataPoints.count {
             let datapoint = dataPoints[index]
             if datapoint.ignore { continue }
             
-            let nextPoint = plotPointWithBarOffset(v: datapoint.value,
-                                                   m: minValue,
-                                                   r: range,
-                                                   i: index,
-                                                   c: dataPoints.count,
-                                                   w: rect.width,
-                                                   h: rect.height)
+            let nextPoint = plotPointWithBarOffset(datapoint.value,
+                                                   minValue,
+                                                   range,
+                                                   index,
+                                                   dataPoints.count,
+                                                   rect.width,
+                                                   rect.height)
             path.addLine(to: nextPoint)
         }
         return path
@@ -330,22 +330,22 @@ extension Path {
         var path = Path()
         guard let firstIndex = dataPoints.firstIndex(where: { !$0.ignore }) else { return path }
         let firstDataPoint = dataPoints[firstIndex]
-        let firstPointOne = plotPoint(v: firstDataPoint.value,
-                                      m: minValue,
-                                      r: range,
-                                      i: firstIndex,
-                                      c: dataPoints.count,
-                                      w: rect.width,
-                                      h: rect.height)
+        let firstPointOne = plotPoint(firstDataPoint.value,
+                                      minValue,
+                                      range,
+                                      firstIndex,
+                                      dataPoints.count,
+                                      rect.width,
+                                      rect.height)
         path.move(to: firstPointOne)
         
-        let firstPointTwo = plotPointWithBarOffset(v: firstDataPoint.value,
-                                                   m: minValue,
-                                                   r: range,
-                                                   i: firstIndex,
-                                                   c: dataPoints.count,
-                                                   w: rect.width,
-                                                   h: rect.height)
+        let firstPointTwo = plotPointWithBarOffset(firstDataPoint.value,
+                                                   minValue,
+                                                   range,
+                                                   firstIndex,
+                                                   dataPoints.count,
+                                                   rect.width,
+                                                   rect.height)
         path.addLine(to: firstPointTwo)
         
         var previousPoint = firstPointTwo
@@ -353,28 +353,28 @@ extension Path {
         for index in firstIndex ..< dataPoints.count {
             let datapoint = dataPoints[index]
             if datapoint.ignore { continue }
-            let nextPoint = plotPointWithBarOffset(v: datapoint.value,
-                                                   m: minValue,
-                                                   r: range,
-                                                   i: index,
-                                                   c: dataPoints.count,
-                                                   w: rect.width,
-                                                   h: rect.height)
+            let nextPoint = plotPointWithBarOffset(datapoint.value,
+                                                   minValue,
+                                                   range,
+                                                   index,
+                                                   dataPoints.count,
+                                                   rect.width,
+                                                   rect.height)
             path.addCurve(to: nextPoint,
-                          control1: cubicBezierC1(pp: previousPoint, np: nextPoint),
-                          control2: cubicBezierC2(pp: previousPoint, np: nextPoint))
+                          control1: cubicBezierC1(previousPoint, nextPoint),
+                          control2: cubicBezierC2(previousPoint, nextPoint))
             previousPoint = nextPoint
         }
         
         guard let lastIndex = dataPoints.lastIndex(where: { !$0.ignore }) else { return path }
         let lastDatapoint = dataPoints[lastIndex]
-        let lastPoint = plotPoint(v: lastDatapoint.value,
-                                  m: minValue,
-                                  r: range,
-                                  i: lastIndex,
-                                  c: dataPoints.count,
-                                  w: rect.width,
-                                  h: rect.height)
+        let lastPoint = plotPoint(lastDatapoint.value,
+                                  minValue,
+                                  range,
+                                  lastIndex,
+                                  dataPoints.count,
+                                  rect.width,
+                                  rect.height)
         path.addLine(to: lastPoint)
         
         return path

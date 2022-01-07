@@ -6,15 +6,15 @@
 //
 
 import SwiftUI
+import ChartMath
 
 public protocol PointOfInterestProtocol {
     
-    // MARK: Ordinate
     /**
      A type representing a Shape for displaying a line
      as a POI.
      */
-    associatedtype MarkerShape: Shape
+    associatedtype YAxisMarkerShape: Shape
     
     /**
      Displays a line marking a Point Of Interest.
@@ -28,7 +28,7 @@ public protocol PointOfInterestProtocol {
      - minValue: Lowest value in the data set.
      - Returns: A line shape at a specified point.
      */
-    func yAxisPOIMarker(value: Double) -> MarkerShape
+    func yAxisPOIMarker(value: Double) -> YAxisMarkerShape
     
     /**
      Sets the position of the POI Label when it's over
@@ -48,7 +48,7 @@ public protocol PointOfInterestProtocol {
      A type representing a Shape for displaying a line
      as a POI.
      */
-    associatedtype AbscissaMarkerShape: Shape
+    associatedtype XAxisMarkerShape: Shape
     
     /**
      Displays a line marking a Point Of Interest.
@@ -62,7 +62,7 @@ public protocol PointOfInterestProtocol {
      - minValue: Lowest value in the data set.
      - Returns: A line shape at a specified point.
      */
-    func xAxisPOIMarker(value: Int, total: Int) -> AbscissaMarkerShape
+    func xAxisPOIMarker(value: Int, total: Int) -> XAxisMarkerShape
     
     func xAxisPOIMarkerPosition(value: Int, count: Int, position: PoiPositionable, chartSize: CGRect) -> CGPoint
 }
@@ -71,22 +71,21 @@ public protocol PointOfInterestProtocol {
 // MARK: - Extensions
 extension PointOfInterestProtocol where Self: CTChartData & VerticalChart {
     public func yAxisPOIMarker(value: Double) -> some Shape {
-        HorizontalMarker(chartData: self, value: value)
+        YAxisHorizontalMarker(chartData: self, value: value)
     }
     
-    // ---
     public func xAxisPOIMarker(value: Int, total: Int) -> some Shape {
-        VerticalAbscissaMarker(chartData: self, value: value, total: total)
+        XAxisVerticalMarker(chartData: self, value: value, total: total)
     }
 }
+
 extension PointOfInterestProtocol where Self: CTChartData & HorizontalChart {
     public func yAxisPOIMarker(value: Double) -> some Shape {
-        VerticalMarker(chartData: self, value: value)
+        YAxisVerticalMarker(chartData: self, value: value)
     }
     
-    // ---
     public func xAxisPOIMarker(value: Int, total: Int) -> some Shape {
-        HorizontalAbscissaMarker(chartData: self, value: value, total: total)
+        XAxisHorizontalMarker(chartData: self, value: value, total: total)
     }
 }
 
@@ -99,36 +98,33 @@ extension PointOfInterestProtocol where Self: CTChartData & ViewDataProtocol & D
                                         Self: VerticalChart,
                                         Self: LineChartType {
     public func yAxisPOIMarkerPosition(value: Double, position: PoiPositionable, chartSize: CGSize) -> CGPoint {
-        let ctValue = CGFloat(value - minValue)
-        let sizing: CGFloat = -(chartSize.height / CGFloat(range))
         let padding: CGFloat = 4.0
         switch position as? PoiStyle.HorizontalPosition {
         case .leading:
             return CGPoint(x: -((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) - padding,
-                           y: ctValue * sizing + chartSize.height)
-        case .trailing:
-            return CGPoint(x: chartSize.width + ((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) + padding,
-                           y: ctValue * sizing + chartSize.height)
+                           y: plotPointY(value, minValue, range, chartSize.height))
         case .center:
             return CGPoint(x: chartSize.width / 2,
-                           y: ctValue * sizing + chartSize.height)
+                           y: plotPointY(value, minValue, range, chartSize.height))
+        case .trailing:
+            return CGPoint(x: chartSize.width + ((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) + padding,
+                           y: plotPointY(value, minValue, range, chartSize.height))
         default:
             return .zero
         }
     }
-
-    // ---
+    
     public func xAxisPOIMarkerPosition(value: Int, count: Int, position: PoiPositionable, chartSize: CGRect) -> CGPoint {
         let padding: CGFloat = 10
         switch position as? PoiStyle.VerticalPosition {
         case .top:
-            return CGPoint(x: (chartSize.width / CGFloat(count-1)) * CGFloat(value),
+            return CGPoint(x: lineXAxisPOIMarkerX(value, count, chartSize.width),
                            y: -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - padding)
         case .center:
-            return CGPoint(x: (chartSize.width / CGFloat(count-1)) * CGFloat(value),
+            return CGPoint(x: lineXAxisPOIMarkerX(value, count, chartSize.width),
                            y: chartSize.height / 2)
         case .bottom:
-            return CGPoint(x: (chartSize.width / CGFloat(count-1)) * CGFloat(value),
+            return CGPoint(x: lineXAxisPOIMarkerX(value, count, chartSize.width),
                            y:  chartSize.height + ((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) + padding)
         default:
             return .zero
@@ -141,35 +137,34 @@ extension PointOfInterestProtocol where Self: CTChartData & PointOfInterestProto
                                         Self: VerticalChart,
                                         Self: BarChartType {
     public func yAxisPOIMarkerPosition(value: Double, position: PoiPositionable, chartSize: CGSize) -> CGPoint {
-        let value: CGFloat = divideByZeroProtection(CGFloat.self, (value - minValue), range)
         let padding: CGFloat = 4.0
         switch position as? PoiStyle.HorizontalPosition {
         case .leading:
             return CGPoint(x: -((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) - padding,
-                           y: chartSize.height - value * chartSize.height)
-        case .trailing:
-            return CGPoint(x: chartSize.width + ((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) + padding,
-                           y: chartSize.height - value * chartSize.height)
+                           y: barYAxisPOIMarkerX(value, minValue, range, chartSize.height))
         case .center:
             return CGPoint(x: chartSize.width / 2,
-                           y: chartSize.height - value * chartSize.height)
+                           y: barYAxisPOIMarkerX(value, minValue, range, chartSize.height))
+        case .trailing:
+            return CGPoint(x: chartSize.width + ((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) + padding,
+                           y: barYAxisPOIMarkerX(value, minValue, range, chartSize.height))
         default:
             return .zero
         }
     }
     
-    // ---
     public func xAxisPOIMarkerPosition(value: Int, count: Int, position: PoiPositionable, chartSize: CGRect) -> CGPoint {
         let padding: CGFloat = 10.0
         switch position as? PoiStyle.VerticalPosition {
         case .top:
-            return CGPoint(x: (chartSize.width / CGFloat(count-1)) * CGFloat(value),
+            return CGPoint(x: barXAxisPOIMarkerX(value, count, chartSize.width),
                            y: -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - padding)
         case .center:
-            return CGPoint(x: (chartSize.width / CGFloat(count)) * CGFloat(value) + ((chartSize.width / CGFloat(count)) / 2),
+            // (chartSize.width / CGFloat(count)) * CGFloat(value) + ((chartSize.width / CGFloat(count)) / 2)
+            return CGPoint(x: barXAxisPOIMarkerX(value, count, chartSize.width),
                            y: chartSize.height / 2)
         case .bottom:
-            return CGPoint(x: (chartSize.width / CGFloat(count-1)) * CGFloat(value),
+            return CGPoint(x: barXAxisPOIMarkerX(value, count, chartSize.width),
                            y: chartSize.height + ((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) + padding)
         default:
             return .zero
@@ -182,35 +177,34 @@ extension PointOfInterestProtocol where Self: CTChartData & PointOfInterestProto
                                         Self: HorizontalChart,
                                         Self: BarChartType {
     public func yAxisPOIMarkerPosition(value: Double, position: PoiPositionable, chartSize: CGSize) -> CGPoint {
-        let ctValue: CGFloat = divideByZeroProtection(CGFloat.self, (value - minValue), range)
         let padding: CGFloat = 4.0
         switch position as? PoiStyle.VerticalPosition {
         case .top:
-            return CGPoint(x: ctValue * chartSize.width,
+            return CGPoint(x: horizontalBarYPosition(value, minValue, range, chartSize.width),
                            y: -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - padding)
         case .center:
-            return CGPoint(x: ctValue * chartSize.width,
+            return CGPoint(x: horizontalBarYPosition(value, minValue, range, chartSize.width),
                            y: chartSize.height / 2)
         case .bottom:
-            return CGPoint(x: ctValue * chartSize.width,
+            return CGPoint(x: horizontalBarYPosition(value, minValue, range, chartSize.width),
                            y: chartSize.height + ((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) + padding)
         default:
             return .zero
         }
     }
-    // ---
+    
     public func xAxisPOIMarkerPosition(value: Int, count: Int, position: PoiPositionable, chartSize: CGRect) -> CGPoint {
         let padding: CGFloat = 8.0
         switch position as? PoiStyle.HorizontalPosition {
         case .leading:
             return CGPoint(x: -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - padding,
-                           y: ((chartSize.height / CGFloat(count)) * CGFloat(value) + ((chartSize.height / CGFloat(count)) / 2)))
+                           y: horizontalBarXAxisPOIMarkerY(value, count, chartSize.height))
         case .center:
             return CGPoint(x: chartSize.width / 2,
-                           y: ((chartSize.height / CGFloat(count)) * CGFloat(value) + ((chartSize.height / CGFloat(count)) / 2)))
+                           y: horizontalBarXAxisPOIMarkerY(value, count, chartSize.height))
         case .trailing:
             return CGPoint(x: chartSize.width + ((xAxisViewData.xAxislabelWidths.max() ?? 0) / 2) + padding,
-                           y: ((chartSize.height / CGFloat(count)) * CGFloat(value) + ((chartSize.height / CGFloat(count)) / 2)))
+                           y: horizontalBarXAxisPOIMarkerY(value, count, chartSize.height))
         default:
             return .zero
         }
