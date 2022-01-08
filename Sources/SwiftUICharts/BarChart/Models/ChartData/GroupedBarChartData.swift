@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import ChartMath
 
 /**
  Data model for drawing and styling a Grouped Bar Chart.
@@ -132,64 +133,18 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     }
     
     // MARK: Labels
-    public func getXAxisLabels() -> some View {
-        Group {
-            switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint(let angle):
-                HStack(spacing: 0) {
-                    ForEach(dataSets.dataSets.indices, id: \.self) { i in
-                        if i > 0 {
-                            Spacer().frame(minWidth: 0, maxWidth: 500)
-                        }
-                        VStack {
-                            if self.chartStyle.xAxisLabelPosition == .bottom {
-                                RotatedText(chartData: self, label: self.dataSets.dataSets[i].setTitle, rotation: angle)
-                                Spacer()
-                            } else {
-                                Spacer()
-                                RotatedText(chartData: self, label: self.dataSets.dataSets[i].setTitle, rotation: angle)
-                            }
-                        }
-                        .frame(width: self.getXSectionForDataPoint(dataSet: self.dataSets, chartSize: self.chartSize, groupSpacing: self.groupSpacing),
-                               height: self.xAxisViewData.xAxisLabelHeights.max())
-                        if i < self.dataSets.dataSets.count - 1 {
-                            Spacer().frame(minWidth: 0, maxWidth: 500)
-                        }
-                    }
-                }
-            case .chartData(let angle):
-                if let labelArray = self.xAxisLabels {
-                    HStack(spacing: 0) {
-                        ForEach(labelArray.indices, id: \.self) { i in
-                            if i > 0 {
-                                Spacer().frame(minWidth: 0, maxWidth: 500)
-                            }
-                            VStack {
-                                if self.chartStyle.xAxisLabelPosition == .bottom {
-                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
-                                    Spacer()
-                                } else {
-                                    Spacer()
-                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
-                                }
-                            }
-                            .frame(width: self.xAxisViewData.xAxislabelWidths.max(),
-                                   height: self.xAxisViewData.xAxisLabelHeights.max())
-                            if i < labelArray.count - 1 {
-                                Spacer().frame(minWidth: 0, maxWidth: 500)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    private func getXSectionForDataPoint(dataSet: GroupedBarDataSets, chartSize: CGRect, groupSpacing: CGFloat) -> CGFloat {
-        let superXSection: CGFloat = (chartSize.width / CGFloat(dataSet.dataSets.count))
-        let compensation: CGFloat = ((groupSpacing * CGFloat(dataSets.dataSets.count - 1)) / CGFloat(dataSets.dataSets.count))
+    public func sectionX(count: Int, size: CGFloat) -> CGFloat {
+        let superXSection = divide(size, count)
+        let spaceSection = groupSpacing * CGFloat(count - 1)
+        let compensation = divide(spaceSection, count)
         let section = superXSection - compensation
         return section > 0 ? section : 0
+    }
+    
+    public func xAxisLabelOffSet(index: Int, size: CGFloat, count: Int) -> CGFloat {
+        let superXSection = divide(size, count)
+        let compensation = ((groupSpacing * CGFloat(count - 1)) / CGFloat(count))
+        return (CGFloat(index) * superXSection) + ((CGFloat(index) * compensation) / CGFloat(count))
     }
     
     // MARK: Touch
@@ -202,17 +157,17 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     
     private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         // Divide the chart into equal sections.
-        let superXSection: CGFloat = (chartSize.width / CGFloat(dataSets.dataSets.count))
-        let superIndex: Int = Int((touchLocation.x) / superXSection)
+        let superXSection = chartSize.width / CGFloat(dataSets.dataSets.count)
+        let superIndex = Int((touchLocation.x) / superXSection)
         
         // Work out how much to remove from xSection due to groupSpacing.
-        let compensation: CGFloat = ((groupSpacing * CGFloat(dataSets.dataSets.count - 1)) / CGFloat(dataSets.dataSets.count))
+        let compensation = ((groupSpacing * CGFloat(dataSets.dataSets.count - 1)) / CGFloat(dataSets.dataSets.count))
         
         // Make those sections take account of spacing between groups.
-        let xSection: CGFloat = superXSection - compensation
-        let ySection: CGFloat = chartSize.height / CGFloat(self.maxValue)
+        let xSection = superXSection - compensation
+        let ySection = chartSize.height / CGFloat(self.maxValue)
         
-        let index: Int = Int((touchLocation.x - CGFloat(groupSpacing * CGFloat(superIndex))) / xSection)
+        let index = Int((touchLocation.x - CGFloat(groupSpacing * CGFloat(superIndex))) / xSection)
         
         if index >= 0 && index < dataSets.dataSets.count && superIndex == index {
             let subDataSet = dataSets.dataSets[index]

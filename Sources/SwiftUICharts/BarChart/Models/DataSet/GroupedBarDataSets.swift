@@ -21,6 +21,16 @@ public struct GroupedBarDataSets: CTMultiDataSetProtocol, DataFunctionsProtocol 
     }
 }
 
+extension GroupedBarDataSets {
+    public var dataWidth: Int {
+        dataSets.count
+    }
+    
+    public var dataLabels: [String] {
+        return dataSets.map(\.setTitle)
+    }
+}
+
 /**
  Individual data sets for grouped bars charts.
  */

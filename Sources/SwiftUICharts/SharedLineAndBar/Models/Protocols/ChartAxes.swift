@@ -115,17 +115,11 @@ extension AxisY where Self: CTChartData & DataHelper & ViewDataProtocol {
 
 // MARK: - AxisX
 public protocol AxisX: AnyObject {
-    /**
-     Array of strings for the labels on the X Axis instead of the labels in the data points.
-     */
+    /// Array of strings for the labels on the X Axis instead of the labels in the data points.
+    @available(*, deprecated, message: "Move to view, please use \".xAxisLabels\"")
     var xAxisLabels: [String]? { get set }
     
-    /**
-     A type representing a View for displaying labels on the X axis.
-     */
-    associatedtype XLabels: View
-    /**
-     Displays a view for the labels on the X Axis.
-     */
-    func getXAxisLabels() -> XLabels
+    func sectionX(count: Int, size: CGFloat) -> CGFloat
+    
+    func xAxisLabelOffSet(index: Int, size: CGFloat, count: Int) -> CGFloat
 }

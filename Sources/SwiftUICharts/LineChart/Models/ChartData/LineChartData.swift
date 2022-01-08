@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import ChartMath
 
 /**
  Data for drawing and styling a single line, line chart.
@@ -119,56 +120,13 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     }
     
     // MARK: Labels
-    public func getXAxisLabels() -> some View {
-        Group {
-            switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint(let angle):
-                
-                GeometryReader { geo in
-                    ZStack {
-                        ForEach(self.dataSets.dataPoints.indices) { i in
-                            if let label = self.dataSets.dataPoints[i].xAxisLabel {
-                                if label != "" {
-                                    TempText(chartData: self, label: label, rotation: angle)
-                                        .frame(width: min(self.getXSection(dataSet: self.dataSets, chartSize: self.chartSize),
-                                                          self.xAxisViewData.xAxislabelWidths.min() ?? 0),
-                                               height: self.xAxisViewData.xAxisLabelHeights.max() ?? 0)
-                                        .offset(x: CGFloat(i) * (geo.frame(in: .local).width / CGFloat(self.dataSets.dataPoints.count - 1)),
-                                                y: 0)
-                                }
-                            }
-                        }
-                    }
-                }
-                .frame(height: self.xAxisViewData.xAxisLabelHeights.max())
-                
-            case .chartData(let angle):
-                if let labelArray = self.xAxisLabels {
-                    HStack(spacing: 0) {
-                        ForEach(labelArray.indices, id: \.self) { i in
-                            VStack {
-                                if self.chartStyle.xAxisLabelPosition == .bottom {
-                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
-                                    Spacer()
-                                } else {
-                                    Spacer()
-                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
-                                }
-                            }
-                            .frame(width: self.xAxisViewData.xAxislabelWidths.min(),
-                                   height: self.xAxisViewData.xAxisLabelHeights.max())
-                            if i != labelArray.count - 1 {
-                                Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    public func sectionX(count: Int, size: CGFloat) -> CGFloat {
+        return min(divide(size, count),
+                   self.xAxisViewData.xAxisLabelWidths.min() ?? 0)
     }
-    private func getXSection(dataSet: LineDataSet, chartSize: CGRect) -> CGFloat {
-         chartSize.width / CGFloat(dataSet.dataPoints.count)
+    
+    public func xAxisLabelOffSet(index: Int, size: CGFloat, count: Int) -> CGFloat {
+       return CGFloat(index) * divide(size, count - 1)
     }
     
     // MARK: Points

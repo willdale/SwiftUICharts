@@ -34,7 +34,7 @@ public struct XAxisViewData {
      Needed for calculating other parts
      of the layout system.
      */
-    var xAxislabelWidths: [CGFloat] = []
+    var xAxisLabelWidths: [CGFloat] = []
 }
 
 public struct YAxisViewData {

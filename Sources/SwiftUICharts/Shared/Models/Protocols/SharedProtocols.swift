@@ -76,6 +76,10 @@ public struct DeprecatedCTStyle {}
  */
 public protocol CTDataSetProtocol: Hashable, Identifiable {
     var id: ID { get }
+    
+    var dataWidth: Int { get }
+    
+    var dataLabels: [String] { get }
 }
 
 /**
@@ -93,6 +97,17 @@ public protocol CTSingleDataSetProtocol: CTDataSetProtocol {
     
 }
 
+extension CTSingleDataSetProtocol {
+    public var dataWidth: Int {
+        dataPoints.count
+    }
+}
+extension CTSingleDataSetProtocol where Self.DataPoint: CTLineBarDataPointProtocol {
+    public var dataLabels: [String] {
+        dataPoints.compactMap(\.xAxisLabel)
+    }
+}
+
 /**
  Protocol for data sets that require a multiple sets of data .
  */
@@ -107,7 +122,25 @@ public protocol CTMultiDataSetProtocol: CTDataSetProtocol {
     var dataSets: [DataSet] { get set }
 }
 
+extension CTMultiDataSetProtocol {
+    public var dataWidth: Int {
+        guard let ordered = dataSets.max(by: { $0.dataPoints.count < $1.dataPoints.count }) else { return 0 }
+        return ordered.dataPoints.count
+    }
+}
 
+extension CTMultiDataSetProtocol where Self.DataSet.DataPoint: CTLineBarDataPointProtocol {
+    public var dataLabels: [String] {
+        guard let dataSet = dataSets.first else { return [] }
+        return dataSet.dataPoints.compactMap(\.xAxisLabel)
+    }
+}
+
+extension CTSingleDataSetProtocol where Self.DataPoint: CTPieDataPoint {
+    public var dataLabels: [String] {
+        return dataPoints.compactMap(\.description)
+    }
+}
 
 // MARK: - Data Points
 /**

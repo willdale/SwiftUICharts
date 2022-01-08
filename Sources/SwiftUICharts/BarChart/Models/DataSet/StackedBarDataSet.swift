@@ -21,6 +21,16 @@ public struct StackedBarDataSets: CTMultiDataSetProtocol, DataFunctionsProtocol 
     }
 }
 
+extension StackedBarDataSets {
+    public var dataWidth: Int {
+        return dataSets.count
+    }
+    
+    public var dataLabels: [String] {
+        return dataSets.map(\.setTitle)
+    }
+}
+
 /**
  Individual data sets for stacked bars charts.
  */

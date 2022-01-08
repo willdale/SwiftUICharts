@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import ChartMath
 
 /**
  Data model for drawing and styling a Stacked Bar Chart.
@@ -131,57 +132,12 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     }
     
     // MARK: Labels
-    public func getXAxisLabels() -> some View {
-        Group {
-            switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint(let angle):
-                HStack(spacing: 0) {
-                    ForEach(dataSets.dataSets, id: \.id) { dataSet in
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
-                        VStack {
-                            if self.chartStyle.xAxisLabelPosition == .bottom {
-                                RotatedText(chartData: self, label: dataSet.setTitle, rotation: angle)
-                                Spacer()
-                            } else {
-                                Spacer()
-                                RotatedText(chartData: self, label: dataSet.setTitle, rotation: angle)
-                            }
-                        }
-                        .frame(width: self.xAxisViewData.xAxislabelWidths.max(),
-                               height: self.xAxisViewData.xAxisLabelHeights.max())
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
-                    }
-                }
-            case .chartData(let angle):
-                if let labelArray = self.xAxisLabels {
-                    HStack(spacing: 0) {
-                        ForEach(labelArray.indices, id: \.self) { i in
-                            if i > 0 {
-                                Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
-                            }
-                            VStack {
-                                if self.chartStyle.xAxisLabelPosition == .bottom {
-                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
-                                    Spacer()
-                                } else {
-                                    Spacer()
-                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
-                                }
-                            }
-                            .frame(width: self.xAxisViewData.xAxislabelWidths.max(),
-                                   height: self.xAxisViewData.xAxisLabelHeights.max())
-                            if i < labelArray.count - 1 {
-                                Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    public func sectionX(count: Int, size: CGFloat) -> CGFloat {
+        return divide(size, count)
+    }
+    
+    public func xAxisLabelOffSet(index: Int, size: CGFloat, count: Int) -> CGFloat {
+       return CGFloat(index) * divide(size, count)
     }
 
     // MARK: - Touch

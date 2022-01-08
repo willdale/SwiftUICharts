@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import ChartMath
 
 /**
  Data for drawing and styling a standard Bar Chart.
@@ -123,96 +124,104 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
     }
     
     // MARK: Labels
-    public func getXAxisLabels() -> some View {
-        HStack(spacing: 0) {
-            ForEach(self.labelsArray.indices, id: \.self) { i in
-                Text(LocalizedStringKey(self.labelsArray[i]))
-                    .font(self.chartStyle.yAxisLabelFont)
-                    .foregroundColor(self.chartStyle.yAxisLabelColour)
-                    .lineLimit(1)
-                    .accessibilityLabel(LocalizedStringKey("Y-Axis-Label"))
-                    .accessibilityValue(LocalizedStringKey(self.labelsArray[i]))
-                    .overlay(
-                        GeometryReader { geo in
-                            Color.clear
-                                .onAppear {
-                                    self.xAxisViewData.xAxisLabelHeights.append(geo.size.height)
-                                }
-                        }
-                    )
-                if i != self.labelsArray.count - 1 {
-                    Spacer()
-                        .frame(minWidth: 0, maxWidth: 500)
-                }
-            }
-        }
-    }
+//    public func getXAxisLabels() -> some View {
+//        HStack(spacing: 0) {
+//            ForEach(self.labelsArray.indices, id: \.self) { i in
+//                Text(LocalizedStringKey(self.labelsArray[i]))
+//                    .font(self.chartStyle.yAxisLabelFont)
+//                    .foregroundColor(self.chartStyle.yAxisLabelColour)
+//                    .lineLimit(1)
+//                    .accessibilityLabel(LocalizedStringKey("Y-Axis-Label"))
+//                    .accessibilityValue(LocalizedStringKey(self.labelsArray[i]))
+//                    .overlay(
+//                        GeometryReader { geo in
+//                            Color.clear
+//                                .onAppear {
+//                                    self.xAxisViewData.xAxisLabelHeights.append(geo.size.height)
+//                                }
+//                        }
+//                    )
+//                if i != self.labelsArray.count - 1 {
+//                    Spacer()
+//                        .frame(minWidth: 0, maxWidth: 500)
+//                }
+//            }
+//        }
+//    }
     
     public func getYAxisLabels() -> some View {
         Group {
-            switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint:
-                
-                VStack {
-                    if self.chartStyle.xAxisLabelPosition == .top {
-                        Spacer()
-                            .frame(height: yAxisPaddingHeight + 8) // Why 8 ?
-                    }
-                    ForEach(dataSets.dataPoints, id: \.id) { data in
-                        Spacer()
-                            .frame(minHeight: 0, maxHeight: 500)
-                        HStack(spacing: 0) {
-                            if self.chartStyle.yAxisLabelPosition == .leading {
-                                Spacer()
-                                HorizontalRotatedText(chartData: self, label: data.wrappedXAxisLabel)
-                            } else {
-                                HorizontalRotatedText(chartData: self, label: data.wrappedXAxisLabel)
-                                Spacer()
-                            }
-                        }
-                        .frame(width: self.yAxisViewData.yAxisLabelWidth.max())
-                        Spacer()
-                            .frame(minHeight: 0, maxHeight: 500)
-                    }
-                    if self.chartStyle.xAxisLabelPosition == .bottom {
-                        Spacer()
-                            .frame(height: yAxisPaddingHeight + 8) // Why 8 ?
-                    }
-                }
-                
-            case .chartData:
-                
-                if let labelArray = self.xAxisLabels {
-                    VStack(spacing: 0) {
-                        ForEach(labelArray, id: \.self) { data in
-                            Spacer()
-                                .frame(minHeight: 0, maxHeight: 500)
-                            Text(LocalizedStringKey(data))
-                                .font(self.chartStyle.xAxisLabelFont)
-                                .lineLimit(1)
-                                .foregroundColor(self.chartStyle.xAxisLabelColour)
-                                .overlay(
-                                    GeometryReader { geo in
-                                        Rectangle()
-                                            .foregroundColor(Color.clear)
-                                            .onAppear {
-                                                self.yAxisViewData.yAxisLabelWidth.append(geo.size.width)
-                                            }
-                                    }
-                                )
-                                .accessibilityLabel(LocalizedStringKey("Y-Axis-Label"))
-                                .accessibilityValue(LocalizedStringKey(data))
-                            
-                            Spacer()
-                                .frame(minHeight: 0, maxHeight: 500)
-                        }
-                        Spacer()
-                            .frame(height: yAxisPaddingHeight + 8) // Why 8 ?
-                    }
-                    .frame(width: self.yAxisViewData.yAxisLabelWidth.max())
-                }
-            }
+//            switch self.chartStyle.xAxisLabelsFrom {
+//            case .dataPoint:
+//                
+//                VStack {
+//                    if self.chartStyle.xAxisLabelPosition == .top {
+//                        Spacer()
+//                            .frame(height: yAxisPaddingHeight + 8) // Why 8 ?
+//                    }
+//                    ForEach(dataSets.dataPoints, id: \.id) { data in
+//                        Spacer()
+//                            .frame(minHeight: 0, maxHeight: 500)
+//                        HStack(spacing: 0) {
+//                            if self.chartStyle.yAxisLabelPosition == .leading {
+//                                Spacer()
+//                                HorizontalRotatedText(chartData: self, label: data.wrappedXAxisLabel)
+//                            } else {
+//                                HorizontalRotatedText(chartData: self, label: data.wrappedXAxisLabel)
+//                                Spacer()
+//                            }
+//                        }
+//                        .frame(width: self.yAxisViewData.yAxisLabelWidth.max())
+//                        Spacer()
+//                            .frame(minHeight: 0, maxHeight: 500)
+//                    }
+//                    if self.chartStyle.xAxisLabelPosition == .bottom {
+//                        Spacer()
+//                            .frame(height: yAxisPaddingHeight + 8) // Why 8 ?
+//                    }
+//                }
+//                
+//            case .chartData:
+//                
+//                if let labelArray = self.xAxisLabels {
+//                    VStack(spacing: 0) {
+//                        ForEach(labelArray, id: \.self) { data in
+//                            Spacer()
+//                                .frame(minHeight: 0, maxHeight: 500)
+//                            Text(LocalizedStringKey(data))
+//                                .font(self.chartStyle.xAxisLabelFont)
+//                                .lineLimit(1)
+//                                .foregroundColor(self.chartStyle.xAxisLabelColour)
+//                                .overlay(
+//                                    GeometryReader { geo in
+//                                        Rectangle()
+//                                            .foregroundColor(Color.clear)
+//                                            .onAppear {
+//                                                self.yAxisViewData.yAxisLabelWidth.append(geo.size.width)
+//                                            }
+//                                    }
+//                                )
+//                                .accessibilityLabel(LocalizedStringKey("Y-Axis-Label"))
+//                                .accessibilityValue(LocalizedStringKey(data))
+//                            
+//                            Spacer()
+//                                .frame(minHeight: 0, maxHeight: 500)
+//                        }
+//                        Spacer()
+//                            .frame(height: yAxisPaddingHeight + 8) // Why 8 ?
+//                    }
+//                    .frame(width: self.yAxisViewData.yAxisLabelWidth.max())
+//                }
+//            }
         }
+    }
+    
+    public func sectionX(count: Int, size: CGFloat) -> CGFloat {
+        return divide(size, count)
+    }
+    
+    public func xAxisLabelOffSet(index: Int, size: CGFloat, count: Int) -> CGFloat {
+       return CGFloat(index) * divide(size, count)
     }
     
     // MARK: Touch

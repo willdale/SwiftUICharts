@@ -43,7 +43,6 @@ public protocol PointOfInterestProtocol {
      */
     func yAxisPOIMarkerPosition(value: Double, position: PoiPositionable, chartSize: CGSize) -> CGPoint
     
-    // MARK: Abscissa
     /**
      A type representing a Shape for displaying a line
      as a POI.
@@ -203,7 +202,7 @@ extension PointOfInterestProtocol where Self: CTChartData & PointOfInterestProto
             return CGPoint(x: chartSize.width / 2,
                            y: horizontalBarXAxisPOIMarkerY(value, count, chartSize.height))
         case .trailing:
-            return CGPoint(x: chartSize.width + ((xAxisViewData.xAxislabelWidths.max() ?? 0) / 2) + padding,
+            return CGPoint(x: chartSize.width + ((xAxisViewData.xAxisLabelWidths.max() ?? 0) / 2) + padding,
                            y: horizontalBarXAxisPOIMarkerY(value, count, chartSize.height))
         default:
             return .zero
