@@ -200,6 +200,30 @@ extension View {
                                addToLegends: addToLegends,
                                isAverage: true))
     }
+
+    /**
+     Vertical line marking the average.
+     
+     Shows a marker line at the average of all the data points within
+     the relevant data set(s).
+     */
+    public func averageLine<ChartData>(
+        chartData: ChartData,
+        label: String,
+        position: PoiStyle.VerticalPosition,
+        style: PoiStyle,
+        addToLegends: Bool = true
+    ) -> some View
+    where ChartData: CTChartData & DataHelper & PointOfInterestProtocol & ViewDataProtocol & HorizontalChart
+    {
+        self.modifier(YAxisPOI(chartData: chartData,
+                               label: label,
+                               value: 0,
+                               position: position,
+                               style: style,
+                               addToLegends: addToLegends,
+                               isAverage: true))
+    }
 }
 
 fileprivate struct _AxisLabel<ChartData>: View where ChartData: CTChartData & DataHelper & PointOfInterestProtocol & ViewDataProtocol {
