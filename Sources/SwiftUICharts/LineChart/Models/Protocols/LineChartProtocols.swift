@@ -47,9 +47,8 @@ extension CTLineChartDataProtocol where Self: CTChartData, SetType: CTLineChartD
 
 
 // MARK: - Style
-/**
- A protocol to extend functionality of `CTLineBarChartStyle` specifically for  Line Charts.
- */
+/// A protocol to extend functionality of `CTLineBarChartStyle` specifically for  Line Charts.
+@available(*, deprecated, message: "Has been de-centralised")
 public protocol CTLineChartStyle: CTLineBarChartStyle {}
 
 /**

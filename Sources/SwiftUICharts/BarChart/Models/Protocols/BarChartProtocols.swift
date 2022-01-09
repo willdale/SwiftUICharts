@@ -32,12 +32,11 @@ public protocol VerticalChart {}
 public protocol HorizontalChart {}
 
 // MARK: - Style
-/**
- A protocol to extend functionality of `CTLineBarChartStyle` specifically for  Bar Charts.
- */
+/// A protocol to extend functionality of `CTLineBarChartStyle` specifically for  Bar Charts.
+@available(*, deprecated, message: "Has been de-centralised")
 public protocol CTBarChartStyle: CTLineBarChartStyle {}
 
-public protocol CTBarStyle: CTBarColourProtocol, Hashable {
+public protocol CTBarStyle: Hashable {
     /// How much of the available width to use. 0...1
     var barWidth: CGFloat { get set }
     
@@ -96,9 +95,9 @@ public protocol CTRangedBarChartDataSet: CTStandardBarChartDataSet  {}
  */
 public protocol CTBarDataPointBaseProtocol: CTLineBarDataPointProtocol {}
 
-/**
- A protocol to a standard colour scheme for bar charts.
- */
+
+/// A protocol to a standard colour scheme for bar charts.
+@available(*, deprecated, message: "Protocol no longer needed")
 public protocol CTBarColourProtocol {
     /// Drawing style of the range fill.
     var colour: ChartColour { get set }
@@ -107,12 +106,12 @@ public protocol CTBarColourProtocol {
 /**
  A protocol to extend functionality of `CTBarDataPointBaseProtocol` specifically for standard Bar Charts.
  */
-public protocol CTStandardBarDataPoint: CTBarDataPointBaseProtocol, CTStandardDataPointProtocol, CTBarColourProtocol, CTnotRanged {}
+public protocol CTStandardBarDataPoint: CTBarDataPointBaseProtocol, CTStandardDataPointProtocol, CTnotRanged {}
 
 /**
  A protocol to extend functionality of `CTBarDataPointBaseProtocol` specifically for standard Bar Charts.
  */
-public protocol CTRangedBarDataPoint: CTBarDataPointBaseProtocol, CTRangeDataPointProtocol, CTBarColourProtocol, CTisRanged {
+public protocol CTRangedBarDataPoint: CTBarDataPointBaseProtocol, CTRangeDataPointProtocol, CTisRanged {
     var value: Double { get }
 }
 

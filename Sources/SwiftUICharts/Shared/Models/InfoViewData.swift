@@ -10,6 +10,7 @@ import SwiftUI
 /**
  Data model to pass view information internally for the `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
  */
+@available(*, deprecated, message: "Distributed to be more focused")
 public struct InfoViewData<DP: CTDataPointBaseProtocol> {
     
     /**
@@ -19,6 +20,7 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
      
      Used by `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
      */
+    @available(*, deprecated, message: "Moved to chart data")
     public var isTouchCurrent: Bool = false
     
     /**
@@ -38,6 +40,7 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
      
      Used by `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
      */
+    @available(*, deprecated, message: "Please use number formatters instead.")
     var touchSpecifier: String = "%.0f"
     
     /**
@@ -49,6 +52,7 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
      
      Used by `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
      */
+    @available(*, deprecated, message: "Touch data will be provided in when relevent")
     var touchLocation: CGPoint = .zero
     
 
@@ -61,10 +65,12 @@ public struct InfoViewData<DP: CTDataPointBaseProtocol> {
      
      Used by `InfoBox`, `FloatingInfoBox` and `HeaderBox`.
      */
+    @available(*, deprecated, message: "Sizing data will be passed at point of use.")
     var chartSize: CGRect  = .zero
     
     /**
      Option to display units before or after values.
      */
+    @available(*, deprecated, message: "Please use number formatters")
     var touchUnit: TouchUnit = .none
 }
