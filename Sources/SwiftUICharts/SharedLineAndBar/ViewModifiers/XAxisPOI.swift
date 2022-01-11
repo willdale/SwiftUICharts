@@ -1,6 +1,6 @@
 //
 //  XAxisPOI.swift
-//  
+//
 //
 //  Created by Will Dale on 19/06/2021.
 //
@@ -100,11 +100,24 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                             .position(chartData.poiAbscissaValueLabelPositionCenter(frame: geo.frame(in: .local),
                                                                                     markerValue: markerValue,
                                                                                     count: dataPointCount))
-                            
                             .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
                             .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(self.markerName) %@", comment: ""), "\(markerValue)")))
 
-//                            .accessibilityValue(LocalizedStringKey("\(markerName), \(markerValue)"))
+                    case .oppositeYAxis:
+                        
+                        chartData.poiAbscissaLabelOppositeAxis(marker: markerName,
+                                                       labelFont: labelFont,
+                                                       labelColour: labelColour,
+                                                       labelBackground: labelBackground,
+                                                       lineColour: lineColour,
+                                                       strokeStyle: strokeStyle)
+                            .frame(width: geo.frame(in: .local).width, height: geo.frame(in: .local).height)
+                            .fixedSize()
+                            .position(chartData.poiAbscissaValueLabelPositionOppositeAxis(frame: geo.frame(in: .local),
+                                                                                    markerValue: markerValue,
+                                                                                    count: dataPointCount))
+                            .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
+                            .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(self.markerName) %@", comment: ""), "\(markerValue)")))
                     }
                 }
                 .animateOnAppear(using: chartData.chartStyle.globalAnimation) {

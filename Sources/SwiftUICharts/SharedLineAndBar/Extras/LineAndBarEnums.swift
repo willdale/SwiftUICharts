@@ -1,6 +1,6 @@
 //
 //  LineAndBarEnums.swift
-//  
+//
 //
 //  Created by Will Dale on 08/02/2021.
 //
@@ -67,6 +67,9 @@ public enum DisplayValue {
     case yAxis(specifier: String, formatter: NumberFormatter? = nil)
     /// Places the label in the center of chart.
     case center(specifier: String, formatter: NumberFormatter? = nil)
+    /// Places the label at the opposite end of yAxis labels of the chart
+    case oppositeYAxis(specifier: String, formatter: NumberFormatter? = nil)
+    
 }
 
 /**

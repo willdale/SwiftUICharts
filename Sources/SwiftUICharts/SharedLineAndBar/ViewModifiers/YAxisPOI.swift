@@ -91,7 +91,6 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                                                labelBackground: labelBackground,
                                                lineColour: lineColour)
                             .position(chartData.poiValueLabelPositionAxis(frame: geo.frame(in: .local), markerValue: markerValue, minValue: minValue, range: range))
-                            
                             .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
                             .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(markerName) %@", comment: ""), String(format: specifier, markerValue))))
                         
@@ -106,7 +105,21 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                                                  lineColour: lineColour,
                                                  strokeStyle: strokeStyle)
                             .position(chartData.poiValueLabelPositionCenter(frame: geo.frame(in: .local), markerValue: markerValue, minValue: minValue, range: range))
-                            
+                            .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
+                            .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(markerName) %@", comment: ""), String(format: specifier, markerValue))))
+                    case .oppositeYAxis(specifier: let specifier, formatter: let formatter):
+                        
+                        chartData.poiLabelOppositeAxis(markerValue: markerValue,
+                                                       specifier: specifier,
+                                                       formatter: formatter,
+                                                       labelFont: labelFont,
+                                                       labelColour: labelColour,
+                                                       labelBackground: labelBackground,
+                                                       lineColour: lineColour,
+                                                       strokeStyle: strokeStyle)
+                            .frame(width: geo.frame(in: .local).width, height: geo.frame(in: .local).height)
+                            .fixedSize()
+                            .position(chartData.poiValueLabelPositionOppositeYAxis(frame: geo.frame(in: .local), markerValue: markerValue, minValue: minValue, range: range))
                             .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
                             .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(markerName) %@", comment: ""), String(format: specifier, markerValue))))
                     }
