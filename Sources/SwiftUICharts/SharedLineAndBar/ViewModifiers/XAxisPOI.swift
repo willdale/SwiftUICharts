@@ -142,7 +142,7 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                     self.startAnimation = false
                 }
             } else { content }
-        }
+        }.zIndex(1)
     }
     
     private func setupPOILegends() {
