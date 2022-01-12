@@ -38,7 +38,7 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
     }
     
     public var body: some View {
-        GeometryReader { geo in
+//        GeometryReader { geo in
             ZStack {
                 chartData.getAccessibility()
                 ForEach(chartData.dataSets.dataSets, id: \.id) { dataSet in
@@ -47,10 +47,11 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
                                            colour: dataSet.style.lineColour)
                 }
             }
-            .onAppear { // Needed for axes label frames
-                self.chartData.chartSize = geo.frame(in: .local)
-            }
-        }
+            .modifier(SizeModifier(chartData: chartData))
+//            .onAppear { // Needed for axes label frames
+//                self.chartData.chartSize = geo.frame(in: .local)
+//            }
+//        }
     }
 }
 

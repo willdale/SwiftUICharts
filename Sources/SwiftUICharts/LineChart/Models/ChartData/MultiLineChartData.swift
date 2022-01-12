@@ -127,7 +127,7 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
     }
     
     // MARK: Labels
-    public func sectionX(count: Int, size: CGFloat) -> CGFloat {
+    public func xAxisSectionSizing(count: Int, size: CGFloat) -> CGFloat {
         return min(divide(size, count),
                    self.xAxisViewData.xAxisLabelWidths.min() ?? 0)
     }

@@ -100,13 +100,13 @@ extension PointOfInterestProtocol where Self: CTChartData & ViewDataProtocol & D
         let padding: CGFloat = 4.0
         switch position as? PoiStyle.HorizontalPosition {
         case .leading:
-            return CGPoint(x: -((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) - padding,
+            return CGPoint(x: -((yAxisViewData.yAxisLabelWidths.max() ?? 0) / 2) - padding,
                            y: plotPointY(value, minValue, range, chartSize.height))
         case .center:
             return CGPoint(x: chartSize.width / 2,
                            y: plotPointY(value, minValue, range, chartSize.height))
         case .trailing:
-            return CGPoint(x: chartSize.width + ((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) + padding,
+            return CGPoint(x: chartSize.width + ((yAxisViewData.yAxisLabelWidths.max() ?? 0) / 2) + padding,
                            y: plotPointY(value, minValue, range, chartSize.height))
         default:
             return .zero
@@ -139,13 +139,13 @@ extension PointOfInterestProtocol where Self: CTChartData & PointOfInterestProto
         let padding: CGFloat = 4.0
         switch position as? PoiStyle.HorizontalPosition {
         case .leading:
-            return CGPoint(x: -((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) - padding,
+            return CGPoint(x: -((yAxisViewData.yAxisLabelWidths.max() ?? 0) / 2) - padding,
                            y: barYAxisPOIMarkerX(value, minValue, range, chartSize.height))
         case .center:
             return CGPoint(x: chartSize.width / 2,
                            y: barYAxisPOIMarkerX(value, minValue, range, chartSize.height))
         case .trailing:
-            return CGPoint(x: chartSize.width + ((yAxisViewData.yAxisLabelWidth.max() ?? 0) / 2) + padding,
+            return CGPoint(x: chartSize.width + ((yAxisViewData.yAxisLabelWidths.max() ?? 0) / 2) + padding,
                            y: barYAxisPOIMarkerX(value, minValue, range, chartSize.height))
         default:
             return .zero

@@ -19,15 +19,16 @@ public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBar
     }
     
     public var body: some View {
-        GeometryReader { geo in
+//        GeometryReader { geo in
             VStack(spacing: 0) {
                 HorizontalBarChartSubView(chartData: chartData)
                     .accessibilityLabel(chartData.accessibilityTitle)
             }
-            .onAppear { // Needed for axes label frames
-                self.chartData.chartSize = geo.frame(in: .local)
-            }
-        }
+            .modifier(SizeModifier(chartData: chartData))
+//            .onAppear { // Needed for axes label frames
+//                self.chartData.chartSize = geo.frame(in: .local)
+//            }
+//        }
     }
 }
 

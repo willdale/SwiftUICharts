@@ -117,6 +117,7 @@ internal struct FilledLineSubView<ChartData>: View where ChartData: FilledLineCh
                    range: chartData.range)
             .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
             .fill(colour)
+            .modifier(SizeModifier(chartData: chartData))
         
             .animateOnAppear(using: .linear) {
                 self.startAnimation = true

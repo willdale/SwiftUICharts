@@ -111,9 +111,10 @@ public enum Topline: Hashable {
  
  ```
  case numeric // Auto generated, numeric labels.
- case custom // Custom labels array -- `ChartData -> yAxisLabels`
+ case custom // Custom labels array
  ```
  */
+@available(*, deprecated, message: "Set in view")
 public enum YAxisLabelType {
     /// Auto generated, numeric labels.
     case numeric
@@ -131,6 +132,7 @@ public enum YAxisLabelType {
  case custom(colour: ChartColour, size: CGFloat) // Set custom style.
  ```
  */
+@available(*, deprecated, message: "Please use \"\" instead.")
 public enum AxisColour {
     /// No colour marker.
     case none

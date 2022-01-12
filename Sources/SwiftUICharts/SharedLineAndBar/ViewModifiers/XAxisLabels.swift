@@ -30,15 +30,13 @@ internal struct XAxisLabels<ChartData>: ViewModifier where ChartData: CTChartDat
     }
     
     internal func body(content: Content) -> some View {
-        Group {
-            switch position.type {
-            case .vertical:
-                _Vertical_Labels(chartData: chartData, content: content, data: data, position: position, style: style)
-            case .horizontal:
-                _Horizontal_Labels(chartData: chartData, content: content, data: data, position: position, style: style)
-            default:
-                content
-            }
+        switch position.type {
+        case .vertical:
+            _Vertical_Labels(chartData: chartData, content: content, data: data, position: position, style: style)
+        case .horizontal:
+            _Horizontal_Labels(chartData: chartData, content: content, data: data, position: position, style: style)
+        default:
+            content
         }
     }
 }
@@ -51,7 +49,7 @@ extension View {
     public func xAxisLabels<ChartData>(
         chartData: ChartData,
         data: XAxisLabelStyle.Data = .datapoints,
-        position: XAxisLabelStyle.VerticalPosition = .bottom,
+        position: VerticalLabelPosition = .bottom,
         style: XAxisLabelStyle = .standard
     ) -> some View
     where ChartData: CTChartData & AxisX & ViewDataProtocol
@@ -72,7 +70,7 @@ extension View {
     public func xAxisLabels<ChartData>(
         chartData: ChartData,
         data: XAxisLabelStyle.Data = .datapoints,
-        position: XAxisLabelStyle.HorizontalPosition = .leading,
+        position: HorizontalLabelPosition = .leading,
         style: XAxisLabelStyle = .standard
     ) -> some View
     where ChartData: CTChartData & AxisX & ViewDataProtocol & HorizontalChart
@@ -98,52 +96,22 @@ extension XAxisLabelStyle {
                                                  rotation: .degrees(90))
 }
 
-public protocol LabelPositionable {}
-
-extension LabelPositionable {
-    internal var type: _LabelPositionType {
-        switch self {
-        case is XAxisLabelStyle.HorizontalPosition:
-            return .horizontal
-        case is XAxisLabelStyle.VerticalPosition:
-            return .vertical
-        default:
-            return .none
-        }
-    }
-}
-
-internal enum _LabelPositionType {
-    case none
-    case horizontal
-    case vertical
-}
-
 public struct XAxisLabelStyle {
     public var font: Font
     public var fontColour: Color
     public var rotation: Angle
+    public var padding: CGFloat
     
     public init(
         font: Font = .caption,
         fontColour: Color = .primary,
-        rotation: Angle = .degrees(0)
+        rotation: Angle = .degrees(0),
+        padding: CGFloat = 8
     ) {
         self.font = font
         self.fontColour = fontColour
         self.rotation = rotation
-    }
-    
-    public enum HorizontalPosition: LabelPositionable {
-        case none
-        case leading
-        case trailing
-    }
-    
-    public enum VerticalPosition: LabelPositionable {
-        case none
-        case top
-        case bottom
+        self.padding = padding
     }
     
     public enum Data {
@@ -181,16 +149,18 @@ fileprivate struct _Vertical_Labels<ChartData, Content>: View where ChartData: C
     }
     
     var body: some View {
-        switch position as? XAxisLabelStyle.VerticalPosition {
+        switch position as? VerticalLabelPosition {
         case .top:
-            VStack {
+            VStack(spacing: 0) {
                 _Labels(chartData: chartData, data: data, position: position, style: style)
+                    .padding(.bottom, style.padding)
                 content
             }
         case .bottom:
-            VStack {
+            VStack(spacing: 0) {
                 content
                 _Labels(chartData: chartData, data: data, position: position, style: style)
+                    .padding(.top, style.padding)
             }
         default:
             content
@@ -223,16 +193,18 @@ fileprivate struct _Horizontal_Labels<ChartData, Content>: View where ChartData:
     }
     
     var body: some View {
-        switch position as? XAxisLabelStyle.HorizontalPosition {
+        switch position as? HorizontalLabelPosition {
         case .leading:
-            HStack {
+            HStack(spacing: 0) {
                 _Labels(chartData: chartData, data: data, position: position, style: style)
+                    .padding(.trailing, style.padding)
                 content
             }
         case .trailing:
-            HStack {
+            HStack(spacing: 0) {
                 content
                 _Labels(chartData: chartData, data: data, position: position, style: style)
+                    .padding(.leading, style.padding)
             }
         default:
             content
@@ -262,7 +234,7 @@ fileprivate struct _Labels<ChartData>: View where ChartData: CTChartData & XAxis
     
     var body: some View {
         GeometryReader { geo in
-            _Labels_Data_Source(chartData: chartData,
+            _Labels_SubView(chartData: chartData,
                                 data: data,
                                 position: position,
                                 style: style,
@@ -273,7 +245,7 @@ fileprivate struct _Labels<ChartData>: View where ChartData: CTChartData & XAxis
 }
 
 // MARK: _Labels_Data_Source
-fileprivate struct _Labels_Data_Source<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol & AxisX {
+fileprivate struct _Labels_SubView<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol & AxisX {
     
     @ObservedObject private var chartData: ChartData
     private var data: XAxisLabelStyle.Data
@@ -305,7 +277,7 @@ fileprivate struct _Labels_Data_Source<ChartData>: View where ChartData: CTChart
                                         style: style,
                                         index: index,
                                         frame: frame)
-            }
+            }.border(.red)
         case .custom(let labels):
             HStack(spacing: 0) {
                 ForEach(labels.indices, id: \.self) { index in
@@ -321,6 +293,10 @@ fileprivate struct _Labels_Data_Source<ChartData>: View where ChartData: CTChart
     }
 }
 
+// MARK: Cells
+//
+//
+//
 // MARK: _Labels_DataPoints_Cell
 fileprivate struct _Labels_DataPoints_Cell<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol & AxisX {
     
@@ -353,6 +329,44 @@ fileprivate struct _Labels_DataPoints_Cell<ChartData>: View where ChartData: CTC
     }
 }
 
+// MARK: _Labels_Custom_Cell
+fileprivate struct _Labels_Custom_Cell<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol & AxisX {
+    
+    @ObservedObject private var chartData: ChartData
+    private var label: String
+    private var position: LabelPositionable
+    private var style: XAxisLabelStyle
+    private var index: Int
+    private var count: Int
+    
+    internal init(
+        chartData: ChartData,
+        label: String,
+        position: LabelPositionable,
+        style: XAxisLabelStyle,
+        index: Int,
+        count: Int
+    ) {
+        self.chartData = chartData
+        self.label = label
+        self.position = position
+        self.style = style
+        self.index = index
+        self.count = count
+    }
+    
+    var body: some View {
+        RotatedText(chartData: chartData, label: label, position: position, style: style)
+//            .frame(width: chartData.xAxisViewData.xAxisLabelWidths.min(),
+//                   height: chartData.xAxisViewData.xAxisLabelHeights.max())
+        
+        if index != count - 1 { 
+            Spacer()
+                .frame(minWidth: 0, maxWidth: 500)
+        }
+    }
+}
+
 // MARK: View Modifiers
 //
 //
@@ -382,15 +396,15 @@ fileprivate struct _label_Positioning<ChartData>: ViewModifier where ChartData: 
         case .horizontal:
             content
                 .frame(width: chartData.xAxisViewData.xAxisLabelWidths.max(),
-                       height: chartData.sectionX(count: chartData.dataSets.dataWidth, size: frame.height))
-                .offset(x: 0,
-                        y: chartData.xAxisLabelOffSet(index: index, size: frame.height, count: chartData.dataSets.dataWidth))
+                       height: chartData.xAxisSectionSizing(count: chartData.dataSets.dataWidth, size: frame.height))
+                .position(x: (chartData.xAxisViewData.xAxisLabelWidths.max() ?? 0) / 2,
+                          y: chartData.xAxisLabelOffSet(index: index, size: frame.height, count: chartData.dataSets.dataWidth))
         case .vertical:
             content
-                .frame(width: chartData.sectionX(count: chartData.dataSets.dataWidth, size: frame.width),
+                .frame(width: chartData.xAxisSectionSizing(count: chartData.dataSets.dataWidth, size: frame.width),
                        height: chartData.xAxisViewData.xAxisLabelHeights.max())
-                .offset(x: chartData.xAxisLabelOffSet(index: index, size: frame.width, count: chartData.dataSets.dataWidth),
-                        y: 0)
+                .position(x: chartData.xAxisLabelOffSet(index: index, size: frame.width, count: chartData.dataSets.dataWidth),
+                          y: (chartData.xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2)
         default:
             content
         }
@@ -421,43 +435,6 @@ fileprivate struct _Axis_Label_Size<ChartData>: ViewModifier where ChartData: CT
                 .frame(width: chartData.xAxisViewData.xAxisLabelWidths.max())
         default:
             content
-        }
-    }
-}
-
-// MARK: _Labels_Custom_Cell
-fileprivate struct _Labels_Custom_Cell<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol {
-    
-    @ObservedObject private var chartData: ChartData
-    private var label: String
-    private var position: LabelPositionable
-    private var style: XAxisLabelStyle
-    private var index: Int
-    private var count: Int
-    
-    internal init(
-        chartData: ChartData,
-        label: String,
-        position: LabelPositionable,
-        style: XAxisLabelStyle,
-        index: Int,
-        count: Int
-    ) {
-        self.chartData = chartData
-        self.label = label
-        self.position = position
-        self.style = style
-        self.index = index
-        self.count = count
-    }
-    
-    var body: some View {
-        RotatedText(chartData: chartData, label: label, position: position, style: style)
-            .frame(width: chartData.xAxisViewData.xAxisLabelWidths.min(),
-                   height: chartData.xAxisViewData.xAxisLabelHeights.max())
-        if index != count - 1 {
-            Spacer()
-                .frame(minWidth: 0, maxWidth: 500)
         }
     }
 }

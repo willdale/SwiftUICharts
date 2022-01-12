@@ -36,7 +36,7 @@ public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartD
     }
     
     public var body: some View {
-        GeometryReader { geo in
+//        GeometryReader { geo in
             ZStack {
                 chartData.getAccessibility()
                 RangedBoxSubView(chartData: chartData,
@@ -51,10 +51,11 @@ public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartD
                                   range: chartData.range,
                                   colour: chartData.dataSets.style.lineColour)
             }
-            .onAppear { // Needed for axes label frames
-                self.chartData.chartSize = geo.frame(in: .local)
-            }
-        }
+            .modifier(SizeModifier(chartData: chartData))
+//            .onAppear { // Needed for axes label frames
+//                self.chartData.chartSize = geo.frame(in: .local)
+//            }
+//        }
     }
 }
 

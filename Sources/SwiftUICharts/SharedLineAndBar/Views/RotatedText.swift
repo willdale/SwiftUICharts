@@ -54,7 +54,7 @@ internal struct RotatedText<ChartData>: View where ChartData: CTChartData & XAxi
                                     chartData.xAxisViewData.xAxisLabelWidths.append(geo.frame(in: .local).height)
                                 }
                             case .horizontal:
-                                chartData.xAxisViewData.xAxisLabelWidths.append(geo.frame(in: .local).width + 10)
+                                chartData.xAxisViewData.xAxisLabelWidths.append(geo.frame(in: .local).width/* + 10*/)
                             default:
                                 break
                             }

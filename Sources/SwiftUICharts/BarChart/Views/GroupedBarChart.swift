@@ -43,16 +43,17 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
     }
     
     public var body: some View {
-        GeometryReader { geo in
+//        GeometryReader { geo in
             HStack(spacing: groupSpacing) {
                 ForEach(chartData.dataSets.dataSets) { dataSet in
                     GroupedBarGroup(chartData: chartData, dataSet: dataSet)
                 }
             }
-            .onAppear { // Needed for axes label frames
-                self.chartData.chartSize = geo.frame(in: .local)
-            }
-        }
+            .modifier(SizeModifier(chartData: chartData))
+//            .onAppear { // Needed for axes label frames
+//                self.chartData.chartSize = geo.frame(in: .local)
+//            }
+//        }
     }
 }
 

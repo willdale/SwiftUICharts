@@ -136,12 +136,13 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
     }
     
     // MARK: Labels
-    public func sectionX(count: Int, size: CGFloat) -> CGFloat {
+    public func xAxisSectionSizing(count: Int, size: CGFloat) -> CGFloat {
         return divide(size, count)
     }
     
     public func xAxisLabelOffSet(index: Int, size: CGFloat, count: Int) -> CGFloat {
-        return CGFloat(index) * divide(size, count)
+        return CGFloat(index) * divide(size, count) +
+        (xAxisSectionSizing(count: count, size: size) / 2)
     }
     
     // MARK: - Touch

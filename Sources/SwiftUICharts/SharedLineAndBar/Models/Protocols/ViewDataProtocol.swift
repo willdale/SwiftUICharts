@@ -26,6 +26,6 @@ public protocol YAxisViewDataProtocol: ObservableObject {
 
 extension YAxisViewDataProtocol {
     var axisPadding: CGFloat {
-        (yAxisViewData.yAxisLabelWidth.max() ?? 0) + yAxisViewData.yAxisTitleWidth + (yAxisViewData.hasYAxisLabels ? 4 : 0)
+        (yAxisViewData.yAxisLabelWidths.max() ?? 0) + yAxisViewData.yAxisTitleWidth + (yAxisViewData.hasYAxisLabels ? 4 : 0)
     }
 }

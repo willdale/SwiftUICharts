@@ -53,28 +53,26 @@ internal struct AxisTitle<ChartData>: ViewModifier where ChartData: CTChartData 
     }
     
     internal func body(content: Content) -> some View {
-        Group {
-            switch style.position {
-            case .top:
-                VStack {
-                    _XAxisTitle_View(chartData: chartData, text: text, style: style)
-                    content
-                }
-            case .bottom:
-                VStack {
-                    content
-                    _XAxisTitle_View(chartData: chartData, text: text, style: style)
-                }
-            case .leading:
-                HStack {
-                    _YAxisTitle_View(chartData: chartData, text: text, style: style)
-                    content
-                }
-            case .trailing:
-                HStack {
-                    content
-                    _YAxisTitle_View(chartData: chartData, text: text, style: style)
-                }
+        switch style.position {
+        case .top:
+            VStack {
+                _XAxisTitle_View(chartData: chartData, text: text, style: style)
+                content
+            }
+        case .bottom:
+            VStack {
+                content
+                _XAxisTitle_View(chartData: chartData, text: text, style: style)
+            }
+        case .leading:
+            HStack {
+                _YAxisTitle_View(chartData: chartData, text: text, style: style)
+                content
+            }
+        case .trailing:
+            HStack {
+                content
+                _YAxisTitle_View(chartData: chartData, text: text, style: style)
             }
         }
     }
@@ -160,7 +158,7 @@ fileprivate struct _YAxisTitle_View<ChartData>: View where ChartData: CTChartDat
                                 }
                         }
                     )
-                    .rotationEffect(Angle.init(degrees: -90), anchor: .center)
+                    .rotationEffect(Angle(degrees: -90), anchor: .center)
                     .fixedSize()
                     .frame(width: chartData.yAxisViewData.yAxisTitleWidth)
 //                    .offset(x: 0, y: chartData.yAxisViewData.yAxisTitleHeight / 2)

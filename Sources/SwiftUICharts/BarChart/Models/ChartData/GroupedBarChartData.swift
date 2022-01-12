@@ -133,7 +133,7 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     }
     
     // MARK: Labels
-    public func sectionX(count: Int, size: CGFloat) -> CGFloat {
+    public func xAxisSectionSizing(count: Int, size: CGFloat) -> CGFloat {
         let superXSection = divide(size, count)
         let spaceSection = groupSpacing * CGFloat(count - 1)
         let compensation = divide(spaceSection, count)
@@ -144,7 +144,9 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     public func xAxisLabelOffSet(index: Int, size: CGFloat, count: Int) -> CGFloat {
         let superXSection = divide(size, count)
         let compensation = ((groupSpacing * CGFloat(count - 1)) / CGFloat(count))
-        return (CGFloat(index) * superXSection) + ((CGFloat(index) * compensation) / CGFloat(count))
+        return (CGFloat(index) * superXSection) +
+                ((CGFloat(index) * compensation) / CGFloat(count)) +
+                (xAxisSectionSizing(count: count, size: size) / 2)
     }
     
     // MARK: Touch

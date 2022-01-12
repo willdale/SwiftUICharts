@@ -36,15 +36,16 @@ public struct RangedBarChart<ChartData>: View where ChartData: RangedBarChartDat
     }
     
     public var body: some View {
-        GeometryReader { geo in
+//        GeometryReader { geo in
             HStack(spacing: 0) {
                 RangedBarSubView(chartData: chartData)
                     .accessibilityLabel(chartData.accessibilityTitle)
             }
-            .onAppear { // Needed for axes label frames
-                self.chartData.chartSize = geo.frame(in: .local)
-            }
-        }
+            .modifier(SizeModifier(chartData: chartData))
+//            .onAppear { // Needed for axes label frames
+//                self.chartData.chartSize = geo.frame(in: .local)
+//            }
+//        }
     }
 }
 

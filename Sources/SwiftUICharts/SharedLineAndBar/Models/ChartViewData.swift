@@ -49,10 +49,11 @@ public struct YAxisViewData {
      
      This gets passed in from the view modifier.
      */
-    @available(*, deprecated, message: "Please use \"yAxisNumberFormatter\" instead")
+    @available(*, deprecated, message: "Please use Number Formatter in the views instead")
     var yAxisSpecifier: String = "%.0f"
     
     /// Optional number formatter for the y axis labels when they are `.numeric`.
+    @available(*, deprecated, message: "Number formatter is now in the view")
     var yAxisNumberFormatter: NumberFormatter? = nil
     
     /**
@@ -63,25 +64,9 @@ public struct YAxisViewData {
      of the layout system.
      */
     var yAxisTitleWidth: CGFloat = 0
-    /**
-     Experimental
-     */
+
     var yAxisTitleHeight: CGFloat = 0
     
-    /**
-     Width of the y axis labels once
-     they have been rotated.
-     
-     Needed for calculating other parts
-     of the layout system.
-     
-     ---
-     
-     Current width of the `yAxisLabels`
-     
-     Needed line up the touch overlay to compensate for
-     the loss of width.
-     
-     */
-    var yAxisLabelWidth: [CGFloat] = []
+    var yAxisLabelWidths: [CGFloat] = []
+    var yAxisLabelHeights: [CGFloat] = []
 }
