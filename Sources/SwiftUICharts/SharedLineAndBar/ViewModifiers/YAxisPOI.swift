@@ -25,9 +25,11 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
     private let labelFont: Font
     private let labelColour: Color
     private let labelBackground: Color
+    private let labelBorderColor: Color
     
     private let customLabelShape: CustomLabelShape?
     private let customTextToShapePadding: CGFloat?
+    private let labelIcon: AnyView?
     
     private let addToLegends: Bool
     
@@ -44,9 +46,11 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
         labelColour: Color,
         labelBackground: Color,
         lineColour: Color,
+        labelBorderColor: Color?,
         strokeStyle: StrokeStyle,
         customLabelShape: CustomLabelShape?,
         customTextToShapePadding: CGFloat?,
+        labelIcon: AnyView?,
         addToLegends: Bool,
         isAverage: Bool
     ) {
@@ -59,9 +63,11 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
         self.labelFont = labelFont
         self.labelColour = labelColour
         self.labelBackground = labelBackground
+        self.labelBorderColor = labelBorderColor ?? lineColour
         
         self.customLabelShape = customLabelShape
         self.customTextToShapePadding = customTextToShapePadding
+        self.labelIcon = labelIcon
         
         self.addToLegends = addToLegends
         
@@ -97,9 +103,10 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                                                labelFont: labelFont,
                                                labelColour: labelColour,
                                                labelBackground: labelBackground,
-                                               lineColour: lineColour,
+                                               labelBorderColor: labelBorderColor,
                                                customLabelShape: customLabelShape,
-                                               customTextToShapePadding: customTextToShapePadding)
+                                               customTextToShapePadding: customTextToShapePadding,
+                                               labelIcon: labelIcon)
                             .position(chartData.poiValueLabelPositionAxis(frame: geo.frame(in: .local), markerValue: markerValue, minValue: minValue, range: range))
                             .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
                             .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(markerName) %@", comment: ""), String(format: specifier, markerValue))))
@@ -112,10 +119,11 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                                                  labelFont: labelFont,
                                                  labelColour: labelColour,
                                                  labelBackground: labelBackground,
-                                                 lineColour: lineColour,
+                                                 labelBorderColor: labelBorderColor,
                                                  strokeStyle: strokeStyle,
                                                  customLabelShape: customLabelShape,
-                                                 customTextToShapePadding: customTextToShapePadding)
+                                                 customTextToShapePadding: customTextToShapePadding,
+                                                 labelIcon: labelIcon)
                             .position(chartData.poiValueLabelPositionCenter(frame: geo.frame(in: .local), markerValue: markerValue, minValue: minValue, range: range))
                             .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
                             .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(markerName) %@", comment: ""), String(format: specifier, markerValue))))
@@ -127,10 +135,11 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                                                        labelFont: labelFont,
                                                        labelColour: labelColour,
                                                        labelBackground: labelBackground,
-                                                       lineColour: lineColour,
+                                                       labelBorderColor: labelBorderColor,
                                                        strokeStyle: strokeStyle,
                                                        customLabelShape: customLabelShape,
-                                                       customTextToShapePadding: customTextToShapePadding)
+                                                       customTextToShapePadding: customTextToShapePadding,
+                                                       labelIcon: labelIcon)
                             .frame(width: geo.frame(in: .local).width, height: geo.frame(in: .local).height)
                             .fixedSize()
                             .position(chartData.poiValueLabelPositionOppositeYAxis(frame: geo.frame(in: .local), markerValue: markerValue, minValue: minValue, range: range))
@@ -214,9 +223,11 @@ extension View {
         - labelColour: Colour of the `Text`.
         - labelBackground: Colour of the background.
         - lineColour: Line Colour.
+        - labelBorderColor: Custom Color for the label border, if not provided `lineColor` will be used.
         - strokeStyle: Style of Stroke.
         - customLabelShape: Custom Shape for POI Label.
         - customTextToShapePadding: Custom Padding between Shape and `Text`.
+        - labelIcon: Custom icon to be added with `Text`.
         - addToLegends: Whether or not to add this to the legends.
      - Returns: A  new view containing the chart with a marker line at a specified value.
      */
@@ -229,9 +240,11 @@ extension View {
         labelColour: Color = Color.primary,
         labelBackground: Color = Color.systemsBackground,
         lineColour: Color = Color(.blue),
+        labelBorderColor: Color? = nil,
         strokeStyle: StrokeStyle = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0),
         customLabelShape: CustomLabelShape? = nil,
         customTextToShapePadding: CGFloat? = nil,
+        labelIcon: AnyView? = nil,
         addToLegends: Bool = true
     ) -> some View {
         self.modifier(YAxisPOI(chartData: chartData,
@@ -242,9 +255,11 @@ extension View {
                                labelColour: labelColour,
                                labelBackground: labelBackground,
                                lineColour: lineColour,
+                               labelBorderColor: labelBorderColor,
                                strokeStyle: strokeStyle,
                                customLabelShape: customLabelShape,
                                customTextToShapePadding: customTextToShapePadding,
+                               labelIcon: labelIcon,
                                addToLegends: addToLegends,
                                isAverage: false))
     }
@@ -301,9 +316,11 @@ extension View {
         - labelColour: Colour of the `Text`.
         - labelBackground: Colour of the background.
         - lineColour: Line Colour.
+        - labelBorderColor: Custom Color for the label border, if not provided lineColor will be used.
         - strokeStyle: Style of Stroke.
         - customLabelShape: Custom Shape for POI Label.
         - customTextToShapePadding: Custom Padding between Shape and `Text`.
+        - labelIcon: Custom icon to be added with `Text`.
         - addToLegends: Whether or not to add this to the legends.
      - Returns: A  new view containing the chart with a marker line at the average.
      */
@@ -315,9 +332,11 @@ extension View {
         labelColour: Color = Color.primary,
         labelBackground: Color = Color.systemsBackground,
         lineColour: Color = Color.primary,
+        labelBorderColor: Color? = nil,
         strokeStyle: StrokeStyle = StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, miterLimit: 10, dash: [CGFloat](), dashPhase: 0),
         customLabelShape: CustomLabelShape? = nil,
         customTextToShapePadding: CGFloat? = nil,
+        labelIcon: AnyView? = nil,
         addToLegends: Bool = true
     ) -> some View {
         self.modifier(YAxisPOI(chartData: chartData,
@@ -327,9 +346,11 @@ extension View {
                                labelColour: labelColour,
                                labelBackground: labelBackground,
                                lineColour: lineColour,
+                               labelBorderColor: labelBorderColor,
                                strokeStyle: strokeStyle,
                                customLabelShape: customLabelShape,
                                customTextToShapePadding: customTextToShapePadding,
+                               labelIcon: labelIcon,
                                addToLegends: addToLegends,
                                isAverage: true))
     }
