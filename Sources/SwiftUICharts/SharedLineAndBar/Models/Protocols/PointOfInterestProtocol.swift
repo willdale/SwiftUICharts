@@ -42,7 +42,7 @@ public protocol PointOfInterestProtocol {
      In standard charts this will display leading or trailing.
      In horizontal charts this will display bottom or top.
      */
-    func poiLabelAxis(markerValue: Double, specifier: String, formatter: NumberFormatter?, labelFont: Font, labelColour: Color, labelBackground: Color, labelBorderColor: Color, customLabelShape: CustomLabelShape?, customTextToShapePadding: CGFloat?, labelIcon: AnyView?) -> LabelAxis
+    func poiLabelAxis(markerValue: Double, specifier: String, formatter: NumberFormatter?, labelFont: Font, labelColour: Color, labelBackground: Color, labelBorderColor: Color, customLabelShape: CustomLabelShape?, padding: CGFloat?) -> LabelAxis
     
     /**
      A type representing a View for displaying a label
@@ -56,21 +56,21 @@ public protocol PointOfInterestProtocol {
      In standard charts this will display leading or trailing.
      In horizontal charts this will display bottom or top.
      */
-    func poiLabelCenter(markerValue: Double, specifier: String, formatter: NumberFormatter?, labelFont: Font, labelColour: Color, labelBackground: Color, labelBorderColor: Color, strokeStyle: StrokeStyle, customLabelShape: CustomLabelShape?, customTextToShapePadding: CGFloat?, labelIcon: AnyView?) -> LabelCenter
+    func poiLabelCenter(markerValue: Double, specifier: String, formatter: NumberFormatter?, labelFont: Font, labelColour: Color, labelBackground: Color, labelBorderColor: Color, strokeStyle: StrokeStyle, customLabelShape: CustomLabelShape?, padding: CGFloat?) -> LabelCenter
     
     /**
      A type representing a View for displaying a label
-     as a POI at the opposite end of yAxis.
+     as a POI at a relative location from the leading axis.
      */
-    associatedtype LabelOppositeAxis: View
+    associatedtype LabelPosition: View
     /**
      Displays a label and box that mark a Point Of Interest
-     at the opposite end of yAxis.
+     at a relative location from the axis.
      
      In standard charts this will display leading or trailing.
      In horizontal charts this will display bottom or top.
      */
-    func poiLabelOppositeAxis(markerValue: Double, specifier: String, formatter: NumberFormatter?, labelFont: Font, labelColour: Color, labelBackground: Color, labelBorderColor: Color, strokeStyle: StrokeStyle, customLabelShape: CustomLabelShape?, customTextToShapePadding: CGFloat?, labelIcon: AnyView?) -> LabelOppositeAxis
+    func poiLabelPosition(location: CGFloat, markerValue: Double, specifier: String, formatter: NumberFormatter?, labelFont: Font, labelColour: Color, labelBackground: Color, labelBorderColor: Color, strokeStyle: StrokeStyle, customLabelShape: CustomLabelShape?, padding: CGFloat?) -> LabelPosition
     
     
     /**
@@ -101,7 +101,7 @@ public protocol PointOfInterestProtocol {
     
     /**
      Sets the position of the POI Label when it's at
-     the opposite end of the yAxis.
+     a relative location from the leading axis.
      
      - Parameters:
         - frame: Size of the chart.
@@ -110,7 +110,7 @@ public protocol PointOfInterestProtocol {
         - range: Difference between the highest and lowest values in the data set.
      - Returns: Position of label.
      */
-    func poiValueLabelPositionOppositeYAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint
+    func poiValueLabelRelativePosition(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint
     
     
     
@@ -147,7 +147,7 @@ public protocol PointOfInterestProtocol {
      In standard charts this will display leading or trailing.
      In horizontal charts this will display bottom or top.
      */
-    func poiAbscissaLabelAxis(marker: String, labelFont: Font, labelColour: Color, labelBackground: Color, labelBorderColor: Color, customLabelShape: CustomLabelShape?, customTextToShapePadding: CGFloat?, labelIcon: AnyView?) -> AbscissaLabelAxis
+    func poiAbscissaLabelAxis(marker: String, labelFont: Font, labelColour: Color, labelBackground: Color, labelBorderColor: Color, customLabelShape: CustomLabelShape?, padding: CGFloat?) -> AbscissaLabelAxis
     
     /**
      A type representing a View for displaying a label
@@ -161,21 +161,21 @@ public protocol PointOfInterestProtocol {
      In standard charts this will display leading or trailing.
      In horizontal charts this will display bottom or top.
      */
-    func poiAbscissaLabelCenter(marker: String, labelFont: Font, labelColour: Color, labelBackground: Color, labelBorderColor: Color, strokeStyle: StrokeStyle, customLabelShape: CustomLabelShape?, customTextToShapePadding: CGFloat?, labelIcon: AnyView?) -> AbscissaLabelCenter
+    func poiAbscissaLabelCenter(marker: String, labelFont: Font, labelColour: Color, labelBackground: Color, labelBorderColor: Color, strokeStyle: StrokeStyle, customLabelShape: CustomLabelShape?, padding: CGFloat?) -> AbscissaLabelCenter
     
     /**
      A type representing a View for displaying a label
-     as a POI at the opposite end of the axis.
+     as a POI at a relative location from the leading axis.
      */
-    associatedtype AbscissaLabelOppositeAxis: View
+    associatedtype AbscissaLabelPosition: View
     /**
      Displays a label and box that mark a Point Of Interest
-     opposite of labels of axis.
+     at a relative location from the leading axis.
      
      In standard charts this will display leading or trailing.
      In horizontal charts this will display bottom or top.
      */
-    func poiAbscissaLabelOppositeAxis(marker: String, labelFont: Font, labelColour: Color, labelBackground: Color, labelBorderColor: Color, strokeStyle: StrokeStyle, customLabelShape: CustomLabelShape?, customTextToShapePadding: CGFloat?, labelIcon: AnyView?) -> AbscissaLabelOppositeAxis
+    func poiAbscissaLabelPosition(location: CGFloat, marker: String, labelFont: Font, labelColour: Color, labelBackground: Color, labelBorderColor: Color, strokeStyle: StrokeStyle, customLabelShape: CustomLabelShape?, padding: CGFloat?) -> AbscissaLabelPosition
     
     
     /**
@@ -206,7 +206,7 @@ public protocol PointOfInterestProtocol {
     
     /**
      Sets the position of the POI Label when it's at
-     the opposite side of labels of axis.
+     a relative location from the leading axis.
      
      - Parameters:
         - frame: Size of the chart.
@@ -215,7 +215,7 @@ public protocol PointOfInterestProtocol {
         - range: Difference between the highest and lowest values in the data set.
      - Returns: Position of label.
      */
-    func poiAbscissaValueLabelPositionOppositeAxis(frame: CGRect, markerValue: Int, count: Int) -> CGPoint
+    func poiAbscissaValueLabelRelativePosition(frame: CGRect, markerValue: Int, count: Int) -> CGPoint
 }
 
 
@@ -247,31 +247,26 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
      labelBackground: Color,
      labelBorderColor: Color,
      customLabelShape: CustomLabelShape?,
-     customTextToShapePadding: CGFloat?,
-     labelIcon: AnyView?
+     padding: CGFloat?
     ) -> some View {
-        Label {
-            Text(poiLabel(value: markerValue, specifier: specifier, formatter: formatter))
-                .font(labelFont)
-                .foregroundColor(labelColour)
-        } icon: {
-            labelIcon
-        }
-        .padding(customTextToShapePadding ?? 4)
-        .background(labelBackground)
-        .ifElse(self.chartStyle.yAxisLabelPosition == .leading, if: {
-            $0
-                .clipShape(customLabelShape ?? CustomLabelShape(LeadingLabelShape()))
-                .overlay((customLabelShape ?? CustomLabelShape(LeadingLabelShape()))
-                            .stroke(labelBorderColor)
-                )
-        }, else: {
-            $0
-                .clipShape(customLabelShape ?? CustomLabelShape(TrailingLabelShape()))
-                .overlay((customLabelShape ?? CustomLabelShape(TrailingLabelShape()))
-                            .stroke(labelBorderColor)
-                )
-        })
+        Text(poiLabel(value: markerValue, specifier: specifier, formatter: formatter))
+            .font(labelFont)
+            .foregroundColor(labelColour)
+            .padding(padding ?? 4)
+            .background(labelBackground)
+            .ifElse(self.chartStyle.yAxisLabelPosition == .leading, if: {
+                $0
+                    .clipShape(customLabelShape ?? CustomLabelShape(LeadingLabelShape()))
+                    .overlay((customLabelShape ?? CustomLabelShape(LeadingLabelShape()))
+                                .stroke(labelBorderColor)
+                    )
+            }, else: {
+                $0
+                    .clipShape(customLabelShape ?? CustomLabelShape(TrailingLabelShape()))
+                    .overlay((customLabelShape ?? CustomLabelShape(TrailingLabelShape()))
+                                .stroke(labelBorderColor)
+                    )
+            })
     }
     
    public func poiLabelCenter(
@@ -284,25 +279,21 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
     labelBorderColor: Color,
     strokeStyle: StrokeStyle,
     customLabelShape: CustomLabelShape?,
-    customTextToShapePadding: CGFloat?,
-    labelIcon: AnyView?
+    padding: CGFloat?
    ) -> some View {
-       Label {
-           Text(poiLabel(value: markerValue, specifier: specifier, formatter: formatter))
-               .font(labelFont)
-               .foregroundColor(labelColour)
-       } icon: {
-           labelIcon
-       }
-       .padding(.all, customTextToShapePadding)
-       .background(labelBackground)
-       .clipShape(customLabelShape ?? CustomLabelShape(DiamondShape()))
-       .overlay((customLabelShape ?? CustomLabelShape(DiamondShape()))
-                   .stroke(labelBorderColor, style: strokeStyle)
-       )
+       Text(poiLabel(value: markerValue, specifier: specifier, formatter: formatter))
+           .font(labelFont)
+           .foregroundColor(labelColour)
+           .padding(.all, padding)
+           .background(labelBackground)
+           .clipShape(customLabelShape ?? CustomLabelShape(DiamondShape()))
+           .overlay((customLabelShape ?? CustomLabelShape(DiamondShape()))
+                        .stroke(labelBorderColor, style: strokeStyle)
+           )
     }
     
-    public func poiLabelOppositeAxis(
+    public func poiLabelPosition(
+     location: CGFloat,
      markerValue: Double,
      specifier: String,
      formatter: NumberFormatter?,
@@ -312,30 +303,28 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
      labelBorderColor: Color,
      strokeStyle: StrokeStyle,
      customLabelShape: CustomLabelShape?,
-     customTextToShapePadding: CGFloat?,
-     labelIcon: AnyView?
+     padding: CGFloat?
     ) -> some View {
-        HStack {
-            if self.chartStyle.yAxisLabelPosition == .leading {
-                Spacer()
-            }
-            Label {
-                Text(poiLabel(value: markerValue, specifier: specifier, formatter: formatter))
-                    .font(labelFont)
-                    .foregroundColor(labelColour)
-            } icon: {
-                labelIcon
-            }
-            .padding(.all, customTextToShapePadding)
-            .background(labelBackground)
-            .clipShape(customLabelShape ?? CustomLabelShape(DiamondShape()))
-            .overlay((customLabelShape ?? CustomLabelShape(DiamondShape()))
-                        .stroke(labelBorderColor, style: strokeStyle)
-            )
+        var distanceFromLeading: CGFloat = 0.5
+        if 0...1 ~= location {
             if self.chartStyle.yAxisLabelPosition == .trailing {
-                Spacer()
+                distanceFromLeading = 1 - location
+            } else {
+                distanceFromLeading = location
             }
         }
+        
+        return PositionedPOILabel(content: {
+            Text(self.poiLabel(value: markerValue, specifier: specifier, formatter: formatter))
+                .font(labelFont)
+                .foregroundColor(labelColour)
+                .padding(.all, padding)
+                .background(labelBackground)
+                .clipShape(customLabelShape ?? CustomLabelShape(DiamondShape()))
+                .overlay((customLabelShape ?? CustomLabelShape(DiamondShape()))
+                            .stroke(labelBorderColor, style: strokeStyle)
+                )
+        }, orientation: .horizontal, distanceFromLeading: distanceFromLeading)
     }
 }
 extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol & isHorizontal {
@@ -352,34 +341,30 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol & isHor
      labelBackground: Color,
      labelBorderColor: Color,
      customLabelShape: CustomLabelShape?,
-     customTextToShapePadding: CGFloat?,
-     labelIcon: AnyView?
+     padding: CGFloat?
     ) -> some View {
-        Label {
-            Text(LocalizedStringKey("\(markerValue, specifier: specifier)"))
-                .font(labelFont)
-                .foregroundColor(labelColour)
-        } icon: {
-            labelIcon
-        }
-        .padding(customTextToShapePadding ?? 4)
-        .background(labelBackground)
-        .ifElse(self.chartStyle.xAxisLabelPosition == .bottom, if: {
-            $0
-                .clipShape(customLabelShape ?? CustomLabelShape(BottomLabelShape()))
-                .overlay((customLabelShape ?? CustomLabelShape(BottomLabelShape()))
-                            .stroke(labelBorderColor)
-                )
-        }, else: {
-            $0
-                .clipShape(customLabelShape ?? CustomLabelShape(TopLabelShape()))
-                .overlay((customLabelShape ?? CustomLabelShape(TopLabelShape()))
-                            .stroke(labelBorderColor)
-                )
-        })
+        Text(LocalizedStringKey("\(markerValue, specifier: specifier)"))
+            .font(labelFont)
+            .foregroundColor(labelColour)
+            .padding(padding ?? 4)
+            .background(labelBackground)
+            .ifElse(self.chartStyle.xAxisLabelPosition == .bottom, if: {
+                $0
+                    .clipShape(customLabelShape ?? CustomLabelShape(BottomLabelShape()))
+                    .overlay((customLabelShape ?? CustomLabelShape(BottomLabelShape()))
+                                .stroke(labelBorderColor)
+                    )
+            }, else: {
+                $0
+                    .clipShape(customLabelShape ?? CustomLabelShape(TopLabelShape()))
+                    .overlay((customLabelShape ?? CustomLabelShape(TopLabelShape()))
+                                .stroke(labelBorderColor)
+                    )
+            })
     }
     
-    public func poiLabelOppositeAxis(
+    public func poiLabelPosition(
+     location: CGFloat,
      markerValue: Double,
      specifier: String,
      formatter: NumberFormatter?,
@@ -389,30 +374,29 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol & isHor
      labelBorderColor: Color,
      strokeStyle: StrokeStyle,
      customLabelShape: CustomLabelShape?,
-     customTextToShapePadding: CGFloat?,
-     labelIcon: AnyView?
+     padding: CGFloat?
     ) -> some View {
-        VStack {
-            if self.chartStyle.xAxisLabelPosition == .top {
-                Spacer()
-            }
-            Label {
-                Text(poiLabel(value: markerValue, specifier: specifier, formatter: formatter))
-                    .font(labelFont)
-                    .foregroundColor(labelColour)
-            } icon: {
-                labelIcon
-            }
-            .padding(.all, customTextToShapePadding)
-            .background(labelBackground)
-            .clipShape(customLabelShape ?? CustomLabelShape(DiamondShape()))
-            .overlay((customLabelShape ?? CustomLabelShape(DiamondShape()))
-                        .stroke(labelBorderColor, style: strokeStyle)
-            )
+        
+        var distanceFromLeading: CGFloat = 0.5
+        if 0...1 ~= location {
             if self.chartStyle.xAxisLabelPosition == .bottom {
-                Spacer()
+                distanceFromLeading = 1 - location
+            } else {
+                distanceFromLeading = location
             }
         }
+        
+        return PositionedPOILabel(content: {
+            Text(self.poiLabel(value: markerValue, specifier: specifier, formatter: formatter))
+                .font(labelFont)
+                .foregroundColor(labelColour)
+                .padding(.all, padding)
+                .background(labelBackground)
+                .clipShape(customLabelShape ?? CustomLabelShape(DiamondShape()))
+                .overlay((customLabelShape ?? CustomLabelShape(DiamondShape()))
+                            .stroke(labelBorderColor, style: strokeStyle)
+                )
+        }, orientation: .vertical, distanceFromLeading: distanceFromLeading)
     }
 }
 
@@ -439,7 +423,7 @@ extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol & Point
                 y: CGFloat(markerValue - minValue) * -(frame.height / CGFloat(range)) + frame.height)
     }
     
-    public func poiValueLabelPositionOppositeYAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
+    public func poiValueLabelRelativePosition(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         let value: CGFloat = CGFloat(markerValue - minValue)
         let sizing: CGFloat = -(frame.height / CGFloat(range))
         return CGPoint(x: frame.width / 2,
@@ -463,7 +447,7 @@ extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointO
                 y: frame.height - divideByZeroProtection(CGFloat.self, (markerValue - minValue), range) * frame.height)
     }
     
-    public func poiValueLabelPositionOppositeYAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
+    public func poiValueLabelRelativePosition(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         let value: CGFloat = CGFloat(markerValue - minValue)
         let sizing: CGFloat = -(frame.height / CGFloat(range))
         return CGPoint(x: frame.width / 2,
@@ -488,7 +472,7 @@ extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointO
                 y: frame.height / 2)
     }
     
-    public func poiValueLabelPositionOppositeYAxis(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
+    public func poiValueLabelRelativePosition(frame: CGRect, markerValue: Double, minValue: Double, range: Double) -> CGPoint {
         let value: CGFloat = divideByZeroProtection(CGFloat.self, (markerValue - minValue), range)
         return CGPoint(x: value * frame.width,
                 y: frame.height / 2)
@@ -514,23 +498,18 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
      labelBackground: Color,
      labelBorderColor: Color,
      customLabelShape: CustomLabelShape?,
-     customTextToShapePadding: CGFloat?,
-     labelIcon: AnyView?
+     padding: CGFloat?
     ) -> some View {
-        Label {
-            Text(LocalizedStringKey(marker))
-                .font(labelFont)
-                .foregroundColor(labelColour)
-        } icon: {
-            labelIcon
-        }
-        .padding(customTextToShapePadding ?? 4)
-        .padding(.vertical, 4)
-        .background(labelBackground)
-        .clipShape(customLabelShape ?? CustomLabelShape(RoundedRectangle(cornerRadius: 5, style: .continuous)))
-        .overlay((customLabelShape ?? CustomLabelShape(RoundedRectangle(cornerRadius: 5, style: .continuous)))
-                    .stroke(labelBorderColor)
-        )
+        Text(LocalizedStringKey(marker))
+            .font(labelFont)
+            .foregroundColor(labelColour)
+            .padding(padding ?? 4)
+            .padding(.vertical, 4)
+            .background(labelBackground)
+            .clipShape(customLabelShape ?? CustomLabelShape(RoundedRectangle(cornerRadius: 5, style: .continuous)))
+            .overlay((customLabelShape ?? CustomLabelShape(RoundedRectangle(cornerRadius: 5, style: .continuous)))
+                        .stroke(labelBorderColor)
+            )
     }
     
     public func poiAbscissaLabelCenter(
@@ -541,25 +520,21 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
      labelBorderColor: Color,
      strokeStyle: StrokeStyle,
      customLabelShape: CustomLabelShape?,
-     customTextToShapePadding: CGFloat?,
-     labelIcon: AnyView?
+     padding: CGFloat?
     ) -> some View {
-        Label {
-            Text(LocalizedStringKey(marker))
-                .font(labelFont)
-                .foregroundColor(labelColour)
-        } icon: {
-            labelIcon
-        }
-        .padding(.all, customTextToShapePadding)
-        .background(labelBackground)
-        .clipShape(customLabelShape ?? CustomLabelShape(DiamondShape()))
-        .overlay((customLabelShape ?? CustomLabelShape(DiamondShape()))
-                    .stroke(labelBorderColor, style: strokeStyle)
-        )
+        Text(LocalizedStringKey(marker))
+            .font(labelFont)
+            .foregroundColor(labelColour)
+            .padding(.all, padding)
+            .background(labelBackground)
+            .clipShape(customLabelShape ?? CustomLabelShape(DiamondShape()))
+            .overlay((customLabelShape ?? CustomLabelShape(DiamondShape()))
+                        .stroke(labelBorderColor, style: strokeStyle)
+            )
     }
     
-    public func poiAbscissaLabelOppositeAxis(
+    public func poiAbscissaLabelPosition(
+     location: CGFloat,
      marker: String,
      labelFont: Font,
      labelColour: Color,
@@ -567,30 +542,28 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol {
      labelBorderColor: Color,
      strokeStyle: StrokeStyle,
      customLabelShape: CustomLabelShape?,
-     customTextToShapePadding: CGFloat?,
-     labelIcon: AnyView?
+     padding: CGFloat?
     ) -> some View {
-        VStack {
-            if self.chartStyle.xAxisLabelPosition == .top {
-                Spacer()
-            }
-            Label {
-                Text(LocalizedStringKey(marker))
-                    .font(labelFont)
-                    .foregroundColor(labelColour)
-            } icon: {
-                labelIcon
-            }
-            .padding(.all, customTextToShapePadding)
-            .background(labelBackground)
-            .clipShape(customLabelShape ?? CustomLabelShape(DiamondShape()))
-            .overlay((customLabelShape ?? CustomLabelShape(DiamondShape()))
-                        .stroke(labelBorderColor, style: strokeStyle)
-            )
+        var distanceFromLeading: CGFloat = 0.5
+        if 0...1 ~= location {
             if self.chartStyle.xAxisLabelPosition == .bottom {
-                Spacer()
+                distanceFromLeading = 1 - location
+            } else {
+                distanceFromLeading = location
             }
         }
+        
+        return PositionedPOILabel(content: {
+            Text(LocalizedStringKey(marker))
+                .font(labelFont)
+                .foregroundColor(labelColour)
+                .padding(.all, padding)
+                .background(labelBackground)
+                .clipShape(customLabelShape ?? CustomLabelShape(DiamondShape()))
+                .overlay((customLabelShape ?? CustomLabelShape(DiamondShape()))
+                            .stroke(labelBorderColor, style: strokeStyle)
+                )
+        }, orientation: .vertical, distanceFromLeading: distanceFromLeading)
     }
 }
 
@@ -607,34 +580,30 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol & isHor
      labelBackground: Color,
      labelBorderColor: Color,
      customLabelShape: CustomLabelShape?,
-     customTextToShapePadding: CGFloat?,
-     labelIcon: AnyView?
+     padding: CGFloat?
     ) -> some View {
-        Label {
-            Text(LocalizedStringKey(marker))
-                .font(labelFont)
-                .foregroundColor(labelColour)
-        } icon: {
-            labelIcon
-        }
-        .padding(customTextToShapePadding ?? 4)
-        .background(labelBackground)
-        .ifElse(self.chartStyle.yAxisLabelPosition == .leading, if: {
-            $0
-                .clipShape(customLabelShape ?? CustomLabelShape(LeadingLabelShape()))
-                .overlay((customLabelShape ?? CustomLabelShape(LeadingLabelShape()))
-                            .stroke(labelBorderColor)
-                )
-        }, else: {
-            $0
-                .clipShape(customLabelShape ?? CustomLabelShape(TrailingLabelShape()))
-                .overlay((customLabelShape ?? CustomLabelShape(TrailingLabelShape()))
-                            .stroke(labelBorderColor)
-                )
-        })
+        Text(LocalizedStringKey(marker))
+            .font(labelFont)
+            .foregroundColor(labelColour)
+            .padding(padding ?? 4)
+            .background(labelBackground)
+            .ifElse(self.chartStyle.yAxisLabelPosition == .leading, if: {
+                $0
+                    .clipShape(customLabelShape ?? CustomLabelShape(LeadingLabelShape()))
+                    .overlay((customLabelShape ?? CustomLabelShape(LeadingLabelShape()))
+                                .stroke(labelBorderColor)
+                    )
+            }, else: {
+                $0
+                    .clipShape(customLabelShape ?? CustomLabelShape(TrailingLabelShape()))
+                    .overlay((customLabelShape ?? CustomLabelShape(TrailingLabelShape()))
+                                .stroke(labelBorderColor)
+                    )
+            })
     }
     
-    public func poiAbscissaLabelOppositeAxis(
+    public func poiAbscissaLabelPosition(
+     location: CGFloat,
      marker: String,
      labelFont: Font,
      labelColour: Color,
@@ -642,30 +611,28 @@ extension CTLineBarChartDataProtocol where Self: PointOfInterestProtocol & isHor
      labelBorderColor: Color,
      strokeStyle: StrokeStyle,
      customLabelShape: CustomLabelShape?,
-     customTextToShapePadding: CGFloat?,
-     labelIcon: AnyView?
+     padding: CGFloat?
     ) -> some View {
-        HStack {
-            if self.chartStyle.yAxisLabelPosition == .leading {
-                Spacer()
-            }
-            Label {
-                Text(LocalizedStringKey(marker))
-                    .font(labelFont)
-                    .foregroundColor(labelColour)
-            } icon: {
-                labelIcon
-            }
-            .padding(.all, customTextToShapePadding)
-            .background(labelBackground)
-            .clipShape(customLabelShape ?? CustomLabelShape(DiamondShape()))
-            .overlay((customLabelShape ?? CustomLabelShape(DiamondShape()))
-                        .stroke(labelBorderColor, style: strokeStyle)
-            )
+        var distanceFromLeading: CGFloat = 0.5
+        if 0...1 ~= location {
             if self.chartStyle.yAxisLabelPosition == .trailing {
-                Spacer()
+                distanceFromLeading = 1 - location
+            } else {
+                distanceFromLeading = location
             }
         }
+        
+        return PositionedPOILabel(content: {
+            Text(LocalizedStringKey(marker))
+                .font(labelFont)
+                .foregroundColor(labelColour)
+                .padding(.all, padding)
+                .background(labelBackground)
+                .clipShape(customLabelShape ?? CustomLabelShape(DiamondShape()))
+                .overlay((customLabelShape ?? CustomLabelShape(DiamondShape()))
+                            .stroke(labelBorderColor, style: strokeStyle)
+                )
+        }, orientation: .horizontal, distanceFromLeading: distanceFromLeading)
     }
 }
 
@@ -690,7 +657,7 @@ extension CTLineBarChartDataProtocol where Self: CTLineChartDataProtocol & Point
                 y: frame.height / 2)
     }
     
-    public func poiAbscissaValueLabelPositionOppositeAxis(frame: CGRect, markerValue: Int, count: Int) -> CGPoint {
+    public func poiAbscissaValueLabelRelativePosition(frame: CGRect, markerValue: Int, count: Int) -> CGPoint {
         CGPoint(x: (frame.width / CGFloat(count-1)) * CGFloat(markerValue),
                 y: frame.height / 2)
     }
@@ -711,7 +678,7 @@ extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointO
                 y: frame.height / 2)
     }
     
-    public func poiAbscissaValueLabelPositionOppositeAxis(frame: CGRect, markerValue: Int, count: Int) -> CGPoint {
+    public func poiAbscissaValueLabelRelativePosition(frame: CGRect, markerValue: Int, count: Int) -> CGPoint {
         CGPoint(x: (frame.width / CGFloat(count)) * CGFloat(markerValue) + ((frame.width / CGFloat(count)) / 2),
                 y: frame.height / 2)
     }
@@ -733,7 +700,7 @@ extension CTLineBarChartDataProtocol where Self: CTBarChartDataProtocol & PointO
                 y: ((frame.height / CGFloat(count)) * CGFloat(markerValue) + ((frame.height / CGFloat(count)) / 2)))
     }
     
-    public func poiAbscissaValueLabelPositionOppositeAxis(frame: CGRect, markerValue: Int, count: Int) -> CGPoint {
+    public func poiAbscissaValueLabelRelativePosition(frame: CGRect, markerValue: Int, count: Int) -> CGPoint {
         CGPoint(x: frame.width / 2,
                 y: ((frame.height / CGFloat(count)) * CGFloat(markerValue) + ((frame.height / CGFloat(count)) / 2)))
     }

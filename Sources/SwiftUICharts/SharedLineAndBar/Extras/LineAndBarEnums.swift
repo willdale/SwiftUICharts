@@ -58,6 +58,7 @@ public enum YAxisLabelPosistion {
  case none // No label.
  case yAxis(specifier: String, formatter: NumberFormatter? = nil) // Places the label in the yAxis labels.
  case center(specifier: String, formatter: NumberFormatter? = nil) // Places the label in the center of chart.
+ case position(location: CGFloat, specifier: String, formatter: NumberFormatter? = nil) // Places the label at a relative position from leading edge.
  ```
  */
 public enum DisplayValue {
@@ -67,8 +68,8 @@ public enum DisplayValue {
     case yAxis(specifier: String, formatter: NumberFormatter? = nil)
     /// Places the label in the center of chart.
     case center(specifier: String, formatter: NumberFormatter? = nil)
-    /// Places the label at the opposite end of yAxis labels of the chart
-    case oppositeYAxis(specifier: String, formatter: NumberFormatter? = nil)
+    /// Places the label in between the graph at a certain distance from the axis,  i.e. 0 places it on the leading edge and 1 places it on the trailing edge. Defaults to 0.5 if location >1 or <0
+    case position(location: CGFloat, specifier: String, formatter: NumberFormatter? = nil)
     
 }
 

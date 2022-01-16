@@ -29,8 +29,7 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
     private let labelBorderColor: Color
     
     private let customLabelShape: CustomLabelShape?
-    private let customTextToShapePadding: CGFloat?
-    private let labelIcon: AnyView?
+    private let padding: CGFloat?
     
     private let addToLegends: Bool
     
@@ -49,8 +48,7 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
         labelBackground: Color,
         
         customLabelShape: CustomLabelShape?,
-        customTextToShapePadding: CGFloat?,
-        labelIcon: AnyView?,
+        padding: CGFloat?,
         
         addToLegends: Bool
     ) {
@@ -69,8 +67,7 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
         self.labelBorderColor = labelBorderColor ?? lineColour
         
         self.customLabelShape = customLabelShape
-        self.customTextToShapePadding = customTextToShapePadding
-        self.labelIcon = labelIcon
+        self.padding = padding
         
         self.addToLegends = addToLegends
         
@@ -99,8 +96,7 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                                                        labelBackground: labelBackground,
                                                        labelBorderColor: labelBorderColor,
                                                        customLabelShape: customLabelShape,
-                                                       customTextToShapePadding: customTextToShapePadding,
-                                                       labelIcon: labelIcon)
+                                                       padding: padding)
                             .position(chartData.poiAbscissaValueLabelPositionAxis(frame: geo.frame(in: .local),
                                                                                   markerValue: markerValue,
                                                                                   count: dataPointCount))
@@ -116,28 +112,27 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                                                          labelBorderColor: labelBorderColor,
                                                          strokeStyle: strokeStyle,
                                                          customLabelShape: customLabelShape,
-                                                         customTextToShapePadding: customTextToShapePadding,
-                                                         labelIcon: labelIcon)
+                                                         padding: padding)
                             .position(chartData.poiAbscissaValueLabelPositionCenter(frame: geo.frame(in: .local),
                                                                                     markerValue: markerValue,
                                                                                     count: dataPointCount))
                             .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
                             .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(self.markerName) %@", comment: ""), "\(markerValue)")))
 
-                    case .oppositeYAxis:
+                    case .position(location: let location, _, _):
                         
-                        chartData.poiAbscissaLabelOppositeAxis(marker: markerName,
-                                                               labelFont: labelFont,
-                                                               labelColour: labelColour,
-                                                               labelBackground: labelBackground,
-                                                               labelBorderColor: labelBorderColor,
-                                                               strokeStyle: strokeStyle,
-                                                               customLabelShape: customLabelShape,
-                                                               customTextToShapePadding: customTextToShapePadding,
-                                                               labelIcon: labelIcon)
+                        chartData.poiAbscissaLabelPosition(location: location,
+                                                           marker: markerName,
+                                                           labelFont: labelFont,
+                                                           labelColour: labelColour,
+                                                           labelBackground: labelBackground,
+                                                           labelBorderColor: labelBorderColor,
+                                                           strokeStyle: strokeStyle,
+                                                           customLabelShape: customLabelShape,
+                                                           padding: padding)
                             .frame(width: geo.frame(in: .local).width, height: geo.frame(in: .local).height)
                             .fixedSize()
-                            .position(chartData.poiAbscissaValueLabelPositionOppositeAxis(frame: geo.frame(in: .local),
+                            .position(chartData.poiAbscissaValueLabelRelativePosition(frame: geo.frame(in: .local),
                                                                                     markerValue: markerValue,
                                                                                     count: dataPointCount))
                             .accessibilityLabel(LocalizedStringKey("P-O-I-Marker"))
@@ -208,8 +203,7 @@ extension View {
         - labelBorderColor: Custom Color for the label border, if not provided lineColor will be used.
         - strokeStyle: Style of Stroke.
         - customLabelShape: Custom Shape for POI Label.
-        - customTextToShapePadding: Custom Padding between Shape and `Text`.
-        - labelIcon: Custom icon to be added with `Text`.
+        - padding: Custom Padding between Shape and `Text`.
         - addToLegends: Whether or not to add this to the legends.
      - Returns: A  new view containing the chart with a marker line at a specified value.
      */
@@ -226,8 +220,7 @@ extension View {
         labelColour: Color = Color.primary,
         labelBackground: Color = Color.systemsBackground,
         customLabelShape: CustomLabelShape? = nil,
-        customTextToShapePadding: CGFloat? = nil,
-        labelIcon: AnyView? = nil,
+        padding: CGFloat? = nil,
         addToLegends: Bool = true
     ) -> some View {
         self.modifier(XAxisPOI(chartData: chartData,
@@ -242,8 +235,7 @@ extension View {
                                labelColour: labelColour,
                                labelBackground: labelBackground,
                                customLabelShape: customLabelShape,
-                               customTextToShapePadding: customTextToShapePadding,
-                               labelIcon: labelIcon,
+                               padding: padding,
                                addToLegends: addToLegends))
     }
 }
