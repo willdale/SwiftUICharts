@@ -119,11 +119,11 @@ extension Path {
             path.move(to: firstPoint)
             var newPoint = firstPoint
             for index in 1 ..< dataPoints.count {
-                let nextStep = CGPoint(x: newPoint.x,
-                                       y: (CGFloat(dataPoints[index] - minValue) * -y) + rect.height)
+                let nextStep = CGPoint(x: CGFloat(index) * x,
+                                       y: newPoint.y)
                 path.addLine(to: nextStep)
                 newPoint = CGPoint(x: CGFloat(index) * x,
-                                        y: (CGFloat(dataPoints[index] - minValue) * -y) + rect.height)
+                                   y: (CGFloat(dataPoints[index] - minValue) * -y) + rect.height)
                 path.addLine(to: newPoint)
             }
         }
@@ -208,11 +208,11 @@ extension Path {
             path.move(to: firstPoint)
             var newPoint = firstPoint
             for index in 1 ..< dataPoints.count {
-                let nextStep = CGPoint(x: newPoint.x,
-                                       y: (CGFloat(dataPoints[index] - minValue) * -y) + rect.height)
+                let nextStep = CGPoint(x: (CGFloat(index) * x) + (x / 2),
+                                       y: newPoint.y)
                 path.addLine(to: nextStep)
                 newPoint = CGPoint(x: (CGFloat(index) * x) + (x / 2),
-                                        y: (CGFloat(dataPoints[index] - minValue) * -y) + rect.height)
+                                   y: (CGFloat(dataPoints[index] - minValue) * -y) + rect.height)
                 path.addLine(to: newPoint)
             }
         }

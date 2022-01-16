@@ -106,8 +106,8 @@ extension Path {
             
             var newPoint = firstPoint
             for index in 1 ..< dataPoints.count {
-                let nextStep = CGPoint(x: newPoint.x,
-                                       y: (CGFloat(dataPoints[index].value - minValue) * -y) + rect.height)
+                let nextStep = CGPoint(x: CGFloat(index) * x,
+                                       y: newPoint.y)
                 path.addLine(to: nextStep)
                 newPoint = CGPoint(x: CGFloat(index) * x,
                                         y: (CGFloat(dataPoints[index].value - minValue) * -y) + rect.height)
@@ -229,21 +229,21 @@ extension Path {
         var newPoint = firstPointUpper
         
         for indexUpper in 1 ..< dataPoints.count {
-            let nextStep = CGPoint(x: newPoint.x,
-                                   y: (CGFloat(dataPoints[indexUpper].upperValue - minValue) * -y) + rect.height)
+            let nextStep = CGPoint(x: CGFloat(indexUpper) * x,
+                                   y: newPoint.y)
             path.addLine(to: nextStep)
             newPoint = CGPoint(x: CGFloat(indexUpper) * x,
-                                         y: (CGFloat(dataPoints[indexUpper].upperValue - minValue) * -y) + rect.height)
+                               y: (CGFloat(dataPoints[indexUpper].upperValue - minValue) * -y) + rect.height)
             path.addLine(to: newPoint)
         }
         
         // Lower Path
         for indexLower in (0 ..< dataPoints.count).reversed() {
-            let nextStep = CGPoint(x: newPoint.x,
-                                   y: (CGFloat(dataPoints[indexLower].lowerValue - minValue) * -y) + rect.height)
+            let nextStep = CGPoint(x: CGFloat(indexLower) * x,
+                                   y: newPoint.y)
             path.addLine(to: nextStep)
             newPoint = CGPoint(x: CGFloat(indexLower) * x,
-                                         y: (CGFloat(dataPoints[indexLower].lowerValue - minValue) * -y) + rect.height)
+                               y: (CGFloat(dataPoints[indexLower].lowerValue - minValue) * -y) + rect.height)
             
             path.addLine(to: newPoint)
         }
@@ -379,8 +379,8 @@ extension Path {
             
             for index in 1 ..< dataPoints.count {
                 
-                let nextStep = CGPoint(x: newPoint.x,
-                                       y: (CGFloat(dataPoints[index].value - minValue) * -y) + rect.height)
+                let nextStep = CGPoint(x: CGFloat(index) * x,
+                                       y: newPoint.y)
                 
                 let nextPoint = CGPoint(x: CGFloat(index) * x,
                                         y: (CGFloat(dataPoints[index].value - minValue) * -y) + rect.height)
@@ -517,8 +517,8 @@ extension Path {
         var newPoint = firstPointUpper
         
         for indexUpper in 1 ..< dataPoints.count {
-            let nextStep = CGPoint(x: newPoint.x,
-                                   y: (CGFloat(dataPoints[indexUpper].upperValue - minValue) * -y) + rect.height)
+            let nextStep = CGPoint(x: CGFloat(indexUpper) * x,
+                                   y: newPoint.y)
             
             let nextPointUpper = CGPoint(x: CGFloat(indexUpper) * x,
                                          y: (CGFloat(dataPoints[indexUpper].upperValue - minValue) * -y) + rect.height)
@@ -532,8 +532,8 @@ extension Path {
         
         // Lower Path
         for indexLower in (0 ..< dataPoints.count).reversed() {
-            let nextStep = CGPoint(x: newPoint.x,
-                                   y: (CGFloat(dataPoints[indexLower].lowerValue - minValue) * -y) + rect.height)
+            let nextStep = CGPoint(x: CGFloat(indexLower) * x,
+                                   y: newPoint.y)
             
             let nextPointLower = CGPoint(x: CGFloat(indexLower) * x,
                                          y: (CGFloat(dataPoints[indexLower].lowerValue - minValue) * -y) + rect.height)
