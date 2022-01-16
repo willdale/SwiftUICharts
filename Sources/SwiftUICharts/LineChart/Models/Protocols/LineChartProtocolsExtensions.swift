@@ -1,6 +1,6 @@
 //
 //  LineChartProtocolsExtensions.swift
-//  
+//
 //
 //  Created by Will Dale on 13/02/2021.
 //
@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - Box Location
 extension CTLineBarChartDataProtocol {
-    public func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {        
+    public func setBoxLocationation(touchLocation: CGFloat, boxFrame: CGRect, chartSize: CGRect) -> CGFloat {
         var returnPoint: CGFloat = .zero
         if touchLocation < chartSize.minX + (boxFrame.width / 2) {
             returnPoint = chartSize.minX + (boxFrame.width / 2)
@@ -110,6 +110,21 @@ extension CTLineChartDataProtocol {
                                        isFilled: isFilled)
             case true:
                 return Path.curvedLineIgnoreZero(rect: rect,
+                                                 dataPoints: dataPoints,
+                                                 minValue: minValue,
+                                                 range: range,
+                                                 isFilled: isFilled)
+            }
+        case .stepped:
+            switch ignoreZero {
+            case false:
+                return Path.steppedLine(rect: rect,
+                                       dataPoints: dataPoints,
+                                       minValue: minValue,
+                                       range: range,
+                                       isFilled: isFilled)
+            case true:
+                return Path.steppedLineIgnoreZero(rect: rect,
                                                  dataPoints: dataPoints,
                                                  minValue: minValue,
                                                  range: range,
