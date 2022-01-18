@@ -239,8 +239,8 @@ extension Path {
         
         // Lower Path
         for indexLower in (0 ..< dataPoints.count).reversed() {
-            let nextStep = CGPoint(x: CGFloat(indexLower) * x,
-                                   y: newPoint.y)
+            let nextStep = CGPoint(x: newPoint.x,
+                                   y: (CGFloat(dataPoints[indexLower].lowerValue - minValue) * -y) + rect.height)
             path.addLine(to: nextStep)
             newPoint = CGPoint(x: CGFloat(indexLower) * x,
                                y: (CGFloat(dataPoints[indexLower].lowerValue - minValue) * -y) + rect.height)
@@ -532,8 +532,8 @@ extension Path {
         
         // Lower Path
         for indexLower in (0 ..< dataPoints.count).reversed() {
-            let nextStep = CGPoint(x: CGFloat(indexLower) * x,
-                                   y: newPoint.y)
+            let nextStep = CGPoint(x: newPoint.x,
+                                   y: (CGFloat(dataPoints[indexLower].lowerValue - minValue) * -y) + rect.height)
             
             let nextPointLower = CGPoint(x: CGFloat(indexLower) * x,
                                          y: (CGFloat(dataPoints[indexLower].lowerValue - minValue) * -y) + rect.height)
