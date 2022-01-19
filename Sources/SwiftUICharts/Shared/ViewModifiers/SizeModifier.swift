@@ -23,7 +23,6 @@ struct SizeModifier<ChartData>: ViewModifier where ChartData: CTChartData {
         GeometryReader { geo in
             Color.clear
                 .onChange(of: geo.frame(in: .local)) { chartData.chartSize = $0 }
-                .onChange(of: geo.frame(in: .global)) { print($0.origin) }
         }
     }
 }

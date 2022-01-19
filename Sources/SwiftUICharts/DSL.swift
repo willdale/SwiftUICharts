@@ -8,35 +8,6 @@
 import SwiftUI
 import ChartMath
 
-//Chart(chartData: data) {
-//    ZStack {
-//        TestGrid<LineChartData>(orientation: .vertical, style: .standard)
-//        TestGrid<LineChartData>(orientation: .horizontal, style: .standard)
-//
-//        TestLineChart()
-//            .pointMarkers(chartData: data)
-//            .touch(chartData: data)
-//            .border(width: 1, edges: [.trailing, .bottom], color: .primary)
-////                    .chartBorder(chartData: data, side: [.trailing, .top], style: .primary)
-//    }
-//    .padding()
-//}
-
-// -----
-
-//@resultBuilder
-//struct ChartBuilder {
-//    static func buildBlock<T: BinaryInteger>(_ components: T...) -> T {
-//        var result: T = 0
-//        components.forEach { result += $0 }
-//        return result
-//    }
-//}
-//
-//func chartBuilder<T: View>(@ChartBuilder content: () -> T) -> T {
-//    return content()
-//}
-
 public struct Chart<Content, ChartData>: View where ChartData: CTChartData,
                                                     Content: View {
     
@@ -78,14 +49,19 @@ public struct TestLineChart<ChartData>: View where ChartData: LineChartData {
     }
 }
 
-public struct HGrid: Shape {
-    private let numberOfLines: UInt
-    private let ignoreEdges: Bool
+// MARK: Grid
+public struct Grid: Shape {
+    
+    public var orientation: Orientation
+    public var numberOfLines: UInt
+    public var ignoreEdges: Bool
     
     public init(
+        orientation: Orientation,
         numberOfLines: UInt,
         ignoreEdges: Bool = false
     ) {
+        self.orientation = orientation
         self.numberOfLines = numberOfLines
         self.ignoreEdges = ignoreEdges
     }
@@ -94,17 +70,39 @@ public struct HGrid: Shape {
         if numberOfLines == 0 { return Path() }
         if !ignoreEdges && numberOfLines == 1 ||
            ignoreEdges && 1...3 ~= numberOfLines {
-            let pointOne = CGPoint(x: rect.minX, y: rect.midY)
-            let pointTwo = CGPoint(x: rect.maxX, y: rect.midY)
+            let pointOne: CGPoint
+            let pointTwo: CGPoint
+            switch orientation {
+            case .horizontal:
+                pointOne = CGPoint(x: rect.minX, y: rect.midY)
+                pointTwo = CGPoint(x: rect.maxX, y: rect.midY)
+            case .vertical:
+                pointOne = CGPoint(x: rect.midX, y: rect.minY)
+                pointTwo = CGPoint(x: rect.midX, y: rect.maxY)
+            }
+            
             var path = Path()
             path.move(to: pointOne)
             path.addLine(to: pointTwo)
             return path
         } else if numberOfLines == 2 {
-            let bottomPointOne = CGPoint(x: rect.minX, y: rect.maxY)
-            let bottomPointTwo = CGPoint(x: rect.maxX, y: rect.maxY)
-            let topPointOne = CGPoint(x: rect.minX, y: rect.minY)
-            let topPointTwo = CGPoint(x: rect.maxX, y: rect.minY)
+            let bottomPointOne: CGPoint
+            let bottomPointTwo: CGPoint
+            let topPointOne: CGPoint
+            let topPointTwo: CGPoint
+            switch orientation {
+            case .horizontal:
+                bottomPointOne = CGPoint(x: rect.minX, y: rect.maxY)
+                bottomPointTwo = CGPoint(x: rect.maxX, y: rect.maxY)
+                topPointOne = CGPoint(x: rect.minX, y: rect.minY)
+                topPointTwo = CGPoint(x: rect.maxX, y: rect.minY)
+            case .vertical:
+                bottomPointOne = CGPoint(x: rect.maxX, y: rect.minY)
+                bottomPointTwo = CGPoint(x: rect.maxX, y: rect.maxY)
+                topPointOne = CGPoint(x: rect.minX, y: rect.minY)
+                topPointTwo = CGPoint(x: rect.minX, y: rect.maxY)
+            }
+
             var path = Path()
             path.move(to: bottomPointOne)
             path.addLine(to: bottomPointTwo)
@@ -113,7 +111,14 @@ public struct HGrid: Shape {
             return path
         } else {
             let range = ignoreEdges ? 1..<numberOfLines-1 : 0..<numberOfLines
-            let sectionSize = divide(rect.height, numberOfLines-1)
+            let sectionSize: CGFloat
+            switch orientation {
+            case .horizontal:
+                sectionSize = divide(rect.height, numberOfLines-1)
+            case .vertical:
+                sectionSize = divide(rect.width, numberOfLines-1)
+            }
+            
             var path = Path()
             for index in range {
                 let y = CGFloat(index) * sectionSize
@@ -125,110 +130,73 @@ public struct HGrid: Shape {
             return path
         }
     }
-}
-
-public struct VGrid: Shape {
-    private let numberOfLines: UInt
-    private let ignoreEdges: Bool
     
-    public init(
-        numberOfLines: UInt,
-        ignoreEdges: Bool = false
-    ) {
-        self.numberOfLines = numberOfLines
-        self.ignoreEdges = ignoreEdges
-    }
-    
-    public func path(in rect: CGRect) -> Path {
-        if numberOfLines == 0 { return Path() }
-        if !ignoreEdges && numberOfLines == 1 ||
-           ignoreEdges && 1...3 ~= numberOfLines {
-            let pointOne = CGPoint(x: rect.midX, y: rect.minY)
-            let pointTwo = CGPoint(x: rect.midX, y: rect.maxY)
-            var path = Path()
-            path.move(to: pointOne)
-            path.addLine(to: pointTwo)
-            return path
-        } else if numberOfLines == 2 {
-            let bottomPointOne = CGPoint(x: rect.maxX, y: rect.minY)
-            let bottomPointTwo = CGPoint(x: rect.maxX, y: rect.maxY)
-            let topPointOne = CGPoint(x: rect.minX, y: rect.minY)
-            let topPointTwo = CGPoint(x: rect.minX, y: rect.maxY)
-            var path = Path()
-            path.move(to: bottomPointOne)
-            path.addLine(to: bottomPointTwo)
-            path.move(to: topPointOne)
-            path.addLine(to: topPointTwo)
-            return path
-        } else {
-            let range = ignoreEdges ? 1..<numberOfLines-1 : 0..<numberOfLines
-            let sectionSize = divide(rect.width, numberOfLines-1)
-            var path = Path()
-            for index in range {
-                let x = CGFloat(index) * sectionSize
-                let pointOne = CGPoint(x: x, y: rect.minY)
-                let pointTwo = CGPoint(x: x, y: rect.maxY)
-                path.move(to: pointOne)
-                path.addLine(to: pointTwo)
-            }
-            return path
-        }
+    public enum Orientation {
+        case horizontal
+        case vertical
     }
 }
 
-final class YAxisModel: ObservableObject {
-    @Published var widths = Set<Model>()
-    @Published var widest: CGFloat = 0
+// MARK: - YAxisLabels
+internal final class YAxisLabelsLayoutModel: ObservableObject  {
+        
+    @Published internal var widths = Set<Model>()
+    @Published internal var widest: CGFloat = 0
     
     internal func update(with newItem: Model) {
         if let oldItem = widths.first(where: { $0.id == newItem.id }) {
             widths.remove(oldItem)
             widths.insert(newItem)
-            print("Updated")
         } else {
             widths.insert(newItem)
-            print("Added: \(newItem)")
         }
         widest = widths.map(\.value).max() ?? 0
-        print("widest: \(widest)")
     }
     
-    struct Model: Hashable {
-        let id: Int
-        let value: CGFloat
+    internal struct Model: Hashable {
+        internal let id: Int
+        internal let value: CGFloat
     }
 }
 
-// MARK: - TestYAxisLabels
-public struct TestYAxisLabels<ChartData>: View
-where ChartData: CTChartData & ViewDataProtocol & AxisY & DataHelper & ObservableObject {
+
+public struct TestYAxisLabels<ChartData>: View where ChartData: CTChartData & DataHelper {
+
+    @ObservedObject private var chartData: ChartData
+    @StateObject private var state = YAxisLabelsLayoutModel()
     
-    @EnvironmentObject private var chartData: ChartData
-    @ObservedObject private var state = YAxisModel()
-    
-    public var data: YAxisLabelStyle.Data
-    public var style: YAxisLabelStyle
+    internal let data: YAxisLabelStyle.Data
+    internal let style: YAxisLabelStyle
     
     public init(
+        chartData: ChartData,
         data: YAxisLabelStyle.Data,
         style: YAxisLabelStyle
     ) {
+        self.chartData = chartData
         self.data = data
         self.style = style
     }
     
     public var body: some View {
         ZStack {
-            Labels_SubView(chartData: chartData, state: state, labels: labels, style: style)
+            ForEach(labels.indices, id: \.self) { index in
+                _Label_Cell(state: state, label: labels[index], index: index, count: labels.count, style: style)
+                    .frame(width: state.widest,
+                           height: divide(chartData.chartSize.height, labels.count))
+                    .position(x: state.widest / 2,
+                              y: CGFloat(index) * divide(chartData.chartSize.height, labels.count-1))
+            }
+            .frame(width: state.widest)
         }
     }
     
-    private var labels: [String] {
+    internal var labels: [String] {
         switch data {
         case .generated:
             guard let firstLabel = style.formatter.string(from: NSNumber(value: chartData.minValue)) else { return [] }
             let otherLabels: [String] = (1...style.number-1).compactMap {
-                let value = chartData.minValue + (chartData.range / Double(style.number-1)) * Double($0)
+                let value = chartData.minValue + divide(chartData.range, style.number-1) * Double($0)
                 guard let formattedNumber = style.formatter.string(from: NSNumber(value: value)) else { return nil }
                 return formattedNumber
             }
@@ -239,65 +207,28 @@ where ChartData: CTChartData & ViewDataProtocol & AxisY & DataHelper & Observabl
     }
 }
 
-fileprivate struct Labels_SubView<ChartData>: View
-where ChartData: CTChartData & ViewDataProtocol & AxisY & DataHelper & ObservableObject {
-    
-    @ObservedObject private var chartData: ChartData
-    @ObservedObject private var state: YAxisModel
-    
-    var labels: [String]
-    public var style: YAxisLabelStyle
-    
-    public init(
-        chartData: ChartData,
-        state: YAxisModel,
-        labels: [String],
-        style: YAxisLabelStyle
-    ) {
-        self.chartData = chartData
-        self.state = state
-        self.labels = labels
-        self.style = style
-    }
-        
-    public var body: some View {
-        ForEach(labels.indices, id: \.self) { index in
-            _Label_Cell(chartData: chartData, state: state, label: labels[index], index: index, count: labels.count, style: style)
-                .modifier(_label_Positioning(chartData: chartData, state: state, style: style, index: index, count: labels.count, frame: chartData.chartSize))
-        }
-        .frame(width: state.widest)
-    }
-}
+fileprivate struct _Label_Cell: View {
 
-fileprivate struct _Label_Cell<ChartData>: View
-where ChartData: CTChartData & ViewDataProtocol & AxisY & DataHelper & ObservableObject {
+    @ObservedObject private var state: YAxisLabelsLayoutModel
+    private let label: String
+    private let index: Int
+    private let count: Int
+    private let style: YAxisLabelStyle
     
-    @ObservedObject private var chartData: ChartData
-    @ObservedObject private var state: YAxisModel
-    
-    var label: String
-    var index: Int
-    var count: Int
-    var style: YAxisLabelStyle
-    
-    init(
-        chartData: ChartData,
-        state: YAxisModel,
+    internal init(
+        state: YAxisLabelsLayoutModel,
         label: String,
         index: Int,
         count: Int,
         style: YAxisLabelStyle
     ) {
-        self.chartData = chartData
         self.state = state
         self.label = label
         self.index = index
         self.count = count
         self.style = style
     }
-    
-    @State private var bounds: CGSize = .zero
-    
+        
     var body: some View {
         Text(LocalizedStringKey(label))
             .font(style.font)
@@ -305,12 +236,9 @@ where ChartData: CTChartData & ViewDataProtocol & AxisY & DataHelper & Observabl
             .background(
                 GeometryReader { geo in
                     Color.clear
-                        .onAppear(perform: {
-                            state.update(with: YAxisModel.Model(id: index, value: geo.frame(in: .local).width))
-                        })
-//                        .onChange(of: geo.frame(in: .local)) { newValue in
-//                            state.update(with: YAxisModel.Model(id: index, value: newValue.width))
-//                        }
+                        .onAppear {
+                            state.update(with: YAxisLabelsLayoutModel.Model(id: index, value: geo.frame(in: .local).width))
+                        }
                 }
             )
             .fixedSize()
@@ -319,48 +247,11 @@ where ChartData: CTChartData & ViewDataProtocol & AxisY & DataHelper & Observabl
     }
 }
 
-// MARK: _label_Positioning
-fileprivate struct _label_Positioning<ChartData>: ViewModifier where ChartData: CTChartData & ViewDataProtocol & AxisY {
-    
-    @ObservedObject private var chartData: ChartData
-    @ObservedObject private var state: YAxisModel
-    private var style: YAxisLabelStyle
-    private var index: Int
-    private var count: Int
-    private var frame: CGRect
-    
-    internal init(
-        chartData: ChartData,
-        state: YAxisModel,
-        style: YAxisLabelStyle,
-        index: Int,
-        count: Int,
-        frame: CGRect
-    ) {
-        self.chartData = chartData
-        self.state = state
-        self.style = style
-        self.index = index
-        self.count = count
-        self.frame = frame
-    }
-    
-    func body(content: Content) -> some View {
-        content
-            .frame(width: state.widest,
-                   height: chartData.yAxisSectionSizing(count: count, size: frame.height))
-            .position(x: state.widest / 2,
-                      y: chartData.yAxisLabelOffSet(index: index,
-                                                    size: frame.height,
-                                                    count: count))
-    }
-}
-
 // MARK: - EdgeBorder
 struct EdgeBorder: Shape {
 
     var width: CGFloat
-    var edges: [Edge]
+    var edges: Set<Edge>
 
     func path(in rect: CGRect) -> Path {
         var path = Path()
@@ -399,7 +290,7 @@ struct EdgeBorder: Shape {
 }
 
 extension View {
-    public func border(width: CGFloat, edges: [Edge], color: Color) -> some View {
+    public func border(width: CGFloat, edges: Set<Edge>, color: Color) -> some View {
         overlay(EdgeBorder(width: width, edges: edges).foregroundColor(color))
     }
 }

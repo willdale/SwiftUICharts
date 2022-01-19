@@ -58,6 +58,7 @@ public protocol DataHelper {
 
 extension DataHelper where Self: CTChartData,
                            SetType: DataFunctionsProtocol {
+        
     public var range: Double {
         get {
             var _lowestValue: Double
