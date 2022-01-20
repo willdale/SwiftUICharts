@@ -34,10 +34,10 @@ public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBar
                 .onChange(of: geo.frame(in: .local)) { value in
                     self.chartData.viewData.chartSize = value
                 }
-                .if(chartData.minValue.isLess(than: 0)) {
-                    $0.scaleEffect(x: CGFloat(chartData.maxValue/(chartData.maxValue - chartData.minValue)), anchor: .trailing)
-                }
             } else { CustomNoDataView(chartData: chartData) }
+        }
+        .if(chartData.minValue.isLess(than: 0)) {
+            $0.scaleEffect(x: CGFloat(chartData.maxValue/(chartData.maxValue - chartData.minValue)), anchor: .trailing)
         }
     }
 }
