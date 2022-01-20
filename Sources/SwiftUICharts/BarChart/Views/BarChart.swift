@@ -72,7 +72,7 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
             } else { CustomNoDataView(chartData: chartData) }
         }
         .if(chartData.minValue.isLess(than: 0)) {
-            $0.scaleEffect(y: chartData.maxValue/(chartData.maxValue - chartData.minValue), anchor: .top)
+            $0.scaleEffect(y: CGFloat(chartData.maxValue/(chartData.maxValue - chartData.minValue)), anchor: .top)
         }
     }
 }

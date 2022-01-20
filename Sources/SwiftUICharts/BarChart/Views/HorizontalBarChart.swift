@@ -35,7 +35,7 @@ public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBar
                     self.chartData.viewData.chartSize = value
                 }
                 .if(chartData.minValue.isLess(than: 0)) {
-                    $0.scaleEffect(x: chartData.maxValue/(chartData.maxValue - chartData.minValue), anchor: .trailing)
+                    $0.scaleEffect(x: CGFloat(chartData.maxValue/(chartData.maxValue - chartData.minValue)), anchor: .trailing)
                 }
             } else { CustomNoDataView(chartData: chartData) }
         }
