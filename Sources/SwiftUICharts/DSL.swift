@@ -169,7 +169,7 @@ public struct TestYAxisLabels<ChartData>: View where ChartData: CTChartData & Da
     internal let style: YAxisLabelStyle
     
     public init(
-        chartData: ChartData,
+        _ chartData: ChartData,
         data: YAxisLabelStyle.Data,
         style: YAxisLabelStyle
     ) {
@@ -247,6 +247,122 @@ fileprivate struct _Label_Cell: View {
     }
 }
 
+// MARK: - XAxisLabels
+public struct TestXAxisLabels<ChartData>: View where ChartData: CTChartData & AxisX & ViewDataProtocol {
+    
+    @ObservedObject private var chartData: ChartData
+    private var data: XAxisLabelStyle.Data
+    private var style: XAxisLabelStyle
+    
+    public init(
+        _ chartData: ChartData,
+        data: XAxisLabelStyle.Data,
+        style: XAxisLabelStyle
+    ) {
+        self.chartData = chartData
+        self.data = data
+        self.style = style
+    }
+    
+    public var body: some View {
+        ZStack {
+            _Labels_SubView(chartData: chartData,
+                            data: data,
+                            style: style)
+        }
+        .frame(height: chartData.xAxisViewData.xAxisLabelHeights.max())
+    }
+}
+
+// MARK: _Labels_Data_Source
+fileprivate struct _Labels_SubView<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol & AxisX {
+    
+    @ObservedObject private var chartData: ChartData
+    private var data: XAxisLabelStyle.Data
+    private var style: XAxisLabelStyle
+    
+    internal init(
+        chartData: ChartData,
+        data: XAxisLabelStyle.Data,
+        style: XAxisLabelStyle
+    ) {
+        self.chartData = chartData
+        self.data = data
+        self.style = style
+    }
+    
+    var body: some View {
+        switch data {
+        case .datapoints:
+            ForEach(chartData.dataSets.dataLabels.indices, id: \.self) { index in
+                TestRotatedText(chartData: chartData, label: chartData.dataSets.dataLabels[index], style: style)
+                    .frame(width: chartData.xAxisSectionSizing(count: chartData.dataSets.dataWidth, size: chartData.chartSize.width),
+                           height: chartData.xAxisViewData.xAxisLabelHeights.max())
+                    .position(x: chartData.xAxisLabelOffSet(index: index, size: chartData.chartSize.width, count: chartData.dataSets.dataWidth),
+                              y: (chartData.xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2)
+            }
+        case .custom(let labels):
+            HStack(spacing: 0) {
+                ForEach(labels.indices, id: \.self) { index in
+                    TestRotatedText(chartData: chartData, label: labels[index], style: style)
+                    if index != labels.count - 1 {
+                        Spacer().frame(minWidth: 0, maxWidth: 500)
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - RotatedText
+internal struct TestRotatedText<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol {
+    
+    @ObservedObject private var chartData: ChartData
+    private let label: String
+    private var style: XAxisLabelStyle
+    
+    internal init(
+        chartData: ChartData,
+        label: String,
+        style: XAxisLabelStyle
+    ) {
+        self.chartData = chartData
+        self.label = label
+        self.style = style
+    }
+    
+    @State private var finalFrame: CGRect = .zero
+    
+    internal var body: some View {
+        Text(LocalizedStringKey(label))
+            .font(style.font)
+            .foregroundColor(style.fontColour)
+            .lineLimit(1)
+            .overlay(
+                GeometryReader { geo in
+                    Color.clear
+                        .onAppear {
+                            finalFrame = geo.frame(in: .local)
+                            chartData.xAxisViewData.xAxisLabelHeights.append(geo.frame(in: .local).width)
+                            if style.rotation == .degrees(0) || style.rotation == .radians(0) {
+                                chartData.xAxisViewData.xAxisLabelWidths.append(geo.frame(in: .local).width)
+                            } else {
+                                chartData.xAxisViewData.xAxisLabelWidths.append(geo.frame(in: .local).height)
+                            }
+                        }
+                }
+            )
+            .fixedSize(horizontal: true, vertical: false)
+            .rotationEffect(style.rotation, anchor: .center)
+            .frame(width: style.rotation == .degrees(0) || style.rotation == .radians(0) ? finalFrame.width : finalFrame.height,
+                   height: style.rotation == .degrees(0) || style.rotation == .radians(0) ? finalFrame.height : finalFrame.width)
+            
+            .accessibilityLabel(LocalizedStringKey("X-Axis-Label"))
+            .accessibilityValue(LocalizedStringKey(label))
+    }
+}
+
+
 // MARK: - EdgeBorder
 struct EdgeBorder: Shape {
 
@@ -292,105 +408,5 @@ struct EdgeBorder: Shape {
 extension View {
     public func border(width: CGFloat, edges: Set<Edge>, color: Color) -> some View {
         overlay(EdgeBorder(width: width, edges: edges).foregroundColor(color))
-    }
-}
-
-
-
-// MARK: NO
-public struct TestGrid: View {
-    
-    private var style: GridStyle
-    private var orientation: Orientation
-    
-    public init(
-        orientation: Orientation,
-        style: GridStyle
-    ) {
-        self.style = style
-        self.orientation = orientation
-    }
-    
-    public var body: some View {
-        switch orientation {
-        case .vertical:
-            HStack {
-                ForEach((0...style.numberOfLines-1), id: \.self) { index in
-                    if index != 0 {
-                        TestVerticalGridView(style: style)
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
-                    }
-                }
-                TestVerticalGridView(style: style)
-            }
-        case .horizontal:
-            VStack {
-                ForEach((0...style.numberOfLines-1), id: \.self) { index in
-                    if index != 0 {
-                        TestHorizontalGridView(style: style)
-                        Spacer()
-                            .frame(minHeight: 0, maxHeight: 500)
-                    }
-                }
-                TestHorizontalGridView(style: style)
-            }
-        }
-    }
-    
-    public enum Orientation {
-        case horizontal, vertical
-    }
-}
-
-internal struct TestVerticalGridView: View {
-    
-    private var style: GridStyle
-    @State private var startAnimation: Bool = false
-    
-    internal init(style: GridStyle) {
-        self.style = style
-    }
-    
-    var body: some View {
-        VerticalGridShape()
-            .trim(to: startAnimation ? 1 : 0)
-            .stroke(style.lineColour,
-                    style: StrokeStyle(lineWidth: style.lineWidth,
-                                       dash: style.dash,
-                                       dashPhase: style.dashPhase))
-            .frame(width: style.lineWidth)
-            .animateOnAppear(using: .linear) {
-                self.startAnimation = true
-            }
-            .onDisappear {
-                self.startAnimation = false
-            }
-    }
-}
-
-internal struct TestHorizontalGridView: View {
-    
-    private var style: GridStyle
-    @State private var startAnimation: Bool = false
-    
-    internal init(style: GridStyle) {
-        self.style = style
-    }
-    
-    var body: some View {
-        HorizontalGridShape()
-            .trim(to: startAnimation ? 1 : 0)
-            .stroke(style.lineColour,
-                    style: StrokeStyle(lineWidth: style.lineWidth,
-                                       dash: style.dash,
-                                       dashPhase: style.dashPhase))
-            .frame(height: style.lineWidth)
-            .animateOnAppear(using: .linear) {
-                self.startAnimation = true
-            }
-            .onDisappear {
-                self.startAnimation = false
-            }
     }
 }

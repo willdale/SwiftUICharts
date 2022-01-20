@@ -14,13 +14,6 @@ internal struct RotatedText<ChartData>: View where ChartData: CTChartData & XAxi
     private let position: LabelPositionable
     private var style: XAxisLabelStyle
     
-    /**
-     Initialises a new instance of RotatedText.
-     
-     A view that displays text with rotation.
-     
-     - Parameters:
-     */
     internal init(
         chartData: ChartData,
         label: String,
