@@ -1,6 +1,6 @@
 //
 //  GroupedBarChart.swift
-//  
+//
 //
 //  Created by Will Dale on 25/01/2021.
 //
@@ -72,6 +72,9 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                     self.chartData.viewData.chartSize = geo.frame(in: .local)
                 }
             } else { CustomNoDataView(chartData: chartData) }
+        }
+        .if(chartData.minValue.isLess(than: 0)) {
+            $0.scaleEffect(y: chartData.maxValue/(chartData.maxValue - chartData.minValue), anchor: .top)
         }
     }
 }
