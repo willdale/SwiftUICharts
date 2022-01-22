@@ -19,11 +19,11 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
     @Published public var dataSets: BarDataSet
     @Published public var barStyle: BarStyle
     @Published public var legends: [LegendData] = []
-    @Published public var infoView = InfoViewData<BarChartDataPoint>()
     @Published public var shouldAnimate: Bool
+    @Published public var chartSize: CGRect = .zero
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
-    
+        
     // MARK: ViewDataProtocol
     @Published public var xAxisViewData = XAxisViewData()
     @Published public var yAxisViewData = YAxisViewData()
@@ -47,10 +47,6 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
     @Published public var extraLineData: ExtraLineData!
     
     // MARK: Non-Protocol
-    @Published public var chartSize: CGRect = .zero
-    private var internalSubscription: AnyCancellable?
-    private var markerData: MarkerData = MarkerData()
-    private var internalDataSubscription: AnyCancellable?
     internal let chartType: CTChartType = (.bar, .single)
     
     // MARK: Deprecated
@@ -58,6 +54,8 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
     @Published public var metadata = ChartMetadata()
     @available(*, deprecated, message: "")
     @Published public var chartStyle = BarChartStyle()
+    @available(*, deprecated, message: "Split in to axis data")
+    @Published public var infoView = InfoViewData<BarChartDataPoint>()
     
     // MARK: Initializer
     /// Initialises a standard Bar Chart.
@@ -89,38 +87,6 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
         self.topLine = topLine
         
 //        self.setupLegends()
-        self.setupInternalCombine()
-    }
-    
-    private func setupInternalCombine() {
-        internalSubscription = touchedDataPointPublisher
-            .sink {
-                let lineMarkerData: [LineMarkerData] = $0.compactMap { data in
-                    if data.type == .extraLine,
-                       let extraData = self.extraLineData {
-                        return LineMarkerData(markerType: extraData.style.markerType,
-                                              location: data.location,
-                                              dataPoints: extraData.dataPoints.map { LineChartDataPoint($0) },
-                                              lineType: extraData.style.lineType,
-                                              lineSpacing: .bar,
-                                              minValue: extraData.minValue,
-                                              range: extraData.range)
-                    }
-                    return nil
-                }
-                let barMarkerData: [BarMarkerData] = $0.compactMap { data in
-                    if data.type == .bar {
-                        return BarMarkerData(markerType: self.touchMarkerType,
-                                              location: data.location)
-                    }
-                    return nil
-                }
-                self.markerData =  MarkerData(lineMarkerData: lineMarkerData,
-                                              barMarkerData: barMarkerData)
-            }
-        
-        internalDataSubscription = touchedDataPointPublisher
-            .sink { self.touchPointData = $0.map(\.datapoint) }
     }
     
     // MARK: Labels
@@ -133,14 +99,8 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
     }
     
     // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent = true
-        self.infoView.touchLocation = touchLocation
-        self.infoView.chartSize = chartSize
-        self.processTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
-    }
-    
-    private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+    public func processTouchInteraction(_ data: inout MarkerData, touchLocation: CGPoint) {
+        var values: [PublishedTouchData<DataPoint>] = []
         let ySection: CGFloat = chartSize.height / CGFloat(dataSets.dataPoints.count)
         let xSection: CGFloat = chartSize.width / CGFloat(self.maxValue)
         let index: Int = Int((touchLocation.y) / ySection)
@@ -149,7 +109,6 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
             let location = CGPoint(x: (CGFloat(dataSets.dataPoints[index].value) * xSection),
                                    y: (CGFloat(index) * ySection) + (ySection / 2))
             
-            var values: [PublishedTouchData<DataPoint>] = []
             values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
             
             if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
@@ -163,17 +122,16 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
                 values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
             }
             
-            touchedDataPointPublisher.send(values)
         }
-    }
-    
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        markerSubView(markerData: markerData, chartSize: chartSize, touchLocation: touchLocation)
+        let barMarkerData = values.map { data in
+            return BarMarkerData(markerType: self.touchMarkerType,
+                                 location: data.location)
+        }
+        data.update(with: barMarkerData)
     }
 
     public func touchDidFinish() {
         touchPointData = []
-        infoView.isTouchCurrent = false
     }
     
     public typealias SetType = BarDataSet

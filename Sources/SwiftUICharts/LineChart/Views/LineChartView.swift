@@ -35,17 +35,13 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
     }
     
     public var body: some View {
-//        GeometryReader { geo in
             ZStack {
                 chartData.getAccessibility()
                 LineSubView(chartData: chartData,
                             colour: chartData.dataSets.style.lineColour)
-                    .modifier(SizeModifier(chartData: chartData))
             }
-//            .onAppear { // Needed for axes label frames
-//                self.chartData.chartSize = geo.frame(in: .local)
-//            }
-//        }
+            .modifier(SizeModifier(chartData: chartData))
+            .coordinateSpace(name: "Chart")
     }
 }
 
@@ -67,9 +63,9 @@ internal struct LineSubView<ChartData>: View where ChartData: LineChartData {
     
     internal var body: some View {
         LineShape(dataPoints: chartData.dataSets.dataPoints,
-             lineType: chartData.dataSets.style.lineType,
-             minValue: chartData.minValue,
-             range: chartData.range)
+                  lineType: chartData.dataSets.style.lineType,
+                  minValue: chartData.minValue,
+                  range: chartData.range)
             .trim(to: startAnimation ? 1 : 0)
             .stroke(colour, strokeStyle: chartData.dataSets.style.strokeStyle)
         

@@ -8,57 +8,80 @@
 import Foundation
 import CoreGraphics.CGGeometry
 
-internal struct MarkerData: Hashable {
-    internal let id: UUID = UUID()
-    internal let lineMarkerData: [LineMarkerData]
-    internal let barMarkerData: [BarMarkerData]
+public final class MarkerData {
+    public let id: UUID = UUID()
+    public private(set) var lineMarkerData: [LineMarkerData]
+    public private(set) var barMarkerData: [BarMarkerData]
+    public private(set) var pieMarkerData: [PieMarkerData]
     
-    internal init(
-        lineMarkerData: [LineMarkerData],
-        barMarkerData: [BarMarkerData]
+    public init(
+        lineMarkerData: [LineMarkerData] = [],
+        barMarkerData: [BarMarkerData] = [],
+        pieMarkerData: [PieMarkerData] = []
     ) {
         self.lineMarkerData = lineMarkerData
         self.barMarkerData = barMarkerData
+        self.pieMarkerData = pieMarkerData
     }
     
-    internal init() {
+    public init() {
         self.lineMarkerData = []
         self.barMarkerData = []
+        self.pieMarkerData = []
+    }
+    
+    internal func update(with lineData: [LineMarkerData]) {
+        lineMarkerData = lineData
+        barMarkerData = []
+        pieMarkerData = []
+    }
+    
+    internal func update(with barData: [BarMarkerData]) {
+        lineMarkerData = []
+        barMarkerData = barData
+        pieMarkerData = []
+    }
+    
+    internal func update(with pieData: [PieMarkerData]) {
+        lineMarkerData = []
+        barMarkerData = []
+        pieMarkerData = pieData
     }
 }
 
-struct LineMarkerData: Hashable {
+public struct LineMarkerData: Hashable {
     let id: UUID = UUID()
     let markerType: LineMarkerType
     let location: CGPoint
+    
     let dataPoints: [LineChartDataPoint]
     let lineType: LineType
     let lineSpacing: ExtraLineStyle.SpacingType
     let minValue: Double
     let range: Double
     
-    static func == (lhs: LineMarkerData, rhs: LineMarkerData) -> Bool {
+    public static func == (lhs: LineMarkerData, rhs: LineMarkerData) -> Bool {
         lhs.id == rhs.id &&
         lhs.location == rhs.location
     }
     
-    func hash(into hasher: inout Hasher) {
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
         hasher.combine(location)
     }
 }
 
-struct BarMarkerData: Hashable {
+public struct BarMarkerData: Hashable {
     let id: UUID = UUID()
     let markerType: BarMarkerType
     let location: CGPoint
     
-    static func == (lhs: BarMarkerData, rhs: BarMarkerData) -> Bool {
+    public static func == (lhs: BarMarkerData, rhs: BarMarkerData) -> Bool {
         lhs.id == rhs.id &&
         lhs.location == rhs.location
     }
     
-    func hash(into hasher: inout Hasher) {
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
         hasher.combine(location)
     }
@@ -79,5 +102,21 @@ extension LineChartDataPoint {
                   description: datapoint.description,
                   pointColour: datapoint.pointColour,
                   ignore: datapoint.ignore)
+    }
+}
+
+public struct PieMarkerData: Hashable {
+    let id: UUID = UUID()
+    let markerType: BarMarkerType
+    let location: CGPoint
+    
+    public static func == (lhs: PieMarkerData, rhs: PieMarkerData) -> Bool {
+        lhs.id == rhs.id &&
+        lhs.location == rhs.location
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(location)
     }
 }

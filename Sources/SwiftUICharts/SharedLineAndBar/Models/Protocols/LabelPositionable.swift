@@ -66,16 +66,23 @@ extension LabelPositionable {
     }
 }
 
-public enum HorizontalLabelPosition: LabelPositionable {
+public enum HorizontalLabelPosition: LabelPositionable, Hashable {
     case none
     case leading
     case trailing
 }
 
-public enum VerticalLabelPosition: LabelPositionable {
+public enum VerticalLabelPosition: LabelPositionable, Hashable {
     case none
     case top
     case bottom
+}
+
+extension HorizontalLabelPosition: Identifiable {
+    public var id: Self { self }
+}
+extension VerticalLabelPosition: Identifiable {
+    public var id: Self { self }
 }
 
 internal enum _LabelPositionType {

@@ -42,13 +42,13 @@ where ChartData: InfoData,
         ZStack {
             content
             infoView.content
-                .position(position(chartData.infoView.touchLocation, chartData.infoView.chartSize))
+                .position(position(chartData.infoView.touchLocation, chartData.chartSize))
                 .zIndex(1)
         }
     }
 }
 
-// MARK: - Extension
+// MARK: - API
 extension View {
     
     /// Customisable display of the data from ``touchOverlay``.

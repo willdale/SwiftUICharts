@@ -15,12 +15,5 @@ public protocol Publishable {
     
     associatedtype DataPoint: CTDataPointBaseProtocol
     
-    /**
-     Streams the data points from touch overlay.
-     
-     Uses Combine
-     */
-    var touchedDataPointPublisher: PassthroughSubject<[PublishedTouchData<Self.DataPoint>], Never> { get }
-    
     var touchPointData: [DataPoint] { get set }
 }

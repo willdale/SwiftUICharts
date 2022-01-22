@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+public protocol PieChartType {}
+
 // MARK: - Chart Data
 /**
  A protocol to extend functionality of `CTChartData` specifically for Pie and Doughnut Charts.

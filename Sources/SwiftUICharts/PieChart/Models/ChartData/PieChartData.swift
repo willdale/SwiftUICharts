@@ -14,26 +14,23 @@ import Combine
  This model contains the data and styling information for a pie chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable, TouchInfoDisplayable {
+public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishable, Touchable, TouchInfoDisplayable {
     // MARK: Properties
     public var id: UUID = UUID()
     @Published public var dataSets: PieDataSet
     @Published public var legends: [LegendData] = []
-    @Published public var infoView = InfoViewData<PieChartDataPoint>()
     @Published public var shouldAnimate: Bool
+    @Published public var chartSize: CGRect = .zero
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
-    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<PieChartDataPoint>],Never>()
     
     // MARK: Touchable
     public var touchMarkerType: PieMarkerType = defualtTouchMarker
     
     // MARK: Non-Protocol
-    @Published public var chartSize: CGRect = .zero
-    private var internalDataSubscription: AnyCancellable?
     internal let chartType: CTChartType = (chartType: .pie, dataSetType: .single)
     
     // MARK: Deprecated
@@ -41,6 +38,8 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable,
     @Published public var metadata = ChartMetadata()
     @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
     @Published public var chartStyle = PieChartStyle()
+    @available(*, deprecated, message: "Split in to axis data")
+    @Published public var infoView = InfoViewData<PieChartDataPoint>()
     
     // MARK: Initializer
     /// Initialises Pie Chart data.
@@ -61,20 +60,10 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable,
         
         self.setupLegends()
         self.makeDataPoints()
-        
-        internalDataSubscription = touchedDataPointPublisher
-            .sink { self.touchPointData = $0.map(\.datapoint) }
     }
     
     // MARK: - Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent = true
-        self.infoView.touchLocation = touchLocation
-        self.infoView.chartSize = chartSize
-        self.processTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
-    }
-    
-    private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+    public func processTouchInteraction(_ data: inout MarkerData, touchLocation: CGPoint) {
         let touchDegree = degree(from: touchLocation, in: chartSize)
         let index = self.dataSets.dataPoints.firstIndex(where:) {
             let start = $0.startAngle * Double(180 / Double.pi) <= Double(touchDegree)
@@ -83,14 +72,15 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable, Touchable,
         }
         guard let wrappedIndex = index else { return }
         let datapoint = self.dataSets.dataPoints[wrappedIndex]
-        self.touchedDataPointPublisher.send([PublishedTouchData(datapoint: datapoint, location: .zero, type: .pie)])
+        let values = [PublishedTouchData(datapoint: datapoint, location: .zero, type: .pie)]
+        let pieMarkerData = values.map { data in
+            return PieMarkerData(markerType: .full(), location: data.location)
+        }
+        data.update(with: pieMarkerData)
     }
-    
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View { EmptyView() }
-    
+        
     public func touchDidFinish() {
         touchPointData = []
-        infoView.isTouchCurrent = false
     }
     
     public typealias SetType = PieDataSet

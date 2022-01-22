@@ -235,10 +235,10 @@ fileprivate struct _Labels<ChartData>: View where ChartData: CTChartData & XAxis
     var body: some View {
         GeometryReader { geo in
             _Labels_SubView(chartData: chartData,
-                                data: data,
-                                position: position,
-                                style: style,
-                                frame: geo.frame(in: .local))
+                            data: data,
+                            position: position,
+                            style: style,
+                            frame: geo.frame(in: .local))
         }
         .modifier(_Axis_Label_Size(chartData: chartData, position: position))
     }
@@ -277,7 +277,7 @@ fileprivate struct _Labels_SubView<ChartData>: View where ChartData: CTChartData
                                         style: style,
                                         index: index,
                                         frame: frame)
-            }.border(.red)
+            }
         case .custom(let labels):
             HStack(spacing: 0) {
                 ForEach(labels.indices, id: \.self) { index in
@@ -357,8 +357,6 @@ fileprivate struct _Labels_Custom_Cell<ChartData>: View where ChartData: CTChart
     
     var body: some View {
         RotatedText(chartData: chartData, label: label, position: position, style: style)
-//            .frame(width: chartData.xAxisViewData.xAxisLabelWidths.min(),
-//                   height: chartData.xAxisViewData.xAxisLabelHeights.max())
         
         if index != count - 1 { 
             Spacer()

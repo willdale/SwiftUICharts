@@ -6,75 +6,47 @@
 //
 
 import SwiftUI
+import ChartMath
 
-// MARK: YAxisLabels
-internal struct YAxisLabels<ChartData>: ViewModifier where ChartData: CTChartData & ViewDataProtocol & AxisY & DataHelper {
-    
-    @ObservedObject private var chartData: ChartData
-    private var position: LabelPositionable
-    private var data: YAxisLabelStyle.Data
-    private var style: YAxisLabelStyle
-    
-    internal init(
-        chartData: ChartData,
-        position: LabelPositionable,
-        data: YAxisLabelStyle.Data,
-        style: YAxisLabelStyle
-    ) {
-        self.chartData = chartData
-        self.position = position
-        self.data = data
-        self.style = style
-        
-        self.chartData.yAxisViewData.hasYAxisLabels = true
-    }
-    
-    internal func body(content: Content) -> some View {
-        switch position.type {
-        case .horizontal:
-            _Horizontal_Labels(chartData: chartData, content: content, data: data, position: position, style: style)
-        case .vertical:
-            _Vertical_Labels(chartData: chartData, content: content, data: data, position: position, style: style)
-        default:
-            content
-        }
-    }
-}
+// MARK: - TODO:
+// fix layout in horizontal charts
 
-// MARK: API
+
+
+// MARK: - API
 extension View {
-    /// Labels for the X axis.
+    /// Labels for the Y axis.
     public func yAxisLabels<ChartData>(
         chartData: ChartData,
-        position: HorizontalLabelPosition,
+        position: Set<HorizontalLabelPosition>,
         data: YAxisLabelStyle.Data,
         style: YAxisLabelStyle = .standard
     ) -> some View
-    where ChartData: CTChartData & ViewDataProtocol & AxisY & DataHelper & VerticalChart
+    where ChartData: CTChartData & DataHelper & VerticalChart
     {
         self.modifier(
-            YAxisLabels(
+            _YAxisLabelsModifier_Vertical(
                 chartData: chartData,
-                position: position,
+                position: Array(position),
                 data: data,
                 style: style
             )
         )
     }
-    
-    /// Labels for the X axis.
+
+    /// Labels for the Y axis.
     public func yAxisLabels<ChartData>(
         chartData: ChartData,
-        position: VerticalLabelPosition,
+        position: Set<VerticalLabelPosition>,
         data: YAxisLabelStyle.Data,
         style: YAxisLabelStyle = .standard
     ) -> some View
-    where ChartData: CTChartData & ViewDataProtocol & AxisY & DataHelper & HorizontalChart
+    where ChartData: CTChartData & DataHelper & HorizontalChart
     {
         self.modifier(
-            YAxisLabels(
+            _YAxisLabelsModifier_Horizontal(
                 chartData: chartData,
-                position: position,
+                position: Array(position),
                 data: data,
                 style: style
             )
@@ -88,7 +60,7 @@ public struct YAxisLabelStyle {
     public var number: Int
     public var formatter: NumberFormatter
     public var padding: CGFloat
-    
+
     public init(
         font: Font = .caption,
         colour: Color = .primary,
@@ -102,7 +74,7 @@ public struct YAxisLabelStyle {
         self.formatter = formatter
         self.padding = padding
     }
-    
+
     public enum Data {
         case generated
         case custom(labels: [String])
@@ -116,281 +88,238 @@ extension YAxisLabelStyle {
                                                  formatter: .default)
 }
 
-// MARK: - Implementation
-//
-//
-//
-// MARK: _Vertical_Labels
-fileprivate struct _Vertical_Labels<ChartData, Content>: View where ChartData: CTChartData & ViewDataProtocol & AxisY & DataHelper,
-                                                                    Content: View {
-    
-    @ObservedObject private var chartData: ChartData
-    private var content: Content
-    private var data: YAxisLabelStyle.Data
-    private var position: LabelPositionable
-    private var style: YAxisLabelStyle
-    
-    internal init(
-        chartData: ChartData,
-        content: Content,
-        data: YAxisLabelStyle.Data,
-        position: LabelPositionable,
-        style: YAxisLabelStyle
-    ) {
-        self.chartData = chartData
-        self.content = content
-        self.data = data
-        self.position = position
-        self.style = style
-    }
-    
-    var body: some View {
-        switch position as? VerticalLabelPosition {
-        case .top:
-            VStack {
-                _Labels(chartData: chartData, data: data, position: position, style: style)
-                    .padding(.bottom, style.padding)
-                content
-            }
-        case .bottom:
-            VStack {
-                content
-                _Labels(chartData: chartData, data: data, position: position, style: style)
-                    .padding(.top, style.padding)
-            }
-        default:
-            content
-        }
-    }
+public enum AxisOrientation {
+    case vertical
+    case horizontal
 }
 
-// MARK: _Horizontal_Labels
-fileprivate struct _Horizontal_Labels<ChartData, Content>: View where ChartData: CTChartData & ViewDataProtocol & AxisY & DataHelper,
-                                                                      Content: View  {
-    
-    @ObservedObject private var chartData: ChartData
-    private var content: Content
-    private var data: YAxisLabelStyle.Data
-    private var position: LabelPositionable
-    private var style: YAxisLabelStyle
-    
-    internal init(
-        chartData: ChartData,
-        content: Content,
-        data: YAxisLabelStyle.Data,
-        position: LabelPositionable,
-        style: YAxisLabelStyle
-    ) {
-        self.chartData = chartData
-        self.content = content
-        self.data = data
-        self.position = position
-        self.style = style
-    }
-    
-    var body: some View {
-        switch position as? HorizontalLabelPosition {
-        case .leading:
-            HStack(spacing: 0) {
-                _Labels(chartData: chartData, data: data, position: position, style: style)
-                    .padding(.trailing, style.padding)
-                content
-            }
-        case .trailing:
-            HStack(spacing: 0) {
-                content
-                _Labels(chartData: chartData, data: data, position: position, style: style)
-                    .padding(.leading, style.padding)
-            }
-        default:
-            content
-        }
-    }
-}
 
-fileprivate struct _Labels<ChartData>: View where ChartData: CTChartData & ViewDataProtocol & AxisY & DataHelper {
-    
-    @ObservedObject private var chartData: ChartData
-    private var data: YAxisLabelStyle.Data
-    private var position: LabelPositionable
-    private var style: YAxisLabelStyle
-    
-    internal init(
-        chartData: ChartData,
-        data: YAxisLabelStyle.Data,
-        position: LabelPositionable,
-        style: YAxisLabelStyle
-    ) {
-        self.chartData = chartData
-        self.data = data
-        self.position = position
-        self.style = style
-    }
-    
-    var body: some View {
-        _Labels_SubView(chartData: chartData, data: data, position: position, style: style)
-            .modifier(_Axis_Label_Size(chartData: chartData, position: position))
-    }
-}
+// MARK: - View
+public struct YAxisLabels<ChartData>: View where ChartData: CTChartData & DataHelper {
 
-// MARK: _Labels
-fileprivate struct _Labels_SubView<ChartData>: View where ChartData: CTChartData & ViewDataProtocol & AxisY & DataHelper {
-    
     @ObservedObject private var chartData: ChartData
-    private var data: YAxisLabelStyle.Data
-    private var position: LabelPositionable
-    private var style: YAxisLabelStyle
+    @StateObject private var state = YAxisLabelsLayoutModel()
     
-    internal init(
-        chartData: ChartData,
+    private let data: YAxisLabelStyle.Data
+    private let style: YAxisLabelStyle
+    private let orientation: AxisOrientation
+    
+    public init(
+        _ chartData: ChartData,
         data: YAxisLabelStyle.Data,
-        position: LabelPositionable,
-        style: YAxisLabelStyle
+        style: YAxisLabelStyle,
+        orientation: AxisOrientation
     ) {
         self.chartData = chartData
         self.data = data
-        self.position = position
         self.style = style
+        self.orientation = orientation
     }
     
-    var body: some View {
+    public var body: some View {
         ZStack {
             ForEach(labels.indices, id: \.self) { index in
-                _Label_Cell(chartData: chartData, label: labels[index], style: style)
-                    .modifier(_label_Positioning(chartData: chartData, position: position, style: style, index: index, count: labels.count, frame: chartData.chartSize))
+                _Label_Cell(state: state, label: labels[index], index: index, count: labels.count, style: style)
+                    .modifier(_label_Positioning(state: state,
+                                                 index: index,
+                                                 count: labels.count,
+                                                 chartSize: chartData.chartSize))
             }
+            .modifier(_Axis_Label_Size(state: state))
         }
-        .border(.blue)
+        .onAppear { state.orientation = orientation }
     }
     
-    private var labels: [String] {
+    internal var labels: [String] {
         switch data {
         case .generated:
             guard let firstLabel = style.formatter.string(from: NSNumber(value: chartData.minValue)) else { return [] }
             let otherLabels: [String] = (1...style.number-1).compactMap {
-                let value = chartData.minValue + (chartData.range / Double(style.number-1)) * Double($0)
+                let value = chartData.minValue + divide(chartData.range, style.number-1) * Double($0)
                 guard let formattedNumber = style.formatter.string(from: NSNumber(value: value)) else { return nil }
                 return formattedNumber
             }
-            return position.isHorizontal ? ([firstLabel] + otherLabels).reversed() : ([firstLabel] + otherLabels)
+            return ([firstLabel] + otherLabels).reversed()
         case .custom(let labels):
-            return position.isHorizontal ? labels.reversed() : labels
+            return labels.reversed()
         }
     }
 }
 
-// MARK: _Label_Cell
-fileprivate struct _Label_Cell<ChartData>: View where ChartData: CTChartData & YAxisViewDataProtocol & AxisY & DataHelper {
-    
-    @ObservedObject private var chartData: ChartData
-    private var label: String
-    private var style: YAxisLabelStyle
+// MARK: Cell
+fileprivate struct _Label_Cell: View {
+
+    @ObservedObject private var state: YAxisLabelsLayoutModel
+    private let label: String
+    private let index: Int
+    private let count: Int
+    private let style: YAxisLabelStyle
     
     internal init(
-        chartData: ChartData,
+        state: YAxisLabelsLayoutModel,
         label: String,
+        index: Int,
+        count: Int,
         style: YAxisLabelStyle
     ) {
-        self.chartData = chartData
+        self.state = state
         self.label = label
+        self.index = index
+        self.count = count
         self.style = style
     }
-    
+        
     var body: some View {
         Text(LocalizedStringKey(label))
             .font(style.font)
             .foregroundColor(style.colour)
-            .overlay(
+            .background(
                 GeometryReader { geo in
-                    Rectangle()
-                        .foregroundColor(Color.clear)
+                    Color.clear
                         .onAppear {
-                            chartData.yAxisViewData.yAxisLabelWidths.append(geo.size.width)
-                            chartData.yAxisViewData.yAxisLabelHeights.append(geo.size.height)
+                            let value: CGFloat
+                            switch state.orientation {
+                            case .vertical:
+                                value = geo.frame(in: .local).width
+                            case .horizontal:
+                                value = geo.frame(in: .local).height
+                            }
+                            state.update(with: YAxisLabelsLayoutModel.Model(id: index, value: value))
                         }
                 }
             )
+            .fixedSize()
             .accessibilityLabel(LocalizedStringKey("Y-Axis-Label"))
             .accessibilityValue(LocalizedStringKey(label))
     }
 }
 
-// MARK: View Modifiers
-//
-//
-//
-// MARK: _label_Positioning
-fileprivate struct _label_Positioning<ChartData>: ViewModifier where ChartData: CTChartData & ViewDataProtocol & AxisY {
-    
-    @ObservedObject private var chartData: ChartData
-    private var position: LabelPositionable
-    private var style: YAxisLabelStyle
-    private var index: Int
-    private var count: Int
-    private var frame: CGRect
-    
-    internal init(
-        chartData: ChartData,
-        position: LabelPositionable,
-        style: YAxisLabelStyle,
-        index: Int,
-        count: Int,
-        frame: CGRect
-    ) {
-        self.chartData = chartData
-        self.position = position
-        self.style = style
-        self.index = index
-        self.count = count
-        self.frame = frame
-    }
-    
+// MARK: - ViewModifiers
+fileprivate struct _label_Positioning: ViewModifier {
+
+    @ObservedObject var state: YAxisLabelsLayoutModel
+    var index: Int
+    var count: Int
+
+    var chartSize: CGRect
+
     func body(content: Content) -> some View {
-        switch position.type {
-        case .horizontal:
-            content
-                .frame(width: chartData.yAxisViewData.yAxisLabelWidths.max(),
-                       height: chartData.yAxisSectionSizing(count: count, size: frame.height))
-                .position(x: (chartData.yAxisViewData.yAxisLabelWidths.max() ?? 0) / 2,
-                          y: chartData.yAxisLabelOffSet(index: index,
-                                                       size: frame.height,
-                                                       count: count))
+        switch state.orientation {
         case .vertical:
             content
-                .frame(width: chartData.yAxisSectionSizing(count: count, size: frame.width),
-                       height: chartData.yAxisViewData.yAxisLabelHeights.max())
-                .position(x: (chartData.xAxisViewData.xAxisLabelWidths.max() ?? 0) + style.padding + chartData.yAxisLabelOffSet(index: index, size: frame.width, count: count),
-                          y: (chartData.yAxisViewData.yAxisLabelWidths.max() ?? 0) / 2)
-        default:
+                .frame(width: state.widest,
+                       height: divide(chartSize.height, count))
+                .position(x: state.widest / 2,
+                          y: CGFloat(index) * divide(chartSize.height, count-1))
+        case .horizontal:
             content
+                .frame(width: divide(chartSize.width, count),
+                       height: state.widest)
+                .position(x: (CGFloat(index) * divide(chartSize.width, count-1)),
+                          y: state.widest / 2)
+        }
+    }
+
+    func test() -> CGFloat {
+        return .zero
+    }
+}
+
+fileprivate struct _Axis_Label_Size: ViewModifier {
+
+    @ObservedObject var state: YAxisLabelsLayoutModel
+
+    func body(content: Content) -> some View {
+        switch state.orientation {
+        case .vertical:
+            content
+                .frame(width: state.widest)
+        case .horizontal:
+            content
+                .frame(height: state.widest)
         }
     }
 }
 
-// MARK: _Axis_Label_Size
-fileprivate struct _Axis_Label_Size<ChartData>: ViewModifier where ChartData: CTChartData & YAxisViewDataProtocol & AxisY {
+// MARK: - AxisOrientation
+fileprivate struct _YAxisLabelsModifier_Horizontal<ChartData>: ViewModifier where ChartData: CTChartData & DataHelper {
+
+    var chartData: ChartData
+    var position: [VerticalLabelPosition]
+    var data: YAxisLabelStyle.Data
+    var style: YAxisLabelStyle = .standard
+
+    var axisOrientation: AxisOrientation = .horizontal
+
+    func body(content: Content) -> some View {
+        ForEach(position) { pos in
+            switch pos {
+            case .bottom:
+                VStack {
+                    content
+                    YAxisLabels(chartData, data: data, style: style, orientation: axisOrientation)
+                }
+            case .top:
+                VStack {
+                    YAxisLabels(chartData, data: data, style: style, orientation: axisOrientation)
+                    content
+                }
+            default:
+                content
+            }
+        }
+    }
+}
+
+fileprivate struct _YAxisLabelsModifier_Vertical<ChartData>: ViewModifier where ChartData: CTChartData & DataHelper {
+
+    var chartData: ChartData
+    var position: [HorizontalLabelPosition]
+    var data: YAxisLabelStyle.Data
+    var style: YAxisLabelStyle = .standard
+
+    var axisOrientation: AxisOrientation = .vertical
+
+    func body(content: Content) -> some View {
+        ForEach(position) { pos in
+            switch pos {
+            case .leading:
+                HStack {
+                    YAxisLabels(chartData, data: data, style: style, orientation: axisOrientation)
+                    content
+                }
+            case .trailing:
+                HStack {
+                    content
+                    YAxisLabels(chartData, data: data, style: style, orientation: axisOrientation)
+                }
+            default:
+                content
+            }
+        }
+    }
+}
+
+// MARK: - LayoutModel
+internal final class YAxisLabelsLayoutModel: ObservableObject  {
+        
+    @Published internal var widths = Set<Model>()
+    @Published internal var widest: CGFloat = 0
     
-    @ObservedObject private var chartData: ChartData
-    private var position: LabelPositionable
-    
-    internal init(
-        chartData: ChartData,
-        position: LabelPositionable
-    ) {
-        self.chartData = chartData
-        self.position = position
+    var orientation: AxisOrientation = .vertical
+        
+    internal func update(with newItem: Model) {
+        if let oldItem = widths.first(where: { $0.id == newItem.id }) {
+            widths.remove(oldItem)
+            widths.insert(newItem)
+        } else {
+            widths.insert(newItem)
+        }
+        widest = widths.map(\.value).max() ?? 0
     }
     
-    func body(content: Content) -> some View {
-        switch position.type {
-        case .vertical:
-            content
-                .frame(height: chartData.yAxisViewData.yAxisLabelHeights.max())
-        case .horizontal:
-            content
-                .frame(width: chartData.yAxisViewData.yAxisLabelWidths.max())
-        default:
-            content
-        }
+    internal struct Model: Hashable {
+        internal let id: Int
+        internal let value: CGFloat
     }
 }

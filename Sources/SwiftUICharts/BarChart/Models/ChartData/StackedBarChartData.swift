@@ -21,11 +21,11 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     @Published public var dataSets: StackedBarDataSets
     @Published public var barStyle: BarStyle
     @Published public var legends: [LegendData] = []
-    @Published public var infoView = InfoViewData<StackedBarDataPoint>()
     @Published public var shouldAnimate: Bool
+    @Published public var chartSize: CGRect = .zero
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
-    
+        
     // MARK: Multi
     @Published public var groups: [GroupingData]
     
@@ -39,7 +39,6 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
-    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<DataPoint>], Never>()
 
     // MARK: Touchable
     public var touchMarkerType: BarMarkerType = defualtTouchMarker
@@ -52,10 +51,6 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     @Published public var extraLineData: ExtraLineData!
     
     // MARK: Non-Protocol
-    @Published public var chartSize: CGRect = .zero
-    private var internalSubscription: AnyCancellable?
-    private var markerData: MarkerData = MarkerData()
-    private var internalDataSubscription: AnyCancellable?
     internal let chartType: CTChartType = (chartType: .bar, dataSetType: .multi)
     
     // MARK: Deprecated
@@ -63,6 +58,8 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     @Published public var metadata = ChartMetadata()
     @available(*, deprecated, message: "")
     @Published public var chartStyle = BarChartStyle()
+    @available(*, deprecated, message: "Split in to axis data")
+    @Published public var infoView = InfoViewData<StackedBarDataPoint>()
     
     // MARK: Initializer
     /// Initialises a Stacked Bar Chart.
@@ -97,38 +94,6 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
         self.topLine = topLine
         
 //        self.setupLegends()
-        self.setupInternalCombine()
-    }
-    
-    private func setupInternalCombine() {
-        internalSubscription = touchedDataPointPublisher
-            .sink {
-                let lineMarkerData: [LineMarkerData] = $0.compactMap { data in
-                    if data.type == .extraLine,
-                       let extraData = self.extraLineData {
-                        return LineMarkerData(markerType: extraData.style.markerType,
-                                              location: data.location,
-                                              dataPoints: extraData.dataPoints.map { LineChartDataPoint($0) },
-                                              lineType: extraData.style.lineType,
-                                              lineSpacing: .bar,
-                                              minValue: extraData.minValue,
-                                              range: extraData.range)
-                    }
-                    return nil
-                }
-                let barMarkerData: [BarMarkerData] = $0.compactMap { data in
-                    if data.type == .bar {
-                        return BarMarkerData(markerType: self.touchMarkerType,
-                                              location: data.location)
-                    }
-                    return nil
-                }
-                self.markerData =  MarkerData(lineMarkerData: lineMarkerData,
-                                              barMarkerData: barMarkerData)
-            }
-        
-        internalDataSubscription = touchedDataPointPublisher
-            .sink { self.touchPointData = $0.map(\.datapoint) }
     }
     
     // MARK: Labels
@@ -142,14 +107,8 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     }
 
     // MARK: - Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent = true
-        self.infoView.touchLocation = touchLocation
-        self.infoView.chartSize = chartSize
-        self.processTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
-    }
-    
-    private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+    public func processTouchInteraction(_ data: inout MarkerData, touchLocation: CGPoint) {
+        var values: [PublishedTouchData<DataPoint>] = []
         // Filter to get the right dataset based on the x axis.
         let superXSection: CGFloat = chartSize.width / CGFloat(dataSets.dataSets.count)
         let superIndex: Int = Int((touchLocation.x) / superXSection)
@@ -162,7 +121,6 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
                     let datapoint = dataSets.dataSets[superIndex].dataPoints[index]
                     let location = CGPoint(x: (CGFloat(superIndex) * superXSection) + (superXSection / 2),
                                            y: (chartSize.height - calculatedIndex.endPointOfElements[index]))
-                    var values: [PublishedTouchData<DataPoint>] = []
                     values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
                     
                     if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
@@ -176,15 +134,16 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
                         values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
                     }
                     
-                    touchedDataPointPublisher.send(values)                }
+                }
             }
         }
+        let barMarkerData = values.map { data in
+            return BarMarkerData(markerType: self.touchMarkerType,
+                                 location: data.location)
+        }
+        data.update(with: barMarkerData)
     }
-    
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        markerSubView(markerData: markerData, chartSize: chartSize, touchLocation: touchLocation)
-    }
-    
+
     private func calculateIndex(
         dataSet: StackedBarDataSet,
         touchLocation: CGPoint,
@@ -223,7 +182,6 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     
     public func touchDidFinish() {
         touchPointData = []
-        infoView.isTouchCurrent = false
     }
     
     public typealias SetType = StackedBarDataSets

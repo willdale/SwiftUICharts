@@ -20,11 +20,11 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
     public let id: UUID = UUID()
     @Published public var dataSets: FilledLineDataSet
     @Published public var legends: [LegendData] = []
-    @Published public var infoView = InfoViewData<LineChartDataPoint>()
     @Published public var shouldAnimate: Bool
-    public var noDataText: Text
+    @Published public var chartSize: CGRect = .zero
+        public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
-
+    
     // MARK: ViewDataProtocol
     @Published public var xAxisViewData = XAxisViewData()
     @Published public var yAxisViewData = YAxisViewData()
@@ -35,7 +35,6 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
     
     // MARK: Publishable
     @Published public var touchPointData: [LineChartDataPoint] = []
-    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<LineChartDataPoint>], Never>()
     
     // MARK: Touchable
     public var touchMarkerType: LineMarkerType = defualtTouchMarker
@@ -48,10 +47,6 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
     @Published public var extraLineData: ExtraLineData!
     
     // MARK: Non-Protocol
-    @Published public var chartSize: CGRect = .zero
-    private var internalSubscription: AnyCancellable?
-    private var markerData: MarkerData = MarkerData()
-    private var internalDataSubscription: AnyCancellable?
     internal let chartType: CTChartType = (chartType: .line, dataSetType: .single)
     
     // MARK: Deprecated
@@ -59,6 +54,8 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
     @Published public var metadata = ChartMetadata()
     @available(*, deprecated, message: "")
     @Published public var chartStyle = LineChartStyle()
+    @available(*, deprecated, message: "Split in to axis data")
+    @Published public var infoView = InfoViewData<LineChartDataPoint>()
     
     // MARK: Initializer
     /// Initialises a Single Line Chart.
@@ -87,38 +84,6 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
         self.topLine = topLine
 
 //        self.setupLegends()
-        self.setupInternalCombine()
-    }
-    
-    private func setupInternalCombine() {
-        internalSubscription = touchedDataPointPublisher
-            .sink {
-                let lineMarkerData: [LineMarkerData] = $0.compactMap { data in
-                    if data.type == .extraLine,
-                       let extraData = self.extraLineData {
-                        return LineMarkerData(markerType: extraData.style.markerType,
-                                              location: data.location,
-                                              dataPoints: extraData.dataPoints.map { LineChartDataPoint($0) },
-                                              lineType: extraData.style.lineType,
-                                              lineSpacing: extraData.style.lineSpacing,
-                                              minValue: extraData.minValue,
-                                              range: extraData.range)
-                    } else if data.type == .line {
-                        return LineMarkerData(markerType: self.touchMarkerType,
-                                              location: data.location,
-                                              dataPoints: self.dataSets.dataPoints,
-                                              lineType: self.dataSets.style.lineType,
-                                              lineSpacing: .line,
-                                              minValue: self.minValue,
-                                              range: self.range)
-                    }
-                    return nil
-                }
-                self.markerData =  MarkerData(lineMarkerData: lineMarkerData, barMarkerData: [])
-            }
-        
-        internalDataSubscription = touchedDataPointPublisher
-            .sink { self.touchPointData = $0.map(\.datapoint) }
     }
     
     // MARK: Labels
@@ -141,14 +106,7 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
     }
 
     // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent = true
-        self.infoView.touchLocation = touchLocation
-        self.infoView.chartSize = chartSize
-        self.processTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
-    }
-    
-    private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+    public func processTouchInteraction(_ data: inout MarkerData, touchLocation: CGPoint) {
         var values: [PublishedTouchData<DataPoint>] = []
         
         let xSection = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
@@ -157,11 +115,9 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
         let index = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
             let datapoint = dataSets.dataPoints[index]
-//            if !datapoint.ignore {
                 let location = CGPoint(x: CGFloat(index) * xSection,
                                        y: (CGFloat(datapoint.value - minValue) * -ySection) + chartSize.height)
                 values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
-//            }
             
             if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
                let location = extraLine.location,
@@ -170,21 +126,22 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
                 var datapoint = DataPoint(value: value, description: extraLine.description ?? "")
                 datapoint._legendTag = extraLine._legendTag ?? ""
                 values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
-            }
-            
-            touchedDataPointPublisher.send(values)
+            }            
         }
-    }
-    
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        markerSubView(markerData: markerData,
-                      chartSize: chartSize,
-                      touchLocation: touchLocation)
+        let lineMarkerData = values.map {
+            return LineMarkerData(markerType: touchMarkerType,
+                                  location: $0.location,
+                                  dataPoints: dataSets.dataPoints,
+                                  lineType: dataSets.style.lineType,
+                                  lineSpacing: .line,
+                                  minValue: minValue,
+                                  range: range)
+        }
+        data.update(with: lineMarkerData)
     }
     
     public func touchDidFinish() {
         touchPointData = []
-        infoView.isTouchCurrent = false
     }
     
     public typealias SetType = FilledLineDataSet

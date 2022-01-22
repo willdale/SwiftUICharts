@@ -10,8 +10,8 @@ import SwiftUI
 internal typealias CTChartType = (chartType: ChartType, dataSetType: DataSetType)
 
 public typealias ChartConformance = DataHelper & Publishable & PointOfInterestProtocol & Touchable & TouchInfoDisplayable & ExtraLineProtocol
-public typealias StandardChartConformance = AxisCharts & ChartConformance & VerticalChart
-public typealias HorizontalChartConformance = AxisCharts & ChartConformance & HorizontalChart
+public typealias StandardChartConformance =  ChartConformance & AxisCharts & VerticalChart
+public typealias HorizontalChartConformance = ChartConformance & AxisCharts & HorizontalChart
 
 // MARK: Chart Data
 /**
@@ -47,6 +47,7 @@ public protocol CTChartData: ObservableObject, Identifiable {
     
     /// Data model pass data from `TouchOverlay` ViewModifier to
     /// `HeaderBox` or `InfoBox` for display.
+    @available(*, deprecated, message: "Split in to axis data")
     var infoView: InfoViewData<DataPoint> { get set }
     
     /// Customisable `Text` to display when where is not enough data to draw the chart.
