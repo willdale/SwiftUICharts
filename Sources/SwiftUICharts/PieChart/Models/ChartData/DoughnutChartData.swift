@@ -20,7 +20,6 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
     @Published public var dataSets: PieDataSet
     @Published public var legends: [LegendData] = []
     @Published public var shouldAnimate: Bool
-    @Published public var chartSize: CGRect = .zero
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     
@@ -63,7 +62,7 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
         self.makeDataPoints()
     }
 
-    public func processTouchInteraction(_ data: inout MarkerData, touchLocation: CGPoint) {
+    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
         let touchDegree = degree(from: touchLocation, in: chartSize)
         let index = self.dataSets.dataPoints.firstIndex(where:) {
             let start = $0.startAngle * Double(180 / Double.pi) <= Double(touchDegree)
@@ -76,7 +75,7 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
         let pieMarkerData = values.map { data in
             return PieMarkerData(markerType: .full(), location: data.location)
         }
-        data.update(with: pieMarkerData)
+        markerData.update(with: pieMarkerData)
         
     }
         

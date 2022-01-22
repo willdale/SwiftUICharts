@@ -22,7 +22,6 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     @Published public var barStyle: BarStyle
     @Published public var legends: [LegendData] = []
     @Published public var shouldAnimate: Bool
-    @Published public var chartSize: CGRect = .zero
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
         
@@ -107,7 +106,7 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     }
 
     // MARK: - Touch
-    public func processTouchInteraction(_ data: inout MarkerData, touchLocation: CGPoint) {
+    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
         // Filter to get the right dataset based on the x axis.
         let superXSection: CGFloat = chartSize.width / CGFloat(dataSets.dataSets.count)
@@ -141,7 +140,7 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
             return BarMarkerData(markerType: self.touchMarkerType,
                                  location: data.location)
         }
-        data.update(with: barMarkerData)
+        markerData.update(with: barMarkerData)
     }
 
     private func calculateIndex(

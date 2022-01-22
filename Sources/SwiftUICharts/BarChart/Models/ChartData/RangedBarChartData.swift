@@ -20,7 +20,6 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
     @Published public var barStyle: BarStyle
     @Published public var legends: [LegendData] = []
     @Published public var shouldAnimate: Bool
-    @Published public var chartSize: CGRect = .zero
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
             
@@ -111,7 +110,7 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
     }
     
     // MARK: - Touch
-    public func processTouchInteraction(_ data: inout MarkerData, touchLocation: CGPoint) {
+    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
         let xSection: CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count)
         let index: Int = Int((touchLocation.x) / xSection)
@@ -139,7 +138,7 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
             return BarMarkerData(markerType: self.touchMarkerType,
                                  location: data.location)
         }
-        data.update(with: barMarkerData)
+        markerData.update(with: barMarkerData)
     }
     
     public func touchDidFinish() {

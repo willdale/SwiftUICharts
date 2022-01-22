@@ -42,7 +42,6 @@ public struct FilledLineChart<ChartData>: View where ChartData: FilledLineChartD
     }
     
     public var body: some View {
-        GeometryReader { geo in
             ZStack {
                 chartData.getAccessibility()
                 TopLineSubView(chartData: chartData,
@@ -50,12 +49,9 @@ public struct FilledLineChart<ChartData>: View where ChartData: FilledLineChartD
                 FilledLineSubView(chartData: chartData,
                                   colour: chartData.dataSets.style.fillColour)
             }
-            .onAppear { // Needed for axes label frames
-                self.chartData.chartSize = geo.frame(in: .local)
-            }
+        
         }
     }
-}
 
  // MARK: - Top Line
 internal struct TopLineSubView<ChartData>: View where ChartData: FilledLineChartData {

@@ -20,7 +20,7 @@ public protocol Touchable {
     /// A type representing a data point. -- `CTChartDataPoint`
     associatedtype DataPoint: CTDataPointBaseProtocol
     
-    func processTouchInteraction(_ markerData: inout MarkerData, touchLocation: CGPoint)
+    func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect)
     
     /// Informs the data model that touch
     /// input has finished.

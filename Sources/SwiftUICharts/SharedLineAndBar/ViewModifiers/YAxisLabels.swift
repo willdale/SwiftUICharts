@@ -12,47 +12,54 @@ import ChartMath
 // fix layout in horizontal charts
 // Add padding to the chart size
 
+public struct DataSetInfo {
+    public let minValue: Double
+    public let range: Double
+    
+    public init(
+        minValue: Double,
+        range: Double
+    ) {
+        self.minValue = minValue
+        self.range = range
+    }
+}
+
 
 // MARK: - API
 extension View {
     /// Labels for the Y axis.
-    public func yAxisLabels<ChartData>(
-        stateObject: TestStateObject,
-        chartData: ChartData,
+    public func yAxisLabels(
         position: Set<HorizontalLabelPosition>,
         data: YAxisLabelStyle.Data,
-        style: YAxisLabelStyle = .standard
+        style: YAxisLabelStyle = .standard,
+        dataSetInfo: DataSetInfo
     ) -> some View
-    where ChartData: CTChartData & DataHelper & VerticalChart
     {
         self.modifier(
             _YAxisLabelsModifier_Vertical(
-                stateObject: stateObject,
-                chartData: chartData,
                 position: Array(position),
                 data: data,
-                style: style
+                style: style,
+                dataSetInfo: dataSetInfo
             )
         )
     }
 
     /// Labels for the Y axis.
-    public func yAxisLabels<ChartData>(
-        stateObject: TestStateObject,
-        chartData: ChartData,
+    public func yAxisLabels(
         position: Set<VerticalLabelPosition>,
         data: YAxisLabelStyle.Data,
-        style: YAxisLabelStyle = .standard
+        style: YAxisLabelStyle = .standard,
+        dataSetInfo: DataSetInfo
     ) -> some View
-    where ChartData: CTChartData & DataHelper & HorizontalChart
     {
         self.modifier(
             _YAxisLabelsModifier_Horizontal(
-                stateObject: stateObject,
-                chartData: chartData,
                 position: Array(position),
                 data: data,
-                style: style
+                style: style,
+                dataSetInfo: dataSetInfo
             )
         )
     }
@@ -99,16 +106,16 @@ public enum AxisOrientation {
 
 
 // MARK: - View
-public struct YAxisLabels<ChartData>: View where ChartData: CTChartData & DataHelper {
-
-    @ObservedObject var stateObject: TestStateObject
-    @ObservedObject var chartData: ChartData
+public struct YAxisLabels:View {
     
-    var data: YAxisLabelStyle.Data
-    var style: YAxisLabelStyle
-    var orientation: AxisOrientation
-    
+    @EnvironmentObject var stateObject: TestStateObject
     @StateObject var state = YAxisLabelsLayoutModel()
+    
+    let data: YAxisLabelStyle.Data
+    let style: YAxisLabelStyle
+    let orientation: AxisOrientation
+    let dataSetInfo: DataSetInfo
+    
     
     public var body: some View {
         ZStack {
@@ -117,7 +124,7 @@ public struct YAxisLabels<ChartData>: View where ChartData: CTChartData & DataHe
                     .modifier(_label_Positioning(state: state,
                                                  index: index,
                                                  count: labels.count,
-                                                 chartSize: chartData.chartSize))
+                                                 chartSize: stateObject.chartSize))
             }
             .modifier(_Axis_Label_Size(state: state))
         }
@@ -128,9 +135,9 @@ public struct YAxisLabels<ChartData>: View where ChartData: CTChartData & DataHe
     internal var labels: [String] {
         switch data {
         case .generated:
-            guard let firstLabel = style.formatter.string(from: NSNumber(value: chartData.minValue)) else { return [] }
+            guard let firstLabel = style.formatter.string(from: NSNumber(value: dataSetInfo.minValue)) else { return [] }
             let otherLabels: [String] = (1...style.number-1).compactMap {
-                let value = chartData.minValue + divide(chartData.range, style.number-1) * Double($0)
+                let value = dataSetInfo.minValue + divide(dataSetInfo.range, style.number-1) * Double($0)
                 guard let formattedNumber = style.formatter.string(from: NSNumber(value: value)) else { return nil }
                 return formattedNumber
             }
@@ -238,15 +245,17 @@ fileprivate struct _Axis_Label_Size: ViewModifier {
 }
 
 // MARK: - AxisOrientation
-fileprivate struct _YAxisLabelsModifier_Horizontal<ChartData>: ViewModifier where ChartData: CTChartData & DataHelper {
+fileprivate struct _YAxisLabelsModifier_Horizontal: ViewModifier {
 
-    @ObservedObject var stateObject: TestStateObject
-    var chartData: ChartData
+    @EnvironmentObject var stateObject: TestStateObject
+
     var position: [VerticalLabelPosition]
     var data: YAxisLabelStyle.Data
     var style: YAxisLabelStyle = .standard
 
     var axisOrientation: AxisOrientation = .horizontal
+    
+    let dataSetInfo: DataSetInfo
 
     func body(content: Content) -> some View {
         ForEach(position) { pos in
@@ -254,11 +263,11 @@ fileprivate struct _YAxisLabelsModifier_Horizontal<ChartData>: ViewModifier wher
             case .bottom:
                 VStack(spacing: 0) {
                     content
-                    YAxisLabels(stateObject: stateObject, chartData: chartData, data: data, style: style, orientation: axisOrientation)
+                    YAxisLabels(data: data, style: style, orientation: axisOrientation, dataSetInfo: dataSetInfo)
                 }
             case .top:
                 VStack(spacing: 0) {
-                    YAxisLabels(stateObject: stateObject, chartData: chartData, data: data, style: style, orientation: axisOrientation)
+                    YAxisLabels(data: data, style: style, orientation: axisOrientation, dataSetInfo: dataSetInfo)
                     content
                 }
             default:
@@ -268,28 +277,30 @@ fileprivate struct _YAxisLabelsModifier_Horizontal<ChartData>: ViewModifier wher
     }
 }
 
-fileprivate struct _YAxisLabelsModifier_Vertical<ChartData>: ViewModifier where ChartData: CTChartData & DataHelper {
+fileprivate struct _YAxisLabelsModifier_Vertical: ViewModifier {
 
-    @ObservedObject var stateObject: TestStateObject
-    var chartData: ChartData
+    @EnvironmentObject var stateObject: TestStateObject
+
     var position: [HorizontalLabelPosition]
     var data: YAxisLabelStyle.Data
     var style: YAxisLabelStyle = .standard
 
     var axisOrientation: AxisOrientation = .vertical
+    
+    let dataSetInfo: DataSetInfo
 
     func body(content: Content) -> some View {
         ForEach(position) { pos in
             switch pos {
             case .leading:
                 HStack(spacing: 0) {
-                    YAxisLabels(stateObject: stateObject, chartData: chartData, data: data, style: style, orientation: axisOrientation)
+                    YAxisLabels(data: data, style: style, orientation: axisOrientation, dataSetInfo: dataSetInfo)
                     content
                 }
             case .trailing:
                 HStack(spacing: 0) {
                     content
-                    YAxisLabels(stateObject: stateObject, chartData: chartData, data: data, style: style, orientation: axisOrientation)
+                    YAxisLabels(data: data, style: style, orientation: axisOrientation, dataSetInfo: dataSetInfo)
                 }
             default:
                 content

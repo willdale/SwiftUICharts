@@ -71,14 +71,14 @@ internal struct TouchOverlay<ChartData>: ViewModifier where ChartData: CTChartDa
                     _ChartDragGesture(stateObject: stateObject, minDistance: minDistance) {
                         switch $0 {
                         case .started:
-                            chartData.processTouchInteraction(&markerData, touchLocation: stateObject.touchLocation)
+                            chartData.processTouchInteraction(markerData, touchLocation: stateObject.touchLocation, chartSize: stateObject.chartSize)
                         case .ended:
                             chartData.touchDidFinish()
                         }
                     }
                 )
             if stateObject.isTouch {
-                _MarkerData(markerData: markerData, chartSize: chartData.chartSize, touchLocation: stateObject.touchLocation)
+                _MarkerData(markerData: markerData, chartSize: stateObject.chartSize, touchLocation: stateObject.touchLocation)
             }
         }
     }

@@ -21,7 +21,6 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     @Published public var dataSets: LineDataSet
     @Published public var legends: [LegendData] = []
     @Published public var shouldAnimate: Bool
-    @Published public var chartSize: CGRect = .zero
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
         
@@ -107,7 +106,7 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     }
 
     // MARK: Touch
-    public func processTouchInteraction(_ data: inout MarkerData, touchLocation: CGPoint) {
+    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
 
         let xSection = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
@@ -141,7 +140,7 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
                                   minValue: minValue,
                                   range: range)
         }
-        data.update(with: lineMarkerData)
+        markerData.update(with: lineMarkerData)
     }
     
     public func touchDidFinish() {

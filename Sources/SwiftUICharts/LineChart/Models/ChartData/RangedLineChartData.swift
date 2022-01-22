@@ -21,7 +21,6 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
     @Published public var dataSets: RangedLineDataSet
     @Published public var legends: [LegendData] = []
     @Published public var shouldAnimate: Bool
-    @Published public var chartSize: CGRect = .zero
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
         
@@ -115,7 +114,7 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
     }
     
     // MARK: Touch
-    public func processTouchInteraction(_ data: inout MarkerData, touchLocation: CGPoint) {
+    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
         let xSection = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
         let ySection = chartSize.height / CGFloat(range)
@@ -154,7 +153,7 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
                                   minValue: minValue,
                                   range: range)
         }
-        data.update(with: lineMarkerData)
+        markerData.update(with: lineMarkerData)
     }
     
     public func touchDidFinish() {

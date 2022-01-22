@@ -35,8 +35,7 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
             ZStack {
                 LineSubView(chartData: chartData)
             }
-            .modifier(ChartSizeUpdating(stateObject: stateObject, chartData: chartData))
-            .coordinateSpace(name: "Chart")
+            .modifier(ChartSizeUpdating(stateObject: stateObject))
     }
 }
 

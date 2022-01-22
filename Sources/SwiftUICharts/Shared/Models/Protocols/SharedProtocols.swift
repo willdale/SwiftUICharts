@@ -31,24 +31,15 @@ public protocol CTChartData: ObservableObject, Identifiable {
     
     /// This is a read out by voice over to make it clear what is being described.
     ///
-    /// The value count be what the chart title is or screen title.
+    /// The value could be what the chart title is or screen title.
     var accessibilityTitle: LocalizedStringKey { get set }
     
     /// Data model containing datapoints and styling information.
     var dataSets: SetType { get set }
     
-    /// Data model containing the charts Title, Subtitle and the Title for Legend.
-    @available(*, deprecated, message: "Please use \"\" instead.")
-    var metadata: ChartMetadata { get set }
-    
     /// Array of `LegendData` to populate the charts legend.
     /// This is populated automatically from within each view.
     var legends: [LegendData] { get set }
-    
-    /// Data model pass data from `TouchOverlay` ViewModifier to
-    /// `HeaderBox` or `InfoBox` for display.
-    @available(*, deprecated, message: "Split in to axis data")
-    var infoView: InfoViewData<DataPoint> { get set }
     
     /// Customisable `Text` to display when where is not enough data to draw the chart.
     var noDataText: Text { get set }
@@ -56,20 +47,33 @@ public protocol CTChartData: ObservableObject, Identifiable {
     /// A global control to disable animations
     var shouldAnimate: Bool { get set }
     
-    var chartSize: CGRect { get set }
+    
+    /// Data model containing the charts Title, Subtitle and the Title for Legend.
+    ///
+    /// Not hooked up to anything
+    @available(*, deprecated, message: "Please use \"\" instead.")
+    var metadata: ChartMetadata { get set }
+    
+    /// Data model pass data from `TouchOverlay` ViewModifier to
+    /// `HeaderBox` or `InfoBox` for display.
+    ///
+    /// Not hooked up to anything
+    @available(*, deprecated, message: "Split in to axis data")
+    var infoView: InfoViewData<DataPoint> { get set }
     
     /// Data model conatining the style data for the chart.
+    ///
+    /// Now just a stub
     @available(*, deprecated, message: "Please use \"\" instead.")
     var chartStyle: DeprecatedCTStyle { get }
 }
 
-extension CTChartData {
-    public var chartStyle: DeprecatedCTStyle {
-        DeprecatedCTStyle()
+extension CTChartData where Self: DataHelper {
+    public var dataSetInfo: DataSetInfo {
+        DataSetInfo(minValue: minValue, range: range)
     }
 }
 
-public struct DeprecatedCTStyle {}
 
 // MARK: - Data Sets
 /**
@@ -211,3 +215,11 @@ public protocol CTRangeDataPointProtocol: CTDataPointBaseProtocol {
 
 public protocol CTisRanged {}
 public protocol CTnotRanged {}
+
+// MARK: deprecated
+public struct DeprecatedCTStyle {}
+extension CTChartData {
+    public var chartStyle: DeprecatedCTStyle {
+        DeprecatedCTStyle()
+    }
+}
