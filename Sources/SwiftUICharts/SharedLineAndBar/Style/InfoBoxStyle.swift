@@ -2,7 +2,7 @@
 //  InfoBoxStyle.swift
 //  
 //
-//  Created by Will Dale on 02/10/2021.
+//  Created by Will Dale on 22/01/2022.
 //
 
 import SwiftUI

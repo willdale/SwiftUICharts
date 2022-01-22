@@ -130,6 +130,8 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
             }
         }
         
+        touchPointData = values.map(\.datapoint)
+        
         let lineMarkerData = values.map {
             return LineMarkerData(markerType: touchMarkerType,
                                   location: $0.location,

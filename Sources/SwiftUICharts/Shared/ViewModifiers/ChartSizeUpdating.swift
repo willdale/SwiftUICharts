@@ -1,5 +1,5 @@
 //
-//  SizeModifier.swift
+//  ChartSizeUpdating.swift
 //  
 //
 //  Created by Will Dale on 09/01/2022.
@@ -7,15 +7,12 @@
 
 import SwiftUI
 
-struct SizeModifier<ChartData>: ViewModifier where ChartData: CTChartData {
+internal struct ChartSizeUpdating<ChartData>: ViewModifier where ChartData: CTChartData {
     
-    private var chartData: ChartData
+    private(set) var stateObject: TestStateObject
+    private(set) var chartData: ChartData
     
-    internal init(chartData: ChartData) {
-        self.chartData = chartData
-    }
-    
-    func body(content: Content) -> some View {
+    internal func body(content: Content) -> some View {
         content.background(sizeView)
     }
     
@@ -24,10 +21,11 @@ struct SizeModifier<ChartData>: ViewModifier where ChartData: CTChartData {
             Color.clear
                 .onAppear {
                     chartData.chartSize = geo.frame(in: .local)
+                    stateObject.chartSize = geo.frame(in: .local)
                 }
-
                 .onChange(of: geo.frame(in: .local)) {
                     chartData.chartSize = $0
+                    stateObject.chartSize = $0
                 }
         }
     }

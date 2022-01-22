@@ -27,7 +27,7 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
                              index: index)
             }
         }
-        .modifier(SizeModifier(chartData: chartData))
+//        .modifier(ChartSizeUpdating(chartData: chartData))
     }
 }
 
@@ -118,7 +118,7 @@ internal struct StackSingleBarView: View {
                                                           dataPoint: dataPoint),
                                     animations: animations,
                                     index: index)
-                        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: specifier))
+//                        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: specifier))
                 }
             }
         }

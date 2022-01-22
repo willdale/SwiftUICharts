@@ -51,7 +51,7 @@ public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartD
                                   range: chartData.range,
                                   colour: chartData.dataSets.style.lineColour)
             }
-            .modifier(SizeModifier(chartData: chartData))
+//            .modifier(ChartSizeUpdating(chartData: chartData))
 //            .onAppear { // Needed for axes label frames
 //                self.chartData.chartSize = geo.frame(in: .local)
 //            }

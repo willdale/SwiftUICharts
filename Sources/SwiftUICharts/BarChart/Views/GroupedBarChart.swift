@@ -49,7 +49,7 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                     GroupedBarGroup(chartData: chartData, dataSet: dataSet)
                 }
             }
-            .modifier(SizeModifier(chartData: chartData))
+//            .modifier(ChartSizeUpdating(chartData: chartData))
 //            .onAppear { // Needed for axes label frames
 //                self.chartData.chartSize = geo.frame(in: .local)
 //            }
@@ -143,7 +143,7 @@ internal struct GroupBarElement<ChartData>: View where ChartData: GroupedBarChar
             self.fillAnimation = false
         }
         .background(Color(.gray).opacity(0.000000001))
-        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+//        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
         .id(chartData.id)
     }
 }

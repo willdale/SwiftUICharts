@@ -64,7 +64,7 @@ public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData 
                                 .shadow(color: Color.primary, radius: 10)
                         }
                         .accessibilityLabel(chartData.accessibilityTitle)
-                        .accessibilityValue(chartData.dataSets.dataPoints[data].getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+//                        .accessibilityValue(chartData.dataSets.dataPoints[data].getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
                 }
             }
         }

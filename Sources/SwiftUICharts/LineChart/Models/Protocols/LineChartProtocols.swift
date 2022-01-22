@@ -40,7 +40,7 @@ extension CTLineChartDataProtocol where Self: CTChartData, SetType: CTLineChartD
                                    dataPointNo: point)
                 .foregroundColor(Color(.gray).opacity(0.000000001))
                 .accessibilityLabel(self.accessibilityTitle)
-                .accessibilityValue(self.dataSets.dataPoints[point].getCellAccessibilityValue(specifier: self.infoView.touchSpecifier))
+//                .accessibilityValue(self.dataSets.dataPoints[point].getCellAccessibilityValue(specifier: self.infoView.touchSpecifier))
         }
     }
 }

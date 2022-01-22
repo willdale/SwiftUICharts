@@ -171,7 +171,7 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
                                        dataPointNo: point)
                     .foregroundColor(Color(.gray).opacity(0.000000001))
                     .accessibilityLabel(self.accessibilityTitle)
-                    .accessibilityValue(dataSet.dataPoints[point].getCellAccessibilityValue(specifier: self.infoView.touchSpecifier))
+//                    .accessibilityValue(dataSet.dataPoints[point].getCellAccessibilityValue(specifier: self.infoView.touchSpecifier))
             }
         }
     }

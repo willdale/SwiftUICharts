@@ -26,38 +26,29 @@ import SwiftUI
  */
 public struct LineChart<ChartData>: View where ChartData: LineChartData {
     
-    @ObservedObject private var chartData: ChartData
+    @EnvironmentObject public var stateObject: TestStateObject
+    @EnvironmentObject public var chartData: ChartData
     
-    /// Initialises a line chart view.
-    /// - Parameter chartData: Must be LineChartData model.
-    public init(chartData: ChartData) {
-        self.chartData = chartData
-    }
+    public init() {}
     
     public var body: some View {
             ZStack {
-                chartData.getAccessibility()
-                LineSubView(chartData: chartData,
-                            colour: chartData.dataSets.style.lineColour)
+                LineSubView(chartData: chartData)
             }
-            .modifier(SizeModifier(chartData: chartData))
+            .modifier(ChartSizeUpdating(stateObject: stateObject, chartData: chartData))
             .coordinateSpace(name: "Chart")
     }
 }
 
 internal struct LineSubView<ChartData>: View where ChartData: LineChartData {
     @ObservedObject private var chartData: ChartData
-    private let colour: ChartColour
     
     @State private var startAnimation: Bool = false
     
     internal init(
-        chartData: ChartData,
-        colour: ChartColour
+        chartData: ChartData
     ) {
         self.chartData = chartData
-        self.colour = colour
-        
         self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
     
@@ -67,7 +58,7 @@ internal struct LineSubView<ChartData>: View where ChartData: LineChartData {
                   minValue: chartData.minValue,
                   range: chartData.range)
             .trim(to: startAnimation ? 1 : 0)
-            .stroke(colour, strokeStyle: chartData.dataSets.style.strokeStyle)
+            .stroke(chartData.dataSets.style.lineColour, strokeStyle: chartData.dataSets.style.strokeStyle)
         
             .animateOnAppear(using: .linear) {
                 self.startAnimation = true

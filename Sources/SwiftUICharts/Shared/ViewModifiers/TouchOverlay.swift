@@ -7,6 +7,22 @@
 
 import SwiftUI
 
+
+public final class TestStateObject: ObservableObject {
+    @Published public var chartSize: CGRect = .zero
+    @Published public var leadingInset: CGFloat = 0
+    @Published public var touchLocation: CGPoint = .zero
+    @Published public var isTouch: Bool = false
+    
+    public init() {}
+    
+    public enum Touch {
+        case touch(location: CGPoint)
+        case off
+    }
+}
+
+
 // MARK: - API
 extension View {
     
@@ -19,25 +35,20 @@ extension View {
      Unavailable in tvOS
      */
     public func touch<ChartData: CTChartData & Touchable>(
+        stateObject: TestStateObject,
         chartData: ChartData,
         markerType: ChartData.Marker = ChartData.defualtTouchMarker,
-        minDistance: CGFloat = 0,
-        location: @escaping ((Touch) -> Void)
+        minDistance: CGFloat = 0
     ) -> some View {
         #if !os(tvOS)
-        self.modifier(TouchOverlay(chartData: chartData,
+        self.modifier(TouchOverlay(stateObject: stateObject,
+                                   chartData: chartData,
                                    markerType: markerType,
-                                   minDistance: minDistance,
-                                   location: location))
+                                   minDistance: minDistance))
         #elseif os(tvOS)
         self.modifier(EmptyModifier())
         #endif
     }
-}
-
-public enum Touch {
-    case touch(location: CGPoint)
-    case off
 }
 
 #if !os(tvOS)
@@ -46,32 +57,28 @@ public enum Touch {
  */
 internal struct TouchOverlay<ChartData>: ViewModifier where ChartData: CTChartData & Touchable {
     
+    @ObservedObject var stateObject: TestStateObject
     @ObservedObject var chartData: ChartData
     var markerType: ChartData.Marker
     var minDistance: CGFloat
-    var location: (Touch) -> Void
     
-    @State private var touchLocation: CGPoint = .zero
-    @State private var isTouch = false
     @State private var markerData = MarkerData()
     
     internal func body(content: Content) -> some View {
         ZStack {
             content
                 .gesture(
-                    _ChartDragGesture(touchLocation: $touchLocation, isTouch: $isTouch, minDistance: minDistance) {
+                    _ChartDragGesture(stateObject: stateObject, minDistance: minDistance) {
                         switch $0 {
                         case .started:
-                            chartData.processTouchInteraction(&markerData, touchLocation: touchLocation)
-                            location(.touch(location: touchLocation))
+                            chartData.processTouchInteraction(&markerData, touchLocation: stateObject.touchLocation)
                         case .ended:
                             chartData.touchDidFinish()
-                            location(.off)
                         }
                     }
                 )
-            if isTouch {
-                _MarkerData(markerData: markerData, chartSize: chartData.chartSize, touchLocation: touchLocation)
+            if stateObject.isTouch {
+                _MarkerData(markerData: markerData, chartSize: chartData.chartSize, touchLocation: stateObject.touchLocation)
             }
         }
     }
@@ -108,21 +115,20 @@ fileprivate struct _MarkerData: View {
 // MARK: - Gesture
 fileprivate struct _ChartDragGesture: Gesture {
    
-    @Binding var touchLocation: CGPoint
-    @Binding var isTouch: Bool
+    @ObservedObject var stateObject: TestStateObject
     let minDistance: CGFloat
     let state: (State) -> Void
     
     var body: some Gesture {
         DragGesture(minimumDistance: minDistance, coordinateSpace: .local)
             .onChanged {
-                touchLocation = $0.location
-                isTouch = true
+                stateObject.touchLocation = $0.location
+                stateObject.isTouch = true
                 state(.started)
             }
             .onEnded { _ in
+                stateObject.isTouch = false
                 state(.ended)
-                isTouch = false
             }
     }
     
@@ -150,9 +156,7 @@ extension View {
         minDistance: CGFloat = 0
     ) -> some View {
         #if !os(tvOS)
-        self.modifier(TouchOverlay(chartData: chartData,
-                                   markerType: ChartData.defualtTouchMarker,
-                                   minDistance: minDistance, location: { _ in }))
+        self.modifier(EmptyModifier())
         #elseif os(tvOS)
         self.modifier(EmptyModifier())
         #endif

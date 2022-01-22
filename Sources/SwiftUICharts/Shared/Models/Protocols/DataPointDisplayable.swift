@@ -9,6 +9,11 @@ import Foundation
 import SwiftUI
 
 public protocol DataPointDisplayable {
+    
+    var id: UUID { get }
+    
+    var wrappedDescription: String { get }
+    
     /**
      Displays the relevent Legend for the data point.
      

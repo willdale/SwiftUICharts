@@ -21,7 +21,7 @@ public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBar
     public var body: some View {
         VStack(spacing: 0) {
             HorizontalBarChartSubView(chartData: chartData)
-                .modifier(SizeModifier(chartData: chartData))
+//                .modifier(ChartSizeUpdating(chartData: chartData))
                 .accessibilityLabel(chartData.accessibilityTitle)
         }
     }
@@ -117,7 +117,7 @@ internal struct HorizontalBarElement<ChartData>: View where ChartData: CTChartDa
             self.lengthAnimation = false
         }
         .background(Color(.gray).opacity(0.000000001))
-        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+//        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
         .id(chartData.id)
     }
 }

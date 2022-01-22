@@ -114,15 +114,6 @@ extension CTMultiBarChartDataSet where Self == StackedBarDataSet {
     }
 }
 
-
-// MARK: - Data Point
-extension CTDataPointBaseProtocol  {
-    /// Returns information about the data point for use in accessibility tags.
-    func getCellAccessibilityValue(specifier: String) -> Text {
-        Text(String(format: NSLocalizedString("%@ \(self.wrappedDescription)", comment: ""), "\(self.valueAsString(specifier: specifier))"))
-    }
-}
-
 extension CTDataPointBaseProtocol {
     /// Unwraps description
     public var wrappedDescription: String {
