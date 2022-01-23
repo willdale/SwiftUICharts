@@ -1,5 +1,5 @@
 //
-//  GridStyle.swift
+//  deprecated+GridStyle.swift
 //  
 //
 //  Created by Will Dale on 13/01/2021.
@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@available(*, deprecated, message: "Use \".grid\" instead")
 public struct GridStyle {
     
     /// Number of lines to break up the axis
@@ -46,7 +47,9 @@ public struct GridStyle {
     }
 }
 
+@available(*, deprecated, message: "Use \".grid\" instead")
 extension GridStyle {
+    @available(*, deprecated, message: "Use \".grid\" instead")
     public static let standard = GridStyle(numberOfLines: 10,
                                            lineColour: Color(.gray).opacity(0.25),
                                            lineWidth: 1,

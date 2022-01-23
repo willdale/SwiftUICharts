@@ -1,13 +1,14 @@
 //
-//  XAxisGrid.swift
+//  YAxisGrid.swift
 //  LineChart
 //
-//  Created by Will Dale on 26/12/2020.
+//  Created by Will Dale on 24/12/2020.
 //
 
 import SwiftUI
 
-internal struct XAxisGrid<ChartData>: ViewModifier where ChartData: CTChartData {
+@available(*, deprecated, message: "Use \".grid\" instead")
+internal struct YAxisGrid<ChartData>: ViewModifier where ChartData: CTChartData {
     
     @ObservedObject private var chartData: ChartData
     private var style: GridStyle
@@ -19,18 +20,18 @@ internal struct XAxisGrid<ChartData>: ViewModifier where ChartData: CTChartData 
         self.chartData = chartData
         self.style = style
     }
-    
+
     internal func body(content: Content) -> some View {
         ZStack {
-            HStack {
+            VStack {
                 ForEach((0...style.numberOfLines-1), id: \.self) { index in
                     if index != 0 {
-                        VerticalGridView(chartData: chartData, style: style)
+                        HorizontalGridView(chartData: chartData, style: style)
                         Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
+                            .frame(minHeight: 0, maxHeight: 500)
                     }
                 }
-                VerticalGridView(chartData: chartData, style: style)
+                HorizontalGridView(chartData: chartData, style: style)
             }
             content
         }
@@ -38,10 +39,11 @@ internal struct XAxisGrid<ChartData>: ViewModifier where ChartData: CTChartData 
 }
 
 extension View {
-    /// Adds vertical lines along the X axis.
+    /// Adds horizontal lines along the Y axis.
     ///
     /// Verbose method
-    public func xAxisGrid<ChartData>(
+    @available(*, deprecated, message: "Use \".grid\" instead")
+    public func yAxisGrid<ChartData>(
         chartData: ChartData,
         numberOfLines: Int,
         lineColour: Color,
@@ -52,24 +54,25 @@ extension View {
     where ChartData: CTChartData
     {
         self.modifier(
-            XAxisGrid(
+            YAxisGrid(
                 chartData: chartData,
                 style: GridStyle(numberOfLines: numberOfLines, lineColour: lineColour, lineWidth: lineWidth, dash: dash, dashPhase: dashPhase)
             )
         )
     }
     
-    /// Adds vertical lines along the X axis.
+    /// Adds horizontal lines along the Y axis.
     ///
     /// Convenience method
-    public func xAxisGrid<ChartData>(
+    @available(*, deprecated, message: "Use \".grid\" instead")
+    public func yAxisGrid<ChartData>(
         chartData: ChartData,
         style: GridStyle = .standard
     ) -> some View
     where ChartData: CTChartData
     {
         self.modifier(
-            XAxisGrid(
+            YAxisGrid(
                 chartData: chartData,
                 style: style
             )
