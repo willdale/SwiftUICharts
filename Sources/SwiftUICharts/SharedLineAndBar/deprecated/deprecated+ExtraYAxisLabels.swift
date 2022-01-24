@@ -1,5 +1,5 @@
 //
-//  ExtraYAxisLabels.swift
+//  deprecated+ExtraYAxisLabels.swift
 //  
 //
 //  Created by Will Dale on 05/06/2021.
@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@available(*, deprecated, message: "")
 internal struct ExtraYAxisLabels<ChartData>: ViewModifier where ChartData: CTChartData & YAxisViewDataProtocol {
     
     @ObservedObject private var chartData: ChartData
@@ -25,22 +26,7 @@ internal struct ExtraYAxisLabels<ChartData>: ViewModifier where ChartData: CTCha
     }
     
     internal func body(content: Content) -> some View {
-//        Group {
-//            switch chartData.chartStyle.yAxisLabelPosition {
-//            case .leading:
-//                HStack(spacing: 0) {
-                    content
-//                    chartData.getExtraYAxisLabels().padding(.leading, 4)
-//                    chartData.getExtraYAxisTitle(colour: colourIndicator)
-//                }
-//            case .trailing:
-//                HStack(spacing: 0) {
-//                    chartData.getExtraYAxisTitle(colour: colourIndicator)
-//                    chartData.getExtraYAxisLabels().padding(.trailing, 4)
-//                    content
-//                }
-//            }
-//        }
+        content
     }
 }
 
@@ -54,6 +40,7 @@ extension View {
         - colourIndicator: Second Y Axis style.
      - Returns: A View with second set of Y axis labels.
      */
+    @available(*, deprecated, message: "")
     public func extraYAxisLabels<ChartData>(
         chartData: ChartData,
         specifier: String = "%.0f",

@@ -13,7 +13,7 @@ import ChartMath
  Data for drawing and styling a ranged Bar Chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
+public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartDataProtocol, StandardChartConformance, ViewDataProtocol {
     // MARK: Properties
     public let id: UUID = UUID()
     @Published public var dataSets: RangedBarDataSet
@@ -22,6 +22,7 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
     @Published public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
+    public let chartName: ChartName = .rangedBar
             
     // MARK: ViewDataProtocol
     @Published public var xAxisViewData = XAxisViewData()
@@ -98,17 +99,7 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
             .divide(by: Double(dataSets.dataPoints.count))
         return (upperAverage + lowerAverage) / 2
     }
-    
-    // MARK: Labels
-    public func xAxisSectionSizing(count: Int, size: CGFloat) -> CGFloat {
-        return divide(size, count)
-    }
-    
-    public func xAxisLabelOffSet(index: Int, size: CGFloat, count: Int) -> CGFloat {
-        return CGFloat(index) * divide(size, count) +
-        (xAxisSectionSizing(count: count, size: size) / 2)
-    }
-    
+
     // MARK: - Touch
     public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []

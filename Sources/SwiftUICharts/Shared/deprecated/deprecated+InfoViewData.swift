@@ -1,5 +1,5 @@
 //
-//  InfoViewData.swift
+//  deprecated+InfoViewData.swift
 //  
 //
 //  Created by Will Dale on 04/02/2021.

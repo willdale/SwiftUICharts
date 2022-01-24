@@ -13,7 +13,7 @@ import ChartMath
  Data for drawing and styling a standard Bar Chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class BarChartData: BarChartType, CTChartData, CTBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
+public final class BarChartData: BarChartType, CTChartData, CTBarChartDataProtocol, StandardChartConformance, ViewDataProtocol {
     // MARK: Properties
     public let id: UUID = UUID()
     @Published public var dataSets: BarDataSet
@@ -22,6 +22,7 @@ public final class BarChartData: BarChartType, CTChartData, CTBarChartDataProtoc
     @Published public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
+    public let chartName: ChartName = .bar
         
     // MARK: ViewDataProtocol
     @Published public var xAxisViewData = XAxisViewData()
@@ -86,16 +87,7 @@ public final class BarChartData: BarChartType, CTChartData, CTBarChartDataProtoc
         
 //        self.setupLegends()
     }
-    
-    // MARK: Labels
-    public func xAxisSectionSizing(count: Int, size: CGFloat) -> CGFloat {
-        return divide(size, count)
-    }
-    
-    public func xAxisLabelOffSet(index: Int, size: CGFloat, count: Int) -> CGFloat {
-       return CGFloat(index) * divide(size, count) + (xAxisSectionSizing(count: count, size: size) / 2)
-    }
-    
+   
     // MARK: - Touch
     public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []

@@ -15,7 +15,7 @@ import ChartMath
  This model contains all the data and styling information for a single line, line chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
+public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance, ViewDataProtocol {
     // MARK: Properties
     public let id: UUID = UUID()
     @Published public var dataSets: MultiLineDataSet
@@ -23,6 +23,7 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
     @Published public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
+    public let chartName: ChartName = .multiLine
         
     // MARK: ViewDataProtocol
     @Published public var xAxisViewData = XAxisViewData()
@@ -84,17 +85,7 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
         
 //        self.setupLegends()
     }
-    
-    // MARK: Labels
-    public func xAxisSectionSizing(count: Int, size: CGFloat) -> CGFloat {
-        return min(divide(size, count),
-                   self.xAxisViewData.xAxisLabelWidths.min() ?? 0)
-    }
-    
-    public func xAxisLabelOffSet(index: Int, size: CGFloat, count: Int) -> CGFloat {
-       return CGFloat(index) * divide(size, count - 1)
-    }
-    
+
     // MARK: Points
     public func getPointMarker() -> some View {
         ForEach(self.dataSets.dataSets, id: \.id) { dataSet in

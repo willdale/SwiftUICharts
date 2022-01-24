@@ -14,7 +14,7 @@ import Combine
  This model contains the data and styling information for a doughnut chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol, Publishable, Touchable, TouchInfoDisplayable {
+public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol, Publishable, Touchable {
     // MARK: Properties
     public var id: UUID = UUID()
     @Published public var dataSets: PieDataSet
@@ -22,6 +22,7 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
     @Published public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
+    public let chartName: ChartName = .doughnut
     
     public var strokeWidth: CGFloat = 1
 

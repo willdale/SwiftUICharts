@@ -15,7 +15,7 @@ import ChartMath
  The grouping data informs the model as to how the datapoints are linked.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
+public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarChartDataProtocol, StandardChartConformance, ViewDataProtocol {
     // MARK: Properties
     public let id: UUID = UUID()
     @Published public var dataSets: GroupedBarDataSets
@@ -24,6 +24,7 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     @Published public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
+    public let chartName: ChartName = .groupedBar
         
     // MARK: Multi
     @Published public var groupSpacing: CGFloat = 0
@@ -94,23 +95,6 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
         self.topLine = topLine
         
 //        self.setupLegends()
-    }
-    
-    // MARK: Labels
-    public func xAxisSectionSizing(count: Int, size: CGFloat) -> CGFloat {
-        let superXSection = divide(size, count)
-        let spaceSection = groupSpacing * CGFloat(count - 1)
-        let compensation = divide(spaceSection, count)
-        let section = superXSection - compensation
-        return section > 0 ? section : 0
-    }
-    
-    public func xAxisLabelOffSet(index: Int, size: CGFloat, count: Int) -> CGFloat {
-        let superXSection = divide(size, count)
-        let compensation = ((groupSpacing * CGFloat(count - 1)) / CGFloat(count))
-        return (CGFloat(index) * superXSection) +
-                ((CGFloat(index) * compensation) / CGFloat(count)) +
-                (xAxisSectionSizing(count: count, size: size) / 2)
     }
     
     // MARK: Touch

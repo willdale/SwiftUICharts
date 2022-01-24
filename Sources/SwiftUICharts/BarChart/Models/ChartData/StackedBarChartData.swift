@@ -15,7 +15,7 @@ import ChartMath
  The grouping data informs the model as to how the datapoints are linked.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDataProtocol, CTMultiBarChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
+public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDataProtocol, CTMultiBarChartDataProtocol, StandardChartConformance, ViewDataProtocol {
     // MARK: Properties
     public let id: UUID = UUID()
     @Published public var dataSets: StackedBarDataSets
@@ -24,6 +24,7 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     @Published public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
+    public let chartName: ChartName = .stackedBar
         
     // MARK: Multi
     @Published public var groups: [GroupingData]
@@ -93,16 +94,6 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
         self.topLine = topLine
         
 //        self.setupLegends()
-    }
-    
-    // MARK: Labels
-    public func xAxisSectionSizing(count: Int, size: CGFloat) -> CGFloat {
-        return divide(size, count)
-    }
-    
-    public func xAxisLabelOffSet(index: Int, size: CGFloat, count: Int) -> CGFloat {
-       return CGFloat(index) * divide(size, count) +
-        (xAxisSectionSizing(count: count, size: size) / 2)
     }
 
     // MARK: - Touch

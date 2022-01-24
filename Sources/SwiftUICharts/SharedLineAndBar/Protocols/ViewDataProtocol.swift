@@ -15,9 +15,9 @@ public protocol XAxisViewDataProtocol: ObservableObject {
 }
 
 extension XAxisViewDataProtocol {
-    var axisPadding: CGFloat {
-        (xAxisViewData.xAxisLabelHeights.max() ?? 0) + xAxisViewData.xAxisTitleHeight + (xAxisViewData.hasXAxisLabels ? 4 : 0)
-    }
+//    var axisPadding: CGFloat {
+//        (xAxisViewData.xAxisLabelHeights.max() ?? 0) + xAxisViewData.xAxisTitleHeight + (xAxisViewData.hasXAxisLabels ? 4 : 0)
+//    }
 }
 
 public protocol YAxisViewDataProtocol: ObservableObject {

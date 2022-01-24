@@ -50,7 +50,7 @@ public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData 
                                          startAngle: chartData.dataSets.dataPoints[data].startAngle,
                                          amount: chartData.dataSets.dataPoints[data].amount)
                         .stroke(chartData.dataSets.dataPoints[data].colour,
-                                lineWidth: chartData.chartStyle.strokeWidth)
+                                lineWidth: chartData.strokeWidth)
                         .overlay(dataPoint: chartData.dataSets.dataPoints[data],
                                  chartData: chartData,
                                  rect: geo.frame(in: .local))

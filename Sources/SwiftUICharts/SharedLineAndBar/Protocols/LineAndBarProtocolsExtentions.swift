@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension AxisX where Self: CTChartData & ViewDataProtocol {
+extension CTChartData where Self: ViewDataProtocol {
 
     @ViewBuilder
     internal func getAxisColourAsCircle(customColour: ChartColour, width: CGFloat) -> some View {

@@ -22,24 +22,6 @@ extension View {
     }
 }
 
-extension View {
-    /**
-     View modifier to conditionally add a view modifier else add a different one.
-     
-     [Five Stars](https://fivestars.blog/swiftui/conditional-modifiers.html)
-     */
-    @ViewBuilder func `ifElse`<TrueContent: View, FalseContent: View>(
-        _ condition: Bool,
-        if ifTransform: (Self) -> TrueContent,
-        else elseTransform: (Self) -> FalseContent
-    ) -> some View {
-        if condition {
-            ifTransform(self)
-        } else {
-            elseTransform(self)
-        }
-    }
-}
 
 extension View {
     /**
@@ -56,35 +38,6 @@ extension View {
                 action()
             }
         }
-    }
-}
-
-extension Double {
-    /**
-     Simple, neat divide.
-     */
-    func divide<T:BinaryInteger>(by divideBy: T) -> Double {
-        self / Double(divideBy)
-    }
-    /**
-     Simple, neat divide.
-     */
-    func divide<T:BinaryFloatingPoint>(by divideBy: T) -> Double {
-        self / Double(divideBy)
-    }
-}
-extension CGFloat {
-    /**
-     Simple, neat divide.
-     */
-    func divide<T:BinaryInteger>(by divideBy: T) -> CGFloat {
-        self / CGFloat(divideBy)
-    }
-    /**
-     Simple, neat divide.
-     */
-    func divide<T:BinaryFloatingPoint>(by divideBy: T) -> CGFloat {
-        self / CGFloat(divideBy)
     }
 }
 

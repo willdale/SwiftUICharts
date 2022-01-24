@@ -26,19 +26,12 @@ import SwiftUI
  */
 public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartData {
     
-    @ObservedObject private var chartData: ChartData
+    @EnvironmentObject public var stateObject: TestStateObject
+    @EnvironmentObject public var chartData: ChartData
     
-    @State private var startAnimation: Bool
-    
-    /// Initialises a multi-line, line chart.
-    /// - Parameter chartData: Must be MultiLineChartData model.
-    public init(chartData: ChartData) {
-        self.chartData = chartData
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
-    }
-    
+    public init() {}
+        
     public var body: some View {
-//        GeometryReader { geo in
             ZStack {
                 chartData.getAccessibility()
                 ForEach(chartData.dataSets.dataSets, id: \.id) { dataSet in
@@ -46,12 +39,8 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
                                            dataSet: dataSet,
                                            colour: dataSet.style.lineColour)
                 }
+                .modifier(ChartSizeUpdating(stateObject: stateObject))
             }
-//            .modifier(ChartSizeUpdating(chartData: chartData))
-//            .onAppear { // Needed for axes label frames
-//                self.chartData.chartSize = geo.frame(in: .local)
-//            }
-//        }
     }
 }
 

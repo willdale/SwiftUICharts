@@ -9,9 +9,9 @@ import SwiftUI
 
 internal typealias CTChartType = (chartType: ChartType, dataSetType: DataSetType)
 
-public typealias ChartConformance = DataHelper & Publishable & PointOfInterestProtocol & Touchable & TouchInfoDisplayable & ExtraLineProtocol
-public typealias StandardChartConformance =  ChartConformance & AxisCharts & VerticalChart
-public typealias HorizontalChartConformance = ChartConformance & AxisCharts & HorizontalChart
+public typealias ChartConformance = DataHelper & Publishable & PointOfInterestProtocol & Touchable & ExtraLineProtocol
+public typealias StandardChartConformance =  ChartConformance & VerticalChart
+public typealias HorizontalChartConformance = ChartConformance & HorizontalChart
 
 // MARK: Chart Data
 /**
@@ -47,6 +47,8 @@ public protocol CTChartData: ObservableObject, Identifiable {
     /// A global control to disable animations
     var shouldAnimate: Bool { get set }
     
+    var chartName: ChartName { get }
+    
     
     /// Data model containing the charts Title, Subtitle and the Title for Legend.
     ///
@@ -69,11 +71,67 @@ public protocol CTChartData: ObservableObject, Identifiable {
 }
 
 extension CTChartData where Self: DataHelper {
-    public var dataSetInfo: DataSetInfo {
-        DataSetInfo(minValue: minValue, range: range)
+    public var dataSetInfo: YAxisLabelStyle.DataSetInfo {
+        YAxisLabelStyle.DataSetInfo(minValue: minValue, range: range)
     }
 }
 
+extension CTChartData {
+    public var xAxisData: XAxisLabelStyle.XLabelData {
+        XAxisLabelStyle.XLabelData(chart: chartName, spacing: nil)
+    }
+}
+extension CTChartData where Self: GroupedBarChartData {
+    public var xAxisData: XAxisLabelStyle.XLabelData {
+        XAxisLabelStyle.XLabelData(chart: chartName, spacing: groupSpacing)
+    }
+}
+
+extension CTChartData where Self: BarChartType {
+    internal func markerSubView(
+        markerData: MarkerData,
+        chartSize: CGRect,
+        touchLocation: CGPoint
+    ) -> some View {
+        ZStack {
+            ForEach(markerData.barMarkerData, id: \.self) { marker in
+                MarkerView.bar(barMarker: marker.markerType, markerData: marker)
+            }
+            
+            ForEach(markerData.lineMarkerData, id: \.self) { marker in
+                MarkerView.line(lineMarker: marker.markerType,
+                                markerData: marker,
+                                chartSize: chartSize,
+                                touchLocation: touchLocation,
+                                dataPoints: marker.dataPoints,
+                                lineType: marker.lineType,
+                                lineSpacing: marker.lineSpacing,
+                                minValue: marker.minValue,
+                                range: marker.range)
+            }
+        }
+    }
+}
+
+extension CTChartData where Self: LineChartType {
+    internal func markerSubView(
+        markerData: MarkerData,
+        chartSize: CGRect,
+        touchLocation: CGPoint
+    ) -> some View {
+        ForEach(markerData.lineMarkerData, id: \.self) { marker in
+            MarkerView.line(lineMarker: marker.markerType,
+                            markerData: marker,
+                            chartSize: chartSize,
+                            touchLocation: touchLocation,
+                            dataPoints: marker.dataPoints,
+                            lineType: marker.lineType,
+                            lineSpacing: marker.lineSpacing,
+                            minValue: marker.minValue,
+                            range: marker.range)
+        }
+    }
+}
 
 // MARK: - Data Sets
 /**

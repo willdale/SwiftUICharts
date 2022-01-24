@@ -1,5 +1,5 @@
 //
-//  ChartMetadata.swift
+//  deprecated+ChartMetadata.swift
 //  LineChart
 //
 //  Created by Will Dale on 03/01/2021.

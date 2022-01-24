@@ -34,3 +34,15 @@ public func divide<T: BinaryFloatingPoint, U: BinaryInteger>(_ lhs: T, _ rhs: U)
 public func divide<T: BinaryFloatingPoint>(_ lhs: T, _ rhs: T) -> T {
     rhs != 0 ? (lhs / T(rhs)) : 0
 }
+
+extension BinaryFloatingPoint {
+    @inlinable
+    public func divide<T: BinaryInteger>(by divisor: T) -> Self {
+        ChartMath.divide(self, Self(divisor))
+    }
+    
+    @inlinable
+    public func divide<T: BinaryFloatingPoint>(by divisor: T) -> Self {
+        ChartMath.divide(self, Self(divisor))
+    }
+}

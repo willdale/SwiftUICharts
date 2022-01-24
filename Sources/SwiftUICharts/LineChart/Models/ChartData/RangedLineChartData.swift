@@ -15,7 +15,7 @@ import ChartMath
  This model contains the data and styling information for a ranged line chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance, ChartAxes, ViewDataProtocol {
+public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance, ViewDataProtocol {
     // MARK: Properties
     public let id: UUID  = UUID()
     @Published public var dataSets: RangedLineDataSet
@@ -23,6 +23,7 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
     @Published public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
+    public let chartName: ChartName = .rangedLine
         
     // MARK: ViewDataProtocol
     @Published public var xAxisViewData = XAxisViewData()

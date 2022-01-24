@@ -6,83 +6,51 @@
 //
 
 import SwiftUI
+import ChartMath
 
-// MARK: XAxisLabels
-internal struct XAxisLabels<ChartData>: ViewModifier where ChartData: CTChartData & AxisX & ViewDataProtocol {
+public struct XAxisLabelStyle {
+    public var font: Font
+    public var fontColour: Color
+    public var rotation: Angle
+    public var inBounds: Bool
+    public var padding: CGFloat
     
-    @ObservedObject private var chartData: ChartData
-    private var data: XAxisLabelStyle.Data
-    private var position: LabelPositionable
-    private var style: XAxisLabelStyle
-    
-    internal init(
-        chartData: ChartData,
-        data: XAxisLabelStyle.Data,
-        position: LabelPositionable,
-        style: XAxisLabelStyle
+    public init(
+        font: Font = .caption,
+        fontColour: Color = .primary,
+        rotation: Angle = .degrees(0),
+        inBounds: Bool = true,
+        padding: CGFloat = 8
     ) {
-        self.chartData = chartData
-        self.data = data
-        self.position = position
-        self.style = style
-        
-        self.chartData.xAxisViewData.hasXAxisLabels = true
+        self.font = font
+        self.fontColour = fontColour
+        self.rotation = rotation
+        self.inBounds = inBounds
+        self.padding = padding
     }
     
-    internal func body(content: Content) -> some View {
-        switch position.type {
-        case .vertical:
-            _Vertical_Labels(chartData: chartData, content: content, data: data, position: position, style: style)
-        case .horizontal:
-            _Horizontal_Labels(chartData: chartData, content: content, data: data, position: position, style: style)
-        default:
-            content
+    public enum Data {
+        case datapoints
+        case custom(labels: [String])
+    }
+    
+    public struct XLabelData {
+
+        public let chart: ChartName
+        public let spacing: CGFloat?
+        
+        public init(
+            chart: ChartName,
+            spacing: CGFloat? = nil
+        ) {
+            self.chart = chart
+            self.spacing = spacing
         }
     }
-}
 
-// MARK: API
-extension View {
-    /// Labels for the X axis.
-    ///
-    /// For vertical charts
-    public func xAxisLabels<ChartData>(
-        chartData: ChartData,
-        data: XAxisLabelStyle.Data = .datapoints,
-        position: VerticalLabelPosition = .bottom,
-        style: XAxisLabelStyle = .standard
-    ) -> some View
-    where ChartData: CTChartData & AxisX & ViewDataProtocol
-    {
-        self.modifier(
-            XAxisLabels(
-                chartData: chartData,
-                data: data,
-                position: position,
-                style: style
-            )
-        )
-    }
-    
-    /// Labels for the X axis.
-    ///
-    /// For horizontal charts
-    public func xAxisLabels<ChartData>(
-        chartData: ChartData,
-        data: XAxisLabelStyle.Data = .datapoints,
-        position: HorizontalLabelPosition = .leading,
-        style: XAxisLabelStyle = .standard
-    ) -> some View
-    where ChartData: CTChartData & AxisX & ViewDataProtocol & HorizontalChart
-    {
-        self.modifier(
-            XAxisLabels(
-                chartData: chartData,
-                data: data,
-                position: position,
-                style: style
-            )
-        )
+    internal enum AxisOrientation {
+        case vertical
+        case horizontal
     }
 }
 
@@ -96,343 +64,345 @@ extension XAxisLabelStyle {
                                                  rotation: .degrees(90))
 }
 
-public struct XAxisLabelStyle {
-    public var font: Font
-    public var fontColour: Color
-    public var rotation: Angle
-    public var padding: CGFloat
-    
-    public init(
-        font: Font = .caption,
-        fontColour: Color = .primary,
-        rotation: Angle = .degrees(0),
-        padding: CGFloat = 8
-    ) {
-        self.font = font
-        self.fontColour = fontColour
-        self.rotation = rotation
-        self.padding = padding
+// MARK: - API
+extension View {
+    /// Labels for the X axis.
+    ///
+    /// For vertical charts
+    public func xAxisLabels(
+        labels: [String],
+        positions: Set<HorizontalLabelPosition>,
+        style: XAxisLabelStyle = .standard,
+        data: XAxisLabelStyle.XLabelData
+    ) -> some View
+    {
+        self.modifier(
+            _XAxisLabelsModifier_Vertical(
+                labels: labels,
+                positions: Array(positions),
+                style: style,
+                data: data
+            )
+        )
     }
     
-    public enum Data {
-        case datapoints
-        case custom(labels: [String])
-    }
-}
-
-// MARK: - Implementation
-//
-//
-//
-// MARK: _Vertical_Labels
-fileprivate struct _Vertical_Labels<ChartData, Content>: View where ChartData: CTChartData & XAxisViewDataProtocol & AxisX,
-                                                                    Content: View {
-    
-    @ObservedObject private var chartData: ChartData
-    private var content: Content
-    private var data: XAxisLabelStyle.Data
-    private var position: LabelPositionable
-    private var style: XAxisLabelStyle
-    
-    internal init(
-        chartData: ChartData,
-        content: Content,
-        data: XAxisLabelStyle.Data,
-        position: LabelPositionable,
-        style: XAxisLabelStyle
-    ) {
-        self.chartData = chartData
-        self.content = content
-        self.data = data
-        self.position = position
-        self.style = style
-    }
-    
-    var body: some View {
-        switch position as? VerticalLabelPosition {
-        case .top:
-            VStack(spacing: 0) {
-                _Labels(chartData: chartData, data: data, position: position, style: style)
-                    .padding(.bottom, style.padding)
-                content
-            }
-        case .bottom:
-            VStack(spacing: 0) {
-                content
-                _Labels(chartData: chartData, data: data, position: position, style: style)
-                    .padding(.top, style.padding)
-            }
-        default:
-            content
-        }
+    /// Labels for the X axis.
+    ///
+    /// For horizontal charts
+    public func xAxisLabels(
+        labels: [String],
+        positions: Set<VerticalLabelPosition>,
+        style: XAxisLabelStyle = .standard,
+        data: XAxisLabelStyle.XLabelData
+    ) -> some View
+    {
+        self.modifier(
+            _XAxisLabelsModifier_Horizontal (
+                labels: labels,
+                positions: Array(positions),
+                style: style,
+                data: data
+            )
+        )
     }
 }
 
-// MARK: _Horizontal_Labels
-fileprivate struct _Horizontal_Labels<ChartData, Content>: View where ChartData: CTChartData & XAxisViewDataProtocol & AxisX,
-                                                                      Content: View  {
-    
-    @ObservedObject private var chartData: ChartData
-    private var content: Content
-    private var data: XAxisLabelStyle.Data
-    private var position: LabelPositionable
-    private var style: XAxisLabelStyle
-    
-    internal init(
-        chartData: ChartData,
-        content: Content,
-        data: XAxisLabelStyle.Data,
-        position: LabelPositionable,
-        style: XAxisLabelStyle
-    ) {
-        self.chartData = chartData
-        self.content = content
-        self.data = data
-        self.position = position
-        self.style = style
-    }
-    
-    var body: some View {
-        switch position as? HorizontalLabelPosition {
-        case .leading:
-            HStack(spacing: 0) {
-                _Labels(chartData: chartData, data: data, position: position, style: style)
-                    .padding(.trailing, style.padding)
-                content
-            }
-        case .trailing:
-            HStack(spacing: 0) {
-                content
-                _Labels(chartData: chartData, data: data, position: position, style: style)
-                    .padding(.leading, style.padding)
-            }
-        default:
-            content
-        }
-    }
-}
+// MARK: - AxisOrientation
+fileprivate struct _XAxisLabelsModifier_Vertical: ViewModifier {
 
-// MARK: _Labels
-fileprivate struct _Labels<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol & AxisX {
+    let labels: [String]
+    let positions: [HorizontalLabelPosition]
+    let style: XAxisLabelStyle
+    let data: XAxisLabelStyle.XLabelData
     
-    @ObservedObject private var chartData: ChartData
-    private var data: XAxisLabelStyle.Data
-    private var position: LabelPositionable
-    private var style: XAxisLabelStyle
+    let axisOrientation: XAxisLabelStyle.AxisOrientation = .horizontal
     
-    internal init(
-        chartData: ChartData,
-        data: XAxisLabelStyle.Data,
-        position: LabelPositionable,
-        style: XAxisLabelStyle
-    ) {
-        self.chartData = chartData
-        self.data = data
-        self.position = position
-        self.style = style
-    }
-    
-    var body: some View {
-        GeometryReader { geo in
-            _Labels_SubView(chartData: chartData,
-                            data: data,
-                            position: position,
-                            style: style,
-                            frame: geo.frame(in: .local))
-        }
-        .modifier(_Axis_Label_Size(chartData: chartData, position: position))
-    }
-}
-
-// MARK: _Labels_Data_Source
-fileprivate struct _Labels_SubView<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol & AxisX {
-    
-    @ObservedObject private var chartData: ChartData
-    private var data: XAxisLabelStyle.Data
-    private var position: LabelPositionable
-    private var style: XAxisLabelStyle
-    private var frame: CGRect
-    
-    internal init(
-        chartData: ChartData,
-        data: XAxisLabelStyle.Data,
-        position: LabelPositionable,
-        style: XAxisLabelStyle,
-        frame: CGRect
-    ) {
-        self.chartData = chartData
-        self.data = data
-        self.position = position
-        self.style = style
-        self.frame = frame
-    }
-    
-    var body: some View {
-        switch data {
-        case .datapoints:
-            ForEach(chartData.dataSets.dataLabels.indices, id: \.self) { index in
-                _Labels_DataPoints_Cell(chartData: chartData,
-                                        label: chartData.dataSets.dataLabels[index],
-                                        position: position,
-                                        style: style,
-                                        index: index,
-                                        frame: frame)
-            }
-        case .custom(let labels):
-            HStack(spacing: 0) {
-                ForEach(labels.indices, id: \.self) { index in
-                    _Labels_Custom_Cell(chartData: chartData,
-                                        label: labels[index],
-                                        position: position,
-                                        style: style,
-                                        index: index,
-                                        count: labels.count)
+    func body(content: Content) -> some View {
+        ForEach(positions) { position in
+            switch position {
+            case .leading:
+                HStack(spacing: style.padding) {
+                    XAxisLabels(labels: labels, style: style, data: data, orientation: axisOrientation)
+                    content
+                }
+            case .trailing:
+                HStack(spacing: style.padding) {
+                    content
+                    XAxisLabels(labels: labels, style: style, data: data, orientation: axisOrientation)
                 }
             }
         }
     }
 }
 
-// MARK: Cells
-//
-//
-//
-// MARK: _Labels_DataPoints_Cell
-fileprivate struct _Labels_DataPoints_Cell<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol & AxisX {
+fileprivate struct _XAxisLabelsModifier_Horizontal: ViewModifier {
+
+    let labels: [String]
+    let positions: [VerticalLabelPosition]
+    let style: XAxisLabelStyle
+    let data: XAxisLabelStyle.XLabelData
+
+    let axisOrientation: XAxisLabelStyle.AxisOrientation = .vertical
     
-    @ObservedObject private var chartData: ChartData
-    private var label: String
-    private var position: LabelPositionable
-    private var style: XAxisLabelStyle
-    private var index: Int
-    private var frame: CGRect
-    
-    internal init(
-        chartData: ChartData,
-        label: String,
-        position: LabelPositionable,
-        style: XAxisLabelStyle,
-        index: Int,
-        frame: CGRect
-    ) {
-        self.chartData = chartData
-        self.label = label
-        self.position = position
-        self.style = style
-        self.index = index
-        self.frame = frame
-    }
-    
-    var body: some View {
-        RotatedText(chartData: chartData, label: label, position: position, style: style)
-            .modifier(_label_Positioning(chartData: chartData, position: position, index: index, frame: frame))
+    func body(content: Content) -> some View {
+        ForEach(positions) { position in
+            switch position {
+            case .bottom:
+                VStack(spacing: style.padding) {
+                    content
+                    XAxisLabels(labels: labels, style: style, data: data, orientation: axisOrientation)
+                }
+            case .top:
+                VStack(spacing: style.padding) {
+                    XAxisLabels(labels: labels, style: style, data: data, orientation: axisOrientation)
+                    content
+                }
+            }
+        }
     }
 }
 
-// MARK: _Labels_Custom_Cell
-fileprivate struct _Labels_Custom_Cell<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol & AxisX {
+// MARK: - View
+public struct XAxisLabels: View {
     
-    @ObservedObject private var chartData: ChartData
-    private var label: String
-    private var position: LabelPositionable
-    private var style: XAxisLabelStyle
-    private var index: Int
-    private var count: Int
+    @EnvironmentObject var stateObject: TestStateObject
+    @StateObject var state = XAxisLabelsLayoutModel()
     
-    internal init(
-        chartData: ChartData,
-        label: String,
-        position: LabelPositionable,
-        style: XAxisLabelStyle,
-        index: Int,
-        count: Int
-    ) {
-        self.chartData = chartData
-        self.label = label
-        self.position = position
-        self.style = style
-        self.index = index
-        self.count = count
+    let labels: [String]
+    let style: XAxisLabelStyle
+    let data: XAxisLabelStyle.XLabelData
+    
+    let orientation: XAxisLabelStyle.AxisOrientation
+    
+    public var body: some View {
+        ZStack {
+            ForEach(labels.indices, id: \.self) { index in
+                _label_Cell(state: state, label: labels[index], style: style, index: index)
+                    .modifier(_label_Positioning(state: state,
+                                                 data: data,
+                                                 index: index,
+                                                 count: labels.count,
+                                                 size: stateObject.chartSize.size,
+                                                 minLabel: state.minWidth,
+                                                 padding: state.maxWidth,
+                                                 inBounds: style.inBounds))
+            }
+            .modifier(_Axis_Label_Size(state: state))
+        }
+        .onAppear {
+            state.orientation = orientation
+            state.isRotated = style.rotation.degrees != 0 || style.rotation.radians != 0
+        }
     }
+}
+
+// MARK: Cell
+fileprivate struct _label_Cell: View {
+    
+    @ObservedObject var state: XAxisLabelsLayoutModel
+    let label: String
+    let style: XAxisLabelStyle
+    let index: Int
+    
     
     var body: some View {
-        RotatedText(chartData: chartData, label: label, position: position, style: style)
+        Text(LocalizedStringKey(label))
+            .font(style.font)
+            .foregroundColor(style.fontColour)
         
-        if index != count - 1 { 
-            Spacer()
-                .frame(minWidth: 0, maxWidth: 500)
+            .fixedSize()
+            .rotationEffect(style.rotation, anchor: .center)
+        
+            .background(
+                GeometryReader { geo in
+                    Color.clear
+                        .onAppear {
+                            let width: CGFloat
+                            let height: CGFloat
+                            switch state.orientation {
+                            case .vertical:
+                                width = geo.frame(in: .local).width
+                                height = geo.frame(in: .local).height
+                            case .horizontal:
+                                width = geo.frame(in: .local).height
+                                height = geo.frame(in: .local).width
+                            }
+                            state.update(with: XAxisLabelsLayoutModel.Model(id: index, width: width, height: height))
+                        }
+                }
+            )
+            .accessibilityLabel(LocalizedStringKey("X-Axis-Label"))
+            .accessibilityValue(LocalizedStringKey(label))
+    }
+}
+
+// MARK: - ViewModifiers
+fileprivate struct _label_Positioning: ViewModifier {
+    
+    @ObservedObject var state: XAxisLabelsLayoutModel
+    let data: XAxisLabelStyle.XLabelData
+    let index: Int
+    let count: Int
+    let size: CGSize
+    let minLabel: CGFloat
+    let padding: CGFloat
+    let inBounds: Bool
+    
+    func body(content: Content) -> some View {
+        switch state.orientation {
+        case .vertical:
+            content
+                .frame(width: _XAxisMath.xAxisSectionSizing(data: data,
+                                                           count: count,
+                                                           size: size.width,
+                                                           minLabel: state.minWidth,
+                                                           padding: inBounds ? state.maxWidth : 0),
+                       height: state.isRotated ? state.maxWidth : state.maxHeight)
+                .position(x: _XAxisMath.xAxisLabelOffSet(data: data,
+                                                        index: index,
+                                                        count: count,
+                                                        size: size.width,
+                                                        minLabel: state.minWidth,
+                                                        padding: inBounds ? state.width(for: index) : 0),
+                          y: state.isRotated ? state.width(for: index) / 2 : state.maxHeight / 2)
+        case .horizontal:
+            content
+                .frame(width: state.maxWidth,
+                       height: divide(size.height, count))
+                .position(x: state.maxWidth / 2,
+                          y: (CGFloat(index) * divide(size.height, count-1)))
         }
     }
 }
 
-// MARK: View Modifiers
-//
-//
-//
-// MARK: _label_Positioning
-fileprivate struct _label_Positioning<ChartData>: ViewModifier where ChartData: CTChartData & XAxisViewDataProtocol & AxisX {
+fileprivate struct _Axis_Label_Size: ViewModifier {
+
+    @ObservedObject var state: XAxisLabelsLayoutModel
+
+    func body(content: Content) -> some View {
+        switch state.orientation {
+        case .vertical:
+            content
+                .frame(height: state.maxHeight)
+        case .horizontal:
+            content
+                .frame(width: state.maxWidth)
+        }
+    }
+}
+
+// MARK: - Layout Model
+internal final class XAxisLabelsLayoutModel: ObservableObject  {
+        
+    @Published internal var sizes = Set<Model>()
+    @Published internal var maxWidth: CGFloat = 0
+    @Published internal var maxHeight: CGFloat = 0
+    @Published internal var minWidth: CGFloat = 0
+    @Published internal var isRotated: Bool = false
     
-    @ObservedObject private var chartData: ChartData
-    private var position: LabelPositionable
-    private var index: Int
-    private var frame: CGRect
+    internal var orientation: XAxisLabelStyle.AxisOrientation = .vertical
     
-    internal init(
-        chartData: ChartData,
-        position: LabelPositionable,
+        
+    internal func update(with newItem: Model) {
+        if let oldItem = sizes.first(where: { $0.id == newItem.id }) {
+            sizes.remove(oldItem)
+            sizes.insert(newItem)
+        } else {
+            sizes.insert(newItem)
+        }
+        maxWidth = sizes
+            .map(\.width)
+            .max() ?? 0
+        maxHeight = sizes
+            .map(\.height)
+            .max() ?? 0
+        
+        minWidth = sizes
+            .map(\.height)
+            .min() ?? 0
+    }
+    
+    internal func width(for index: Int) -> CGFloat {
+        return sizes.first(where: { $0.id == index })?.width ?? 0
+    }
+    
+    internal struct Model: Hashable {
+        internal let id: Int
+        internal let width: CGFloat
+        internal let height: CGFloat
+    }
+}
+
+// MARK: - Math
+fileprivate enum _XAxisMath {
+    static internal func xAxisSectionSizing(
+        data: XAxisLabelStyle.XLabelData,
+        count: Int,
+        size: CGFloat,
+        minLabel: CGFloat,
+        padding: CGFloat
+    ) -> CGFloat {
+        switch data.chart {
+        case .line,
+             .filledLine,
+             .multiLine,
+             .rangedLine:
+            let section = divide(size - padding, count)
+            let value = min(section, minLabel)
+            return value > 0 ? value : 0
+            
+        case .bar,
+             .rangedBar,
+             .stackedBar,
+             .horizontalBar:
+            let value = divide(size - padding, count)
+            return value > 0 ? value : 0
+            
+        case .groupedBar:
+            let superXSection = divide(size - padding, count)
+            let spaceSection = (data.spacing ?? 0) * CGFloat(count - 1)
+            let compensation = divide(spaceSection, count)
+            let section = superXSection - compensation
+            return section > 0 ? section : 0
+            
+        default:
+            return .zero
+        }
+    }
+    
+    static internal func xAxisLabelOffSet(
+        data: XAxisLabelStyle.XLabelData,
         index: Int,
-        frame: CGRect
-    ) {
-        self.chartData = chartData
-        self.position = position
-        self.index = index
-        self.frame = frame
-    }
-    
-    func body(content: Content) -> some View {
-        switch position.type {
-        case .horizontal:
-            content
-                .frame(width: chartData.xAxisViewData.xAxisLabelWidths.max(),
-                       height: chartData.xAxisSectionSizing(count: chartData.dataSets.dataWidth, size: frame.height))
-                .position(x: (chartData.xAxisViewData.xAxisLabelWidths.max() ?? 0) / 2,
-                          y: chartData.xAxisLabelOffSet(index: index, size: frame.height, count: chartData.dataSets.dataWidth))
-        case .vertical:
-            content
-                .frame(width: chartData.xAxisSectionSizing(count: chartData.dataSets.dataWidth, size: frame.width),
-                       height: chartData.xAxisViewData.xAxisLabelHeights.max())
-                .position(x: chartData.xAxisLabelOffSet(index: index, size: frame.width, count: chartData.dataSets.dataWidth),
-                          y: (chartData.xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2)
+        count: Int,
+        size: CGFloat,
+        minLabel: CGFloat,
+        padding: CGFloat
+    ) -> CGFloat {
+        switch data.chart {
+        case .line,
+             .filledLine,
+             .multiLine,
+             .rangedLine:
+            return (CGFloat(index) * divide(size - padding, count - 1)) + (padding / 2)
+            
+        case .bar,
+             .rangedBar,
+             .stackedBar,
+             .horizontalBar:
+            let value = CGFloat(index) * divide(size - padding, count)
+            let offSet = xAxisSectionSizing(data: data, count: count, size: size, minLabel: minLabel, padding: padding) / 2
+            let pad = padding / 2
+            return value + offSet + pad
+            
+        case .groupedBar:
+            let superXSection = divide(size - padding, count)
+            let compensation = (((data.spacing ?? 0) * CGFloat(count - 1)) / CGFloat(count))
+            let section = (CGFloat(index) * superXSection) + ((CGFloat(index) * compensation) / CGFloat(count))
+            let offSet = xAxisSectionSizing(data: data, count: count, size: size, minLabel: minLabel, padding: padding) / 2
+            let pad = padding / 2
+            return section + offSet + pad
         default:
-            content
-        }
-    }
-}
-
-// MARK: _Axis_Label_Size
-fileprivate struct _Axis_Label_Size<ChartData>: ViewModifier where ChartData: CTChartData & XAxisViewDataProtocol & AxisX {
-    
-    @ObservedObject private var chartData: ChartData
-    private var position: LabelPositionable
-    
-    internal init(
-        chartData: ChartData,
-        position: LabelPositionable
-    ) {
-        self.chartData = chartData
-        self.position = position
-    }
-    
-    func body(content: Content) -> some View {
-        switch position.type {
-        case .vertical:
-            content
-                .frame(height: chartData.xAxisViewData.xAxisLabelHeights.max())
-        case .horizontal:
-            content
-                .frame(width: chartData.xAxisViewData.xAxisLabelWidths.max())
-        default:
-            content
+            return .zero
         }
     }
 }

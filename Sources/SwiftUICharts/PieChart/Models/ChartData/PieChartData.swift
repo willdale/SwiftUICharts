@@ -14,7 +14,7 @@ import Combine
  This model contains the data and styling information for a pie chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishable, Touchable, TouchInfoDisplayable {
+public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishable, Touchable {
     // MARK: Properties
     public var id: UUID = UUID()
     @Published public var dataSets: PieDataSet
@@ -22,6 +22,7 @@ public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishab
     @Published public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
+    public let chartName: ChartName = .pie
     
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
