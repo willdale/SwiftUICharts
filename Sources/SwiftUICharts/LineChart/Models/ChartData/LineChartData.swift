@@ -29,10 +29,6 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     @Published public var xAxisViewData = XAxisViewData()
     @Published public var yAxisViewData = YAxisViewData()
     
-    // MARK: ChartAxes
-    @Published public var xAxisLabels: [String]?
-    @Published public var yAxisLabels: [String]?
-    
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
     
@@ -56,6 +52,10 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     @Published public var chartStyle = LineChartStyle()
     @available(*, deprecated, message: "Split in to axis data")
     @Published public var infoView = InfoViewData<LineChartDataPoint>()
+    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
+    @Published public var xAxisLabels: [String]?
+    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
+    @Published public var yAxisLabels: [String]?
     
     // MARK: Initializer
     /// Initialises a Single Line Chart.
@@ -68,16 +68,12 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: LineDataSet,
-        xAxisLabels: [String]? = nil,
-        yAxisLabels: [String]? = nil,
         shouldAnimate: Bool = true,
         noDataText: Text = Text("No Data"),
         baseline: Baseline = .minimumValue,
         topLine: Topline = .maximumValue
     ) {
         self.dataSets = dataSets
-        self.xAxisLabels = xAxisLabels
-        self.yAxisLabels = yAxisLabels
         self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         self.baseline = baseline

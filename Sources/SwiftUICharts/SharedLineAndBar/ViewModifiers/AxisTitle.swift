@@ -7,185 +7,252 @@
 
 import SwiftUI
 
-public struct AxisTitleData {
-    /// Which axis the label is on.
-    public var position: Edge
-
+public struct AxisTitleStyle {
     /// Font of the axis title.
     public var font: Font
     
     /// Colour of the x axis title.
     public var colour: Color
     
+    /// Padding between the title and next element
+    public var padding: CGFloat
     
     public init(
-        position: Edge,
         font: Font = .caption,
-        colour: Color = .primary
+        colour: Color = .primary,
+        padding: CGFloat = 8
     ) {
-        self.position = position
         self.font = font
         self.colour = colour
-    }
-}
-
-extension AxisTitleData {
-    public static let top = AxisTitleData(position: .top, font: .caption, colour: .primary)
-    public static let leading = AxisTitleData(position: .leading, font: .caption, colour: .primary)
-    public static let trailing = AxisTitleData(position: .trailing, font: .caption, colour: .primary)
-    public static let bottom = AxisTitleData(position: .bottom, font: .caption, colour: .primary)
-}
-
-internal struct AxisTitle<ChartData>: ViewModifier where ChartData: CTChartData & ViewDataProtocol {
-    
-    @ObservedObject private var chartData: ChartData
-    private var text: String
-    private var style: AxisTitleData
-    
-    internal init(
-        chartData: ChartData,
-        text: String,
-        style: AxisTitleData
-    ) {
-        self.chartData = chartData
-        self.text = text
-        self.style = style
+        self.padding = padding
     }
     
-    internal func body(content: Content) -> some View {
-        switch style.position {
-        case .top:
-            VStack {
-                _XAxisTitle_View(chartData: chartData, text: text, style: style)
-                content
+    public enum Edge: Hashable, Identifiable {
+        case top(text: String)
+        case leading(text: String)
+        case trailing(text: String)
+        case bottom(text: String)
+        
+        public var id: String {
+            switch self {
+            case .top(let text):
+                return "-top-\(text)"
+            case .leading(let text):
+                return "-leading-\(text)"
+            case .trailing(let text):
+                return "-trailing-\(text)"
+            case .bottom(let text):
+                return "-bottom-\(text)"
             }
-        case .bottom:
-            VStack {
-                content
-                _XAxisTitle_View(chartData: chartData, text: text, style: style)
+        }
+        
+        var text: String {
+            switch self {
+            case let .top(text): return text
+            case let .leading(text): return text
+            case let .trailing(text): return text
+            case let .bottom(text): return text
             }
-        case .leading:
-            HStack {
-                _YAxisTitle_View(chartData: chartData, text: text, style: style)
-                content
+        }
+        
+        internal var isTop: Bool {
+            switch self {
+            case .top: return true
+            default: return false
             }
-        case .trailing:
-            HStack {
-                content
-                _YAxisTitle_View(chartData: chartData, text: text, style: style)
+        }
+        internal var isLeading: Bool {
+            switch self {
+            case .leading: return true
+            default: return false
+            }
+        }
+        internal var isTrailing: Bool {
+            switch self {
+            case .trailing: return true
+            default: return false
+            }
+        }
+        internal var isBottom: Bool {
+            switch self {
+            case .bottom: return true
+            default: return false
             }
         }
     }
 }
 
-// MARK: - Extension
+extension AxisTitleStyle {
+    public static let standard = AxisTitleStyle(font: .caption, colour: .primary, padding: 8)
+}
+
+// MARK: - API
 extension View {
-    public func axisTitle<ChartData>(
-        chartData: ChartData,
-        text: String,
-        style: AxisTitleData
-    ) -> some View
-    where ChartData: CTChartData & ViewDataProtocol
-    {
-        self.modifier(AxisTitle(chartData: chartData, text: text, style: style))
+    public func axisTitles(
+        edges: Set<AxisTitleStyle.Edge>,
+        style: AxisTitleStyle
+    ) -> some View {
+        self.modifier(_AxisTitles(edges: Array(edges)))
     }
 }
 
-// MARK: - X View
-fileprivate struct _XAxisTitle_View<ChartData>: View where ChartData: CTChartData & XAxisViewDataProtocol {
+// MARK: - Internal
+//
+//
+//
+// MARK: View Modifier
+internal struct _AxisTitles: ViewModifier {
     
-    @ObservedObject private var chartData: ChartData
-    private var text: String
-    var style: AxisTitleData
+    internal let edges: [AxisTitleStyle.Edge]
+    internal let style: AxisTitleStyle = .standard
     
-    internal init(
-        chartData: ChartData,
-        text: String,
-        style: AxisTitleData
-    ) {
-        self.chartData = chartData
-        self.text = text
-        self.style = style
+    internal func body(content: Content) -> some View {
+        content
+            .modifier(__AxisTitle(edge: edge(in: edges, at: 0), style: style))
+            .modifier(__AxisTitle(edge: edge(in: edges, at: 1), style: style))
+            .modifier(__AxisTitle(edge: edge(in: edges, at: 2), style: style))
+            .modifier(__AxisTitle(edge: edge(in: edges, at: 3), style: style))
     }
     
-    var body: some View {
-        Text(LocalizedStringKey(text))
+    private func edge(
+        in edges: [AxisTitleStyle.Edge],
+        at index: Int
+    ) -> AxisTitleStyle.Edge? {
+        switch index {
+        case 0: return edges.first { $0.isLeading }
+        case 1: return edges.first { $0.isTrailing}
+        case 2: return edges.first { $0.isTop     }
+        case 3: return edges.first { $0.isBottom  }
+        default: return nil
+        }
+    }
+}
+
+fileprivate struct __AxisTitle: ViewModifier {
+
+    internal let edge: AxisTitleStyle.Edge?
+    internal let style: AxisTitleStyle
+
+    internal func body(content: Content) -> some View {
+        switch edge {
+        case .top:
+            VStack(spacing: style.padding) {
+                XAxisTitle(edge: edge, style: style)
+                content
+            }
+        case .bottom:
+            VStack(spacing: style.padding) {
+                content
+                XAxisTitle(edge: edge, style: style)
+            }
+        case .leading:
+            HStack(spacing: style.padding) {
+                YAxisTitle(edge: edge, style: style)
+                content
+            }
+        case .trailing:
+            HStack(spacing: style.padding) {
+                content
+                YAxisTitle(edge: edge, style: style)
+            }
+        default:
+            content
+        }
+    }
+}
+
+// MARK: X View
+internal struct XAxisTitle: View {
+    
+    @EnvironmentObject internal var stateObject: ChartStateObject
+    
+    internal let edge: AxisTitleStyle.Edge?
+    internal let style: AxisTitleStyle
+    
+    @State private var height: CGFloat = 0
+    
+    internal var body: some View {
+        Text(LocalizedStringKey(edge?.text ?? ""))
             .font(style.font)
             .foregroundColor(style.colour)
-            .modifier(_XAxisTitle_Padding(position: style.position))
             .background(
                 GeometryReader { geo in
                     Rectangle()
                         .foregroundColor(Color.clear)
                         .onAppear {
-                            chartData.xAxisViewData.xAxisTitleHeight = geo.size.height + 10
+                            let element = element(for: edge)
+                            let value = geo.frame(in: .local).height
+                            stateObject.updateLayoutElement(with: ChartStateObject.Model(element: element, value: value + padding + style.padding))
+                            height = value
                         }
                 }
             )
-    }
-}
-
-// MARK: - Y View
-fileprivate struct _YAxisTitle_View<ChartData>: View where ChartData: CTChartData & YAxisViewDataProtocol {
-    
-    @ObservedObject private var chartData: ChartData
-    private var text: String
-    var style: AxisTitleData
-    
-    internal init(
-        chartData: ChartData,
-        text: String,
-        style: AxisTitleData
-    ) {
-        self.chartData = chartData
-        self.text = text
-        self.style = style
+            .position(x: stateObject.leadingInset + (stateObject.chartSize.width / 2),
+                      y: padding)
+            .frame(height: height)
     }
     
-    var body: some View {
-        VStack {
-            VStack(spacing: 0) {
-                Text(LocalizedStringKey(text))
-                    .font(style.font)
-                    .foregroundColor(style.colour)
-                    .background(
-                        GeometryReader { geo in
-                            Rectangle()
-                                .foregroundColor(Color.clear)
-                                .onAppear {
-                                    chartData.yAxisViewData.yAxisTitleWidth = geo.size.height + 10 // 10 to add padding
-                                    chartData.yAxisViewData.yAxisTitleHeight = geo.size.width
-                                }
-                        }
-                    )
-                    .rotationEffect(Angle(degrees: -90), anchor: .center)
-                    .fixedSize()
-                    .frame(width: chartData.yAxisViewData.yAxisTitleWidth)
-//                    .offset(x: 0, y: chartData.yAxisViewData.yAxisTitleHeight / 2)
-            }
+    private var padding: CGFloat {
+        return (edge?.isBottom ?? false) ? 4 : 0
+    }
+    
+    private func element(for edge: AxisTitleStyle.Edge?) -> ChartStateObject.Model.Element {
+        switch edge {
+        case .top:
+            return .topTitle
+        case .bottom:
+            return .bottomTitle
+        default:
+            return .bottomTitle
         }
     }
 }
 
-
-// MARK: - Padding
-fileprivate struct _XAxisTitle_Padding: ViewModifier {
+// MARK: Y View
+internal struct YAxisTitle: View {
     
-    private let verticalPadding: CGFloat = 2.0
-    private let horizontalPadding: CGFloat = 2.0
+    @EnvironmentObject internal var stateObject: ChartStateObject
     
-    var position: Edge
+    internal let edge: AxisTitleStyle.Edge?
+    internal let style: AxisTitleStyle
     
-    func body(content: Content) -> some View {
-        switch position {
-        case .top:
-            content
-                .padding(.bottom, verticalPadding)
-        case .bottom:
-            content
-                .padding(.top, horizontalPadding)
+    @State private var width: CGFloat = 0
+    
+    internal var body: some View {
+        Text(LocalizedStringKey(edge?.text ?? ""))
+            .font(style.font)
+            .foregroundColor(style.colour)
+            .background(
+                GeometryReader { geo in
+                    Rectangle()
+                        .foregroundColor(Color.clear)
+                        .onAppear {
+                            let element = element(for: edge)
+                            let value = geo.frame(in: .local).height
+                            stateObject.updateLayoutElement(with: ChartStateObject.Model(element: element, value: value + padding + style.padding))
+                            width = value
+                        }
+                }
+            )
+            .rotationEffect(Angle(degrees: -90), anchor: .center)
+            .fixedSize()
+            .position(x: padding,
+                      y: stateObject.topInset + (stateObject.chartSize.height / 2))
+            .frame(width: width)
+    }
+    
+    private var padding: CGFloat {
+        (edge?.isLeading ?? false) ? 0 : 4
+    }
+    
+    private func element(for edge: AxisTitleStyle.Edge?) -> ChartStateObject.Model.Element {
+        switch edge {
+        case .leading:
+            return .leadingTitle
+        case .trailing:
+            return .trailingTitle
         default:
-            content
+            return .leadingTitle
         }
     }
 }

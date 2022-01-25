@@ -50,7 +50,7 @@ public enum InfoView {
 // MARK: - Implementation
 internal struct InfoDisplay<Info>: ViewModifier where Info: View {
     
-    @EnvironmentObject internal var stateObject: TestStateObject
+    @EnvironmentObject internal var stateObject: ChartStateObject
     internal var infoView: Info
     internal var position: (CGRect) -> CGPoint
     
@@ -94,7 +94,7 @@ fileprivate struct __ViewSize<Info: View>: View {
 // MARK: - Presets
 fileprivate struct __Vertical_Info_PreSet<DataPoint>: View where DataPoint: DataPointDisplayable {
     
-    @EnvironmentObject var stateObject: TestStateObject
+    @EnvironmentObject var stateObject: ChartStateObject
     let datapoints: [DataPoint]
     let style: InfoBoxStyle
     
@@ -129,7 +129,7 @@ fileprivate struct __Vertical_Info_PreSet<DataPoint>: View where DataPoint: Data
 
 fileprivate struct __Horizontal_Info_PreSet<DataPoint>: View where DataPoint: DataPointDisplayable {
     
-    @EnvironmentObject var stateObject: TestStateObject
+    @EnvironmentObject var stateObject: ChartStateObject
     let datapoints: [DataPoint]
     let style: InfoBoxStyle
     

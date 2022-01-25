@@ -34,10 +34,6 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     @Published public var xAxisViewData = XAxisViewData()
     @Published public var yAxisViewData = YAxisViewData()
     
-    // MARK: ChartAxes
-    @Published public var xAxisLabels: [String]?
-    @Published public var yAxisLabels: [String]?
-    
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
 
@@ -61,6 +57,10 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     @Published public var chartStyle = BarChartStyle()
     @available(*, deprecated, message: "Split in to axis data")
     @Published public var infoView = InfoViewData<GroupedBarDataPoint>()
+    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
+    @Published public var xAxisLabels: [String]?
+    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
+    @Published public var yAxisLabels: [String]?
     
     // MARK: Initializer
     /// Initialises a Grouped Bar Chart.
@@ -76,8 +76,6 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     public init(
         dataSets: GroupedBarDataSets,
         groups: [GroupingData],
-        xAxisLabels: [String]? = nil,
-        yAxisLabels: [String]? = nil,
         barStyle: BarStyle = BarStyle(),
         shouldAnimate: Bool = true,
         noDataText: Text = Text("No Data"),
@@ -86,8 +84,6 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     ) {
         self.dataSets = dataSets
         self.groups = groups
-        self.xAxisLabels = xAxisLabels
-        self.yAxisLabels = yAxisLabels
         self.barStyle = barStyle
         self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText

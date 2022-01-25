@@ -7,22 +7,6 @@
 
 import SwiftUI
 
-
-public final class TestStateObject: ObservableObject {
-    @Published public var chartSize: CGRect = .zero
-    @Published public var leadingInset: CGFloat = 0
-    @Published public var touchLocation: CGPoint = .zero
-    @Published public var isTouch: Bool = false
-    
-    public init() {}
-    
-    public enum Touch {
-        case touch(location: CGPoint)
-        case off
-    }
-}
-
-
 // MARK: - API
 extension View {
     
@@ -35,7 +19,7 @@ extension View {
      Unavailable in tvOS
      */
     public func touch<ChartData: CTChartData & Touchable>(
-        stateObject: TestStateObject,
+        stateObject: ChartStateObject,
         chartData: ChartData,
         markerType: ChartData.Marker = ChartData.defualtTouchMarker,
         minDistance: CGFloat = 0
@@ -57,7 +41,7 @@ extension View {
  */
 internal struct TouchOverlay<ChartData>: ViewModifier where ChartData: CTChartData & Touchable {
     
-    @ObservedObject var stateObject: TestStateObject
+    @ObservedObject var stateObject: ChartStateObject
     @ObservedObject var chartData: ChartData
     var markerType: ChartData.Marker
     var minDistance: CGFloat
@@ -115,7 +99,7 @@ fileprivate struct _MarkerData: View {
 // MARK: - Gesture
 fileprivate struct _ChartDragGesture: Gesture {
    
-    @ObservedObject var stateObject: TestStateObject
+    @ObservedObject var stateObject: ChartStateObject
     let minDistance: CGFloat
     let state: (State) -> Void
     

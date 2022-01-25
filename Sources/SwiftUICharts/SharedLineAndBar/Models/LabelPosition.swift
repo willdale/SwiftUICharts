@@ -7,19 +7,19 @@
 
 import Foundation
 
-public enum HorizontalLabelPosition: Hashable {
+public enum HorizontalEdge: Hashable {
     case leading
     case trailing
 }
 
-public enum VerticalLabelPosition: Hashable {
+public enum VerticalEdge: Hashable {
     case top
     case bottom
 }
 
-extension HorizontalLabelPosition: Identifiable {
+extension HorizontalEdge: Identifiable {
     public var id: Self { self }
 }
-extension VerticalLabelPosition: Identifiable {
+extension VerticalEdge: Identifiable {
     public var id: Self { self }
 }

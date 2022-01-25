@@ -9,7 +9,7 @@ import SwiftUI
 
 internal struct ChartSizeUpdating: ViewModifier {
     
-    private(set) var stateObject: TestStateObject
+    private(set) var stateObject: ChartStateObject
     
     internal func body(content: Content) -> some View {
         content.background(sizeView)

@@ -19,7 +19,7 @@ public struct XAxisLabelStyle {
         font: Font = .caption,
         fontColour: Color = .primary,
         rotation: Angle = .degrees(0),
-        inBounds: Bool = true,
+        inBounds: Bool = false,
         padding: CGFloat = 8
     ) {
         self.font = font
@@ -71,7 +71,7 @@ extension View {
     /// For vertical charts
     public func xAxisLabels(
         labels: [String],
-        positions: Set<HorizontalLabelPosition>,
+        positions: Set<HorizontalEdge>,
         style: XAxisLabelStyle = .standard,
         data: XAxisLabelStyle.XLabelData
     ) -> some View
@@ -91,7 +91,7 @@ extension View {
     /// For horizontal charts
     public func xAxisLabels(
         labels: [String],
-        positions: Set<VerticalLabelPosition>,
+        positions: Set<VerticalEdge>,
         style: XAxisLabelStyle = .standard,
         data: XAxisLabelStyle.XLabelData
     ) -> some View
@@ -111,7 +111,7 @@ extension View {
 fileprivate struct _XAxisLabelsModifier_Vertical: ViewModifier {
 
     let labels: [String]
-    let positions: [HorizontalLabelPosition]
+    let positions: [HorizontalEdge]
     let style: XAxisLabelStyle
     let data: XAxisLabelStyle.XLabelData
     
@@ -138,7 +138,7 @@ fileprivate struct _XAxisLabelsModifier_Vertical: ViewModifier {
 fileprivate struct _XAxisLabelsModifier_Horizontal: ViewModifier {
 
     let labels: [String]
-    let positions: [VerticalLabelPosition]
+    let positions: [VerticalEdge]
     let style: XAxisLabelStyle
     let data: XAxisLabelStyle.XLabelData
 
@@ -165,7 +165,7 @@ fileprivate struct _XAxisLabelsModifier_Horizontal: ViewModifier {
 // MARK: - View
 public struct XAxisLabels: View {
     
-    @EnvironmentObject var stateObject: TestStateObject
+    @EnvironmentObject var stateObject: ChartStateObject
     @StateObject var state = XAxisLabelsLayoutModel()
     
     let labels: [String]

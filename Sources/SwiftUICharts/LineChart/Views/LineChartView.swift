@@ -26,7 +26,7 @@ import SwiftUI
  */
 public struct LineChart<ChartData>: View where ChartData: LineChartData {
     
-    @EnvironmentObject public var stateObject: TestStateObject
+    @EnvironmentObject public var stateObject: ChartStateObject
     @EnvironmentObject public var chartData: ChartData
     
     public init() {}

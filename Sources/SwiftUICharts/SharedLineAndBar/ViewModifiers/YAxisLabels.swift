@@ -64,7 +64,7 @@ extension YAxisLabelStyle {
 extension View {
     /// Labels for the Y axis.
     public func yAxisLabels(
-        position: Set<HorizontalLabelPosition>,
+        position: Set<HorizontalEdge>,
         data: YAxisLabelStyle.Data,
         style: YAxisLabelStyle = .standard,
         dataSetInfo: YAxisLabelStyle.DataSetInfo
@@ -82,7 +82,7 @@ extension View {
 
     /// Labels for the Y axis.
     public func yAxisLabels(
-        position: Set<VerticalLabelPosition>,
+        position: Set<VerticalEdge>,
         data: YAxisLabelStyle.Data,
         style: YAxisLabelStyle = .standard,
         dataSetInfo: YAxisLabelStyle.DataSetInfo
@@ -102,9 +102,9 @@ extension View {
 // MARK: - Orientation
 fileprivate struct _YAxisLabelsModifier_Vertical: ViewModifier {
 
-    @EnvironmentObject var stateObject: TestStateObject
+    @EnvironmentObject var stateObject: ChartStateObject
 
-    let position: [HorizontalLabelPosition]
+    let position: [HorizontalEdge]
     let data: YAxisLabelStyle.Data
     let style: YAxisLabelStyle
     let dataSetInfo: YAxisLabelStyle.DataSetInfo
@@ -132,9 +132,9 @@ fileprivate struct _YAxisLabelsModifier_Vertical: ViewModifier {
 
 fileprivate struct _YAxisLabelsModifier_Horizontal: ViewModifier {
 
-    @EnvironmentObject var stateObject: TestStateObject
+    @EnvironmentObject var stateObject: ChartStateObject
 
-    let position: [VerticalLabelPosition]
+    let position: [VerticalEdge]
     let data: YAxisLabelStyle.Data
     let style: YAxisLabelStyle
     let dataSetInfo: YAxisLabelStyle.DataSetInfo
@@ -163,7 +163,7 @@ fileprivate struct _YAxisLabelsModifier_Horizontal: ViewModifier {
 // MARK: - View
 public struct YAxisLabels: View {
     
-    @EnvironmentObject var stateObject: TestStateObject
+    @EnvironmentObject var stateObject: ChartStateObject
     @StateObject var state = YAxisLabelsLayoutModel()
     
     let data: YAxisLabelStyle.Data
@@ -183,7 +183,10 @@ public struct YAxisLabels: View {
             .modifier(_Axis_Label_Size(state: state))
         }
         .onAppear { state.orientation = orientation }
-        .onChange(of: state.widest) { stateObject.leadingInset = $0 + style.padding }
+        .onChange(of: state.widest) {
+            stateObject.updateLayoutElement(with: ChartStateObject.Model(element: .leadingLabels, value: $0 + style.padding))
+            
+        }
     }
     
     internal var labels: [String] {
@@ -239,7 +242,7 @@ fileprivate struct _Label_Cell: View {
 // MARK: - ViewModifiers
 fileprivate struct _label_Positioning: ViewModifier {
 
-    @ObservedObject var stateObject: TestStateObject
+    @ObservedObject var stateObject: ChartStateObject
     @ObservedObject var state: YAxisLabelsLayoutModel
     let index: Int
     let count: Int
