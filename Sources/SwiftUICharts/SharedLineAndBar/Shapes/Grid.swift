@@ -8,6 +8,17 @@
 import SwiftUI
 import ChartMath
 
+// MARK: - API
+extension View {
+    public func grid(
+        vLines: UInt = 5,
+        hLines: UInt = 5,
+        style: Grid.Style = .grey
+    ) -> some View {
+        self.modifier(GridModifier(vLines: vLines, hLines: hLines, style: style))
+    }
+}
+
 // MARK: - HGrid
 public struct HGrid: Shape {
     
@@ -172,7 +183,10 @@ public struct Grid: Shape {
 
 extension Grid.Style {
     public static let grey = Self(colour: .colour(colour: .gray), stroke: StrokeStyle(), edges: true)
-    public static let gray = Self(colour: .colour(colour: .gray), stroke: StrokeStyle(), edges: true)
+    public static let greyNoEdges = Self(colour: .colour(colour: .gray), stroke: StrokeStyle(), edges: false)
+    
+    public static let lightGrey = Self(colour: .colour(colour: Color(.lightGray)), stroke: StrokeStyle(), edges: true)
+    public static let lightGreyNoEdges = Self(colour: .colour(colour: Color(.lightGray)), stroke: StrokeStyle(), edges: false)
 }
 
 // MARK: - HGrid Modifier
@@ -193,7 +207,7 @@ internal struct HGridModifier: ViewModifier {
 extension View {
     public func hGrid(
         lines: UInt = 5,
-        style: Grid.Style = .gray
+        style: Grid.Style = .grey
     ) -> some View {
         self.modifier(HGridModifier(lines: lines, style: style))
     }
@@ -217,7 +231,7 @@ internal struct VGridModifier: ViewModifier {
 extension View {
     public func vGrid(
         lines: UInt = 5,
-        style: Grid.Style = .gray
+        style: Grid.Style = .grey
     ) -> some View {
         self.modifier(VGridModifier(lines: lines, style: style))
     }
@@ -232,19 +246,9 @@ internal struct GridModifier: ViewModifier {
     
     internal func body(content: Content) -> some View {
         ZStack {
-            content
             Grid(vLines: vLines, hLines: hLines, edges: style.edges)
                 .stroke(style.colour, strokeStyle: style.stroke)
+            content
         }
-    }
-}
-
-extension View {
-    public func grid(
-        vLines: UInt = 5,
-        hLines: UInt = 5,
-        style: Grid.Style = .gray
-    ) -> some View {
-        self.modifier(GridModifier(vLines: vLines, hLines: hLines, style: style))
     }
 }

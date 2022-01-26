@@ -7,84 +7,38 @@
 
 import SwiftUI
 
-internal struct AxisBorder<ChartData>: ViewModifier where ChartData: CTChartData {
-    
-    @ObservedObject private var chartData: ChartData
-    private var border: ChartBorder
-    
-    internal init(
-        chartData: ChartData,
-        side: ChartBorder.Side,
-        style: ChartBorder.Style
-    ) {
-        self.chartData = chartData
-        self.border = ChartBorder(side: side, style: style)
-    }
-    
-    internal func body(content: Content) -> some View {
-        Group {
-            switch border.side {
-            case .top:
-                ZStack(alignment: .top) {
-                    HorizontalBorderView(chartData: chartData, style: border.style)
-                    content
-                }
-            case .leading:
-                ZStack(alignment: .leading) {
-                    VerticalBorderView(chartData: chartData, style: border.style)
-                    content
-                }
-            case .trailing:
-                ZStack(alignment: .trailing) {
-                    content
-                    VerticalBorderView(chartData: chartData, style: border.style)
-                }
-            case .bottom:
-                ZStack(alignment: .bottom) {
-                    content
-                    HorizontalBorderView(chartData: chartData, style: border.style)
-                }
-            }
-        }
-    }
-}
-// MARK: - Extension
-extension View {
-    public func axisBorder<ChartData>(
-        chartData: ChartData,
-        side: ChartBorder.Side,
-        style: ChartBorder.Style
-    ) -> some View
-    where ChartData: CTChartData
-    {
-        self.modifier(AxisBorder(chartData: chartData, side: side, style: style))
-    }
-}
+public typealias BorderSet = Set<ChartBorder>
+public typealias BorderStyle = ChartBorder.Style
 
-// MARK: - ChartBorder
-public struct ChartBorder {
-    public var side: Side
-    public var style: Style
+// MARK: - Style
+public enum ChartBorder: Hashable, Identifiable {
+    case top(direction: HorizontalAnimationDirection, style: BorderStyle)
+    case bottom(direction: HorizontalAnimationDirection, style: BorderStyle)
+    case leading(direction: VerticalAnimationDirection, style: BorderStyle)
+    case trailing(direction: VerticalAnimationDirection, style: BorderStyle)
     
-    public enum Side {
-        case top
+    public var id: Self { self }
+    
+    public enum VerticalAnimationDirection: Hashable {
+        case up
+        case middle
+        case down
+    }
+    
+    public enum HorizontalAnimationDirection: Hashable {
         case leading
+        case middle
         case trailing
-        case bottom
     }
     
     public struct Style: Hashable {
         /// Line Colour
-        public var lineColour: Color
+        public var colour: Color
         
         /// Line Width
-        public var lineWidth: CGFloat
+        public var style: StrokeStyle
         
-        /// Dash
-        public var dash: [CGFloat]
-        
-        /// Dash Phase
-        public var dashPhase: CGFloat
+        public var animation: Animation
         
         /// Model for controlling the look of the Grid
         /// - Parameters:
@@ -93,91 +47,296 @@ public struct ChartBorder {
         ///   - dash: Dash
         ///   - dashPhase: Dash Phase
         public init(
-            lineColour: Color = Color(.gray).opacity(0.25),
-            lineWidth: CGFloat = 1,
-            dash: [CGFloat] = [],
-            dashPhase: CGFloat = 0
+            colour: Color = Color(.gray).opacity(0.25),
+            style: StrokeStyle = StrokeStyle(),
+            animation: Animation //= .linear(duration: 1)
         ) {
-            self.lineColour = lineColour
-            self.lineWidth = lineWidth
-            self.dash = dash
-            self.dashPhase = dashPhase
+            self.colour = colour
+            self.style = style
+            self.animation = animation
+        }
+        
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(colour)
+            hasher.combine(style)
+        }
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        switch self {
+        case .top:
+            hasher.combine("ChartBorder.Side.top(direction: .middle)")
+        case .leading:
+            hasher.combine("ChartBorder.Side.leading(direction: .middle)")
+        case .trailing:
+            hasher.combine("ChartBorder.Side.trailing(direction: .middle)")
+        case .bottom:
+            hasher.combine("ChartBorder.Side.bottom(direction: .middle)")
+        }
+    }
+    
+    internal enum Direction {
+        case up
+        case down
+        
+        case middle
+        
+        case leading
+        case trailing
+    }
+    
+    internal var reverse: (ChartBorder, ChartBorder) {
+        switch self {
+        case .top:
+            return (.top(direction: .leading, style: .noStyle),
+                    .top(direction: .trailing, style: .noStyle))
+        case .bottom:
+            return (.bottom(direction: .leading, style: .noStyle),
+                    .bottom(direction: .trailing, style: .noStyle))
+        case .leading:
+            return (.leading(direction: .up, style: .noStyle),
+                    .leading(direction: .down, style: .noStyle))
+        case .trailing:
+            return (.trailing(direction: .up, style: .noStyle),
+                    .trailing(direction: .down, style: .noStyle))
+        }
+    }
+    
+    internal var isMiddle: Bool {
+        switch self {
+        case .top(direction: let direction, _):
+            if direction == .middle {
+                return true
+            }
+            return false
+        case .bottom(direction: let direction, _):
+            if direction == .middle {
+                return true
+            }
+            return false
+        case .leading(direction: let direction, _):
+            if direction == .middle {
+                return true
+            }
+            return false
+        case .trailing(direction: let direction, _):
+            if direction == .middle {
+                return true
+            }
+            return false
+        }
+    }
+    
+    var style: Style {
+        switch self {
+        case .top(_, let style):
+            return style
+        case .bottom(_, let style):
+            return style
+        case .leading(_, let style):
+            return style
+        case .trailing(_, let style):
+            return style
+        }
+    }
+    
+    var animation: Animation {
+        switch self {
+        case .top(_, let style):
+            return style.animation
+        case .bottom(_, let style):
+            return style.animation
+        case .leading(_, let style):
+            return style.animation
+        case .trailing(_, let style):
+            return style.animation
         }
     }
 }
 
 extension ChartBorder.Style {
-    public static let white = ChartBorder.Style(lineColour: Color(.white))
-    public static let lightGray = ChartBorder.Style(lineColour: Color(.gray).opacity(0.50))
-    public static let gray = ChartBorder.Style(lineColour: Color(.gray))
-    public static let black = ChartBorder.Style(lineColour: Color(.black))
-    public static let primary = ChartBorder.Style(lineColour: Color.primary)
+//    public static let white = ChartBorder.Style(colour: Color(.white))
+//    public static let lightGray = ChartBorder.Style(colour: Color(.gray).opacity(0.50))
+//    public static let gray = ChartBorder.Style(colour: Color(.gray))
+//    public static let black = ChartBorder.Style(colour: Color(.black))
+//    public static let primary =   ChartBorder.Style(colour: Color.primary)
+    
+    internal static let noStyle = ChartBorder.Style(colour: .clear, animation: .default)
 }
 
-// MARK: - HorizontalBorderView
-internal struct HorizontalBorderView<ChartData>: View where ChartData: CTChartData {
-    
-    @ObservedObject private var chartData: ChartData
-    private var style: ChartBorder.Style
-    
-    @State private var startAnimation: Bool
-    
-    internal init(
-        chartData: ChartData,
-        style: ChartBorder.Style
-    ) {
-        self.chartData = chartData
-        self.style = style
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
-    }
-    
-    var body: some View {
-        HorizontalGridShape()
-            .trim(to: startAnimation ? 1 : 0)
-            .stroke(style.lineColour,
-                    style: StrokeStyle(lineWidth: style.lineWidth,
-                                       dash: style.dash,
-                                       dashPhase: style.dashPhase))
-            .frame(height: style.lineWidth)
-            .animateOnAppear(using: .linear) {
-                self.startAnimation = true
-            }
-            .onDisappear {
-                self.startAnimation = false
-            }
+// MARK: - API
+extension View {
+    public func axisBorder(
+        edges: BorderSet
+    ) -> some View {
+        self.modifier(AxisBorder(edges: Array(edges)))
     }
 }
 
-// MARK: - VerticalBorderView
-internal struct VerticalBorderView<ChartData>: View where ChartData: CTChartData {
+internal struct AxisBorder: ViewModifier {
     
-    @ObservedObject private var chartData: ChartData
-    private var style: ChartBorder.Style
+    internal let edges: [ChartBorder]
     
-    @State private var startAnimation: Bool
-    
-    internal init(
-        chartData: ChartData,
-        style: ChartBorder.Style
-    ) {
-        self.chartData = chartData
-        self.style = style
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
+    internal func body(content: Content) -> some View {
+        ZStack {
+            ForEach(edges, id: \.id) { edge in
+                switch edge.isMiddle {
+                case false:
+                    _Animate_From_Corner(edge: edge)
+                case true:
+                    _Animate_From_Middle(edge: edge)
+                }
+
+                content
+            }
+        }
     }
+}
+
+fileprivate struct _Animate_From_Corner: View {
+    
+    internal let edge: ChartBorder
+    
+    @State private var animate = false
     
     var body: some View {
-        VerticalGridShape()
-            .trim(to: startAnimation ? 1 : 0)
-            .stroke(style.lineColour,
-                    style: StrokeStyle(lineWidth: style.lineWidth,
-                                       dash: style.dash,
-                                       dashPhase: style.dashPhase))
-            .frame(width: style.lineWidth)
-            .animateOnAppear(using: .linear) {
-                self.startAnimation = true
+        ZStack {
+            AxisBorderShape(edge: edge)
+                .trim(from: 0.0, to: animate ? 1.0 : 0.0)
+                .stroke(edge.style.colour, style: edge.style.style)
+        }
+        .animateOnAppear(using: edge.style.animation) {
+            self.animate = true
+        }
+    }
+}
+
+fileprivate struct _Animate_From_Middle: View {
+    
+    internal let edge: ChartBorder
+    
+    @State private var animate = false
+    
+    var body: some View {
+        ZStack {
+            AxisBorderShape(edge: edge.reverse.0)
+                .trim(from: 0.5, to: animate ? 1.0 : 0.5)
+                .stroke(edge.style.colour, style: edge.style.style)
+            AxisBorderShape(edge: edge.reverse.1)
+                .trim(from: 0.5, to: animate ? 1.0 : 0.5)
+                .stroke(edge.style.colour, style: edge.style.style)
+        }
+        .animateOnAppear(using: edge.style.animation) {
+            self.animate = true
+        }
+    }
+}
+
+public struct AxisBorderShape: Shape {
+    
+    let edge: ChartBorder
+    
+    public func path(in rect: CGRect) -> Path {
+        switch edge {
+        case .top(let direction, _):
+            switch direction {
+            case .leading:
+                return Path._topTrailing_to_topLeading(rect)
+            case .trailing:
+                return Path._topLeading_to_topTrailing(rect)
+            default:
+                return Path._topLeading_to_topTrailing(rect)
             }
-            .onDisappear {
-                self.startAnimation = false
+        case .leading(let direction, _):
+            switch direction {
+            case .up:
+                return Path._leadingBottom_to_leadingTop(rect)
+            case .down:
+                return Path._leadingTop_to_leadingBottom(rect)
+            default:
+                return Path._leadingTop_to_leadingBottom(rect)
             }
+        case .bottom(let direction, _):
+            switch direction {
+            case .leading:
+                return Path._bottomTrailing_to_bottomLeading(rect)
+            case .trailing:
+                return Path._bottomLeading_to_bottomTrailing(rect)
+            default:
+                return Path._bottomLeading_to_bottomTrailing(rect)
+            }
+        case .trailing(let direction, _):
+            switch direction {
+            case .up:
+                return Path._bottomTrailing_to_topTrailing(rect)
+            case .down:
+                return Path._topTrailing_to_bottomTrailing(rect)
+            default:
+                return Path._topTrailing_to_bottomTrailing(rect)
+            }
+        }
+    }
+}
+
+extension Path {
+    static func topLeading(_ rect: CGRect) -> CGPoint { CGPoint(x: rect.minX, y: rect.minY) }
+    static func bottomLeading(_ rect: CGRect) -> CGPoint { CGPoint(x: rect.minX, y: rect.maxY) }
+    static func bottomTrailing(_ rect: CGRect) -> CGPoint { CGPoint(x: rect.maxX, y: rect.maxY) }
+    static func topTrailing(_ rect: CGRect) -> CGPoint { CGPoint(x: rect.maxX, y: rect.minY) }
+    
+    static func _leadingBottom_to_leadingTop(_ rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: Self.bottomLeading(rect))
+        path.addLine(to: Self.topLeading(rect))
+        return path
+    }
+    
+    static func _leadingTop_to_leadingBottom(_ rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: Self.topLeading(rect))
+        path.addLine(to: Self.bottomLeading(rect))
+        return path
+    }
+    
+    static func _bottomLeading_to_bottomTrailing(_ rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: Self.bottomLeading(rect))
+        path.addLine(to: Self.bottomTrailing(rect))
+        return path
+    }
+    
+    static func _bottomTrailing_to_bottomLeading(_ rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: Self.bottomTrailing(rect))
+        path.addLine(to: Self.bottomLeading(rect))
+        return path
+    }
+    
+    static func _bottomTrailing_to_topTrailing(_ rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: Self.bottomTrailing(rect))
+        path.addLine(to: Self.topTrailing(rect))
+        return path
+    }
+    
+    static func _topTrailing_to_bottomTrailing(_ rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: Self.topTrailing(rect))
+        path.addLine(to: Self.bottomTrailing(rect))
+        return path
+    }
+    
+    static func _topLeading_to_topTrailing(_ rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: Self.topLeading(rect))
+        path.addLine(to: Self.topTrailing(rect))
+        return path
+    }
+    
+    static func _topTrailing_to_topLeading(_ rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: Self.topTrailing(rect))
+        path.addLine(to: Self.topLeading(rect))
+        return path
     }
 }
