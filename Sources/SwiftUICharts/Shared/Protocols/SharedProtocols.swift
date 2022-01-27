@@ -70,9 +70,22 @@ public protocol CTChartData: ObservableObject, Identifiable {
     var chartStyle: DeprecatedCTStyle { get }
 }
 
+public struct DataSetInfo {
+    public var minValue: Double
+    public var range: Double
+    
+    public init(
+        minValue: Double,
+        range: Double
+    ) {
+        self.minValue = minValue
+        self.range = range
+    }
+}
+
 extension CTChartData where Self: DataHelper {
-    public var dataSetInfo: YAxisLabelStyle.DataSetInfo {
-        YAxisLabelStyle.DataSetInfo(minValue: minValue, range: range)
+    public var dataSetInfo: DataSetInfo {
+        DataSetInfo(minValue: minValue, range: range)
     }
 }
 

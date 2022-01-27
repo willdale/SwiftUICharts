@@ -1,5 +1,5 @@
 //
-//  PointStyle.swift
+//  deprecated+PointStyle.swift
 //  LineChart
 //
 //  Created by Will Dale on 04/01/2021.
@@ -12,6 +12,7 @@ import SwiftUI
  
  Point markers are placed on top of the line, marking where the data points are.
  */
+@available(*, deprecated, message: "Please use \".pointMarkers\" instead")
 public struct PointStyle: Hashable {
     
     /// Overall size of the mark
@@ -57,6 +58,7 @@ public struct PointStyle: Hashable {
     }
 }
 
+@available(*, deprecated, message: "Please use \".pointMarkers\" instead")
 public struct PointColour: Hashable {
     public let border: Color
     public let fill: Color

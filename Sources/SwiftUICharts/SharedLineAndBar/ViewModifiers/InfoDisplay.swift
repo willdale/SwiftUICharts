@@ -61,7 +61,7 @@ internal struct InfoDisplay<Info>: ViewModifier where Info: View {
             content
             __ViewSize(infoView: infoView, size: $size)
                 .position(x: stateObject.leadingInset + position(size).x,
-                          y: position(size).y)
+                          y: stateObject.topInset + position(size).y)
                 .zIndex(1)
         }
     }

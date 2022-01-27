@@ -12,9 +12,19 @@ public struct FilledLineDataSet: CTLineChartDataSet, DataFunctionsProtocol {
     public let id: UUID = UUID()
     public var dataPoints: [LineChartDataPoint]
     public var legendTitle: String
-    public var pointStyle: PointStyle
     public var style: FilledLineStyle
+
+    public init(
+        dataPoints: [LineChartDataPoint],
+        legendTitle: String = "",
+        style: FilledLineStyle = FilledLineStyle()
+    ) {
+        self.dataPoints = dataPoints
+        self.legendTitle = legendTitle
+        self.style = style
+    }
     
+    @available(*, deprecated, message: "\"PointStyle\" has been depricated")
     public init(
         dataPoints: [LineChartDataPoint],
         legendTitle: String = "",
@@ -26,4 +36,7 @@ public struct FilledLineDataSet: CTLineChartDataSet, DataFunctionsProtocol {
         self.pointStyle = pointStyle
         self.style = style
     }
+    
+    @available(*, deprecated, message: "\"PointStyle\" has been depricated")
+    public var pointStyle = PointStyle()
 }

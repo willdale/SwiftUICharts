@@ -1,5 +1,5 @@
 //
-//  FilledTopLine.swift
+//  deprecated+FilledTopLine.swift
 //  
 //
 //  Created by Will Dale on 31/03/2021.
@@ -10,7 +10,7 @@ import SwiftUI
 /**
  ViewModifier for for laying out point markers.
  */
-@available(*, deprecated, message: "Build in to Filled Line Chart now.")
+@available(*, deprecated, message: "Built in to Filled Line Chart now.")
 internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
     
     @ObservedObject private var chartData: T

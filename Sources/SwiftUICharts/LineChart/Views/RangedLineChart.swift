@@ -38,7 +38,7 @@ public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartD
     public var body: some View {
 //        GeometryReader { geo in
             ZStack {
-                chartData.getAccessibility()
+//                chartData.getAccessibility()
                 RangedBoxSubView(chartData: chartData,
                                  dataSet: chartData.dataSets,
                                  minValue: chartData.minValue,

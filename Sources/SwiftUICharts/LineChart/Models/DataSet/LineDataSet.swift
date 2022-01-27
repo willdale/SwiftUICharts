@@ -17,9 +17,21 @@ public struct LineDataSet: CTLineChartDataSet, DataFunctionsProtocol {
     public let id: UUID = UUID()
     public var dataPoints: [LineChartDataPoint]
     public var legendTitle: String
-    public var pointStyle: PointStyle
+    
     public var style: LineStyle
     
+    public init(
+        dataPoints: [LineChartDataPoint],
+        legendTitle: String = "",
+        style: LineStyle = LineStyle()
+    ) {
+        self.dataPoints = dataPoints
+        self.legendTitle = legendTitle
+        self.style = style
+    }
+    
+    
+    @available(*, deprecated, message: "\"PointStyle\" has been depricated")
     public init(
         dataPoints: [LineChartDataPoint],
         legendTitle: String = "",
@@ -31,4 +43,7 @@ public struct LineDataSet: CTLineChartDataSet, DataFunctionsProtocol {
         self.pointStyle = pointStyle
         self.style = style
     }
+    
+    @available(*, deprecated, message: "Please use \".pointMarkers\" instead")
+    public var pointStyle = PointStyle()
 }

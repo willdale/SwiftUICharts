@@ -10,41 +10,7 @@ import SwiftUI
 public protocol LineChartType {}
 
 // MARK: - Chart Data
-public protocol CTLineChartDataProtocol {
-    
-    /// A type representing opaque View
-    associatedtype Points: View
-    
-    /// A type representing opaque View
-    associatedtype Access: View
-    
-    /**
-     Displays Shapes over the data points.
-     
-     - Returns: Relevent view containing point markers based the chosen parameters.
-     */
-    func getPointMarker() -> Points
-    
-    /**
-     Ensures that line charts have an accessibility layer.
-     
-     - Returns: A view with invisible rectangles over the data point.
-     */
-    func getAccessibility() -> Access
-}
-
-extension CTLineChartDataProtocol where Self: CTChartData, SetType: CTLineChartDataSet {
-    public func getAccessibility() -> some View {
-        ForEach(dataSets.dataPoints.indices, id: \.self) { point in
-            AccessibilityRectangle(dataPointCount: self.dataSets.dataPoints.count,
-                                   dataPointNo: point)
-                .foregroundColor(Color(.gray).opacity(0.000000001))
-                .accessibilityLabel(self.accessibilityTitle)
-//                .accessibilityValue(self.dataSets.dataPoints[point].getCellAccessibilityValue(specifier: self.infoView.touchSpecifier))
-        }
-    }
-}
-
+public protocol CTLineChartDataProtocol {}
 
 // MARK: - Style
 /// A protocol to extend functionality of `CTLineBarChartStyle` specifically for  Line Charts.
@@ -104,6 +70,7 @@ public protocol CTLineChartDataSet: CTSingleDataSetProtocol {
      The markers are layed out when the ViewModifier `PointMarkers`
      is applied.
      */
+    @available(*, deprecated, message: "Please use \".pointMarkers\" instead")
     var pointStyle: PointStyle { get set }
 }
 
@@ -130,6 +97,7 @@ public protocol CTMultiLineChartDataSet: CTMultiDataSetProtocol {}
  A protocol to extend functionality of `CTLineBarDataPointProtocol` specifically for Line and Bar Charts.
  */
 public protocol CTLineDataPointProtocol: CTLineBarDataPointProtocol {
+    @available(*, deprecated, message: "Please use \".pointMarkers\" instead")
     var pointColour: PointColour? { get set }
 }
 

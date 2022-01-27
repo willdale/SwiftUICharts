@@ -43,7 +43,7 @@ public struct FilledLineChart<ChartData>: View where ChartData: FilledLineChartD
     
     public var body: some View {
             ZStack {
-                chartData.getAccessibility()
+//                chartData.getAccessibility()
                 TopLineSubView(chartData: chartData,
                                colour: chartData.dataSets.style.lineColour)
                 FilledLineSubView(chartData: chartData,

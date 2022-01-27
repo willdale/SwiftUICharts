@@ -78,17 +78,6 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
         self.noDataText = noDataText
         self.baseline = baseline
         self.topLine = topLine
-        
-//        self.setupLegends()
-    }
-    
-    // MARK: Points
-    public func getPointMarker() -> some View {
-        PointsSubView(chartData: self,
-                      dataSets: dataSets,
-                      minValue: minValue,
-                      range: range,
-                      animation: chartStyle.globalAnimation)
     }
 
     // MARK: Touch

@@ -101,15 +101,6 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
        return  CGFloat(index) * divide(size, count - 1)
     }
     
-    // MARK: Points
-    public func getPointMarker() -> some View {
-        PointsSubView(chartData: self,
-                      dataSets: dataSets,
-                      minValue: self.minValue,
-                      range: self.range,
-                      animation: self.chartStyle.globalAnimation)
-    }
-    
     // MARK: Touch
     public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []

@@ -81,15 +81,6 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
 
 //        self.setupLegends()
     }
-    
-    // MARK: Points
-    public func getPointMarker() -> some View {
-        PointsSubView(chartData: self,
-                      dataSets: dataSets,
-                      minValue: self.minValue,
-                      range: self.range,
-                      animation: self.chartStyle.globalAnimation)
-    }
 
     // MARK: Touch
     public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {

@@ -1,5 +1,5 @@
 //
-//  PointsSubView.swift
+//  deprecated+PointsSubView.swift
 //  
 //
 //  Created by Will Dale on 04/02/2021.
@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@available(*, deprecated, message: "")
 internal struct PointsSubView<ChartData, DataSet>: View where ChartData: CTChartData,
                                                               DataSet: CTLineChartDataSet,
                                                               DataSet.DataPoint: CTLineDataPointProtocol & CTStandardDataPointProtocol & Ignorable {
@@ -105,7 +106,7 @@ internal struct PointsSubView<ChartData, DataSet>: View where ChartData: CTChart
     }
 }
 
-
+@available(*, deprecated, message: "")
 internal struct FilledPointsSubView<ChartData, DataSet>: View where ChartData: CTChartData,
                                                                     DataSet: CTLineChartDataSet,
                                                                     DataSet.DataPoint: CTStandardLineDataPoint & CTLineDataPointProtocol & Ignorable {

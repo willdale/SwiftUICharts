@@ -82,17 +82,6 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
 //        self.setupLegends()
     }
 
-    // MARK: Points
-    public func getPointMarker() -> some View {
-        ForEach(self.dataSets.dataSets, id: \.id) { dataSet in
-            PointsSubView(chartData: self,
-                          dataSets: dataSet,
-                          minValue: self.minValue,
-                          range: self.range,
-                          animation: self.chartStyle.globalAnimation)
-        }
-    }
-    
     // MARK: Touch
     public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []

@@ -1,15 +1,17 @@
 //
-//  PointShape.swift
+//  deprecated+PointShape.swift
 //  LineChart
 //
 //  Created by Will Dale on 24/12/2020.
 //
 
 import SwiftUI
+import ChartMath
 
 /**
  Draws point markers over the data point locations.
  */
+@available(*, deprecated, message: "Please use \".pointMarkers\" instead")
 internal struct Point<DataPoint>: Shape where DataPoint: CTStandardDataPointProtocol & Ignorable {
     
     private let datapoint: DataPoint

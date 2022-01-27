@@ -19,7 +19,7 @@ public struct RangedLineChartDataPoint: CTRangedLineDataPoint, Ignorable, DataPo
     public var xAxisLabel: String?
     public var description: String?
     public var date: Date?
-    public var pointColour: PointColour?
+    
     
     public var ignore: Bool = false
     
@@ -35,7 +35,37 @@ public struct RangedLineChartDataPoint: CTRangedLineDataPoint, Ignorable, DataPo
     ///   - xAxisLabel: Label that can be shown on the X axis.
     ///   - description: A longer label that can be shown on touch input.
     ///   - date: Date of the data point if any data based calculations are required.
+    public init(
+        value: Double,
+        upperValue: Double,
+        lowerValue: Double,
+        xAxisLabel: String? = nil,
+        description: String? = nil,
+        date: Date? = nil,
+        ignore: Bool = false
+    ) {
+        self.value = value
+        self.upperValue = upperValue
+        self.lowerValue = lowerValue
+        self.xAxisLabel = xAxisLabel
+        self.description = description
+        self.date = date
+        self.ignore = ignore
+    }
+    
+    @available(*, deprecated, message: "\"PointStyle\" has been depricated")
+    public var pointColour: PointColour? = nil
+    
+    /// Data model for a single data point with colour for use with a ranged line chart.
+    /// - Parameters:
+    ///   - value: Value of the data point.
+    ///   - upperValue: Value of the upper range of the data point.
+    ///   - lowerValue: Value of the lower range of the data point.
+    ///   - xAxisLabel: Label that can be shown on the X axis.
+    ///   - description: A longer label that can be shown on touch input.
+    ///   - date: Date of the data point if any data based calculations are required.
     ///   - pointColour: Colour of the point markers.
+    @available(*, deprecated, message: "\"PointStyle\" has been depricated")
     public init(
         value: Double,
         upperValue: Double,
@@ -55,6 +85,7 @@ public struct RangedLineChartDataPoint: CTRangedLineDataPoint, Ignorable, DataPo
         self.pointColour = pointColour
         self.ignore = ignore
     }
+    
 }
 
 extension RangedLineChartDataPoint {

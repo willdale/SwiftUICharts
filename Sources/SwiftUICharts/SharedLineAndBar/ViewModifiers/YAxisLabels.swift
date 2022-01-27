@@ -34,19 +34,6 @@ public struct YAxisLabelStyle {
         case custom(labels: [String])
     }
     
-    public struct DataSetInfo {
-        public var minValue: Double
-        public var range: Double
-        
-        public init(
-            minValue: Double,
-            range: Double
-        ) {
-            self.minValue = minValue
-            self.range = range
-        }
-    }
-    
     internal enum AxisOrientation {
         case vertical
         case horizontal
@@ -67,7 +54,7 @@ extension View {
         position: Set<HorizontalEdge>,
         data: YAxisLabelStyle.Data,
         style: YAxisLabelStyle = .standard,
-        dataSetInfo: YAxisLabelStyle.DataSetInfo
+        dataSetInfo: DataSetInfo
     ) -> some View
     {
         self.modifier(
@@ -85,7 +72,7 @@ extension View {
         position: Set<VerticalEdge>,
         data: YAxisLabelStyle.Data,
         style: YAxisLabelStyle = .standard,
-        dataSetInfo: YAxisLabelStyle.DataSetInfo
+        dataSetInfo: DataSetInfo
     ) -> some View
     {
         self.modifier(
@@ -107,7 +94,7 @@ fileprivate struct _YAxisLabelsModifier_Vertical: ViewModifier {
     let position: [HorizontalEdge]
     let data: YAxisLabelStyle.Data
     let style: YAxisLabelStyle
-    let dataSetInfo: YAxisLabelStyle.DataSetInfo
+    let dataSetInfo: DataSetInfo
 
     var axisOrientation: YAxisLabelStyle.AxisOrientation = .vertical
     
@@ -137,7 +124,7 @@ fileprivate struct _YAxisLabelsModifier_Horizontal: ViewModifier {
     let position: [VerticalEdge]
     let data: YAxisLabelStyle.Data
     let style: YAxisLabelStyle
-    let dataSetInfo: YAxisLabelStyle.DataSetInfo
+    let dataSetInfo: DataSetInfo
 
     let axisOrientation: YAxisLabelStyle.AxisOrientation = .horizontal
     
@@ -169,7 +156,7 @@ public struct YAxisLabels: View {
     let data: YAxisLabelStyle.Data
     let style: YAxisLabelStyle
     let orientation: YAxisLabelStyle.AxisOrientation
-    let dataSetInfo: YAxisLabelStyle.DataSetInfo
+    let dataSetInfo: DataSetInfo
     
     public var body: some View {
         ZStack {
