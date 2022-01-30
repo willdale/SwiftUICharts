@@ -1,6 +1,6 @@
 //
 //  ExtraLine.swift
-//  
+//
 //
 //  Created by Will Dale on 08/05/2021.
 //
@@ -35,7 +35,7 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                        let colour = chartData.extraLineData.style.lineColour.colour
                     {
                         Group {
-                            ColourExtraLineView(chartData: chartData, colour: colour)
+                            ColourExtraLineView(chartData: chartData, colour: colour, stroke: chartData.extraLineData.style.strokeStyle)
                             PointsExtraLineView(chartData: chartData)
                         }
                     } else if chartData.extraLineData.style.lineColour.colourType == .gradientColour,
@@ -44,7 +44,7 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                               let endPoint = chartData.extraLineData.style.lineColour.endPoint
                     {
                         Group {
-                            ColoursExtraLineView(chartData: chartData, colours: colours, startPoint: startPoint, endPoint: endPoint)
+                            ColoursExtraLineView(chartData: chartData, colours: colours, startPoint: startPoint, endPoint: endPoint, stroke: chartData.extraLineData.style.strokeStyle)
                             PointsExtraLineView(chartData: chartData)
                         }
                     } else if chartData.extraLineData.style.lineColour.colourType == .gradientStops,
@@ -53,7 +53,7 @@ internal struct ExtraLine<T>: ViewModifier where T: CTLineBarChartDataProtocol {
                               let endPoint = chartData.extraLineData.style.lineColour.endPoint
                     {
                         Group {
-                            StopsExtraLineView(chartData: chartData, stops: stops, startPoint: startPoint, endPoint: endPoint)
+                            StopsExtraLineView(chartData: chartData, stops: stops, startPoint: startPoint, endPoint: endPoint, stroke: chartData.extraLineData.style.strokeStyle)
                             PointsExtraLineView(chartData: chartData)
                         }
                     }
@@ -181,13 +181,16 @@ internal struct ColourExtraLineView<ChartData>: View where ChartData: CTLineBarC
     
     @ObservedObject private var chartData: ChartData
     let colour: Color
+    let stroke: Stroke
     
     internal init(
         chartData: ChartData,
-        colour: Color
+        colour: Color,
+        stroke: Stroke
     ) {
         self.chartData = chartData
         self.colour = colour
+        self.stroke = stroke
     }
     
     @State private var startAnimation: Bool = false
@@ -201,10 +204,10 @@ internal struct ColourExtraLineView<ChartData>: View where ChartData: CTLineBarC
                        minValue: chartData.extraLineData.minValue)
             .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
                 $0.trim(to: startAnimation ? 1 : 0)
-                    .stroke(colour, style: StrokeStyle(lineWidth: 3))
+                    .stroke(colour, style: stroke.strokeToStrokeStyle())
             }, else: {
                 $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
-                    .stroke(colour, style: StrokeStyle(lineWidth: 3))
+                    .stroke(colour, style: stroke.strokeToStrokeStyle())
             })
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
@@ -223,17 +226,20 @@ internal struct ColoursExtraLineView<ChartData>: View where ChartData: CTLineBar
     let colours: [Color]
     let startPoint: UnitPoint
     let endPoint: UnitPoint
+    let stroke: Stroke
     
     internal init(
         chartData: ChartData,
         colours: [Color],
         startPoint: UnitPoint,
-        endPoint: UnitPoint
+        endPoint: UnitPoint,
+        stroke: Stroke
     ) {
         self.chartData = chartData
         self.colours = colours
         self.startPoint = startPoint
         self.endPoint = endPoint
+        self.stroke = stroke
     }
     
     @State private var startAnimation: Bool = false
@@ -249,13 +255,13 @@ internal struct ColoursExtraLineView<ChartData>: View where ChartData: CTLineBar
                     .stroke(LinearGradient(gradient: Gradient(colors: colours),
                                            startPoint: startPoint,
                                            endPoint: endPoint),
-                            style: StrokeStyle(lineWidth: 3))
+                            style: stroke.strokeToStrokeStyle())
             }, else: {
                 $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                     .stroke(LinearGradient(gradient: Gradient(colors: colours),
                                            startPoint: startPoint,
                                            endPoint: endPoint),
-                            style: StrokeStyle(lineWidth: 3))
+                            style: stroke.strokeToStrokeStyle())
             })
             
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
@@ -274,17 +280,20 @@ internal struct StopsExtraLineView<ChartData>: View where ChartData: CTLineBarCh
     let stops: [Gradient.Stop]
     let startPoint: UnitPoint
     let endPoint: UnitPoint
+    let stroke: Stroke
     
     internal init(
         chartData: ChartData,
         stops: [GradientStop],
         startPoint: UnitPoint,
-        endPoint: UnitPoint
+        endPoint: UnitPoint,
+        stroke: Stroke
     ) {
         self.chartData = chartData
         self.stops = GradientStop.convertToGradientStopsArray(stops: stops)
         self.startPoint = startPoint
         self.endPoint = endPoint
+        self.stroke = stroke
     }
     
     @State private var startAnimation: Bool = false
@@ -300,13 +309,13 @@ internal struct StopsExtraLineView<ChartData>: View where ChartData: CTLineBarCh
                     .stroke(LinearGradient(gradient: Gradient(stops: stops),
                                            startPoint: startPoint,
                                            endPoint: endPoint),
-                            style: StrokeStyle(lineWidth: 3))
+                            style: stroke.strokeToStrokeStyle())
             }, else: {
                 $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                     .stroke(LinearGradient(gradient: Gradient(stops: stops),
                                            startPoint: startPoint,
                                            endPoint: endPoint),
-                            style: StrokeStyle(lineWidth: 3))
+                            style: stroke.strokeToStrokeStyle())
             })
             .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
@@ -519,7 +528,7 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
     }
 }
 
-// MARK: - Bar Point 
+// MARK: - Bar Point
 /// Custom version of ``Point`` for Extra Line
 /// when being used on a Bar Chart.
 internal struct PointBarSpcing: Shape {
