@@ -1,6 +1,6 @@
 //
 //  LabelShape.swift
-//  
+//
 //
 //  Created by Will Dale on 08/02/2021.
 //
@@ -8,6 +8,25 @@
 import SwiftUI
 
 // MARK: - Ordinate
+
+/**
+ Custom Label Shape used in POI Markers when displaying POI values.
+ */
+public struct CustomLabelShape: Shape {
+    public init<S: Shape>(_ wrapped: S) {
+        _path = { rect in
+            let path = wrapped.path(in: rect)
+            return path
+        }
+    }
+    
+    public func path(in rect: CGRect) -> Path {
+        return _path(rect)
+    }
+    
+    private let _path: (CGRect) -> Path
+}
+
 /**
  Shape used in POI Markers when displaying value in the Y axis labels on the leading edge.
  */
