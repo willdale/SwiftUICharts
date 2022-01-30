@@ -1,6 +1,6 @@
 //
 //  HorizontalBarChartData.swift
-//  
+//
 //
 //  Created by Will Dale on 26/04/2021.
 //
@@ -120,10 +120,6 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Get
                         Spacer()
                             .frame(minHeight: 0, maxHeight: 500)
                     }
-                    if self.chartStyle.xAxisLabelPosition == .bottom {
-                        Spacer()
-                            .frame(height: yAxisPaddingHeight + 8) // Why 8 ?
-                    }
                 }
                 
             case .chartData:
@@ -187,11 +183,17 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Get
     
     public final func getPointLocation(dataSet: BarDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
         let ySection: CGFloat = chartSize.height / CGFloat(dataSet.dataPoints.count)
-        let xSection: CGFloat = chartSize.width / CGFloat(self.maxValue)
+        var xSection: CGFloat = chartSize.width / CGFloat(self.maxValue)
         let index: Int = Int((touchLocation.y) / ySection)
         if index >= 0 && index < dataSet.dataPoints.count {
-            return CGPoint(x: (CGFloat(dataSet.dataPoints[index].value) * xSection),
-                           y: (CGFloat(index) * ySection) + (ySection / 2))
+            var x = (CGFloat(dataSet.dataPoints[index].value) * xSection)
+            let y = (CGFloat(index) * ySection) + (ySection / 2)
+            if self.minValue.isLess(than: 0) {
+                xSection = chartSize.width / (CGFloat(self.maxValue) - CGFloat(self.minValue))
+                x = (CGFloat(dataSet.dataPoints[index].value) * xSection) - (CGFloat(self.minValue) * xSection)
+            }
+            return CGPoint(x: x,
+                           y: y)
         }
         return nil
     }
