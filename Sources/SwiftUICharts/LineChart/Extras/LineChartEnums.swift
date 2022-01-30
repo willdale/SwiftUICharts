@@ -12,6 +12,7 @@ import SwiftUI
  ```
  case line // Straight line from point to point
  case curvedLine // Dual control point curved line
+ case stepped // Stepped line from point to point
  ```
  */
 public enum LineType {
@@ -19,6 +20,8 @@ public enum LineType {
     case line
     /// Dual control point curved line
     case curvedLine
+    /// Stepped line from point to point
+    case stepped
 }
 
 /**

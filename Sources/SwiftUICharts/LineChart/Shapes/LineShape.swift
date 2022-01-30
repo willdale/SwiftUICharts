@@ -51,6 +51,13 @@ internal struct LineShape<DP>: Shape where DP: CTStandardDataPointProtocol & Ign
             case true:
                 return Path.straightLineIgnoreZero(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
             }
+        case .stepped:
+            switch ignoreZero {
+            case false:
+                return Path.steppedLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
+            case true:
+                return Path.steppedLineIgnoreZero(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range, isFilled: isFilled)
+            }
         }
     }
 }
@@ -97,7 +104,13 @@ internal struct RangedLineFillShape<DP>: Shape where DP: CTRangedLineDataPoint &
             case true:
                 return Path.straightLineBoxIgnoreZero(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
             }
-            
+        case .stepped:
+            switch ignoreZero {
+            case false:
+                return Path.steppedLineBox(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            case true:
+                return Path.steppedLineBoxIgnoreZero(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            }
         }
     }
 }

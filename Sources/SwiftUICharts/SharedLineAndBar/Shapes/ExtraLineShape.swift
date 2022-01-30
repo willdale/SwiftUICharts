@@ -1,6 +1,6 @@
 //
 //  ExtraLineShape.swift
-//  
+//
 //
 //  Created by Will Dale on 05/06/2021.
 //
@@ -39,6 +39,10 @@ internal struct ExtraLineShape: Shape {
             return Path.extraLineCurvedBarSpacing(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
         case (.line, .bar):
             return Path.extraLineStraightBarSpacing(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+        case (.stepped, .line):
+            return Path.extraLineStepped(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+        case (.stepped, .bar):
+            return Path.extraLineSteppedBarSpacing(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
         }
     }
 }
@@ -96,6 +100,32 @@ extension Path {
                           control2: CGPoint(x: nextPoint.x - (nextPoint.x - previousPoint.x) / 2,
                                             y: nextPoint.y))
             previousPoint = nextPoint
+        }
+        return path
+    }
+    
+    static func extraLineStepped(
+        rect: CGRect,
+        dataPoints: [Double],
+        minValue: Double,
+        range: Double
+    ) -> Path {
+        let x: CGFloat = rect.width / CGFloat(dataPoints.count - 1)
+        let y: CGFloat = rect.height / CGFloat(range)
+        var path = Path()
+        if dataPoints.count >= 2 {
+            let firstPoint = CGPoint(x: 0,
+                                     y: (CGFloat(dataPoints[0] - minValue) * -y) + rect.height)
+            path.move(to: firstPoint)
+            var newPoint = firstPoint
+            for index in 1 ..< dataPoints.count {
+                let nextStep = CGPoint(x: CGFloat(index) * x,
+                                       y: newPoint.y)
+                path.addLine(to: nextStep)
+                newPoint = CGPoint(x: CGFloat(index) * x,
+                                   y: (CGFloat(dataPoints[index] - minValue) * -y) + rect.height)
+                path.addLine(to: newPoint)
+            }
         }
         return path
     }
@@ -160,6 +190,32 @@ extension Path {
                                          y: (CGFloat(dataPoints[dataPoints.count - 1] - minValue) * -y) + rect.height)
         path.addLine(to: lastPoint)
         
+        return path
+    }
+    
+    static func extraLineSteppedBarSpacing(
+        rect: CGRect,
+        dataPoints: [Double],
+        minValue: Double,
+        range: Double
+    ) -> Path {
+        let x: CGFloat = rect.width / CGFloat(dataPoints.count)
+        let y: CGFloat = rect.height / CGFloat(range)
+        var path = Path()
+        if dataPoints.count >= 2 {
+            let firstPoint = CGPoint(x: 0 + (x / 2),
+                                     y: (CGFloat(dataPoints[0] - minValue) * -y) + rect.height)
+            path.move(to: firstPoint)
+            var newPoint = firstPoint
+            for index in 1 ..< dataPoints.count {
+                let nextStep = CGPoint(x: (CGFloat(index) * x) + (x / 2),
+                                       y: newPoint.y)
+                path.addLine(to: nextStep)
+                newPoint = CGPoint(x: (CGFloat(index) * x) + (x / 2),
+                                   y: (CGFloat(dataPoints[index] - minValue) * -y) + rect.height)
+                path.addLine(to: newPoint)
+            }
+        }
         return path
     }
 }

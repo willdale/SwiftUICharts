@@ -1,6 +1,6 @@
 //
 //  ExtraLineData.swift
-//  
+//
 //
 //  Created by Will Dale on 05/06/2021.
 //
@@ -185,6 +185,10 @@ extension ExtraLineData {
             return Path.extraLineCurvedBarSpacing(rect: rect, dataPoints: dataPoints.map(\.value), minValue: minValue, range: range)
         case (.line, .bar):
             return Path.extraLineStraightBarSpacing(rect: rect, dataPoints: dataPoints.map(\.value), minValue: minValue, range: range)
+        case (.stepped, .line):
+            return Path.extraLineStepped(rect: rect, dataPoints: dataPoints.map(\.value), minValue: minValue, range: range)
+        case (.stepped, .bar):
+            return Path.extraLineSteppedBarSpacing(rect: rect, dataPoints: dataPoints.map(\.value), minValue: minValue, range: range)
         }
     }
     
