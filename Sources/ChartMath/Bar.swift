@@ -15,8 +15,8 @@ public func barYAxisPOIMarkerX<T: BinaryFloatingPoint>(_ value: T, _ min: T, _ r
 
 @inlinable
 public func barXAxisPOIMarkerX<T: BinaryInteger, U: BinaryFloatingPoint>(_ value: T, _ count: T, _ width: U) -> U {
-    // same as lineXAxisPOIMarkerX
-    return divideByZeroProtection(U.self, width, U(count - 1)) * U(value)
+    let section = divideByZeroProtection(U.self, width, U(count))
+    return (U(value) * section) + (section / 2)
 }
 
 @inlinable

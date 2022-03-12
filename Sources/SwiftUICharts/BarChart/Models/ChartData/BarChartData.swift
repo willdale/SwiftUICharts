@@ -93,7 +93,7 @@ public final class BarChartData: BarChartType, CTChartData, CTBarChartDataProtoc
         if index >= 0 && index < dataSets.dataPoints.count {
             let datapoint = dataSets.dataPoints[index]
             let location = CGPoint(x: (CGFloat(index) * xSection) + (xSection / 2),
-                                            y: (chartSize.size.height - CGFloat(dataSets.dataPoints[index].value) * ySection))
+                                   y: (chartSize.size.height - CGFloat(dataSets.dataPoints[index].value) * ySection))
             
             values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
             

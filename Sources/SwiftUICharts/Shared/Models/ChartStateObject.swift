@@ -5,6 +5,7 @@
 //  Created by Will Dale on 24/01/2022.
 //
 
+import ChartMath
 import SwiftUI
 
 public final class ChartStateObject: ObservableObject {
@@ -112,6 +113,113 @@ public final class ChartStateObject: ObservableObject {
                 case trailing
                 case bottom
             }
+        }
+    }
+}
+
+// MARK: - POI
+//
+//
+//
+// MARK: Y Axis
+extension ChartStateObject {
+    public func horizontalLinePosition(value: Double, position: PoiStyle.HorizontalPosition, dataSetInfo: DataSetInfo) -> CGPoint {
+        switch position {
+        case .leading:
+            return CGPoint(x: -(leadingInset / 2),
+                           y: plotPointY(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.height))
+        case .center:
+            return CGPoint(x: chartSize.width / 2,
+                           y: plotPointY(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.height))
+        case .trailing:
+            return CGPoint(x: chartSize.width + (trailingInset / 2),
+                           y: plotPointY(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.height))
+        }
+    }
+}
+
+extension ChartStateObject {
+    public func verticalLinePosition(value: Double, position: PoiStyle.VerticalPosition, dataSetInfo: DataSetInfo) -> CGPoint {
+        switch position {
+        case .top:
+            return CGPoint(x: horizontalBarYPosition(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.width),
+                           y: -(topInset / 2))
+        case .center:
+            return CGPoint(x: horizontalBarYPosition(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.width),
+                           y: chartSize.height / 2)
+        case .bottom:
+            return CGPoint(x: horizontalBarYPosition(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.width),
+                           y: chartSize.height + topInset / 2)
+        }
+    }
+}
+
+// MARK: X Axis
+//
+//
+//
+// MARK: Line
+extension ChartStateObject {
+    public func verticalLineIndexedPosition(value: Int, count: Int, position: PoiStyle.VerticalPosition) -> CGPoint {
+        switch position {
+        case .top:
+            return CGPoint(x: lineXAxisPOIMarkerX(value, count, chartSize.width),
+                           y: -(topInset / 2))
+        case .center:
+            return CGPoint(x: lineXAxisPOIMarkerX(value, count, chartSize.width),
+                           y: chartSize.height / 2)
+        case .bottom:
+            return CGPoint(x: lineXAxisPOIMarkerX(value, count, chartSize.width),
+                           y: chartSize.height + topInset / 2)
+        }
+    }
+}
+
+extension ChartStateObject {
+    public func horizontalLineIndexedPosition(value: Int, count: Int, position: PoiStyle.HorizontalPosition) -> CGPoint {
+        switch position {
+        case .leading:
+            return CGPoint(x: -(leadingInset / 2),
+                           y: horizontalBarXAxisPOIMarkerY(value, count, chartSize.height))
+        case .center:
+            return CGPoint(x: chartSize.width / 2,
+                           y: horizontalBarXAxisPOIMarkerY(value, count, chartSize.height))
+        case .trailing:
+            return CGPoint(x: chartSize.width + (trailingInset / 2),
+                           y: horizontalBarXAxisPOIMarkerY(value, count, chartSize.height))
+        }
+    }
+}
+
+// MARK: Bar
+extension ChartStateObject {
+    public func verticalLineIndexedBarPosition(value: Int, count: Int, position: PoiStyle.VerticalPosition) -> CGPoint {
+        switch position {
+        case .top:
+            return CGPoint(x: barXAxisPOIMarkerX(value, count, chartSize.width),
+                           y: -(topInset / 2))
+        case .center:
+            return CGPoint(x: barXAxisPOIMarkerX(value, count, chartSize.width),
+                           y: chartSize.height / 2)
+        case .bottom:
+            return CGPoint(x: barXAxisPOIMarkerX(value, count, chartSize.width),
+                           y: chartSize.height + topInset / 2)
+        }
+    }
+}
+
+extension ChartStateObject {
+    public func horizontalLineIndexedBarPosition(value: Int, count: Int, position: PoiStyle.HorizontalPosition) -> CGPoint {
+        switch position {
+        case .leading:
+            return CGPoint(x: -(leadingInset / 2),
+                           y: barXAxisPOIMarkerX(value, count, chartSize.height))
+        case .center:
+            return CGPoint(x: chartSize.width / 2,
+                           y: barXAxisPOIMarkerX(value, count, chartSize.height))
+        case .trailing:
+            return CGPoint(x: chartSize.width + (trailingInset / 2),
+                           y: barXAxisPOIMarkerX(value, count, chartSize.height))
         }
     }
 }

@@ -5,6 +5,7 @@
 //  Created by Will Dale on 31/12/2020.
 //
 
+import ChartMath
 import SwiftUI
 
 public struct PoiStyle {
@@ -31,7 +32,6 @@ extension PoiStyle {
 
 // MARK: - API
 extension View {
-    
     public func yAxisMarker<Label: View>(
         value: Double,
         position: PoiStyle.HorizontalPosition,
@@ -39,11 +39,15 @@ extension View {
         dataSetInfo: DataSetInfo,
         label: Label
     ) -> some View {
-        self.modifier(YAxisMarker_HorizontalPosition(value: value,
-                                                     position: position,
-                                                     style: style,
-                                                     dataSetInfo: dataSetInfo,
-                                                     label: label))
+        self.modifier(
+            YAxisMarker_HorizontalPosition(
+                value: value,
+                position: position,
+                style: style,
+                dataSetInfo: dataSetInfo,
+                label: label
+            )
+        )
     }
     
     public func yAxisMarker<Label: View>(
@@ -53,11 +57,15 @@ extension View {
         dataSetInfo: DataSetInfo,
         label: () -> Label
     ) -> some View {
-        self.modifier(YAxisMarker_HorizontalPosition(value: value,
-                                                     position: position,
-                                                     style: style,
-                                                     dataSetInfo: dataSetInfo,
-                                                     label: label()))
+        self.modifier(
+            YAxisMarker_HorizontalPosition(
+                value: value,
+                position: position,
+                style: style,
+                dataSetInfo: dataSetInfo,
+                label: label()
+            )
+        )
     }
     
     public func yAxisMarker<Label: View>(
@@ -67,11 +75,15 @@ extension View {
         dataSetInfo: DataSetInfo,
         label: Label
     ) -> some View {
-        self.modifier(YAxisMarker_VerticalPosition(value: value,
-                                                   position: position,
-                                                   style: style,
-                                                   dataSetInfo: dataSetInfo,
-                                                   label: label))
+        self.modifier(
+            YAxisMarker_VerticalPosition(
+                value: value,
+                position: position,
+                style: style,
+                dataSetInfo: dataSetInfo,
+                label: label
+            )
+        )
     }
     
     public func yAxisMarker<Label: View>(
@@ -81,15 +93,22 @@ extension View {
         dataSetInfo: DataSetInfo,
         label: () -> Label
     ) -> some View {
-        self.modifier(YAxisMarker_VerticalPosition(value: value,
-                                                   position: position,
-                                                   style: style,
-                                                   dataSetInfo: dataSetInfo,
-                                                   label: label()))
+        self.modifier(
+            YAxisMarker_VerticalPosition(
+                value: value,
+                position: position,
+                style: style,
+                dataSetInfo: dataSetInfo,
+                label: label()
+            )
+        )
     }
 }
 
+// MARK: - Implementation
 internal struct YAxisMarker_HorizontalPosition<Label: View>: ViewModifier {
+    
+    @EnvironmentObject var state: ChartStateObject
     
     internal let value: Double
     internal let position: PoiStyle.HorizontalPosition
@@ -100,13 +119,21 @@ internal struct YAxisMarker_HorizontalPosition<Label: View>: ViewModifier {
     internal func body(content: Content) -> some View {
         ZStack {
             content
-            _AxisLabel_HorizontalPosition(value: value, position: position, style: style, dataSetInfo: dataSetInfo, label: label)
+            label.position(placement)
+            AxisHorizontalMarker(yPosition: placement.y)
+                .stroke(style.colour, style: style.strokeStyle)
         }
+    }
+    
+    var placement: CGPoint {
+        state.horizontalLinePosition(value: value, position: position, dataSetInfo: dataSetInfo)
     }
 }
 
 internal struct YAxisMarker_VerticalPosition<Label: View>: ViewModifier {
     
+    @EnvironmentObject var state: ChartStateObject
+    
     internal let value: Double
     internal let position: PoiStyle.VerticalPosition
     internal let style: PoiStyle
@@ -116,171 +143,16 @@ internal struct YAxisMarker_VerticalPosition<Label: View>: ViewModifier {
     internal func body(content: Content) -> some View {
         ZStack {
             content
-            _AxisLabel_VerticalPosition(value: value, position: position, style: style, dataSetInfo: dataSetInfo, label: label)
+            label.position(placement)
+            AxisVerticalMarker(yPosition: placement.x)
+                .stroke(style.colour, style: style.strokeStyle)
         }
     }
-}
-
-fileprivate struct _AxisLabel_HorizontalPosition<Label: View>: View {
     
-    @EnvironmentObject var state: ChartStateObject
-
-    internal let value: Double
-    internal let position: PoiStyle.HorizontalPosition
-    internal let style: PoiStyle
-    internal let dataSetInfo: DataSetInfo
-    internal let label: Label
-    
-    internal var body: some View {
-       label
-            .position(state.verticalLineMarkerPosition(value: value,
-                                                 position: position,
-                                                 chartSize: state.chartSize.size,
-                                                 dataSetInfo: dataSetInfo))
-        
-        AxisHorizontalMarker(yPosition: state.verticalLineMarkerPosition(value: value,
-                                                                         position: position,
-                                                                         chartSize: state.chartSize.size,
-                                                                         dataSetInfo: dataSetInfo).y)
-            .stroke(style.colour, style: style.strokeStyle)
+    var placement: CGPoint {
+        state.verticalLinePosition(value: value, position: position, dataSetInfo: dataSetInfo)
     }
 }
-
-fileprivate struct _AxisLabel_VerticalPosition<Label: View>: View {
-    
-    @EnvironmentObject var state: ChartStateObject
-
-    internal let value: Double
-    internal let position: PoiStyle.VerticalPosition
-    internal let style: PoiStyle
-    internal let dataSetInfo: DataSetInfo
-    internal let label: Label
-    
-    internal var body: some View {
-       label
-            .position(state.horizontalBarMarkerPosition(value: value, position: position, chartSize: state.chartSize.size, dataSetInfo: dataSetInfo))
-        
-        AxisVerticalMarker(yPosition: state.horizontalBarMarkerPosition(value: value, position: position, chartSize: state.chartSize.size, dataSetInfo: dataSetInfo).x)
-            .stroke(style.colour, style: style.strokeStyle)
-    }
-}
-
-
-import ChartMath
-
-// MARK: - Position
-//
-//
-//
-// MARK: Vertical Charts
-extension ChartStateObject {
-    public func verticalLineMarkerPosition(value: Double, position: PoiStyle.HorizontalPosition, chartSize: CGSize, dataSetInfo: DataSetInfo) -> CGPoint {
-        switch position {
-        case .leading:
-            return CGPoint(x: -(leadingInset / 2),
-                           y: plotPointY(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.height))
-        case .center:
-            return CGPoint(x: chartSize.width / 2,
-                           y: plotPointY(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.height))
-        case .trailing:
-            return CGPoint(x: chartSize.width + (trailingInset / 2),
-                           y: plotPointY(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.height))
-        }
-    }
-}
-/*
-     // MARK: Line Charts
-    public func xAxisPOIMarkerPosition(value: Int, count: Int, position: PoiPositionable, chartSize: CGRect) -> CGPoint {
-        let padding: CGFloat = 10
-        switch position as? PoiStyle.VerticalPosition {
-        case .top:
-            return CGPoint(x: lineXAxisPOIMarkerX(value, count, chartSize.width),
-                           y: -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - padding)
-        case .center:
-            return CGPoint(x: lineXAxisPOIMarkerX(value, count, chartSize.width),
-                           y: chartSize.height / 2)
-        case .bottom:
-            return CGPoint(x: lineXAxisPOIMarkerX(value, count, chartSize.width),
-                           y:  chartSize.height + ((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) + padding)
-        default:
-            return .zero
-        }
-    }
-*/
-
-// MARK: Vertical Bar Charts
-extension ChartStateObject {
-//    public func veriticalBarMarkerPosition(value: Double, position: PoiStyle.HorizontalPosition, chartSize: CGSize, dataSetInfo: DataSetInfo) -> CGPoint {
-//        switch position {
-//        case .leading:
-//            return CGPoint(x: -(leadingInset / 2),
-//                           y: barYAxisPOIMarkerX(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.height))
-//        case .center:
-//            return CGPoint(x: chartSize.width / 2,
-//                           y: barYAxisPOIMarkerX(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.height))
-//        case .trailing:
-//            return CGPoint(x: chartSize.width + (trailingInset / 2),
-//                           y: barYAxisPOIMarkerX(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.height))
-//        }
-//    }
-}
-
-/*
-    // MARK: Vertical Bar Charts
-    public func xAxisPOIMarkerPosition(value: Int, count: Int, position: PoiPositionable, chartSize: CGRect) -> CGPoint {
-        let padding: CGFloat = 10.0
-        switch position as? PoiStyle.VerticalPosition {
-        case .top:
-            return CGPoint(x: barXAxisPOIMarkerX(value, count, chartSize.width),
-                           y: -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - padding)
-        case .center:
-            // (chartSize.width / CGFloat(count)) * CGFloat(value) + ((chartSize.width / CGFloat(count)) / 2)
-            return CGPoint(x: barXAxisPOIMarkerX(value, count, chartSize.width),
-                           y: chartSize.height / 2)
-        case .bottom:
-            return CGPoint(x: barXAxisPOIMarkerX(value, count, chartSize.width),
-                           y: chartSize.height + ((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) + padding)
-        default:
-            return .zero
-        }
-    }
-*/
-
-// MARK: Horizontal Bar Charts
-extension ChartStateObject {
-    public func horizontalBarMarkerPosition(value: Double, position: PoiStyle.VerticalPosition, chartSize: CGSize, dataSetInfo: DataSetInfo) -> CGPoint {
-        switch position {
-        case .top:
-            return CGPoint(x: horizontalBarYPosition(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.width),
-                           y: -(topInset / 2))
-        case .center:
-            return CGPoint(x: horizontalBarYPosition(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.width),
-                           y: chartSize.height / 2)
-        case .bottom:
-            return CGPoint(x: horizontalBarYPosition(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.width),
-                           y: chartSize.height + topInset / 2)
-        }
-    }
-}
-/*
-     // MARK: Horizontal Bar Charts
-    public func xAxisPOIMarkerPosition(value: Int, count: Int, position: PoiPositionable, chartSize: CGRect) -> CGPoint {
-        let padding: CGFloat = 8.0
-        switch position as? PoiStyle.HorizontalPosition {
-        case .leading:
-            return CGPoint(x: -((xAxisViewData.xAxisLabelHeights.max() ?? 0) / 2) - padding,
-                           y: horizontalBarXAxisPOIMarkerY(value, count, chartSize.height))
-        case .center:
-            return CGPoint(x: chartSize.width / 2,
-                           y: horizontalBarXAxisPOIMarkerY(value, count, chartSize.height))
-        case .trailing:
-            return CGPoint(x: chartSize.width + ((xAxisViewData.xAxisLabelWidths.max() ?? 0) / 2) + padding,
-                           y: horizontalBarXAxisPOIMarkerY(value, count, chartSize.height))
-        default:
-            return .zero
-        }
-    }
-*/
 
 // MARK: - deprecated api
 extension View {

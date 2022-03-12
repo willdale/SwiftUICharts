@@ -18,9 +18,9 @@ public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBar
     public var body: some View {
         VStack(spacing: 0) {
             HorizontalBarChartSubView(chartData: chartData)
-                .modifier(ChartSizeUpdating(stateObject: stateObject))
                 .accessibilityLabel(chartData.accessibilityTitle)
         }
+        .modifier(ChartSizeUpdating(stateObject: stateObject))
     }
 }
 
