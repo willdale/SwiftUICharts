@@ -10,18 +10,15 @@ import SwiftUI
 // MARK: - Chart
 public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBarChartData {
     
-    @ObservedObject private var chartData: ChartData
+    @EnvironmentObject public var stateObject: ChartStateObject
+    @EnvironmentObject public var chartData: ChartData
     
-    /// Initialises a bar chart view.
-    /// - Parameter chartData: Must be BarChartData model.
-    public init(chartData: ChartData) {
-        self.chartData = chartData
-    }
+    public init() {}
     
     public var body: some View {
         VStack(spacing: 0) {
             HorizontalBarChartSubView(chartData: chartData)
-//                .modifier(ChartSizeUpdating(chartData: chartData))
+                .modifier(ChartSizeUpdating(stateObject: stateObject))
                 .accessibilityLabel(chartData.accessibilityTitle)
         }
     }

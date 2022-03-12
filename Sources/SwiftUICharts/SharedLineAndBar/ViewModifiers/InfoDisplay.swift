@@ -88,7 +88,6 @@ fileprivate struct __ViewSize<Info: View>: View {
                 }
         }
     }
-    
 }
 
 // MARK: - Presets

@@ -10,25 +10,17 @@ import SwiftUI
 // MARK: - Chart
 public struct BarChart<ChartData>: View where ChartData: BarChartData {
     
-    @ObservedObject private var chartData: ChartData
+    @EnvironmentObject public var stateObject: ChartStateObject
+    @EnvironmentObject public var chartData: ChartData
     
-    /// Initialises a bar chart view.
-    /// - Parameter chartData: Must be BarChartData model.
-    public init(chartData: ChartData) {
-        self.chartData = chartData
-    }
+    public init() {}
     
     public var body: some View {
-//        GeometryReader { geo in
             HStack(spacing: 0) {
                 BarChartSubView(chartData: chartData)
                     .accessibilityLabel(chartData.accessibilityTitle)
             }
-//            .modifier(ChartSizeUpdating(chartData: chartData))
-//            .onAppear { // Needed for axes label frames
-//                self.chartData.chartSize = geo.frame(in: .local)
-//            }
-//        }
+            .modifier(ChartSizeUpdating(stateObject: stateObject))
     }
 }
 

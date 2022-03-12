@@ -9,7 +9,7 @@ import SwiftUI
 
 internal typealias CTChartType = (chartType: ChartType, dataSetType: DataSetType)
 
-public typealias ChartConformance = DataHelper & Publishable & PointOfInterestProtocol & Touchable & ExtraLineProtocol
+public typealias ChartConformance = DataHelper & Publishable & Touchable & ExtraLineProtocol
 public typealias StandardChartConformance =  ChartConformance & VerticalChart
 public typealias HorizontalChartConformance = ChartConformance & HorizontalChart
 
@@ -71,21 +71,24 @@ public protocol CTChartData: ObservableObject, Identifiable {
 }
 
 public struct DataSetInfo {
+    public var chart: ChartName
     public var minValue: Double
     public var range: Double
     
     public init(
+        chart: ChartName,
         minValue: Double,
         range: Double
     ) {
         self.minValue = minValue
         self.range = range
+        self.chart = chart
     }
 }
 
 extension CTChartData where Self: DataHelper {
     public var dataSetInfo: DataSetInfo {
-        DataSetInfo(minValue: minValue, range: range)
+        DataSetInfo(chart: chartName, minValue: minValue, range: range)
     }
 }
 

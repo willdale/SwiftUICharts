@@ -1,5 +1,5 @@
 //
-//  LinearTrendLineShape.swift
+//  deprecated+LinearTrendLineShape.swift
 //  
 //
 //  Created by Will Dale on 26/03/2021.
@@ -10,6 +10,7 @@ import SwiftUI
 /**
  A line across the chart to show the trend in the data.
  */
+@available(*, deprecated, message: "Use ExtraLine")
 internal struct LinearTrendLineShape: Shape {
     
     private let firstValue: Double
