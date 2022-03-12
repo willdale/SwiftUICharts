@@ -1,6 +1,6 @@
 //
 //  BarChartData.swift
-//  
+//
 //
 //  Created by Will Dale on 23/01/2021.
 //
@@ -41,7 +41,7 @@ public final class BarChartData: CTBarChartDataProtocol, GetDataProtocol, Publis
     ///   - dataSets: Data to draw and style the bars.
     ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
-    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
+    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
     ///   - barStyle: Control for the aesthetic of the bar chart.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
@@ -148,11 +148,17 @@ public final class BarChartData: CTBarChartDataProtocol, GetDataProtocol, Publis
     
     public final func getPointLocation(dataSet: BarDataSet, touchLocation: CGPoint, chartSize: CGRect) -> CGPoint? {
         let xSection: CGFloat = chartSize.width / CGFloat(dataSet.dataPoints.count)
-        let ySection: CGFloat = chartSize.height / CGFloat(self.maxValue)
+        var ySection: CGFloat = chartSize.height / CGFloat(self.maxValue)
         let index: Int = Int((touchLocation.x) / xSection)
         if index >= 0 && index < dataSet.dataPoints.count {
-            return CGPoint(x: (CGFloat(index) * xSection) + (xSection / 2),
-                           y: (chartSize.size.height - CGFloat(dataSet.dataPoints[index].value) * ySection))
+            let x = (CGFloat(index) * xSection) + (xSection / 2)
+            var y = (chartSize.size.height - CGFloat(dataSet.dataPoints[index].value) * ySection)
+            if self.minValue.isLess(than: 0) {
+                ySection = chartSize.height / (CGFloat(self.maxValue) - CGFloat(self.minValue))
+                y = (chartSize.size.height - (CGFloat(dataSet.dataPoints[index].value) * ySection) + (CGFloat(self.minValue) * ySection))
+            }
+            return CGPoint(x: x,
+                           y: y)
         }
         return nil
     }

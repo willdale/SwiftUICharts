@@ -1,6 +1,6 @@
 //
 //  BarChart.swift
-//  
+//
 //
 //  Created by Will Dale on 11/01/2021.
 //
@@ -70,6 +70,9 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
                     self.chartData.viewData.chartSize = value
                 }
             } else { CustomNoDataView(chartData: chartData) }
+        }
+        .if(chartData.minValue.isLess(than: 0)) {
+            $0.scaleEffect(y: CGFloat(chartData.maxValue/(chartData.maxValue - chartData.minValue)), anchor: .top)
         }
     }
 }

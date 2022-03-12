@@ -1,6 +1,6 @@
 //
 //  MultiBarChartData.swift
-//  
+//
 //
 //  Created by Will Dale on 26/01/2021.
 //
@@ -49,7 +49,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
     ///   - groups: Information for how to group the data points.
     ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
-    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
+    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
     ///   - barStyle: Control for the aesthetic of the bar chart.
     ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
@@ -185,7 +185,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
         
         // Make those sections take account of spacing between groups.
         let xSection: CGFloat = superXSection - compensation
-        let ySection: CGFloat = chartSize.height / CGFloat(self.maxValue)
+        var ySection: CGFloat = chartSize.height / CGFloat(self.maxValue)
         
         let index: Int = Int((touchLocation.x - CGFloat(groupSpacing * CGFloat(superIndex))) / xSection)
         
@@ -197,8 +197,14 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
                 let element: CGFloat = (CGFloat(subIndex) * xSubSection) + (xSubSection / 2)
                 let section: CGFloat = (superXSection * CGFloat(superIndex))
                 let spacing: CGFloat = ((groupSpacing / CGFloat(dataSets.dataSets.count)) * CGFloat(superIndex))
-                return CGPoint(x: element + section + spacing,
-                               y: (chartSize.height - CGFloat(subDataSet.dataPoints[subIndex].value) * ySection))
+                let x = element + section + spacing
+                var y = (chartSize.height - CGFloat(subDataSet.dataPoints[subIndex].value) * ySection)
+                if self.minValue.isLess(than: 0) {
+                    ySection = chartSize.height / (CGFloat(self.maxValue) - CGFloat(self.minValue))
+                    y = (chartSize.height - (CGFloat(subDataSet.dataPoints[subIndex].value) * ySection) + (CGFloat(self.minValue) * ySection))
+                }
+                return CGPoint(x: x,
+                               y: y)
             }
         }
         return nil

@@ -1,6 +1,6 @@
 //
 //  HorizontalBarChart.swift
-//  
+//
 //
 //  Created by Will Dale on 26/04/2021.
 //
@@ -29,13 +29,15 @@ public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBar
                         HorizontalBarChartDataPointSubView(chartData: chartData)
                             .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
                     }
-                    
                 }
                 // Needed for axes label frames
                 .onChange(of: geo.frame(in: .local)) { value in
                     self.chartData.viewData.chartSize = value
                 }
             } else { CustomNoDataView(chartData: chartData) }
+        }
+        .if(chartData.minValue.isLess(than: 0)) {
+            $0.scaleEffect(x: CGFloat(chartData.maxValue/(chartData.maxValue - chartData.minValue)), anchor: .trailing)
         }
     }
 }
