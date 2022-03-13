@@ -8,45 +8,6 @@
 import SwiftUI
 import ChartMath
 
-public struct YAxisLabelStyle {
-    public var font: Font
-    public var colour: Color
-    public var number: Int
-    public var formatter: NumberFormatter
-    public var padding: CGFloat
-
-    public init(
-        font: Font = .caption,
-        colour: Color = .primary,
-        number: Int = 10,
-        formatter: NumberFormatter = .default,
-        padding: CGFloat = 8
-    ) {
-        self.font = font
-        self.colour = colour
-        self.number = number
-        self.formatter = formatter
-        self.padding = padding
-    }
-
-    public enum Data {
-        case generated
-        case custom(labels: [String])
-    }
-    
-    internal enum AxisOrientation {
-        case vertical
-        case horizontal
-    }
-}
-
-extension YAxisLabelStyle {
-    public static let standard = YAxisLabelStyle(font: .caption,
-                                                 colour: .primary,
-                                                 number: 10,
-                                                 formatter: .default)
-}
-
 // MARK: - API
 extension View {
     /// Labels for the Y axis.
@@ -265,29 +226,5 @@ fileprivate struct _Axis_Label_Size: ViewModifier {
             content
                 .frame(height: state.widest)
         }
-    }
-}
-
-// MARK: - Layout Model
-internal final class YAxisLabelsLayoutModel: ObservableObject  {
-        
-    @Published internal var widths = Set<Model>()
-    @Published internal var widest: CGFloat = 0
-    
-    internal var orientation: YAxisLabelStyle.AxisOrientation = .vertical
-        
-    internal func update(with newItem: Model) {
-        if let oldItem = widths.first(where: { $0.id == newItem.id }) {
-            widths.remove(oldItem)
-            widths.insert(newItem)
-        } else {
-            widths.insert(newItem)
-        }
-        widest = widths.map(\.value).max() ?? 0
-    }
-    
-    internal struct Model: Hashable {
-        internal let id: Int
-        internal let value: CGFloat
     }
 }
