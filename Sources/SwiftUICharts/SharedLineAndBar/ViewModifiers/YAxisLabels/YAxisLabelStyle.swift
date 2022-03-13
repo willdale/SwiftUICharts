@@ -5,7 +5,7 @@
 //  Created by Will Dale on 13/03/2022.
 //
 
-import Foundation
+import SwiftUI
 
 public struct YAxisLabelStyle {
     public var font: Font
