@@ -123,7 +123,7 @@ public final class ChartStateObject: ObservableObject {
 //
 // MARK: Y Axis
 extension ChartStateObject {
-    public func horizontalLinePosition(value: Double, position: PoiStyle.HorizontalPosition, dataSetInfo: DataSetInfo) -> CGPoint {
+    public func horizontalLinePosition(value: Double, position: AxisMarkerStyle.Horizontal, dataSetInfo: DataSetInfo) -> CGPoint {
         switch position {
         case .leading:
             return CGPoint(x: -(leadingInset / 2),
@@ -139,7 +139,7 @@ extension ChartStateObject {
 }
 
 extension ChartStateObject {
-    public func verticalLinePosition(value: Double, position: PoiStyle.VerticalPosition, dataSetInfo: DataSetInfo) -> CGPoint {
+    public func verticalLinePosition(value: Double, position: AxisMarkerStyle.Vertical, dataSetInfo: DataSetInfo) -> CGPoint {
         switch position {
         case .top:
             return CGPoint(x: horizontalBarYPosition(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.width),
@@ -160,7 +160,7 @@ extension ChartStateObject {
 //
 // MARK: Line
 extension ChartStateObject {
-    public func verticalLineIndexedPosition(value: Int, count: Int, position: PoiStyle.VerticalPosition) -> CGPoint {
+    public func verticalLineIndexedPosition(value: Int, count: Int, position: AxisMarkerStyle.Vertical) -> CGPoint {
         switch position {
         case .top:
             return CGPoint(x: lineXAxisPOIMarkerX(value, count, chartSize.width),
@@ -176,7 +176,7 @@ extension ChartStateObject {
 }
 
 extension ChartStateObject {
-    public func horizontalLineIndexedPosition(value: Int, count: Int, position: PoiStyle.HorizontalPosition) -> CGPoint {
+    public func horizontalLineIndexedPosition(value: Int, count: Int, position: AxisMarkerStyle.Horizontal) -> CGPoint {
         switch position {
         case .leading:
             return CGPoint(x: -(leadingInset / 2),
@@ -193,7 +193,7 @@ extension ChartStateObject {
 
 // MARK: Bar
 extension ChartStateObject {
-    public func verticalLineIndexedBarPosition(value: Int, count: Int, position: PoiStyle.VerticalPosition) -> CGPoint {
+    public func verticalLineIndexedBarPosition(value: Int, count: Int, position: AxisMarkerStyle.Vertical) -> CGPoint {
         switch position {
         case .top:
             return CGPoint(x: barXAxisPOIMarkerX(value, count, chartSize.width),
@@ -209,7 +209,7 @@ extension ChartStateObject {
 }
 
 extension ChartStateObject {
-    public func horizontalLineIndexedBarPosition(value: Int, count: Int, position: PoiStyle.HorizontalPosition) -> CGPoint {
+    public func horizontalLineIndexedBarPosition(value: Int, count: Int, position: AxisMarkerStyle.Horizontal) -> CGPoint {
         switch position {
         case .leading:
             return CGPoint(x: -(leadingInset / 2),

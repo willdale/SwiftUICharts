@@ -1,5 +1,5 @@
 //
-//  XAxisPOI.swift
+//  xAxisMarker.swift
 //  
 //
 //  Created by Will Dale on 19/06/2021.
@@ -12,8 +12,8 @@ extension View {
     public func xAxisMarker<Label: View>(
         value: Int,
         total: Int,
-        position: PoiStyle.HorizontalPosition,
-        style: PoiStyle,
+        position: AxisMarkerStyle.Horizontal,
+        style: AxisMarkerStyle,
         chartName: ChartName,
         label: Label
     ) -> some View {
@@ -32,8 +32,8 @@ extension View {
     public func xAxisMarker<Label: View>(
         value: Int,
         total: Int,
-        position: PoiStyle.HorizontalPosition,
-        style: PoiStyle,
+        position: AxisMarkerStyle.Horizontal,
+        style: AxisMarkerStyle,
         chartName: ChartName,
         label: () -> Label
     ) -> some View {
@@ -52,8 +52,8 @@ extension View {
     public func xAxisMarker<Label: View>(
         value: Int,
         total: Int,
-        position: PoiStyle.VerticalPosition,
-        style: PoiStyle,
+        position: AxisMarkerStyle.Vertical,
+        style: AxisMarkerStyle,
         chartName: ChartName,
         label: Label
     ) -> some View {
@@ -72,8 +72,8 @@ extension View {
     public func xAxisMarker<Label: View>(
         value: Int,
         total: Int,
-        position: PoiStyle.VerticalPosition,
-        style: PoiStyle,
+        position: AxisMarkerStyle.Vertical,
+        style: AxisMarkerStyle,
         chartName: ChartName,
         label: () -> Label
     ) -> some View {
@@ -97,8 +97,8 @@ internal struct XAxisMarker_HorizontalPosition<Label: View>: ViewModifier {
     
     internal let value: Int
     internal let total: Int
-    internal let position: PoiStyle.HorizontalPosition
-    internal let style: PoiStyle
+    internal let position: AxisMarkerStyle.Horizontal
+    internal let style: AxisMarkerStyle
     internal let chartName: ChartName
     internal let label: Label
     
@@ -126,8 +126,8 @@ internal struct XAxisMarker_VerticalPosition<Label: View>: ViewModifier {
     
     internal let value: Int
     internal let total: Int
-    internal let position: PoiStyle.VerticalPosition
-    internal let style: PoiStyle
+    internal let position: AxisMarkerStyle.Vertical
+    internal let style: AxisMarkerStyle
     internal let chartName: ChartName
     internal let label: Label
     

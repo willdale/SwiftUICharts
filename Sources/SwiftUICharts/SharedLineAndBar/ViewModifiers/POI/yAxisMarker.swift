@@ -1,41 +1,18 @@
 //
-//  YAxisPOI.swift
+//  yAxisMarker.swift
 //  LineChart
 //
 //  Created by Will Dale on 31/12/2020.
 //
 
-import ChartMath
 import SwiftUI
-
-public struct PoiStyle {
-    public var colour: Color
-    public var strokeStyle: StrokeStyle
-    
-    public enum HorizontalPosition {
-        case leading
-        case trailing
-        case center
-    }
-    
-    public enum VerticalPosition {
-        case top
-        case bottom
-        case center
-    }
-}
-
-extension PoiStyle {
-    public static let amber = PoiStyle(colour: Color(red: 1.0, green: 0.75, blue: 0.25),
-                                       strokeStyle: StrokeStyle(lineWidth: 1, dash: [5,10]))
-}
 
 // MARK: - API
 extension View {
     public func yAxisMarker<Label: View>(
         value: Double,
-        position: PoiStyle.HorizontalPosition,
-        style: PoiStyle,
+        position: AxisMarkerStyle.Horizontal,
+        style: AxisMarkerStyle,
         dataSetInfo: DataSetInfo,
         label: Label
     ) -> some View {
@@ -52,8 +29,8 @@ extension View {
     
     public func yAxisMarker<Label: View>(
         value: Double,
-        position: PoiStyle.HorizontalPosition,
-        style: PoiStyle,
+        position: AxisMarkerStyle.Horizontal,
+        style: AxisMarkerStyle,
         dataSetInfo: DataSetInfo,
         label: () -> Label
     ) -> some View {
@@ -70,8 +47,8 @@ extension View {
     
     public func yAxisMarker<Label: View>(
         value: Double,
-        position: PoiStyle.VerticalPosition,
-        style: PoiStyle,
+        position: AxisMarkerStyle.Vertical,
+        style: AxisMarkerStyle,
         dataSetInfo: DataSetInfo,
         label: Label
     ) -> some View {
@@ -88,8 +65,8 @@ extension View {
     
     public func yAxisMarker<Label: View>(
         value: Double,
-        position: PoiStyle.VerticalPosition,
-        style: PoiStyle,
+        position: AxisMarkerStyle.Vertical,
+        style: AxisMarkerStyle,
         dataSetInfo: DataSetInfo,
         label: () -> Label
     ) -> some View {
@@ -111,8 +88,8 @@ internal struct YAxisMarker_HorizontalPosition<Label: View>: ViewModifier {
     @EnvironmentObject var state: ChartStateObject
     
     internal let value: Double
-    internal let position: PoiStyle.HorizontalPosition
-    internal let style: PoiStyle
+    internal let position: AxisMarkerStyle.Horizontal
+    internal let style: AxisMarkerStyle
     internal let dataSetInfo: DataSetInfo
     internal let label: Label
     
@@ -135,8 +112,8 @@ internal struct YAxisMarker_VerticalPosition<Label: View>: ViewModifier {
     @EnvironmentObject var state: ChartStateObject
     
     internal let value: Double
-    internal let position: PoiStyle.VerticalPosition
-    internal let style: PoiStyle
+    internal let position: AxisMarkerStyle.Vertical
+    internal let style: AxisMarkerStyle
     internal let dataSetInfo: DataSetInfo
     internal let label: Label
     
@@ -165,8 +142,8 @@ extension View {
     @available(*, deprecated, message: "Please do this client side using \".yAxisPOI\"")
     public func averageLine(
         label: String,
-        position: PoiStyle.HorizontalPosition,
-        style: PoiStyle,
+        position: AxisMarkerStyle.Horizontal,
+        style: AxisMarkerStyle,
         addToLegends: Bool = true
     ) -> some View {
         self.modifier(EmptyModifier())
@@ -181,8 +158,8 @@ extension View {
     @available(*, deprecated, message: "Please do this client side using \".yAxisPOI\"")
     public func averageLine(
         label: String,
-        position: PoiStyle.VerticalPosition,
-        style: PoiStyle,
+        position: AxisMarkerStyle.Vertical,
+        style: AxisMarkerStyle,
         addToLegends: Bool = true
     ) -> some View {
         self.modifier(EmptyModifier())
