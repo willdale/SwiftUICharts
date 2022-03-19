@@ -76,7 +76,7 @@ public final class LineChartData: CTLineChartDataProtocol, GetDataProtocol, Publ
                 
                 GeometryReader { geo in
                     ZStack {
-                        ForEach(self.dataSets.dataPoints.indices) { i in
+                        ForEach(self.dataSets.dataPoints.indices, id: \.self) { i in
                             if let label = self.dataSets.dataPoints[i].xAxisLabel {
                                 if label != "" {
                                     TempText(chartData: self, label: label, rotation: angle)
