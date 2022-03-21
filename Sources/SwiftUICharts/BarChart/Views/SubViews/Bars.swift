@@ -505,20 +505,26 @@ internal struct HorizontalColourBar<CD: CTBarChartDataProtocol & GetDataProtocol
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
-            .fill(colour)
-            .scaleEffect(x: startAnimation ? divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue) : 0, anchor: .leading)
-            .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
-            .animation(.default, value: chartData.dataSets)
-            .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = true
-            }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = false
-            }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
-                                                                    formatter: chartData.infoView.touchFormatter))
+        let scaleRatio = divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue)
+        let minWidth = max(chartData.barStyle.cornerRadius.topLeft, chartData.barStyle.cornerRadius.bottomLeft) + max(chartData.barStyle.cornerRadius.topRight, chartData.barStyle.cornerRadius.bottomRight)
+        return GeometryReader { geo in
+            RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
+                .fill(colour)
+                .frame(width: geo.size.width * scaleRatio < minWidth ? minWidth : geo.size.width * scaleRatio, alignment: .leading)
+                .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
+                .animation(.default, value: chartData.dataSets)
+                .background(Color(.gray).opacity(0.000000001))
+                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = true
+                }
+                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = false
+                }
+                .accessibilityValue(dataPoint.getCellAccessibilityValue(
+                    specifier: chartData.infoView.touchSpecifier,
+                    formatter: chartData.infoView.touchFormatter))
+                .padding(0)
+        }
     }
 }
 
