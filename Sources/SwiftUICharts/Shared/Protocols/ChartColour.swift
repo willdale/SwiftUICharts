@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-/// Was ColourStyle
 public enum ChartColour: Hashable, Equatable {
     case colour(colour: Color)
     case gradient(colours: [Color], startPoint: UnitPoint, endPoint: UnitPoint)

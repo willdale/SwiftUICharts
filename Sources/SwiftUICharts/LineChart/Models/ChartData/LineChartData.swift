@@ -19,7 +19,6 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     // MARK: Properties
     public let id: UUID = UUID()
     @Published public var dataSets: LineDataSet
-    @Published public var legends: [LegendData] = []
     @Published public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
@@ -50,6 +49,8 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     @Published public var metadata = ChartMetadata()
     @available(*, deprecated, message: "")
     @Published public var chartStyle = LineChartStyle()
+    @available(*, deprecated, message: "Has been moved to the view")
+    @Published public var legends: [LegendData] = []
     @available(*, deprecated, message: "Split in to axis data")
     @Published public var infoView = InfoViewData<LineChartDataPoint>()
     @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")

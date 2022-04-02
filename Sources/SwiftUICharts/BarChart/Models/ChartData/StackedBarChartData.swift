@@ -20,7 +20,6 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     public let id: UUID = UUID()
     @Published public var dataSets: StackedBarDataSets
     @Published public var barStyle: BarStyle
-    @Published public var legends: [LegendData] = []
     @Published public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
@@ -54,6 +53,8 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     @Published public var metadata = ChartMetadata()
     @available(*, deprecated, message: "")
     @Published public var chartStyle = BarChartStyle()
+    @available(*, deprecated, message: "Has been moved to the view")
+    @Published public var legends: [LegendData] = []
     @available(*, deprecated, message: "Split in to axis data")
     @Published public var infoView = InfoViewData<StackedBarDataPoint>()
     @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
@@ -88,8 +89,6 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
         self.noDataText = noDataText
         self.baseline = baseline
         self.topLine = topLine
-        
-//        self.setupLegends()
     }
 
     // MARK: - Touch

@@ -18,7 +18,6 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
     public let id: UUID = UUID()
     @Published public var dataSets: BarDataSet
     @Published public var barStyle: BarStyle
-    @Published public var legends: [LegendData] = []
     @Published public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
@@ -50,6 +49,8 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
     @Published public var metadata = ChartMetadata()
     @available(*, deprecated, message: "")
     @Published public var chartStyle = BarChartStyle()
+    @available(*, deprecated, message: "Has been moved to the view")
+    @Published public var legends: [LegendData] = []
     @available(*, deprecated, message: "Split in to axis data")
     @Published public var infoView = InfoViewData<BarChartDataPoint>()
     @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
@@ -81,8 +82,6 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
         self.noDataText = noDataText
         self.baseline = baseline
         self.topLine = topLine
-        
-//        self.setupLegends()
     }
     
     // MARK: Touch

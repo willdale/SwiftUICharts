@@ -18,7 +18,6 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
     // MARK: Properties
     public var id: UUID = UUID()
     @Published public var dataSets: PieDataSet
-    @Published public var legends: [LegendData] = []
     @Published public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
@@ -40,6 +39,8 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
     @Published public var metadata = ChartMetadata()
     @available(*, deprecated, message: "")
     @Published public var chartStyle = DoughnutChartStyle()
+    @available(*, deprecated, message: "Has been moved to the view")
+    @Published public var legends: [LegendData] = []
     @available(*, deprecated, message: "Split in to axis data")
     @Published public var infoView = InfoViewData<PieChartDataPoint>()
     
@@ -59,7 +60,6 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
         self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         
-        self.setupLegends()
         self.makeDataPoints()
     }
 

@@ -10,6 +10,7 @@ import SwiftUI
 /**
  Data model to hold data for Legends
  */
+@available(*, deprecated, message: "")
 public struct LegendData: Hashable, Identifiable {
     
     public var id: UUID

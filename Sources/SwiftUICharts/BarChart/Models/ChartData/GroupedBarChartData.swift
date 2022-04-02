@@ -20,7 +20,6 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     public let id: UUID = UUID()
     @Published public var dataSets: GroupedBarDataSets
     @Published public var barStyle: BarStyle
-    @Published public var legends: [LegendData] = []
     @Published public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
@@ -55,6 +54,8 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     @Published public var metadata = ChartMetadata()
     @available(*, deprecated, message: "")
     @Published public var chartStyle = BarChartStyle()
+    @available(*, deprecated, message: "Has been moved to the view")
+    @Published public var legends: [LegendData] = []
     @available(*, deprecated, message: "Split in to axis data")
     @Published public var infoView = InfoViewData<GroupedBarDataPoint>()
     @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
@@ -89,8 +90,6 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
         self.noDataText = noDataText
         self.baseline = baseline
         self.topLine = topLine
-        
-//        self.setupLegends()
     }
     
     // MARK: Touch

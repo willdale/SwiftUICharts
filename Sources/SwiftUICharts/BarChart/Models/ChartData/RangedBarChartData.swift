@@ -18,7 +18,6 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
     public let id: UUID = UUID()
     @Published public var dataSets: RangedBarDataSet
     @Published public var barStyle: BarStyle
-    @Published public var legends: [LegendData] = []
     @Published public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
@@ -49,6 +48,8 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
     @Published public var metadata = ChartMetadata()
     @available(*, deprecated, message: "")
     @Published public var chartStyle = BarChartStyle()
+    @available(*, deprecated, message: "Has been moved to the view")
+    @Published public var legends: [LegendData] = []
     @available(*, deprecated, message: "Split in to axis data")
     @Published public var infoView = InfoViewData<RangedBarDataPoint>()
     @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
@@ -80,8 +81,6 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
         self.noDataText = noDataText
         self.baseline = baseline
         self.topLine = topLine
-        
-//        self.setupLegends()
     }
 
     public var average: Double {

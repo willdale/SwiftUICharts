@@ -56,22 +56,6 @@ extension CTPieDoughnutChartDataProtocol where SetType == PieDataSet, DataPoint 
     }
 }
 
-extension CTPieDoughnutChartDataProtocol where Self.SetType.DataPoint.ID == UUID,
-                                               Self.SetType: CTSingleDataSetProtocol,
-                                               Self.SetType.DataPoint: CTPieDataPoint {
-    internal func setupLegends() {
-//        dataSets.dataPoints.forEach { dataPoint in
-//            guard let legend = dataPoint.description else { return }
-//            self.legends.append(LegendData(id: dataPoint.id,
-//                                           legend: legend,
-//                                           colour: ColourStyle(colour: dataPoint.colour),
-//                                           strokeStyle: nil,
-//                                           prioity: 1,
-//                                           chartType: .pie))
-//        }
-    }
-}
-
 extension View {
     internal func overlay<CD: CTPieDoughnutChartDataProtocol>(
         dataPoint: PieChartDataPoint,

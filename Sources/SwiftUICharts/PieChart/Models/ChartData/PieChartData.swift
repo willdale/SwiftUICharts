@@ -18,7 +18,6 @@ public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishab
     // MARK: Properties
     public var id: UUID = UUID()
     @Published public var dataSets: PieDataSet
-    @Published public var legends: [LegendData] = []
     @Published public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
@@ -38,6 +37,8 @@ public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishab
     @Published public var metadata = ChartMetadata()
     @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
     @Published public var chartStyle = PieChartStyle()
+    @available(*, deprecated, message: "Has been moved to the view")
+    @Published public var legends: [LegendData] = []
     @available(*, deprecated, message: "Split in to axis data")
     @Published public var infoView = InfoViewData<PieChartDataPoint>()
     
@@ -58,7 +59,6 @@ public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishab
         self.shouldAnimate = true
         self.noDataText = noDataText
         
-        self.setupLegends()
         self.makeDataPoints()
     }
     
