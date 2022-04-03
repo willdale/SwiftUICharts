@@ -30,7 +30,7 @@ public enum LineType {
  */
 public enum MarkerAttachment: Hashable {
     /// Attached to the line.
-    case line(dot: Dot)
+    case line
     /// Attached to the data points.
     case point
 }
@@ -52,7 +52,7 @@ public enum LineMarkerType: Hashable {
     /// No overlay markers.
     case none
     /// Dot that follows the path.
-    case indicator(style: DotStyle)
+    case indicator
     /// Vertical line from top to bottom.
     case vertical(attachment: MarkerAttachment, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// Full width and height of view intersecting at a specified point.
@@ -65,19 +65,4 @@ public enum LineMarkerType: Hashable {
     case topLeading(attachment: MarkerAttachment, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
     /// From top and trailing edges meeting at a specified point.
     case topTrailing(attachment: MarkerAttachment, colour: Color = Color.primary, style: StrokeStyle = StrokeStyle())
-}
-
-/**
- Whether or not to show a dot on the line
- 
- ```
- case none // No Dot
- case style(_ style: DotStyle) // Adds a dot the line at point of touch.
- ```
- */
-public enum Dot: Hashable {
-    /// No Dot
-    case none
-    /// Adds a dot the line at point of touch.
-    case style(_ style: DotStyle)
 }

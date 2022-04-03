@@ -10,7 +10,7 @@ import SwiftUI
 /// Vertical line from top to bottom.
 internal struct Vertical: Shape {
     
-    private var position: CGPoint
+    private let position: CGPoint
     
     internal init(position: CGPoint) {
         self.position = position
@@ -28,7 +28,7 @@ internal struct Vertical: Shape {
 /// Full width and height of view intersecting at a specified point.
 internal struct MarkerFull: Shape {
     
-    private var position: CGPoint
+    private let position: CGPoint
     
     internal init(position: CGPoint) {
         self.position = position
@@ -53,10 +53,15 @@ internal struct MarkerFull: Shape {
 /// From bottom and leading edges meeting at a specified point.
 internal struct MarkerBottomLeading: Shape {
     
-    private var position: CGPoint
+    private let position: CGPoint
+    private let lineWidth: CGFloat
     
-    internal init(position: CGPoint) {
+    internal init(
+        position: CGPoint,
+        lineWidth: CGFloat
+    ) {
         self.position = position
+        self.lineWidth = lineWidth
     }
     
     internal func path(in rect: CGRect) -> Path {
@@ -65,9 +70,9 @@ internal struct MarkerBottomLeading: Shape {
         var verticalPath = Path()
         
         horizontalPath.move(to: CGPoint(x: 0, y: position.y))
-        horizontalPath.addLine(to: CGPoint(x: position.x, y: position.y))
+        horizontalPath.addLine(to: CGPoint(x: position.x + lineWidth, y: position.y))
         verticalPath.move(to: CGPoint(x: position.x, y: rect.height))
-        verticalPath.addLine(to: CGPoint(x: position.x, y: position.y))
+        verticalPath.addLine(to: CGPoint(x: position.x, y: position.y + lineWidth))
         
         combinedPaths.addPath(horizontalPath)
         combinedPaths.addPath(verticalPath)
@@ -78,10 +83,15 @@ internal struct MarkerBottomLeading: Shape {
 /// From bottom and trailing edges meeting at a specified point.
 internal struct MarkerBottomTrailing: Shape {
     
-    private var position: CGPoint
+    private let position: CGPoint
+    private let lineWidth: CGFloat
     
-    internal init(position: CGPoint) {
+    internal init(
+        position: CGPoint,
+        lineWidth: CGFloat
+    ) {
         self.position = position
+        self.lineWidth = lineWidth
     }
     
     internal func path(in rect: CGRect) -> Path {
@@ -90,9 +100,9 @@ internal struct MarkerBottomTrailing: Shape {
         var verticalPath = Path()
         
         horizontalPath.move(to: CGPoint(x: rect.width, y: position.y))
-        horizontalPath.addLine(to: CGPoint(x: position.x, y: position.y))
+        horizontalPath.addLine(to: CGPoint(x: position.x - (lineWidth / 2), y: position.y))
         verticalPath.move(to: CGPoint(x: position.x, y: rect.height))
-        verticalPath.addLine(to: CGPoint(x: position.x, y: position.y))
+        verticalPath.addLine(to: CGPoint(x: position.x, y: position.y - (lineWidth / 2)))
         
         combinedPaths.addPath(horizontalPath)
         combinedPaths.addPath(verticalPath)
@@ -103,10 +113,15 @@ internal struct MarkerBottomTrailing: Shape {
 // From top and leading edges meeting at a specified point.
 internal struct MarkerTopLeading: Shape {
     
-    private var position: CGPoint
+    private let position: CGPoint
+    private let lineWidth: CGFloat
     
-    internal init(position: CGPoint) {
+    internal init(
+        position: CGPoint,
+        lineWidth: CGFloat
+    ) {
         self.position = position
+        self.lineWidth = lineWidth
     }
     
     internal func path(in rect: CGRect) -> Path {
@@ -114,10 +129,10 @@ internal struct MarkerTopLeading: Shape {
         var horizontalPath = Path()
         var verticalPath = Path()
         
-        horizontalPath.move(to: CGPoint(x: rect.width, y: position.y))
-        horizontalPath.addLine(to: CGPoint(x: position.x, y: position.y))
+        horizontalPath.move(to: CGPoint(x: 0, y: position.y))
+        horizontalPath.addLine(to: CGPoint(x: position.x + (lineWidth / 2), y: position.y))
         verticalPath.move(to: CGPoint(x: position.x, y: 0))
-        verticalPath.addLine(to: CGPoint(x: position.x, y: position.y))
+        verticalPath.addLine(to: CGPoint(x: position.x, y: position.y + (lineWidth / 2)))
         
         combinedPaths.addPath(horizontalPath)
         combinedPaths.addPath(verticalPath)
@@ -128,10 +143,15 @@ internal struct MarkerTopLeading: Shape {
 // From top and trailing edges meeting at a specified point.
 internal struct MarkerTopTrailing: Shape {
     
-    private var position: CGPoint
+    private let position: CGPoint
+    private let lineWidth: CGFloat
     
-    internal init(position: CGPoint) {
+    internal init(
+        position: CGPoint,
+        lineWidth: CGFloat
+    ) {
         self.position = position
+        self.lineWidth = lineWidth
     }
     
     internal func path(in rect: CGRect) -> Path {
@@ -140,9 +160,9 @@ internal struct MarkerTopTrailing: Shape {
         var verticalPath = Path()
         
         horizontalPath.move(to: CGPoint(x: rect.width, y: position.y))
-        horizontalPath.addLine(to: CGPoint(x: position.x, y: position.y))
+        horizontalPath.addLine(to: CGPoint(x: position.x - (lineWidth / 2), y: position.y))
         verticalPath.move(to: CGPoint(x: position.x, y: 0))
-        verticalPath.addLine(to: CGPoint(x: position.x, y: position.y))
+        verticalPath.addLine(to: CGPoint(x: position.x, y: position.y + (lineWidth / 2)))
         
         combinedPaths.addPath(horizontalPath)
         combinedPaths.addPath(verticalPath)

@@ -28,7 +28,7 @@ public struct RangedLineDataSet: CTRangedLineChartDataSet, DataFunctionsProtocol
     ///   - style: Styling for how the line will be draw in.
     public init(
         dataPoints: [RangedLineChartDataPoint],
-        marketType: LineMarkerType = .full(attachment: .line(dot: .style(DotStyle())), colour: .primary, style: StrokeStyle()),
+        marketType: LineMarkerType = .full(attachment: .line, colour: .primary, style: StrokeStyle()),
         style: RangedLineStyle = RangedLineStyle()
     ) {
         self.dataPoints = dataPoints

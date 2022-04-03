@@ -35,7 +35,7 @@ public struct ExtraLineStyle {
         lineColour: ChartColour = .colour(colour: .red),
         lineType: LineType = .curvedLine,
         lineSpacing: SpacingType = .line,
-        markerType: LineMarkerType = .indicator(style: DotStyle()),
+        markerType: LineMarkerType = .indicator,
         
         strokeStyle: StrokeStyle = StrokeStyle(),
         pointStyle: PointStyle = PointStyle(pointSize: 0, borderColour: .clear, fillColour: .clear),

@@ -125,7 +125,7 @@ public struct LineChartStyle: CTLineChartStyle {
     ///
     ///   - globalAnimation: Global control of animations.
     public init(
-        markerType: LineMarkerType = .indicator(style: DotStyle()),
+        markerType: LineMarkerType = .indicator,
         
         xAxisGridStyle: GridStyle = GridStyle(),
         

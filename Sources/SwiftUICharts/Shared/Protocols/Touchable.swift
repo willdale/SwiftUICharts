@@ -46,19 +46,6 @@ public protocol Touchable {
     func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> Touch
 }
 
-extension Touchable where Self: LineChartType {
-    public static var defualtTouchMarker: LineMarkerType { .full(attachment: .line(dot: .style(DotStyle()))) }
-}
-
-extension Touchable where Self: BarChartType {
-    public static var defualtTouchMarker: BarMarkerType { .full() }
-}
-
-extension Touchable where Self: PieChartType {
-    public static var defualtTouchMarker: PieMarkerType { .none }
-}
-
-
 extension Touchable {
     public func setTouchInteraction(touchLocation: CGPoint) {}
     public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View { EmptyView() }
