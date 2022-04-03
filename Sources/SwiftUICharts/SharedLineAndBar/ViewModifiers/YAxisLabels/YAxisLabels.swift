@@ -123,12 +123,13 @@ public struct YAxisLabels: View {
         ZStack {
             ForEach(labels.indices, id: \.self) { index in
                 _Label_Cell(state: state, label: labels[index], index: index, count: labels.count, style: style)
-                    .modifier(_label_Positioning(stateObject: stateObject,
-                                                 state: state,
+                    .modifier(_label_Positioning(orientation: state.orientation,
+                                                 width: state.widest,
+                                                 chartSize: stateObject.chartSize.size,
                                                  index: index,
                                                  count: labels.count))
             }
-            .modifier(_Axis_Label_Size(state: state))
+            .modifier(_Axis_Label_Size(orientation: state.orientation, width: state.widest))
         }
         .onAppear { state.orientation = orientation }
         .onChange(of: state.widest) {
@@ -190,41 +191,43 @@ fileprivate struct _Label_Cell: View {
 // MARK: - ViewModifiers
 fileprivate struct _label_Positioning: ViewModifier {
 
-    @ObservedObject var stateObject: ChartStateObject
-    @ObservedObject var state: YAxisLabelsLayoutModel
+    var orientation: YAxisLabelStyle.AxisOrientation
+    let width: CGFloat
+    let chartSize: CGSize
     let index: Int
     let count: Int
 
     func body(content: Content) -> some View {
-        switch state.orientation {
+        switch orientation {
         case .vertical:
             content
-                .frame(width: state.widest,
-                       height: divide(stateObject.chartSize.height, count))
-                .position(x: state.widest / 2,
-                          y: CGFloat(index) * divide(stateObject.chartSize.height, count-1))
+                .frame(width: width,
+                       height: divide(chartSize.height, count))
+                .position(x: width / 2,
+                          y: CGFloat(index) * divide(chartSize.height, count-1))
         case .horizontal:
             content
-                .frame(width: divide(stateObject.chartSize.width, count),
-                       height: state.widest)
-                .position(x: (CGFloat(index) * divide(stateObject.chartSize.width, count-1)),
-                          y: state.widest / 2)
+                .frame(width: divide(chartSize.width, count),
+                       height: width)
+                .position(x: (CGFloat(index) * divide(chartSize.width, count-1)),
+                          y: width / 2)
         }
     }
 }
 
 fileprivate struct _Axis_Label_Size: ViewModifier {
 
-    @ObservedObject var state: YAxisLabelsLayoutModel
+    var orientation: YAxisLabelStyle.AxisOrientation
+    let width: CGFloat
 
     func body(content: Content) -> some View {
-        switch state.orientation {
+        switch orientation {
         case .vertical:
             content
-                .frame(width: state.widest)
+                .frame(width: width)
         case .horizontal:
             content
-                .frame(height: state.widest)
+                .frame(height: width)
         }
     }
 }

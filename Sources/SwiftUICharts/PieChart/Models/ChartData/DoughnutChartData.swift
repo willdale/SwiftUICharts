@@ -18,7 +18,7 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
     // MARK: Properties
     public var id: UUID = UUID()
     @Published public var dataSets: PieDataSet
-    @Published public var shouldAnimate: Bool
+    public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .doughnut
@@ -33,16 +33,6 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
     
     // MARK: Non-Protocol
     internal let chartType: CTChartType = (chartType: .pie, dataSetType: .single)
-    
-    // MARK: Deprecated
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    @Published public var metadata = ChartMetadata()
-    @available(*, deprecated, message: "")
-    @Published public var chartStyle = DoughnutChartStyle()
-    @available(*, deprecated, message: "Has been moved to the view")
-    @Published public var legends: [LegendData] = []
-    @available(*, deprecated, message: "Split in to axis data")
-    @Published public var infoView = InfoViewData<PieChartDataPoint>()
     
     // MARK: Initializer
     /// Initialises Doughnut Chart data.
@@ -87,4 +77,14 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
     public typealias SetType = PieDataSet
     public typealias DataPoint = PieChartDataPoint
     public typealias Marker = PieMarkerType
+    
+    // MARK: Deprecated
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    public var metadata = ChartMetadata()
+    @available(*, deprecated, message: "")
+    public var chartStyle = DoughnutChartStyle()
+    @available(*, deprecated, message: "Has been moved to the view")
+    public var legends: [LegendData] = []
+    @available(*, deprecated, message: "Split in to axis data")
+    public var infoView = InfoViewData<PieChartDataPoint>()
 }

@@ -13,19 +13,15 @@ import ChartMath
  Data for drawing and styling a standard Bar Chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChartDataProtocol, HorizontalChartConformance, ViewDataProtocol {
+public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChartDataProtocol, HorizontalChartConformance {
     // MARK: Properties
     public let id: UUID = UUID()
     @Published public var dataSets: BarDataSet
-    @Published public var barStyle: BarStyle
-    @Published public var shouldAnimate: Bool
+    public var barStyle: BarStyle
+    public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .horizontalBar
-        
-    // MARK: ViewDataProtocol
-    @Published public var xAxisViewData = XAxisViewData()
-    @Published public var yAxisViewData = YAxisViewData()
     
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
@@ -38,25 +34,8 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
     public var baseline: Baseline
     public var topLine: Topline
     
-    // MARK: ExtraLineDataProtocol
-    @Published public var extraLineData: ExtraLineData!
-    
     // MARK: Non-Protocol
     internal let chartType: CTChartType = (.bar, .single)
-    
-    // MARK: Deprecated
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    @Published public var metadata = ChartMetadata()
-    @available(*, deprecated, message: "")
-    @Published public var chartStyle = BarChartStyle()
-    @available(*, deprecated, message: "Has been moved to the view")
-    @Published public var legends: [LegendData] = []
-    @available(*, deprecated, message: "Split in to axis data")
-    @Published public var infoView = InfoViewData<BarChartDataPoint>()
-    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
-    @Published public var xAxisLabels: [String]?
-    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
-    @Published public var yAxisLabels: [String]?
     
     // MARK: Initializer
     /// Initialises a standard Bar Chart.
@@ -96,18 +75,6 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
                                    y: (CGFloat(index) * ySection) + (ySection / 2))
             
             values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
-            
-            if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
-               let location = extraLine.location,
-               let value = extraLine.value,
-               let description = extraLine.description,
-               let _legendTag = extraLine._legendTag
-            {
-                var datapoint = DataPoint(value: value, description: description)
-                datapoint._legendTag = _legendTag
-                values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
-            }
-            
         }
         let barMarkerData = values.map { data in
             return BarMarkerData(markerType: self.touchMarkerType,
@@ -123,4 +90,18 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
     public typealias SetType = BarDataSet
     public typealias DataPoint = BarChartDataPoint
     public typealias Marker = BarMarkerType
+    
+    // MARK: Deprecated
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    public var metadata = ChartMetadata()
+    @available(*, deprecated, message: "")
+    public var chartStyle = BarChartStyle()
+    @available(*, deprecated, message: "Has been moved to the view")
+    public var legends: [LegendData] = []
+    @available(*, deprecated, message: "Split in to axis data")
+    public var infoView = InfoViewData<BarChartDataPoint>()
+    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
+    public var xAxisLabels: [String]?
+    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
+    public var yAxisLabels: [String]?
 }

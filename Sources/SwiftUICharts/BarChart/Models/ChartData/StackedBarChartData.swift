@@ -15,22 +15,18 @@ import ChartMath
  The grouping data informs the model as to how the datapoints are linked.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDataProtocol, CTMultiBarChartDataProtocol, StandardChartConformance, ViewDataProtocol {
+public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDataProtocol, CTMultiBarChartDataProtocol, StandardChartConformance {
     // MARK: Properties
     public let id: UUID = UUID()
     @Published public var dataSets: StackedBarDataSets
-    @Published public var barStyle: BarStyle
-    @Published public var shouldAnimate: Bool
+    public var barStyle: BarStyle
+    public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .stackedBar
         
     // MARK: Multi
-    @Published public var groups: [GroupingData]
-    
-    // MARK: ViewDataProtocol
-    @Published public var xAxisViewData = XAxisViewData()
-    @Published public var yAxisViewData = YAxisViewData()
+    public var groups: [GroupingData]
     
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
@@ -42,25 +38,8 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     public var baseline: Baseline
     public var topLine: Topline
     
-    // MARK: ExtraLineDataProtocol
-    @Published public var extraLineData: ExtraLineData!
-    
     // MARK: Non-Protocol
     internal let chartType: CTChartType = (chartType: .bar, dataSetType: .multi)
-    
-    // MARK: Deprecated
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    @Published public var metadata = ChartMetadata()
-    @available(*, deprecated, message: "")
-    @Published public var chartStyle = BarChartStyle()
-    @available(*, deprecated, message: "Has been moved to the view")
-    @Published public var legends: [LegendData] = []
-    @available(*, deprecated, message: "Split in to axis data")
-    @Published public var infoView = InfoViewData<StackedBarDataPoint>()
-    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
-    @Published public var xAxisLabels: [String]?
-    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
-    @Published public var yAxisLabels: [String]?
     
     // MARK: Initializer
     /// Initialises a Stacked Bar Chart.
@@ -107,18 +86,6 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
                     let location = CGPoint(x: (CGFloat(superIndex) * superXSection) + (superXSection / 2),
                                            y: (chartSize.height - calculatedIndex.endPointOfElements[index]))
                     values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
-                    
-                    if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
-                       let location = extraLine.location,
-                       let value = extraLine.value,
-                       let description = extraLine.description,
-                       let _legendTag = extraLine._legendTag
-                    {
-                        var datapoint = DataPoint(value: value, description: description)
-                        datapoint._legendTag = _legendTag
-                        values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
-                    }
-                    
                 }
             }
         }
@@ -172,4 +139,18 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     public typealias SetType = StackedBarDataSets
     public typealias DataPoint = StackedBarDataPoint
     public typealias Marker = BarMarkerType
+    
+    // MARK: Deprecated
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    public var metadata = ChartMetadata()
+    @available(*, deprecated, message: "")
+    public var chartStyle = BarChartStyle()
+    @available(*, deprecated, message: "Has been moved to the view")
+    public var legends: [LegendData] = []
+    @available(*, deprecated, message: "Split in to axis data")
+    public var infoView = InfoViewData<StackedBarDataPoint>()
+    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
+    public var xAxisLabels: [String]?
+    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
+    public var yAxisLabels: [String]?
 }

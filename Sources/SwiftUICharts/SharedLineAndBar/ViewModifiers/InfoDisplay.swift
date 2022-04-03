@@ -22,20 +22,21 @@ extension View {
     
     /// Templated display of the data from `touch`.
     @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-    public func infoDisplay<DataPoint>(
-        datapoints: [DataPoint],
+    public func infoDisplay<ChartData>(
+//        datapoints: [DataPoint],
+        chartData: ChartData,
         infoView: InfoView,
         position: @escaping (_ boxSize: CGRect) -> CGPoint
     ) -> some View
-    where DataPoint: DataPointDisplayable
+    where ChartData: CTChartData & Publishable, ChartData.DataPoint: DataPointDisplayable
     {
         Group {
             switch infoView {
             case .vertical(let style):
-                self.modifier(InfoDisplay(infoView: __Vertical_Info_PreSet(datapoints: datapoints, style: style),
+                self.modifier(InfoDisplay(infoView: __Vertical_Info_PreSet(chartData: chartData, style: style),
                                           position: position))
             case .horizontal(let style):
-                self.modifier(InfoDisplay(infoView: __Horizontal_Info_PreSet(datapoints: datapoints, style: style),
+                self.modifier(InfoDisplay(infoView: __Horizontal_Info_PreSet(chartData: chartData, style: style),
                                           position: position))
             }
         }
@@ -91,15 +92,16 @@ fileprivate struct __ViewSize<Info: View>: View {
 }
 
 // MARK: - Presets
-fileprivate struct __Vertical_Info_PreSet<DataPoint>: View where DataPoint: DataPointDisplayable {
+fileprivate struct __Vertical_Info_PreSet<ChartData>: View where ChartData: CTChartData & Publishable,
+                                                                 ChartData.DataPoint: DataPointDisplayable {
     
     @EnvironmentObject var stateObject: ChartStateObject
-    let datapoints: [DataPoint]
+    let chartData: ChartData
     let style: InfoBoxStyle
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ForEach(datapoints, id: \.id) { point in
+            ForEach(chartData.touchPointData, id: \.id) { point in
                 Group {
                     Text(LocalizedStringKey(point.wrappedDescription))
                         .font(style.valueFont)
@@ -126,15 +128,16 @@ fileprivate struct __Vertical_Info_PreSet<DataPoint>: View where DataPoint: Data
     }
 }
 
-fileprivate struct __Horizontal_Info_PreSet<DataPoint>: View where DataPoint: DataPointDisplayable {
+fileprivate struct __Horizontal_Info_PreSet<ChartData>: View where ChartData: CTChartData & Publishable,
+                                                                   ChartData.DataPoint: DataPointDisplayable {
     
     @EnvironmentObject var stateObject: ChartStateObject
-    let datapoints: [DataPoint]
+    let chartData: ChartData
     let style: InfoBoxStyle
     
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
-            ForEach(datapoints, id: \.id) { point in
+            ForEach(chartData.touchPointData, id: \.id) { point in
                 Group {
                     Text(LocalizedStringKey(point.wrappedDescription))
                         .font(style.valueFont)

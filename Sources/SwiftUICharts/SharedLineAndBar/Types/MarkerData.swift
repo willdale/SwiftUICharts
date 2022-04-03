@@ -88,19 +88,9 @@ public struct BarMarkerData: Hashable {
 }
 
 extension LineChartDataPoint {
-    init(_ datapoint: ExtraLineDataPoint) {
-        self.init(value: datapoint.value,
-                  description: datapoint.description,
-                  pointColour: datapoint.pointColour,
-                  ignore: datapoint.ignore)
-    }
-}
-
-extension LineChartDataPoint {
     init(_ datapoint: RangedLineChartDataPoint) {
         self.init(value: datapoint.value,
                   description: datapoint.description,
-                  pointColour: datapoint.pointColour,
                   ignore: datapoint.ignore)
     }
 }

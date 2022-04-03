@@ -9,7 +9,7 @@ import SwiftUI
 
 internal typealias CTChartType = (chartType: ChartType, dataSetType: DataSetType)
 
-public typealias ChartConformance = DataHelper & Publishable & Touchable & ExtraLineProtocol
+public typealias ChartConformance = DataHelper & Publishable & Touchable
 public typealias StandardChartConformance =  ChartConformance & VerticalChart
 public typealias HorizontalChartConformance = ChartConformance & HorizontalChart
 
