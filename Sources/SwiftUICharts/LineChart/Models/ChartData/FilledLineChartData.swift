@@ -74,7 +74,7 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
                 values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
         }
         markerData = MarkerData(lineMarkerData: values.map {
-            return LineMarkerData(markerType: dataSets.marketType,
+            return LineMarkerData(markerType: dataSets.markerType,
                                   location: $0.location,
                                   dataPoints: dataSets.dataPoints,
                                   lineType: dataSets.style.lineType,

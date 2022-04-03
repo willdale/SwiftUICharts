@@ -88,7 +88,7 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
         values.forEach { data in
             let location = data.location
             let lineData = self.dataSets.dataSets.compactMap { dataSet in
-                return LineMarkerData(markerType: dataSet.marketType,
+                return LineMarkerData(markerType: dataSet.markerType,
                                       location: location,
                                       dataPoints: dataSet.dataPoints,
                                       lineType: dataSet.style.lineType,

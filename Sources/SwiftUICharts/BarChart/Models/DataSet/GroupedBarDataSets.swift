@@ -14,15 +14,15 @@ public struct GroupedBarDataSets: CTMultiDataSetProtocol, DataFunctionsProtocol 
     
     public let id: UUID = UUID()
     public var dataSets: [GroupedBarDataSet]
-    public var marketType: BarMarkerType
+    public var markerType: BarMarkerType
     
     /// Initialises a new data set for Grouped Bar Chart.
     public init(
         dataSets: [GroupedBarDataSet],
-        marketType: BarMarkerType = .full(colour: .primary, style: StrokeStyle())
+        markerType: BarMarkerType = .full(colour: .primary, style: StrokeStyle())
     ) {
         self.dataSets = dataSets
-        self.marketType = marketType
+        self.markerType = markerType
     }
     
     public var dataWidth: Int {

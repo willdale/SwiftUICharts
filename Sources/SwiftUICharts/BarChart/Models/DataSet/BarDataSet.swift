@@ -14,14 +14,14 @@ public struct BarDataSet: CTStandardBarChartDataSet, DataFunctionsProtocol {
     
     public let id: UUID = UUID()
     public var dataPoints: [BarChartDataPoint]
-    public var marketType: BarMarkerType
+    public var markerType: BarMarkerType
     
     public init(
         dataPoints: [BarChartDataPoint],
-        marketType: BarMarkerType = .full(colour: .primary, style: StrokeStyle())
+        markerType: BarMarkerType = .full(colour: .primary, style: StrokeStyle())
     ) {
         self.dataPoints = dataPoints
-        self.marketType = marketType
+        self.markerType = markerType
     }
     
     public typealias ID = UUID
@@ -37,7 +37,7 @@ public struct BarDataSet: CTStandardBarChartDataSet, DataFunctionsProtocol {
         legendTitle: String
     ) {
         self.dataPoints = dataPoints
-        self.marketType = .none
+        self.markerType = .none
         self.legendTitle = legendTitle
     }
     

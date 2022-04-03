@@ -75,7 +75,7 @@ public final class HorizontalBarChartData: BarChartType, CTChartData, CTBarChart
             values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
         }
         markerData = MarkerData(barMarkerData: values.map { data in
-            return BarMarkerData(markerType: dataSets.marketType,
+            return BarMarkerData(markerType: dataSets.markerType,
                                  location: data.location)
         })
     }

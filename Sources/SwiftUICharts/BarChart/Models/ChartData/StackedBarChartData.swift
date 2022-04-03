@@ -89,7 +89,7 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
             }
         }
         markerData = MarkerData(barMarkerData: values.map { data in
-            return BarMarkerData(markerType: dataSets.marketType,
+            return BarMarkerData(markerType: dataSets.markerType,
                                  location: data.location)
         })
     }

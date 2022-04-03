@@ -88,7 +88,7 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
             values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .line))
         }
         markerData = MarkerData(lineMarkerData: values.map {
-            return LineMarkerData(markerType: dataSets.marketType,
+            return LineMarkerData(markerType: dataSets.markerType,
                                   location: $0.location,
                                   dataPoints: dataSets.dataPoints.map { LineChartDataPoint($0) },
                                   lineType: dataSets.style.lineType,

@@ -63,7 +63,7 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
         let datapoint = self.dataSets.dataPoints[wrappedIndex]
         let values = [PublishedTouchData(datapoint: datapoint, location: .zero, type: .pie)]
         markerData = MarkerData(pieMarkerData: values.map { data in
-            return PieMarkerData(markerType: dataSets.marketType, location: data.location)
+            return PieMarkerData(markerType: dataSets.markerType, location: data.location)
         })
     }
         

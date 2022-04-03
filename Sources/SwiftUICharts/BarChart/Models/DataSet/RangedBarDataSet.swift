@@ -14,14 +14,14 @@ public struct RangedBarDataSet: CTRangedBarChartDataSet, DataFunctionsProtocol {
     
     public var id: UUID = UUID()
     public var dataPoints: [RangedBarDataPoint]
-    public var marketType: BarMarkerType
+    public var markerType: BarMarkerType
     
     public init(
         dataPoints: [RangedBarDataPoint],
-        marketType: BarMarkerType = .full(colour: .primary, style: StrokeStyle())
+        markerType: BarMarkerType = .full(colour: .primary, style: StrokeStyle())
     ) {
         self.dataPoints = dataPoints
-        self.marketType = marketType
+        self.markerType = markerType
     }
     
     public typealias ID = UUID
@@ -37,7 +37,7 @@ public struct RangedBarDataSet: CTRangedBarChartDataSet, DataFunctionsProtocol {
         legendTitle: String
     ) {
         self.dataPoints = dataPoints
-        self.marketType = .none
+        self.markerType = .none
         self.legendTitle = legendTitle
     }
     

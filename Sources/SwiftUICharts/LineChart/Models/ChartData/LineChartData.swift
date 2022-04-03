@@ -76,7 +76,7 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
         
         touchPointData = values.map(\.datapoint)
         markerData = MarkerData(lineMarkerData: values.map {
-            return LineMarkerData(markerType: dataSets.marketType,
+            return LineMarkerData(markerType: dataSets.markerType,
                                   location: $0.location,
                                   dataPoints: dataSets.dataPoints,
                                   lineType: dataSets.style.lineType,

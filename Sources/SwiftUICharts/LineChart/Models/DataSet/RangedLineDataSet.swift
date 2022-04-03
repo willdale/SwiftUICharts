@@ -16,7 +16,7 @@ public struct RangedLineDataSet: CTRangedLineChartDataSet, DataFunctionsProtocol
     
     public let id: UUID = UUID()
     public var dataPoints: [RangedLineChartDataPoint]
-    public var marketType: LineMarkerType
+    public var markerType: LineMarkerType
     public var style: RangedLineStyle
     
     /// Initialises a data set for a line in a ranged line chart.
@@ -28,11 +28,11 @@ public struct RangedLineDataSet: CTRangedLineChartDataSet, DataFunctionsProtocol
     ///   - style: Styling for how the line will be draw in.
     public init(
         dataPoints: [RangedLineChartDataPoint],
-        marketType: LineMarkerType = .full(attachment: .line, colour: .primary, style: StrokeStyle()),
+        markerType: LineMarkerType = .full(attachment: .line, colour: .primary, style: StrokeStyle()),
         style: RangedLineStyle = RangedLineStyle()
     ) {
         self.dataPoints = dataPoints
-        self.marketType = marketType
+        self.markerType = markerType
         self.style = style
     }
     
@@ -54,7 +54,7 @@ public struct RangedLineDataSet: CTRangedLineChartDataSet, DataFunctionsProtocol
         self.dataPoints = dataPoints
         self.legendTitle = ""
         self.legendFillTitle = ""
-        self.marketType = .none
+        self.markerType = .none
         self.pointStyle = pointStyle
         self.style = style
     }

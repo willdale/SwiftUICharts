@@ -14,7 +14,7 @@ public struct PieDataSet: CTSingleDataSetProtocol {
     
     public var id: UUID = UUID()
     public var dataPoints: [PieChartDataPoint]
-    public var marketType: PieMarkerType
+    public var markerType: PieMarkerType
     
     /// Initialises a new data set for a standard pie chart.
     /// - Parameters:
@@ -22,10 +22,10 @@ public struct PieDataSet: CTSingleDataSetProtocol {
     ///   - legendTitle: Label for the data in legend.
     public init(
         dataPoints: [PieChartDataPoint],
-        marketType: PieMarkerType = .none
+        markerType: PieMarkerType = .none
     ) {
         self.dataPoints = dataPoints
-        self.marketType = marketType
+        self.markerType = markerType
     }
     
     public typealias ID = UUID
@@ -44,7 +44,7 @@ public struct PieDataSet: CTSingleDataSetProtocol {
         legendTitle: String
     ) {
         self.dataPoints = dataPoints
-        self.marketType = .none
+        self.markerType = .none
         self.legendTitle = legendTitle
     }
 }

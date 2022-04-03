@@ -103,7 +103,7 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
             }
         }
         markerData = MarkerData(barMarkerData: values.map { data in
-            return BarMarkerData(markerType: dataSets.marketType,
+            return BarMarkerData(markerType: dataSets.markerType,
                                  location: data.location)
         })
     }

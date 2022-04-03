@@ -11,16 +11,16 @@ public struct FilledLineDataSet: CTLineChartDataSet, DataFunctionsProtocol {
     
     public let id: UUID = UUID()
     public var dataPoints: [LineChartDataPoint]
-    public var marketType: LineMarkerType
+    public var markerType: LineMarkerType
     public var style: FilledLineStyle
 
     public init(
         dataPoints: [LineChartDataPoint],
-        marketType: LineMarkerType = .full(attachment: .line, colour: .primary, style: StrokeStyle()),
+        markerType: LineMarkerType = .full(attachment: .line, colour: .primary, style: StrokeStyle()),
         style: FilledLineStyle = FilledLineStyle()
     ) {
         self.dataPoints = dataPoints
-        self.marketType = marketType
+        self.markerType = markerType
         self.style = style
     }
     
@@ -33,7 +33,7 @@ public struct FilledLineDataSet: CTLineChartDataSet, DataFunctionsProtocol {
     ) {
         self.dataPoints = dataPoints
         self.legendTitle = legendTitle
-        self.marketType = .none
+        self.markerType = .none
         self.pointStyle = pointStyle
         self.style = style
     }
