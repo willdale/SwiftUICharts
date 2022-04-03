@@ -7,6 +7,6 @@
 
 import Foundation
 
-public enum PieMarkerType: MarkerType {
-case none
+public enum PieMarkerType: Hashable {
+    case none
 }

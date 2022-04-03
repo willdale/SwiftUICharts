@@ -16,8 +16,7 @@ public struct RangedLineDataSet: CTRangedLineChartDataSet, DataFunctionsProtocol
     
     public let id: UUID = UUID()
     public var dataPoints: [RangedLineChartDataPoint]
-    public var legendTitle: String
-    public var legendFillTitle: String
+    public var markerType: LineMarkerType
     public var style: RangedLineStyle
     
     /// Initialises a data set for a line in a ranged line chart.
@@ -29,18 +28,14 @@ public struct RangedLineDataSet: CTRangedLineChartDataSet, DataFunctionsProtocol
     ///   - style: Styling for how the line will be draw in.
     public init(
         dataPoints: [RangedLineChartDataPoint],
-        legendTitle: String = "",
-        legendFillTitle: String = "",
+        markerType: LineMarkerType = .full(attachment: .line, colour: .primary, style: StrokeStyle()),
         style: RangedLineStyle = RangedLineStyle()
     ) {
         self.dataPoints = dataPoints
-        self.legendTitle = legendTitle
-        self.legendFillTitle = legendFillTitle
+        self.markerType = markerType
         self.style = style
     }
     
-    @available(*, deprecated, message: "\"PointStyle\" has been depricated")
-    public var pointStyle = PointStyle()
     /// Initialises a data set for a line in a ranged line chart.
     /// - Parameters:
     ///   - dataPoints: Array of elements.
@@ -48,7 +43,7 @@ public struct RangedLineDataSet: CTRangedLineChartDataSet, DataFunctionsProtocol
     ///   - legendFillTitle: Label for the range data in legend.
     ///   - pointStyle: Styling information for the data point markers.
     ///   - style: Styling for how the line will be draw in.
-    @available(*, deprecated, message: "\"PointStyle\" has been depricated")
+    @available(*, deprecated, message: "\"PointStyle\", \"legendTitle\" and \"legendFillTitle\" has been depricated")
     public init(
         dataPoints: [RangedLineChartDataPoint],
         legendTitle: String = "",
@@ -57,12 +52,20 @@ public struct RangedLineDataSet: CTRangedLineChartDataSet, DataFunctionsProtocol
         style: RangedLineStyle = RangedLineStyle()
     ) {
         self.dataPoints = dataPoints
-        self.legendTitle = legendTitle
-        self.legendFillTitle = legendFillTitle
+        self.legendTitle = ""
+        self.legendFillTitle = ""
+        self.markerType = .none
         self.pointStyle = pointStyle
         self.style = style
     }
     
     public typealias ID = UUID
     public typealias Styling = RangedLineStyle
+    
+    @available(*, deprecated, message: "\"PointStyle\" has been depricated")
+    public var pointStyle = PointStyle()
+    @available(*, deprecated, message: "depricated")
+    public var legendTitle: String = ""
+    @available(*, deprecated, message: "depricated")
+    public var legendFillTitle: String = ""
 }

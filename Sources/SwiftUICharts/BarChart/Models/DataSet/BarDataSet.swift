@@ -14,20 +14,33 @@ public struct BarDataSet: CTStandardBarChartDataSet, DataFunctionsProtocol {
     
     public let id: UUID = UUID()
     public var dataPoints: [BarChartDataPoint]
-    public var legendTitle: String
+    public var markerType: BarMarkerType
+    
+    public init(
+        dataPoints: [BarChartDataPoint],
+        markerType: BarMarkerType = .full(colour: .primary, style: StrokeStyle())
+    ) {
+        self.dataPoints = dataPoints
+        self.markerType = markerType
+    }
+    
+    public typealias ID = UUID
+    public typealias DataPoint = BarChartDataPoint
     
     /// Initialises a new data set for standard Bar Charts.
     /// - Parameters:
     ///   - dataPoints: Array of elements.
     ///   - legendTitle: label for the data in legend.
+    @available(*, deprecated, message: "\"legendTitle\" has been depricated")
     public init(
         dataPoints: [BarChartDataPoint],
-        legendTitle: String = ""
+        legendTitle: String
     ) {
         self.dataPoints = dataPoints
+        self.markerType = .none
         self.legendTitle = legendTitle
     }
     
-    public typealias ID = UUID
-    public typealias DataPoint = BarChartDataPoint
+    @available(*, deprecated, message: "depricated")
+    public var legendTitle: String = ""
 }

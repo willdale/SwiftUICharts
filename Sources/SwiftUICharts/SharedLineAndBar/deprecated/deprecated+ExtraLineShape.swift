@@ -1,5 +1,5 @@
 //
-//  ExtraLineShape.swift
+//  deprecated+ExtraLineShape.swift
 //  
 //
 //  Created by Will Dale on 05/06/2021.
@@ -7,18 +7,19 @@
 
 import SwiftUI
 
+@available(*, deprecated, message: "deprecated")
 internal struct ExtraLineShape<DataPoint>: Shape where DataPoint: CTStandardDataPointProtocol & Ignorable {
     
     private let dataPoints: [DataPoint]
     private let lineType: LineType
-    private let lineSpacing: ExtraLineStyle.SpacingType
+    private let lineSpacing: SpacingType
     private let range: Double
     private let minValue: Double
     
     internal init(
         dataPoints: [DataPoint],
         lineType: LineType,
-        lineSpacing: ExtraLineStyle.SpacingType,
+        lineSpacing: SpacingType,
         range: Double,
         minValue: Double
     ) {

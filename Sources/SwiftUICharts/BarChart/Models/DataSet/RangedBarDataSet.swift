@@ -14,20 +14,33 @@ public struct RangedBarDataSet: CTRangedBarChartDataSet, DataFunctionsProtocol {
     
     public var id: UUID = UUID()
     public var dataPoints: [RangedBarDataPoint]
-    public var legendTitle: String
+    public var markerType: BarMarkerType
+    
+    public init(
+        dataPoints: [RangedBarDataPoint],
+        markerType: BarMarkerType = .full(colour: .primary, style: StrokeStyle())
+    ) {
+        self.dataPoints = dataPoints
+        self.markerType = markerType
+    }
+    
+    public typealias ID = UUID
+    public typealias DataPoint = RangedBarDataPoint
     
     /// Initialises a new data set for ranged bar chart.
     /// - Parameters:
     ///   - dataPoints: Array of elements.
     ///   - legendTitle: Label for the data in legend.
+    @available(*, deprecated, message: "\"legendTitle\" has been depricated")
     public init(
         dataPoints: [RangedBarDataPoint],
-        legendTitle: String = ""
+        legendTitle: String
     ) {
         self.dataPoints = dataPoints
+        self.markerType = .none
         self.legendTitle = legendTitle
     }
     
-    public typealias ID = UUID
-    public typealias DataPoint = RangedBarDataPoint
+    @available(*, deprecated, message: "depricated")
+    public var legendTitle: String = ""
 }

@@ -18,29 +18,18 @@ public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishab
     // MARK: Properties
     public var id: UUID = UUID()
     @Published public var dataSets: PieDataSet
-    @Published public var shouldAnimate: Bool
+    public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .pie
     
+    public var markerData = MarkerData()
+    
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
     
-    // MARK: Touchable
-    public var touchMarkerType: PieMarkerType = defualtTouchMarker
-    
     // MARK: Non-Protocol
     internal let chartType: CTChartType = (chartType: .pie, dataSetType: .single)
-    
-    // MARK: Deprecated
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    @Published public var metadata = ChartMetadata()
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    @Published public var chartStyle = PieChartStyle()
-    @available(*, deprecated, message: "Has been moved to the view")
-    @Published public var legends: [LegendData] = []
-    @available(*, deprecated, message: "Split in to axis data")
-    @Published public var infoView = InfoViewData<PieChartDataPoint>()
     
     // MARK: Initializer
     /// Initialises Pie Chart data.
@@ -63,7 +52,7 @@ public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishab
     }
     
     // MARK: - Touch
-    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
+    public func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         let touchDegree = degree(from: touchLocation, in: chartSize)
         let index = self.dataSets.dataPoints.firstIndex(where:) {
             let start = $0.startAngle * Double(180 / Double.pi) <= Double(touchDegree)
@@ -73,10 +62,9 @@ public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishab
         guard let wrappedIndex = index else { return }
         let datapoint = self.dataSets.dataPoints[wrappedIndex]
         let values = [PublishedTouchData(datapoint: datapoint, location: .zero, type: .pie)]
-        let pieMarkerData = values.map { data in
-            return PieMarkerData(markerType: .full(), location: data.location)
-        }
-        markerData.update(with: pieMarkerData)
+        markerData = MarkerData(pieMarkerData: values.map { data in
+            return PieMarkerData(markerType: dataSets.markerType, location: data.location)
+        })
     }
         
     public func touchDidFinish() {
@@ -86,5 +74,15 @@ public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishab
     public typealias SetType = PieDataSet
     public typealias DataPoint = PieChartDataPoint
     public typealias Marker = PieMarkerType
+    
+    // MARK: Deprecated
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    public var metadata = ChartMetadata()
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    public var chartStyle = PieChartStyle()
+    @available(*, deprecated, message: "Has been moved to the view")
+    public var legends: [LegendData] = []
+    @available(*, deprecated, message: "Split in to axis data")
+    public var infoView = InfoViewData<PieChartDataPoint>()
 }
 

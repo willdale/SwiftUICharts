@@ -15,49 +15,26 @@ import ChartMath
  This model contains the data and styling information for a ranged line chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance, ViewDataProtocol {
+public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance {
     // MARK: Properties
     public let id: UUID  = UUID()
     @Published public var dataSets: RangedLineDataSet
-    @Published public var shouldAnimate: Bool
+    public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .rangedLine
-        
-    // MARK: ViewDataProtocol
-    @Published public var xAxisViewData = XAxisViewData()
-    @Published public var yAxisViewData = YAxisViewData()
+    
+    public var markerData = MarkerData()
 
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
-    
-    // MARK: Touchable
-    public var markerData: MarkerData = MarkerData()
-    public var touchMarkerType: LineMarkerType = defualtTouchMarker
     
     // MARK: DataHelper
     public var baseline: Baseline
     public var topLine: Topline
     
-    // MARK: ExtraLineDataProtocol
-    @Published public var extraLineData: ExtraLineData!
-    
     // MARK: Non-Protocol
     internal let chartType: CTChartType = (chartType: .line, dataSetType: .single)
-    
-    // MARK: Deprecated
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    @Published public var metadata = ChartMetadata()
-    @available(*, deprecated, message: "")
-    @Published public var chartStyle = LineChartStyle()
-    @available(*, deprecated, message: "Has been moved to the view")
-    @Published public var legends: [LegendData] = []
-    @available(*, deprecated, message: "Split in to axis data")
-    @Published public var infoView = InfoViewData<RangedLineChartDataPoint>()
-    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
-    @Published public var xAxisLabels: [String]?
-    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
-    @Published public var yAxisLabels: [String]?
     
     // MARK: Initializer
     /// Initialises a ranged line chart.
@@ -89,18 +66,8 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
             .divide(by: Double(dataSets.dataPoints.count))
     }
     
-    // MARK: Labels
-    public func xAxisSectionSizing(count: Int, size: CGFloat) -> CGFloat {
-        return min(divide(size, count),
-                   self.xAxisViewData.xAxisLabelWidths.min() ?? 0)
-    }
-    
-    public func xAxisLabelOffSet(index: Int, size: CGFloat, count: Int) -> CGFloat {
-       return  CGFloat(index) * divide(size, count - 1)
-    }
-    
     // MARK: Touch
-    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
+    public func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
         let xSection = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
         let ySection = chartSize.height / CGFloat(range)
@@ -119,27 +86,16 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
             }
             
             values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .line))
-            
-            if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
-               let location = extraLine.location,
-               let value = extraLine.value
-            {
-                var datapoint = DataPoint(value: value, description: extraLine.description ?? "")
-                datapoint._legendTag = extraLine._legendTag ?? ""
-                values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
-            }
-            
         }
-        let lineMarkerData = values.map {
-            return LineMarkerData(markerType: touchMarkerType,
+        markerData = MarkerData(lineMarkerData: values.map {
+            return LineMarkerData(markerType: dataSets.markerType,
                                   location: $0.location,
                                   dataPoints: dataSets.dataPoints.map { LineChartDataPoint($0) },
                                   lineType: dataSets.style.lineType,
                                   lineSpacing: .line,
                                   minValue: minValue,
                                   range: range)
-        }
-        markerData.update(with: lineMarkerData)
+        })
     }
     
     public func touchDidFinish() {
@@ -149,4 +105,18 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
     public typealias SetType = RangedLineDataSet
     public typealias DataPoint = RangedLineChartDataPoint
     public typealias MarkerType = LineMarkerType
+    
+    // MARK: Deprecated
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    public var metadata = ChartMetadata()
+    @available(*, deprecated, message: "")
+    public var chartStyle = LineChartStyle()
+    @available(*, deprecated, message: "Has been moved to the view")
+    public var legends: [LegendData] = []
+    @available(*, deprecated, message: "Split in to axis data")
+    public var infoView = InfoViewData<RangedLineChartDataPoint>()
+    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
+    public var xAxisLabels: [String]?
+    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
+    public var yAxisLabels: [String]?
 }

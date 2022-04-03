@@ -8,7 +8,7 @@
 import SwiftUI
 
 @available(*, deprecated, message: "")
-internal struct ExtraYAxisLabels<ChartData>: ViewModifier where ChartData: CTChartData & YAxisViewDataProtocol {
+internal struct ExtraYAxisLabels<ChartData>: ViewModifier where ChartData: CTChartData {
     
     @ObservedObject private var chartData: ChartData
     private let specifier: String
@@ -22,7 +22,6 @@ internal struct ExtraYAxisLabels<ChartData>: ViewModifier where ChartData: CTCha
         self.chartData = chartData
         self.specifier = specifier
         self.colourIndicator = colourIndicator
-        chartData.yAxisViewData.hasYAxisLabels = true
     }
     
     internal func body(content: Content) -> some View {
@@ -46,7 +45,7 @@ extension View {
         specifier: String = "%.0f",
         colourIndicator: AxisColour = .none
     ) -> some View
-    where ChartData: CTChartData & YAxisViewDataProtocol
+    where ChartData: CTChartData
     {
         self.modifier(ExtraYAxisLabels(chartData: chartData, specifier: specifier, colourIndicator: colourIndicator))
     }

@@ -1,5 +1,5 @@
 //
-//  LegendData.swift
+//  deprecated+LegendData.swift
 //  LineChart
 //
 //  Created by Will Dale on 02/01/2021.

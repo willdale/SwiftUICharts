@@ -9,7 +9,7 @@ import SwiftUI
 
 internal typealias CTChartType = (chartType: ChartType, dataSetType: DataSetType)
 
-public typealias ChartConformance = DataHelper & Publishable & Touchable & ExtraLineProtocol
+public typealias ChartConformance = DataHelper & Publishable & Touchable
 public typealias StandardChartConformance =  ChartConformance & VerticalChart
 public typealias HorizontalChartConformance = ChartConformance & HorizontalChart
 
@@ -36,10 +36,8 @@ public protocol CTChartData: ObservableObject, Identifiable {
     
     /// Data model containing datapoints and styling information.
     var dataSets: SetType { get set }
-    
-    /// Array of `LegendData` to populate the charts legend.
-    /// This is populated automatically from within each view.
-    var legends: [LegendData] { get set }
+
+    var markerData: MarkerData { get set }
     
     /// Customisable `Text` to display when where is not enough data to draw the chart.
     var noDataText: Text { get set }
@@ -100,52 +98,6 @@ extension CTChartData {
 extension CTChartData where Self: GroupedBarChartData {
     public var xAxisData: XAxisLabelStyle.XLabelData {
         XAxisLabelStyle.XLabelData(chart: chartName, spacing: groupSpacing)
-    }
-}
-
-extension CTChartData where Self: BarChartType {
-    internal func markerSubView(
-        markerData: MarkerData,
-        chartSize: CGRect,
-        touchLocation: CGPoint
-    ) -> some View {
-        ZStack {
-            ForEach(markerData.barMarkerData, id: \.self) { marker in
-                MarkerView.bar(barMarker: marker.markerType, markerData: marker)
-            }
-            
-            ForEach(markerData.lineMarkerData, id: \.self) { marker in
-                MarkerView.line(lineMarker: marker.markerType,
-                                markerData: marker,
-                                chartSize: chartSize,
-                                touchLocation: touchLocation,
-                                dataPoints: marker.dataPoints,
-                                lineType: marker.lineType,
-                                lineSpacing: marker.lineSpacing,
-                                minValue: marker.minValue,
-                                range: marker.range)
-            }
-        }
-    }
-}
-
-extension CTChartData where Self: LineChartType {
-    internal func markerSubView(
-        markerData: MarkerData,
-        chartSize: CGRect,
-        touchLocation: CGPoint
-    ) -> some View {
-        ForEach(markerData.lineMarkerData, id: \.self) { marker in
-            MarkerView.line(lineMarker: marker.markerType,
-                            markerData: marker,
-                            chartSize: chartSize,
-                            touchLocation: touchLocation,
-                            dataPoints: marker.dataPoints,
-                            lineType: marker.lineType,
-                            lineSpacing: marker.lineSpacing,
-                            minValue: marker.minValue,
-                            range: marker.range)
-        }
     }
 }
 

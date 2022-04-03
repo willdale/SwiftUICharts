@@ -15,48 +15,26 @@ import ChartMath
  This model contains all the data and styling information for a single line, line chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance, ViewDataProtocol {
+public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance {
     // MARK: Properties
     public let id: UUID = UUID()
     @Published public var dataSets: MultiLineDataSet
-    @Published public var shouldAnimate: Bool
+    public var shouldAnimate: Bool
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .multiLine
-        
-    // MARK: ViewDataProtocol
-    @Published public var xAxisViewData = XAxisViewData()
-    @Published public var yAxisViewData = YAxisViewData()
+    
+    public var markerData = MarkerData()
     
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
-    
-    // MARK: Touchable
-    public var touchMarkerType: LineMarkerType = defualtTouchMarker
     
     // MARK: DataHelper
     public var baseline: Baseline
     public var topLine: Topline
     
-    // MARK: ExtraLineDataProtocol
-    @Published public var extraLineData: ExtraLineData!
-    
     // MARK: Non-Protocol
     internal let chartType: CTChartType = (chartType: .line, dataSetType: .single)
-    
-    // MARK: Deprecated
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    @Published public var metadata = ChartMetadata()
-    @available(*, deprecated, message: "")
-    @Published public var chartStyle = LineChartStyle()
-    @available(*, deprecated, message: "Has been moved to the view")
-    @Published public var legends: [LegendData] = []
-    @available(*, deprecated, message: "Split in to axis data")
-    @Published public var infoView = InfoViewData<LineChartDataPoint>()
-    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
-    @Published public var xAxisLabels: [String]?
-    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
-    @Published public var yAxisLabels: [String]?
     
     // MARK: Initializers
     /// Initialises a Multi Line Chart.
@@ -82,7 +60,7 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
     }
 
     // MARK: Touch
-    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
+    public func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
         let data: [PublishedTouchData<LineChartDataPoint>] = dataSets.dataSets.compactMap { dataSet in
             let xSection = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
@@ -97,7 +75,6 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
                     location = CGPoint(x: CGFloat(index) * xSection,
                                        y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
                     datapoint = dataSet.dataPoints[index]
-                    datapoint._legendTag = dataSet.legendTitle
                 } else {
                     return nil
                 }
@@ -107,20 +84,11 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
         
         values.append(contentsOf: data)
         
-        if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
-           let location = extraLine.location,
-           let value = extraLine.value
-        {
-            var datapoint = DataPoint(value: value, description: extraLine.description ?? "")
-            datapoint._legendTag = extraLine._legendTag ?? ""
-            values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
-        }
-        
         var lineMarkerData: [LineMarkerData] = []
         values.forEach { data in
             let location = data.location
             let lineData = self.dataSets.dataSets.compactMap { dataSet in
-                return LineMarkerData(markerType: self.touchMarkerType,
+                return LineMarkerData(markerType: dataSet.markerType,
                                       location: location,
                                       dataPoints: dataSet.dataPoints,
                                       lineType: dataSet.style.lineType,
@@ -129,8 +97,8 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
                                       range: self.range)
             }
             lineMarkerData.append(contentsOf: lineData)
+            markerData = MarkerData(lineMarkerData: lineMarkerData)
         }
-        markerData.update(with: lineMarkerData)
     }
     
     public func touchDidFinish() {
@@ -153,4 +121,18 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
     public typealias SetType = MultiLineDataSet
     public typealias DataPoint = LineChartDataPoint
     public typealias Marker = LineMarkerType
+
+    // MARK: Deprecated
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    public var metadata = ChartMetadata()
+    @available(*, deprecated, message: "")
+    public var chartStyle = LineChartStyle()
+    @available(*, deprecated, message: "Has been moved to the view")
+    public var legends: [LegendData] = []
+    @available(*, deprecated, message: "Split in to axis data")
+    public var infoView = InfoViewData<LineChartDataPoint>()
+    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
+    public var xAxisLabels: [String]?
+    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
+    public var yAxisLabels: [String]?
 }
