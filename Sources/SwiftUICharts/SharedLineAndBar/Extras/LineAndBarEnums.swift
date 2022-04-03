@@ -15,6 +15,7 @@ import SwiftUI
  case bottom
  ```
  */
+@available(*, deprecated, message: "")
 public enum XAxisLabelPosistion {
     case top
     case bottom
@@ -46,6 +47,7 @@ public enum LabelsFrom {
  case trailing
  ```
  */
+@available(*, deprecated, message: "Please use \"\" instead.")
 public enum YAxisLabelPosistion {
     case leading
     case trailing
@@ -60,6 +62,7 @@ public enum YAxisLabelPosistion {
  case center(specifier: String) // Places the label in the center of chart.
  ```
  */
+@available(*, deprecated, message: "Please use \"\" instead.")
 public enum DisplayValue {
     /// No label.
     case none
@@ -108,9 +111,10 @@ public enum Topline: Hashable {
  
  ```
  case numeric // Auto generated, numeric labels.
- case custom // Custom labels array -- `ChartData -> yAxisLabels`
+ case custom // Custom labels array
  ```
  */
+@available(*, deprecated, message: "Set in view")
 public enum YAxisLabelType {
     /// Auto generated, numeric labels.
     case numeric
@@ -128,6 +132,7 @@ public enum YAxisLabelType {
  case custom(colour: ChartColour, size: CGFloat) // Set custom style.
  ```
  */
+@available(*, deprecated, message: "Please use \"\" instead.")
 public enum AxisColour {
     /// No colour marker.
     case none

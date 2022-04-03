@@ -14,66 +14,56 @@ import Combine
  This model contains the data and styling information for a doughnut chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class DoughnutChartData: CTDoughnutChartDataProtocol, Publishable, Touchable, TouchInfoDisplayable {
-    
+public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol, Publishable, Touchable {
     // MARK: Properties
     public var id: UUID = UUID()
-    
-    public var accessibilityTitle: LocalizedStringKey = ""
-    
     @Published public var dataSets: PieDataSet
+    @Published public var shouldAnimate: Bool
+    public var noDataText: Text
+    public var accessibilityTitle: LocalizedStringKey = ""
+    public let chartName: ChartName = .doughnut
     
+    public var strokeWidth: CGFloat = 1
+
+    // MARK: Publishable
+    @Published public var touchPointData: [DataPoint] = []
+    
+    // MARK: Touchable
+    public var touchMarkerType: PieMarkerType = defualtTouchMarker
+    
+    // MARK: Non-Protocol
+    internal let chartType: CTChartType = (chartType: .pie, dataSetType: .single)
+    
+    // MARK: Deprecated
     @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
     @Published public var metadata = ChartMetadata()
-    
-    @Published public var chartStyle: DoughnutChartStyle
+    @available(*, deprecated, message: "")
+    @Published public var chartStyle = DoughnutChartStyle()
+    @available(*, deprecated, message: "Has been moved to the view")
     @Published public var legends: [LegendData] = []
-    @Published public var infoView: InfoViewData<PieChartDataPoint> = InfoViewData()
-    
-    @Published public var shouldAnimate: Bool
-        
-    public var noDataText: Text
-
-    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .pie, dataSetType: .single)
-    
-    private var internalDataSubscription: AnyCancellable?
-    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<PieChartDataPoint>],Never>()
-    @Published public var touchPointData: [DataPoint] = []
+    @available(*, deprecated, message: "Split in to axis data")
+    @Published public var infoView = InfoViewData<PieChartDataPoint>()
     
     // MARK: Initializer
     /// Initialises Doughnut Chart data.
     ///
     /// - Parameters:
     ///   - dataSets: Data to draw and style the chart.
-    ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - shouldAnimate: Whether the chart should be animated.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: PieDataSet,
-        chartStyle: DoughnutChartStyle = DoughnutChartStyle(),
         shouldAnimate: Bool = true,
         noDataText: Text
     ) {
         self.dataSets = dataSets
-        self.chartStyle = chartStyle
         self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         
-        self.setupLegends()
         self.makeDataPoints()
-        
-        internalDataSubscription = touchedDataPointPublisher
-            .sink { self.touchPointData = $0.map(\.datapoint) }
     }
-    
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent = true
-        self.infoView.touchLocation = touchLocation
-        self.infoView.chartSize = chartSize
-        self.processTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
-    }
-    
-    private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+
+    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
         let touchDegree = degree(from: touchLocation, in: chartSize)
         let index = self.dataSets.dataPoints.firstIndex(where:) {
             let start = $0.startAngle * Double(180 / Double.pi) <= Double(touchDegree)
@@ -82,45 +72,19 @@ public final class DoughnutChartData: CTDoughnutChartDataProtocol, Publishable, 
         }
         guard let wrappedIndex = index else { return }
         let datapoint = self.dataSets.dataPoints[wrappedIndex]
-        self.touchedDataPointPublisher.send([PublishedTouchData(datapoint: datapoint, location: .zero, type: .pie)])
+        let values = [PublishedTouchData(datapoint: datapoint, location: .zero, type: .pie)]
+        let pieMarkerData = values.map { data in
+            return PieMarkerData(markerType: .full(), location: data.location)
+        }
+        markerData.update(with: pieMarkerData)
+        
     }
-    
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View { EmptyView() }
-    
+        
     public func touchDidFinish() {
         touchPointData = []
-        infoView.isTouchCurrent = false
     }
     
     public typealias SetType = PieDataSet
     public typealias DataPoint = PieChartDataPoint
-    public typealias CTStyle = DoughnutChartStyle
-    
-    // MARK: Deprecated
-    /// Initialises Doughnut Chart data.
-    ///
-    /// - Parameters:
-    ///   - dataSets: Data to draw and style the chart.
-    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
-    ///   - chartStyle: The style data for the aesthetic of the chart.
-    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    @available(*, deprecated, message: "Please set use other init instead.")
-    public init(
-        dataSets: PieDataSet,
-        metadata: ChartMetadata,
-        chartStyle: DoughnutChartStyle = DoughnutChartStyle(),
-        noDataText: Text
-    ) {
-        self.dataSets = dataSets
-        self.metadata = metadata
-        self.chartStyle = chartStyle
-        self.shouldAnimate = true
-        self.noDataText = noDataText
-        
-        self.setupLegends()
-        self.makeDataPoints()
-        
-        internalDataSubscription = touchedDataPointPublisher
-            .sink { self.touchPointData = $0.map(\.datapoint) }
-    }
+    public typealias Marker = PieMarkerType
 }

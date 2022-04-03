@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+public protocol PieChartType {}
+
 // MARK: - Chart Data
 /**
  A protocol to extend functionality of `CTChartData` specifically for Pie and Doughnut Charts.
@@ -52,33 +54,4 @@ public protocol CTPieDataPoint: CTStandardDataPointProtocol, CTnotRanged {
      Option to add overlays on top of the segment.
      */
     var label: OverlayType { get set }
-}
-
-
-
-
-
-
-// MARK: - Style
-/**
- A protocol to extend functionality of `CTChartStyle` specifically for  Pie and Doughnut Charts.
- */
-public protocol CTPieAndDoughnutChartStyle: CTChartStyle {}
-
-
-/**
- A protocol to extend functionality of `CTPieAndDoughnutChartStyle` specifically for  Pie Charts.
- */
-public protocol CTPieChartStyle: CTPieAndDoughnutChartStyle {}
-
-
-/**
- A protocol to extend functionality of `CTPieAndDoughnutChartStyle` specifically for Doughnut Charts.
- */
-public protocol CTDoughnutChartStyle: CTPieAndDoughnutChartStyle {
-    
-    /**
-     Width / Delta of the Doughnut Chart
-     */
-    var strokeWidth: CGFloat { get set }
 }

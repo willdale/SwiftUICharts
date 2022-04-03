@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-/// Draw line in legend view
 internal struct LegendLine: Shape {
     
     private let width: CGFloat
@@ -18,8 +17,8 @@ internal struct LegendLine: Shape {
     
     internal func path(in rect: CGRect) -> Path {
         var path = Path()
-        path.move(to: CGPoint(x: 0, y: 0))
-        path.addLine(to: CGPoint(x: width, y: 0))
+        path.move(to: CGPoint(x: 0, y: rect.height / 2))
+        path.addLine(to: CGPoint(x: width, y: rect.height / 2))
         return path
     }
 }

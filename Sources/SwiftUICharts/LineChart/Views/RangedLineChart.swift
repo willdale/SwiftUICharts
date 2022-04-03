@@ -36,27 +36,26 @@ public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartD
     }
     
     public var body: some View {
-        GeometryReader { geo in
-            if chartData.isGreaterThanTwo() {
-                ZStack {
-                    chartData.getAccessibility()
-                    RangedBoxSubView(chartData: chartData,
-                                     dataSet: chartData.dataSets,
-                                     minValue: chartData.minValue,
-                                     range: chartData.range,
-                                     colour: chartData.dataSets.style.fillColour)
-                    
-                    RangedLineSubView(chartData: chartData,
-                                     dataSet: chartData.dataSets,
-                                     minValue: chartData.minValue,
-                                     range: chartData.range,
-                                     colour: chartData.dataSets.style.lineColour)
-                }
-                .onAppear { // Needed for axes label frames
-                    self.chartData.viewData.chartSize = geo.frame(in: .local)
-                }
-            } else { CustomNoDataView(chartData: chartData) }
-        }
+//        GeometryReader { geo in
+            ZStack {
+//                chartData.getAccessibility()
+                RangedBoxSubView(chartData: chartData,
+                                 dataSet: chartData.dataSets,
+                                 minValue: chartData.minValue,
+                                 range: chartData.range,
+                                 colour: chartData.dataSets.style.fillColour)
+                
+                RangedLineSubView(chartData: chartData,
+                                  dataSet: chartData.dataSets,
+                                  minValue: chartData.minValue,
+                                  range: chartData.range,
+                                  colour: chartData.dataSets.style.lineColour)
+            }
+//            .modifier(ChartSizeUpdating(chartData: chartData))
+//            .onAppear { // Needed for axes label frames
+//                self.chartData.chartSize = geo.frame(in: .local)
+//            }
+//        }
     }
 }
 
@@ -130,7 +129,7 @@ internal struct RangedLineSubView<ChartData>: View where ChartData: RangedLineCh
             .trim(to: startAnimation ? 1 : 0)
             .stroke(colour, strokeStyle: dataSet.style.strokeStyle)
 
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .background(Color(.gray).opacity(0.000000001))

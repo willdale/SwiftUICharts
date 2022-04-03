@@ -22,40 +22,6 @@ public enum LineType {
 }
 
 /**
- Style of the point marks
- ```
- case filled // Just fill
- case outline // Just stroke
- case filledOutLine // Both fill and stroke
- ```
- */
-public enum PointType {
-    /// Just fill
-    case filled
-    /// Just stroke
-    case outline
-    /// Both fill and stroke
-    case filledOutLine
-}
-
-/**
- Shape of the points
- ```
- case circle
- case square
- case roundSquare
- ```
- */
-public enum PointShape {
-    /// Circle Shape
-    case circle
-    /// Square Shape
-    case square
-    /// Rounded Square Shape
-    case roundSquare
-}
-
-/**
  Where the Y and X touch markers should attach themselves to.
  ```
  case line(dot: Dot) // Attached to the line.

@@ -68,6 +68,7 @@ public struct InfoExtra<T>: View where T: CTChartData {
     }
 }
 
+@available(*, deprecated, message: "")
 extension LegendData {
     /**
      Get the legend as a view.

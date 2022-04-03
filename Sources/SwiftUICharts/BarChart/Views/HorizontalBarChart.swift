@@ -10,26 +10,17 @@ import SwiftUI
 // MARK: - Chart
 public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBarChartData {
     
-    @ObservedObject private var chartData: ChartData
+    @EnvironmentObject public var stateObject: ChartStateObject
+    @EnvironmentObject public var chartData: ChartData
     
-    /// Initialises a bar chart view.
-    /// - Parameter chartData: Must be BarChartData model.
-    public init(chartData: ChartData) {
-        self.chartData = chartData
-    }
+    public init() {}
     
     public var body: some View {
-        GeometryReader { geo in
-            if chartData.isGreaterThanTwo() {
-                VStack(spacing: 0) {
-                    HorizontalBarChartSubView(chartData: chartData)
-                        .accessibilityLabel(chartData.accessibilityTitle)
-                }
-                .onAppear { // Needed for axes label frames
-                    self.chartData.viewData.chartSize = geo.frame(in: .local)
-                }
-            } else { CustomNoDataView(chartData: chartData) }
+        VStack(spacing: 0) {
+            HorizontalBarChartSubView(chartData: chartData)
+                .accessibilityLabel(chartData.accessibilityTitle)
         }
+        .modifier(ChartSizeUpdating(stateObject: stateObject))
     }
 }
 
@@ -63,7 +54,7 @@ internal struct HorizontalBarChartSubView<ChartData>: View where ChartData: Hori
 }
 
 // MARK: - Element
-internal struct HorizontalBarElement<ChartData>: View where ChartData: CTBarChartDataProtocol & GetDataProtocol {
+internal struct HorizontalBarElement<ChartData>: View where ChartData: CTChartData & CTBarChartDataProtocol & DataHelper {
     
     @ObservedObject private var chartData: ChartData
     private let dataPoint: BarChartDataPoint
@@ -123,7 +114,7 @@ internal struct HorizontalBarElement<ChartData>: View where ChartData: CTBarChar
             self.lengthAnimation = false
         }
         .background(Color(.gray).opacity(0.000000001))
-        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+//        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
         .id(chartData.id)
     }
 }

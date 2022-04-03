@@ -42,22 +42,16 @@ public struct FilledLineChart<ChartData>: View where ChartData: FilledLineChartD
     }
     
     public var body: some View {
-        GeometryReader { geo in
-            if chartData.isGreaterThanTwo() {
-                ZStack {
-                    chartData.getAccessibility()
-                    TopLineSubView(chartData: chartData,
-                                   colour: chartData.dataSets.style.lineColour)
-                    FilledLineSubView(chartData: chartData,
-                                      colour: chartData.dataSets.style.fillColour)
-                }
-                .onAppear { // Needed for axes label frames
-                    self.chartData.viewData.chartSize = geo.frame(in: .local)
-                }
-            } else { CustomNoDataView(chartData: chartData) }
+            ZStack {
+//                chartData.getAccessibility()
+                TopLineSubView(chartData: chartData,
+                               colour: chartData.dataSets.style.lineColour)
+                FilledLineSubView(chartData: chartData,
+                                  colour: chartData.dataSets.style.fillColour)
+            }
+        
         }
     }
-}
 
  // MARK: - Top Line
 internal struct TopLineSubView<ChartData>: View where ChartData: FilledLineChartData {
@@ -84,7 +78,7 @@ internal struct TopLineSubView<ChartData>: View where ChartData: FilledLineChart
             .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
             .stroke(colour, strokeStyle: chartData.dataSets.style.strokeStyle)
         
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .background(Color(.gray).opacity(0.000000001))
@@ -119,8 +113,9 @@ internal struct FilledLineSubView<ChartData>: View where ChartData: FilledLineCh
                    range: chartData.range)
             .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
             .fill(colour)
+//            .modifier(ChartSizeUpdating(chartData: chartData))
         
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .background(Color(.gray).opacity(0.000000001))

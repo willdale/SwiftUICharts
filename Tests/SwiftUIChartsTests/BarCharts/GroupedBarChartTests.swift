@@ -75,13 +75,6 @@
 //        XCTAssertEqual(chartData.range, 80.001)
 //    }
 //
-//    // MARK: Greater
-//    func testGroupedBarIsGreaterThanTwoTrue() {
-//        let chartData = GroupedBarChartData(dataSets: data, groups: groups)
-//
-//        XCTAssertTrue(chartData.isGreaterThanTwo())
-//    }
-//
 //
 //    // MARK: - Labels
 //    func testGroupedBarGetYLabels() {

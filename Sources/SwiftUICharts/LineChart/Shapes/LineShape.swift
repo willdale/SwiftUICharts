@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ChartMath
 
 internal struct LineShape<DataPoint>: Shape where DataPoint: CTStandardDataPointProtocol & Ignorable {
     

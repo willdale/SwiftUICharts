@@ -26,33 +26,21 @@ import SwiftUI
  */
 public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartData {
     
-    @ObservedObject private var chartData: ChartData
+    @EnvironmentObject public var stateObject: ChartStateObject
+    @EnvironmentObject public var chartData: ChartData
     
-    @State private var startAnimation: Bool
-    
-    /// Initialises a multi-line, line chart.
-    /// - Parameter chartData: Must be MultiLineChartData model.
-    public init(chartData: ChartData) {
-        self.chartData = chartData
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
-    }
-    
+    public init() {}
+        
     public var body: some View {
-        GeometryReader { geo in
-            if chartData.isGreaterThanTwo() {
-                ZStack {
-                    chartData.getAccessibility()
-                    ForEach(chartData.dataSets.dataSets, id: \.id) { dataSet in
-                        SingleLineChartSubView(chartData: chartData,
-                                               dataSet: dataSet,
-                                               colour: dataSet.style.lineColour)
-                    }
+            ZStack {
+                chartData.getAccessibility()
+                ForEach(chartData.dataSets.dataSets, id: \.id) { dataSet in
+                    SingleLineChartSubView(chartData: chartData,
+                                           dataSet: dataSet,
+                                           colour: dataSet.style.lineColour)
                 }
-                .onAppear { // Needed for axes label frames
-                    self.chartData.viewData.chartSize = geo.frame(in: .local)
-                }
-            } else { CustomNoDataView(chartData: chartData) }
-        }
+                .modifier(ChartSizeUpdating(stateObject: stateObject))
+            }
     }
 }
 
@@ -83,7 +71,7 @@ internal struct SingleLineChartSubView<ChartData>: View where ChartData: MultiLi
             .trim(to: startAnimation ? 1 : 0)
             .stroke(colour, strokeStyle: dataSet.style.strokeStyle)
         
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .background(Color(.gray).opacity(0.000000001))

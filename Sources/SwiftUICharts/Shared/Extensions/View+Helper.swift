@@ -22,24 +22,6 @@ extension View {
     }
 }
 
-extension View {
-    /**
-     View modifier to conditionally add a view modifier else add a different one.
-     
-     [Five Stars](https://fivestars.blog/swiftui/conditional-modifiers.html)
-     */
-    @ViewBuilder func `ifElse`<TrueContent: View, FalseContent: View>(
-        _ condition: Bool,
-        if ifTransform: (Self) -> TrueContent,
-        else elseTransform: (Self) -> FalseContent
-    ) -> some View {
-        if condition {
-            ifTransform(self)
-        } else {
-            elseTransform(self)
-        }
-    }
-}
 
 extension View {
     /**
@@ -56,35 +38,6 @@ extension View {
                 action()
             }
         }
-    }
-}
-
-extension Double {
-    /**
-     Simple, neat divide.
-     */
-    func divide<T:BinaryInteger>(by divideBy: T) -> Double {
-        self / Double(divideBy)
-    }
-    /**
-     Simple, neat divide.
-     */
-    func divide<T:BinaryFloatingPoint>(by divideBy: T) -> Double {
-        self / Double(divideBy)
-    }
-}
-extension CGFloat {
-    /**
-     Simple, neat divide.
-     */
-    func divide<T:BinaryInteger>(by divideBy: T) -> CGFloat {
-        self / CGFloat(divideBy)
-    }
-    /**
-     Simple, neat divide.
-     */
-    func divide<T:BinaryFloatingPoint>(by divideBy: T) -> CGFloat {
-        self / CGFloat(divideBy)
     }
 }
 
@@ -105,22 +58,4 @@ extension Color {
 
 extension Collection {
     func distance(to index: Index) -> Int { distance(from: startIndex, to: index) }
-}
-
-// MARK: - Global Functions
-/// Protects against divide by zero.
-///
-/// Return zero in the case of divide by zero.
-/// 
-/// ```
-/// divideByZeroProtection(CGFloat.self, value, maxValue)
-/// ```
-///
-/// - Parameters:
-///   - outputType: The numeric type required as an output.
-///   - lhs: Dividend
-///   - rhs: Divisor
-/// - Returns: If rhs is not zero it returns the quotient otherwise it returns zero.
-func divideByZeroProtection<T: BinaryFloatingPoint, U: BinaryFloatingPoint>(_ outputType: U.Type, _ lhs: T, _ rhs: T) -> U {
-    U(rhs != 0 ? (lhs / rhs) : 0)
 }

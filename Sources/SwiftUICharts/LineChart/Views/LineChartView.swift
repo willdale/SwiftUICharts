@@ -26,55 +26,40 @@ import SwiftUI
  */
 public struct LineChart<ChartData>: View where ChartData: LineChartData {
     
-    @ObservedObject private var chartData: ChartData
+    @EnvironmentObject public var stateObject: ChartStateObject
+    @EnvironmentObject public var chartData: ChartData
     
-    /// Initialises a line chart view.
-    /// - Parameter chartData: Must be LineChartData model.
-    public init(chartData: ChartData) {
-        self.chartData = chartData
-    }
+    public init() {}
     
     public var body: some View {
-        GeometryReader { geo in
-            if chartData.isGreaterThanTwo() {
-                ZStack {
-                    chartData.getAccessibility()
-                    LineSubView(chartData: chartData,
-                                colour: chartData.dataSets.style.lineColour)
-                }
-                .onAppear { // Needed for axes label frames
-                    self.chartData.viewData.chartSize = geo.frame(in: .local)
-                }
-            } else { CustomNoDataView(chartData: chartData) }
-        }
+            ZStack {
+                LineSubView(chartData: chartData)
+            }
+            .modifier(ChartSizeUpdating(stateObject: stateObject))
     }
 }
 
 internal struct LineSubView<ChartData>: View where ChartData: LineChartData {
     @ObservedObject private var chartData: ChartData
-    private let colour: ChartColour
     
     @State private var startAnimation: Bool = false
     
     internal init(
-        chartData: ChartData,
-        colour: ChartColour
+        chartData: ChartData
     ) {
         self.chartData = chartData
-        self.colour = colour
-        
         self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
     
     internal var body: some View {
         LineShape(dataPoints: chartData.dataSets.dataPoints,
-             lineType: chartData.dataSets.style.lineType,
-             minValue: chartData.minValue,
-             range: chartData.range)
+                  lineType: chartData.dataSets.style.lineType,
+                  minValue: chartData.minValue,
+                  range: chartData.range)
             .trim(to: startAnimation ? 1 : 0)
-            .stroke(colour, strokeStyle: chartData.dataSets.style.strokeStyle)
+            .stroke(chartData.dataSets.style.lineColour, strokeStyle: chartData.dataSets.style.strokeStyle)
         
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(using: .linear) {
                 self.startAnimation = true
             }
             .background(Color(.gray).opacity(0.000000001))

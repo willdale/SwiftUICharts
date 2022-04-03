@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import ChartMath
 
 /**
  Data model for drawing and styling a Stacked Bar Chart.
@@ -14,42 +15,52 @@ import Combine
  The grouping data informs the model as to how the datapoints are linked.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConformance {
-    
+public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDataProtocol, CTMultiBarChartDataProtocol, StandardChartConformance, ViewDataProtocol {
     // MARK: Properties
     public let id: UUID = UUID()
-    
-    public var accessibilityTitle: LocalizedStringKey = ""
-    
     @Published public var dataSets: StackedBarDataSets
-    
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    @Published public var metadata = ChartMetadata()
-    
-    @Published public var xAxisLabels: [String]?
-    @Published public var yAxisLabels: [String]?
     @Published public var barStyle: BarStyle
-    @Published public var chartStyle: BarChartStyle
-    
-    @Published public var legends: [LegendData] = []
-    @Published public var viewData: ChartViewData = ChartViewData()
-    @Published public var infoView: InfoViewData<StackedBarDataPoint> = InfoViewData()
-    @Published public var extraLineData: ExtraLineData!
-    
     @Published public var shouldAnimate: Bool
-    
+    public var noDataText: Text
+    public var accessibilityTitle: LocalizedStringKey = ""
+    public let chartName: ChartName = .stackedBar
+        
+    // MARK: Multi
     @Published public var groups: [GroupingData]
     
-    public var noDataText: Text
-
-    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .bar, dataSetType: .multi)
+    // MARK: ViewDataProtocol
+    @Published public var xAxisViewData = XAxisViewData()
+    @Published public var yAxisViewData = YAxisViewData()
     
-    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<DataPoint>], Never>()
-
-    private var internalSubscription: AnyCancellable?
-    private var markerData: MarkerData = MarkerData()
-    private var internalDataSubscription: AnyCancellable?
+    // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
+
+    // MARK: Touchable
+    public var touchMarkerType: BarMarkerType = defualtTouchMarker
+    
+    // MARK: DataHelper
+    public var baseline: Baseline
+    public var topLine: Topline
+    
+    // MARK: ExtraLineDataProtocol
+    @Published public var extraLineData: ExtraLineData!
+    
+    // MARK: Non-Protocol
+    internal let chartType: CTChartType = (chartType: .bar, dataSetType: .multi)
+    
+    // MARK: Deprecated
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    @Published public var metadata = ChartMetadata()
+    @available(*, deprecated, message: "")
+    @Published public var chartStyle = BarChartStyle()
+    @available(*, deprecated, message: "Has been moved to the view")
+    @Published public var legends: [LegendData] = []
+    @available(*, deprecated, message: "Split in to axis data")
+    @Published public var infoView = InfoViewData<StackedBarDataPoint>()
+    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
+    @Published public var xAxisLabels: [String]?
+    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
+    @Published public var yAxisLabels: [String]?
     
     // MARK: Initializer
     /// Initialises a Stacked Bar Chart.
@@ -60,126 +71,29 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
     ///   - barStyle: Control for the aesthetic of the bar chart.
-    ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - shouldAnimate: Whether the chart should be animated.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: StackedBarDataSets,
         groups: [GroupingData],
-        xAxisLabels: [String]? = nil,
-        yAxisLabels: [String]? = nil,
         barStyle: BarStyle = BarStyle(),
-        chartStyle: BarChartStyle = BarChartStyle(),
         shouldAnimate: Bool = true,
-        noDataText: Text = Text("No Data")
+        noDataText: Text = Text("No Data"),
+        baseline: Baseline = .minimumValue,
+        topLine: Topline = .maximumValue
     ) {
         self.dataSets = dataSets
         self.groups = groups
-        self.xAxisLabels = xAxisLabels
-        self.yAxisLabels = yAxisLabels
         self.barStyle = barStyle
-        self.chartStyle = chartStyle
         self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
-        
-        self.setupLegends()
-        self.setupInternalCombine()
-    }
-    
-    private func setupInternalCombine() {
-        internalSubscription = touchedDataPointPublisher
-            .sink {
-                let lineMarkerData: [LineMarkerData] = $0.compactMap { data in
-                    if data.type == .extraLine,
-                       let extraData = self.extraLineData {
-                        return LineMarkerData(markerType: extraData.style.markerType,
-                                              location: data.location,
-                                              dataPoints: extraData.dataPoints.map { LineChartDataPoint($0) },
-                                              lineType: extraData.style.lineType,
-                                              lineSpacing: .bar,
-                                              minValue: extraData.minValue,
-                                              range: extraData.range)
-                    }
-                    return nil
-                }
-                let barMarkerData: [BarMarkerData] = $0.compactMap { data in
-                    if data.type == .bar {
-                        return BarMarkerData(markerType: self.chartStyle.markerType,
-                                              location: data.location)
-                    }
-                    return nil
-                }
-                self.markerData =  MarkerData(lineMarkerData: lineMarkerData,
-                                              barMarkerData: barMarkerData)
-            }
-        
-        internalDataSubscription = touchedDataPointPublisher
-            .sink { self.touchPointData = $0.map(\.datapoint) }
-    }
-    
-    // MARK: Labels
-    public func getXAxisLabels() -> some View {
-        Group {
-            switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint(let angle):
-                HStack(spacing: 0) {
-                    ForEach(dataSets.dataSets, id: \.id) { dataSet in
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
-                        VStack {
-                            if self.chartStyle.xAxisLabelPosition == .bottom {
-                                RotatedText(chartData: self, label: dataSet.setTitle, rotation: angle)
-                                Spacer()
-                            } else {
-                                Spacer()
-                                RotatedText(chartData: self, label: dataSet.setTitle, rotation: angle)
-                            }
-                        }
-                        .frame(width: self.viewData.xAxislabelWidths.max(),
-                               height: self.viewData.xAxisLabelHeights.max())
-                        Spacer()
-                            .frame(minWidth: 0, maxWidth: 500)
-                    }
-                }
-            case .chartData(let angle):
-                if let labelArray = self.xAxisLabels {
-                    HStack(spacing: 0) {
-                        ForEach(labelArray.indices, id: \.self) { i in
-                            if i > 0 {
-                                Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
-                            }
-                            VStack {
-                                if self.chartStyle.xAxisLabelPosition == .bottom {
-                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
-                                    Spacer()
-                                } else {
-                                    Spacer()
-                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
-                                }
-                            }
-                            .frame(width: self.viewData.xAxislabelWidths.max(),
-                                   height: self.viewData.xAxisLabelHeights.max())
-                            if i < labelArray.count - 1 {
-                                Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        self.baseline = baseline
+        self.topLine = topLine
     }
 
     // MARK: - Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent = true
-        self.infoView.touchLocation = touchLocation
-        self.infoView.chartSize = chartSize
-        self.processTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
-    }
-    
-    private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
+        var values: [PublishedTouchData<DataPoint>] = []
         // Filter to get the right dataset based on the x axis.
         let superXSection: CGFloat = chartSize.width / CGFloat(dataSets.dataSets.count)
         let superIndex: Int = Int((touchLocation.x) / superXSection)
@@ -192,7 +106,6 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
                     let datapoint = dataSets.dataSets[superIndex].dataPoints[index]
                     let location = CGPoint(x: (CGFloat(superIndex) * superXSection) + (superXSection / 2),
                                            y: (chartSize.height - calculatedIndex.endPointOfElements[index]))
-                    var values: [PublishedTouchData<DataPoint>] = []
                     values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
                     
                     if let extraLine = extraLineData?.pointAndLocation(touchLocation: touchLocation, chartSize: chartSize),
@@ -206,15 +119,16 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
                         values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
                     }
                     
-                    touchedDataPointPublisher.send(values)                }
+                }
             }
         }
+        let barMarkerData = values.map { data in
+            return BarMarkerData(markerType: self.touchMarkerType,
+                                 location: data.location)
+        }
+        markerData.update(with: barMarkerData)
     }
-    
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        markerSubView(markerData: markerData, touchLocation: touchLocation, chartSize: chartSize)
-    }
-    
+
     private func calculateIndex(
         dataSet: StackedBarDataSet,
         touchLocation: CGPoint,
@@ -253,47 +167,9 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, ChartConfor
     
     public func touchDidFinish() {
         touchPointData = []
-        infoView.isTouchCurrent = false
     }
     
     public typealias SetType = StackedBarDataSets
     public typealias DataPoint = StackedBarDataPoint
-    public typealias CTStyle = BarChartStyle
-    
-    // MARK: Deprecated
-    /// Initialises a Stacked Bar Chart.
-    ///
-    /// - Parameters:
-    ///   - dataSets: Data to draw and style the bars.
-    ///   - groups: Information for how to group the data points.
-    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
-    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
-    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
-    ///   - barStyle: Control for the aesthetic of the bar chart.
-    ///   - chartStyle: The style data for the aesthetic of the chart.
-    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    @available(*, deprecated, message: "Please set use other init instead.")
-    public init(
-        dataSets: StackedBarDataSets,
-        groups: [GroupingData],
-        metadata: ChartMetadata,
-        xAxisLabels: [String]? = nil,
-        yAxisLabels: [String]? = nil,
-        barStyle: BarStyle = BarStyle(),
-        chartStyle: BarChartStyle = BarChartStyle(),
-        noDataText: Text = Text("No Data")
-    ) {
-        self.dataSets = dataSets
-        self.groups = groups
-        self.metadata = metadata
-        self.xAxisLabels = xAxisLabels
-        self.yAxisLabels = yAxisLabels
-        self.barStyle = barStyle
-        self.chartStyle = chartStyle
-        self.shouldAnimate = true
-        self.noDataText = noDataText
-        
-        self.setupLegends()
-        self.setupInternalCombine()
-    }
+    public typealias Marker = BarMarkerType
 }

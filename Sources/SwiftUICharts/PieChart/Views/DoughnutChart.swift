@@ -50,7 +50,7 @@ public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData 
                                          startAngle: chartData.dataSets.dataPoints[data].startAngle,
                                          amount: chartData.dataSets.dataPoints[data].amount)
                         .stroke(chartData.dataSets.dataPoints[data].colour,
-                                lineWidth: chartData.chartStyle.strokeWidth)
+                                lineWidth: chartData.strokeWidth)
                         .overlay(dataPoint: chartData.dataSets.dataPoints[data],
                                  chartData: chartData,
                                  rect: geo.frame(in: .local))
@@ -64,11 +64,11 @@ public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData 
                                 .shadow(color: Color.primary, radius: 10)
                         }
                         .accessibilityLabel(chartData.accessibilityTitle)
-                        .accessibilityValue(chartData.dataSets.dataPoints[data].getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+//                        .accessibilityValue(chartData.dataSets.dataPoints[data].getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
                 }
             }
         }
-        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+        .animateOnAppear(using: .linear) {
             self.startAnimation = true
         }
         .onDisappear {

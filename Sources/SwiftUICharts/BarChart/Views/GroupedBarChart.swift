@@ -43,18 +43,17 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
     }
     
     public var body: some View {
-        GeometryReader { geo in
-            if chartData.isGreaterThanTwo() {
-                HStack(spacing: groupSpacing) {
-                    ForEach(chartData.dataSets.dataSets) { dataSet in
-                        GroupedBarGroup(chartData: chartData, dataSet: dataSet)
-                    }
+//        GeometryReader { geo in
+            HStack(spacing: groupSpacing) {
+                ForEach(chartData.dataSets.dataSets) { dataSet in
+                    GroupedBarGroup(chartData: chartData, dataSet: dataSet)
                 }
-                .onAppear { // Needed for axes label frames
-                    self.chartData.viewData.chartSize = geo.frame(in: .local)
-                }
-            } else { CustomNoDataView(chartData: chartData) }
-        }
+            }
+//            .modifier(ChartSizeUpdating(chartData: chartData))
+//            .onAppear { // Needed for axes label frames
+//                self.chartData.chartSize = geo.frame(in: .local)
+//            }
+//        }
     }
 }
 
@@ -85,7 +84,7 @@ internal struct GroupedBarGroup<ChartData>: View where ChartData: GroupedBarChar
 }
 
 // MARK: - Element
-internal struct GroupBarElement<ChartData>: View where ChartData: CTBarChartDataProtocol & GetDataProtocol {
+internal struct GroupBarElement<ChartData>: View where ChartData: GroupedBarChartData {
     
     @ObservedObject private var chartData: ChartData
     private let dataPoint: GroupedBarDataPoint
@@ -144,7 +143,7 @@ internal struct GroupBarElement<ChartData>: View where ChartData: CTBarChartData
             self.fillAnimation = false
         }
         .background(Color(.gray).opacity(0.000000001))
-        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+//        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
         .id(chartData.id)
     }
 }

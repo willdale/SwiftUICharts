@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import ChartMath
 
 /**
  Data for drawing and styling ranged line chart.
@@ -14,38 +15,49 @@ import Combine
  This model contains the data and styling information for a ranged line chart.
  */
 @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformance {
-    
+public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance, ViewDataProtocol {
     // MARK: Properties
     public let id: UUID  = UUID()
-    
-    public var accessibilityTitle: LocalizedStringKey = ""
-    
     @Published public var dataSets: RangedLineDataSet
+    @Published public var shouldAnimate: Bool
+    public var noDataText: Text
+    public var accessibilityTitle: LocalizedStringKey = ""
+    public let chartName: ChartName = .rangedLine
+        
+    // MARK: ViewDataProtocol
+    @Published public var xAxisViewData = XAxisViewData()
+    @Published public var yAxisViewData = YAxisViewData()
+
+    // MARK: Publishable
+    @Published public var touchPointData: [DataPoint] = []
     
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    @Published public var metadata = ChartMetadata()
+    // MARK: Touchable
+    public var markerData: MarkerData = MarkerData()
+    public var touchMarkerType: LineMarkerType = defualtTouchMarker
     
-    @Published public var xAxisLabels: [String]?
-    @Published public var yAxisLabels: [String]?
-    @Published public var chartStyle: LineChartStyle
-    @Published public var legends: [LegendData] = []
-    @Published public var viewData: ChartViewData = ChartViewData()
-    @Published public var infoView: InfoViewData<RangedLineChartDataPoint> = InfoViewData()
+    // MARK: DataHelper
+    public var baseline: Baseline
+    public var topLine: Topline
+    
+    // MARK: ExtraLineDataProtocol
     @Published public var extraLineData: ExtraLineData!
     
-    @Published public var shouldAnimate: Bool
+    // MARK: Non-Protocol
+    internal let chartType: CTChartType = (chartType: .line, dataSetType: .single)
     
-    public var noDataText: Text
-    
-    internal let chartType: (chartType: ChartType, dataSetType: DataSetType) = (chartType: .line, dataSetType: .single)
-
-    public let touchedDataPointPublisher = PassthroughSubject<[PublishedTouchData<DataPoint>], Never>()
-
-    private var internalSubscription: AnyCancellable?
-    private var markerData: MarkerData = MarkerData()
-    private var internalDataSubscription: AnyCancellable?
-    @Published public var touchPointData: [DataPoint] = []
+    // MARK: Deprecated
+    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+    @Published public var metadata = ChartMetadata()
+    @available(*, deprecated, message: "")
+    @Published public var chartStyle = LineChartStyle()
+    @available(*, deprecated, message: "Has been moved to the view")
+    @Published public var legends: [LegendData] = []
+    @available(*, deprecated, message: "Split in to axis data")
+    @Published public var infoView = InfoViewData<RangedLineChartDataPoint>()
+    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
+    @Published public var xAxisLabels: [String]?
+    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
+    @Published public var yAxisLabels: [String]?
     
     // MARK: Initializer
     /// Initialises a ranged line chart.
@@ -54,58 +66,20 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
     ///   - dataSets: Data to draw and style a line.
     ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
     ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
-    ///   - chartStyle: The style data for the aesthetic of the chart.
     ///   - shouldAnimate: Whether the chart should be animated.
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: RangedLineDataSet,
-        xAxisLabels: [String]? = nil,
-        yAxisLabels: [String]? = nil,
-        chartStyle: LineChartStyle = LineChartStyle(),
         shouldAnimate: Bool = true,
-        noDataText: Text = Text("No Data")
+        noDataText: Text = Text("No Data"),
+        baseline: Baseline = .minimumValue,
+        topLine: Topline = .maximumValue
     ) {
         self.dataSets = dataSets
-        self.xAxisLabels = xAxisLabels
-        self.yAxisLabels = yAxisLabels
-        self.chartStyle = chartStyle
         self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
-        
-        self.setupLegends()
-        self.setupRangeLegends()
-        self.setupInternalCombine()
-    }
-    
-    private func setupInternalCombine() {
-        internalSubscription = touchedDataPointPublisher
-            .sink {
-                let lineMarkerData: [LineMarkerData] = $0.compactMap { data in
-                    if data.type == .extraLine,
-                       let extraData = self.extraLineData {
-                        return LineMarkerData(markerType: extraData.style.markerType,
-                                              location: data.location,
-                                              dataPoints: extraData.dataPoints.map { LineChartDataPoint($0) },
-                                              lineType: extraData.style.lineType,
-                                              lineSpacing: .bar,
-                                              minValue: extraData.minValue,
-                                              range: extraData.range)
-                    } else if data.type == .line {
-                        return LineMarkerData(markerType: self.chartStyle.markerType,
-                                              location: data.location,
-                                              dataPoints: self.dataSets.dataPoints.map { LineChartDataPoint($0) },
-                                              lineType: self.dataSets.style.lineType,
-                                              lineSpacing: .line,
-                                              minValue: self.minValue,
-                                              range: self.range)
-                    }
-                    return nil
-                }
-                self.markerData =  MarkerData(lineMarkerData: lineMarkerData, barMarkerData: [])
-            }
-        
-        internalDataSubscription = touchedDataPointPublisher
-            .sink { self.touchPointData = $0.map(\.datapoint) }
+        self.baseline = baseline
+        self.topLine = topLine
     }
     
     public var average: Double {
@@ -116,83 +90,22 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
     }
     
     // MARK: Labels
-    public func getXAxisLabels() -> some View {
-        Group {
-            switch self.chartStyle.xAxisLabelsFrom {
-            case .dataPoint(let angle):
-                
-                HStack(spacing: 0) {
-                    ForEach(dataSets.dataPoints) { data in
-                        VStack {
-                            if self.chartStyle.xAxisLabelPosition == .bottom {
-                                RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
-                                Spacer()
-                            } else {
-                                Spacer()
-                                RotatedText(chartData: self, label: data.wrappedXAxisLabel, rotation: angle)
-                            }
-                        }
-                        .frame(width: min(self.getXSection(dataSet: self.dataSets, chartSize: self.viewData.chartSize), self.viewData.xAxislabelWidths.min() ?? 0),
-                               height: self.viewData.xAxisLabelHeights.max())
-                        if data != self.dataSets.dataPoints[self.dataSets.dataPoints.count - 1] {
-                            Spacer()
-                                .frame(minWidth: 0, maxWidth: 500)
-                        }
-                    }
-                }
-                
-            case .chartData(let angle):
-                if let labelArray = self.xAxisLabels {
-                    HStack(spacing: 0) {
-                        ForEach(labelArray.indices, id: \.self) { i in
-                            VStack {
-                                if self.chartStyle.xAxisLabelPosition == .bottom {
-                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
-                                    Spacer()
-                                } else {
-                                    Spacer()
-                                    RotatedText(chartData: self, label: labelArray[i], rotation: angle)
-                                }
-                            }
-                            .frame(width: self.viewData.xAxislabelWidths.min(),
-                                   height: self.viewData.xAxisLabelHeights.max())
-                            if i != labelArray.count - 1 {
-                                Spacer()
-                                    .frame(minWidth: 0, maxWidth: 500)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    private func getXSection(dataSet: RangedLineDataSet, chartSize: CGRect) -> CGFloat {
-        chartSize.width.divide(by: CGFloat(dataSet.dataPoints.count))
+    public func xAxisSectionSizing(count: Int, size: CGFloat) -> CGFloat {
+        return min(divide(size, count),
+                   self.xAxisViewData.xAxisLabelWidths.min() ?? 0)
     }
     
-    // MARK: Points
-    public func getPointMarker() -> some View {
-        PointsSubView(chartData: self,
-                      dataSets: dataSets,
-                      minValue: self.minValue,
-                      range: self.range,
-                      animation: self.chartStyle.globalAnimation)
+    public func xAxisLabelOffSet(index: Int, size: CGFloat, count: Int) -> CGFloat {
+       return  CGFloat(index) * divide(size, count - 1)
     }
     
     // MARK: Touch
-    public func setTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
-        self.infoView.isTouchCurrent = true
-        self.infoView.touchLocation = touchLocation
-        self.infoView.chartSize = chartSize
-        self.processTouchInteraction(touchLocation: touchLocation, chartSize: chartSize)
-    }
-    
-    private func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
+    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
+        var values: [PublishedTouchData<DataPoint>] = []
         let xSection = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
         let ySection = chartSize.height / CGFloat(range)
         let index = Int((touchLocation.x + (xSection / 2)) / xSection)
         if index >= 0 && index < dataSets.dataPoints.count {
-            var values: [PublishedTouchData<DataPoint>] = []
             let datapoint = dataSets.dataPoints[index]
             var location: CGPoint = .zero
             if !dataSets.style.ignoreZero {
@@ -216,53 +129,24 @@ public final class RangedLineChartData: CTLineChartDataProtocol, ChartConformanc
                 values.append(PublishedTouchData(datapoint: datapoint, location: location, type: .extraLine))
             }
             
-            touchedDataPointPublisher.send(values)
         }
-    }
-    
-    public func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {
-        markerSubView(markerData: markerData,
-                      chartSize: chartSize,
-                      touchLocation: touchLocation)
+        let lineMarkerData = values.map {
+            return LineMarkerData(markerType: touchMarkerType,
+                                  location: $0.location,
+                                  dataPoints: dataSets.dataPoints.map { LineChartDataPoint($0) },
+                                  lineType: dataSets.style.lineType,
+                                  lineSpacing: .line,
+                                  minValue: minValue,
+                                  range: range)
+        }
+        markerData.update(with: lineMarkerData)
     }
     
     public func touchDidFinish() {
         touchPointData = []
-        infoView.isTouchCurrent = false
     }
     
     public typealias SetType = RangedLineDataSet
     public typealias DataPoint = RangedLineChartDataPoint
-    
-    // MARK: Deprecated
-    /// Initialises a ranged line chart.
-    ///
-    /// - Parameters:
-    ///   - dataSets: Data to draw and style a line.
-    ///   - metadata: Data model containing the charts Title, Subtitle and the Title for Legend.
-    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
-    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
-    ///   - chartStyle: The style data for the aesthetic of the chart.
-    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
-    @available(*, deprecated, message: "Please set use other init instead.")
-    public init(
-        dataSets: RangedLineDataSet,
-        metadata: ChartMetadata,
-        xAxisLabels: [String]? = nil,
-        yAxisLabels: [String]? = nil,
-        chartStyle: LineChartStyle = LineChartStyle(),
-        noDataText: Text = Text("No Data")
-    ) {
-        self.dataSets = dataSets
-        self.metadata = metadata
-        self.xAxisLabels = xAxisLabels
-        self.yAxisLabels = yAxisLabels
-        self.chartStyle = chartStyle
-        self.shouldAnimate = true
-        self.noDataText = noDataText
-        
-        self.setupLegends()
-        self.setupRangeLegends()
-        self.setupInternalCombine()
-    }
+    public typealias MarkerType = LineMarkerType
 }

@@ -7,30 +7,75 @@
 
 import SwiftUI
 
-internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
+public struct HeaderBoxStyle {
+    /// Font of the title
+    public var font: Font
+    /// Color of the title
+    public var colour: Color
     
-    @ObservedObject private var chartData: T
-    private var title: HeaderBoxText?
-    private var subtitle: HeaderBoxText?
-            
-    init(chartData: T,
-         title: HeaderBoxText?,
-         subtitle: HeaderBoxText?
+    public init(
+        font: Font,
+        colour: Color
     ) {
-        self.chartData = chartData
-        self.title = title
-        self.subtitle = subtitle
+        self.font = font
+        self.colour = colour
+    }
+}
+
+extension HeaderBoxStyle {
+    public static let title = HeaderBoxStyle(font: .title3,
+                                             colour: .primary)
+    public static let subtitle = HeaderBoxStyle(font: .body,
+                                                colour: .primary)
+}
+
+extension View {
+    public func titleBox(
+        title: String,
+        titleStyle: HeaderBoxStyle = .title,
+        subtitle: String? = nil,
+        subtitleStyle: HeaderBoxStyle = .subtitle
+    ) -> some View {
+        self.modifier(
+            HeaderBox(
+                title: title,
+                titleStyle: titleStyle,
+                subtitle: subtitle,
+                subtitleStyle: subtitleStyle
+            )
+        )
     }
     
-    var titleBox: some View {
-        VStack(alignment: .leading) {
-            Text(LocalizedStringKey(title?.text ?? ""))
-                .font(title?.font)
-                .foregroundColor(title?.colour)
-            Text(LocalizedStringKey(subtitle?.text ?? ""))
-                .font(subtitle?.font)
-                .foregroundColor(subtitle?.colour)
-        }
+    public func titleBox<Title: View>(
+        view: Title
+    ) -> some View {
+        self.modifier(_Custom_HeaderBox(view: view))
+    }
+    
+    public func titleBox<Title: View>(
+        view: () -> Title
+    ) -> some View {
+        self.modifier(_Custom_HeaderBox(view: view()))
+    }
+}
+
+internal struct HeaderBox: ViewModifier {
+    
+    private var title: String?
+    private var titleStyle: HeaderBoxStyle
+    private var subtitle: String?
+    private var subtitleStyle: HeaderBoxStyle
+            
+    internal init(
+        title: String?,
+        titleStyle: HeaderBoxStyle,
+        subtitle: String?,
+        subtitleStyle: HeaderBoxStyle
+    ) {
+        self.title = title
+        self.titleStyle = titleStyle
+        self.subtitle = subtitle
+        self.subtitleStyle = subtitleStyle
     }
     
     internal func body(content: Content) -> some View {
@@ -39,46 +84,28 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
             content
         }
     }
-}
-
-extension View {
-    /**
-     Displays the metadata about the chart.
-     
-     - Parameter chartData: Chart data model.
-     - Returns: A  new view containing the chart with a view above
-     to display metadata.
-     */
-    @available(*, deprecated, message: "Please use the other function instead.")
-    public func headerBox<T:CTChartData & Publishable>(chartData: T) -> some View {
-        self.modifier(HeaderBox(chartData: chartData,
-                                title: HeaderBoxText(text: ""),
-                                subtitle: HeaderBoxText(text: "")))
-    }
     
-    public func titleBox<T:CTChartData & Publishable>(
-        chartData: T,
-        title: HeaderBoxText? = nil,
-        subtitle: HeaderBoxText? = nil
-    ) -> some View {
-        self.modifier(HeaderBox(chartData: chartData, title: title, subtitle: subtitle))
+    var titleBox: some View {
+        VStack(alignment: .leading) {
+            Text(LocalizedStringKey(title ?? ""))
+                .font(titleStyle.font)
+                .foregroundColor(titleStyle.colour)
+            Text(LocalizedStringKey(subtitle ?? ""))
+                .font(subtitleStyle.font)
+                .foregroundColor(subtitleStyle.colour)
+        }
     }
 }
 
-public struct HeaderBoxText {
-    public var text: String
-    /// Font of the title
-    public var font: Font
-    /// Color of the title
-    public var colour: Color
+fileprivate struct _Custom_HeaderBox<Title: View>: ViewModifier {
     
-    public init(
-        text: String,
-        font: Font = .title3,
-        colour: Color = Color.primary
-    ) {
-        self.text = text
-        self.font = font
-        self.colour = colour
+    let view: Title
+    
+    func body(content: Content) -> some View {
+        VStack(alignment: .leading) {
+            view
+            content
+        }
     }
+    
 }

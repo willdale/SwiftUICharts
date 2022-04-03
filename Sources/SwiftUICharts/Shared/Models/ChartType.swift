@@ -5,7 +5,7 @@
 //  Created by Will Dale on 01/01/2022.
 //
 
-import Foundation
+import SwiftUI
 
 /**
  The type of chart being used.
@@ -25,4 +25,16 @@ public enum ChartType {
     case pie
     /// Extra Line Type
     case extraLine
+}
+
+public struct AnyShape: Shape {
+    private var base: (CGRect) -> Path
+    
+    public init<S: Shape>(shape: S) {
+        base = shape.path(in:)
+    }
+    
+    public func path(in rect: CGRect) -> Path {
+        base(rect)
+    }
 }

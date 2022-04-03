@@ -36,17 +36,16 @@ public struct RangedBarChart<ChartData>: View where ChartData: RangedBarChartDat
     }
     
     public var body: some View {
-        GeometryReader { geo in
-            if chartData.isGreaterThanTwo() {
-                HStack(spacing: 0) {
-                    RangedBarSubView(chartData: chartData)
-                        .accessibilityLabel(chartData.accessibilityTitle)
-                }
-                .onAppear { // Needed for axes label frames
-                    self.chartData.viewData.chartSize = geo.frame(in: .local)
-                }
-            } else { CustomNoDataView(chartData: chartData) }
-        }
+//        GeometryReader { geo in
+            HStack(spacing: 0) {
+                RangedBarSubView(chartData: chartData)
+                    .accessibilityLabel(chartData.accessibilityTitle)
+            }
+//            .modifier(ChartSizeUpdating(chartData: chartData))
+//            .onAppear { // Needed for axes label frames
+//                self.chartData.chartSize = geo.frame(in: .local)
+//            }
+//        }
     }
 }
 
@@ -149,7 +148,7 @@ internal struct RangedBarElement<ChartData>: View where ChartData: RangedBarChar
             self.heightAnimation = false
         }
         .background(Color(.gray).opacity(0.000000001))
-        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+//        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
         .id(chartData.id)
     }
 }

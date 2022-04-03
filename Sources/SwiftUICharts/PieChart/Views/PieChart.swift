@@ -63,11 +63,11 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
                                 .shadow(color: Color.primary, radius: 10)
                         }
                         .accessibilityLabel(chartData.accessibilityTitle)
-                        .accessibilityValue(chartData.dataSets.dataPoints[data].getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
+//                        .accessibilityValue(chartData.dataSets.dataPoints[data].getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
                 }
             }
         }
-        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+        .animateOnAppear(using: .linear) {
             self.startAnimation = true
         }
         .onDisappear {
