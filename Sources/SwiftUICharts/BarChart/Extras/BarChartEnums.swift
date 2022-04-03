@@ -34,7 +34,7 @@ public enum ColourFrom {
  case topTrailing // From top and trailing edges meeting at a specified point.
  ```
  */
-public enum BarMarkerType: MarkerType {
+public enum BarMarkerType: Hashable {
     /// No overlay markers.
     case none
     /// Vertical line from top to bottom.

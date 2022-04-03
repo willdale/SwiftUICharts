@@ -24,6 +24,8 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .groupedBar
+    
+    public var markerData = MarkerData()
         
     // MARK: Multi
     public var groupSpacing: CGFloat = 0
@@ -31,9 +33,6 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
-
-    // MARK: Touchable
-    public var touchMarkerType: BarMarkerType = defualtTouchMarker
     
     // MARK: DataHelper
     public var baseline: Baseline
@@ -72,7 +71,7 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     }
     
     // MARK: Touch
-    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
+    public func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
         // Divide the chart into equal sections.
         let superXSection = chartSize.width / CGFloat(dataSets.dataSets.count)
@@ -103,11 +102,10 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
                 values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
             }
         }
-        let barMarkerData = values.map { data in
-            return BarMarkerData(markerType: self.touchMarkerType,
+        markerData = MarkerData(barMarkerData: values.map { data in
+            return BarMarkerData(markerType: dataSets.marketType,
                                  location: data.location)
-        }
-        markerData.update(with: barMarkerData)
+        })
     }
     
     public func touchDidFinish() {

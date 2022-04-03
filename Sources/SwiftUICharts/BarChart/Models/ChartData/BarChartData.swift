@@ -23,11 +23,10 @@ public final class BarChartData: BarChartType, CTChartData, CTBarChartDataProtoc
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .bar
     
+    public var markerData = MarkerData()
+    
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
-    
-    // MARK: Touchable
-    public var touchMarkerType: BarMarkerType = defualtTouchMarker
     
     // MARK: DataHelper
     public var baseline: Baseline
@@ -61,9 +60,9 @@ public final class BarChartData: BarChartType, CTChartData, CTBarChartDataProtoc
         self.baseline = baseline
         self.topLine = topLine
     }
-   
+    
     // MARK: - Touch
-    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
+    public func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
         let xSection: CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count)
         let ySection: CGFloat = chartSize.height / CGFloat(dataSets.maxValue())
@@ -75,11 +74,10 @@ public final class BarChartData: BarChartType, CTChartData, CTBarChartDataProtoc
             
             values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
         }
-        let barMarkerData = values.map { data in
-            return BarMarkerData(markerType: self.touchMarkerType,
+        markerData = MarkerData(barMarkerData: values.map { data in
+            return BarMarkerData(markerType: dataSets.marketType,
                                  location: data.location)
-        }
-        markerData.update(with: barMarkerData)
+        })
     }
 
     public func touchDidFinish() {

@@ -28,7 +28,7 @@ public enum LineType {
  case point // Attached to the data points.
  ```
  */
-public enum MarkerAttachment {
+public enum MarkerAttachment: Hashable {
     /// Attached to the line.
     case line(dot: Dot)
     /// Attached to the data points.
@@ -48,7 +48,7 @@ public enum MarkerAttachment {
  case topTrailing(attachment: MarkerAttachment) // From top and trailing edges meeting at a specified point.
  ```
  */
-public enum LineMarkerType: MarkerType {
+public enum LineMarkerType: Hashable {
     /// No overlay markers.
     case none
     /// Dot that follows the path.
@@ -75,7 +75,7 @@ public enum LineMarkerType: MarkerType {
  case style(_ style: DotStyle) // Adds a dot the line at point of touch.
  ```
  */
-public enum Dot {
+public enum Dot: Hashable {
     /// No Dot
     case none
     /// Adds a dot the line at point of touch.

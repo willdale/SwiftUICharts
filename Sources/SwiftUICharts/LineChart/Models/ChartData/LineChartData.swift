@@ -24,12 +24,11 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .line
     
+    public var markerData = MarkerData()
+    
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
-    
-    // MARK: Touchable
-    public var touchMarkerType: LineMarkerType = defualtTouchMarker
-    
+
     // MARK: DataHelper
     public var baseline: Baseline
     public var topLine: Topline
@@ -61,7 +60,7 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     }
 
     // MARK: Touch
-    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
+    public func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
 
         let xSection = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
@@ -76,17 +75,15 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
         }
         
         touchPointData = values.map(\.datapoint)
-        
-        let lineMarkerData = values.map {
-            return LineMarkerData(markerType: touchMarkerType,
+        markerData = MarkerData(lineMarkerData: values.map {
+            return LineMarkerData(markerType: dataSets.marketType,
                                   location: $0.location,
                                   dataPoints: dataSets.dataPoints,
                                   lineType: dataSets.style.lineType,
                                   lineSpacing: .line,
                                   minValue: minValue,
                                   range: range)
-        }
-        markerData.update(with: lineMarkerData)
+        })
     }
     
     public func touchDidFinish() {

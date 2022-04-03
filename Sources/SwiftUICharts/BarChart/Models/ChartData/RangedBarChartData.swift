@@ -23,11 +23,10 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .rangedBar
     
+    public var markerData = MarkerData()
+    
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
-    
-    // MARK: Touchable
-    public var touchMarkerType: BarMarkerType = defualtTouchMarker
     
     // MARK: DataHelper
     public var baseline: Baseline
@@ -75,7 +74,7 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
     }
 
     // MARK: - Touch
-    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
+    public func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
         let xSection: CGFloat = chartSize.width / CGFloat(dataSets.dataPoints.count)
         let index: Int = Int((touchLocation.x) / xSection)
@@ -87,11 +86,10 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
             
             values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
         }
-        let barMarkerData = values.map { data in
-            return BarMarkerData(markerType: self.touchMarkerType,
+        markerData = MarkerData(barMarkerData: values.map { data in
+            return BarMarkerData(markerType: dataSets.marketType,
                                  location: data.location)
-        }
-        markerData.update(with: barMarkerData)
+        })
     }
     
     public func touchDidFinish() {

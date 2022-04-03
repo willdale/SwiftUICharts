@@ -21,7 +21,7 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
     
     public var body: some View {
         HStack(alignment: .bottom, spacing: 0) {
-            ForEach(chartData.dataSets.dataSets.indices) { index in
+            ForEach(chartData.dataSets.dataSets.indices, id: \.self) { index in
                 StackSubView(chartData: chartData,
                              dataSet: chartData.dataSets.dataSets[index],
                              index: index)
@@ -57,7 +57,6 @@ internal struct StackSubView<ChartData>: View where ChartData: StackedBarChartDa
     var body: some View {
         GeometryReader { section in
             StackSingleBarView(dataSet: dataSet,
-                               specifier: chartData.infoView.touchSpecifier,
                                animations: animations,
                                index: index)
                 .clipShape(RoundedRectangleBarShape(chartData.barStyle.cornerRadius))
@@ -92,18 +91,15 @@ internal struct StackSubView<ChartData>: View where ChartData: StackedBarChartDa
 internal struct StackSingleBarView: View {
     
     private let dataSet: StackedBarDataSet
-    private let specifier: String
     private let animations: BarElementAnimation
     private let index: Double
     
     internal init(
         dataSet: StackedBarDataSet,
-        specifier: String,
         animations: BarElementAnimation,
         index: Double
     ) {
         self.dataSet = dataSet
-        self.specifier = specifier
         self.animations = animations
         self.index = index
     }

@@ -24,15 +24,14 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .stackedBar
+    
+    public var markerData = MarkerData()
         
     // MARK: Multi
     public var groups: [GroupingData]
     
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
-
-    // MARK: Touchable
-    public var touchMarkerType: BarMarkerType = defualtTouchMarker
     
     // MARK: DataHelper
     public var baseline: Baseline
@@ -71,7 +70,7 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     }
 
     // MARK: - Touch
-    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
+    public func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
         // Filter to get the right dataset based on the x axis.
         let superXSection: CGFloat = chartSize.width / CGFloat(dataSets.dataSets.count)
@@ -89,11 +88,10 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
                 }
             }
         }
-        let barMarkerData = values.map { data in
-            return BarMarkerData(markerType: self.touchMarkerType,
+        markerData = MarkerData(barMarkerData: values.map { data in
+            return BarMarkerData(markerType: dataSets.marketType,
                                  location: data.location)
-        }
-        markerData.update(with: barMarkerData)
+        })
     }
 
     private func calculateIndex(

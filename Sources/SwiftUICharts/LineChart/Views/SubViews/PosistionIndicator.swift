@@ -40,7 +40,7 @@ internal struct PosistionIndicator: View {
 /**
  Styling of the dot that follows the line on touch events.
  */
-public struct DotStyle {
+public struct DotStyle: Hashable {
     
     let size: CGFloat
     let fillColour: Color

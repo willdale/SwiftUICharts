@@ -24,11 +24,10 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .multiLine
     
+    public var markerData = MarkerData()
+    
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
-    
-    // MARK: Touchable
-    public var touchMarkerType: LineMarkerType = defualtTouchMarker
     
     // MARK: DataHelper
     public var baseline: Baseline
@@ -61,7 +60,7 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
     }
 
     // MARK: Touch
-    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
+    public func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
         let data: [PublishedTouchData<LineChartDataPoint>] = dataSets.dataSets.compactMap { dataSet in
             let xSection = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
@@ -76,7 +75,6 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
                     location = CGPoint(x: CGFloat(index) * xSection,
                                        y: (CGFloat(dataSet.dataPoints[index].value - minValue) * -ySection) + chartSize.height)
                     datapoint = dataSet.dataPoints[index]
-                    datapoint._legendTag = dataSet.legendTitle
                 } else {
                     return nil
                 }
@@ -90,7 +88,7 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
         values.forEach { data in
             let location = data.location
             let lineData = self.dataSets.dataSets.compactMap { dataSet in
-                return LineMarkerData(markerType: self.touchMarkerType,
+                return LineMarkerData(markerType: dataSet.marketType,
                                       location: location,
                                       dataPoints: dataSet.dataPoints,
                                       lineType: dataSet.style.lineType,
@@ -99,8 +97,8 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
                                       range: self.range)
             }
             lineMarkerData.append(contentsOf: lineData)
+            markerData = MarkerData(lineMarkerData: lineMarkerData)
         }
-        markerData.update(with: lineMarkerData)
     }
     
     public func touchDidFinish() {

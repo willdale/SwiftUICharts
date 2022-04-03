@@ -1,5 +1,5 @@
 //
-//  ExtraLineStyle.swift
+//  Edeprecated+xtraLineStyle.swift
 //  
 //
 //  Created by Will Dale on 05/06/2021.
@@ -10,6 +10,7 @@ import SwiftUI
 /**
   Control of the styling of the Extra Line.
  */
+@available(*, deprecated, message: "deprecated")
 public struct ExtraLineStyle {
     
     public var lineColour: ChartColour
@@ -79,21 +80,11 @@ public struct ExtraLineStyle {
      case raise // Animates using `.scale`.
      ```
      */
+    @available(*, deprecated, message: "deprecated")
     public enum AnimationType: Hashable {
         /// Draws the line using `.trim`.
         case draw
         /// Animates using `.scale`.
         case raise
-    }
-    
-    /**
-     Sets what type of chart is being used.
-     
-     There is different spacing for line charts and bar charts,
-     this sets that up.
-     */
-    public enum SpacingType: Hashable {
-        case line
-        case bar
     }
 }

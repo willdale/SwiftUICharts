@@ -104,6 +104,18 @@ public enum Topline: Hashable {
 }
 
 /**
+ Sets what type of chart is being used.
+ 
+ There is different spacing for line charts and bar charts,
+ this sets that up.
+ */
+public enum SpacingType: Hashable {
+    case line
+    case bar
+}
+
+
+/**
  Option to choose between auto generated, numeric labels
  or custum array of strings.
  

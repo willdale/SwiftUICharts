@@ -10,14 +10,6 @@ import SwiftUI
 /// A protocol to extend functionality of `CTChartStyle` specifically for  Line and Bar Charts.
 @available(*, deprecated, message: "Has been de-centralised")
 public protocol CTLineBarChartStyle: CTChartStyle {
-    
-    /// A type representing touch overlay marker type. -- `MarkerType`
-    associatedtype Mark: MarkerType
-    
-    /// Where the marker lines come from to meet at a specified point.
-    @available(*, deprecated, message: "")
-    var markerType: Mark { get set }
-    
     /// Location of the X axis labels - Top or Bottom.
     @available(*, deprecated, message: "Moved to view \".xAxisLabels\"")
     var xAxisLabelPosition: XAxisLabelPosistion { get set }

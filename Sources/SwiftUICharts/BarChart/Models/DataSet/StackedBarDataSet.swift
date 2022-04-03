@@ -14,14 +14,17 @@ public struct StackedBarDataSets: CTMultiDataSetProtocol, DataFunctionsProtocol 
     
     public let id: UUID = UUID()
     public var dataSets: [StackedBarDataSet]
+    public var marketType: BarMarkerType
     
     /// Initialises a new data set for a Stacked Bar Chart.
-    public init(dataSets: [StackedBarDataSet]) {
+    public init(
+        dataSets: [StackedBarDataSet],
+        marketType: BarMarkerType = .full(colour: .primary, style: StrokeStyle())
+    ) {
         self.dataSets = dataSets
+        self.marketType = marketType
     }
-}
-
-extension StackedBarDataSets {
+    
     public var dataWidth: Int {
         return dataSets.count
     }

@@ -9,7 +9,6 @@ import SwiftUI
 
 // MARK: - API
 extension View {
-    
     /**
      Adds touch interaction with the chart.
      
@@ -19,15 +18,11 @@ extension View {
      Unavailable in tvOS
      */
     public func touch<ChartData: CTChartData & Touchable>(
-        stateObject: ChartStateObject,
         chartData: ChartData,
-        markerType: ChartData.Marker = ChartData.defualtTouchMarker,
         minDistance: CGFloat = 0
     ) -> some View {
         #if !os(tvOS)
-        self.modifier(TouchOverlay(stateObject: stateObject,
-                                   chartData: chartData,
-                                   markerType: markerType,
+        self.modifier(TouchOverlay(chartData: chartData,
                                    minDistance: minDistance))
         #elseif os(tvOS)
         self.modifier(EmptyModifier())
@@ -41,108 +36,24 @@ extension View {
  */
 internal struct TouchOverlay<ChartData>: ViewModifier where ChartData: CTChartData & Touchable {
     
-    @ObservedObject var stateObject: ChartStateObject
-    @ObservedObject var chartData: ChartData
-    var markerType: ChartData.Marker
+    @EnvironmentObject var stateObject: ChartStateObject
+    var chartData: ChartData
     var minDistance: CGFloat
     
-    @State private var markerData = MarkerData()
-    
     internal func body(content: Content) -> some View {
-        ZStack {
-            content
-                .gesture(
-                    _ChartDragGesture(stateObject: stateObject, minDistance: minDistance) {
-                        switch $0 {
-                        case .started:
-                            chartData.processTouchInteraction(markerData, touchLocation: stateObject.touchLocation, chartSize: stateObject.chartSize)
-                        case .ended:
-                            chartData.touchDidFinish()
-                        }
+        content
+            .gesture(
+                DragGesture(minimumDistance: minDistance, coordinateSpace: .local)
+                    .onChanged {
+                        stateObject.touchLocation = $0.location
+                        stateObject.isTouch = true
+                        chartData.processTouchInteraction(touchLocation: stateObject.touchLocation, chartSize: stateObject.chartSize)
                     }
-                )
-            if stateObject.isTouch {
-                _MarkerData(markerData: markerData, chartSize: stateObject.chartSize, touchLocation: stateObject.touchLocation)
-            }
-        }
+                    .onEnded { _ in
+                        stateObject.isTouch = false
+                        chartData.touchDidFinish()
+                    }
+            )
     }
 }
 #endif
-
-fileprivate struct _MarkerData: View {
-    
-    private(set) var markerData: MarkerData
-    private(set) var chartSize: CGRect
-    private(set) var touchLocation: CGPoint
-    
-    var body: some View {
-        ZStack {
-            ForEach(markerData.barMarkerData, id: \.self) { marker in
-                MarkerView.bar(barMarker: marker.markerType, markerData: marker)
-            }
-            
-            ForEach(markerData.lineMarkerData, id: \.self) { marker in
-                MarkerView.line(lineMarker: marker.markerType,
-                                markerData: marker,
-                                chartSize: chartSize,
-                                touchLocation: touchLocation,
-                                dataPoints: marker.dataPoints,
-                                lineType: marker.lineType,
-                                lineSpacing: marker.lineSpacing,
-                                minValue: marker.minValue,
-                                range: marker.range)
-            }
-        }
-    }
-}
-
-// MARK: - Gesture
-fileprivate struct _ChartDragGesture: Gesture {
-   
-    @ObservedObject var stateObject: ChartStateObject
-    let minDistance: CGFloat
-    let state: (State) -> Void
-    
-    var body: some Gesture {
-        DragGesture(minimumDistance: minDistance, coordinateSpace: .local)
-            .onChanged {
-                stateObject.touchLocation = $0.location
-                stateObject.isTouch = true
-                state(.started)
-            }
-            .onEnded { _ in
-                stateObject.isTouch = false
-                state(.ended)
-            }
-    }
-    
-    enum State {
-        case started, ended
-    }
-}
-
-// MARK: - Deprecated API
-extension View {
-    
-    /**
-     Adds touch interaction with the chart.
-     
-     Adds an overlay to detect touch and display the relivent information from the nearest data point.
-     
-     - Attention:
-     Unavailable in tvOS
-     */
-    @available(*, deprecated, message: "Please use \".touch\" instead")
-    public func touchOverlay<ChartData: CTChartData & Touchable>(
-        chartData: ChartData,
-        specifier: String = "%.0f",
-        unit: TouchUnit = .none,
-        minDistance: CGFloat = 0
-    ) -> some View {
-        #if !os(tvOS)
-        self.modifier(EmptyModifier())
-        #elseif os(tvOS)
-        self.modifier(EmptyModifier())
-        #endif
-    }
-}

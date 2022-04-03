@@ -16,22 +16,20 @@ public struct LineDataSet: CTLineChartDataSet, DataFunctionsProtocol {
     
     public let id: UUID = UUID()
     public var dataPoints: [LineChartDataPoint]
-    public var legendTitle: String
-    
+    public var marketType: LineMarkerType
     public var style: LineStyle
     
     public init(
         dataPoints: [LineChartDataPoint],
-        legendTitle: String = "",
+        marketType: LineMarkerType = .full(attachment: .line(dot: .style(DotStyle())), colour: .primary, style: StrokeStyle()),
         style: LineStyle = LineStyle()
     ) {
         self.dataPoints = dataPoints
-        self.legendTitle = legendTitle
+        self.marketType = marketType
         self.style = style
     }
     
-    
-    @available(*, deprecated, message: "\"PointStyle\" has been depricated")
+    @available(*, deprecated, message: "\"PointStyle\" and \"legendTitle\" has been depricated")
     public init(
         dataPoints: [LineChartDataPoint],
         legendTitle: String = "",
@@ -39,11 +37,13 @@ public struct LineDataSet: CTLineChartDataSet, DataFunctionsProtocol {
         style: LineStyle = LineStyle()
     ) {
         self.dataPoints = dataPoints
-        self.legendTitle = legendTitle
         self.pointStyle = pointStyle
+        self.marketType = .none
         self.style = style
     }
     
     @available(*, deprecated, message: "Please use \".pointMarkers\" instead")
     public var pointStyle = PointStyle()
+    @available(*, deprecated, message: "depricated")
+    public var legendTitle = ""
 }

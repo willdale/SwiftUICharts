@@ -23,11 +23,10 @@ public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishab
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .pie
     
+    public var markerData = MarkerData()
+    
     // MARK: Publishable
     @Published public var touchPointData: [DataPoint] = []
-    
-    // MARK: Touchable
-    public var touchMarkerType: PieMarkerType = defualtTouchMarker
     
     // MARK: Non-Protocol
     internal let chartType: CTChartType = (chartType: .pie, dataSetType: .single)
@@ -53,7 +52,7 @@ public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishab
     }
     
     // MARK: - Touch
-    public func processTouchInteraction(_ markerData: MarkerData, touchLocation: CGPoint, chartSize: CGRect) {
+    public func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         let touchDegree = degree(from: touchLocation, in: chartSize)
         let index = self.dataSets.dataPoints.firstIndex(where:) {
             let start = $0.startAngle * Double(180 / Double.pi) <= Double(touchDegree)
@@ -63,10 +62,9 @@ public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishab
         guard let wrappedIndex = index else { return }
         let datapoint = self.dataSets.dataPoints[wrappedIndex]
         let values = [PublishedTouchData(datapoint: datapoint, location: .zero, type: .pie)]
-        let pieMarkerData = values.map { data in
-            return PieMarkerData(markerType: .full(), location: data.location)
-        }
-        markerData.update(with: pieMarkerData)
+        markerData = MarkerData(pieMarkerData: values.map { data in
+            return PieMarkerData(markerType: dataSets.marketType, location: data.location)
+        })
     }
         
     public func touchDidFinish() {

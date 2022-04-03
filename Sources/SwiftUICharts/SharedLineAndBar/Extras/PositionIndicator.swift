@@ -16,7 +16,7 @@ struct PositionIndicator {
         dataPoints: [LineChartDataPoint],
         touchLocation: CGPoint,
         lineType: LineType,
-        lineSpacing: ExtraLineStyle.SpacingType?,
+        lineSpacing: SpacingType?,
         minValue: Double,
         range: Double
     ) -> CGPoint {
@@ -63,7 +63,7 @@ struct PositionIndicator {
     /// Returns the relevent path based on the line type.
     static func getPath(
         lineType: LineType,
-        lineSpacing: ExtraLineStyle.SpacingType,
+        lineSpacing: SpacingType,
         rect: CGRect,
         dataPoints: [LineChartDataPoint],
         minValue: Double,
