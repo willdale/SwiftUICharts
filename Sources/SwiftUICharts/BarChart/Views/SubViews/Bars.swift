@@ -505,12 +505,10 @@ internal struct HorizontalColourBar<CD: CTBarChartDataProtocol & GetDataProtocol
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        let scaleRatio = divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue)
-        let minWidth = max(chartData.barStyle.cornerRadius.topLeft, chartData.barStyle.cornerRadius.bottomLeft) + max(chartData.barStyle.cornerRadius.topRight, chartData.barStyle.cornerRadius.bottomRight)
-        return GeometryReader { geo in
+        GeometryReader { geo in
             RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
                 .fill(colour)
-                .frame(width: geo.size.width * scaleRatio < minWidth ? minWidth : geo.size.width * scaleRatio, alignment: .leading)
+                .frame(width: geo.size.width * getScaleRatio(value: dataPoint.value) < minWidth ? minWidth : geo.size.width * getScaleRatio(value: dataPoint.value), alignment: .leading)
                 .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
                 .animation(.default, value: chartData.dataSets)
                 .background(Color(.gray).opacity(0.000000001))
@@ -525,6 +523,15 @@ internal struct HorizontalColourBar<CD: CTBarChartDataProtocol & GetDataProtocol
                     formatter: chartData.infoView.touchFormatter))
                 .padding(0)
         }
+    }
+    
+    private var minWidth: CGFloat {
+        let cornerRadius = chartData.barStyle.cornerRadius
+        return max(cornerRadius.topLeft, cornerRadius.bottomLeft) + max(cornerRadius.topRight, cornerRadius.bottomRight)
+    }
+    
+    private func getScaleRatio(value: CGFloat) -> CGFloat {
+        divideByZeroProtection(CGFloat.self, value, chartData.maxValue)
     }
 }
 
