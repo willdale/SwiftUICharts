@@ -8,6 +8,13 @@
 import ChartMath
 import SwiftUI
 
+public final class ChartTouchObject: ObservableObject {
+    @Published public var touchLocation: CGPoint = .zero
+    @Published public var isTouch: Bool = false
+    
+    public init() {}
+}
+
 public final class ChartStateObject: ObservableObject {
     @Published public var chartSize: CGRect = .zero
     
@@ -15,9 +22,6 @@ public final class ChartStateObject: ObservableObject {
     @Published public var leadingInset: CGFloat = 0
     @Published public var trailingInset: CGFloat = 0
     @Published public var bottomInset: CGFloat = 0
-    
-    @Published public var touchLocation: CGPoint = .zero
-    @Published public var isTouch: Bool = false
     
     internal var layoutElements = Set<Model>()
     
@@ -123,32 +127,32 @@ public final class ChartStateObject: ObservableObject {
 //
 // MARK: Y Axis
 extension ChartStateObject {
-    public func horizontalLinePosition(value: Double, position: AxisMarkerStyle.Horizontal, dataSetInfo: DataSetInfo) -> CGPoint {
+    public func horizontalLinePosition(value: Double, position: AxisMarkerStyle.Horizontal, minValue: Double, range: Double) -> CGPoint {
         switch position {
         case .leading:
             return CGPoint(x: -(leadingInset / 2),
-                           y: plotPointY(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.height))
+                           y: plotPointY(value, minValue, range, chartSize.height))
         case .center:
             return CGPoint(x: chartSize.width / 2,
-                           y: plotPointY(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.height))
+                           y: plotPointY(value, minValue, range, chartSize.height))
         case .trailing:
             return CGPoint(x: chartSize.width + (trailingInset / 2),
-                           y: plotPointY(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.height))
+                           y: plotPointY(value, minValue, range, chartSize.height))
         }
     }
 }
 
 extension ChartStateObject {
-    public func verticalLinePosition(value: Double, position: AxisMarkerStyle.Vertical, dataSetInfo: DataSetInfo) -> CGPoint {
+    public func verticalLinePosition(value: Double, position: AxisMarkerStyle.Vertical, minValue: Double, range: Double) -> CGPoint {
         switch position {
         case .top:
-            return CGPoint(x: horizontalBarYPosition(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.width),
+            return CGPoint(x: horizontalBarYPosition(value, minValue, range, chartSize.width),
                            y: -(topInset / 2))
         case .center:
-            return CGPoint(x: horizontalBarYPosition(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.width),
+            return CGPoint(x: horizontalBarYPosition(value, minValue, range, chartSize.width),
                            y: chartSize.height / 2)
         case .bottom:
-            return CGPoint(x: horizontalBarYPosition(value, dataSetInfo.minValue, dataSetInfo.range, chartSize.width),
+            return CGPoint(x: horizontalBarYPosition(value, minValue, range, chartSize.width),
                            y: chartSize.height + topInset / 2)
         }
     }

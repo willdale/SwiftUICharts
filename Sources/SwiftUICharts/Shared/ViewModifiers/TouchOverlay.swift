@@ -19,10 +19,14 @@ extension View {
      */
     public func touch<ChartData: CTChartData & Touchable>(
         chartData: ChartData,
+        stateObject: ChartStateObject,
+        touchObject: ChartTouchObject,
         minDistance: CGFloat = 0
     ) -> some View {
         #if !os(tvOS)
         self.modifier(TouchOverlay(chartData: chartData,
+                                   stateObject: stateObject,
+                                   touchObject: touchObject,
                                    minDistance: minDistance))
         #elseif os(tvOS)
         self.modifier(EmptyModifier())
@@ -36,8 +40,9 @@ extension View {
  */
 internal struct TouchOverlay<ChartData>: ViewModifier where ChartData: CTChartData & Touchable {
     
-    @EnvironmentObject var stateObject: ChartStateObject
     var chartData: ChartData
+    var stateObject: ChartStateObject
+    var touchObject: ChartTouchObject
     var minDistance: CGFloat
     
     internal func body(content: Content) -> some View {
@@ -45,12 +50,12 @@ internal struct TouchOverlay<ChartData>: ViewModifier where ChartData: CTChartDa
             .gesture(
                 DragGesture(minimumDistance: minDistance, coordinateSpace: .local)
                     .onChanged {
-                        stateObject.touchLocation = $0.location
-                        stateObject.isTouch = true
-                        chartData.processTouchInteraction(touchLocation: stateObject.touchLocation, chartSize: stateObject.chartSize)
+                        touchObject.touchLocation = $0.location
+                        touchObject.isTouch = true
+                        chartData.processTouchInteraction(touchLocation: touchObject.touchLocation, chartSize: stateObject.chartSize)
                     }
                     .onEnded { _ in
-                        stateObject.isTouch = false
+                        touchObject.isTouch = false
                         chartData.touchDidFinish()
                     }
             )

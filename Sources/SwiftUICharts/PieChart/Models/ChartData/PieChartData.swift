@@ -26,7 +26,7 @@ public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishab
     public var markerData = MarkerData()
     
     // MARK: Publishable
-    @Published public var touchPointData: [DataPoint] = []
+    public var touchedData = TouchedData<DataPoint>()
     
     // MARK: Non-Protocol
     internal let chartType: CTChartType = (chartType: .pie, dataSetType: .single)
@@ -68,7 +68,7 @@ public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishab
     }
         
     public func touchDidFinish() {
-        touchPointData = []
+        touchedData.touchPointData = []
     }
     
     public typealias SetType = PieDataSet

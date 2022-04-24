@@ -10,10 +10,16 @@ import SwiftUI
 // MARK: - Chart
 public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBarChartData {
     
-    @EnvironmentObject public var stateObject: ChartStateObject
-    @EnvironmentObject public var chartData: ChartData
+    public var chartData: ChartData
+    public var stateObject: ChartStateObject
     
-    public init() {}
+    public init(
+        chartData: ChartData,
+        stateObject: ChartStateObject
+    ) {
+        self.chartData = chartData
+        self.stateObject = stateObject
+    }
     
     public var body: some View {
         VStack(spacing: 0) {

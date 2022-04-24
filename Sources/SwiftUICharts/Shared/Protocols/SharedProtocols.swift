@@ -91,13 +91,13 @@ extension CTChartData where Self: DataHelper {
 }
 
 extension CTChartData {
-    public var xAxisData: XAxisLabelStyle.XLabelData {
-        XAxisLabelStyle.XLabelData(chart: chartName, spacing: nil)
+    internal var spacing: CGFloat {
+        return 0
     }
 }
 extension CTChartData where Self: GroupedBarChartData {
-    public var xAxisData: XAxisLabelStyle.XLabelData {
-        XAxisLabelStyle.XLabelData(chart: chartName, spacing: groupSpacing)
+    internal var spacing: CGFloat {
+        return groupSpacing
     }
 }
 

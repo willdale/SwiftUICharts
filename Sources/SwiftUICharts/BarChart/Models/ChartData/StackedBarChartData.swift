@@ -31,7 +31,7 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     public var groups: [GroupingData]
     
     // MARK: Publishable
-    @Published public var touchPointData: [DataPoint] = []
+    public var touchedData = TouchedData<DataPoint>()
     
     // MARK: DataHelper
     public var baseline: Baseline
@@ -131,7 +131,7 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     }
     
     public func touchDidFinish() {
-        touchPointData = []
+        touchedData.touchPointData = []
     }
     
     public typealias SetType = StackedBarDataSets

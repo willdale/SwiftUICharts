@@ -27,7 +27,7 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
     public var markerData = MarkerData()
     
     // MARK: Publishable
-    @Published public var touchPointData: [LineChartDataPoint] = []
+    public var touchedData = TouchedData<DataPoint>()
     
     // MARK: DataHelper
     public var baseline: Baseline
@@ -85,7 +85,7 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
     }
     
     public func touchDidFinish() {
-        touchPointData = []
+        touchedData.touchPointData = []
     }
     
     public typealias SetType = FilledLineDataSet

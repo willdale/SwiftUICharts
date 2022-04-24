@@ -32,7 +32,7 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     public var groups: [GroupingData]
     
     // MARK: Publishable
-    @Published public var touchPointData: [DataPoint] = []
+    public var touchedData = TouchedData<DataPoint>()
     
     // MARK: DataHelper
     public var baseline: Baseline
@@ -109,7 +109,7 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     }
     
     public func touchDidFinish() {
-        touchPointData = []
+        touchedData.touchPointData = []
     }
     
     public typealias SetType = GroupedBarDataSets

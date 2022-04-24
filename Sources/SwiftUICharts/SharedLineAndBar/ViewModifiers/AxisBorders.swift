@@ -232,6 +232,13 @@ fileprivate struct _Animate_From_Middle: View {
     }
 }
 
+fileprivate class Cache {
+    var edge: ChartBorder?
+    var rect: CGRect?
+    
+    var path = Path()
+}
+
 public struct AxisBorderShape: Shape {
     
     let edge: ChartBorder
@@ -240,7 +247,16 @@ public struct AxisBorderShape: Shape {
         self.edge = edge
     }
     
+    fileprivate let cache = Cache()
+    func shouldUseCache(edge: ChartBorder, rect: CGRect) -> Bool {
+        edge == cache.edge && rect == cache.rect
+    }
+    
     public func path(in rect: CGRect) -> Path {
+        if shouldUseCache(edge: edge, rect: rect) {
+            return cache.path
+        }
+        
         var path = Path()
         switch edge {
         case .top(let direction, _):
@@ -280,6 +296,9 @@ public struct AxisBorderShape: Shape {
                 break
             }
         }
+        cache.edge = edge
+        cache.rect = rect
+        cache.path = path
         return path
     }
 }

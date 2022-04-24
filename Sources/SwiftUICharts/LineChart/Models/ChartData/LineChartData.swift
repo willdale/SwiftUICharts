@@ -9,6 +9,10 @@ import SwiftUI
 import Combine
 import ChartMath
 
+public final class TouchedData<DataPoint> where DataPoint: CTDataPointBaseProtocol {
+    @Published public var touchPointData: [DataPoint] = []
+}
+
 /**
  Data for drawing and styling a single line, line chart.
  
@@ -27,7 +31,7 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     public var markerData = MarkerData()
     
     // MARK: Publishable
-    @Published public var touchPointData: [DataPoint] = []
+    public var touchedData = TouchedData<DataPoint>()
 
     // MARK: DataHelper
     public var baseline: Baseline
@@ -62,10 +66,10 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     // MARK: Touch
     public func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
-
+        
         let xSection = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
         let ySection = chartSize.height / CGFloat(range)
-
+        
         let index = Int(divide((touchLocation.x + (xSection / 2)), xSection))
         if index >= 0 && index < dataSets.dataPoints.count {
             let datapoint = dataSets.dataPoints[index]
@@ -74,7 +78,7 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
             values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
         }
         
-        touchPointData = values.map(\.datapoint)
+        touchedData.touchPointData = values.map(\.datapoint)
         markerData = MarkerData(lineMarkerData: values.map {
             return LineMarkerData(markerType: dataSets.markerType,
                                   location: $0.location,
@@ -87,7 +91,7 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     }
     
     public func touchDidFinish() {
-        touchPointData = []
+        touchedData.touchPointData = []
     }
     
     public typealias SetType = LineDataSet

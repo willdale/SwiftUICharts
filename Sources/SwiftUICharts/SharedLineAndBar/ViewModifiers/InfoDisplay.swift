@@ -12,19 +12,21 @@ extension View {
     /// Customisable display of the data from `touch`.
     @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
     public func infoDisplay<Info>(
+        stateObject: ChartStateObject,
         infoView: Info,
         position: @escaping (_ boxSize: CGRect) -> CGPoint
     ) -> some View
     where Info: View
     {
-        self.modifier(InfoDisplay(infoView: infoView, position: position))
+        self.modifier(InfoDisplay(stateObject: stateObject, infoView: infoView, position: position))
     }
     
     /// Templated display of the data from `touch`.
     @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
     public func infoDisplay<ChartData>(
-//        datapoints: [DataPoint],
         chartData: ChartData,
+        stateObject: ChartStateObject,
+        touchObject: ChartTouchObject,
         infoView: InfoView,
         position: @escaping (_ boxSize: CGRect) -> CGPoint
     ) -> some View
@@ -33,10 +35,12 @@ extension View {
         Group {
             switch infoView {
             case .vertical(let style):
-                self.modifier(InfoDisplay(infoView: __Vertical_Info_PreSet(chartData: chartData, style: style),
+                self.modifier(InfoDisplay(stateObject: stateObject,
+                                          infoView: __Vertical_Info_PreSet(chartData: chartData, touchObject: touchObject, style: style),
                                           position: position))
             case .horizontal(let style):
-                self.modifier(InfoDisplay(infoView: __Horizontal_Info_PreSet(chartData: chartData, style: style),
+                self.modifier(InfoDisplay(stateObject: stateObject,
+                                          infoView: __Horizontal_Info_PreSet(chartData: chartData, touchObject: touchObject, style: style),
                                           position: position))
             }
         }
@@ -50,13 +54,13 @@ public enum InfoView {
 
 // MARK: - Implementation
 internal struct InfoDisplay<Info>: ViewModifier where Info: View {
-    
-    @EnvironmentObject internal var stateObject: ChartStateObject
+
+    @ObservedObject internal var stateObject: ChartStateObject
     internal var infoView: Info
     internal var position: (CGRect) -> CGPoint
-    
+
     @State private var size: CGRect = .zero
-        
+
     internal func body(content: Content) -> some View {
         ZStack {
             content
@@ -69,15 +73,15 @@ internal struct InfoDisplay<Info>: ViewModifier where Info: View {
 }
 
 fileprivate struct __ViewSize<Info: View>: View {
-   
+
     internal var infoView: Info
     @Binding internal var size: CGRect
-    
+
     var body: some View {
         infoView
             .background(sizeView)
     }
-    
+
     private var sizeView: some View {
         GeometryReader { geo in
             Color.clear
@@ -94,14 +98,14 @@ fileprivate struct __ViewSize<Info: View>: View {
 // MARK: - Presets
 fileprivate struct __Vertical_Info_PreSet<ChartData>: View where ChartData: CTChartData & Publishable,
                                                                  ChartData.DataPoint: DataPointDisplayable {
-    
-    @EnvironmentObject var stateObject: ChartStateObject
+
     let chartData: ChartData
+    @ObservedObject var touchObject: ChartTouchObject
     let style: InfoBoxStyle
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ForEach(chartData.touchPointData, id: \.id) { point in
+            ForEach(chartData.touchedData.touchPointData, id: \.id) { point in
                 Group {
                     Text(LocalizedStringKey(point.wrappedDescription))
                         .font(style.valueFont)
@@ -115,7 +119,7 @@ fileprivate struct __Vertical_Info_PreSet<ChartData>: View where ChartData: CTCh
         .padding(.all, 8)
         .background(
             GeometryReader { geo in
-                if stateObject.isTouch {
+                if touchObject.isTouch {
                     Rectangle()
                         .fill(style.backgroundColour)
                         .overlay(
@@ -130,14 +134,14 @@ fileprivate struct __Vertical_Info_PreSet<ChartData>: View where ChartData: CTCh
 
 fileprivate struct __Horizontal_Info_PreSet<ChartData>: View where ChartData: CTChartData & Publishable,
                                                                    ChartData.DataPoint: DataPointDisplayable {
-    
-    @EnvironmentObject var stateObject: ChartStateObject
+
     let chartData: ChartData
+    @ObservedObject var touchObject: ChartTouchObject
     let style: InfoBoxStyle
-    
+
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
-            ForEach(chartData.touchPointData, id: \.id) { point in
+            ForEach(chartData.touchedData.touchPointData, id: \.id) { point in
                 Group {
                     Text(LocalizedStringKey(point.wrappedDescription))
                         .font(style.valueFont)
@@ -151,7 +155,7 @@ fileprivate struct __Horizontal_Info_PreSet<ChartData>: View where ChartData: CT
         .padding(.all, 8)
         .background(
             GeometryReader { geo in
-                if stateObject.isTouch {
+                if touchObject.isTouch {
                     Rectangle()
                         .fill(style.backgroundColour)
                         .overlay(

@@ -26,7 +26,7 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
     public var markerData = MarkerData()
     
     // MARK: Publishable
-    @Published public var touchPointData: [DataPoint] = []
+    public var touchedData = TouchedData<DataPoint>()
     
     // MARK: DataHelper
     public var baseline: Baseline
@@ -93,7 +93,7 @@ public final class RangedBarChartData: BarChartType, CTChartData, CTBarChartData
     }
     
     public func touchDidFinish() {
-        touchPointData = []
+        touchedData.touchPointData = []
     }
     
     public typealias SetType = RangedBarDataSet

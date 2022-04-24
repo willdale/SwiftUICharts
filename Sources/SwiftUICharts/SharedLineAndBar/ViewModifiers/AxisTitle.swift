@@ -89,10 +89,11 @@ extension AxisTitleStyle {
 // MARK: - API
 extension View {
     public func axisTitles(
+        stateObject: ChartStateObject,
         edges: Set<AxisTitleStyle.Edge>,
         style: AxisTitleStyle
     ) -> some View {
-        self.modifier(_AxisTitles(edges: Array(edges)))
+        self.modifier(_AxisTitles(stateObject: stateObject, edges: Array(edges)))
     }
 }
 
@@ -102,18 +103,19 @@ extension View {
 //
 // MARK: View Modifier
 internal struct _AxisTitles: ViewModifier {
-    
+
+    internal var stateObject: ChartStateObject
     internal let edges: [AxisTitleStyle.Edge]
     internal let style: AxisTitleStyle = .standard
-    
+
     internal func body(content: Content) -> some View {
         content
-            .modifier(__AxisTitle(edge: edge(in: edges, at: 0), style: style))
-            .modifier(__AxisTitle(edge: edge(in: edges, at: 1), style: style))
-            .modifier(__AxisTitle(edge: edge(in: edges, at: 2), style: style))
-            .modifier(__AxisTitle(edge: edge(in: edges, at: 3), style: style))
+            .modifier(__AxisTitle(stateObject: stateObject, edge: edge(in: edges, at: 0), style: style))
+            .modifier(__AxisTitle(stateObject: stateObject, edge: edge(in: edges, at: 1), style: style))
+            .modifier(__AxisTitle(stateObject: stateObject, edge: edge(in: edges, at: 2), style: style))
+            .modifier(__AxisTitle(stateObject: stateObject, edge: edge(in: edges, at: 3), style: style))
     }
-    
+
     private func edge(
         in edges: [AxisTitleStyle.Edge],
         at index: Int
@@ -130,6 +132,7 @@ internal struct _AxisTitles: ViewModifier {
 
 fileprivate struct __AxisTitle: ViewModifier {
 
+    internal var stateObject: ChartStateObject
     internal let edge: AxisTitleStyle.Edge?
     internal let style: AxisTitleStyle
 
@@ -137,23 +140,23 @@ fileprivate struct __AxisTitle: ViewModifier {
         switch edge {
         case .top:
             VStack(spacing: style.padding) {
-                XAxisTitle(edge: edge, style: style)
+                XAxisTitle(stateObject: stateObject, edge: edge, style: style)
                 content
             }
         case .bottom:
             VStack(spacing: style.padding) {
                 content
-                XAxisTitle(edge: edge, style: style)
+                XAxisTitle(stateObject: stateObject, edge: edge, style: style)
             }
         case .leading:
             HStack(spacing: style.padding) {
-                YAxisTitle(edge: edge, style: style)
+                YAxisTitle(stateObject: stateObject, edge: edge, style: style)
                 content
             }
         case .trailing:
             HStack(spacing: style.padding) {
                 content
-                YAxisTitle(edge: edge, style: style)
+                YAxisTitle(stateObject: stateObject, edge: edge, style: style)
             }
         default:
             content
@@ -164,8 +167,7 @@ fileprivate struct __AxisTitle: ViewModifier {
 // MARK: X View
 internal struct XAxisTitle: View {
     
-    @EnvironmentObject internal var stateObject: ChartStateObject
-    
+    @ObservedObject internal var stateObject: ChartStateObject
     internal let edge: AxisTitleStyle.Edge?
     internal let style: AxisTitleStyle
     
@@ -211,8 +213,7 @@ internal struct XAxisTitle: View {
 // MARK: Y View
 internal struct YAxisTitle: View {
     
-    @EnvironmentObject internal var stateObject: ChartStateObject
-    
+    @ObservedObject internal var stateObject: ChartStateObject
     internal let edge: AxisTitleStyle.Edge?
     internal let style: AxisTitleStyle
     
