@@ -26,7 +26,10 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     public let chartName: ChartName = .groupedBar
     
     public var markerData = MarkerData()
-        
+    
+    public var stateObject = ChartStateObject()
+    public var touchObject = ChartTouchObject()
+    
     // MARK: Multi
     public var groupSpacing: CGFloat = 0
     public var groups: [GroupingData]

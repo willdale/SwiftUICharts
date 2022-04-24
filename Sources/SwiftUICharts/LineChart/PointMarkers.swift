@@ -17,14 +17,13 @@ extension View {
      */
     public func pointMarkers<ChartData, PointMarker>(
         chartData: ChartData,
-        stateObject: ChartStateObject,
         animation: @escaping (_ index: Int) -> Animation,
         pointMaker: @escaping (_ index: Int) -> PointMarker
     ) -> some View where ChartData: CTChartData & DataHelper,
                          ChartData.SetType: CTSingleDataSetProtocol,
                          ChartData.SetType.DataPoint: CTStandardDataPointProtocol,
                          PointMarker: View {
-                             self.modifier(PointMarkersModifier(chartData: chartData, stateObject: stateObject, animation: animation, pointMaker: pointMaker))
+                             self.modifier(PointMarkersModifier(chartData: chartData, animation: animation, pointMaker: pointMaker))
                          }
 }
 
@@ -35,14 +34,13 @@ where ChartData: CTChartData & DataHelper,
       PointMarker: View {
     
     var chartData: ChartData
-    var stateObject: ChartStateObject
     var animation: (_ index: Int) -> Animation
     var pointMaker: (_ index: Int) -> PointMarker
     
     internal func body(content: Content) -> some View {
         ZStack {
             content
-            PointMarkers(chartData: chartData, stateObject: stateObject, animation: animation, pointMaker: pointMaker)
+            PointMarkers(chartData: chartData, stateObject: chartData.stateObject, animation: animation, pointMaker: pointMaker)
         }
     }
 }
@@ -94,14 +92,13 @@ extension View {
      */
     public func pointMarkers<ChartData, PointMarker>(
         chartData: ChartData,
-        stateObject: ChartStateObject,
         animation: @escaping (_ dataSetIndex: Int, _ dataPointIndex: Int) -> Animation,
         pointMaker: @escaping (_ dataSetIndex: Int, _ dataPointIndex: Int) -> PointMarker
     ) -> some View where ChartData: CTChartData & DataHelper,
                          ChartData.SetType: CTMultiDataSetProtocol,
                          ChartData.SetType.DataSet.DataPoint: CTStandardDataPointProtocol,
                          PointMarker: View {
-                             self.modifier(MultiPointMarkersModifier(chartData: chartData, stateObject: stateObject, animation: animation, pointMaker: pointMaker))
+                             self.modifier(MultiPointMarkersModifier(chartData: chartData, animation: animation, pointMaker: pointMaker))
                          }
 }
 
@@ -112,14 +109,13 @@ where ChartData: CTChartData & DataHelper,
       PointMarker: View {
     
     var chartData: ChartData
-    var stateObject: ChartStateObject
     var animation: (_ dataSetIndex: Int, _ dataPointIndex: Int) -> Animation
     var pointMaker: (_ dataSetIndex: Int, _ dataPointIndex: Int) -> PointMarker
     
     internal func body(content: Content) -> some View {
         ZStack {
             content
-            MultiPointMarkers(chartData: chartData, stateObject: stateObject, animation: animation, pointMaker: pointMaker)
+            MultiPointMarkers(chartData: chartData, stateObject: chartData.stateObject, animation: animation, pointMaker: pointMaker)
         }
     }
 }

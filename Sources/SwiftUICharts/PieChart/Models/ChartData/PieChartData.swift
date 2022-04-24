@@ -25,6 +25,9 @@ public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishab
     
     public var markerData = MarkerData()
     
+    public var stateObject = ChartStateObject()
+    public var touchObject = ChartTouchObject()
+    
     // MARK: Publishable
     public var touchedData = TouchedData<DataPoint>()
     

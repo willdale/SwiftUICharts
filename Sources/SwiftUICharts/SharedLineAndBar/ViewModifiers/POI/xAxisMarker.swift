@@ -11,7 +11,6 @@ import SwiftUI
 extension View {
     public func xAxisMarker<ChartData: CTChartData, Label: View>(
         chartData: ChartData,
-        stateObject: ChartStateObject,
         value: Int,
         total: Int,
         position: AxisMarkerStyle.Horizontal,
@@ -21,7 +20,7 @@ extension View {
         self.modifier(
             XAxisMarker_HorizontalPosition(
                 chartData: chartData,
-                stateObject: stateObject,
+                stateObject: chartData.stateObject,
                 value: value,
                 total: total,
                 position: position,
@@ -33,7 +32,6 @@ extension View {
     
     public func xAxisMarker<ChartData: CTChartData, Label: View>(
         chartData: ChartData,
-        stateObject: ChartStateObject,
         value: Int,
         total: Int,
         position: AxisMarkerStyle.Horizontal,
@@ -43,7 +41,7 @@ extension View {
         self.modifier(
             XAxisMarker_HorizontalPosition(
                 chartData: chartData,
-                stateObject: stateObject,
+                stateObject: chartData.stateObject,
                 value: value,
                 total: total,
                 position: position,
@@ -55,7 +53,6 @@ extension View {
     
     public func xAxisMarker<ChartData: CTChartData, Label: View>(
         chartData: ChartData,
-        stateObject: ChartStateObject,
         value: Int,
         total: Int,
         position: AxisMarkerStyle.Vertical,
@@ -65,7 +62,7 @@ extension View {
         self.modifier(
             XAxisMarker_VerticalPosition(
                 chartData: chartData,
-                stateObject: stateObject,
+                stateObject: chartData.stateObject,
                 value: value,
                 total: total,
                 position: position,
@@ -77,7 +74,6 @@ extension View {
     
     public func xAxisMarker<ChartData: CTChartData, Label: View>(
         chartData: ChartData,
-        stateObject: ChartStateObject,
         value: Int,
         total: Int,
         position: AxisMarkerStyle.Vertical,
@@ -87,7 +83,7 @@ extension View {
         self.modifier(
             XAxisMarker_VerticalPosition(
                 chartData: chartData,
-                stateObject: stateObject,
+                stateObject: chartData.stateObject,
                 value: value,
                 total: total,
                 position: position,

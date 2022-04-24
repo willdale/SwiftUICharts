@@ -26,6 +26,9 @@ public final class FilledLineChartData: LineChartType, CTChartData, CTLineChartD
     
     public var markerData = MarkerData()
     
+    public var stateObject = ChartStateObject()
+    public var touchObject = ChartTouchObject()
+    
     // MARK: Publishable
     public var touchedData = TouchedData<DataPoint>()
     

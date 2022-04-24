@@ -28,6 +28,9 @@ public final class BarChartData: BarChartType, CTChartData, CTBarChartDataProtoc
     // MARK: Publishable
     public var touchedData = TouchedData<DataPoint>()
     
+    public var stateObject = ChartStateObject()
+    public var touchObject = ChartTouchObject()
+    
     // MARK: DataHelper
     public var baseline: Baseline
     public var topLine: Topline

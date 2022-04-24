@@ -11,36 +11,30 @@ import SwiftUI
 extension View {
     /// Customisable display of the data from `touch`.
     @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-    public func infoDisplay<Info>(
-        stateObject: ChartStateObject,
+    public func infoDisplay<ChartData, Info>(
+        chartData: ChartData,
         infoView: Info,
-        position: @escaping (_ boxSize: CGRect) -> CGPoint
-    ) -> some View
-    where Info: View
-    {
-        self.modifier(InfoDisplay(stateObject: stateObject, infoView: infoView, position: position))
+        position: @escaping (_ touchLocation: CGPoint, _ chartSize: CGRect, _ boxSize: CGRect) -> CGPoint
+    ) -> some View where Info: View, ChartData: CTChartData {
+        self.modifier(InfoDisplay(chartData: chartData, infoView: infoView, position: position))
     }
     
     /// Templated display of the data from `touch`.
     @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
     public func infoDisplay<ChartData>(
         chartData: ChartData,
-        stateObject: ChartStateObject,
-        touchObject: ChartTouchObject,
         infoView: InfoView,
-        position: @escaping (_ boxSize: CGRect) -> CGPoint
-    ) -> some View
-    where ChartData: CTChartData & Publishable, ChartData.DataPoint: DataPointDisplayable
-    {
+        position: @escaping (_ touchLocation: CGPoint, _ chartSize: CGRect, _ boxSize: CGRect) -> CGPoint
+    ) -> some View where ChartData: CTChartData & Publishable, ChartData.DataPoint: DataPointDisplayable {
         Group {
             switch infoView {
             case .vertical(let style):
-                self.modifier(InfoDisplay(stateObject: stateObject,
-                                          infoView: __Vertical_Info_PreSet(chartData: chartData, touchObject: touchObject, style: style),
+                self.modifier(InfoDisplay(chartData: chartData,
+                                          infoView: __Vertical_Info_PreSet(chartData: chartData, style: style),
                                           position: position))
             case .horizontal(let style):
-                self.modifier(InfoDisplay(stateObject: stateObject,
-                                          infoView: __Horizontal_Info_PreSet(chartData: chartData, touchObject: touchObject, style: style),
+                self.modifier(InfoDisplay(chartData: chartData,
+                                          infoView: __Horizontal_Info_PreSet(chartData: chartData, style: style),
                                           position: position))
             }
         }
@@ -53,43 +47,52 @@ public enum InfoView {
 }
 
 // MARK: - Implementation
-internal struct InfoDisplay<Info>: ViewModifier where Info: View {
+internal struct InfoDisplay<ChartData, Info>: ViewModifier
+where Info: View,
+      ChartData: CTChartData {
 
-    @ObservedObject internal var stateObject: ChartStateObject
+    internal var chartData: ChartData
+    @ObservedObject private var touchObject: ChartTouchObject
     internal var infoView: Info
-    internal var position: (CGRect) -> CGPoint
+    internal var position: (_ touchLocation: CGPoint, _ chartSize: CGRect, _ boxSize: CGRect) -> CGPoint
+    
+    init(
+        chartData: ChartData,
+        infoView: Info,
+        position: @escaping (_ touchLocation: CGPoint, _ chartSize: CGRect, _ boxSize: CGRect) -> CGPoint
+    ) {
+        self.chartData = chartData
+        self.touchObject = chartData.touchObject
+        self.infoView = infoView
+        self.position = position
+    }
 
-    @State private var size: CGRect = .zero
+    @State private var boxSize: CGRect = .zero
 
     internal func body(content: Content) -> some View {
         ZStack {
             content
-            __ViewSize(infoView: infoView, size: $size)
-                .position(x: stateObject.leadingInset + position(size).x,
-                          y: stateObject.topInset + position(size).y)
+            infoView
+                .background(sizeView)
+                .position(computedPosition)
                 .zIndex(1)
         }
     }
-}
-
-fileprivate struct __ViewSize<Info: View>: View {
-
-    internal var infoView: Info
-    @Binding internal var size: CGRect
-
-    var body: some View {
-        infoView
-            .background(sizeView)
+    
+    var computedPosition: CGPoint {
+        let position = position(touchObject.touchLocation, chartData.stateObject.chartSize, boxSize)
+        return CGPoint(x: chartData.stateObject.leadingInset + position.x,
+                       y: chartData.stateObject.topInset + position.y)
     }
-
+    
     private var sizeView: some View {
         GeometryReader { geo in
             Color.clear
                 .onAppear {
-                    size = geo.frame(in: .local)
+                    boxSize = geo.frame(in: .local)
                 }
                 .onChange(of: geo.frame(in: .local)) {
-                    size = $0
+                    boxSize = $0
                 }
         }
     }
@@ -102,6 +105,15 @@ fileprivate struct __Vertical_Info_PreSet<ChartData>: View where ChartData: CTCh
     let chartData: ChartData
     @ObservedObject var touchObject: ChartTouchObject
     let style: InfoBoxStyle
+    
+    init(
+        chartData: ChartData,
+        style: InfoBoxStyle
+    ) {
+        self.chartData = chartData
+        self.touchObject = chartData.touchObject
+        self.style = style
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -138,6 +150,16 @@ fileprivate struct __Horizontal_Info_PreSet<ChartData>: View where ChartData: CT
     let chartData: ChartData
     @ObservedObject var touchObject: ChartTouchObject
     let style: InfoBoxStyle
+    
+    init(
+        chartData: ChartData,
+        style: InfoBoxStyle
+    ) {
+        self.chartData = chartData
+        self.touchObject = chartData.touchObject
+        self.style = style
+    }
+
 
     var body: some View {
         HStack(alignment: .top, spacing: 0) {

@@ -9,10 +9,6 @@ import SwiftUI
 import Combine
 import ChartMath
 
-public final class TouchedData<DataPoint> where DataPoint: CTDataPointBaseProtocol {
-    @Published public var touchPointData: [DataPoint] = []
-}
-
 /**
  Data for drawing and styling a single line, line chart.
  
@@ -29,6 +25,9 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     public let chartName: ChartName = .line
     
     public var markerData = MarkerData()
+    
+    public var stateObject = ChartStateObject()
+    public var touchObject = ChartTouchObject()
     
     // MARK: Publishable
     public var touchedData = TouchedData<DataPoint>()

@@ -26,6 +26,9 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
     
     public var markerData = MarkerData()
     
+    public var stateObject = ChartStateObject()
+    public var touchObject = ChartTouchObject()
+    
     // MARK: Publishable
     public var touchedData = TouchedData<DataPoint>()
     

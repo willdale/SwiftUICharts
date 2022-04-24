@@ -8,6 +8,10 @@
 import ChartMath
 import SwiftUI
 
+public final class TouchedData<DataPoint> where DataPoint: CTDataPointBaseProtocol {
+    @Published public var touchPointData: [DataPoint] = []
+}
+
 public final class ChartTouchObject: ObservableObject {
     @Published public var touchLocation: CGPoint = .zero
     @Published public var isTouch: Bool = false

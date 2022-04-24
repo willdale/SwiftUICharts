@@ -88,12 +88,12 @@ extension AxisTitleStyle {
 
 // MARK: - API
 extension View {
-    public func axisTitles(
-        stateObject: ChartStateObject,
+    public func axisTitles<ChartData: CTChartData>(
+        chartData: ChartData,
         edges: Set<AxisTitleStyle.Edge>,
         style: AxisTitleStyle
     ) -> some View {
-        self.modifier(_AxisTitles(stateObject: stateObject, edges: Array(edges)))
+        self.modifier(_AxisTitles(stateObject: chartData.stateObject, edges: Array(edges)))
     }
 }
 

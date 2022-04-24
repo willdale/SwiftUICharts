@@ -27,21 +27,18 @@ import SwiftUI
 public struct LineChart<ChartData>: View where ChartData: LineChartData {
     
     public var chartData: ChartData
-    public var stateObject: ChartStateObject
     
     public init(
-        chartData: ChartData,
-        stateObject: ChartStateObject
+        chartData: ChartData
     ) {
         self.chartData = chartData
-        self.stateObject = stateObject
     }
     
     public var body: some View {
             ZStack {
                 LineSubView(chartData: chartData)
             }
-            .modifier(ChartSizeUpdating(stateObject: stateObject))
+            .modifier(ChartSizeUpdating(stateObject: chartData.stateObject))
     }
 }
 

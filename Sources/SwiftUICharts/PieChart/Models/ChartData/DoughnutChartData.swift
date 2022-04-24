@@ -26,7 +26,10 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
     public var markerData = MarkerData()
     
     public var strokeWidth: CGFloat = 1
-
+    
+    public var stateObject = ChartStateObject()
+    public var touchObject = ChartTouchObject()
+    
     // MARK: Publishable
     public var touchedData = TouchedData<DataPoint>()
     

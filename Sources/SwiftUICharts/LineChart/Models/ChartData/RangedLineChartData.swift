@@ -25,7 +25,10 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
     public let chartName: ChartName = .rangedLine
     
     public var markerData = MarkerData()
-
+    
+    public var stateObject = ChartStateObject()
+    public var touchObject = ChartTouchObject()
+    
     // MARK: Publishable
     public var touchedData = TouchedData<DataPoint>()
     

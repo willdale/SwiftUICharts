@@ -10,39 +10,29 @@ import SwiftUI
 extension View {
     public func touchMarker<ChartData, Icon: View>(
         chartData: ChartData,
-        stateObject: ChartStateObject,
-        touchObject: ChartTouchObject,
         indicator: Icon
     ) -> some View where ChartData: CTChartData {
-        self.modifier(TouchMarker(chartData: chartData, stateObject: stateObject, touchObject: touchObject, indicator: indicator))
+        self.modifier(TouchMarker(chartData: chartData, indicator: indicator))
     }
     
     public func touchMarker<ChartData, Icon: View>(
         chartData: ChartData,
-        stateObject: ChartStateObject,
-        touchObject: ChartTouchObject,
         indicator: () -> Icon
     ) -> some View where ChartData: CTChartData {
-        self.modifier(TouchMarker(chartData: chartData, stateObject: stateObject, touchObject: touchObject, indicator: indicator()))
+        self.modifier(TouchMarker(chartData: chartData, indicator: indicator()))
     }
     
     public func touchMarker<ChartData>(
         chartData: ChartData,
-        stateObject: ChartStateObject,
-        touchObject: ChartTouchObject,
         indicator: Dot
     ) -> some View where ChartData: CTChartData {
         Group {
             switch indicator {
             case .none:
                 self.modifier(TouchMarker(chartData: chartData,
-                                          stateObject: stateObject,
-                                          touchObject: touchObject,
                                           indicator: EmptyView()))
             case .style(let style):
                 self.modifier(TouchMarker(chartData: chartData,
-                                          stateObject: stateObject,
-                                          touchObject: touchObject,
                                           indicator: PosistionIndicator(
                                             fillColour: style.fillColour,
                                             lineColour: style.lineColour,
@@ -56,20 +46,16 @@ extension View {
 public struct TouchMarker<ChartData, Icon: View>: ViewModifier where ChartData: CTChartData {
     
     @ObservedObject private var chartData: ChartData
-    private var stateObject: ChartStateObject
     @ObservedObject private var touchObject: ChartTouchObject
     
     let indicator: Icon
     
     public init(
         chartData: ChartData,
-        stateObject: ChartStateObject,
-        touchObject: ChartTouchObject,
         indicator: Icon
     ) {
-        self.stateObject = stateObject
         self.chartData = chartData
-        self.touchObject = touchObject
+        self.touchObject = chartData.touchObject
         self.indicator = indicator
     }
     
@@ -77,7 +63,7 @@ public struct TouchMarker<ChartData, Icon: View>: ViewModifier where ChartData: 
         ZStack {
             content
             if touchObject.isTouch {
-                _MarkerData(markerData: chartData.markerData, indicator: indicator, chartSize: stateObject.chartSize, touchLocation: touchObject.touchLocation)
+                _MarkerData(markerData: chartData.markerData, indicator: indicator, chartSize: chartData.stateObject.chartSize, touchLocation: touchObject.touchLocation)
             }
         }
     }

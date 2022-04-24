@@ -11,7 +11,6 @@ import SwiftUI
 extension View {
     public func yAxisMarker<ChartData: CTChartData & DataHelper, Label: View>(
         chartData: ChartData,
-        stateObject: ChartStateObject,
         value: Double,
         position: AxisMarkerStyle.Horizontal,
         style: AxisMarkerStyle,
@@ -20,7 +19,7 @@ extension View {
         self.modifier(
             YAxisMarker_HorizontalPosition(
                 chartData: chartData,
-                stateObject: stateObject,
+                stateObject: chartData.stateObject,
                 value: value,
                 position: position,
                 style: style,
@@ -31,7 +30,6 @@ extension View {
     
     public func yAxisMarker<ChartData: CTChartData & DataHelper, Label: View>(
         chartData: ChartData,
-        stateObject: ChartStateObject,
         value: Double,
         position: AxisMarkerStyle.Horizontal,
         style: AxisMarkerStyle,
@@ -40,7 +38,7 @@ extension View {
         self.modifier(
             YAxisMarker_HorizontalPosition(
                 chartData: chartData,
-                stateObject: stateObject,
+                stateObject: chartData.stateObject,
                 value: value,
                 position: position,
                 style: style,
@@ -51,7 +49,6 @@ extension View {
     
     public func yAxisMarker<ChartData: CTChartData & DataHelper, Label: View>(
         chartData: ChartData,
-        stateObject: ChartStateObject,
         value: Double,
         position: AxisMarkerStyle.Vertical,
         style: AxisMarkerStyle,
@@ -60,7 +57,7 @@ extension View {
         self.modifier(
             YAxisMarker_VerticalPosition(
                 chartData: chartData,
-                stateObject: stateObject,
+                stateObject: chartData.stateObject,
                 value: value,
                 position: position,
                 style: style,
@@ -71,7 +68,6 @@ extension View {
     
     public func yAxisMarker<ChartData: CTChartData & DataHelper, Label: View>(
         chartData: ChartData,
-        stateObject: ChartStateObject,
         value: Double,
         position: AxisMarkerStyle.Vertical,
         style: AxisMarkerStyle,
@@ -80,7 +76,7 @@ extension View {
         self.modifier(
             YAxisMarker_VerticalPosition(
                 chartData: chartData,
-                stateObject: stateObject,
+                stateObject: chartData.stateObject,
                 value: value,
                 position: position,
                 style: style,

@@ -26,7 +26,10 @@ public final class StackedBarChartData: BarChartType, CTChartData, CTBarChartDat
     public let chartName: ChartName = .stackedBar
     
     public var markerData = MarkerData()
-        
+    
+    public var stateObject = ChartStateObject()
+    public var touchObject = ChartTouchObject()
+    
     // MARK: Multi
     public var groups: [GroupingData]
     

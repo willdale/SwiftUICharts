@@ -15,7 +15,6 @@ extension View {
     /// For vertical charts
     public func xAxisLabels<ChartData: CTChartData>(
         chartData: ChartData,
-        stateObject: ChartStateObject,
         labels: [String],
         positions: Set<HorizontalEdge>,
         style: XAxisLabelStyle = .standard
@@ -23,7 +22,6 @@ extension View {
         self.modifier(
             _XAxisLabelsModifier_Vertical(
                 chartData: chartData,
-                stateObject: stateObject,
                 labels: labels,
                 positions: Array(positions),
                 style: style
@@ -36,7 +34,6 @@ extension View {
     /// For horizontal charts
     public func xAxisLabels<ChartData: CTChartData>(
         chartData: ChartData,
-        stateObject: ChartStateObject,
         labels: [String],
         positions: Set<VerticalEdge>,
         style: XAxisLabelStyle = .standard
@@ -44,7 +41,6 @@ extension View {
         self.modifier(
             _XAxisLabelsModifier_Horizontal(
                 chartData: chartData,
-                stateObject: stateObject,
                 labels: labels,
                 positions: Array(positions),
                 style: style
@@ -57,7 +53,6 @@ extension View {
 fileprivate struct _XAxisLabelsModifier_Vertical<ChartData: CTChartData>: ViewModifier {
     
     let chartData: ChartData
-    var stateObject: ChartStateObject
     let labels: [String]
     let positions: [HorizontalEdge]
     let style: XAxisLabelStyle
@@ -67,13 +62,13 @@ fileprivate struct _XAxisLabelsModifier_Vertical<ChartData: CTChartData>: ViewMo
             switch position {
             case .leading:
                 HStack(spacing: style.padding) {
-                    XAxisLabels(chartData: chartData, stateObject: stateObject, labels: labels, style: style, orientation: .horizontal)
+                    XAxisLabels(chartData: chartData, labels: labels, style: style, orientation: .horizontal)
                     content
                 }
             case .trailing:
                 HStack(spacing: style.padding) {
                     content
-                    XAxisLabels(chartData: chartData, stateObject: stateObject, labels: labels, style: style, orientation: .horizontal)
+                    XAxisLabels(chartData: chartData, labels: labels, style: style, orientation: .horizontal)
                 }
             }
         }
@@ -83,7 +78,6 @@ fileprivate struct _XAxisLabelsModifier_Vertical<ChartData: CTChartData>: ViewMo
 fileprivate struct _XAxisLabelsModifier_Horizontal<ChartData: CTChartData>: ViewModifier {
 
     let chartData: ChartData
-    var stateObject: ChartStateObject
     let labels: [String]
     let positions: [VerticalEdge]
     let style: XAxisLabelStyle
@@ -94,11 +88,11 @@ fileprivate struct _XAxisLabelsModifier_Horizontal<ChartData: CTChartData>: View
             case .bottom:
                 VStack(spacing: style.padding) {
                     content
-                    XAxisLabels(chartData: chartData, stateObject: stateObject, labels: labels, style: style, orientation: .vertical)
+                    XAxisLabels(chartData: chartData, labels: labels, style: style, orientation: .vertical)
                 }
             case .top:
                 VStack(spacing: style.padding) {
-                    XAxisLabels(chartData: chartData, stateObject: stateObject, labels: labels, style: style, orientation: .vertical)
+                    XAxisLabels(chartData: chartData, labels: labels, style: style, orientation: .vertical)
                     content
                 }
             }
@@ -111,7 +105,6 @@ public struct XAxisLabels<ChartData: CTChartData>: View {
     
     let chartData: ChartData
     @StateObject private var localState = XAxisLabelsLayoutModel()
-    let stateObject: ChartStateObject
     
     let labels: [String]
     let style: XAxisLabelStyle
@@ -126,11 +119,9 @@ public struct XAxisLabels<ChartData: CTChartData>: View {
                         _label_Positioning(
                             chartData: chartData,
                             localState: localState,
-                            stateObject: stateObject,
+                            stateObject: chartData.stateObject,
                             index: index,
                             count: labels.count,
-                            minLabel: localState.minWidth,
-                            padding: localState.maxWidth,
                             inBounds: style.inBounds
                         )
                     )
@@ -191,8 +182,6 @@ fileprivate struct _label_Positioning<ChartData: CTChartData>: ViewModifier {
     @ObservedObject var stateObject: ChartStateObject
     let index: Int
     let count: Int
-    let minLabel: CGFloat
-    let padding: CGFloat
     let inBounds: Bool
     
     func body(content: Content) -> some View {

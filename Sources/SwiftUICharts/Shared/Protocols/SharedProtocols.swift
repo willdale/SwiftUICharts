@@ -47,6 +47,8 @@ public protocol CTChartData: ObservableObject, Identifiable {
     
     var chartName: ChartName { get }
     
+    var stateObject: ChartStateObject { get set }
+    var touchObject: ChartTouchObject { get set }
     
     /// Data model containing the charts Title, Subtitle and the Title for Legend.
     ///
