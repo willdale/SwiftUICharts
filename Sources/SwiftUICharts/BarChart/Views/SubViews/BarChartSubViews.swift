@@ -17,7 +17,7 @@ import SwiftUI
  */
 internal struct BarChartBarStyleSubView<CD: BarChartData>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     
     internal init(chartData: CD) {
         self.chartData = chartData
@@ -67,7 +67,7 @@ internal struct BarChartBarStyleSubView<CD: BarChartData>: View {
  */
 internal struct BarChartDataPointSubView<CD: BarChartData>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     
     internal init(chartData: CD) {
         self.chartData = chartData
@@ -119,7 +119,7 @@ internal struct BarChartDataPointSubView<CD: BarChartData>: View {
 
 internal struct RangedBarChartBarStyleSubView<CD:RangedBarChartData>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     
     internal init(chartData: CD) {
         self.chartData = chartData
@@ -175,7 +175,7 @@ internal struct RangedBarChartBarStyleSubView<CD:RangedBarChartData>: View {
 // MARK: DataPoints
 internal struct RangedBarChartDataPointSubView<CD:RangedBarChartData>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     
     internal init(chartData: CD) {
         self.chartData = chartData
@@ -234,7 +234,7 @@ internal struct RangedBarChartDataPointSubView<CD:RangedBarChartData>: View {
  */
 internal struct HorizontalBarChartBarStyleSubView<CD: HorizontalBarChartData>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     
     internal init(chartData: CD) {
         self.chartData = chartData
@@ -284,7 +284,7 @@ internal struct HorizontalBarChartBarStyleSubView<CD: HorizontalBarChartData>: V
  */
 internal struct HorizontalBarChartDataPointSubView<CD: HorizontalBarChartData>: View {
     
-    private let chartData: CD
+    @ObservedObject private var chartData: CD
     
     internal init(chartData: CD) {
         self.chartData = chartData
