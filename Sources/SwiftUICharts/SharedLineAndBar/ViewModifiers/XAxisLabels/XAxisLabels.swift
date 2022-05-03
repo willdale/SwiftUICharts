@@ -16,14 +16,14 @@ extension View {
     public func xAxisLabels<ChartData: CTChartData>(
         chartData: ChartData,
         labels: [String],
-        positions: Set<HorizontalEdge>,
+        position: HorizontalEdge,
         style: XAxisLabelStyle = .standard
     ) -> some View {
         self.modifier(
             _XAxisLabelsModifier_Vertical(
                 chartData: chartData,
                 labels: labels,
-                positions: Array(positions),
+                position: position,
                 style: style
             )
         )
@@ -35,14 +35,14 @@ extension View {
     public func xAxisLabels<ChartData: CTChartData>(
         chartData: ChartData,
         labels: [String],
-        positions: Set<VerticalEdge>,
+        position: VerticalEdge,
         style: XAxisLabelStyle = .standard
     ) -> some View {
         self.modifier(
             _XAxisLabelsModifier_Horizontal(
                 chartData: chartData,
                 labels: labels,
-                positions: Array(positions),
+                position: position,
                 style: style
             )
         )
@@ -54,11 +54,11 @@ fileprivate struct _XAxisLabelsModifier_Vertical<ChartData: CTChartData>: ViewMo
     
     let chartData: ChartData
     let labels: [String]
-    let positions: [HorizontalEdge]
+    let position: HorizontalEdge
     let style: XAxisLabelStyle
         
     func body(content: Content) -> some View {
-        ForEach(positions) { position in
+        Group {
             switch position {
             case .leading:
                 HStack(spacing: style.padding) {
@@ -79,11 +79,11 @@ fileprivate struct _XAxisLabelsModifier_Horizontal<ChartData: CTChartData>: View
 
     let chartData: ChartData
     let labels: [String]
-    let positions: [VerticalEdge]
+    let position: VerticalEdge
     let style: XAxisLabelStyle
     
     func body(content: Content) -> some View {
-        ForEach(positions) { position in
+        Group {
             switch position {
             case .bottom:
                 VStack(spacing: style.padding) {

@@ -227,8 +227,6 @@ struct PositionIndicator {
         sqrt((from.x - to.x) * (from.x - to.x) + (from.y - to.y) * (from.y - to.y))
     }
     
-    
-    
     /**
      Returns a point on the path based on the X axis of the users touch input.
      

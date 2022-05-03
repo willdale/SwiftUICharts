@@ -11,173 +11,59 @@ import ChartMath
 // MARK: - API
 extension View {
     public func grid(
-        vLines: UInt = 5,
-        hLines: UInt = 5,
-        style: Grid.Style = .grey
+        vLines: Int = 5,
+        hLines: Int = 5,
+        style: Grid.Style = .grey,
+        animation: @escaping (_ index: Int) -> Animation = { _ in .default }
     ) -> some View {
-        self.modifier(GridModifier(vLines: vLines, hLines: hLines, style: style))
+        self.modifier(__GridModifier(vLines: vLines, hLines: hLines, style: style, animation: animation))
     }
 }
 
-// MARK: - HGrid
-public struct HGrid: Shape {
-    
-    public var lines: UInt
-    public var edges: Bool
-    
-    public init(
-        lines: UInt,
-        edges: Bool = true
-    ) {
-        self.lines = edges ? lines : lines + 2
-        self.edges = edges
-    }
-    
-    public func path(in rect: CGRect) -> Path {
-        if lines == 0 { return Path() }
-        else if lines == 1 {
-            return middleLine(in: rect)
-        } else if lines == 2 {
-            return edgeLines(in: rect)
-        } else {
-            return allLines(in: rect)
-        }
-    }
-    
-    private func middleLine(in rect: CGRect) -> Path {
-        var path = Path()
-        let pointOne = CGPoint(x: rect.minX, y: rect.midY)
-        let pointTwo = CGPoint(x: rect.maxX, y: rect.midY)
-        path.move(to: pointOne)
-        path.addLine(to: pointTwo)
-        return path
-    }
-    
-    private func edgeLines(in rect: CGRect) -> Path {
-        var path = Path()
-        let bottomPointOne = CGPoint(x: rect.minX, y: rect.maxY)
-        let bottomPointTwo = CGPoint(x: rect.maxX, y: rect.maxY)
-        let topPointOne = CGPoint(x: rect.minX, y: rect.minY)
-        let topPointTwo = CGPoint(x: rect.maxX, y: rect.minY)
-
-        path.move(to: bottomPointOne)
-        path.addLine(to: bottomPointTwo)
-        path.move(to: topPointOne)
-        path.addLine(to: topPointTwo)
-        return path
-    }
-    
-    private func allLines(in rect: CGRect) -> Path {
-        var path = Path()
-        let range = edges ? 0..<lines : 1..<lines-1
-        let sectionSize = divide(rect.height, lines-1)
-        for index in range {
-            let y = CGFloat(index) * sectionSize
-            let pointOne = CGPoint(x: rect.minX, y: y)
-            let pointTwo = CGPoint(x: rect.maxX, y: y)
-            path.move(to: pointOne)
-            path.addLine(to: pointTwo)
-        }
-        return path
-    }
-}
-
-// MARK: - VGrid
-public struct VGrid: Shape {
-    
-    public var lines: UInt
-    public var edges: Bool
-    
-    public init(
-        lines: UInt,
-        edges: Bool = true
-    ) {
-        self.lines = edges ? lines : lines + 2
-        self.edges = edges
-    }
-    
-    public func path(in rect: CGRect) -> Path {
-        if lines == 0 { return Path() }
-        else if lines == 1 {
-            return middleLine(in: rect)
-        } else if lines == 2 {
-            return edgeLines(in: rect)
-        } else {
-            return allLines(in: rect)
-        }
-    }
-    
-    private func middleLine(in rect: CGRect) -> Path {
-        var path = Path()
-        let pointOne = CGPoint(x: rect.midX, y: rect.minY)
-        let pointTwo = CGPoint(x: rect.midX, y: rect.maxY)
-        path.move(to: pointOne)
-        path.addLine(to: pointTwo)
-        return path
-    }
-    
-    private func edgeLines(in rect: CGRect) -> Path {
-        var path = Path()
-        let bottomPointOne = CGPoint(x: rect.maxX, y: rect.minY)
-        let bottomPointTwo = CGPoint(x: rect.maxX, y: rect.maxY)
-        let topPointOne = CGPoint(x: rect.minX, y: rect.minY)
-        let topPointTwo = CGPoint(x: rect.minX, y: rect.maxY)
-        
-        path.move(to: bottomPointOne)
-        path.addLine(to: bottomPointTwo)
-        path.move(to: topPointOne)
-        path.addLine(to: topPointTwo)
-        return path
-    }
-    
-    private func allLines(in rect: CGRect) -> Path {
-        var path = Path()
-        let range = edges ? 0..<lines : 1..<lines-1
-        let sectionSize = divide(rect.width, lines-1)
-        for index in range {
-            let y = CGFloat(index) * sectionSize
-            let pointOne = CGPoint(x: y, y: rect.minY)
-            let pointTwo = CGPoint(x: y, y: rect.maxY)
-            path.move(to: pointOne)
-            path.addLine(to: pointTwo)
-        }
-        return path
-    }
-}
-
-// MARK: Grid
-public struct Grid: Shape {
-    
-    public var vLines: UInt
-    public var hLines: UInt
-    public var edges: Bool
-    
-    public init(
-        vLines: UInt,
-        hLines: UInt,
-        edges: Bool = true
-    ) {
-        self.vLines = vLines
-        self.hLines = hLines
-        self.edges = edges
-    }
-    
-    public func path(in rect: CGRect) -> Path {
-        let vGrid = VGrid(lines: vLines, edges: edges)
-            .path(in: rect)
-        let hGrid = HGrid(lines: hLines, edges: edges)
-            .path(in: rect)
-        
-        var path = Path()
-        path.addPath(vGrid)
-        path.addPath(hGrid)
-        return path
-    }
-    
+extension Grid {
     public struct Style {
-        var colour: ChartColour
-        var stroke: StrokeStyle
-        var edges: Bool
+        public var colour: ChartColour
+        public var stroke: StrokeStyle
+        public var edges: Bool
+    }
+    
+    public struct Animation {
+        public var style: Style = .draw(direction: .topLeading)
+
+        public enum Style {
+            case draw(direction: Direction)
+            case fade
+        }
+
+        public enum Direction {
+            case topLeading
+            case topTrailing
+            case bottomLeading
+            case bottomTrailing
+
+            var data: (v: VerticalDirection, h: HorizontalDirection) {
+                switch self {
+                case .topLeading:
+                    return (v: .top, h: .leading)
+                case .topTrailing:
+                    return (v: .top, h: .trailing)
+                case .bottomLeading:
+                    return (v: .bottom, h: .leading)
+                case .bottomTrailing:
+                    return (v: .bottom, h: .trailing)
+                }
+            }
+        }
+
+        internal enum VerticalDirection {
+            case top
+            case bottom
+        }
+
+        internal enum HorizontalDirection {
+            case leading
+            case trailing
+        }
     }
 }
 
@@ -189,66 +75,343 @@ extension Grid.Style {
     public static let lightGreyNoEdges = Self(colour: .colour(colour: Color(.lightGray)), stroke: StrokeStyle(), edges: false)
 }
 
-// MARK: - HGrid Modifier
-internal struct HGridModifier: ViewModifier {
-        
-    internal let lines: UInt
-    internal let style: Grid.Style
-    
-    internal func body(content: Content) -> some View {
-        ZStack {
-            content
-            HGrid(lines: lines, edges: style.edges)
-                .stroke(style.colour, strokeStyle: style.stroke)
+extension Shape {
+    fileprivate func __gridAnimation(animation: Grid.Animation.Style, style: Grid.Style, startAnimation: Bool) -> some View {
+        Group {
+            switch animation {
+            case .draw:
+                self.trim(to: startAnimation ? 1 : 0)
+                    .stroke(style.colour, strokeStyle: style.stroke)
+            case .fade:
+                self.stroke(style.colour, strokeStyle: style.stroke)
+                    .opacity(startAnimation ? 1 : 0)
+                
+            }
         }
     }
 }
 
-extension View {
-    public func hGrid(
-        lines: UInt = 5,
-        style: Grid.Style = .grey
-    ) -> some View {
-        self.modifier(HGridModifier(lines: lines, style: style))
+// MARK: - Grid
+public struct Grid: View {
+    
+    public let vLines: Int
+    public let hLines: Int
+    public let style: Grid.Style
+    public let animation: (_ index: Int) -> SwiftUI.Animation
+    
+    private let hRange: Range<Int>
+    private let vRange: Range<Int>
+    
+    public init(
+        vLines: Int,
+        hLines: Int,
+        style: Grid.Style,
+        animation: @escaping (_ index: Int) -> SwiftUI.Animation
+    ) {
+        self.style = style
+        self.animation = animation
+        
+        var hRange = 0..<hLines
+        var hLines = hLines
+        if !style.edges {
+            hLines = hLines + 2
+            let lower = 1
+            let upper = hLines-1
+            hRange = lower..<upper
+        }
+        self.hLines = hLines
+        self.hRange = hRange
+        
+        var vRange = 0..<vLines
+        var vLines = vLines
+        if !style.edges {
+            vLines = vLines + 2
+            let lower = 1
+            let upper = vLines-1
+            vRange = lower..<upper
+        }
+        self.vLines = vLines
+        self.vRange = vRange
+    }
+    
+    public var body: some View {
+        HGrid(hRange: hRange, hLines: hLines, style: style, animation: animation)
+        VGrid(vRange: vRange, vLines: vLines, style: style, animation: animation)
     }
 }
 
-// MARK: - VGrid Modifier
-internal struct VGridModifier: ViewModifier {
-        
-    internal let lines: UInt
-    internal let style: Grid.Style
+fileprivate struct __GridModifier: ViewModifier {
     
-    internal func body(content: Content) -> some View {
+    fileprivate let vLines: Int
+    fileprivate let hLines: Int
+    fileprivate let style: Grid.Style
+    fileprivate let animation: (_ index: Int) -> Animation
+    
+    fileprivate func body(content: Content) -> some View {
         ZStack {
+            Grid(vLines: vLines, hLines: hLines, style: style, animation: animation)
             content
-            VGrid(lines: lines, edges: style.edges)
-                .stroke(style.colour, strokeStyle: style.stroke)
         }
     }
 }
 
-extension View {
-    public func vGrid(
-        lines: UInt = 5,
-        style: Grid.Style = .grey
-    ) -> some View {
-        self.modifier(VGridModifier(lines: lines, style: style))
+// MARK: - Horrizontal
+public struct HGrid: View {
+    
+    public let hRange: Range<Int>
+    public let hLines: Int
+    public let style: Grid.Style
+    public let animation: (_ index: Int) -> Animation
+    
+    public init(
+        hRange: Range<Int>,
+        hLines: Int,
+        style: Grid.Style,
+        animation: @escaping (Int) -> Animation
+    ) {
+        self.hRange = hRange
+        self.hLines = hLines
+        self.style = style
+        self.animation = animation
+    }
+    
+    public var body: some View {
+        ForEach(hRange, id: \.self) { index in
+            __Horrizontal_Grid_Cell(index: index, total: hLines, style: style, animation: animation)
+        }
     }
 }
 
-// MARK: - Grid Modifier
-internal struct GridModifier: ViewModifier {
-        
-    internal let vLines: UInt
-    internal let hLines: UInt
-    internal let style: Grid.Style
+fileprivate struct __HGridModifier: ViewModifier {
     
-    internal func body(content: Content) -> some View {
+    fileprivate let hLines: Int
+    fileprivate let style: Grid.Style
+    fileprivate let animation: (_ index: Int) -> Animation
+    
+    private let hRange: Range<Int>
+    
+    fileprivate init(
+        hLines: Int,
+        style: Grid.Style,
+        animation: @escaping (_ index: Int) -> Animation
+    ) {
+        var hRange = 0..<hLines
+        var hLines = hLines
+        if !style.edges {
+            hLines = hLines + 2
+            let lower = 1
+            let upper = hLines-1
+            hRange = lower..<upper
+        }
+        self.hLines = hLines
+        self.style = style
+        self.hRange = hRange
+        self.animation = animation
+    }
+    
+    fileprivate func body(content: Content) -> some View {
         ZStack {
-            Grid(vLines: vLines, hLines: hLines, edges: style.edges)
-                .stroke(style.colour, strokeStyle: style.stroke)
+            HGrid(hRange: hRange, hLines: hLines, style: style, animation: animation)
             content
         }
+    }
+}
+
+// MARK: Cell
+fileprivate struct __Horrizontal_Grid_Cell: View {
+    
+    fileprivate let index: Int
+    fileprivate let total: Int
+    fileprivate let style: Grid.Style
+    fileprivate let animation: (_ index: Int) -> Animation
+    
+    @State private var startAnimation: Bool = false
+    
+    fileprivate var body: some View {
+        if total == 1 {
+            __Horrizontal_Line_Center()
+                .__gridAnimation(animation: .draw(direction: .topLeading), style: style, startAnimation: startAnimation)
+                .animateOnAppear(using: animation(index)) {
+                    self.startAnimation = true
+                }
+        } else {
+            __Horrizontal_Line(index: index, total: total)
+                .__gridAnimation(animation: .draw(direction: .topLeading), style: style, startAnimation: startAnimation)
+                .animateOnAppear(using: animation(index)) {
+                    self.startAnimation = true
+                }
+        }
+    }
+}
+
+// MARK: Shape
+fileprivate struct __Horrizontal_Line: Shape {
+    
+    fileprivate let index: Int
+    fileprivate let total: Int
+    fileprivate let direction: Grid.Animation.HorizontalDirection = .leading
+    
+    fileprivate func path(in rect: CGRect) -> Path {
+        let sectionSize = divide(rect.height, total-1)
+        let y = CGFloat(index) * sectionSize
+
+        let leading = CGPoint(x: rect.minX, y: y)
+        let trailing = CGPoint(x: rect.maxX, y: y)
+        
+        var path = Path()
+        if direction == .leading {
+            path.move(to: leading)
+            path.addLine(to: trailing)
+        } else {
+            path.move(to: trailing)
+            path.addLine(to: leading)
+        }
+        return path
+    }
+}
+
+fileprivate struct __Horrizontal_Line_Center: Shape {
+    
+    fileprivate let direction: Grid.Animation.HorizontalDirection = .leading
+    
+    fileprivate func path(in rect: CGRect) -> Path {
+        let leading = CGPoint(x: rect.minX, y: rect.midX)
+        let trailing = CGPoint(x: rect.maxX, y: rect.midX)
+        
+        var path = Path()
+        if direction == .leading {
+            path.move(to: leading)
+            path.addLine(to: trailing)
+        } else {
+            path.move(to: trailing)
+            path.addLine(to: leading)
+        }
+        
+        return path
+    }
+}
+
+// MARK: - Vertical
+public struct VGrid: View {
+    public let vRange: Range<Int>
+    public let vLines: Int
+    public let style: Grid.Style
+    public let animation: (_ index: Int) -> Animation
+    
+    public var body: some View {
+        ForEach(vRange, id: \.self) { index in
+            __Vertical_Grid_Cell(index: index, total: vLines, style: style, animation: animation)
+        }
+    }
+}
+
+fileprivate struct __VGridModifier: ViewModifier {
+    
+    fileprivate let vLines: Int
+    fileprivate let style: Grid.Style
+    fileprivate let animation: (_ index: Int) -> Animation
+    
+    private let vRange: Range<Int>
+    
+    fileprivate init(
+        vLines: Int,
+        style: Grid.Style,
+        animation: @escaping (_ index: Int) -> Animation
+    ) {
+        var vRange = 0..<vLines
+        var vLines = vLines
+        if !style.edges {
+            vLines = vLines + 2
+            let lower = 1
+            let upper = vLines-1
+            vRange = lower..<upper
+        }
+        self.vLines = vLines
+        self.style = style
+        self.vRange = vRange
+        self.animation = animation
+    }
+    
+    fileprivate func body(content: Content) -> some View {
+        ZStack {
+            VGrid(vRange: vRange, vLines: vLines, style: style, animation: animation)
+            content
+        }
+    }
+}
+
+// MARK: Cell
+fileprivate struct __Vertical_Grid_Cell: View {
+    
+    fileprivate let index: Int
+    fileprivate let total: Int
+    fileprivate let style: Grid.Style
+    fileprivate let animation: (_ index: Int) -> Animation
+        
+    @State private var startAnimation: Bool = false
+    
+    fileprivate var body: some View {
+        if total == 1 {
+            __Vertical_Line_Center()
+                .__gridAnimation(animation: .draw(direction: .topLeading), style: style, startAnimation: startAnimation)
+                .animateOnAppear(using: animation(index)) {
+                    self.startAnimation = true
+                }
+        } else {
+            __Vertical_Line(index: index, total: total)
+                .__gridAnimation(animation: .draw(direction: .topLeading), style: style, startAnimation: startAnimation)
+                .animateOnAppear(using: animation(index)) {
+                    print(index)
+                    self.startAnimation = true
+                }
+        }
+    }
+}
+
+// MARK: Shape
+fileprivate struct __Vertical_Line: Shape {
+    
+    fileprivate let index: Int
+    fileprivate let total: Int
+    fileprivate let direction: Grid.Animation.VerticalDirection = .bottom
+    
+    fileprivate func path(in rect: CGRect) -> Path {
+        let sectionSize = divide(rect.width, total-1)
+        let x = CGFloat(index) * sectionSize
+        
+        let top = CGPoint(x: x, y: rect.minY)
+        let bottom = CGPoint(x: x, y: rect.maxY)
+
+        var path = Path()
+        if direction == .bottom {
+            path.move(to: top)
+            path.addLine(to: bottom)
+        } else {
+            path.move(to: bottom)
+            path.addLine(to: top)
+        }
+
+        return path
+    }
+}
+
+fileprivate struct __Vertical_Line_Center: Shape {
+    
+    fileprivate let direction: Grid.Animation.VerticalDirection = .bottom
+    
+    fileprivate func path(in rect: CGRect) -> Path {
+        let top = CGPoint(x: rect.midX, y: rect.minY)
+        let bottom = CGPoint(x: rect.midX, y: rect.maxY)
+
+        var path = Path()
+        if direction == .bottom {
+            path.move(to: top)
+            path.addLine(to: bottom)
+        } else {
+            path.move(to: bottom)
+            path.addLine(to: top)
+        }
+
+        return path
     }
 }

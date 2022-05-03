@@ -13,14 +13,14 @@ extension View {
     /// Labels for the Y axis.
     public func yAxisLabels<ChartData: CTChartData & DataHelper>(
         chartData: ChartData,
-        position: Set<HorizontalEdge>,
+        position: HorizontalEdge,
         data: YAxisLabelStyle.Data,
         style: YAxisLabelStyle = .standard
     ) -> some View {
         self.modifier(
             _YAxisLabelsModifier_Vertical(
                 chartData: chartData,
-                position: Array(position),
+                position: position,
                 data: data,
                 style: style
             )
@@ -30,14 +30,14 @@ extension View {
     /// Labels for the Y axis.
     public func yAxisLabels<ChartData: CTChartData & DataHelper>(
         chartData: ChartData,
-        position: Set<VerticalEdge>,
+        position: VerticalEdge,
         data: YAxisLabelStyle.Data,
         style: YAxisLabelStyle = .standard
     ) -> some View {
         self.modifier(
             _YAxisLabelsModifier_Horizontal(
                 chartData: chartData,
-                position: Array(position),
+                position: position,
                 data: data,
                 style: style
             )
@@ -49,7 +49,7 @@ extension View {
 fileprivate struct _YAxisLabelsModifier_Vertical<ChartData: CTChartData & DataHelper>: ViewModifier {
 
     let chartData: ChartData
-    let position: [HorizontalEdge]
+    let position: HorizontalEdge
     let data: YAxisLabelStyle.Data
     let style: YAxisLabelStyle
 
@@ -57,8 +57,8 @@ fileprivate struct _YAxisLabelsModifier_Vertical<ChartData: CTChartData & DataHe
     
 
     func body(content: Content) -> some View {
-        ForEach(position) { pos in
-            switch pos {
+        Group {
+            switch position {
             case .leading:
                 HStack(spacing: style.padding) {
                     YAxisLabels(chartData: chartData, data: data, style: style, orientation: axisOrientation)
@@ -77,7 +77,7 @@ fileprivate struct _YAxisLabelsModifier_Vertical<ChartData: CTChartData & DataHe
 fileprivate struct _YAxisLabelsModifier_Horizontal<ChartData: CTChartData & DataHelper>: ViewModifier {
 
     let chartData: ChartData
-    let position: [VerticalEdge]
+    let position: VerticalEdge
     let data: YAxisLabelStyle.Data
     let style: YAxisLabelStyle
 
@@ -85,8 +85,8 @@ fileprivate struct _YAxisLabelsModifier_Horizontal<ChartData: CTChartData & Data
     
 
     func body(content: Content) -> some View {
-        ForEach(position) { pos in
-            switch pos {
+        Group {
+            switch position {
             case .bottom:
                 VStack(spacing: style.padding) {
                     content

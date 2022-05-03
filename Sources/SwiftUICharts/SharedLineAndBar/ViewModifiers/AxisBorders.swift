@@ -232,7 +232,7 @@ fileprivate struct _Animate_From_Middle: View {
     }
 }
 
-fileprivate class Cache {
+fileprivate final class AxisBorderCache {
     var edge: ChartBorder?
     var rect: CGRect?
     
@@ -247,13 +247,10 @@ public struct AxisBorderShape: Shape {
         self.edge = edge
     }
     
-    fileprivate let cache = Cache()
-    func shouldUseCache(edge: ChartBorder, rect: CGRect) -> Bool {
-        edge == cache.edge && rect == cache.rect
-    }
+    private let cache = AxisBorderCache()
     
     public func path(in rect: CGRect) -> Path {
-        if shouldUseCache(edge: edge, rect: rect) {
+        if edge == cache.edge && rect == cache.rect {
             return cache.path
         }
         

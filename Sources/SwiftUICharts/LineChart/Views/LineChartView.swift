@@ -35,9 +35,7 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
     }
     
     public var body: some View {
-            ZStack {
-                LineSubView(chartData: chartData)
-            }
+        LineSubView(chartData: chartData)
             .modifier(ChartSizeUpdating(stateObject: chartData.stateObject))
     }
 }
