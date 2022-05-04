@@ -22,7 +22,7 @@ internal struct HorizontalGridView<T>: View where T: CTLineBarChartDataProtocol 
     
     var body: some View {
         HorizontalGridShape()
-            .trim(to: startAnimation ? 1 : 0)
+            .trim(to: animationValue)
             .stroke(chartData.chartStyle.yAxisGridStyle.lineColour,
                     style: StrokeStyle(lineWidth: chartData.chartStyle.yAxisGridStyle.lineWidth,
                                        dash: chartData.chartStyle.yAxisGridStyle.dash,
@@ -34,5 +34,13 @@ internal struct HorizontalGridView<T>: View where T: CTLineBarChartDataProtocol 
             .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
+        }
     }
 }

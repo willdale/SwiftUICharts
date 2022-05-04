@@ -58,8 +58,6 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
         self.chartData.groupSpacing = groupSpacing
     }
     
-    @State private var startAnimation: Bool = false
-    
     public var body: some View {
         GeometryReader { geo in
             if chartData.isGreaterThanTwo() {

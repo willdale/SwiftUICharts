@@ -30,6 +30,8 @@ public final class PieChartData: CTPieChartDataProtocol, Publishable {
     public final var noDataText: Text
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
+    public var disableAnimation = false
+    
     // MARK: Initializer
     /// Initialises Pie Chart data.
     ///

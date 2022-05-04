@@ -36,6 +36,8 @@ public final class MultiLineChartData: CTLineChartDataProtocol, GetDataProtocol,
     public var subscription = SubscriptionSet().subscription
     public let touchedDataPointPublisher = PassthroughSubject<DataPoint,Never>()
     
+    public var disableAnimation = false
+    
     // MARK: Initializers
     /// Initialises a Multi Line Chart.
     ///
@@ -128,7 +130,8 @@ public final class MultiLineChartData: CTLineChartDataProtocol, GetDataProtocol,
                           minValue: self.minValue,
                           range: self.range,
                           animation: self.chartStyle.globalAnimation,
-                          isFilled: false)
+                          isFilled: false,
+                          disableAnimation: self.disableAnimation)
         }
     }
     

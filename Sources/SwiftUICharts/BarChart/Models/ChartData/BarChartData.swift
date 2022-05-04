@@ -34,6 +34,8 @@ public final class BarChartData: CTBarChartDataProtocol, GetDataProtocol, Publis
     public final var noDataText: Text
     public final let chartType: (chartType: ChartType, dataSetType: DataSetType)
     
+    public var disableAnimation = false
+    
     // MARK: Initializer
     /// Initialises a standard Bar Chart.
     ///

@@ -36,6 +36,8 @@ public final class RangedLineChartData: CTLineChartDataProtocol, GetDataProtocol
     public var subscription = SubscriptionSet().subscription
     public let touchedDataPointPublisher = PassthroughSubject<DataPoint,Never>()
     
+    public var disableAnimation = false
+    
     // MARK: Initializer
     /// Initialises a ranged line chart.
     ///
@@ -136,7 +138,8 @@ public final class RangedLineChartData: CTLineChartDataProtocol, GetDataProtocol
                       minValue: self.minValue,
                       range: self.range,
                       animation: self.chartStyle.globalAnimation,
-                      isFilled: false)
+                      isFilled: false,
+                      disableAnimation: disableAnimation)
     }
     
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {

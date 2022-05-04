@@ -38,6 +38,8 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
     public final var noDataText: Text
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
+    public var disableAnimation = false
+    
     // MARK: Initializer
     /// Initialises a Stacked Bar Chart.
     ///

@@ -49,6 +49,7 @@ import SwiftUI
 public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartData {
     
     @ObservedObject private var chartData: ChartData
+    @State private var timer: Timer?
     
     /// Initialises a line chart view.
     /// - Parameter chartData: Must be RangedLineChartData model.
@@ -142,6 +143,10 @@ public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartD
             // Needed for axes label frames
             .onAppear {
                 self.chartData.viewData.chartSize = geo.frame(in: .local)
+                self.timer?.invalidate()
+                self.timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+                    NotificationCenter.default.post(name: .updateLayoutDidFinish, object: self)
+                }
             }
         } else { CustomNoDataView(chartData: chartData) }
     }

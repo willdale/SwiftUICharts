@@ -85,7 +85,7 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                 chartData.poiMarker(value: markerValue,
                                     range: range,
                                     minValue: minValue)
-                    .trim(to: startAnimation ? 1 : 0)
+                    .trim(to: animationValue)
                     .stroke(lineColour, style: strokeStyle)
                 
                 GeometryReader { geo in
@@ -160,6 +160,14 @@ internal struct YAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                                                 strokeStyle: strokeStyle.toStroke(),
                                                 prioity: 2,
                                                 chartType: .line))
+        }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
         }
     }
 }

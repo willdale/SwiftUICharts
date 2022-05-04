@@ -72,6 +72,7 @@ public protocol CTChartData: ObservableObject, Identifiable {
      */
     var chartType: (chartType: ChartType, dataSetType: DataSetType) { get }
     
+    var disableAnimation: Bool { get set }
     
     /**
      Returns whether there are two or more data points.
