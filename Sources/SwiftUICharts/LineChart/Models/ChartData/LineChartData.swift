@@ -74,9 +74,9 @@ public final class LineChartData: CTLineChartDataProtocol, GetDataProtocol, Publ
             switch self.chartStyle.xAxisLabelsFrom {
             case .dataPoint(let angle):
                 
-                GeometryReader { geo in
-                    ZStack {
-                        ForEach(self.dataSets.dataPoints.indices, id: \.self) { i in
+                ZStack {
+                    ForEach(self.dataSets.dataPoints.indices, id: \.self) { i in                                                     
+                        GeometryReader { geo in
                             if let label = self.dataSets.dataPoints[i].xAxisLabel {
                                 if label != "" {
                                     TempText(chartData: self, label: label, rotation: angle)
