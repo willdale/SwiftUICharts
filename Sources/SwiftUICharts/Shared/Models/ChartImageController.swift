@@ -27,7 +27,7 @@ public final class ChartImageHostingController<Content: View>: UIHostingControll
         super.init(rootView: rootView)
     }
     
-    @MainActor required dynamic init?(coder aDecoder: NSCoder) {
+    required dynamic init?(coder aDecoder: NSCoder) {
         return nil
     }
     
