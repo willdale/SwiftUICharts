@@ -57,7 +57,7 @@ internal struct ColourBar<CD: CTBarChartDataProtocol & GetDataProtocol,
     }
     
     func frameAnimationValue(_ value: Double, height: CGFloat) -> CGFloat {
-        let value = BarLayout.barHeight(height, value, chartData.maxValue)
+        let value = BarLayout.barHeight(Double(height), value, chartData.maxValue)
         if chartData.disableAnimation {
             return value
         } else {
@@ -66,7 +66,7 @@ internal struct ColourBar<CD: CTBarChartDataProtocol & GetDataProtocol,
     }
     
     func offsetAnimationValue(_ value: Double, size: CGSize) -> CGSize {
-        let startValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, value, chartData.maxValue)
+        let startValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, Double(value), chartData.maxValue)
         let endValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, 0, 0)
         if chartData.disableAnimation {
             return startValue
@@ -130,7 +130,7 @@ internal struct GradientColoursBar<CD: CTBarChartDataProtocol & GetDataProtocol,
     }
     
     func frameAnimationValue(_ value: Double, height: CGFloat) -> CGFloat {
-        let value = BarLayout.barHeight(height, value, chartData.maxValue)
+        let value = BarLayout.barHeight(height, Double(value), chartData.maxValue)
         if chartData.disableAnimation {
             return value
         } else {
@@ -139,7 +139,7 @@ internal struct GradientColoursBar<CD: CTBarChartDataProtocol & GetDataProtocol,
     }
     
     func offsetAnimationValue(_ value: Double, size: CGSize) -> CGSize {
-        let startValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, value, chartData.maxValue)
+        let startValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, Double(value), chartData.maxValue)
         let endValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, 0, 0)
         if chartData.disableAnimation {
             return startValue
@@ -204,7 +204,7 @@ internal struct GradientStopsBar<CD: CTBarChartDataProtocol & GetDataProtocol,
     }
     
     func frameAnimationValue(_ value: Double, height: CGFloat) -> CGFloat {
-        let value = BarLayout.barHeight(height, value, chartData.maxValue)
+        let value = BarLayout.barHeight(height, Double(value), chartData.maxValue)
         if chartData.disableAnimation {
             return value
         } else {
@@ -213,7 +213,7 @@ internal struct GradientStopsBar<CD: CTBarChartDataProtocol & GetDataProtocol,
     }
     
     func offsetAnimationValue(_ value: Double, size: CGSize) -> CGSize {
-        let startValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, value, chartData.maxValue)
+        let startValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, Double(value), chartData.maxValue)
         let endValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, 0, 0)
         if chartData.disableAnimation {
             return startValue
@@ -449,7 +449,7 @@ internal struct RangedBarChartColourCell<CD:RangedBarChartData>: View {
     }
     
     func frameAnimationValue(_ value: Double, height: CGFloat) -> CGFloat {
-        let value = BarLayout.barHeight(height, value, chartData.range)
+        let value = BarLayout.barHeight(height, Double(value), chartData.range)
         if chartData.disableAnimation {
             return value
         } else {
@@ -514,7 +514,7 @@ internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
     }
     
     func frameAnimationValue(_ value: Double, height: CGFloat) -> CGFloat {
-        let value = BarLayout.barHeight(height, value, chartData.range)
+        let value = BarLayout.barHeight(height, Double(value), chartData.range)
         if chartData.disableAnimation {
             return value
         } else {
@@ -579,7 +579,7 @@ internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
     }
     
     func frameAnimationValue(_ value: Double, height: CGFloat) -> CGFloat {
-        let value = BarLayout.barHeight(height, value, chartData.range)
+        let value = BarLayout.barHeight(height, Double(value), chartData.range)
         if chartData.disableAnimation {
             return value
         } else {
@@ -639,7 +639,7 @@ internal struct HorizontalColourBar<CD: CTBarChartDataProtocol & GetDataProtocol
     }
     
     func animationValue(_ value: Double, width: CGFloat) -> CGFloat {
-        let value = BarLayout.barHeight(width, value, chartData.maxValue)
+        let value = BarLayout.barHeight(width, Double(value), chartData.maxValue)
         if chartData.disableAnimation {
             return value
         } else {
@@ -704,7 +704,7 @@ internal struct HorizontalGradientColoursBar<CD: CTBarChartDataProtocol & GetDat
     }
     
     func animationValue(_ value: Double, width: CGFloat) -> CGFloat {
-        let value = BarLayout.barHeight(width, value, chartData.maxValue)
+        let value = BarLayout.barHeight(width, Double(value), chartData.maxValue)
         if chartData.disableAnimation {
             return value
         } else {
@@ -769,7 +769,7 @@ internal struct HorizontalGradientStopsBar<CD: CTBarChartDataProtocol & GetDataP
     }
     
     func animationValue(_ value: Double, width: CGFloat) -> CGFloat {
-        let value = BarLayout.barHeight(width, value, chartData.maxValue)
+        let value = BarLayout.barHeight(width, Double(value), chartData.maxValue)
         if chartData.disableAnimation {
             return value
         } else {
