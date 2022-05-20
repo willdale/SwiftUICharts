@@ -60,12 +60,16 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
         if chartData.isGreaterThanTwo() {
             HStack(alignment: .bottom, spacing: 0) {
                 ForEach(chartData.dataSets.dataSets) { dataSet in
+                    GeometryReader { geo in
                     StackElementSubView(dataSet: dataSet,
                                         specifier: chartData.infoView.touchSpecifier,
                                         formatter: chartData.infoView.touchFormatter)
                         .clipShape(RoundedRectangleBarShape(chartData.barStyle.cornerRadius))
-                        .scaleEffect(y: animationValue(dataSet.maxValue(), chartData.maxValue), anchor: .bottom)
-                        .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
+                        
+                        .frame(width: BarLayout.barWidth(geo.size.width, chartData.barStyle.barWidth))
+                        .frame(height: frameAnimationValue(dataSet.maxValue(), height: geo.size.height))
+                        .offset(offsetAnimationValue(dataSet.maxValue(), size: geo.size))
+                        
                         .animation(.default, value: chartData.dataSets)
                         .background(Color(.gray).opacity(0.000000001))
                         .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
@@ -75,6 +79,7 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
                             self.startAnimation = false
                         }
                         .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                    }
                 }
             }
             .layoutNotifier(timer)
@@ -87,6 +92,25 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
             return value
         } else {
             return startAnimation ? value : 0
+        }
+    }
+    
+    func frameAnimationValue(_ value: Double, height: CGFloat) -> CGFloat {
+        let value = BarLayout.barHeight(height, value, chartData.maxValue)
+        if chartData.disableAnimation {
+            return value
+        } else {
+            return startAnimation ? value : 0
+        }
+    }
+    
+    func offsetAnimationValue(_ value: Double, size: CGSize) -> CGSize {
+        let value = BarLayout.barOffset(size, chartData.barStyle.barWidth, value, chartData.maxValue)
+        let zero = BarLayout.barOffset(size, chartData.barStyle.barWidth, 0, 0)
+        if chartData.disableAnimation {
+            return value
+        } else {
+            return startAnimation ? value : zero
         }
     }
 }

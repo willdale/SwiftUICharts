@@ -37,28 +37,41 @@ internal struct ColourBar<CD: CTBarChartDataProtocol & GetDataProtocol,
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
-            .fill(colour)
-            .scaleEffect(y: animationValue, anchor: .bottom)
-            .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
-            .background(Color(.gray).opacity(0.000000001))
-            .animation(.default, value: chartData.dataSets)
-            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = true
-            }
-            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = false
-            }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
-                                                                    formatter: chartData.infoView.touchFormatter))
+        GeometryReader { geo in
+            RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
+                .fill(colour)
+                .frame(width: BarLayout.barWidth(geo.size.width, chartData.barStyle.barWidth))
+                .frame(height: frameAnimationValue(dataPoint.value, height: geo.size.height))
+                .offset(offsetAnimationValue(dataPoint.value, size: geo.size))
+                .background(Color(.gray).opacity(0.000000001))
+                .animation(.default, value: chartData.dataSets)
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = true
+                }
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = false
+                }
+                .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
+                                                                        formatter: chartData.infoView.touchFormatter))
+        }
     }
     
-    var animationValue: CGFloat {
-        let value = divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue)
+    func frameAnimationValue(_ value: Double, height: CGFloat) -> CGFloat {
+        let value = BarLayout.barHeight(height, Double(value), chartData.maxValue)
         if chartData.disableAnimation {
             return value
         } else {
             return startAnimation ? value : 0
+        }
+    }
+    
+    func offsetAnimationValue(_ value: Double, size: CGSize) -> CGSize {
+        let startValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, Double(value), chartData.maxValue)
+        let endValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, 0, 0)
+        if chartData.disableAnimation {
+            return startValue
+        } else {
+            return startAnimation ? startValue : endValue
         }
     }
 }
@@ -95,30 +108,43 @@ internal struct GradientColoursBar<CD: CTBarChartDataProtocol & GetDataProtocol,
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
-            .fill(LinearGradient(gradient: Gradient(colors: colours),
-                                 startPoint: startPoint,
-                                 endPoint: endPoint))
-            .scaleEffect(y: animationValue, anchor: .bottom)
-            .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
-            .animation(.default, value: chartData.dataSets)
-            .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = true
-            }
-            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = false
-            }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
-                                                                    formatter: chartData.infoView.touchFormatter))
+        GeometryReader { geo in
+            RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
+                .fill(LinearGradient(gradient: Gradient(colors: colours),
+                                     startPoint: startPoint,
+                                     endPoint: endPoint))
+                .frame(width: BarLayout.barWidth(geo.size.width, chartData.barStyle.barWidth))
+                .frame(height: frameAnimationValue(dataPoint.value, height: geo.size.height))
+                .offset(offsetAnimationValue(dataPoint.value, size: geo.size))
+                .animation(.default, value: chartData.dataSets)
+                .background(Color(.gray).opacity(0.000000001))
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = true
+                }
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = false
+                }
+                .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
+                                                                        formatter: chartData.infoView.touchFormatter))
+        }
     }
     
-    var animationValue: CGFloat {
-        let value = divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue)
+    func frameAnimationValue(_ value: Double, height: CGFloat) -> CGFloat {
+        let value = BarLayout.barHeight(height, Double(value), chartData.maxValue)
         if chartData.disableAnimation {
             return value
         } else {
             return startAnimation ? value : 0
+        }
+    }
+    
+    func offsetAnimationValue(_ value: Double, size: CGSize) -> CGSize {
+        let startValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, Double(value), chartData.maxValue)
+        let endValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, 0, 0)
+        if chartData.disableAnimation {
+            return startValue
+        } else {
+            return startAnimation ? startValue : endValue
         }
     }
 }
@@ -156,30 +182,43 @@ internal struct GradientStopsBar<CD: CTBarChartDataProtocol & GetDataProtocol,
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
-            .fill(LinearGradient(gradient: Gradient(stops: stops),
-                                 startPoint: startPoint,
-                                 endPoint: endPoint))
-            .scaleEffect(y: animationValue, anchor: .bottom)
-            .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
-            .animation(.default, value: chartData.dataSets)
-            .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = true
-            }
-            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = false
-            }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
-                                                                    formatter: chartData.infoView.touchFormatter))
+        GeometryReader { geo in
+            RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
+                .fill(LinearGradient(gradient: Gradient(stops: stops),
+                                     startPoint: startPoint,
+                                     endPoint: endPoint))
+                .frame(width: BarLayout.barWidth(geo.size.width, chartData.barStyle.barWidth))
+                .frame(height: frameAnimationValue(dataPoint.value, height: geo.size.height))
+                .offset(offsetAnimationValue(dataPoint.value, size: geo.size))
+                .animation(.default, value: chartData.dataSets)
+                .background(Color(.gray).opacity(0.000000001))
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = true
+                }
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = false
+                }
+                .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
+                                                                        formatter: chartData.infoView.touchFormatter))
+        }
     }
     
-    var animationValue: CGFloat {
-        let value = divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue)
+    func frameAnimationValue(_ value: Double, height: CGFloat) -> CGFloat {
+        let value = BarLayout.barHeight(height, Double(value), chartData.maxValue)
         if chartData.disableAnimation {
             return value
         } else {
             return startAnimation ? value : 0
+        }
+    }
+    
+    func offsetAnimationValue(_ value: Double, size: CGSize) -> CGSize {
+        let startValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, Double(value), chartData.maxValue)
+        let endValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, 0, 0)
+        if chartData.disableAnimation {
+            return startValue
+        } else {
+            return startAnimation ? startValue : endValue
         }
     }
 }
@@ -383,26 +422,34 @@ internal struct RangedBarChartColourCell<CD:RangedBarChartData>: View {
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
-            .fill(colour)
-            .scaleEffect(y: animationValue, anchor: .center)
-            .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
-            .position(x: barSize.midX,
-                      y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
-            .animation(.default, value: chartData.dataSets)
-            .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = true
-            }
-            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = false
-            }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
-                                                                    formatter: chartData.infoView.touchFormatter))
+        GeometryReader { geo in
+            RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
+                .fill(colour)
+            
+                .frame(width: BarLayout.barWidth(geo.size.width, chartData.barStyle.barWidth))
+                .frame(height: frameAnimationValue(computedValue, height: geo.size.height))
+                .position(x: barSize.midX,
+                          y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
+            
+                .animation(.default, value: chartData.dataSets)
+                .background(Color(.gray).opacity(0.000000001))
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = true
+                }
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = false
+                }
+                .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
+                                                                        formatter: chartData.infoView.touchFormatter))
+        }
     }
     
-    var animationValue: CGFloat {
-        let value = divideByZeroProtection(CGFloat.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range)
+    var computedValue: Double {
+        divideByZeroProtection(Double.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range)
+    }
+    
+    func frameAnimationValue(_ value: Double, height: CGFloat) -> CGFloat {
+        let value = BarLayout.barHeight(height, Double(value), chartData.range)
         if chartData.disableAnimation {
             return value
         } else {
@@ -440,28 +487,34 @@ internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
-            .fill(LinearGradient(gradient: Gradient(colors: colours),
-                                 startPoint: startPoint,
-                                 endPoint: endPoint))
-            .scaleEffect(y: animationValue, anchor: .center)
-            .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
-            .position(x: barSize.midX,
-                      y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
-            .animation(.default, value: chartData.dataSets)
-            .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = true
-            }
-            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = false
-            }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
-                                                                    formatter: chartData.infoView.touchFormatter))
+        GeometryReader { geo in
+            RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
+                .fill(LinearGradient(gradient: Gradient(colors: colours),
+                                     startPoint: startPoint,
+                                     endPoint: endPoint))
+                .frame(width: BarLayout.barWidth(geo.size.width, chartData.barStyle.barWidth))
+                .frame(height: frameAnimationValue(computedValue, height: geo.size.height))
+                .position(x: barSize.midX,
+                          y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
+                .animation(.default, value: chartData.dataSets)
+                .background(Color(.gray).opacity(0.000000001))
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = true
+                }
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = false
+                }
+                .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
+                                                                        formatter: chartData.infoView.touchFormatter))
+        }
     }
     
-    var animationValue: CGFloat {
-        let value = divideByZeroProtection(CGFloat.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range)
+    var computedValue: Double {
+        dataPoint.upperValue - dataPoint.lowerValue
+    }
+    
+    func frameAnimationValue(_ value: Double, height: CGFloat) -> CGFloat {
+        let value = BarLayout.barHeight(height, Double(value), chartData.range)
         if chartData.disableAnimation {
             return value
         } else {
@@ -499,28 +552,34 @@ internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
-            .fill(LinearGradient(gradient: Gradient(stops: stops),
-                                 startPoint: startPoint,
-                                 endPoint: endPoint))
-            .scaleEffect(y: animationValue, anchor: .center)
-            .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
-            .position(x: barSize.midX,
-                      y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
-            .animation(.default, value: chartData.dataSets)
-            .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = true
-            }
-            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = false
-            }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
-                                                                    formatter: chartData.infoView.touchFormatter))
+        GeometryReader { geo in
+            RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
+                .fill(LinearGradient(gradient: Gradient(stops: stops),
+                                     startPoint: startPoint,
+                                     endPoint: endPoint))
+                .frame(width: BarLayout.barWidth(geo.size.width, chartData.barStyle.barWidth))
+                .frame(height: frameAnimationValue(computedValue, height: geo.size.height))
+                .position(x: barSize.midX,
+                          y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
+                .animation(.default, value: chartData.dataSets)
+                .background(Color(.gray).opacity(0.000000001))
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = true
+                }
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = false
+                }
+                .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
+                                                                        formatter: chartData.infoView.touchFormatter))
+        }
     }
     
-    var animationValue: CGFloat {
-        let value = divideByZeroProtection(CGFloat.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range)
+    var computedValue: Double {
+        divideByZeroProtection(Double.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range)
+    }
+    
+    func frameAnimationValue(_ value: Double, height: CGFloat) -> CGFloat {
+        let value = BarLayout.barHeight(height, Double(value), chartData.range)
         if chartData.disableAnimation {
             return value
         } else {
@@ -559,24 +618,28 @@ internal struct HorizontalColourBar<CD: CTBarChartDataProtocol & GetDataProtocol
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
-            .fill(colour)
-            .scaleEffect(x: animationValue, anchor: .leading)
-            .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
-            .animation(.default, value: chartData.dataSets)
-            .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = true
-            }
-            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = false
-            }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
-                                                                    formatter: chartData.infoView.touchFormatter))
+        GeometryReader { geo in
+            RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
+                .fill(colour)
+                .frame(height: BarLayout.barWidth(geo.size.height, chartData.barStyle.barWidth))
+                .frame(width: animationValue(dataPoint.value, width: geo.size.width))
+                .offset(CGSize(width: 0,
+                               height: BarLayout.barXOffset(geo.size.height, chartData.barStyle.barWidth)))
+                .animation(.default, value: chartData.dataSets)
+                .background(Color(.gray).opacity(0.000000001))
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = true
+                }
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = false
+                }
+                .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
+                                                                        formatter: chartData.infoView.touchFormatter))
+        }
     }
     
-    var animationValue: CGFloat {
-        let value = divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue)
+    func animationValue(_ value: Double, width: CGFloat) -> CGFloat {
+        let value = BarLayout.barHeight(width, Double(value), chartData.maxValue)
         if chartData.disableAnimation {
             return value
         } else {
@@ -618,26 +681,30 @@ internal struct HorizontalGradientColoursBar<CD: CTBarChartDataProtocol & GetDat
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
-            .fill(LinearGradient(gradient: Gradient(colors: colours),
-                                 startPoint: startPoint,
-                                 endPoint: endPoint))
-            .scaleEffect(x: animationValue, anchor: .leading)
-            .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
-            .animation(.default, value: chartData.dataSets)
-            .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = true
-            }
-            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = false
-            }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
-                                                                    formatter: chartData.infoView.touchFormatter))
+        GeometryReader { geo in
+            RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
+                .fill(LinearGradient(gradient: Gradient(colors: colours),
+                                     startPoint: startPoint,
+                                     endPoint: endPoint))
+                .frame(height: BarLayout.barWidth(geo.size.height, chartData.barStyle.barWidth))
+                .frame(width: animationValue(dataPoint.value, width: geo.size.width))
+                .offset(CGSize(width: 0,
+                               height: BarLayout.barXOffset(geo.size.height, chartData.barStyle.barWidth)))
+                .animation(.default, value: chartData.dataSets)
+                .background(Color(.gray).opacity(0.000000001))
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = true
+                }
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = false
+                }
+                .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
+                                                                        formatter: chartData.infoView.touchFormatter))
+        }
     }
     
-    var animationValue: CGFloat {
-        let value = divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue)
+    func animationValue(_ value: Double, width: CGFloat) -> CGFloat {
+        let value = BarLayout.barHeight(width, Double(value), chartData.maxValue)
         if chartData.disableAnimation {
             return value
         } else {
@@ -679,26 +746,30 @@ internal struct HorizontalGradientStopsBar<CD: CTBarChartDataProtocol & GetDataP
     @State private var startAnimation: Bool = false
     
     internal var body: some View {
-        RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
-            .fill(LinearGradient(gradient: Gradient(stops: stops),
-                                 startPoint: startPoint,
-                                 endPoint: endPoint))
-            .scaleEffect(x: animationValue, anchor: .leading)
-            .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
-            .animation(.default, value: chartData.dataSets)
-            .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = true
-            }
-            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
-                self.startAnimation = false
-            }
-            .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
-                                                                    formatter: chartData.infoView.touchFormatter))
+        GeometryReader { geo in
+            RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
+                .fill(LinearGradient(gradient: Gradient(stops: stops),
+                                     startPoint: startPoint,
+                                     endPoint: endPoint))
+                .frame(height: BarLayout.barWidth(geo.size.height, chartData.barStyle.barWidth))
+                .frame(width: animationValue(dataPoint.value, width: geo.size.width))
+                .offset(CGSize(width: 0,
+                               height: BarLayout.barXOffset(geo.size.height, chartData.barStyle.barWidth)))
+                .animation(.default, value: chartData.dataSets)
+                .background(Color(.gray).opacity(0.000000001))
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = true
+                }
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
+                    self.startAnimation = false
+                }
+                .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
+                                                                        formatter: chartData.infoView.touchFormatter))
+        }
     }
     
-    var animationValue: CGFloat {
-        let value = divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue)
+    func animationValue(_ value: Double, width: CGFloat) -> CGFloat {
+        let value = BarLayout.barHeight(width, Double(value), chartData.maxValue)
         if chartData.disableAnimation {
             return value
         } else {

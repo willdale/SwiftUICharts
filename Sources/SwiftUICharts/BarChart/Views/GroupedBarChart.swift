@@ -150,5 +150,4 @@ internal struct GroupedBarCell<ChartData>: View where ChartData: GroupedBarChart
             }
         }
     }
-    
 }
