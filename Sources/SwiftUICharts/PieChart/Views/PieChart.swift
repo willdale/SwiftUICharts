@@ -52,7 +52,7 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
                         .fill(chartData.dataSets.dataPoints[data].colour)
                         .overlay(dataPoint: chartData.dataSets.dataPoints[data], chartData: chartData, rect: geo.frame(in: .local))
                         .scaleEffect(animationValue)
-                        .opacity(animationValue)
+                        .opacity(Double(animationValue))
                         .animation(Animation.spring().delay(Double(data) * 0.06))
                         .if(chartData.infoView.touchOverlayInfo == [chartData.dataSets.dataPoints[data]]) {
                             $0

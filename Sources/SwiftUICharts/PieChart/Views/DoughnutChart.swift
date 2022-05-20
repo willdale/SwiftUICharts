@@ -55,7 +55,7 @@ public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData 
                                  chartData: chartData,
                                  rect: geo.frame(in: .local))
                         .scaleEffect(animationValue)
-                        .opacity(animationValue)
+                        .opacity(Double(animationValue))
                         .animation(Animation.spring().delay(Double(data) * 0.06))
                         .if(chartData.infoView.touchOverlayInfo == [chartData.dataSets.dataPoints[data]]) {
                             $0
