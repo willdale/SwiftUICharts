@@ -57,7 +57,7 @@ internal struct ColourBar<CD: CTBarChartDataProtocol & GetDataProtocol,
     }
     
     func frameAnimationValue(_ value: Double, height: CGFloat) -> CGFloat {
-        let value = BarLayout.barHeight(Double(height), value, chartData.maxValue)
+        let value = BarLayout.barHeight(height, Double(value), chartData.maxValue)
         if chartData.disableAnimation {
             return value
         } else {
@@ -444,8 +444,8 @@ internal struct RangedBarChartColourCell<CD:RangedBarChartData>: View {
         }
     }
     
-    var computedValue: CGFloat {
-        divideByZeroProtection(CGFloat.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range)
+    var computedValue: Double {
+        divideByZeroProtection(Double.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range)
     }
     
     func frameAnimationValue(_ value: Double, height: CGFloat) -> CGFloat {
@@ -509,7 +509,7 @@ internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
         }
     }
     
-    var computedValue: CGFloat {
+    var computedValue: Double {
         dataPoint.upperValue - dataPoint.lowerValue
     }
     
@@ -574,8 +574,8 @@ internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
         }
     }
     
-    var computedValue: CGFloat {
-        divideByZeroProtection(CGFloat.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range)
+    var computedValue: Double {
+        divideByZeroProtection(Double.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range)
     }
     
     func frameAnimationValue(_ value: Double, height: CGFloat) -> CGFloat {
