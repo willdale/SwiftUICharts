@@ -122,6 +122,10 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Get
                         Spacer()
                             .frame(minHeight: 0, maxHeight: 500)
                     }
+                    if self.chartStyle.xAxisLabelPosition == .bottom {
+                        Spacer()
+                            .frame(height: yAxisPaddingHeight + 8) // Why 8 ?
+                    }
                 }
                 
             case .chartData:
