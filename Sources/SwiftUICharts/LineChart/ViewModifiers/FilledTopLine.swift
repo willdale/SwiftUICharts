@@ -44,12 +44,12 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                               minValue: self.minValue,
                               range: self.range,
                               ignoreZero: chartData.dataSets.style.ignoreZero)
-                        .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                        .scale(y: animationValue, anchor: .bottom)
                         .stroke(colour, style: strokeStyle)
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                        .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
-                        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                        .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = false
                         }
                 } else if lineColour.colourType == .gradientColour,
@@ -63,15 +63,15 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                               minValue: self.minValue,
                               range: self.range,
                               ignoreZero: chartData.dataSets.style.ignoreZero)
-                        .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                        .scale(y: animationValue, anchor: .bottom)
                         .stroke(LinearGradient(gradient: Gradient(colors: colours),
                                                startPoint: startPoint,
                                                endPoint: endPoint),
                                 style: strokeStyle)
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                        .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
-                        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                        .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = false
                         }
                 } else if lineColour.colourType == .gradientStops,
@@ -86,20 +86,28 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                               minValue: self.minValue,
                               range: self.range,
                               ignoreZero: chartData.dataSets.style.ignoreZero)
-                        .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                        .scale(y: animationValue, anchor: .bottom)
                         .stroke(LinearGradient(gradient: Gradient(stops: stops),
                                                startPoint: startPoint,
                                                endPoint: endPoint),
                                 style: strokeStyle)
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                        .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
-                        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                        .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = false
                         }
                 }
                 content
             } else { content }
+        }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
         }
     }
 }

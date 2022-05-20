@@ -139,10 +139,10 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                             .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(self.markerName) %@", comment: ""), "\(markerValue)")))
                     }
                 }
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = false
                 }
             } else { content }

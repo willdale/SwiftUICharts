@@ -55,7 +55,6 @@ public final class ChartImageHostingController<Content: View>: UIHostingControll
         let renderer = UIGraphicsImageRenderer(size: targetSize)
         let image = renderer.image { context in
             view?.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
-            print("draw")
         }
         finalImage.send(image)
         cancellable?.cancel()

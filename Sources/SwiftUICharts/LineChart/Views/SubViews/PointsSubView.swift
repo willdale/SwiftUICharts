@@ -59,10 +59,10 @@ internal struct PointsSubView<DS>: View where DS: CTLineChartDataSet,
                             .fill(dataSets.dataPoints[index].pointColour?.fill ?? dataSets.pointStyle.fillColour)
                     })
             }
-            .animateOnAppear(using: animation) {
+            .animateOnAppear(disabled: disableAnimation, using: animation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: animation) {
+            .animateOnDisappear(disabled: disableAnimation, using: animation) {
                 self.startAnimation = false
             }
         case .outline:
@@ -85,10 +85,10 @@ internal struct PointsSubView<DS>: View where DS: CTLineChartDataSet,
                                     lineWidth: dataSets.pointStyle.lineWidth)
                     })
             }
-            .animateOnAppear(using: animation) {
+            .animateOnAppear(disabled: disableAnimation, using: animation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: animation) {
+            .animateOnDisappear(disabled: disableAnimation, using: animation) {
                 self.startAnimation = false
             }
         case .filledOutLine:
@@ -121,10 +121,10 @@ internal struct PointsSubView<DS>: View where DS: CTLineChartDataSet,
                                     .foregroundColor(dataSets.dataPoints[index].pointColour?.fill ?? dataSets.pointStyle.fillColour)
                     )
             }
-            .animateOnAppear(using: animation) {
+            .animateOnAppear(disabled: disableAnimation, using: animation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: animation) {
+            .animateOnDisappear(disabled: disableAnimation, using: animation) {
                 self.startAnimation = false
             }
         }

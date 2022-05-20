@@ -28,10 +28,10 @@ internal struct HorizontalGridView<T>: View where T: CTLineBarChartDataProtocol 
                                        dash: chartData.chartStyle.yAxisGridStyle.dash,
                                        dashPhase: chartData.chartStyle.yAxisGridStyle.dashPhase))
             .frame(height: chartData.chartStyle.yAxisGridStyle.lineWidth)
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
     }

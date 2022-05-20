@@ -8,8 +8,8 @@
 import SwiftUI
 
 extension View {
-    public func disableAnimation<ChartData>(chartData: ChartData) -> some View where ChartData: CTLineChartDataProtocol {
-        chartData.disableAnimation = true
+    public func disableAnimation<ChartData>(chartData: ChartData, _ value: Bool = true) -> some View where ChartData: CTChartData {
+        chartData.disableAnimation = value
         return self
     }
 }

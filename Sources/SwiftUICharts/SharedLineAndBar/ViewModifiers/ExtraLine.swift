@@ -209,10 +209,10 @@ internal struct ColourExtraLineView<ChartData>: View where ChartData: CTLineBarC
                 $0.scale(y: animationValue, anchor: .bottom)
                     .stroke(colour, style: stroke.strokeToStrokeStyle())
             })
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
             .zIndex(1)
@@ -272,10 +272,10 @@ internal struct ColoursExtraLineView<ChartData>: View where ChartData: CTLineBar
                             style: stroke.strokeToStrokeStyle())
             })
             
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
     }
@@ -333,10 +333,10 @@ internal struct StopsExtraLineView<ChartData>: View where ChartData: CTLineBarCh
                                            endPoint: endPoint),
                             style: stroke.strokeToStrokeStyle())
             })
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
             .zIndex(1)
@@ -444,10 +444,10 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
                         .scale(y: animationValue, anchor: .bottom)
                         .fill(dataPoint.pointColour?.fill ?? chartData.extraLineData.style.pointStyle.fillColour)
                 })
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = false
                 }
         case .bar:
@@ -468,10 +468,10 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
                         .scale(y: animationValue, anchor: .bottom)
                         .fill(dataPoint.pointColour?.fill ?? chartData.extraLineData.style.pointStyle.fillColour)
                 })
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = false
                 }
         }
@@ -526,10 +526,10 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
                         .stroke(dataPoint.pointColour?.border ?? chartData.extraLineData.style.pointStyle.borderColour,
                                 lineWidth: chartData.extraLineData.style.pointStyle.lineWidth)
                 })
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = false
                 }
         case .bar:
@@ -550,10 +550,10 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
                         .stroke(dataPoint.pointColour?.border ?? chartData.extraLineData.style.pointStyle.borderColour,
                                 lineWidth: chartData.extraLineData.style.pointStyle.lineWidth)
                 })
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = false
                 }
         }

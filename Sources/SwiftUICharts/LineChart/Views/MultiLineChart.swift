@@ -107,11 +107,8 @@ public struct MultiLineChart<ChartData>: View where ChartData: MultiLineChartDat
                 // Needed for axes label frames
                 .onAppear {
                     self.chartData.viewData.chartSize = geo.frame(in: .local)
-                    self.timer?.invalidate()
-                    self.timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
-                        NotificationCenter.default.post(name: .updateLayoutDidFinish, object: self)
-                    }
                 }
+                .layoutNotifier(timer)
             } else { CustomNoDataView(chartData: chartData) }
         }
     }
