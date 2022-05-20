@@ -39,18 +39,27 @@ internal struct ColourBar<CD: CTBarChartDataProtocol & GetDataProtocol,
     internal var body: some View {
         RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
             .fill(colour)
-            .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue) : 0, anchor: .bottom)
+            .scaleEffect(y: animationValue, anchor: .bottom)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
             .background(Color(.gray).opacity(0.000000001))
             .animation(.default, value: chartData.dataSets)
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
             .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
                                                                     formatter: chartData.infoView.touchFormatter))
+    }
+    
+    var animationValue: CGFloat {
+        let value = divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue)
+        if chartData.disableAnimation {
+            return value
+        } else {
+            return startAnimation ? value : 0
+        }
     }
 }
 
@@ -90,18 +99,27 @@ internal struct GradientColoursBar<CD: CTBarChartDataProtocol & GetDataProtocol,
             .fill(LinearGradient(gradient: Gradient(colors: colours),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
-            .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue) : 0, anchor: .bottom)
+            .scaleEffect(y: animationValue, anchor: .bottom)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
             .animation(.default, value: chartData.dataSets)
             .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
             .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
                                                                     formatter: chartData.infoView.touchFormatter))
+    }
+    
+    var animationValue: CGFloat {
+        let value = divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue)
+        if chartData.disableAnimation {
+            return value
+        } else {
+            return startAnimation ? value : 0
+        }
     }
 }
 
@@ -142,18 +160,27 @@ internal struct GradientStopsBar<CD: CTBarChartDataProtocol & GetDataProtocol,
             .fill(LinearGradient(gradient: Gradient(stops: stops),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
-            .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue) : 0, anchor: .bottom)
+            .scaleEffect(y: animationValue, anchor: .bottom)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
             .animation(.default, value: chartData.dataSets)
             .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
             .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
                                                                     formatter: chartData.infoView.touchFormatter))
+    }
+    
+    var animationValue: CGFloat {
+        let value = divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue)
+        if chartData.disableAnimation {
+            return value
+        } else {
+            return startAnimation ? value : 0
+        }
     }
 }
 
@@ -358,20 +385,29 @@ internal struct RangedBarChartColourCell<CD:RangedBarChartData>: View {
     internal var body: some View {
         RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
             .fill(colour)
-            .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range) : 0, anchor: .center)
+            .scaleEffect(y: animationValue, anchor: .center)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
             .position(x: barSize.midX,
                       y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
             .animation(.default, value: chartData.dataSets)
             .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
             .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
                                                                     formatter: chartData.infoView.touchFormatter))
+    }
+    
+    var animationValue: CGFloat {
+        let value = divideByZeroProtection(CGFloat.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range)
+        if chartData.disableAnimation {
+            return value
+        } else {
+            return startAnimation ? value : 0
+        }
     }
 }
 
@@ -408,20 +444,29 @@ internal struct RangedBarChartColoursCell<CD:RangedBarChartData>: View {
             .fill(LinearGradient(gradient: Gradient(colors: colours),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
-            .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range) : 0, anchor: .center)
+            .scaleEffect(y: animationValue, anchor: .center)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
             .position(x: barSize.midX,
                       y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
             .animation(.default, value: chartData.dataSets)
             .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
             .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
                                                                     formatter: chartData.infoView.touchFormatter))
+    }
+    
+    var animationValue: CGFloat {
+        let value = divideByZeroProtection(CGFloat.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range)
+        if chartData.disableAnimation {
+            return value
+        } else {
+            return startAnimation ? value : 0
+        }
     }
 }
 
@@ -458,20 +503,29 @@ internal struct RangedBarChartStopsCell<CD:RangedBarChartData>: View {
             .fill(LinearGradient(gradient: Gradient(stops: stops),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
-            .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range) : 0, anchor: .center)
+            .scaleEffect(y: animationValue, anchor: .center)
             .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
             .position(x: barSize.midX,
                       y: chartData.getBarPositionX(dataPoint: dataPoint, height: barSize.height))
             .animation(.default, value: chartData.dataSets)
             .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
             .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
                                                                     formatter: chartData.infoView.touchFormatter))
+    }
+    
+    var animationValue: CGFloat {
+        let value = divideByZeroProtection(CGFloat.self, (dataPoint.upperValue - dataPoint.lowerValue), chartData.range)
+        if chartData.disableAnimation {
+            return value
+        } else {
+            return startAnimation ? value : 0
+        }
     }
 }
 
@@ -507,18 +561,27 @@ internal struct HorizontalColourBar<CD: CTBarChartDataProtocol & GetDataProtocol
     internal var body: some View {
         RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
             .fill(colour)
-            .scaleEffect(x: startAnimation ? divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue) : 0, anchor: .leading)
+            .scaleEffect(x: animationValue, anchor: .leading)
             .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
             .animation(.default, value: chartData.dataSets)
             .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
             .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
                                                                     formatter: chartData.infoView.touchFormatter))
+    }
+    
+    var animationValue: CGFloat {
+        let value = divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue)
+        if chartData.disableAnimation {
+            return value
+        } else {
+            return startAnimation ? value : 0
+        }
     }
 }
 
@@ -559,18 +622,27 @@ internal struct HorizontalGradientColoursBar<CD: CTBarChartDataProtocol & GetDat
             .fill(LinearGradient(gradient: Gradient(colors: colours),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
-            .scaleEffect(x: startAnimation ? divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue) : 0, anchor: .leading)
+            .scaleEffect(x: animationValue, anchor: .leading)
             .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
             .animation(.default, value: chartData.dataSets)
             .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
             .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
                                                                     formatter: chartData.infoView.touchFormatter))
+    }
+    
+    var animationValue: CGFloat {
+        let value = divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue)
+        if chartData.disableAnimation {
+            return value
+        } else {
+            return startAnimation ? value : 0
+        }
     }
 }
 
@@ -611,17 +683,26 @@ internal struct HorizontalGradientStopsBar<CD: CTBarChartDataProtocol & GetDataP
             .fill(LinearGradient(gradient: Gradient(stops: stops),
                                  startPoint: startPoint,
                                  endPoint: endPoint))
-            .scaleEffect(x: startAnimation ? divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue) : 0, anchor: .leading)
+            .scaleEffect(x: animationValue, anchor: .leading)
             .scaleEffect(y: chartData.barStyle.barWidth, anchor: .center)
             .animation(.default, value: chartData.dataSets)
             .background(Color(.gray).opacity(0.000000001))
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
             .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier,
                                                                     formatter: chartData.infoView.touchFormatter))
+    }
+    
+    var animationValue: CGFloat {
+        let value = divideByZeroProtection(CGFloat.self, dataPoint.value, chartData.maxValue)
+        if chartData.disableAnimation {
+            return value
+        } else {
+            return startAnimation ? value : 0
+        }
     }
 }

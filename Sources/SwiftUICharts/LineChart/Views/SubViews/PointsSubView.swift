@@ -18,19 +18,22 @@ internal struct PointsSubView<DS>: View where DS: CTLineChartDataSet,
     private let range: Double
     private let animation: Animation
     private let isFilled: Bool
-    
+    private let disableAnimation: Bool
+        
     internal init(
         dataSets: DS,
         minValue: Double,
         range: Double,
         animation: Animation,
-        isFilled: Bool
+        isFilled: Bool,
+        disableAnimation: Bool
     ) {
         self.dataSets = dataSets
         self.minValue = minValue
         self.range = range
         self.animation = animation
         self.isFilled = isFilled
+        self.disableAnimation = disableAnimation
     }
     
     @State private var startAnimation: Bool = false
@@ -49,17 +52,17 @@ internal struct PointsSubView<DS>: View where DS: CTLineChartDataSet,
                        ignoreZero: dataSets.style.ignoreZero,
                        pointStyle: dataSets.pointStyle.pointShape)
                     .ifElse(!isFilled, if: {
-                        $0.trim(to: startAnimation ? 1 : 0)
+                        $0.trim(to: animationValue)
                             .fill(dataSets.dataPoints[index].pointColour?.fill ?? dataSets.pointStyle.fillColour)
                     }, else: {
-                        $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                        $0.scale(y: animationValue, anchor: .bottom)
                             .fill(dataSets.dataPoints[index].pointColour?.fill ?? dataSets.pointStyle.fillColour)
                     })
             }
-            .animateOnAppear(using: animation) {
+            .animateOnAppear(disabled: disableAnimation, using: animation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: animation) {
+            .animateOnDisappear(disabled: disableAnimation, using: animation) {
                 self.startAnimation = false
             }
         case .outline:
@@ -73,19 +76,19 @@ internal struct PointsSubView<DS>: View where DS: CTLineChartDataSet,
                        ignoreZero: dataSets.style.ignoreZero,
                        pointStyle: dataSets.pointStyle.pointShape)
                     .ifElse(!isFilled, if: {
-                        $0.trim(to: startAnimation ? 1 : 0)
+                        $0.trim(to: animationValue)
                             .stroke(dataSets.dataPoints[index].pointColour?.border ?? dataSets.pointStyle.borderColour,
                                     lineWidth: dataSets.pointStyle.lineWidth)
                     }, else: {
-                        $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                        $0.scale(y: animationValue, anchor: .bottom)
                             .stroke(dataSets.dataPoints[index].pointColour?.border ?? dataSets.pointStyle.borderColour,
                                     lineWidth: dataSets.pointStyle.lineWidth)
                     })
             }
-            .animateOnAppear(using: animation) {
+            .animateOnAppear(disabled: disableAnimation, using: animation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: animation) {
+            .animateOnDisappear(disabled: disableAnimation, using: animation) {
                 self.startAnimation = false
             }
         case .filledOutLine:
@@ -99,11 +102,11 @@ internal struct PointsSubView<DS>: View where DS: CTLineChartDataSet,
                        ignoreZero: dataSets.style.ignoreZero,
                        pointStyle: dataSets.pointStyle.pointShape)
                     .ifElse(!isFilled, if: {
-                        $0.trim(to: startAnimation ? 1 : 0)
+                        $0.trim(to: animationValue)
                             .stroke(dataSets.dataPoints[index].pointColour?.border ?? dataSets.pointStyle.borderColour,
                                     lineWidth: dataSets.pointStyle.lineWidth)
                     }, else: {
-                        $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                        $0.scale(y: animationValue, anchor: .bottom)
                             .stroke(dataSets.dataPoints[index].pointColour?.border ?? dataSets.pointStyle.borderColour,
                                     lineWidth: dataSets.pointStyle.lineWidth)
                     })
@@ -118,12 +121,20 @@ internal struct PointsSubView<DS>: View where DS: CTLineChartDataSet,
                                     .foregroundColor(dataSets.dataPoints[index].pointColour?.fill ?? dataSets.pointStyle.fillColour)
                     )
             }
-            .animateOnAppear(using: animation) {
+            .animateOnAppear(disabled: disableAnimation, using: animation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: animation) {
+            .animateOnDisappear(disabled: disableAnimation, using: animation) {
                 self.startAnimation = false
             }
+        }
+    }
+    
+    var animationValue: CGFloat {
+        if disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
         }
     }
 }

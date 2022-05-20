@@ -36,6 +36,8 @@ public final class LineChartData: CTLineChartDataProtocol, GetDataProtocol, Publ
     public var subscription = SubscriptionSet().subscription
     public let touchedDataPointPublisher = PassthroughSubject<DataPoint,Never>()
     
+    public var disableAnimation = false
+    
     internal final var isFilled: Bool = false
     
     // MARK: Initializer
@@ -126,7 +128,8 @@ public final class LineChartData: CTLineChartDataProtocol, GetDataProtocol, Publ
                       minValue: self.minValue,
                       range: self.range,
                       animation: self.chartStyle.globalAnimation,
-                      isFilled: self.isFilled)
+                      isFilled: self.isFilled,
+                      disableAnimation: disableAnimation)
     }
     
     public final func getTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) -> some View {

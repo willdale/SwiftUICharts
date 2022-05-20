@@ -22,17 +22,25 @@ internal struct VerticalGridView<T>: View where T: CTLineBarChartDataProtocol {
     
     var body: some View {
         VerticalGridShape()
-            .trim(to: startAnimation ? 1 : 0)
+            .trim(to: animationValue)
             .stroke(chartData.chartStyle.xAxisGridStyle.lineColour,
                     style: StrokeStyle(lineWidth: chartData.chartStyle.xAxisGridStyle.lineWidth,
                                        dash: chartData.chartStyle.xAxisGridStyle.dash,
                                        dashPhase: chartData.chartStyle.xAxisGridStyle.dashPhase))
             .frame(width: chartData.chartStyle.xAxisGridStyle.lineWidth)
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
+        }
     }
 }

@@ -10,6 +10,7 @@ import SwiftUI
 public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBarChartData {
     
     @ObservedObject private var chartData: ChartData
+    @State private var timer: Timer?
     
     /// Initialises a bar chart view.
     /// - Parameter chartData: Must be BarChartData model.
@@ -34,6 +35,7 @@ public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBar
                 .onChange(of: geo.frame(in: .local)) { value in
                     self.chartData.viewData.chartSize = value
                 }
+                .layoutNotifier(timer)
             } else { CustomNoDataView(chartData: chartData) }
         }
         .if(chartData.minValue.isLess(than: 0)) {

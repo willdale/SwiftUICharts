@@ -48,12 +48,21 @@ extension View {
      [HWS](https://www.hackingwithswift.com/quick-start/swiftui/how-to-start-an-animation-immediately-after-a-view-appears)
      */
     func animateOnAppear(
+        disabled: Bool,
         using animation: Animation = Animation.easeInOut(duration: 1),
         _ action: @escaping () -> Void
     ) -> some View {
-        return onAppear {
-            withAnimation(animation) {
-                action()
+        Group {
+            if !disabled {
+                onAppear {
+                    withAnimation(animation) {
+                        action()
+                    }
+                }
+            } else {
+                onAppear {
+                    action()
+                }
             }
         }
     }
@@ -64,12 +73,31 @@ extension View {
      [HWS](https://www.hackingwithswift.com/quick-start/swiftui/how-to-start-an-animation-immediately-after-a-view-appears)
      */
     func animateOnDisappear(
+        disabled: Bool,
         using animation: Animation = Animation.easeInOut(duration: 1),
         _ action: @escaping () -> Void
     ) -> some View {
-        return onDisappear {
-            withAnimation(animation) {
-                action()
+        Group {
+            if !disabled {
+                onDisappear {
+                    withAnimation(animation) {
+                        action()
+                    }
+                }
+            } else {
+                onDisappear {
+                    action()
+                }
+            }
+        }
+    }
+    
+    func layoutNotifier(_ timer: Timer?) -> some View {
+        onAppear {
+            var timer = timer
+            timer?.invalidate()
+            timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+                NotificationCenter.default.post(name: .updateLayoutDidFinish, object: self)
             }
         }
     }

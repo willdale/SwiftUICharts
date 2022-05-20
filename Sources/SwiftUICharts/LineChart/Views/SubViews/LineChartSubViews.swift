@@ -49,21 +49,31 @@ internal struct LineChartColourSubView<CD, DS>: View where CD: CTLineChartDataPr
                   range: range,
                   ignoreZero: dataSet.style.ignoreZero)
             .ifElse(isFilled, if: {
-                $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                $0
+                    .scale(y: animationValue, anchor: .bottom)
                     .fill(colour)
             }, else: {
-                $0.trim(to: startAnimation ? 1 : 0)
+                $0
+                    .trim(to: animationValue)
                     .stroke(colour, style: dataSet.style.strokeStyle.strokeToStrokeStyle())
             })
             .background(Color(.gray).opacity(0.000000001))
             .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
             .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
+        }
     }
 }
 
@@ -117,13 +127,13 @@ internal struct LineChartColoursSubView<CD, DS>: View where CD: CTLineChartDataP
                   ignoreZero: dataSet.style.ignoreZero)
             .ifElse(isFilled, if: {
                 $0
-                    .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                    .scale(y: animationValue, anchor: .bottom)
                     .fill(LinearGradient(gradient: Gradient(colors: colours),
                                          startPoint: startPoint,
                                          endPoint: endPoint))
             }, else: {
                 $0
-                    .trim(to: startAnimation ? 1 : 0)
+                    .trim(to: animationValue)
                     .stroke(LinearGradient(gradient: Gradient(colors: colours),
                                            startPoint: startPoint,
                                            endPoint: endPoint),
@@ -132,12 +142,20 @@ internal struct LineChartColoursSubView<CD, DS>: View where CD: CTLineChartDataP
             .background(Color(.gray).opacity(0.000000001))
             .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
             .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
+        }
     }
 }
 
@@ -190,13 +208,13 @@ internal struct LineChartStopsSubView<CD, DS>: View where CD: CTLineChartDataPro
                   ignoreZero: dataSet.style.ignoreZero)
             .ifElse(isFilled, if: {
                 $0
-                    .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                    .scale(y: animationValue, anchor: .bottom)
                     .fill(LinearGradient(gradient: Gradient(stops: stops),
                                          startPoint: startPoint,
                                          endPoint: endPoint))
             }, else: {
                 $0
-                    .trim(to: startAnimation ? 1 : 0)
+                    .trim(to: animationValue)
                     .stroke(LinearGradient(gradient: Gradient(stops: stops),
                                            startPoint: startPoint,
                                            endPoint: endPoint),
@@ -205,11 +223,19 @@ internal struct LineChartStopsSubView<CD, DS>: View where CD: CTLineChartDataPro
             .background(Color(.gray).opacity(0.000000001))
             .if(chartData.viewData.hasXAxisLabels) { $0.xAxisBorder(chartData: chartData) }
             .if(chartData.viewData.hasYAxisLabels) { $0.yAxisBorder(chartData: chartData) }
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
+        }
     }
 }

@@ -43,6 +43,7 @@ import SwiftUI
 public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartData {
     
     @ObservedObject private var chartData: ChartData
+    @State private var timer: Timer?
     private let groupSpacing: CGFloat
     
     /// Initialises a grouped bar chart view.
@@ -58,8 +59,6 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
         self.chartData.groupSpacing = groupSpacing
     }
     
-    @State private var startAnimation: Bool = false
-    
     public var body: some View {
         GeometryReader { geo in
             if chartData.isGreaterThanTwo() {
@@ -71,6 +70,7 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                 .onAppear {
                     self.chartData.viewData.chartSize = geo.frame(in: .local)
                 }
+                .layoutNotifier(timer)
             } else { CustomNoDataView(chartData: chartData) }
         }
         .if(chartData.minValue.isLess(than: 0)) {

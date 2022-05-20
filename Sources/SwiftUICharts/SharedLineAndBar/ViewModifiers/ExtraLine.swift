@@ -203,19 +203,27 @@ internal struct ColourExtraLineView<ChartData>: View where ChartData: CTLineBarC
                        range: chartData.extraLineData.range,
                        minValue: chartData.extraLineData.minValue)
             .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
-                $0.trim(to: startAnimation ? 1 : 0)
+                $0.trim(to: animationValue)
                     .stroke(colour, style: stroke.strokeToStrokeStyle())
             }, else: {
-                $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                $0.scale(y: animationValue, anchor: .bottom)
                     .stroke(colour, style: stroke.strokeToStrokeStyle())
             })
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
             .zIndex(1)
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
+        }
     }
 }
 
@@ -251,25 +259,33 @@ internal struct ColoursExtraLineView<ChartData>: View where ChartData: CTLineBar
                        range: chartData.extraLineData.range,
                        minValue: chartData.extraLineData.minValue)
             .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
-                $0.trim(to: startAnimation ? 1 : 0)
+                $0.trim(to: animationValue)
                     .stroke(LinearGradient(gradient: Gradient(colors: colours),
                                            startPoint: startPoint,
                                            endPoint: endPoint),
                             style: stroke.strokeToStrokeStyle())
             }, else: {
-                $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                $0.scale(y: animationValue, anchor: .bottom)
                     .stroke(LinearGradient(gradient: Gradient(colors: colours),
                                            startPoint: startPoint,
                                            endPoint: endPoint),
                             style: stroke.strokeToStrokeStyle())
             })
             
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
+        }
     }
 }
 
@@ -305,25 +321,33 @@ internal struct StopsExtraLineView<ChartData>: View where ChartData: CTLineBarCh
                        range: chartData.extraLineData.range,
                        minValue: chartData.extraLineData.minValue)
             .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
-                $0.trim(to: startAnimation ? 1 : 0)
+                $0.trim(to: animationValue)
                     .stroke(LinearGradient(gradient: Gradient(stops: stops),
                                            startPoint: startPoint,
                                            endPoint: endPoint),
                             style: stroke.strokeToStrokeStyle())
             }, else: {
-                $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                $0.scale(y: animationValue, anchor: .bottom)
                     .stroke(LinearGradient(gradient: Gradient(stops: stops),
                                            startPoint: startPoint,
                                            endPoint: endPoint),
                             style: stroke.strokeToStrokeStyle())
             })
-            .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = true
             }
-            .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+            .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                 self.startAnimation = false
             }
             .zIndex(1)
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
+        }
     }
 }
 
@@ -413,17 +437,17 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
                   pointStyle: chartData.extraLineData.style.pointStyle.pointShape)
                 .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
                     $0
-                        .trim(to: startAnimation ? 1 : 0)
+                        .trim(to: animationValue)
                         .fill(dataPoint.pointColour?.fill ?? chartData.extraLineData.style.pointStyle.fillColour)
                 }, else: {
                     $0
-                        .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                        .scale(y: animationValue, anchor: .bottom)
                         .fill(dataPoint.pointColour?.fill ?? chartData.extraLineData.style.pointStyle.fillColour)
                 })
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = false
                 }
         case .bar:
@@ -437,19 +461,27 @@ internal struct FilledDataPointExtraLineView<ChartData>: View where ChartData: C
                            pointStyle: chartData.extraLineData.style.pointStyle.pointShape)
                 .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
                     $0
-                        .trim(to: startAnimation ? 1 : 0)
+                        .trim(to: animationValue)
                         .fill(dataPoint.pointColour?.fill ?? chartData.extraLineData.style.pointStyle.fillColour)
                 }, else: {
                     $0
-                        .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                        .scale(y: animationValue, anchor: .bottom)
                         .fill(dataPoint.pointColour?.fill ?? chartData.extraLineData.style.pointStyle.fillColour)
                 })
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = false
                 }
+        }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
         }
     }
 }
@@ -486,18 +518,18 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
                   ignoreZero: false,
                   pointStyle: chartData.extraLineData.style.pointStyle.pointShape)
                 .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
-                    $0.trim(to: startAnimation ? 1 : 0)
+                    $0.trim(to: animationValue)
                         .stroke(dataPoint.pointColour?.border ?? chartData.extraLineData.style.pointStyle.borderColour,
                                 lineWidth: chartData.extraLineData.style.pointStyle.lineWidth)
                 }, else: {
-                    $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                    $0.scale(y: animationValue, anchor: .bottom)
                         .stroke(dataPoint.pointColour?.border ?? chartData.extraLineData.style.pointStyle.borderColour,
                                 lineWidth: chartData.extraLineData.style.pointStyle.lineWidth)
                 })
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = false
                 }
         case .bar:
@@ -510,20 +542,28 @@ internal struct OutLineDataPointExtraLineView<ChartData>: View where ChartData: 
                            ignoreZero: false,
                            pointStyle: chartData.extraLineData.style.pointStyle.pointShape)
                 .ifElse(chartData.extraLineData.style.animationType == .draw, if: {
-                    $0.trim(to: startAnimation ? 1 : 0)
+                    $0.trim(to: animationValue)
                         .stroke(dataPoint.pointColour?.border ?? chartData.extraLineData.style.pointStyle.borderColour,
                                 lineWidth: chartData.extraLineData.style.pointStyle.lineWidth)
                 }, else: {
-                    $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+                    $0.scale(y: animationValue, anchor: .bottom)
                         .stroke(dataPoint.pointColour?.border ?? chartData.extraLineData.style.pointStyle.borderColour,
                                 lineWidth: chartData.extraLineData.style.pointStyle.lineWidth)
                 })
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = false
                 }
+        }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
         }
     }
 }

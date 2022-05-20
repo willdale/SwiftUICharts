@@ -50,6 +50,7 @@ import SwiftUI
 public struct LineChart<ChartData>: View where ChartData: LineChartData {
     
     @ObservedObject private var chartData: ChartData
+    @State private var timer: Timer?
     
     /// Initialises a line chart view.
     /// - Parameter chartData: Must be LineChartData model.
@@ -104,6 +105,7 @@ public struct LineChart<ChartData>: View where ChartData: LineChartData {
                 .onAppear {
                     self.chartData.viewData.chartSize = geo.frame(in: .local)
                 }
+                .layoutNotifier(timer)
             } else { CustomNoDataView(chartData: chartData) }
         }
     }

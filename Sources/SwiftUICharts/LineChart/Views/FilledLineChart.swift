@@ -44,6 +44,7 @@ import SwiftUI
 public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
     
     @ObservedObject private var chartData: ChartData
+    @State private var timer: Timer?
     
     private let minValue: Double
     private let range: Double
@@ -56,8 +57,6 @@ public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
         self.range = chartData.range
         self.chartData.isFilled = true
     }
-    
-    @State private var startAnimation: Bool = false
     
     public var body: some View {
         GeometryReader { geo in
@@ -106,6 +105,7 @@ public struct FilledLineChart<ChartData>: View where ChartData: LineChartData {
                 .onAppear {
                     self.chartData.viewData.chartSize = geo.frame(in: .local)
                 }
+                .layoutNotifier(timer)
             } else { CustomNoDataView(chartData: chartData) }
         }
     }

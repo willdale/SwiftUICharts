@@ -34,6 +34,8 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol, GetDataProt
     public final var noDataText: Text
     public final let chartType: (chartType: ChartType, dataSetType: DataSetType)
     
+    public var disableAnimation = false
+    
     // MARK: Initializer
     /// Initialises a Ranged Bar Chart.
     ///

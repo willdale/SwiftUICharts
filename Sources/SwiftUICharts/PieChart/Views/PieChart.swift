@@ -32,6 +32,7 @@ import SwiftUI
 public struct PieChart<ChartData>: View where ChartData: PieChartData {
     
     @ObservedObject private var chartData: ChartData
+    @State private var timer: Timer?
     
     /// Initialises a bar chart view.
     /// - Parameter chartData: Must be PieChartData.
@@ -50,8 +51,8 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
                                     amount: chartData.dataSets.dataPoints[data].amount)
                         .fill(chartData.dataSets.dataPoints[data].colour)
                         .overlay(dataPoint: chartData.dataSets.dataPoints[data], chartData: chartData, rect: geo.frame(in: .local))
-                        .scaleEffect(startAnimation ? 1 : 0)
-                        .opacity(startAnimation ? 1 : 0)
+                        .scaleEffect(animationValue)
+                        .opacity(Double(animationValue))
                         .animation(Animation.spring().delay(Double(data) * 0.06))
                         .if(chartData.infoView.touchOverlayInfo == [chartData.dataSets.dataPoints[data]]) {
                             $0
@@ -65,11 +66,20 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
                 }
             }
         }
-        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+        .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
             self.startAnimation = true
         }
-        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+        .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
             self.startAnimation = false
+        }
+        .layoutNotifier(timer)
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
         }
     }
 }

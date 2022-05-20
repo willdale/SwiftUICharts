@@ -45,6 +45,7 @@ import SwiftUI
 public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartData {
     
     @ObservedObject private var chartData: ChartData
+    @State private var timer: Timer?
     
     /// Initialises a stacked bar chart view.
     /// - Parameters:
@@ -63,19 +64,29 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
                                         specifier: chartData.infoView.touchSpecifier,
                                         formatter: chartData.infoView.touchFormatter)
                         .clipShape(RoundedRectangleBarShape(chartData.barStyle.cornerRadius))
-                        .scaleEffect(y: startAnimation ? divideByZeroProtection(CGFloat.self, dataSet.maxValue(), chartData.maxValue) : 0, anchor: .bottom)
+                        .scaleEffect(y: animationValue(dataSet.maxValue(), chartData.maxValue), anchor: .bottom)
                         .scaleEffect(x: chartData.barStyle.barWidth, anchor: .center)
                         .animation(.default, value: chartData.dataSets)
                         .background(Color(.gray).opacity(0.000000001))
-                        .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                        .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = true
                         }
-                        .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                        .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                             self.startAnimation = false
                         }
                         .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
                 }
             }
+            .layoutNotifier(timer)
         } else { CustomNoDataView(chartData: chartData) }
+    }
+    
+    func animationValue(_ dsMax: Double, _ dataMax: Double) -> CGFloat {
+        let value = divideByZeroProtection(CGFloat.self, dsMax, dataMax)
+        if chartData.disableAnimation {
+            return value
+        } else {
+            return startAnimation ? value : 0
+        }
     }
 }

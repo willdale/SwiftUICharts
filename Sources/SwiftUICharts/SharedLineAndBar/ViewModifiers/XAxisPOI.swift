@@ -81,7 +81,7 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
             if chartData.isGreaterThanTwo() {
                 content
                 chartData.poiAbscissaMarker(markerValue: markerValue, dataPointCount: dataPointCount)
-                    .trim(to: startAnimation ? 1 : 0)
+                    .trim(to: animationValue)
                     .stroke(lineColour, style: strokeStyle)
                 
                 GeometryReader { geo in
@@ -139,10 +139,10 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                             .accessibilityValue(LocalizedStringKey(String(format: NSLocalizedString("\(self.markerName) %@", comment: ""), "\(markerValue)")))
                     }
                 }
-                .animateOnAppear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnAppear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = true
                 }
-                .animateOnDisappear(using: chartData.chartStyle.globalAnimation) {
+                .animateOnDisappear(disabled: chartData.disableAnimation, using: chartData.chartStyle.globalAnimation) {
                     self.startAnimation = false
                 }
             } else { content }
@@ -157,6 +157,14 @@ internal struct XAxisPOI<T>: ViewModifier where T: CTLineBarChartDataProtocol & 
                                                 strokeStyle: strokeStyle.toStroke(),
                                                 prioity: 2,
                                                 chartType: .line))
+        }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
         }
     }
 }

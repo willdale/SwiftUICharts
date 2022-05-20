@@ -45,6 +45,7 @@ import SwiftUI
 public struct RangedBarChart<ChartData>: View where ChartData: RangedBarChartData {
     
     @ObservedObject private var chartData: ChartData
+    @State private var timer: Timer?
     
     /// Initialises a bar chart view.
     /// - Parameter chartData: Must be RangedBarChartData model.
@@ -69,6 +70,7 @@ public struct RangedBarChart<ChartData>: View where ChartData: RangedBarChartDat
                 .onAppear {
                     self.chartData.viewData.chartSize = geo.frame(in: .local)
                 }
+                .layoutNotifier(timer)
             } else { CustomNoDataView(chartData: chartData) }
         }
     }
