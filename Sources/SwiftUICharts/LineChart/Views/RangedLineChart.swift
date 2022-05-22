@@ -68,8 +68,6 @@ internal struct RangedBoxSubView<ChartData>: View where ChartData: RangedLineCha
     private let range: Double
     private let colour: ChartColour
     
-    @State private var startAnimation: Bool
-    
     internal init(
         chartData: ChartData,
         dataSet: RangedLineDataSet,
@@ -82,8 +80,6 @@ internal struct RangedBoxSubView<ChartData>: View where ChartData: RangedLineCha
         self.minValue = minValue
         self.range = range
         self.colour = colour
-        
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
     
     internal var body: some View {
@@ -103,7 +99,7 @@ internal struct RangedLineSubView<ChartData>: View where ChartData: RangedLineCh
     private let range: Double
     private let colour: ChartColour
     
-    @State private var startAnimation: Bool
+    @State private var startAnimation: Bool = false
     
     internal init(
         chartData: ChartData,
@@ -117,8 +113,6 @@ internal struct RangedLineSubView<ChartData>: View where ChartData: RangedLineCh
         self.minValue = minValue
         self.range = range
         self.colour = colour
-        
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
     
     internal var body: some View {
@@ -126,15 +120,23 @@ internal struct RangedLineSubView<ChartData>: View where ChartData: RangedLineCh
                   lineType: dataSet.style.lineType,
                   minValue: minValue,
                   range: range)
-            .trim(to: startAnimation ? 1 : 0)
+            .trim(to: animationValue)
             .stroke(colour, strokeStyle: dataSet.style.strokeStyle)
 
-            .animateOnAppear(using: .linear) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: .linear) {
                 self.startAnimation = true
             }
             .background(Color(.gray).opacity(0.000000001))
             .onDisappear {
                 self.startAnimation = false
             }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
+        }
     }
 }

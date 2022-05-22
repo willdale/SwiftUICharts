@@ -11,96 +11,90 @@ import ChartMath
 // MARK: - API
 extension View {
     /// Labels for the Y axis.
-    public func yAxisLabels(
-        position: Set<HorizontalEdge>,
+    public func yAxisLabels<ChartData: CTChartData & DataHelper>(
+        chartData: ChartData,
+        position: HorizontalEdge,
         data: YAxisLabelStyle.Data,
-        style: YAxisLabelStyle = .standard,
-        dataSetInfo: DataSetInfo
-    ) -> some View
-    {
+        style: YAxisLabelStyle = .standard
+    ) -> some View {
         self.modifier(
             _YAxisLabelsModifier_Vertical(
-                position: Array(position),
+                chartData: chartData,
+                position: position,
                 data: data,
-                style: style,
-                dataSetInfo: dataSetInfo
+                style: style
             )
         )
     }
 
     /// Labels for the Y axis.
-    public func yAxisLabels(
-        position: Set<VerticalEdge>,
+    public func yAxisLabels<ChartData: CTChartData & DataHelper>(
+        chartData: ChartData,
+        position: VerticalEdge,
         data: YAxisLabelStyle.Data,
-        style: YAxisLabelStyle = .standard,
-        dataSetInfo: DataSetInfo
-    ) -> some View
-    {
+        style: YAxisLabelStyle = .standard
+    ) -> some View {
         self.modifier(
             _YAxisLabelsModifier_Horizontal(
-                position: Array(position),
+                chartData: chartData,
+                position: position,
                 data: data,
-                style: style,
-                dataSetInfo: dataSetInfo
+                style: style
             )
         )
     }
 }
 
 // MARK: - Orientation
-fileprivate struct _YAxisLabelsModifier_Vertical: ViewModifier {
+fileprivate struct _YAxisLabelsModifier_Vertical<ChartData: CTChartData & DataHelper>: ViewModifier {
 
-    @EnvironmentObject var stateObject: ChartStateObject
-
-    let position: [HorizontalEdge]
+    let chartData: ChartData
+    let position: HorizontalEdge
     let data: YAxisLabelStyle.Data
     let style: YAxisLabelStyle
-    let dataSetInfo: DataSetInfo
 
     var axisOrientation: YAxisLabelStyle.AxisOrientation = .vertical
     
 
     func body(content: Content) -> some View {
-        ForEach(position) { pos in
-            switch pos {
+        Group {
+            switch position {
             case .leading:
                 HStack(spacing: style.padding) {
-                    YAxisLabels(data: data, style: style, orientation: axisOrientation, dataSetInfo: dataSetInfo)
+                    YAxisLabels(chartData: chartData, data: data, style: style, orientation: axisOrientation)
                     content
                 }
             case .trailing:
                 HStack(spacing: style.padding) {
                     content
-                    YAxisLabels(data: data, style: style, orientation: axisOrientation, dataSetInfo: dataSetInfo)
+                    YAxisLabels(chartData: chartData, data: data, style: style, orientation: axisOrientation)
                 }
             }
         }
     }
 }
 
-fileprivate struct _YAxisLabelsModifier_Horizontal: ViewModifier {
+fileprivate struct _YAxisLabelsModifier_Horizontal<ChartData: CTChartData & DataHelper>: ViewModifier {
 
-    @EnvironmentObject var stateObject: ChartStateObject
-
-    let position: [VerticalEdge]
+    let chartData: ChartData
+    let position: VerticalEdge
     let data: YAxisLabelStyle.Data
     let style: YAxisLabelStyle
-    let dataSetInfo: DataSetInfo
 
     let axisOrientation: YAxisLabelStyle.AxisOrientation = .horizontal
     
 
     func body(content: Content) -> some View {
-        ForEach(position) { pos in
-            switch pos {
+        Group {
+            switch position {
             case .bottom:
                 VStack(spacing: style.padding) {
                     content
-                    YAxisLabels(data: data, style: style, orientation: axisOrientation, dataSetInfo: dataSetInfo)
+                    YAxisLabels(chartData: chartData, data: data, style: style, orientation: axisOrientation)
                 }
             case .top:
                 VStack(spacing: style.padding) {
-                    YAxisLabels(data: data, style: style, orientation: axisOrientation, dataSetInfo: dataSetInfo)
+                    YAxisLabels(chartData: chartData, data: data, style: style, orientation: axisOrientation)
                     content
                 }
             }
@@ -109,31 +103,29 @@ fileprivate struct _YAxisLabelsModifier_Horizontal: ViewModifier {
 }
 
 // MARK: - View
-public struct YAxisLabels: View {
+public struct YAxisLabels<ChartData: CTChartData & DataHelper>: View {
     
-    @EnvironmentObject var stateObject: ChartStateObject
-    @StateObject var state = YAxisLabelsLayoutModel()
+    let chartData: ChartData
+    @StateObject var localState = YAxisLabelsLayoutModel()
     
     let data: YAxisLabelStyle.Data
     let style: YAxisLabelStyle
     let orientation: YAxisLabelStyle.AxisOrientation
-    let dataSetInfo: DataSetInfo
     
     public var body: some View {
         ZStack {
             ForEach(labels.indices, id: \.self) { index in
-                _Label_Cell(state: state, label: labels[index], index: index, count: labels.count, style: style)
-                    .modifier(_label_Positioning(orientation: state.orientation,
-                                                 width: state.widest,
-                                                 chartSize: stateObject.chartSize.size,
+                _Label_Cell(localState: localState, label: labels[index], index: index, count: labels.count, style: style)
+                    .modifier(_label_Positioning(stateObject: chartData.stateObject,
+                                                 localState: localState,
                                                  index: index,
                                                  count: labels.count))
             }
-            .modifier(_Axis_Label_Size(orientation: state.orientation, width: state.widest))
+            .modifier(_Axis_Label_Size(localState: localState))
         }
-        .onAppear { state.orientation = orientation }
-        .onChange(of: state.widest) {
-            stateObject.updateLayoutElement(with: ChartStateObject.Model(element: .leadingLabels, value: $0 + style.padding))
+        .onAppear { localState.orientation = orientation }
+        .onChange(of: localState.widest) {
+            chartData.stateObject.updateLayoutElement(with: ChartStateObject.Model(element: .leadingLabels, value: $0 + style.padding))
             
         }
     }
@@ -141,9 +133,9 @@ public struct YAxisLabels: View {
     internal var labels: [String] {
         switch data {
         case .generated:
-            guard let firstLabel = style.formatter.string(from: NSNumber(value: dataSetInfo.minValue)) else { return [] }
+            guard let firstLabel = style.formatter.string(from: NSNumber(value: chartData.minValue)) else { return [] }
             let otherLabels: [String] = (1...style.number-1).compactMap {
-                let value = dataSetInfo.minValue + divide(dataSetInfo.range, style.number-1) * Double($0)
+                let value = chartData.minValue + divide(chartData.range, style.number-1) * Double($0)
                 guard let formattedNumber = style.formatter.string(from: NSNumber(value: value)) else { return nil }
                 return formattedNumber
             }
@@ -157,7 +149,7 @@ public struct YAxisLabels: View {
 // MARK: Cell
 fileprivate struct _Label_Cell: View {
     
-    @ObservedObject var state: YAxisLabelsLayoutModel
+    @ObservedObject var localState: YAxisLabelsLayoutModel
     let label: String
     let index: Int
     let count: Int
@@ -172,13 +164,13 @@ fileprivate struct _Label_Cell: View {
                     Color.clear
                         .onAppear {
                             let value: CGFloat
-                            switch state.orientation {
+                            switch localState.orientation {
                             case .vertical:
                                 value = geo.frame(in: .local).width
                             case .horizontal:
                                 value = geo.frame(in: .local).height
                             }
-                            state.update(with: YAxisLabelsLayoutModel.Model(id: index, value: value))
+                            localState.update(with: YAxisLabelsLayoutModel.Model(id: index, value: value))
                         }
                 }
             )
@@ -191,43 +183,41 @@ fileprivate struct _Label_Cell: View {
 // MARK: - ViewModifiers
 fileprivate struct _label_Positioning: ViewModifier {
 
-    var orientation: YAxisLabelStyle.AxisOrientation
-    let width: CGFloat
-    let chartSize: CGSize
+    @ObservedObject var stateObject: ChartStateObject
+    @ObservedObject var localState: YAxisLabelsLayoutModel
     let index: Int
     let count: Int
 
     func body(content: Content) -> some View {
-        switch orientation {
+        switch localState.orientation {
         case .vertical:
             content
-                .frame(width: width,
-                       height: divide(chartSize.height, count))
-                .position(x: width / 2,
-                          y: CGFloat(index) * divide(chartSize.height, count-1))
+                .frame(width: localState.widest,
+                       height: divide(stateObject.chartSize.height, count))
+                .position(x: localState.widest / 2,
+                          y: CGFloat(index) * divide(stateObject.chartSize.height, count-1))
         case .horizontal:
             content
-                .frame(width: divide(chartSize.width, count),
-                       height: width)
-                .position(x: (CGFloat(index) * divide(chartSize.width, count-1)),
-                          y: width / 2)
+                .frame(width: divide(stateObject.chartSize.width, count),
+                       height: localState.widest)
+                .position(x: (CGFloat(index) * divide(stateObject.chartSize.width, count-1)),
+                          y: localState.widest / 2)
         }
     }
 }
 
 fileprivate struct _Axis_Label_Size: ViewModifier {
 
-    var orientation: YAxisLabelStyle.AxisOrientation
-    let width: CGFloat
+    @ObservedObject var localState: YAxisLabelsLayoutModel
 
     func body(content: Content) -> some View {
-        switch orientation {
+        switch localState.orientation {
         case .vertical:
             content
-                .frame(width: width)
+                .frame(width: localState.widest)
         case .horizontal:
             content
-                .frame(height: width)
+                .frame(height: localState.widest)
         }
     }
 }

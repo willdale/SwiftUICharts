@@ -8,17 +8,29 @@
 import SwiftUI
 
 extension View {
-    public func touchMarker<ChartData, Icon: View>(chartData: ChartData, indicator: Icon) -> some View where ChartData: CTChartData {
+    public func touchMarker<ChartData, Icon: View>(
+        chartData: ChartData,
+        indicator: Icon
+    ) -> some View where ChartData: CTChartData {
         self.modifier(TouchMarker(chartData: chartData, indicator: indicator))
     }
-    public func touchMarker<ChartData, Icon: View>(chartData: ChartData, indicator: () -> Icon) -> some View where ChartData: CTChartData {
+    
+    public func touchMarker<ChartData, Icon: View>(
+        chartData: ChartData,
+        indicator: () -> Icon
+    ) -> some View where ChartData: CTChartData {
         self.modifier(TouchMarker(chartData: chartData, indicator: indicator()))
     }
-    public func touchMarker<ChartData>(chartData: ChartData, indicator: Dot) -> some View where ChartData: CTChartData {
+    
+    public func touchMarker<ChartData>(
+        chartData: ChartData,
+        indicator: Dot
+    ) -> some View where ChartData: CTChartData {
         Group {
             switch indicator {
             case .none:
-                self.modifier(TouchMarker(chartData: chartData, indicator: EmptyView()))
+                self.modifier(TouchMarker(chartData: chartData,
+                                          indicator: EmptyView()))
             case .style(let style):
                 self.modifier(TouchMarker(chartData: chartData,
                                           indicator: PosistionIndicator(
@@ -33,8 +45,8 @@ extension View {
 
 public struct TouchMarker<ChartData, Icon: View>: ViewModifier where ChartData: CTChartData {
     
-    @EnvironmentObject var stateObject: ChartStateObject
     @ObservedObject private var chartData: ChartData
+    @ObservedObject private var touchObject: ChartTouchObject
     
     let indicator: Icon
     
@@ -43,14 +55,15 @@ public struct TouchMarker<ChartData, Icon: View>: ViewModifier where ChartData: 
         indicator: Icon
     ) {
         self.chartData = chartData
+        self.touchObject = chartData.touchObject
         self.indicator = indicator
     }
     
     public func body(content: Content) -> some View {
         ZStack {
             content
-            if stateObject.isTouch {
-                _MarkerData(markerData: chartData.markerData, indicator: indicator, chartSize: stateObject.chartSize, touchLocation: stateObject.touchLocation)
+            if touchObject.isTouch {
+                _MarkerData(markerData: chartData.markerData, indicator: indicator, chartSize: chartData.stateObject.chartSize, touchLocation: touchObject.touchLocation)
             }
         }
     }
@@ -63,11 +76,23 @@ public struct TouchMarker<ChartData, Icon: View>: ViewModifier where ChartData: 
 
 
 fileprivate struct _MarkerData<Icon: View>: View {
+
+    private let markerData: MarkerData
+    private let indicator: Icon
+    private let chartSize: CGRect
+    private let touchLocation: CGPoint
     
-    fileprivate let markerData: MarkerData
-    fileprivate let indicator: Icon
-    fileprivate let chartSize: CGRect
-    fileprivate let touchLocation: CGPoint
+    internal init(
+        markerData: MarkerData, 
+        indicator: Icon, 
+        chartSize: CGRect, 
+        touchLocation: CGPoint
+    ) {
+        self.markerData = markerData
+        self.indicator = indicator
+        self.chartSize = chartSize
+        self.touchLocation = touchLocation
+    }
     
     fileprivate var body: some View {
         ZStack {
@@ -76,16 +101,16 @@ fileprivate struct _MarkerData<Icon: View>: View {
             }
             
             ForEach(markerData.lineMarkerData, id: \.self) { marker in
-                line(lineMarker: marker.markerType,
-                     indicator: indicator,
-                     markerData: marker,
-                     chartSize: chartSize,
-                     touchLocation: touchLocation,
-                     dataPoints: marker.dataPoints,
-                     lineType: marker.lineType,
-                     lineSpacing: marker.lineSpacing,
-                     minValue: marker.minValue,
-                     range: marker.range)
+                    line(lineMarker: marker.markerType,
+                         indicator: indicator,
+                         markerData: marker,
+                         chartSize: chartSize,
+                         touchLocation: touchLocation,
+                         dataPoints: marker.dataPoints,
+                         lineType: marker.lineType,
+                         lineSpacing: marker.lineSpacing,
+                         minValue: marker.minValue,
+                         range: marker.range)
             }
         }
     }

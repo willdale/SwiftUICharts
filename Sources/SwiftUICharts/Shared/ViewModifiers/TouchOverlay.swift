@@ -36,7 +36,6 @@ extension View {
  */
 internal struct TouchOverlay<ChartData>: ViewModifier where ChartData: CTChartData & Touchable {
     
-    @EnvironmentObject var stateObject: ChartStateObject
     var chartData: ChartData
     var minDistance: CGFloat
     
@@ -44,13 +43,15 @@ internal struct TouchOverlay<ChartData>: ViewModifier where ChartData: CTChartDa
         content
             .gesture(
                 DragGesture(minimumDistance: minDistance, coordinateSpace: .local)
-                    .onChanged {
-                        stateObject.touchLocation = $0.location
-                        stateObject.isTouch = true
-                        chartData.processTouchInteraction(touchLocation: stateObject.touchLocation, chartSize: stateObject.chartSize)
+                    .onChanged { value in
+                        chartData.touchObject.touchLocation = value.location
+                        chartData.touchObject.isTouch = true
+                        Task.detached {
+                            chartData.processTouchInteraction(touchLocation: value.location, chartSize: chartData.stateObject.chartSize)
+                        }
                     }
                     .onEnded { _ in
-                        stateObject.isTouch = false
+                        chartData.touchObject.isTouch = false
                         chartData.touchDidFinish()
                     }
             )

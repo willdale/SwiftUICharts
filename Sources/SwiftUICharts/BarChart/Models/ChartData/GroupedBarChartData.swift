@@ -20,19 +20,21 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     public let id: UUID = UUID()
     @Published public var dataSets: GroupedBarDataSets
     public var barStyle: BarStyle
-    public var shouldAnimate: Bool
+    public var disableAnimation = false
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .groupedBar
     
     public var markerData = MarkerData()
-        
+    public var stateObject = ChartStateObject()
+    public var touchObject = ChartTouchObject()
+    
     // MARK: Multi
     public var groupSpacing: CGFloat = 0
     public var groups: [GroupingData]
     
     // MARK: Publishable
-    @Published public var touchPointData: [DataPoint] = []
+    public var touchedData = TouchedData<DataPoint>()
     
     // MARK: DataHelper
     public var baseline: Baseline
@@ -42,16 +44,15 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     internal let chartType: CTChartType = (chartType: .bar, dataSetType: .multi)
     
     // MARK: Initializer
-    /// Initialises a Grouped Bar Chart.
+    /// Initialises a Grouped Bar Chart
     ///
     /// - Parameters:
-    ///   - dataSets: Data to draw and style the bars.
-    ///   - groups: Information for how to group the data points.
-    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
-    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
-    ///   - barStyle: Control for the aesthetic of the bar chart.
-    ///   - shouldAnimate: Whether the chart should be animated.
-    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
+    ///   - dataSets: Data to draw and style the bars
+    ///   - groups: Information for how to group the data points
+    ///   - barStyle: Control for the aesthetic of the bar chart
+    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart
+    ///   - baseline: Lowest point of the chart
+    ///   - topLine: Highest point on the chart
     public init(
         dataSets: GroupedBarDataSets,
         groups: [GroupingData],
@@ -64,7 +65,6 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
         self.dataSets = dataSets
         self.groups = groups
         self.barStyle = barStyle
-        self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         self.baseline = baseline
         self.topLine = topLine
@@ -109,7 +109,7 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     }
     
     public func touchDidFinish() {
-        touchPointData = []
+        touchedData.touchPointData = []
     }
     
     public typealias SetType = GroupedBarDataSets

@@ -18,17 +18,19 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
     // MARK: Properties
     public var id: UUID = UUID()
     @Published public var dataSets: PieDataSet
-    public var shouldAnimate: Bool
+    public var disableAnimation = false
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .doughnut
     
-    public var markerData = MarkerData()
-    
     public var strokeWidth: CGFloat = 1
-
+    
+    public var markerData = MarkerData()
+    public var stateObject = ChartStateObject()
+    public var touchObject = ChartTouchObject()
+    
     // MARK: Publishable
-    @Published public var touchPointData: [DataPoint] = []
+    public var touchedData = TouchedData<DataPoint>()
     
     // MARK: Non-Protocol
     internal let chartType: CTChartType = (chartType: .pie, dataSetType: .single)
@@ -42,11 +44,9 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: PieDataSet,
-        shouldAnimate: Bool = true,
         noDataText: Text
     ) {
         self.dataSets = dataSets
-        self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         
         self.makeDataPoints()
@@ -68,7 +68,7 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
     }
         
     public func touchDidFinish() {
-        touchPointData = []
+        touchedData.touchPointData = []
     }
     
     public typealias SetType = PieDataSet

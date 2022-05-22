@@ -17,7 +17,7 @@ internal struct PointsSubView<ChartData, DataSet>: View where ChartData: CTChart
     private let range: Double
     private let animation: Animation
     
-    @State private var startAnimation: Bool
+    @State private var startAnimation: Bool = false
     
     internal init(
         chartData: ChartData,
@@ -30,8 +30,6 @@ internal struct PointsSubView<ChartData, DataSet>: View where ChartData: CTChart
         self.minValue = minValue
         self.range = range
         self.animation = animation
-        
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
     
     internal var body: some View {
@@ -49,7 +47,7 @@ internal struct PointsSubView<ChartData, DataSet>: View where ChartData: CTChart
                     .trim(to: startAnimation ? 1 : 0)
                     .fill(dataSets.dataPoints[index].pointColour?.fill ?? dataSets.pointStyle.fillColour)
             }
-            .animateOnAppear(using: animation) {
+            .animateOnAppear(disabled: false, using: animation) {
                 self.startAnimation = true
             }
             .onDisappear {
@@ -68,7 +66,7 @@ internal struct PointsSubView<ChartData, DataSet>: View where ChartData: CTChart
                     .stroke(dataSets.dataPoints[index].pointColour?.border ?? dataSets.pointStyle.borderColour,
                             lineWidth: dataSets.pointStyle.lineWidth)
             }
-            .animateOnAppear(using: animation) {
+            .animateOnAppear(disabled: false, using: animation) {
                 self.startAnimation = true
             }
             .onDisappear {
@@ -96,7 +94,7 @@ internal struct PointsSubView<ChartData, DataSet>: View where ChartData: CTChart
                                     .foregroundColor(dataSets.dataPoints[index].pointColour?.fill ?? dataSets.pointStyle.fillColour)
                     )
             }
-            .animateOnAppear(using: animation) {
+            .animateOnAppear(disabled: false, using: animation) {
                 self.startAnimation = true
             }
             .onDisappear {
@@ -116,7 +114,7 @@ internal struct FilledPointsSubView<ChartData, DataSet>: View where ChartData: C
     private let range: Double
     private let animation: Animation
     
-    @State private var startAnimation: Bool
+    @State private var startAnimation: Bool = false
     
     internal init(
         chartData: ChartData,
@@ -129,8 +127,6 @@ internal struct FilledPointsSubView<ChartData, DataSet>: View where ChartData: C
         self.minValue = minValue
         self.range = range
         self.animation = animation
-        
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
     
     internal var body: some View {
@@ -148,7 +144,7 @@ internal struct FilledPointsSubView<ChartData, DataSet>: View where ChartData: C
                     .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                     .fill(dataSets.dataPoints[index].pointColour?.fill ?? dataSets.pointStyle.fillColour)
             }
-            .animateOnAppear(using: animation) {
+            .animateOnAppear(disabled: false, using: animation) {
                 self.startAnimation = true
             }
             .onDisappear {
@@ -167,7 +163,7 @@ internal struct FilledPointsSubView<ChartData, DataSet>: View where ChartData: C
                     .stroke(dataSets.dataPoints[index].pointColour?.border ?? dataSets.pointStyle.borderColour,
                             lineWidth: dataSets.pointStyle.lineWidth)
             }
-            .animateOnAppear(using: animation) {
+            .animateOnAppear(disabled: false, using: animation) {
                 self.startAnimation = true
             }
             .onDisappear {
@@ -195,7 +191,7 @@ internal struct FilledPointsSubView<ChartData, DataSet>: View where ChartData: C
                                     .foregroundColor(dataSets.dataPoints[index].pointColour?.fill ?? dataSets.pointStyle.fillColour)
                     )
             }
-            .animateOnAppear(using: animation) {
+            .animateOnAppear(disabled: false, using: animation) {
                 self.startAnimation = true
             }
             .onDisappear {

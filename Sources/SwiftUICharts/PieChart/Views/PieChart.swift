@@ -33,14 +33,13 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
     
     @ObservedObject private var chartData: ChartData
     
-    @State private var startAnimation: Bool
-    
     /// Initialises a bar chart view.
     /// - Parameter chartData: Must be PieChartData.
     public init(chartData: ChartData) {
         self.chartData = chartData
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
+    
+    @State private var startAnimation: Bool = false
     
     public var body: some View {
         GeometryReader { geo in
@@ -53,25 +52,33 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
                         .overlay(dataPoint: chartData.dataSets.dataPoints[data],
                                  chartData: chartData,
                                  rect: geo.frame(in: .local))
-                        .scaleEffect(startAnimation ? 1 : 0)
-                        .opacity(startAnimation ? 1 : 0)
+                        .scaleEffect(animationValue)
+                        .opacity(animationValue)
                         .animation(Animation.spring().delay(Double(data) * 0.06))
-                        .if(chartData.touchPointData == [chartData.dataSets.dataPoints[data]]) {
-                            $0
-                                .scaleEffect(1.1)
-                                .zIndex(1)
-                                .shadow(color: Color.primary, radius: 10)
-                        }
+//                        .if(chartData.touchPointData == [chartData.dataSets.dataPoints[data]]) {
+//                            $0
+//                                .scaleEffect(1.1)
+//                                .zIndex(1)
+//                                .shadow(color: Color.primary, radius: 10)
+//                        }
                         .accessibilityLabel(chartData.accessibilityTitle)
 //                        .accessibilityValue(chartData.dataSets.dataPoints[data].getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
                 }
             }
         }
-        .animateOnAppear(using: .linear) {
+        .animateOnAppear(disabled: chartData.disableAnimation, using: .linear) {
             self.startAnimation = true
         }
         .onDisappear {
             self.startAnimation = false
+        }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
         }
     }
 }

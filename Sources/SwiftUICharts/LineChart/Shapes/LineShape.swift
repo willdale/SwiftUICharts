@@ -8,6 +8,12 @@
 import SwiftUI
 import ChartMath
 
+fileprivate final class LineShapeCache {
+    var lineHash: Int?
+    var rect: CGRect?
+    var path = Path()
+}
+
 internal struct LineShape<DataPoint>: Shape where DataPoint: CTStandardDataPointProtocol & Ignorable {
     
     private let dataPoints: [DataPoint]
@@ -27,13 +33,31 @@ internal struct LineShape<DataPoint>: Shape where DataPoint: CTStandardDataPoint
         self.range = range
     }
     
+    fileprivate var cache = LineShapeCache()
+    
     internal func path(in rect: CGRect) -> Path {
+        if cache.lineHash == lineHash && cache.rect == rect {
+            return cache.path
+        }
+        
+        var path = Path()
         switch lineType {
         case .curvedLine:
-            return Path.curvedLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            path = Path.curvedLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
         case .line:
-            return Path.straightLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
+            path = Path.straightLine(rect: rect, dataPoints: dataPoints, minValue: minValue, range: range)
         }
+        cache.lineHash = dataPoints.hashValue
+        cache.rect = rect
+        cache.path = path
+        return path
+    }
+    
+    var lineHash: Int {
+        var hasher = Hasher()
+        hasher.combine(dataPoints)
+        hasher.combine(lineType)
+        return hasher.finalize()
     }
 }
 

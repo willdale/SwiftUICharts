@@ -19,15 +19,17 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     // MARK: Properties
     public let id: UUID = UUID()
     @Published public var dataSets: LineDataSet
-    public var shouldAnimate: Bool
+    public var disableAnimation = false
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .line
     
     public var markerData = MarkerData()
+    public var stateObject = ChartStateObject()
+    public var touchObject = ChartTouchObject()
     
     // MARK: Publishable
-    @Published public var touchPointData: [DataPoint] = []
+    public var touchedData = TouchedData<DataPoint>()
 
     // MARK: DataHelper
     public var baseline: Baseline
@@ -37,23 +39,20 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     internal let chartType: CTChartType = (chartType: .line, dataSetType: .single)
     
     // MARK: Initializer
-    /// Initialises a Single Line Chart.
+    /// Initialises a Single Line Chart
     ///
     /// - Parameters:
-    ///   - dataSets: Data to draw and style a line.
-    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
-    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.
-    ///   - shouldAnimate: Whether the chart should be animated.
-    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
+    ///   - dataSets: Data to draw and style a line
+    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart
+    ///   - baseline: Lowest point of the chart
+    ///   - topLine: Highest point on the chart
     public init(
         dataSets: LineDataSet,
-        shouldAnimate: Bool = true,
         noDataText: Text = Text("No Data"),
         baseline: Baseline = .minimumValue,
         topLine: Topline = .maximumValue
     ) {
         self.dataSets = dataSets
-        self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         self.baseline = baseline
         self.topLine = topLine
@@ -62,10 +61,10 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     // MARK: Touch
     public func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
-
+        
         let xSection = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
         let ySection = chartSize.height / CGFloat(range)
-
+        
         let index = Int(divide((touchLocation.x + (xSection / 2)), xSection))
         if index >= 0 && index < dataSets.dataPoints.count {
             let datapoint = dataSets.dataPoints[index]
@@ -74,7 +73,7 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
             values.append(PublishedTouchData(datapoint: datapoint, location: location, type: chartType.chartType))
         }
         
-        touchPointData = values.map(\.datapoint)
+        touchedData.touchPointData = values.map(\.datapoint)
         markerData = MarkerData(lineMarkerData: values.map {
             return LineMarkerData(markerType: dataSets.markerType,
                                   location: $0.location,
@@ -87,7 +86,7 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     }
     
     public func touchDidFinish() {
-        touchPointData = []
+        touchedData.touchPointData = []
     }
     
     public typealias SetType = LineDataSet

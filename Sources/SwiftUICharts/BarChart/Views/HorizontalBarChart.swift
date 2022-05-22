@@ -10,10 +10,16 @@ import SwiftUI
 // MARK: - Chart
 public struct HorizontalBarChart<ChartData>: View where ChartData: HorizontalBarChartData {
     
-    @EnvironmentObject public var stateObject: ChartStateObject
-    @EnvironmentObject public var chartData: ChartData
+    public var chartData: ChartData
+    public var stateObject: ChartStateObject
     
-    public init() {}
+    public init(
+        chartData: ChartData,
+        stateObject: ChartStateObject
+    ) {
+        self.chartData = chartData
+        self.stateObject = stateObject
+    }
     
     public var body: some View {
         VStack(spacing: 0) {
@@ -62,9 +68,6 @@ internal struct HorizontalBarElement<ChartData>: View where ChartData: CTChartDa
     private let animations = BarElementAnimation()
     private let index: Double
     
-    @State private var fillAnimation: Bool = false
-    @State private var lengthAnimation: Bool = false
-    
     internal init(
         chartData: ChartData,
         dataPoint: BarChartDataPoint,
@@ -75,37 +78,31 @@ internal struct HorizontalBarElement<ChartData>: View where ChartData: CTChartDa
         self.dataPoint = dataPoint
         self.fill = fill
         self.index = Double(index)
-        
-        let shouldAnimate = chartData.shouldAnimate ? false : true
-        self._lengthAnimation = State<Bool>(initialValue: shouldAnimate)
-        self._fillAnimation = State<Bool>(initialValue: shouldAnimate)
     }
+
+    @State private var fillAnimation: Bool = false
+    @State private var lengthAnimation: Bool = false    
     
     internal var body: some View {
         GeometryReader { section in
             RoundedRectangleBarShape(chartData.barStyle.cornerRadius)
                 // Fill
-                .fill(fillAnimation ? fill : animations.fill.startState)
-                .animation(animations.fillAnimation(index),
-                           value: fill)
-                .animateOnAppear(using: animations.fillAnimationStart(index)) {
+                .fill(fillAnimationValue)
+                .animation(animations.fillAnimation(index), value: fill)
+                .animateOnAppear(disabled: chartData.disableAnimation, using: animations.fillAnimationStart(index)) {
                     self.fillAnimation = true
                 }
 
                 // Bredth
                 .frame(height: BarLayout.barWidth(section.size.height, chartData.barStyle.barWidth))
-                .animation(animations.widthAnimation(index),
-                           value: chartData.barStyle.barWidth)
+                .animation(animations.widthAnimation(index), value: chartData.barStyle.barWidth)
             
                 // Length
-                .frame(width: lengthAnimation ?
-                       BarLayout.barHeight(section.size.width, dataPoint.value, chartData.maxValue) :
-                       0)
+                .frame(width: lengthAnimationValue(width: section.size.width))
                 .offset(CGSize(width: 0,
                                height: BarLayout.barXOffset(section.size.height, chartData.barStyle.barWidth)))
-                .animation(animations.heightAnimation(index),
-                           value: dataPoint.value)
-                .animateOnAppear(using: animations.heightAnimationStart(index)) {
+                .animation(animations.heightAnimation(index), value: dataPoint.value)
+                .animateOnAppear(disabled: chartData.disableAnimation, using: animations.heightAnimationStart(index)) {
                     self.lengthAnimation = true
                 }
         }
@@ -114,7 +111,25 @@ internal struct HorizontalBarElement<ChartData>: View where ChartData: CTChartDa
             self.lengthAnimation = false
         }
         .background(Color(.gray).opacity(0.000000001))
-//        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: chartData.infoView.touchSpecifier))
         .id(chartData.id)
+    }
+    
+    var fillAnimationValue: ChartColour {
+        let endValue = fill
+        let startValue = animations.fill.startState
+        if chartData.disableAnimation {
+            return endValue
+        } else {
+            return fillAnimation ? endValue : startValue
+        }
+    }
+    
+    func lengthAnimationValue(width: CGFloat) -> CGFloat {
+        let value = BarLayout.barHeight(width, dataPoint.value, chartData.maxValue)
+        if chartData.disableAnimation {
+            return value
+        } else {
+            return lengthAnimation ? value : 0
+        }
     }
 }

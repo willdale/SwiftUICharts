@@ -43,10 +43,12 @@ public protocol CTChartData: ObservableObject, Identifiable {
     var noDataText: Text { get set }
     
     /// A global control to disable animations
-    var shouldAnimate: Bool { get set }
+    var disableAnimation: Bool { get set }
     
     var chartName: ChartName { get }
     
+    var stateObject: ChartStateObject { get set }
+    var touchObject: ChartTouchObject { get set }
     
     /// Data model containing the charts Title, Subtitle and the Title for Legend.
     ///
@@ -91,13 +93,13 @@ extension CTChartData where Self: DataHelper {
 }
 
 extension CTChartData {
-    public var xAxisData: XAxisLabelStyle.XLabelData {
-        XAxisLabelStyle.XLabelData(chart: chartName, spacing: nil)
+    internal var spacing: CGFloat {
+        return 0
     }
 }
 extension CTChartData where Self: GroupedBarChartData {
-    public var xAxisData: XAxisLabelStyle.XLabelData {
-        XAxisLabelStyle.XLabelData(chart: chartName, spacing: groupSpacing)
+    internal var spacing: CGFloat {
+        return groupSpacing
     }
 }
 

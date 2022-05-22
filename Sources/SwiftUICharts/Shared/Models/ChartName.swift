@@ -39,24 +39,6 @@ public enum ChartName {
             return false
         }
     }
-//    var orientation: Orientation {
-//        switch self {
-//        case .line,
-//             .filledLine,
-//             .multiLine,
-//             .rangedLine,
-//             .bar,
-//             .groupedBar,
-//             .rangedBar,
-//             .stackedBar:
-//            return .vertical
-//        case .horizontalBar:
-//            return .horizontal
-//        case .pie,
-//             .doughnut:
-//            return .none
-//        }
-//    }
     
     enum Orientation {
         case vertical

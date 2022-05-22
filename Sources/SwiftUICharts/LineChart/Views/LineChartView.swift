@@ -26,45 +26,53 @@ import SwiftUI
  */
 public struct LineChart<ChartData>: View where ChartData: LineChartData {
     
-    @EnvironmentObject public var stateObject: ChartStateObject
-    @EnvironmentObject public var chartData: ChartData
+    public var chartData: ChartData
     
-    public init() {}
+    public init(
+        chartData: ChartData
+    ) {
+        self.chartData = chartData
+    }
     
     public var body: some View {
-            ZStack {
-                LineSubView(chartData: chartData)
-            }
-            .modifier(ChartSizeUpdating(stateObject: stateObject))
+        LineSubView(chartData: chartData)
+            .modifier(ChartSizeUpdating(stateObject: chartData.stateObject))
     }
 }
 
 internal struct LineSubView<ChartData>: View where ChartData: LineChartData {
     @ObservedObject private var chartData: ChartData
     
-    @State private var startAnimation: Bool = false
-    
     internal init(
         chartData: ChartData
     ) {
         self.chartData = chartData
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
+    
+    @State private var startAnimation: Bool = false
     
     internal var body: some View {
         LineShape(dataPoints: chartData.dataSets.dataPoints,
                   lineType: chartData.dataSets.style.lineType,
                   minValue: chartData.minValue,
                   range: chartData.range)
-            .trim(to: startAnimation ? 1 : 0)
+            .trim(to: animationValue)
             .stroke(chartData.dataSets.style.lineColour, strokeStyle: chartData.dataSets.style.strokeStyle)
         
-            .animateOnAppear(using: .linear) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: .linear) {
                 self.startAnimation = true
             }
             .background(Color(.gray).opacity(0.000000001))
             .onDisappear {
                 self.startAnimation = false
             }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
+        }
     }
 }

@@ -155,36 +155,47 @@ public enum ChartBorder: Hashable, Identifiable {
 }
 
 extension ChartBorder.Style {
-//    public static let white = ChartBorder.Style(colour: Color(.white))
-//    public static let lightGray = ChartBorder.Style(colour: Color(.gray).opacity(0.50))
-//    public static let gray = ChartBorder.Style(colour: Color(.gray))
-//    public static let black = ChartBorder.Style(colour: Color(.black))
-//    public static let primary =   ChartBorder.Style(colour: Color.primary)
+    public static let white = ChartBorder.Style(colour: Color(.white), animation: .default)
+    public static let lightGray = ChartBorder.Style(colour: Color(.gray).opacity(0.50), animation: .default)
+    public static let gray = ChartBorder.Style(colour: Color(.gray), animation: .default)
+    public static let black = ChartBorder.Style(colour: Color(.black), animation: .default)
+    public static let primary = ChartBorder.Style(colour: Color.primary, animation: .default)
     
     internal static let noStyle = ChartBorder.Style(colour: .clear, animation: .default)
 }
 
 // MARK: - API
 extension View {
-    public func axisBorder(
+    public func axisBorder<ChartData>(
+        chartData: ChartData,
         edges: BorderSet
-    ) -> some View {
-        self.modifier(AxisBorder(edges: Array(edges)))
+    ) -> some View where ChartData: CTChartData {
+        self.modifier(AxisBorder(chartData: chartData, edges: Array(edges)))
     }
 }
 
-internal struct AxisBorder: ViewModifier {
+// MARK: Implementation
+fileprivate struct AxisBorder<ChartData>: ViewModifier where ChartData: CTChartData {
+
+    private let chartData: ChartData
+    private let edges: [ChartBorder]
     
-    internal let edges: [ChartBorder]
+    fileprivate init(
+        chartData: ChartData,
+        edges: [ChartBorder]
+    ) {
+        self.chartData = chartData
+        self.edges = edges
+    }
     
-    internal func body(content: Content) -> some View {
+    fileprivate func body(content: Content) -> some View {
         ZStack {
             ForEach(edges, id: \.id) { edge in
                 switch edge.isMiddle {
                 case false:
-                    _Animate_From_Corner(edge: edge)
+                    _Animate_From_Corner(edge: edge, disableAnimation: chartData.disableAnimation)
                 case true:
-                    _Animate_From_Middle(edge: edge)
+                    _Animate_From_Middle(edge: edge, disableAnimation: chartData.disableAnimation)
                 }
 
                 content
@@ -195,7 +206,16 @@ internal struct AxisBorder: ViewModifier {
 
 fileprivate struct _Animate_From_Corner: View {
     
-    internal let edge: ChartBorder
+    private let edge: ChartBorder
+    private let disableAnimation: Bool
+    
+    fileprivate init(
+        edge: ChartBorder,
+        disableAnimation: Bool
+    ) {
+        self.edge = edge
+        self.disableAnimation = disableAnimation
+    }
     
     @State private var animate = false
     
@@ -205,7 +225,7 @@ fileprivate struct _Animate_From_Corner: View {
                 .trim(from: 0.0, to: animate ? 1.0 : 0.0)
                 .stroke(edge.style.colour, style: edge.style.style)
         }
-        .animateOnAppear(using: edge.style.animation) {
+        .animateOnAppear(disabled: disableAnimation, using: edge.style.animation) {
             self.animate = true
         }
     }
@@ -213,7 +233,16 @@ fileprivate struct _Animate_From_Corner: View {
 
 fileprivate struct _Animate_From_Middle: View {
     
-    internal let edge: ChartBorder
+    private let edge: ChartBorder
+    private let disableAnimation: Bool
+    
+    fileprivate init(
+        edge: ChartBorder,
+        disableAnimation: Bool
+    ) {
+        self.edge = edge
+        self.disableAnimation = disableAnimation
+    }
     
     @State private var animate = false
     
@@ -226,117 +255,125 @@ fileprivate struct _Animate_From_Middle: View {
                 .trim(from: 0.5, to: animate ? 1.0 : 0.5)
                 .stroke(edge.style.colour, style: edge.style.style)
         }
-        .animateOnAppear(using: edge.style.animation) {
+        .animateOnAppear(disabled: disableAnimation, using: edge.style.animation) {
             self.animate = true
         }
     }
 }
 
+// MARK: Cache
+fileprivate final class AxisBorderCache {
+    var edge: ChartBorder?
+    var rect: CGRect?
+    
+    var path = Path()
+}
+
+// MARK: Shape
 public struct AxisBorderShape: Shape {
     
     let edge: ChartBorder
     
+    public init(edge: ChartBorder) {
+        self.edge = edge
+    }
+    
+    private let cache = AxisBorderCache()
+    
     public func path(in rect: CGRect) -> Path {
+        if edge == cache.edge && rect == cache.rect {
+            return cache.path
+        }
+        
+        var path = Path()
         switch edge {
         case .top(let direction, _):
             switch direction {
             case .leading:
-                return Path._topTrailing_to_topLeading(rect)
+                _topTrailing_to_topLeading(rect, path: &path)
             case .trailing:
-                return Path._topLeading_to_topTrailing(rect)
+                _topLeading_to_topTrailing(rect, path: &path)
             default:
-                return Path._topLeading_to_topTrailing(rect)
+                break
             }
         case .leading(let direction, _):
             switch direction {
             case .up:
-                return Path._leadingBottom_to_leadingTop(rect)
+                _leadingBottom_to_leadingTop(rect, path: &path)
             case .down:
-                return Path._leadingTop_to_leadingBottom(rect)
+                _leadingTop_to_leadingBottom(rect, path: &path)
             default:
-                return Path._leadingTop_to_leadingBottom(rect)
+                break
             }
         case .bottom(let direction, _):
             switch direction {
             case .leading:
-                return Path._bottomTrailing_to_bottomLeading(rect)
+                _bottomTrailing_to_bottomLeading(rect, path: &path)
             case .trailing:
-                return Path._bottomLeading_to_bottomTrailing(rect)
+                _bottomLeading_to_bottomTrailing(rect, path: &path)
             default:
-                return Path._bottomLeading_to_bottomTrailing(rect)
+                break
             }
         case .trailing(let direction, _):
             switch direction {
             case .up:
-                return Path._bottomTrailing_to_topTrailing(rect)
+                _bottomTrailing_to_topTrailing(rect, path: &path)
             case .down:
-                return Path._topTrailing_to_bottomTrailing(rect)
+                _topTrailing_to_bottomTrailing(rect, path: &path)
             default:
-                return Path._topTrailing_to_bottomTrailing(rect)
+                break
             }
         }
+        cache.edge = edge
+        cache.rect = rect
+        cache.path = path
+        return path
     }
 }
 
-extension Path {
-    static func topLeading(_ rect: CGRect) -> CGPoint { CGPoint(x: rect.minX, y: rect.minY) }
-    static func bottomLeading(_ rect: CGRect) -> CGPoint { CGPoint(x: rect.minX, y: rect.maxY) }
-    static func bottomTrailing(_ rect: CGRect) -> CGPoint { CGPoint(x: rect.maxX, y: rect.maxY) }
-    static func topTrailing(_ rect: CGRect) -> CGPoint { CGPoint(x: rect.maxX, y: rect.minY) }
+extension AxisBorderShape {
+    fileprivate func topLeading(_ rect: CGRect) -> CGPoint { CGPoint(x: rect.minX, y: rect.minY) }
+    fileprivate func bottomLeading(_ rect: CGRect) -> CGPoint { CGPoint(x: rect.minX, y: rect.maxY) }
+    fileprivate func bottomTrailing(_ rect: CGRect) -> CGPoint { CGPoint(x: rect.maxX, y: rect.maxY) }
+    fileprivate func topTrailing(_ rect: CGRect) -> CGPoint { CGPoint(x: rect.maxX, y: rect.minY) }
     
-    static func _leadingBottom_to_leadingTop(_ rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: Self.bottomLeading(rect))
-        path.addLine(to: Self.topLeading(rect))
-        return path
+    fileprivate func _leadingBottom_to_leadingTop(_ rect: CGRect, path: inout Path) {
+        path.move(to: bottomLeading(rect))
+        path.addLine(to: topLeading(rect))
     }
     
-    static func _leadingTop_to_leadingBottom(_ rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: Self.topLeading(rect))
-        path.addLine(to: Self.bottomLeading(rect))
-        return path
+    fileprivate func _leadingTop_to_leadingBottom(_ rect: CGRect, path: inout Path) {
+        path.move(to: topLeading(rect))
+        path.addLine(to: bottomLeading(rect))
     }
     
-    static func _bottomLeading_to_bottomTrailing(_ rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: Self.bottomLeading(rect))
-        path.addLine(to: Self.bottomTrailing(rect))
-        return path
+    fileprivate func _bottomLeading_to_bottomTrailing(_ rect: CGRect, path: inout Path) {
+        path.move(to: bottomLeading(rect))
+        path.addLine(to: bottomTrailing(rect))
     }
     
-    static func _bottomTrailing_to_bottomLeading(_ rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: Self.bottomTrailing(rect))
-        path.addLine(to: Self.bottomLeading(rect))
-        return path
+    fileprivate func _bottomTrailing_to_bottomLeading(_ rect: CGRect, path: inout Path) {
+        path.move(to: bottomTrailing(rect))
+        path.addLine(to: bottomLeading(rect))
     }
     
-    static func _bottomTrailing_to_topTrailing(_ rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: Self.bottomTrailing(rect))
-        path.addLine(to: Self.topTrailing(rect))
-        return path
+    fileprivate func _bottomTrailing_to_topTrailing(_ rect: CGRect, path: inout Path) {
+        path.move(to: bottomTrailing(rect))
+        path.addLine(to: topTrailing(rect))
     }
     
-    static func _topTrailing_to_bottomTrailing(_ rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: Self.topTrailing(rect))
-        path.addLine(to: Self.bottomTrailing(rect))
-        return path
+    fileprivate func _topTrailing_to_bottomTrailing(_ rect: CGRect, path: inout Path) {
+        path.move(to: topTrailing(rect))
+        path.addLine(to: bottomTrailing(rect))
     }
     
-    static func _topLeading_to_topTrailing(_ rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: Self.topLeading(rect))
-        path.addLine(to: Self.topTrailing(rect))
-        return path
+    fileprivate func _topLeading_to_topTrailing(_ rect: CGRect, path: inout Path) {
+        path.move(to: topLeading(rect))
+        path.addLine(to: topTrailing(rect))
     }
     
-    static func _topTrailing_to_topLeading(_ rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: Self.topTrailing(rect))
-        path.addLine(to: Self.topLeading(rect))
-        return path
+    fileprivate func _topTrailing_to_topLeading(_ rect: CGRect, path: inout Path) {
+        path.move(to: topTrailing(rect))
+        path.addLine(to: topLeading(rect))
     }
 }

@@ -26,11 +26,8 @@ import SwiftUI
 public struct FilledLineChart<ChartData>: View where ChartData: FilledLineChartData {
     
     @ObservedObject private var chartData: ChartData
-    
     private let minValue: Double
     private let range: Double
-    
-    @State private var startAnimation: Bool
     
     /// Initialises a filled line chart
     /// - Parameter chartData: Must be LineChartData model.
@@ -38,18 +35,17 @@ public struct FilledLineChart<ChartData>: View where ChartData: FilledLineChartD
         self.chartData = chartData
         self.minValue = chartData.minValue
         self.range = chartData.range
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
+    
+    @State private var startAnimation: Bool = false
     
     public var body: some View {
             ZStack {
-//                chartData.getAccessibility()
                 TopLineSubView(chartData: chartData,
                                colour: chartData.dataSets.style.lineColour)
                 FilledLineSubView(chartData: chartData,
                                   colour: chartData.dataSets.style.fillColour)
             }
-        
         }
     }
 
@@ -58,33 +54,39 @@ internal struct TopLineSubView<ChartData>: View where ChartData: FilledLineChart
     @ObservedObject private var chartData: ChartData
     private let colour: ChartColour
     
-    @State private var startAnimation: Bool = false
-    
     internal init(
         chartData: ChartData,
         colour: ChartColour
     ) {
         self.chartData = chartData
         self.colour = colour
-        
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
+    
+    @State private var startAnimation: Bool = false
     
     internal var body: some View {
         LineShape(dataPoints: chartData.dataSets.dataPoints,
                   lineType: chartData.dataSets.style.lineType,
                   minValue: chartData.minValue,
                   range: chartData.range)
-            .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+            .scale(y: animationValue, anchor: .bottom)
             .stroke(colour, strokeStyle: chartData.dataSets.style.strokeStyle)
         
-            .animateOnAppear(using: .linear) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: .linear) {
                 self.startAnimation = true
             }
             .background(Color(.gray).opacity(0.000000001))
             .onDisappear {
                 self.startAnimation = false
             }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
+        }
     }
 }
 
@@ -94,33 +96,38 @@ internal struct FilledLineSubView<ChartData>: View where ChartData: FilledLineCh
     @ObservedObject private var chartData: ChartData
     private let colour: ChartColour
     
-    @State private var startAnimation: Bool = false
-    
     internal init(
         chartData: ChartData,
         colour: ChartColour
     ) {
         self.chartData = chartData
         self.colour = colour
-        
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
+
+    @State private var startAnimation: Bool = false
     
     internal var body: some View {
         FilledLine(dataPoints: chartData.dataSets.dataPoints,
                    lineType: chartData.dataSets.style.lineType,
                    minValue: chartData.minValue,
                    range: chartData.range)
-            .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
+            .scale(y: animationValue, anchor: .bottom)
             .fill(colour)
-//            .modifier(ChartSizeUpdating(chartData: chartData))
         
-            .animateOnAppear(using: .linear) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: .linear) {
                 self.startAnimation = true
             }
             .background(Color(.gray).opacity(0.000000001))
             .onDisappear {
                 self.startAnimation = false
             }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
+        }
     }
 }
