@@ -82,8 +82,6 @@ fileprivate struct _MarkerData<Icon: View>: View {
     fileprivate let chartSize: CGRect
     fileprivate let touchLocation: CGPoint
     
-    @State private var test: CGPoint = .zero
-    
     fileprivate var body: some View {
         ZStack {
             ForEach(markerData.barMarkerData, id: \.self) { marker in
@@ -91,9 +89,7 @@ fileprivate struct _MarkerData<Icon: View>: View {
             }
             
             ForEach(markerData.lineMarkerData, id: \.self) { marker in
-                if #available(iOS 15.0, watchOS 8.0, *) {
-                    line(indicatorLocation: test,
-                         lineMarker: marker.markerType,
+                    line(lineMarker: marker.markerType,
                          indicator: indicator,
                          markerData: marker,
                          chartSize: chartSize,
@@ -103,32 +99,6 @@ fileprivate struct _MarkerData<Icon: View>: View {
                          lineSpacing: marker.lineSpacing,
                          minValue: marker.minValue,
                          range: marker.range)
-                    .task {
-                        Task.detached {
-                            test = PositionIndicator.getIndicatorLocation(
-                                rect: chartSize,
-                                dataPoints: marker.dataPoints,
-                                touchLocation: touchLocation,
-                                lineType: marker.lineType,
-                                lineSpacing: marker.lineSpacing,
-                                minValue: marker.minValue,
-                                range: marker.range
-                            )
-                        }
-                    }
-                } else {
-                    line(indicatorLocation: .zero,
-                         lineMarker: marker.markerType,
-                         indicator: indicator,
-                         markerData: marker,
-                         chartSize: chartSize,
-                         touchLocation: touchLocation,
-                         dataPoints: marker.dataPoints,
-                         lineType: marker.lineType,
-                         lineSpacing: marker.lineSpacing,
-                         minValue: marker.minValue,
-                         range: marker.range)
-                }
             }
         }
     }
@@ -164,7 +134,6 @@ fileprivate struct _MarkerData<Icon: View>: View {
     }
     
     private func line<Icon: View>(
-        indicatorLocation: CGPoint,
         lineMarker: LineMarkerType,
         indicator: Icon,
         markerData: LineMarkerData,
@@ -176,13 +145,13 @@ fileprivate struct _MarkerData<Icon: View>: View {
         minValue: Double,
         range: Double
     ) -> some View {
-//        let indicatorLocation = PositionIndicator.getIndicatorLocation(rect: chartSize,
-//                                                                       dataPoints: dataPoints,
-//                                                                       touchLocation: touchLocation,
-//                                                                       lineType: lineType,
-//                                                                       lineSpacing: lineSpacing,
-//                                                                       minValue: minValue,
-//                                                                       range: range)
+        let indicatorLocation = PositionIndicator.getIndicatorLocation(rect: chartSize,
+                                                                       dataPoints: dataPoints,
+                                                                       touchLocation: touchLocation,
+                                                                       lineType: lineType,
+                                                                       lineSpacing: lineSpacing,
+                                                                       minValue: minValue,
+                                                                       range: range)
         return Group {
             switch lineMarker {
             case .none:

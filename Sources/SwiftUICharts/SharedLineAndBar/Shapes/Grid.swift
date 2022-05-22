@@ -8,15 +8,18 @@
 import SwiftUI
 import ChartMath
 
+public typealias GridAnimation = (_ index: Int) -> Animation
+
 // MARK: - API
 extension View {
     public func grid(
         vLines: Int = 5,
         hLines: Int = 5,
         style: Grid.Style = .grey,
-        animation: @escaping (_ index: Int) -> Animation = { _ in .default }
+        vAnimation: @escaping GridAnimation = { (_) in .default },
+        hAnimation: @escaping GridAnimation = { (_) in .default }
     ) -> some View {
-        self.modifier(__GridModifier(vLines: vLines, hLines: hLines, style: style, animation: animation))
+        self.modifier(__GridModifier(vLines: vLines, hLines: hLines, style: style, vAnimation: vAnimation, hAnimation: hAnimation))
     }
 }
 
@@ -25,42 +28,39 @@ extension Grid {
         public var colour: ChartColour
         public var stroke: StrokeStyle
         public var edges: Bool
+        public var animationStyle: Animation.Style = .draw()
     }
     
     public struct Animation {
-        public var style: Style = .draw(direction: .topLeading)
-
         public enum Style {
-            case draw(direction: Direction)
+            case draw(vDirection: VerticalDirection = .top, hDirection: HorizontalDirection = .leading)
             case fade
-        }
-
-        public enum Direction {
-            case topLeading
-            case topTrailing
-            case bottomLeading
-            case bottomTrailing
-
-            var data: (v: VerticalDirection, h: HorizontalDirection) {
+            
+            var vDirection: VerticalDirection? {
                 switch self {
-                case .topLeading:
-                    return (v: .top, h: .leading)
-                case .topTrailing:
-                    return (v: .top, h: .trailing)
-                case .bottomLeading:
-                    return (v: .bottom, h: .leading)
-                case .bottomTrailing:
-                    return (v: .bottom, h: .trailing)
+                case let .draw(vDirection, _):
+                    return vDirection
+                default:
+                    return nil
+                }
+            }
+            
+            var hDirection: HorizontalDirection? {
+                switch self {
+                case let .draw(_, hDirection):
+                    return hDirection
+                default:
+                    return nil
                 }
             }
         }
 
-        internal enum VerticalDirection {
+        public enum VerticalDirection {
             case top
             case bottom
         }
 
-        internal enum HorizontalDirection {
+        public enum HorizontalDirection {
             case leading
             case trailing
         }
@@ -85,7 +85,6 @@ extension Shape {
             case .fade:
                 self.stroke(style.colour, strokeStyle: style.stroke)
                     .opacity(startAnimation ? 1 : 0)
-                
             }
         }
     }
@@ -94,49 +93,29 @@ extension Shape {
 // MARK: - Grid
 public struct Grid: View {
     
-    public let vLines: Int
-    public let hLines: Int
-    public let style: Grid.Style
-    public let animation: (_ index: Int) -> SwiftUI.Animation
-    
-    private let hRange: Range<Int>
-    private let vRange: Range<Int>
+    private let vLines: Int
+    private let hLines: Int
+    private let style: Grid.Style
+    private let vAnimation: GridAnimation
+    private let hAnimation: GridAnimation
     
     public init(
         vLines: Int,
         hLines: Int,
         style: Grid.Style,
-        animation: @escaping (_ index: Int) -> SwiftUI.Animation
+        vAnimation: @escaping GridAnimation,
+        hAnimation: @escaping GridAnimation
     ) {
         self.style = style
-        self.animation = animation
-        
-        var hRange = 0..<hLines
-        var hLines = hLines
-        if !style.edges {
-            hLines = hLines + 2
-            let lower = 1
-            let upper = hLines-1
-            hRange = lower..<upper
-        }
-        self.hLines = hLines
-        self.hRange = hRange
-        
-        var vRange = 0..<vLines
-        var vLines = vLines
-        if !style.edges {
-            vLines = vLines + 2
-            let lower = 1
-            let upper = vLines-1
-            vRange = lower..<upper
-        }
         self.vLines = vLines
-        self.vRange = vRange
+        self.vAnimation = vAnimation
+        self.hLines = hLines
+        self.hAnimation = hAnimation
     }
     
     public var body: some View {
-        HGrid(hRange: hRange, hLines: hLines, style: style, animation: animation)
-        VGrid(vRange: vRange, vLines: vLines, style: style, animation: animation)
+        HGrid(hLines: hLines, style: style, animation: hAnimation)
+        VGrid(vLines: vLines, style: style, animation: vAnimation)
     }
 }
 
@@ -145,11 +124,26 @@ fileprivate struct __GridModifier: ViewModifier {
     fileprivate let vLines: Int
     fileprivate let hLines: Int
     fileprivate let style: Grid.Style
-    fileprivate let animation: (_ index: Int) -> Animation
+    fileprivate let vAnimation: GridAnimation
+    fileprivate let hAnimation: GridAnimation
+    
+    fileprivate init(
+        vLines: Int,
+        hLines: Int,
+        style: Grid.Style,
+        vAnimation: @escaping GridAnimation,
+        hAnimation: @escaping GridAnimation
+    ) {
+        self.vLines = vLines
+        self.hLines = hLines
+        self.style = style
+        self.vAnimation = vAnimation
+        self.hAnimation = hAnimation
+    }
     
     fileprivate func body(content: Content) -> some View {
         ZStack {
-            Grid(vLines: vLines, hLines: hLines, style: style, animation: animation)
+            Grid(vLines: vLines, hLines: hLines, style: style, vAnimation: vAnimation, hAnimation: hAnimation)
             content
         }
     }
@@ -158,61 +152,42 @@ fileprivate struct __GridModifier: ViewModifier {
 // MARK: - Horrizontal
 public struct HGrid: View {
     
-    public let hRange: Range<Int>
-    public let hLines: Int
-    public let style: Grid.Style
-    public let animation: (_ index: Int) -> Animation
+    private let total: Int
+    private let style: Grid.Style
+    private let animation: GridAnimation
+    
+    private let data: [Int]
     
     public init(
-        hRange: Range<Int>,
         hLines: Int,
         style: Grid.Style,
-        animation: @escaping (Int) -> Animation
+        animation: @escaping GridAnimation
     ) {
-        self.hRange = hRange
-        self.hLines = hLines
+        let lower: Int
+        let upper: Int
+        let total: Int
+        if style.edges {
+            lower = 0
+            upper = hLines-1
+            total = hLines
+        } else {
+            lower = 1
+            upper = hLines
+            total = hLines+2
+        }
+        if lower <= upper {
+            self.data = Array(lower...upper)
+        } else {
+            self.data = []
+        }
+        self.total = total
         self.style = style
         self.animation = animation
     }
     
     public var body: some View {
-        ForEach(hRange, id: \.self) { index in
-            __Horrizontal_Grid_Cell(index: index, total: hLines, style: style, animation: animation)
-        }
-    }
-}
-
-fileprivate struct __HGridModifier: ViewModifier {
-    
-    fileprivate let hLines: Int
-    fileprivate let style: Grid.Style
-    fileprivate let animation: (_ index: Int) -> Animation
-    
-    private let hRange: Range<Int>
-    
-    fileprivate init(
-        hLines: Int,
-        style: Grid.Style,
-        animation: @escaping (_ index: Int) -> Animation
-    ) {
-        var hRange = 0..<hLines
-        var hLines = hLines
-        if !style.edges {
-            hLines = hLines + 2
-            let lower = 1
-            let upper = hLines-1
-            hRange = lower..<upper
-        }
-        self.hLines = hLines
-        self.style = style
-        self.hRange = hRange
-        self.animation = animation
-    }
-    
-    fileprivate func body(content: Content) -> some View {
-        ZStack {
-            HGrid(hRange: hRange, hLines: hLines, style: style, animation: animation)
-            content
+        ForEach(data, id: \.self) { index in
+            __Horrizontal_Grid_Cell(index: index, total: total, style: style, animation: animation)
         }
     }
 }
@@ -220,23 +195,35 @@ fileprivate struct __HGridModifier: ViewModifier {
 // MARK: Cell
 fileprivate struct __Horrizontal_Grid_Cell: View {
     
-    fileprivate let index: Int
-    fileprivate let total: Int
-    fileprivate let style: Grid.Style
-    fileprivate let animation: (_ index: Int) -> Animation
+    private let index: Int
+    private let total: Int
+    private let style: Grid.Style
+    private let animation: GridAnimation
+    
+    fileprivate init(
+        index: Int,
+        total: Int,
+        style: Grid.Style,
+        animation: @escaping GridAnimation
+    ) {
+        self.index = index
+        self.total = total
+        self.style = style
+        self.animation = animation
+    }
     
     @State private var startAnimation: Bool = false
     
     fileprivate var body: some View {
         if total == 1 {
-            __Horrizontal_Line_Center()
-                .__gridAnimation(animation: .draw(direction: .topLeading), style: style, startAnimation: startAnimation)
+            __Horrizontal_Line_Center(direction: style.animationStyle.hDirection)
+                .__gridAnimation(animation: style.animationStyle, style: style, startAnimation: startAnimation)
                 .animateOnAppear(using: animation(index)) {
                     self.startAnimation = true
                 }
         } else {
-            __Horrizontal_Line(index: index, total: total)
-                .__gridAnimation(animation: .draw(direction: .topLeading), style: style, startAnimation: startAnimation)
+            __Horrizontal_Line(index: index, total: total, direction: style.animationStyle.hDirection)
+                .__gridAnimation(animation: style.animationStyle, style: style, startAnimation: startAnimation)
                 .animateOnAppear(using: animation(index)) {
                     self.startAnimation = true
                 }
@@ -247,14 +234,24 @@ fileprivate struct __Horrizontal_Grid_Cell: View {
 // MARK: Shape
 fileprivate struct __Horrizontal_Line: Shape {
     
-    fileprivate let index: Int
-    fileprivate let total: Int
-    fileprivate let direction: Grid.Animation.HorizontalDirection = .leading
+    private let index: Int
+    private let total: Int
+    private let direction: Grid.Animation.HorizontalDirection
+    
+    fileprivate init(
+        index: Int,
+        total: Int,
+        direction: Grid.Animation.HorizontalDirection?
+    ) {
+        self.index = index
+        self.total = total
+        self.direction = direction ?? .leading
+    }
     
     fileprivate func path(in rect: CGRect) -> Path {
         let sectionSize = divide(rect.height, total-1)
         let y = CGFloat(index) * sectionSize
-
+        
         let leading = CGPoint(x: rect.minX, y: y)
         let trailing = CGPoint(x: rect.maxX, y: y)
         
@@ -272,7 +269,11 @@ fileprivate struct __Horrizontal_Line: Shape {
 
 fileprivate struct __Horrizontal_Line_Center: Shape {
     
-    fileprivate let direction: Grid.Animation.HorizontalDirection = .leading
+    private let direction: Grid.Animation.HorizontalDirection
+    
+    fileprivate init(direction: Grid.Animation.HorizontalDirection?) {
+        self.direction = direction ?? .leading
+    }
     
     fileprivate func path(in rect: CGRect) -> Path {
         let leading = CGPoint(x: rect.minX, y: rect.midX)
@@ -293,49 +294,44 @@ fileprivate struct __Horrizontal_Line_Center: Shape {
 
 // MARK: - Vertical
 public struct VGrid: View {
-    public let vRange: Range<Int>
-    public let vLines: Int
-    public let style: Grid.Style
-    public let animation: (_ index: Int) -> Animation
-    
-    public var body: some View {
-        ForEach(vRange, id: \.self) { index in
-            __Vertical_Grid_Cell(index: index, total: vLines, style: style, animation: animation)
-        }
-    }
-}
 
-fileprivate struct __VGridModifier: ViewModifier {
+    private let total: Int
+    private let style: Grid.Style
+    private let animation: GridAnimation
     
-    fileprivate let vLines: Int
-    fileprivate let style: Grid.Style
-    fileprivate let animation: (_ index: Int) -> Animation
-    
-    private let vRange: Range<Int>
-    
-    fileprivate init(
+    private let data: [Int]
+        
+    public init(
         vLines: Int,
         style: Grid.Style,
-        animation: @escaping (_ index: Int) -> Animation
+        animation: @escaping GridAnimation
     ) {
-        var vRange = 0..<vLines
-        var vLines = vLines
-        if !style.edges {
-            vLines = vLines + 2
-            let lower = 1
-            let upper = vLines-1
-            vRange = lower..<upper
+        let lower: Int
+        let upper: Int
+        let total: Int
+        if style.edges {
+            lower = 0
+            upper = vLines-1
+            total = vLines
+        } else {
+            lower = 1
+            upper = vLines
+            total = vLines+2
         }
-        self.vLines = vLines
+        
+        if lower <= upper {
+            self.data = Array(lower...upper)
+        } else {
+            self.data = []
+        }
+        self.total = total
         self.style = style
-        self.vRange = vRange
         self.animation = animation
     }
     
-    fileprivate func body(content: Content) -> some View {
-        ZStack {
-            VGrid(vRange: vRange, vLines: vLines, style: style, animation: animation)
-            content
+    public var body: some View {
+        ForEach(data, id: \.self) { index in
+            __Vertical_Grid_Cell(index: index, total: total, style: style, animation: animation)
         }
     }
 }
@@ -343,25 +339,36 @@ fileprivate struct __VGridModifier: ViewModifier {
 // MARK: Cell
 fileprivate struct __Vertical_Grid_Cell: View {
     
-    fileprivate let index: Int
-    fileprivate let total: Int
-    fileprivate let style: Grid.Style
-    fileprivate let animation: (_ index: Int) -> Animation
-        
+    private let index: Int
+    private let total: Int
+    private let style: Grid.Style
+    private let animation: GridAnimation
+    
+    fileprivate init(
+        index: Int,
+        total: Int,
+        style: Grid.Style,
+        animation: @escaping GridAnimation
+    ) {
+        self.index = index
+        self.total = total
+        self.style = style
+        self.animation = animation
+    }
+    
     @State private var startAnimation: Bool = false
     
     fileprivate var body: some View {
         if total == 1 {
-            __Vertical_Line_Center()
-                .__gridAnimation(animation: .draw(direction: .topLeading), style: style, startAnimation: startAnimation)
+            __Vertical_Line_Center(direction: style.animationStyle.vDirection)
+                .__gridAnimation(animation: style.animationStyle, style: style, startAnimation: startAnimation)
                 .animateOnAppear(using: animation(index)) {
                     self.startAnimation = true
                 }
         } else {
-            __Vertical_Line(index: index, total: total)
-                .__gridAnimation(animation: .draw(direction: .topLeading), style: style, startAnimation: startAnimation)
+            __Vertical_Line(index: index, total: total, direction: style.animationStyle.vDirection)
+                .__gridAnimation(animation: style.animationStyle, style: style, startAnimation: startAnimation)
                 .animateOnAppear(using: animation(index)) {
-                    print(index)
                     self.startAnimation = true
                 }
         }
@@ -371,9 +378,19 @@ fileprivate struct __Vertical_Grid_Cell: View {
 // MARK: Shape
 fileprivate struct __Vertical_Line: Shape {
     
-    fileprivate let index: Int
-    fileprivate let total: Int
-    fileprivate let direction: Grid.Animation.VerticalDirection = .bottom
+    private let index: Int
+    private let total: Int
+    private let direction: Grid.Animation.VerticalDirection
+    
+    fileprivate init(
+        index: Int,
+        total: Int,
+        direction: Grid.Animation.VerticalDirection?
+    ) {
+        self.index = index
+        self.total = total
+        self.direction = direction ?? .top
+    }
     
     fileprivate func path(in rect: CGRect) -> Path {
         let sectionSize = divide(rect.width, total-1)
@@ -383,7 +400,7 @@ fileprivate struct __Vertical_Line: Shape {
         let bottom = CGPoint(x: x, y: rect.maxY)
 
         var path = Path()
-        if direction == .bottom {
+        if direction == .top {
             path.move(to: top)
             path.addLine(to: bottom)
         } else {
@@ -397,7 +414,11 @@ fileprivate struct __Vertical_Line: Shape {
 
 fileprivate struct __Vertical_Line_Center: Shape {
     
-    fileprivate let direction: Grid.Animation.VerticalDirection = .bottom
+    private let direction: Grid.Animation.VerticalDirection
+    
+    fileprivate init(direction: Grid.Animation.VerticalDirection?) {
+        self.direction = direction ?? .top
+    }
     
     fileprivate func path(in rect: CGRect) -> Path {
         let top = CGPoint(x: rect.midX, y: rect.minY)
