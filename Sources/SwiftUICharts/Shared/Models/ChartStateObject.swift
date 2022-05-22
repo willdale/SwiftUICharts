@@ -29,17 +29,27 @@ public final class ChartStateObject: ObservableObject {
     
     internal var layoutElements = Set<Model>()
     
+    private var timer: Timer?
+    
     public init() {}
     
     internal func updateLayoutElement(with newItem: Model) {
+        mangeNewItem(newItem)
+        handleNewItem(with: newItem.element)
+        postLayoutNotification(after: timer)
+    }
+    
+    private func mangeNewItem(_ newItem: Model) {
         if let oldItem = layoutElements.first(where: { $0.element == newItem.element }) {
             layoutElements.remove(oldItem)
             layoutElements.insert(newItem)
         } else {
             layoutElements.insert(newItem)
         }
-        
-        switch newItem.element {
+    }
+    
+    private func handleNewItem(with newElement: Model.Element) {
+        switch newElement {
         case .topTitle:
             topElement()
         case .leadingTitle, .leadingLabels:
@@ -83,9 +93,12 @@ public final class ChartStateObject: ObservableObject {
         if newBottom != bottomInset { bottomInset = newBottom }
     }
     
-    public enum Touch {
-        case touch(location: CGPoint)
-        case off
+    private func postLayoutNotification(after timer: Timer?) {
+        var timer = timer
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+            NotificationCenter.default.post(name: .updateLayoutDidFinish, object: self)
+        }
     }
     
     internal struct Model: Hashable {
