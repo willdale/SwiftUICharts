@@ -43,7 +43,7 @@ public protocol CTChartData: ObservableObject, Identifiable {
     var noDataText: Text { get set }
     
     /// A global control to disable animations
-    var shouldAnimate: Bool { get set }
+    var disableAnimation: Bool { get set }
     
     var chartName: ChartName { get }
     

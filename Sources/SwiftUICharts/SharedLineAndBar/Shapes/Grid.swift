@@ -12,14 +12,20 @@ public typealias GridAnimation = (_ index: Int) -> Animation
 
 // MARK: - API
 extension View {
-    public func grid(
+    public func grid<ChartData>(
+        chartData: ChartData,
         vLines: Int = 5,
         hLines: Int = 5,
         style: Grid.Style = .grey,
         vAnimation: @escaping GridAnimation = { (_) in .default },
         hAnimation: @escaping GridAnimation = { (_) in .default }
-    ) -> some View {
-        self.modifier(__GridModifier(vLines: vLines, hLines: hLines, style: style, vAnimation: vAnimation, hAnimation: hAnimation))
+    ) -> some View where ChartData: CTChartData {
+        self.modifier(__GridModifier(chartData: chartData,
+                                     vLines: vLines,
+                                     hLines: hLines,
+                                     style: style,
+                                     vAnimation: vAnimation,
+                                     hAnimation: hAnimation))
     }
 }
 
@@ -96,6 +102,7 @@ public struct Grid: View {
     private let vLines: Int
     private let hLines: Int
     private let style: Grid.Style
+    private let disableAnimation: Bool
     private let vAnimation: GridAnimation
     private let hAnimation: GridAnimation
     
@@ -103,6 +110,7 @@ public struct Grid: View {
         vLines: Int,
         hLines: Int,
         style: Grid.Style,
+        disableAnimation: Bool,
         vAnimation: @escaping GridAnimation,
         hAnimation: @escaping GridAnimation
     ) {
@@ -111,29 +119,34 @@ public struct Grid: View {
         self.vAnimation = vAnimation
         self.hLines = hLines
         self.hAnimation = hAnimation
+        
+        self.disableAnimation = disableAnimation
     }
     
     public var body: some View {
-        HGrid(hLines: hLines, style: style, animation: hAnimation)
-        VGrid(vLines: vLines, style: style, animation: vAnimation)
+        HGrid(hLines: hLines, style: style, animation: hAnimation, disableAnimation: disableAnimation)
+        VGrid(vLines: vLines, style: style, animation: vAnimation, disableAnimation: disableAnimation)
     }
 }
 
-fileprivate struct __GridModifier: ViewModifier {
+fileprivate struct __GridModifier<ChartData>: ViewModifier where ChartData: CTChartData {
     
-    fileprivate let vLines: Int
-    fileprivate let hLines: Int
-    fileprivate let style: Grid.Style
-    fileprivate let vAnimation: GridAnimation
-    fileprivate let hAnimation: GridAnimation
+    private let chartData: ChartData
+    private let vLines: Int
+    private let hLines: Int
+    private let style: Grid.Style
+    private let vAnimation: GridAnimation
+    private let hAnimation: GridAnimation
     
     fileprivate init(
+        chartData: ChartData,
         vLines: Int,
         hLines: Int,
         style: Grid.Style,
         vAnimation: @escaping GridAnimation,
         hAnimation: @escaping GridAnimation
     ) {
+        self.chartData = chartData
         self.vLines = vLines
         self.hLines = hLines
         self.style = style
@@ -143,7 +156,12 @@ fileprivate struct __GridModifier: ViewModifier {
     
     fileprivate func body(content: Content) -> some View {
         ZStack {
-            Grid(vLines: vLines, hLines: hLines, style: style, vAnimation: vAnimation, hAnimation: hAnimation)
+            Grid(vLines: vLines,
+                 hLines: hLines,
+                 style: style,
+                 disableAnimation: chartData.disableAnimation,
+                 vAnimation: vAnimation,
+                 hAnimation: hAnimation)
             content
         }
     }
@@ -155,13 +173,15 @@ public struct HGrid: View {
     private let total: Int
     private let style: Grid.Style
     private let animation: GridAnimation
+    private let disableAnimation: Bool
     
     private let data: [Int]
     
     public init(
         hLines: Int,
         style: Grid.Style,
-        animation: @escaping GridAnimation
+        animation: @escaping GridAnimation,
+        disableAnimation: Bool
     ) {
         let lower: Int
         let upper: Int
@@ -183,11 +203,12 @@ public struct HGrid: View {
         self.total = total
         self.style = style
         self.animation = animation
+        self.disableAnimation = disableAnimation
     }
     
     public var body: some View {
         ForEach(data, id: \.self) { index in
-            __Horrizontal_Grid_Cell(index: index, total: total, style: style, animation: animation)
+            __Horrizontal_Grid_Cell(index: index, total: total, style: style, animation: animation, disableAnimation: disableAnimation)
         }
     }
 }
@@ -199,17 +220,20 @@ fileprivate struct __Horrizontal_Grid_Cell: View {
     private let total: Int
     private let style: Grid.Style
     private let animation: GridAnimation
+    private let disableAnimation: Bool
     
     fileprivate init(
         index: Int,
         total: Int,
         style: Grid.Style,
-        animation: @escaping GridAnimation
+        animation: @escaping GridAnimation,
+        disableAnimation: Bool
     ) {
         self.index = index
         self.total = total
         self.style = style
         self.animation = animation
+        self.disableAnimation = disableAnimation
     }
     
     @State private var startAnimation: Bool = false
@@ -218,13 +242,13 @@ fileprivate struct __Horrizontal_Grid_Cell: View {
         if total == 1 {
             __Horrizontal_Line_Center(direction: style.animationStyle.hDirection)
                 .__gridAnimation(animation: style.animationStyle, style: style, startAnimation: startAnimation)
-                .animateOnAppear(using: animation(index)) {
+                .animateOnAppear(disabled: disableAnimation, using: animation(index)) {
                     self.startAnimation = true
                 }
         } else {
             __Horrizontal_Line(index: index, total: total, direction: style.animationStyle.hDirection)
                 .__gridAnimation(animation: style.animationStyle, style: style, startAnimation: startAnimation)
-                .animateOnAppear(using: animation(index)) {
+                .animateOnAppear(disabled: disableAnimation, using: animation(index)) {
                     self.startAnimation = true
                 }
         }
@@ -298,13 +322,15 @@ public struct VGrid: View {
     private let total: Int
     private let style: Grid.Style
     private let animation: GridAnimation
+    private let disableAnimation: Bool
     
     private let data: [Int]
         
     public init(
         vLines: Int,
         style: Grid.Style,
-        animation: @escaping GridAnimation
+        animation: @escaping GridAnimation,
+        disableAnimation: Bool
     ) {
         let lower: Int
         let upper: Int
@@ -327,11 +353,12 @@ public struct VGrid: View {
         self.total = total
         self.style = style
         self.animation = animation
+        self.disableAnimation = disableAnimation
     }
     
     public var body: some View {
         ForEach(data, id: \.self) { index in
-            __Vertical_Grid_Cell(index: index, total: total, style: style, animation: animation)
+            __Vertical_Grid_Cell(index: index, total: total, style: style, animation: animation, disableAnimation: disableAnimation)
         }
     }
 }
@@ -343,17 +370,20 @@ fileprivate struct __Vertical_Grid_Cell: View {
     private let total: Int
     private let style: Grid.Style
     private let animation: GridAnimation
+    private let disableAnimation: Bool
     
     fileprivate init(
         index: Int,
         total: Int,
         style: Grid.Style,
-        animation: @escaping GridAnimation
+        animation: @escaping GridAnimation,
+        disableAnimation: Bool
     ) {
         self.index = index
         self.total = total
         self.style = style
         self.animation = animation
+        self.disableAnimation = disableAnimation
     }
     
     @State private var startAnimation: Bool = false
@@ -362,13 +392,13 @@ fileprivate struct __Vertical_Grid_Cell: View {
         if total == 1 {
             __Vertical_Line_Center(direction: style.animationStyle.vDirection)
                 .__gridAnimation(animation: style.animationStyle, style: style, startAnimation: startAnimation)
-                .animateOnAppear(using: animation(index)) {
+                .animateOnAppear(disabled: disableAnimation, using: animation(index)) {
                     self.startAnimation = true
                 }
         } else {
             __Vertical_Line(index: index, total: total, direction: style.animationStyle.vDirection)
                 .__gridAnimation(animation: style.animationStyle, style: style, startAnimation: startAnimation)
-                .animateOnAppear(using: animation(index)) {
+                .animateOnAppear(disabled: disableAnimation, using: animation(index)) {
                     self.startAnimation = true
                 }
         }

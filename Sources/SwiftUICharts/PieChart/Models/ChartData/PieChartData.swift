@@ -18,13 +18,12 @@ public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishab
     // MARK: Properties
     public var id: UUID = UUID()
     @Published public var dataSets: PieDataSet
-    public var shouldAnimate: Bool
+    public var disableAnimation = false
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .pie
     
     public var markerData = MarkerData()
-    
     public var stateObject = ChartStateObject()
     public var touchObject = ChartTouchObject()
     
@@ -43,12 +42,9 @@ public final class PieChartData: PieChartType, CTPieChartDataProtocol, Publishab
     ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
     public init(
         dataSets: PieDataSet,
-        shouldAnimate: Bool = true,
         noDataText: Text = Text("No Data")
     ) {
         self.dataSets = dataSets
-        self.shouldAnimate = shouldAnimate
-        self.shouldAnimate = true
         self.noDataText = noDataText
         
         self.makeDataPoints()

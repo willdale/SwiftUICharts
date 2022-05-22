@@ -12,7 +12,7 @@ internal struct VerticalGridView<ChartData>: View where ChartData: CTChartData {
     
     @ObservedObject private var chartData: ChartData
     private var style: GridStyle
-    @State private var startAnimation: Bool
+    @State private var startAnimation: Bool = false
     
     internal init(
         chartData: ChartData,
@@ -20,7 +20,6 @@ internal struct VerticalGridView<ChartData>: View where ChartData: CTChartData {
     ) {
         self.chartData = chartData
         self.style = style
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
     
     var body: some View {
@@ -31,7 +30,7 @@ internal struct VerticalGridView<ChartData>: View where ChartData: CTChartData {
                                        dash: style.dash,
                                        dashPhase: style.dashPhase))
             .frame(width: style.lineWidth)
-            .animateOnAppear(using: .linear) {
+            .animateOnAppear(disabled: false, using: .linear) {
                 self.startAnimation = true
             }
             .onDisappear {

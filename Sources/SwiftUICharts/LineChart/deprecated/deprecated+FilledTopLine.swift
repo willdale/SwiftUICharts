@@ -19,7 +19,7 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
     private let minValue: Double
     private let range: Double
     
-    @State private var startAnimation: Bool
+    @State private var startAnimation: Bool = false
 
     internal init(
         chartData: T,
@@ -31,8 +31,6 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
         self.strokeStyle = strokeStyle
         self.minValue = chartData.minValue
         self.range = chartData.range
-        
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
     
     internal func body(content: Content) -> some View {
@@ -47,7 +45,7 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                     .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
                     .stroke(colour, style: strokeStyle)
                 
-                    .animateOnAppear(using: .linear) {
+                    .animateOnAppear(disabled: chartData.disableAnimation, using: .linear) {
                         self.startAnimation = true
                     }
                     .onDisappear {
@@ -67,7 +65,7 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                                            startPoint: startPoint,
                                            endPoint: endPoint),
                             style: strokeStyle)
-                    .animateOnAppear(using: .linear) {
+                    .animateOnAppear(disabled: chartData.disableAnimation, using: .linear) {
                         self.startAnimation = true
                     }
                     .onDisappear {
@@ -87,7 +85,7 @@ internal struct FilledTopLine<T>: ViewModifier where T: LineChartData {
                                            startPoint: startPoint,
                                            endPoint: endPoint),
                             style: strokeStyle)
-                    .animateOnAppear(using: .linear) {
+                    .animateOnAppear(disabled: chartData.disableAnimation, using: .linear) {
                         self.startAnimation = true
                     }
                     .onDisappear {

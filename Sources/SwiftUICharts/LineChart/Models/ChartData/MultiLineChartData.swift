@@ -19,13 +19,12 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
     // MARK: Properties
     public let id: UUID = UUID()
     @Published public var dataSets: MultiLineDataSet
-    public var shouldAnimate: Bool
+    public var disableAnimation = false
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .multiLine
     
     public var markerData = MarkerData()
-    
     public var stateObject = ChartStateObject()
     public var touchObject = ChartTouchObject()
     
@@ -40,23 +39,20 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
     internal let chartType: CTChartType = (chartType: .line, dataSetType: .single)
     
     // MARK: Initializers
-    /// Initialises a Multi Line Chart.
+    /// Initialises a Multi Line Chart
     ///
     /// - Parameters:
-    ///   - dataSets: Data to draw and style the lines.
-    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
-    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
-    ///   - shouldAnimate: Whether the chart should be animated.
-    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
+    ///   - dataSets: Data to draw and style the lines
+    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart
+    ///   - baseline: Lowest point of the chart
+    ///   - topLine: Highest point on the chart
     public init(
         dataSets: MultiLineDataSet,
-        shouldAnimate: Bool = true,
         noDataText: Text = Text("No Data"),
         baseline: Baseline = .minimumValue,
         topLine: Topline = .maximumValue
     ) {
         self.dataSets = dataSets
-        self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         self.baseline = baseline
         self.topLine = topLine

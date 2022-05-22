@@ -179,7 +179,7 @@ import SwiftUI
 //                $0.scale(y: startAnimation ? 1 : 0, anchor: .bottom)
 //                    .stroke(colour, style: StrokeStyle(lineWidth: 3))
 //            })
-//            .animateOnAppear(using: .linear) {
+//            .animateOnAppear(disabled: chartData.disableAnimation, using: .linear) {
 //                self.startAnimation = true
 //            }
 //            .onDisappear {
@@ -232,7 +232,7 @@ import SwiftUI
 //                            style: StrokeStyle(lineWidth: 3))
 //            })
 //
-//            .animateOnAppear(using: .linear) {
+//            .animateOnAppear(disabled: chartData.disableAnimation, using: .linear) {
 //                self.startAnimation = true
 //            }
 //            .onDisappear {
@@ -283,7 +283,7 @@ import SwiftUI
 //                                           endPoint: endPoint),
 //                            style: StrokeStyle(lineWidth: 3))
 //            })
-//            .animateOnAppear(using: .linear) {
+//            .animateOnAppear(disabled: chartData.disableAnimation, using: .linear) {
 //                self.startAnimation = true
 //            }
 //            .onDisappear {
@@ -386,7 +386,7 @@ import SwiftUI
 //                        .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
 //                        .fill(dataPoint.pointColour?.fill ?? chartData.extraLineData.style.pointStyle.fillColour)
 //                })
-//                .animateOnAppear(using: .linear) {
+//                .animateOnAppear(disabled: chartData.disableAnimation, using: .linear) {
 //                    self.startAnimation = true
 //                }
 //                .onDisappear {
@@ -410,7 +410,7 @@ import SwiftUI
 //                        .scale(y: startAnimation ? 1 : 0, anchor: .bottom)
 //                        .fill(dataPoint.pointColour?.fill ?? chartData.extraLineData.style.pointStyle.fillColour)
 //                })
-//                .animateOnAppear(using: .linear) {
+//                .animateOnAppear(disabled: chartData.disableAnimation, using: .linear) {
 //                    self.startAnimation = true
 //                }
 //                .onDisappear {
@@ -460,7 +460,7 @@ import SwiftUI
 //                        .stroke(dataPoint.pointColour?.border ?? chartData.extraLineData.style.pointStyle.borderColour,
 //                                lineWidth: chartData.extraLineData.style.pointStyle.lineWidth)
 //                })
-//                .animateOnAppear(using: .linear) {
+//                .animateOnAppear(disabled: chartData.disableAnimation, using: .linear) {
 //                    self.startAnimation = true
 //                }
 //                .onDisappear {
@@ -484,7 +484,7 @@ import SwiftUI
 //                        .stroke(dataPoint.pointColour?.border ?? chartData.extraLineData.style.pointStyle.borderColour,
 //                                lineWidth: chartData.extraLineData.style.pointStyle.lineWidth)
 //                })
-//                .animateOnAppear(using: .linear) {
+//                .animateOnAppear(disabled: chartData.disableAnimation, using: .linear) {
 //                    self.startAnimation = true
 //                }
 //                .onDisappear {

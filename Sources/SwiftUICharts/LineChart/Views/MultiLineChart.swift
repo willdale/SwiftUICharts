@@ -55,8 +55,6 @@ internal struct SingleLineChartSubView<ChartData>: View where ChartData: MultiLi
     private let dataSet: LineDataSet
     private let colour: ChartColour
     
-    @State private var startAnimation: Bool
-    
     internal init(
         chartData: ChartData,
         dataSet: LineDataSet,
@@ -65,24 +63,32 @@ internal struct SingleLineChartSubView<ChartData>: View where ChartData: MultiLi
         self.chartData = chartData
         self.dataSet = dataSet
         self.colour = colour
-        
-        self._startAnimation = State<Bool>(initialValue: chartData.shouldAnimate ? false : true)
     }
+    
+    @State private var startAnimation: Bool = false
     
     internal var body: some View {
         LineShape(dataPoints: dataSet.dataPoints,
                   lineType: dataSet.style.lineType,
                   minValue: chartData.minValue,
                   range: chartData.range)
-            .trim(to: startAnimation ? 1 : 0)
+            .trim(to: animationValue)
             .stroke(colour, strokeStyle: dataSet.style.strokeStyle)
         
-            .animateOnAppear(using: .linear) {
+            .animateOnAppear(disabled: chartData.disableAnimation, using: .linear) {
                 self.startAnimation = true
             }
             .background(Color(.gray).opacity(0.000000001))
             .onDisappear {
                 self.startAnimation = false
             }
+    }
+    
+    var animationValue: CGFloat {
+        if chartData.disableAnimation {
+            return 1
+        } else {
+            return startAnimation ? 1 : 0
+        }
     }
 }

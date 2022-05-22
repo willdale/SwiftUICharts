@@ -19,13 +19,12 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
     // MARK: Properties
     public let id: UUID  = UUID()
     @Published public var dataSets: RangedLineDataSet
-    public var shouldAnimate: Bool
+    public var disableAnimation = false
     public var noDataText: Text
     public var accessibilityTitle: LocalizedStringKey = ""
     public let chartName: ChartName = .rangedLine
     
     public var markerData = MarkerData()
-    
     public var stateObject = ChartStateObject()
     public var touchObject = ChartTouchObject()
     
@@ -40,23 +39,20 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
     internal let chartType: CTChartType = (chartType: .line, dataSetType: .single)
     
     // MARK: Initializer
-    /// Initialises a ranged line chart.
+    /// Initialises a ranged line chart
     ///
     /// - Parameters:
-    ///   - dataSets: Data to draw and style a line.
-    ///   - xAxisLabels: Labels for the X axis instead of the labels in the data points.
-    ///   - yAxisLabels: Labels for the Y axis instead of the labels generated from data point values.   
-    ///   - shouldAnimate: Whether the chart should be animated.
-    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart.
+    ///   - dataSets: Data to draw and style a line
+    ///   - noDataText: Customisable Text to display when where is not enough data to draw the chart
+    ///   - baseline: Lowest point of the chart
+    ///   - topLine: Highest point on the chart
     public init(
         dataSets: RangedLineDataSet,
-        shouldAnimate: Bool = true,
         noDataText: Text = Text("No Data"),
         baseline: Baseline = .minimumValue,
         topLine: Topline = .maximumValue
     ) {
         self.dataSets = dataSets
-        self.shouldAnimate = shouldAnimate
         self.noDataText = noDataText
         self.baseline = baseline
         self.topLine = topLine

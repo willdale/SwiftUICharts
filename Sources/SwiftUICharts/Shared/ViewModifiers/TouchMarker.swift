@@ -76,11 +76,23 @@ public struct TouchMarker<ChartData, Icon: View>: ViewModifier where ChartData: 
 
 
 fileprivate struct _MarkerData<Icon: View>: View {
+
+    private let markerData: MarkerData
+    private let indicator: Icon
+    private let chartSize: CGRect
+    private let touchLocation: CGPoint
     
-    fileprivate let markerData: MarkerData
-    fileprivate let indicator: Icon
-    fileprivate let chartSize: CGRect
-    fileprivate let touchLocation: CGPoint
+    internal init(
+        markerData: MarkerData, 
+        indicator: Icon, 
+        chartSize: CGRect, 
+        touchLocation: CGPoint
+    ) {
+        self.markerData = markerData
+        self.indicator = indicator
+        self.chartSize = chartSize
+        self.touchLocation = touchLocation
+    }
     
     fileprivate var body: some View {
         ZStack {

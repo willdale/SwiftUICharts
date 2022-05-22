@@ -30,12 +30,21 @@ extension View {
      [HWS](https://www.hackingwithswift.com/quick-start/swiftui/how-to-start-an-animation-immediately-after-a-view-appears)
      */
     func animateOnAppear(
+        disabled: Bool,
         using animation: Animation = Animation.easeInOut(duration: 1),
         _ action: @escaping () -> Void
     ) -> some View {
-        return onAppear {
-            withAnimation(animation) {
-                action()
+        Group {
+            if !disabled {
+                onAppear {
+                    withAnimation(animation) {
+                        action()
+                    }
+                }
+            } else {
+                onAppear {
+                    action()
+                }
             }
         }
     }

@@ -32,16 +32,14 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
 }
 
 // MARK: Sub View
-internal struct StackSubView<ChartData>: View where ChartData: StackedBarChartData {
+fileprivate struct StackSubView<ChartData>: View where ChartData: StackedBarChartData {
     
     @ObservedObject private var chartData: ChartData
     private let dataSet: StackedBarDataSet
     private let animations = BarElementAnimation()
     private let index: Double
     
-    @State private var heightAnimation: Bool = false
-    
-    internal init(
+    fileprivate init(
         chartData: ChartData,
         dataSet: StackedBarDataSet,
         index: Int
@@ -49,32 +47,27 @@ internal struct StackSubView<ChartData>: View where ChartData: StackedBarChartDa
         self.chartData = chartData
         self.dataSet = dataSet
         self.index = Double(index)
-        
-        let shouldAnimate = chartData.shouldAnimate ? false : true
-        self._heightAnimation = State<Bool>(initialValue: shouldAnimate)
     }
     
+    @State private var heightAnimation: Bool = false
+
     var body: some View {
         GeometryReader { section in
             StackSingleBarView(dataSet: dataSet,
                                animations: animations,
+                               disableAnimation: chartData.disableAnimation,
                                index: index)
                 .clipShape(RoundedRectangleBarShape(chartData.barStyle.cornerRadius))
             
                 // Width
                 .frame(width: BarLayout.barWidth(section.size.width, chartData.barStyle.barWidth))
-                .animation(animations.widthAnimation(index),
-                           value: chartData.barStyle.barWidth)
+                .animation(animations.widthAnimation(index), value: chartData.barStyle.barWidth)
             
                 // Height
-                .frame(height: heightAnimation ?
-                       BarLayout.barHeight(section.size.height, dataSet.totalSetValue, chartData.maxValue) : 0)
-                .offset(heightAnimation ?
-                        BarLayout.barOffset(section.size, chartData.barStyle.barWidth, dataSet.totalSetValue, chartData.maxValue) :
-                            BarLayout.barOffset(section.size, chartData.barStyle.barWidth, 0, 0))
-                .animation(animations.heightAnimation(index),
-                           value: dataSet.totalSetValue)
-                .animateOnAppear(using: animations.heightAnimationStart(index)) {
+                .frame(height: heightAnimationValue(height: section.size.height))
+                .offset(offsetAnimationValue(size: section.size))
+                .animation(animations.heightAnimation(index), value: dataSet.totalSetValue)
+                .animateOnAppear(disabled: chartData.disableAnimation, using: animations.heightAnimationStart(index)) {
                     self.heightAnimation = true
                 }
         }
@@ -85,26 +78,48 @@ internal struct StackSubView<ChartData>: View where ChartData: StackedBarChartDa
         .accessibilityLabel(chartData.accessibilityTitle)
         .id(chartData.id)
     }
+    
+    func heightAnimationValue(height: CGFloat) -> CGFloat {
+        let value = BarLayout.barHeight(height, dataSet.totalSetValue, chartData.maxValue)
+        if chartData.disableAnimation {
+            return value
+        } else {
+            return heightAnimation ? value : 0
+        }
+    }
+    
+    func offsetAnimationValue(size: CGSize) -> CGSize {
+        let endValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, dataSet.totalSetValue, chartData.maxValue)
+        let startValue = BarLayout.barOffset(size, chartData.barStyle.barWidth, 0, 0)
+        if chartData.disableAnimation {
+            return endValue
+        } else {
+            return heightAnimation ? endValue : startValue
+        }
+    }
 }
 
 // MARK: - Single Bar
-internal struct StackSingleBarView: View {
+fileprivate struct StackSingleBarView: View {
     
     private let dataSet: StackedBarDataSet
     private let animations: BarElementAnimation
+    private let disableAnimation: Bool
     private let index: Double
     
-    internal init(
+    fileprivate init(
         dataSet: StackedBarDataSet,
         animations: BarElementAnimation,
+        disableAnimation: Bool,
         index: Double
     ) {
         self.dataSet = dataSet
         self.animations = animations
+        self.disableAnimation = disableAnimation
         self.index = index
     }
     
-    internal var body: some View {
+    fileprivate var body: some View {
         GeometryReader { geo in
             VStack(spacing: 0) {
                 ForEach(dataSet.dataPoints.reversed()) { dataPoint in
@@ -113,6 +128,7 @@ internal struct StackSingleBarView: View {
                                                           dataSet: dataSet,
                                                           dataPoint: dataPoint),
                                     animations: animations,
+                                    disableAnimation: disableAnimation,
                                     index: index)
 //                        .accessibilityValue(dataPoint.getCellAccessibilityValue(specifier: specifier))
                 }
@@ -134,34 +150,36 @@ internal struct StackSingleBarView: View {
 }
 
 // MARK: Stacked Element
-internal struct StackBarElement: View {
+fileprivate struct StackBarElement: View {
     
     private let fill: ChartColour
     private let height: CGFloat
     private let animations: BarElementAnimation
+    private let disableAnimation: Bool
     private let index: Double
     
-    @State private var fillAnimation: Bool = false
-    
-    internal init(
+    fileprivate init(
         fill: ChartColour,
         height: CGFloat,
         animations: BarElementAnimation,
+        disableAnimation: Bool,
         index: Double
     ) {
         self.fill = fill
         self.height = height
         self.animations = animations
+        self.disableAnimation = disableAnimation
         self.index = index
     }
     
-    internal var body: some View {
+    @State private var fillAnimation: Bool = false
+    
+    fileprivate var body: some View {
         Rectangle()
             // Fill
             .fill(fillAnimation ? fill : animations.fill.startState)
-            .animation(animations.fillAnimation(index),
-                       value: fill)
-            .animateOnAppear(using: animations.fillAnimationStart(index)) {
+            .animation(animations.fillAnimation(index), value: fill)
+            .animateOnAppear(disabled: disableAnimation, using: animations.fillAnimationStart(index)) {
                 self.fillAnimation = true
             }
 

@@ -166,25 +166,36 @@ extension ChartBorder.Style {
 
 // MARK: - API
 extension View {
-    public func axisBorder(
+    public func axisBorder<ChartData>(
+        chartData: ChartData,
         edges: BorderSet
-    ) -> some View {
-        self.modifier(AxisBorder(edges: Array(edges)))
+    ) -> some View where ChartData: CTChartData {
+        self.modifier(AxisBorder(chartData: chartData, edges: Array(edges)))
     }
 }
 
-internal struct AxisBorder: ViewModifier {
+// MARK: Implementation
+fileprivate struct AxisBorder<ChartData>: ViewModifier where ChartData: CTChartData {
+
+    private let chartData: ChartData
+    private let edges: [ChartBorder]
     
-    internal let edges: [ChartBorder]
+    fileprivate init(
+        chartData: ChartData,
+        edges: [ChartBorder]
+    ) {
+        self.chartData = chartData
+        self.edges = edges
+    }
     
-    internal func body(content: Content) -> some View {
+    fileprivate func body(content: Content) -> some View {
         ZStack {
             ForEach(edges, id: \.id) { edge in
                 switch edge.isMiddle {
                 case false:
-                    _Animate_From_Corner(edge: edge)
+                    _Animate_From_Corner(edge: edge, disableAnimation: chartData.disableAnimation)
                 case true:
-                    _Animate_From_Middle(edge: edge)
+                    _Animate_From_Middle(edge: edge, disableAnimation: chartData.disableAnimation)
                 }
 
                 content
@@ -195,7 +206,16 @@ internal struct AxisBorder: ViewModifier {
 
 fileprivate struct _Animate_From_Corner: View {
     
-    internal let edge: ChartBorder
+    private let edge: ChartBorder
+    private let disableAnimation: Bool
+    
+    fileprivate init(
+        edge: ChartBorder,
+        disableAnimation: Bool
+    ) {
+        self.edge = edge
+        self.disableAnimation = disableAnimation
+    }
     
     @State private var animate = false
     
@@ -205,7 +225,7 @@ fileprivate struct _Animate_From_Corner: View {
                 .trim(from: 0.0, to: animate ? 1.0 : 0.0)
                 .stroke(edge.style.colour, style: edge.style.style)
         }
-        .animateOnAppear(using: edge.style.animation) {
+        .animateOnAppear(disabled: disableAnimation, using: edge.style.animation) {
             self.animate = true
         }
     }
@@ -213,7 +233,16 @@ fileprivate struct _Animate_From_Corner: View {
 
 fileprivate struct _Animate_From_Middle: View {
     
-    internal let edge: ChartBorder
+    private let edge: ChartBorder
+    private let disableAnimation: Bool
+    
+    fileprivate init(
+        edge: ChartBorder,
+        disableAnimation: Bool
+    ) {
+        self.edge = edge
+        self.disableAnimation = disableAnimation
+    }
     
     @State private var animate = false
     
@@ -226,12 +255,13 @@ fileprivate struct _Animate_From_Middle: View {
                 .trim(from: 0.5, to: animate ? 1.0 : 0.5)
                 .stroke(edge.style.colour, style: edge.style.style)
         }
-        .animateOnAppear(using: edge.style.animation) {
+        .animateOnAppear(disabled: disableAnimation, using: edge.style.animation) {
             self.animate = true
         }
     }
 }
 
+// MARK: Cache
 fileprivate final class AxisBorderCache {
     var edge: ChartBorder?
     var rect: CGRect?
@@ -239,6 +269,7 @@ fileprivate final class AxisBorderCache {
     var path = Path()
 }
 
+// MARK: Shape
 public struct AxisBorderShape: Shape {
     
     let edge: ChartBorder

@@ -27,17 +27,27 @@ extension View {
                          }
 }
 
-internal struct PointMarkersModifier<ChartData, PointMarker>: ViewModifier
+fileprivate struct PointMarkersModifier<ChartData, PointMarker>: ViewModifier
 where ChartData: CTChartData & DataHelper,
       ChartData.SetType: CTSingleDataSetProtocol,
       ChartData.SetType.DataPoint: CTStandardDataPointProtocol,
       PointMarker: View {
     
-    var chartData: ChartData
-    var animation: (_ index: Int) -> Animation
-    var pointMaker: (_ index: Int) -> PointMarker
+    private let chartData: ChartData
+    private let animation: (_ index: Int) -> Animation
+    private let pointMaker: (_ index: Int) -> PointMarker
     
-    internal func body(content: Content) -> some View {
+    fileprivate init(
+        chartData: ChartData,
+        animation: @escaping (Int) -> Animation,
+        pointMaker: @escaping (Int) -> PointMarker
+    ) {
+        self.chartData = chartData
+        self.animation = animation
+        self.pointMaker = pointMaker
+    }
+    
+    fileprivate func body(content: Content) -> some View {
         ZStack {
             content
             PointMarkers(chartData: chartData, stateObject: chartData.stateObject, animation: animation, pointMaker: pointMaker)
@@ -51,10 +61,22 @@ where ChartData: CTChartData & DataHelper,
       ChartData.SetType.DataPoint: CTStandardDataPointProtocol,
       PointMarker: View {
     
-    var chartData: ChartData
-    @ObservedObject var stateObject: ChartStateObject
-    var animation: (_ index: Int) -> Animation
-    var pointMaker: (_ index: Int) -> PointMarker
+    @ObservedObject private var chartData: ChartData
+    @ObservedObject private var stateObject: ChartStateObject
+    private let animation: (_ index: Int) -> Animation
+    private let pointMaker: (_ index: Int) -> PointMarker
+    
+    public init(
+        chartData: ChartData,
+        stateObject: ChartStateObject,
+        animation: @escaping (Int) -> Animation,
+        pointMaker: @escaping (Int) -> PointMarker
+    ) {
+        self.chartData = chartData
+        self.stateObject = stateObject
+        self.animation = animation
+        self.pointMaker = pointMaker
+    }
     
     public var body: some View {
         ForEach(chartData.dataSets.dataPoints.indices, id: \.self) { index in
@@ -62,23 +84,36 @@ where ChartData: CTChartData & DataHelper,
                 .position(x: plotPointX(index, chartData.dataSets.dataPoints.count, stateObject.chartSize.size.width),
                           y: plotPointY(chartData.dataSets.dataPoints[index].value, chartData.minValue, chartData.range, stateObject.chartSize.size.height))
             
-                .modifier(_PointMarker_Cell_Pos_Anim(index: index, animation: animation))
+                .modifier(_PointMarker_Cell_Pos_Anim(index: index,
+                                                     animation: animation,
+                                                     disableAnimation: chartData.disableAnimation))
         }
     }
 }
 
 fileprivate struct _PointMarker_Cell_Pos_Anim: ViewModifier {
 
-    let index: Int
-    let animation: (_ index: Int) -> Animation
+    private let index: Int
+    private let animation: (_ index: Int) -> Animation
+    private let disableAnimation: Bool
 
-    @State private var animate = false
+    fileprivate init(
+        index: Int,
+        animation: @escaping (Int) -> Animation,
+        disableAnimation: Bool
+    ) {
+        self.index = index
+        self.animation = animation
+        self.disableAnimation = disableAnimation
+    }
+    
+    @State private var startAnimation = false
 
-    func body(content: Content) -> some View {
+    fileprivate func body(content: Content) -> some View {
         content
-            .opacity(animate ? 1 : 0)
-            .animateOnAppear(using: animation(index)) {
-                self.animate = true
+            .opacity(startAnimation ? 1 : 0)
+            .animateOnAppear(disabled: disableAnimation, using: animation(index)) {
+                self.startAnimation = true
             }
     }
 }
@@ -102,17 +137,27 @@ extension View {
                          }
 }
 
-internal struct MultiPointMarkersModifier<ChartData, PointMarker>: ViewModifier
+fileprivate struct MultiPointMarkersModifier<ChartData, PointMarker>: ViewModifier
 where ChartData: CTChartData & DataHelper,
       ChartData.SetType: CTMultiDataSetProtocol,
       ChartData.SetType.DataSet.DataPoint: CTStandardDataPointProtocol,
       PointMarker: View {
     
-    var chartData: ChartData
-    var animation: (_ dataSetIndex: Int, _ dataPointIndex: Int) -> Animation
-    var pointMaker: (_ dataSetIndex: Int, _ dataPointIndex: Int) -> PointMarker
+    private let chartData: ChartData
+    private let animation: (_ dataSetIndex: Int, _ dataPointIndex: Int) -> Animation
+    private let pointMaker: (_ dataSetIndex: Int, _ dataPointIndex: Int) -> PointMarker
     
-    internal func body(content: Content) -> some View {
+    fileprivate init(
+        chartData: ChartData,
+        animation: @escaping (Int, Int) -> Animation,
+        pointMaker: @escaping (Int, Int) -> PointMarker
+    ) {
+        self.chartData = chartData
+        self.animation = animation
+        self.pointMaker = pointMaker
+    }
+    
+    fileprivate func body(content: Content) -> some View {
         ZStack {
             content
             MultiPointMarkers(chartData: chartData, stateObject: chartData.stateObject, animation: animation, pointMaker: pointMaker)
@@ -126,10 +171,22 @@ where ChartData: CTChartData & DataHelper,
       ChartData.SetType.DataSet.DataPoint: CTStandardDataPointProtocol,
       PointMarker: View {
     
-    var chartData: ChartData
-    @ObservedObject var stateObject: ChartStateObject
-    var animation: (_ dataSetIndex: Int, _ dataPointIndex: Int) -> Animation
-    var pointMaker: (_ dataSetIndex: Int, _ dataPointIndex: Int) -> PointMarker
+    @ObservedObject private var chartData: ChartData
+    @ObservedObject private var stateObject: ChartStateObject
+    private var animation: (_ dataSetIndex: Int, _ dataPointIndex: Int) -> Animation
+    private var pointMaker: (_ dataSetIndex: Int, _ dataPointIndex: Int) -> PointMarker
+    
+    public init(
+        chartData: ChartData,
+        stateObject: ChartStateObject,
+        animation: @escaping (Int, Int) -> Animation,
+        pointMaker: @escaping (Int, Int) -> PointMarker
+    ) {
+        self.chartData = chartData
+        self.stateObject = stateObject
+        self.animation = animation
+        self.pointMaker = pointMaker
+    }
     
     public var body: some View {
         ForEach(chartData.dataSets.dataSets.indices, id: \.self) { dataSetIndex in
@@ -138,7 +195,10 @@ where ChartData: CTChartData & DataHelper,
                     .position(x: plotPointX(dataPointIndex, chartData.dataSets.dataSets[dataSetIndex].dataPoints.count, stateObject.chartSize.size.width),
                               y: plotPointY(chartData.dataSets.dataSets[dataSetIndex].dataPoints[dataPointIndex].value, chartData.minValue, chartData.range, stateObject.chartSize.size.height))
                 
-                    .modifier(_Multi_PointMarker_Cell_Pos_Anim(dataSetIndex: dataSetIndex, dataPointIndex: dataPointIndex, animation: animation))
+                    .modifier(_Multi_PointMarker_Cell_Pos_Anim(dataSetIndex: dataSetIndex,
+                                                               dataPointIndex: dataPointIndex,
+                                                               animation: animation,
+                                                               disableAnimation: chartData.disableAnimation))
             }
         }
     }
@@ -146,17 +206,30 @@ where ChartData: CTChartData & DataHelper,
 
 fileprivate struct _Multi_PointMarker_Cell_Pos_Anim: ViewModifier {
 
-    let dataSetIndex: Int
-    let dataPointIndex: Int
-    let animation: (_ dataSetIndex: Int, _ dataPointIndex: Int) -> Animation
-
-    @State private var animate = false
+    private let dataSetIndex: Int
+    private let dataPointIndex: Int
+    private let animation: (_ dataSetIndex: Int, _ dataPointIndex: Int) -> Animation
+    private let disableAnimation: Bool
+    
+    fileprivate init(
+        dataSetIndex: Int,
+        dataPointIndex: Int,
+        animation: @escaping (Int, Int) -> Animation,
+        disableAnimation: Bool
+    ) {
+        self.dataSetIndex = dataSetIndex
+        self.dataPointIndex = dataPointIndex
+        self.animation = animation
+        self.disableAnimation = disableAnimation
+    }
+    
+    @State private var startAnimation = false
 
     func body(content: Content) -> some View {
         content
-            .opacity(animate ? 1 : 0)
-            .animateOnAppear(using: animation(dataSetIndex, dataPointIndex)) {
-                self.animate = true
+            .opacity(startAnimation ? 1 : 0)
+            .animateOnAppear(disabled: disableAnimation, using: animation(dataSetIndex, dataPointIndex)) {
+                self.startAnimation = true
             }
     }
 }
