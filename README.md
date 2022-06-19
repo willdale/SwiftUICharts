@@ -6,6 +6,8 @@ A charts / plotting library for SwiftUI. Works on macOS, iOS,  watchOS, and tvOS
 
 [Documentation](https://willdale.github.io/SwiftUICharts/index.html)
 
+Working on a [Version 3](https://github.com/willdale/SwiftUICharts/tree/release/3) with a more SwiftUI feel to the API. 
+
 ## Chart Types
 
 - [Line Chart](#Line-Chart)
