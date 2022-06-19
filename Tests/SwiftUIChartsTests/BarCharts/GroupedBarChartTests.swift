@@ -72,7 +72,7 @@ final class GroupedBarChartTests: XCTestCase {
     }
     func testGroupedBarRange() {
         let chartData = GroupedBarChartData(dataSets: data, groups: groups)
-        XCTAssertEqual(chartData.range, 80.001)
+        XCTAssertEqual(chartData.range, 80)
     }
     
     // MARK: Greater

@@ -81,7 +81,7 @@ public struct ExtraLineData: Identifiable {
                 _highestValue = max(self.getMaxValue(), value)
             }
             
-            return (_highestValue - _lowestValue) + 0.001
+            return (_highestValue - _lowestValue) + 0.00000000001
         }
     }
     internal var minValue: Double {

@@ -26,7 +26,7 @@ final class BarChartTests: XCTestCase {
     }
     func testBarRange() {
         let chartData = BarChartData(dataSets: BarDataSet(dataPoints: dataPoints))
-        XCTAssertEqual(chartData.range, 50.001)
+        XCTAssertEqual(chartData.range, 50)
     }
     func testBarIsGreaterThanTwoTrue() {
         let chartData = BarChartData(dataSets: BarDataSet(dataPoints: dataPoints))

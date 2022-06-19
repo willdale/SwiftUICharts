@@ -36,7 +36,7 @@ final class MultiLineChartTest: XCTestCase {
     }
     func testMultiLineRange() {
         let chartData = MultiLineChartData(dataSets: dataSet)
-        XCTAssertEqual(chartData.range, 90.001)
+        XCTAssertEqual(chartData.range, 90)
     }
     // MARK: Greater
     func testMultiIsGreaterThanTwoTrue() {
