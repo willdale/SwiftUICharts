@@ -31,7 +31,7 @@ extension CTLineBarChartDataProtocol where Self: GetDataProtocol,
                 _highestValue = max(self.dataSets.maxValue(), value)
             }
             
-            return (_highestValue - _lowestValue) + 0.001
+            return (_highestValue - _lowestValue)
         }
     }
     

@@ -72,7 +72,7 @@ final class StackedBarChartTests: XCTestCase {
     }
     func testStackedBarRange() {
         let chartData = StackedBarChartData(dataSets: data, groups: groups)
-        XCTAssertEqual(chartData.range, 210.001)
+        XCTAssertEqual(chartData.range, 210)
     }
     
     // MARK: Greater

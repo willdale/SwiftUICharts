@@ -27,7 +27,7 @@ final class LineChartTests: XCTestCase {
     }
     func testLineRange() {
         let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints))
-        XCTAssertEqual(chartData.range, 70.001)
+        XCTAssertEqual(chartData.range, 70)
     }
     func testLineIsGreaterThanTwoTrue() {
         let chartData = LineChartData(dataSets: LineDataSet(dataPoints: dataPoints))
