@@ -79,7 +79,7 @@ public struct PieChart<ChartData>: View where ChartData: PieChartData {
         if chartData.disableAnimation {
             return 1
         } else {
-            return startAnimation ? 1 : 0
+            return startAnimation ? 1 : 0.001
         }
     }
 }
