@@ -25,7 +25,7 @@ public final class RangedBarChartData: CTRangedBarChartDataProtocol, GetDataProt
     @Published public final var viewData: ChartViewData
     @Published public final var infoView: InfoViewData<RangedBarDataPoint> = InfoViewData()
     
-    @Published public final var extraLineData: ExtraLineData!
+    @Published public final var extraLineData: ExtraLineData?
     
     // Publishable
     public var subscription = SubscriptionSet().subscription

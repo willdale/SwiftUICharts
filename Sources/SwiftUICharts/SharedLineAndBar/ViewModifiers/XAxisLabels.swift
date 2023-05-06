@@ -16,7 +16,6 @@ internal struct XAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
     
     internal init(chartData: T) {
         self.chartData = chartData
-        self.chartData.viewData.hasXAxisLabels = true
     }
     
     internal func body(content: Content) -> some View {
@@ -39,6 +38,9 @@ internal struct XAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                     }
                 } else { content }
             }
+        }
+        .onAppear {
+            self.chartData.viewData.hasXAxisLabels = true
         }
     }
 }

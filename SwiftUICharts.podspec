@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'SwiftUICharts'
-  s.version          = '2.9.9'
+  s.version          = '2.10.1'
   s.summary          = 'A charts / plotting library for SwiftUI.'
   s.description      = 'A charts / plotting library for SwiftUI. Works on macOS, iOS, watchOS, and tvOS and has accessibility features built in.'
   s.homepage         = 'https://github.com/willdale/SwiftUICharts'

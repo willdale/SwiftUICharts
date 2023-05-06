@@ -30,7 +30,7 @@ public final class GroupedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
     @Published public final var infoView: InfoViewData<GroupedBarDataPoint> = InfoViewData()
     @Published public final var groups: [GroupingData]
     
-    @Published public final var extraLineData: ExtraLineData!
+    @Published public final var extraLineData: ExtraLineData?
     
     // Publishable
     public var subscription = SubscriptionSet().subscription

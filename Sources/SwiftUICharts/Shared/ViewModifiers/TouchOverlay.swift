@@ -15,6 +15,9 @@ internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
     
     @ObservedObject private var chartData: T
     let minDistance: CGFloat
+    private let specifier: String
+    private let formatter: NumberFormatter?
+    private let unit: TouchUnit
     
     internal init(
         chartData: T,
@@ -25,9 +28,9 @@ internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
     ) {
         self.chartData = chartData
         self.minDistance = minDistance
-        self.chartData.infoView.touchSpecifier = specifier
-        self.chartData.infoView.touchFormatter = formatter
-        self.chartData.infoView.touchUnit = unit
+        self.specifier = specifier
+        self.formatter = formatter
+        self.unit = unit
     }
     
     internal func body(content: Content) -> some View {
@@ -54,6 +57,11 @@ internal struct TouchOverlay<T>: ViewModifier where T: CTChartData {
                     }
                 }
             } else { content }
+        }
+        .onAppear {
+            self.chartData.infoView.touchSpecifier = specifier
+            self.chartData.infoView.touchFormatter = formatter
+            self.chartData.infoView.touchUnit = unit
         }
     }
 }

@@ -37,7 +37,9 @@ public struct Stroke: Hashable, Identifiable {
         self.miterLimit = miterLimit
         self.dash = dash
         self.dashPhase = dashPhase
-    }    
+    }
+    
+    static let `default` = Stroke()
 }
 
 extension Stroke {

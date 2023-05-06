@@ -15,6 +15,7 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
     @ObservedObject private var chartData: T
     private let specifier: String
     private let colourIndicator: AxisColour
+    private let formatter: NumberFormatter?
     
     internal init(
         chartData: T,
@@ -25,9 +26,7 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
         self.chartData = chartData
         self.specifier = specifier
         self.colourIndicator = colourIndicator
-        chartData.viewData.hasYAxisLabels = true
-        chartData.viewData.yAxisSpecifier = specifier
-        chartData.viewData.yAxisNumberFormatter = formatter
+        self.formatter = formatter
     }
     
     internal func body(content: Content) -> some View {
@@ -48,6 +47,11 @@ internal struct YAxisLabels<T>: ViewModifier where T: CTLineBarChartDataProtocol
                     }
                 }
             } else { content }
+        }
+        .onAppear {
+            chartData.viewData.hasYAxisLabels = true
+            chartData.viewData.yAxisSpecifier = specifier
+            chartData.viewData.yAxisNumberFormatter = formatter
         }
     }
 }
