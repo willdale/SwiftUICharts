@@ -30,7 +30,7 @@ public final class LineChartData: CTLineChartDataProtocol, GetDataProtocol, Publ
     public final var noDataText: Text
     public final var chartType: (chartType: ChartType, dataSetType: DataSetType)
     
-    @Published public final var extraLineData: ExtraLineData!
+    @Published public final var extraLineData: ExtraLineData?
     
     // Publishable
     public var subscription = SubscriptionSet().subscription

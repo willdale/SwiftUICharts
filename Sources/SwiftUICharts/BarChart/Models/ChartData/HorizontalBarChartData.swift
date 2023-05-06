@@ -25,7 +25,7 @@ public final class HorizontalBarChartData: CTHorizontalBarChartDataProtocol, Get
     @Published public final var viewData: ChartViewData
     @Published public final var infoView: InfoViewData<BarChartDataPoint> = InfoViewData()
     
-    @Published public final var extraLineData: ExtraLineData!
+    @Published public final var extraLineData: ExtraLineData?
     
     // Publishable
     public var subscription = SubscriptionSet().subscription

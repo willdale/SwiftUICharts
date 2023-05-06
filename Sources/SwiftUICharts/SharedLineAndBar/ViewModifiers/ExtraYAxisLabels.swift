@@ -21,7 +21,6 @@ internal struct ExtraYAxisLabels<T>: ViewModifier where T: CTLineBarChartDataPro
         self.chartData = chartData
         self.specifier = specifier
         self.colourIndicator = colourIndicator
-        chartData.viewData.hasYAxisLabels = true
     }
     
     internal func body(content: Content) -> some View {
@@ -42,6 +41,9 @@ internal struct ExtraYAxisLabels<T>: ViewModifier where T: CTLineBarChartDataPro
                     }
                 }
             } else { content }
+        }
+        .onAppear {
+            chartData.viewData.hasYAxisLabels = true
         }
     }
 }

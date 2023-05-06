@@ -311,12 +311,12 @@ extension CTLineBarChartDataProtocol {
     
     internal var extraLabelsArray: [String] { self.generateExtraYLabels(self.viewData.yAxisSpecifier) }
     private func generateExtraYLabels(_ specifier: String) -> [String] {
-        
-        let dataRange: Double = self.extraLineData.range
-        let minValue: Double = self.extraLineData.minValue
-        let range: Double = dataRange / Double(self.extraLineData.style.yAxisNumberOfLabels-1)
+        guard let extraLineData = extraLineData else { return [] }
+        let dataRange: Double = extraLineData.range
+        let minValue: Double = extraLineData.minValue
+        let range: Double = dataRange / Double(extraLineData.style.yAxisNumberOfLabels-1)
         let firstLabel = [String(format: specifier, minValue)]
-        let otherLabels = (1...self.extraLineData.style.yAxisNumberOfLabels-1).map { String(format: specifier, minValue + range * Double($0)) }
+        let otherLabels = (1...extraLineData.style.yAxisNumberOfLabels-1).map { String(format: specifier, minValue + range * Double($0)) }
         let labels = firstLabel + otherLabels
         return labels
 
@@ -363,7 +363,7 @@ extension CTLineBarChartDataProtocol {
     
     public func getExtraYAxisTitle(colour: AxisColour) -> some View {
         Group {
-            if let title = self.extraLineData.style.yAxisTitle {
+            if let title = self.extraLineData?.style.yAxisTitle {
                 VStack {
                     if self.chartStyle.xAxisLabelPosition == .top {
                         Spacer()
@@ -391,7 +391,7 @@ extension CTLineBarChartDataProtocol {
                             case .none:
                                 EmptyView()
                             case .style(let size):
-                                self.getAxisColourAsCircle(customColour: self.extraLineData.style.lineColour, width: size)
+                                self.getAxisColourAsCircle(customColour: self.extraLineData?.style.lineColour ?? ColourStyle(), width: size)
                             case .custom(let colour, let size):
                                 self.getAxisColourAsCircle(customColour: colour, width: size)
                             }

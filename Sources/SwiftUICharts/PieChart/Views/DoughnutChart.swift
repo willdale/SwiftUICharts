@@ -82,7 +82,7 @@ public struct DoughnutChart<ChartData>: View where ChartData: DoughnutChartData 
         if chartData.disableAnimation {
             return 1
         } else {
-            return startAnimation ? 1 : 0
+            return startAnimation ? 1 : 0.001
         }
     }
 }

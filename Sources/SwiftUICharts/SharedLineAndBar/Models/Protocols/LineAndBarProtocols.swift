@@ -38,7 +38,7 @@ public protocol CTLineBarChartDataProtocol: CTChartData where CTStyle: CTLineBar
     /**
      A data model for the `ExtraLine` View Modifier
     */
-    var extraLineData: ExtraLineData! { get set }
+    var extraLineData: ExtraLineData? { get set }
     
     /**
      A type representing a View for displaying second set of labels on the Y axis.

@@ -29,7 +29,7 @@ public final class StackedBarChartData: CTMultiBarChartDataProtocol, GetDataProt
     @Published public final var infoView: InfoViewData<StackedBarDataPoint> = InfoViewData()
     @Published public final var groups: [GroupingData]
     
-    @Published public final var extraLineData: ExtraLineData!
+    @Published public final var extraLineData: ExtraLineData?
     
     // Publishable
     public var subscription = SubscriptionSet().subscription
