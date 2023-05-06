@@ -4,7 +4,7 @@ on:
     branches:
       - 'main'
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, synchronize]
 
 concurrency: 
   group: ci
@@ -57,14 +57,14 @@ jobs:
 
     tvOS:
         name: Test tvOS
-        runs-on: macOS-12
+        runs-on: macos-11
         env:
-            DEVELOPER_DIR: /Applications/Xcode_14.2.app/Contents/Developer
+            DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
         timeout-minutes: 10
         steps:
             - uses: actions/checkout@v3
             - name: tvOS
-              run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation),OS=16.0" clean test | xcpretty
+              run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=tvOS Simulator,name=Apple TV 4K (at 1080p) (2nd generation),OS=15.2" clean test | xcpretty
 
     watchOS:
         name: Test watchOS
