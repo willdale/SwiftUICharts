@@ -9,7 +9,8 @@ jobs:
     macOS:
         name: Test macOS 12
         runs-on: macOS-12
-        env: DEVELOPER_DIR: /Applications/Xcode_14.2.app/Contents/Developer
+        env:
+            DEVELOPER_DIR: /Applications/Xcode_14.2.app/Contents/Developer
         timeout-minutes: 10
         steps:
             - uses: actions/checkout@v3
@@ -19,7 +20,8 @@ jobs:
     iOS_16:
         name: Test iOS 16
         runs-on: macOS-12
-        env: DEVELOPER_DIR: /Applications/Xcode_14.2.app/Contents/Developer
+        env:
+            DEVELOPER_DIR: /Applications/Xcode_14.2.app/Contents/Developer
         timeout-minutes: 10
         steps:
             - uses: actions/checkout@v3
@@ -29,7 +31,8 @@ jobs:
     iOS_15:
         name: Test iOS 15
         runs-on: macOS-11
-        env: DEVELOPER_DIR: /Applications/Xcode_13.1.app/Contents/Developer
+        env:
+            DEVELOPER_DIR: /Applications/Xcode_13.1.app/Contents/Developer
         timeout-minutes: 10
         steps:
             - uses: actions/checkout@v3
@@ -39,7 +42,8 @@ jobs:
     iOS_14:
         name: Test iOS 14
         runs-on: macOS-11
-        env: DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
+        env:
+            DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
         timeout-minutes: 10
         steps:
             - uses: actions/checkout@v3
@@ -49,7 +53,8 @@ jobs:
     tvOS_15:
         name: Test tvOS 15
         runs-on: macOS-11
-        env: DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
+        env:
+            DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
         timeout-minutes: 10
         steps:
             - uses: actions/checkout@v3
@@ -59,7 +64,8 @@ jobs:
     watchOS_8:
         name: Test watchOS 8
         runs-on: macOS-11
-        env: DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
+        env:
+            DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
         timeout-minutes: 10
         steps:
             - uses: actions/checkout@v3
