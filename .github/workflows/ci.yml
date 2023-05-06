@@ -64,7 +64,7 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - name: tvOS
-              run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=tvOS Simulator,name=Apple TV 4K (3rd generation),OS=16.1" clean test | xcpretty
+              run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation),OS=16.0" clean test | xcpretty
 
     watchOS:
         name: Test watchOS
