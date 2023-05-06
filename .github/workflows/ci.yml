@@ -26,7 +26,7 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - name: iOS 15
-              run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=iOS Simulator,name=iPhone 11,OS=15.0" clean test CODE_SIGNING_ALLOWED=NO | xcpretty
+              run: xcrun simctl list runtimes
     iOS_14:
         name: Test iOS 14
         runs-on: macOS-11
