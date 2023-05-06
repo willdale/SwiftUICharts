@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 concurrency: 
   group: ci
-  cancel-in-progress: true
+  cancel-in-progress: false
     
 jobs:
     macOS_11:
@@ -13,7 +13,7 @@ jobs:
             DEVELOPER_DIR: /Applications/Xcode_13.0.app/Contents/Developer
         timeout-minutes: 10
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - name: macOS 11
               run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=macOS" clean test | xcpretty
 
@@ -24,7 +24,7 @@ jobs:
             DEVELOPER_DIR: /Applications/Xcode_13.1.app/Contents/Developer
         timeout-minutes: 10
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - name: iOS 15
               run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=iOS Simulator,name=iPhone 11,OS=15.0" clean test | xcpretty
     iOS_14:
@@ -34,7 +34,7 @@ jobs:
             DEVELOPER_DIR: /Applications/Xcode_12.4.app/Contents/Developer
         timeout-minutes: 10
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - name: iOS 14
               run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=iOS Simulator,name=iPhone 11,OS=14.4" clean test | xcpretty
 
@@ -45,7 +45,7 @@ jobs:
             DEVELOPER_DIR: /Applications/Xcode_13.0.app/Contents/Developer
         timeout-minutes: 10
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - name: tvOS 15
               run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation),OS=15.0" clean test | xcpretty
     tvOS_14:
@@ -55,7 +55,7 @@ jobs:
             DEVELOPER_DIR: /Applications/Xcode_12.4.app/Contents/Developer
         timeout-minutes: 10
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - name: tvOS 14
               run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=tvOS Simulator,name=Apple TV 4K,OS=14.3" clean test | xcpretty
 
@@ -66,6 +66,6 @@ jobs:
             DEVELOPER_DIR: /Applications/Xcode_13.1.app/Contents/Developer
         timeout-minutes: 10
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - name: watchOS 8.0
               run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=watchOS Simulator,name=Apple Watch Series 7 - 45mm,OS=8.0" clean test | xcpretty
