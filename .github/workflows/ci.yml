@@ -26,7 +26,7 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - name: iOS 16
-              run: run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=iOS Simulator,name=iPhone 14,OS=16.2" clean test | xcpretty
+              run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "SwiftUICharts" -destination "platform=iOS Simulator,name=iPhone 14,OS=16.2" clean test | xcpretty
 
     iOS_15:
         name: Test iOS 15
