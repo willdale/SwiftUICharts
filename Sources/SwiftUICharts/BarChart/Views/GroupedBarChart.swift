@@ -70,6 +70,8 @@ public struct GroupedBarChart<ChartData>: View where ChartData: GroupedBarChartD
                 .onAppear {
                     self.chartData.viewData.chartSize = geo.frame(in: .local)
                 }
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
                 .layoutNotifier(timer)
             } else { CustomNoDataView(chartData: chartData) }
         }
@@ -123,7 +125,7 @@ internal struct GroupedBarCell<ChartData>: View where ChartData: GroupedBarChart
                 ColourBar(chartData: chartData,
                           dataPoint: dataPoint,
                           colour: colour)
-                    .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                    .accessibilityLabel(LocalizedStringKey(dataPoint.group.title))
             } else if dataPoint.group.colour.colourType == .gradientColour,
                       let colours = dataPoint.group.colour.colours,
                       let startPoint = dataPoint.group.colour.startPoint,
@@ -134,7 +136,7 @@ internal struct GroupedBarCell<ChartData>: View where ChartData: GroupedBarChart
                                    colours: colours,
                                    startPoint: startPoint,
                                    endPoint: endPoint)
-                    .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                    .accessibilityLabel(LocalizedStringKey(dataPoint.group.title))
             } else if dataPoint.group.colour.colourType == .gradientStops,
                       let stops = dataPoint.group.colour.stops,
                       let startPoint = dataPoint.group.colour.startPoint,
@@ -146,7 +148,7 @@ internal struct GroupedBarCell<ChartData>: View where ChartData: GroupedBarChart
                                  stops: safeStops,
                                  startPoint: startPoint,
                                  endPoint: endPoint)
-                    .accessibilityLabel(LocalizedStringKey(chartData.metadata.title))
+                    .accessibilityLabel(LocalizedStringKey(dataPoint.group.title))
             }
         }
     }
