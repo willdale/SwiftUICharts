@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+/*
 extension CTStandardDataPointProtocol where Self: CTBarDataPointBaseProtocol {
     /// Data point's value as a string
     @available(*, deprecated, message: "")
@@ -56,3 +56,4 @@ extension CTRangedLineDataPoint where Self == RangedLineChartDataPoint {
         }
     }
 }
+*/

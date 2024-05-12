@@ -13,7 +13,6 @@ import Combine
  
  This model contains the data and styling information for a doughnut chart.
  */
-@available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
 public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol, Publishable, Touchable {
     // MARK: Properties
     public var id: UUID = UUID()
@@ -26,8 +25,6 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
     public var strokeWidth: CGFloat = 1
     
     public var markerData = MarkerData()
-    public var stateObject = ChartStateObject()
-    public var touchObject = ChartTouchObject()
     
     // MARK: Publishable
     public var touchedData = TouchedData<DataPoint>()
@@ -76,12 +73,12 @@ public final class DoughnutChartData: PieChartType, CTDoughnutChartDataProtocol,
     public typealias Marker = PieMarkerType
     
     // MARK: Deprecated
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    public var metadata = ChartMetadata()
-    @available(*, deprecated, message: "")
-    public var chartStyle = DoughnutChartStyle()
-    @available(*, deprecated, message: "Has been moved to the view")
-    public var legends: [LegendData] = []
-    @available(*, deprecated, message: "Split in to axis data")
-    public var infoView = InfoViewData<PieChartDataPoint>()
+//    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+//    public var metadata = ChartMetadata()
+//    @available(*, deprecated, message: "")
+//    public var chartStyle = DoughnutChartStyle()
+//    @available(*, deprecated, message: "Has been moved to the view")
+//    public var legends: [LegendData] = []
+//    @available(*, deprecated, message: "Split in to axis data")
+//    public var infoView = InfoViewData<PieChartDataPoint>()
 }

@@ -119,7 +119,6 @@ public struct XAxisLabels<ChartData: CTChartData>: View {
                         _label_Positioning(
                             chartData: chartData,
                             localState: localState,
-                            stateObject: chartData.stateObject,
                             index: index,
                             count: labels.count,
                             inBounds: style.inBounds
@@ -179,7 +178,6 @@ fileprivate struct _label_Positioning<ChartData: CTChartData>: ViewModifier {
     
     let chartData: ChartData
     @ObservedObject var localState: XAxisLabelsLayoutModel
-    @ObservedObject var stateObject: ChartStateObject
     let index: Int
     let count: Int
     let inBounds: Bool
@@ -192,7 +190,7 @@ fileprivate struct _label_Positioning<ChartData: CTChartData>: ViewModifier {
                     width: xAxisSectionSizing(
                         chart: chartData.chartName,
                         count: count,
-                        size: stateObject.chartSize.size.width,
+                        size: .zero,
                         minLabel: localState.minWidth,
                         padding: inBounds ? localState.maxWidth : 0,
                         spacing: chartData.spacing
@@ -204,7 +202,7 @@ fileprivate struct _label_Positioning<ChartData: CTChartData>: ViewModifier {
                         chart: chartData.chartName,
                         index: index,
                         count: count,
-                        size: stateObject.chartSize.size.width,
+                        size: .zero,
                         minLabel: localState.minWidth,
                         padding: inBounds ? localState.width(for: index) : 0,
                         spacing: chartData.spacing
@@ -214,9 +212,9 @@ fileprivate struct _label_Positioning<ChartData: CTChartData>: ViewModifier {
         case .horizontal:
             content
                 .frame(width: localState.maxWidth,
-                       height: divide(stateObject.chartSize.size.height, count))
+                       height: divide(.zero, count))
                 .position(x: localState.maxWidth / 2,
-                          y: (CGFloat(index) * divide(stateObject.chartSize.size.height, count-1)))
+                          y: (CGFloat(index) * divide(.zero, count-1)))
         }
     }
     

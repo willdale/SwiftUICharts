@@ -93,7 +93,7 @@ extension View {
         edges: Set<AxisTitleStyle.Edge>,
         style: AxisTitleStyle
     ) -> some View {
-        self.modifier(_AxisTitles(stateObject: chartData.stateObject, edges: Array(edges)))
+        self.modifier(_AxisTitles(edges: Array(edges)))
     }
 }
 
@@ -104,16 +104,15 @@ extension View {
 // MARK: View Modifier
 internal struct _AxisTitles: ViewModifier {
 
-    internal var stateObject: ChartStateObject
     internal let edges: [AxisTitleStyle.Edge]
     internal let style: AxisTitleStyle = .standard
 
     internal func body(content: Content) -> some View {
         content
-            .modifier(__AxisTitle(stateObject: stateObject, edge: edge(in: edges, at: 0), style: style))
-            .modifier(__AxisTitle(stateObject: stateObject, edge: edge(in: edges, at: 1), style: style))
-            .modifier(__AxisTitle(stateObject: stateObject, edge: edge(in: edges, at: 2), style: style))
-            .modifier(__AxisTitle(stateObject: stateObject, edge: edge(in: edges, at: 3), style: style))
+            .modifier(__AxisTitle(edge: edge(in: edges, at: 0), style: style))
+            .modifier(__AxisTitle(edge: edge(in: edges, at: 1), style: style))
+            .modifier(__AxisTitle(edge: edge(in: edges, at: 2), style: style))
+            .modifier(__AxisTitle(edge: edge(in: edges, at: 3), style: style))
     }
 
     private func edge(
@@ -132,7 +131,6 @@ internal struct _AxisTitles: ViewModifier {
 
 fileprivate struct __AxisTitle: ViewModifier {
 
-    internal var stateObject: ChartStateObject
     internal let edge: AxisTitleStyle.Edge?
     internal let style: AxisTitleStyle
 
@@ -140,23 +138,23 @@ fileprivate struct __AxisTitle: ViewModifier {
         switch edge {
         case .top:
             VStack(spacing: style.padding) {
-                XAxisTitle(stateObject: stateObject, edge: edge, style: style)
+                XAxisTitle(edge: edge, style: style)
                 content
             }
         case .bottom:
             VStack(spacing: style.padding) {
                 content
-                XAxisTitle(stateObject: stateObject, edge: edge, style: style)
+                XAxisTitle(edge: edge, style: style)
             }
         case .leading:
             HStack(spacing: style.padding) {
-                YAxisTitle(stateObject: stateObject, edge: edge, style: style)
+                YAxisTitle(edge: edge, style: style)
                 content
             }
         case .trailing:
             HStack(spacing: style.padding) {
                 content
-                YAxisTitle(stateObject: stateObject, edge: edge, style: style)
+                YAxisTitle(edge: edge, style: style)
             }
         default:
             content
@@ -167,7 +165,6 @@ fileprivate struct __AxisTitle: ViewModifier {
 // MARK: X View
 internal struct XAxisTitle: View {
     
-    @ObservedObject internal var stateObject: ChartStateObject
     internal let edge: AxisTitleStyle.Edge?
     internal let style: AxisTitleStyle
     
@@ -182,14 +179,13 @@ internal struct XAxisTitle: View {
                     Rectangle()
                         .foregroundColor(Color.clear)
                         .onAppear {
-                            let element = element(for: edge)
-                            let value = geo.frame(in: .local).height
-                            stateObject.updateLayoutElement(with: ChartStateObject.Model(element: element, value: value + padding + style.padding))
-                            height = value
+//                            let element = element(for: edge)
+//                            let value = geo.frame(in: .local).height
+//                            height = value
                         }
                 }
             )
-            .position(x: stateObject.leadingInset + (stateObject.chartSize.width / 2),
+            .position(x: .zero,
                       y: padding)
             .frame(height: height)
     }
@@ -198,22 +194,21 @@ internal struct XAxisTitle: View {
         return (edge?.isBottom ?? false) ? 4 : 0
     }
     
-    private func element(for edge: AxisTitleStyle.Edge?) -> ChartStateObject.Model.Element {
-        switch edge {
-        case .top:
-            return .topTitle
-        case .bottom:
-            return .bottomTitle
-        default:
-            return .bottomTitle
-        }
-    }
+//    private func element(for edge: AxisTitleStyle.Edge?) -> ChartStateObject.Model.Element {
+//        switch edge {
+//        case .top:
+//            return .topTitle
+//        case .bottom:
+//            return .bottomTitle
+//        default:
+//            return .bottomTitle
+//        }
+//    }
 }
 
 // MARK: Y View
 internal struct YAxisTitle: View {
     
-    @ObservedObject internal var stateObject: ChartStateObject
     internal let edge: AxisTitleStyle.Edge?
     internal let style: AxisTitleStyle
     
@@ -228,17 +223,17 @@ internal struct YAxisTitle: View {
                     Rectangle()
                         .foregroundColor(Color.clear)
                         .onAppear {
-                            let element = element(for: edge)
-                            let value = geo.frame(in: .local).height
-                            stateObject.updateLayoutElement(with: ChartStateObject.Model(element: element, value: value + padding + style.padding))
-                            width = value
+//                            let element = element(for: edge)
+//                            let value = geo.frame(in: .local).height
+//                            stateObject.updateLayoutElement(with: ChartStateObject.Model(element: element, value: value + padding + style.padding))
+//                            width = value
                         }
                 }
             )
             .rotationEffect(Angle(degrees: -90), anchor: .center)
             .fixedSize()
             .position(x: padding,
-                      y: stateObject.topInset + (stateObject.chartSize.height / 2))
+                      y: .zero)
             .frame(width: width)
     }
     
@@ -246,14 +241,14 @@ internal struct YAxisTitle: View {
         (edge?.isLeading ?? false) ? 0 : 4
     }
     
-    private func element(for edge: AxisTitleStyle.Edge?) -> ChartStateObject.Model.Element {
-        switch edge {
-        case .leading:
-            return .leadingTitle
-        case .trailing:
-            return .trailingTitle
-        default:
-            return .leadingTitle
-        }
-    }
+//    private func element(for edge: AxisTitleStyle.Edge?) -> ChartStateObject.Model.Element {
+//        switch edge {
+//        case .leading:
+//            return .leadingTitle
+//        case .trailing:
+//            return .trailingTitle
+//        default:
+//            return .leadingTitle
+//        }
+//    }
 }

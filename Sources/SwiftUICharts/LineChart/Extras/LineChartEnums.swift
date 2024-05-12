@@ -7,13 +7,12 @@
 
 import SwiftUI
 
-/**
- Drawing style of the line
- ```
- case line // Straight line from point to point
- case curvedLine // Dual control point curved line
- ```
- */
+/// Drawing style of the line
+///
+/// ```swift
+/// case line // Straight line from point to point
+/// case curvedLine // Dual control point curved line
+/// ```
 public enum LineType {
     /// Straight line from point to point
     case line
@@ -21,13 +20,12 @@ public enum LineType {
     case curvedLine
 }
 
-/**
- Where the Y and X touch markers should attach themselves to.
- ```
- case line(dot: Dot) // Attached to the line.
- case point // Attached to the data points.
- ```
- */
+/// Where the Y and X touch markers should attach themselves to.
+///
+/// ```swift
+/// case line(dot: Dot) // Attached to the line.
+/// case point // Attached to the data points.
+/// ```
 public enum MarkerAttachment: Hashable {
     /// Attached to the line.
     case line
@@ -35,19 +33,18 @@ public enum MarkerAttachment: Hashable {
     case point
 }
 
-/**
- Where the marker lines come from to meet at a specified point.
- ```
- case none // No overlay markers.
- case indicator(style: DotStyle) // Dot that follows the path.
- case vertical(attachment: MarkerAttachment) // Vertical line from top to bottom.
- case full(attachment: MarkerAttachment) // Full width and height of view intersecting at a specified point.
- case bottomLeading(attachment: MarkerAttachment) // From bottom and leading edges meeting at a specified point.
- case bottomTrailing(attachment: MarkerAttachment) // From bottom and trailing edges meeting at a specified point.
- case topLeading(attachment: MarkerAttachment) // From top and leading edges meeting at a specified point.
- case topTrailing(attachment: MarkerAttachment) // From top and trailing edges meeting at a specified point.
- ```
- */
+/// Where the marker lines come from to meet at a specified point.
+///
+/// ```swift
+/// case none // No overlay markers.
+/// case indicator(style: DotStyle) // Dot that follows the path.
+/// case vertical(attachment: MarkerAttachment) // Vertical line from top to bottom.
+/// case full(attachment: MarkerAttachment) // Full width and height of view intersecting at a specified point.
+/// case bottomLeading(attachment: MarkerAttachment) // From bottom and leading edges meeting at a specified point.
+/// case bottomTrailing(attachment: MarkerAttachment) // From bottom and trailing edges meeting at a specified point.
+/// case topLeading(attachment: MarkerAttachment) // From top and leading edges meeting at a specified point.
+/// case topTrailing(attachment: MarkerAttachment) // From top and trailing edges meeting at a specified point.
+/// ```
 public enum LineMarkerType: Hashable {
     /// No overlay markers.
     case none

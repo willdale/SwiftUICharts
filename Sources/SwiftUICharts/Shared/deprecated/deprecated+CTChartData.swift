@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+/*
 extension CTChartData {
     
     /**
@@ -95,3 +95,4 @@ extension CTChartData where Self == RangedLineChartData {
         }
     }
 }
+*/

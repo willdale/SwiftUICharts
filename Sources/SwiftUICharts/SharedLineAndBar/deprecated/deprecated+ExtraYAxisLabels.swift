@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+/*
 @available(*, deprecated, message: "")
 internal struct ExtraYAxisLabels<ChartData>: ViewModifier where ChartData: CTChartData {
     
@@ -50,4 +50,4 @@ extension View {
         self.modifier(ExtraYAxisLabels(chartData: chartData, specifier: specifier, colourIndicator: colourIndicator))
     }
 }
-
+*/

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+/*
 /// A protocol to extend functionality of `CTPieAndDoughnutChartStyle` specifically for Doughnut Charts.
 @available(*, deprecated, message: "")
 public protocol CTDoughnutChartStyle {
@@ -65,3 +65,4 @@ public struct DoughnutChartStyle: CTDoughnutChartStyle {
         self.strokeWidth = strokeWidth
     }
 }
+*/

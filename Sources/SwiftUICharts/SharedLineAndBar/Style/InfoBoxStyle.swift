@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
 public struct InfoBoxStyle {
     public var valueFont: Font
     public var valueColour: Color

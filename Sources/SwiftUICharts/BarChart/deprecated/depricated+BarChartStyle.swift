@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+/*
 /**
  Control of the overall aesthetic of the bar chart.
  
@@ -154,3 +154,4 @@ public struct BarChartStyle: CTBarChartStyle {
         self.globalAnimation = globalAnimation
     }
 }
+*/

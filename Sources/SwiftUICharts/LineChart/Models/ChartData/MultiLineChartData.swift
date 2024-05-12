@@ -9,13 +9,11 @@ import SwiftUI
 import Combine
 import ChartMath
 
-/**
- Data for drawing and styling a multi line, line chart.
- 
- This model contains all the data and styling information for a single line, line chart.
- */
-@available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance {
+/// Data for drawing and styling a multi line, line chart.
+///
+/// This model contains all the data and styling information for a single line, line chart.
+public final class MultiLineChartData: CTChartData, Publishable, Touchable {
+    
     // MARK: Properties
     public let id: UUID = UUID()
     @Published public var dataSets: MultiLineDataSet
@@ -25,8 +23,6 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
     public let chartName: ChartName = .multiLine
     
     public var markerData = MarkerData()
-    public var stateObject = ChartStateObject()
-    public var touchObject = ChartTouchObject()
     
     // MARK: Publishable
     public var touchedData = TouchedData<DataPoint>()
@@ -56,12 +52,20 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
         self.noDataText = noDataText
         self.baseline = baseline
         self.topLine = topLine
+    }    
+    
+    internal func range() -> Double {
+        let (minValue, maxValue) = ChartMath.minAndMaxValue(dataPoints: dataSets.dataSets.map(\.dataPoints))
+        return ChartMath.calculateRange(baseline: self.baseline, topLine: self.topLine, minValue: minValue, maxValue: maxValue)
     }
 
     // MARK: Touch
     public func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
         let data: [PublishedTouchData<LineChartDataPoint>] = dataSets.dataSets.compactMap { dataSet in
+            let (minValue, maxValue) = ChartMath.minAndMaxValue(dataPoints: dataSet.dataPoints)
+            let range = ChartMath.calculateRange(baseline: self.baseline, topLine: self.topLine, minValue: minValue, maxValue: maxValue)
+            
             let xSection = chartSize.width / CGFloat(dataSet.dataPoints.count - 1)
             let ySection = chartSize.height / CGFloat(range)
             let index = Int((touchLocation.x + (xSection / 2)) / xSection)
@@ -83,6 +87,9 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
         
         values.append(contentsOf: data)
         
+        let (minValue, maxValue) = ChartMath.minAndMaxValue(dataPoints: dataSets.dataSets.map(\.dataPoints))
+        let range = ChartMath.calculateRange(baseline: self.baseline, topLine: self.topLine, minValue: minValue, maxValue: maxValue)
+        
         var lineMarkerData: [LineMarkerData] = []
         values.forEach { data in
             let location = data.location
@@ -92,8 +99,8 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
                                       dataPoints: dataSet.dataPoints,
                                       lineType: dataSet.style.lineType,
                                       lineSpacing: .line,
-                                      minValue: self.minValue,
-                                      range: self.range)
+                                      minValue: minValue,
+                                      range: range)
             }
             lineMarkerData.append(contentsOf: lineData)
             markerData = MarkerData(lineMarkerData: lineMarkerData)
@@ -112,7 +119,6 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
                                        dataPointNo: point)
                     .foregroundColor(Color(.gray).opacity(0.000000001))
                     .accessibilityLabel(self.accessibilityTitle)
-//                    .accessibilityValue(dataSet.dataPoints[point].getCellAccessibilityValue(specifier: self.infoView.touchSpecifier))
             }
         }
     }
@@ -120,18 +126,4 @@ public final class MultiLineChartData: LineChartType, CTChartData, CTLineChartDa
     public typealias SetType = MultiLineDataSet
     public typealias DataPoint = LineChartDataPoint
     public typealias Marker = LineMarkerType
-
-    // MARK: Deprecated
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    public var metadata = ChartMetadata()
-    @available(*, deprecated, message: "")
-    public var chartStyle = LineChartStyle()
-    @available(*, deprecated, message: "Has been moved to the view")
-    public var legends: [LegendData] = []
-    @available(*, deprecated, message: "Split in to axis data")
-    public var infoView = InfoViewData<LineChartDataPoint>()
-    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
-    public var xAxisLabels: [String]?
-    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
-    public var yAxisLabels: [String]?
 }

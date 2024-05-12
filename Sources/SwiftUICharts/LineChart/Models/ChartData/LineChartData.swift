@@ -9,13 +9,10 @@ import SwiftUI
 import Combine
 import ChartMath
 
-/**
- Data for drawing and styling a single line, line chart.
- 
- This model contains the data and styling information for a single line, line chart.
- */
-@available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class LineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance {
+/// Data for drawing and styling a single line, line chart.
+///
+/// This model contains the data and styling information for a single line, line chart.
+public final class LineChartData: CTChartData, Publishable, Touchable {
     // MARK: Properties
     public let id: UUID = UUID()
     @Published public var dataSets: LineDataSet
@@ -25,8 +22,6 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     public let chartName: ChartName = .line
     
     public var markerData = MarkerData()
-    public var stateObject = ChartStateObject()
-    public var touchObject = ChartTouchObject()
     
     // MARK: Publishable
     public var touchedData = TouchedData<DataPoint>()
@@ -39,6 +34,7 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     internal let chartType: CTChartType = (chartType: .line, dataSetType: .single)
     
     // MARK: Initializer
+    
     /// Initialises a Single Line Chart
     ///
     /// - Parameters:
@@ -58,9 +54,17 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
         self.topLine = topLine
     }
 
+    internal func range() -> Double {
+        let (minValue, maxValue) = ChartMath.minAndMaxValue(dataPoints: dataSets.dataPoints)
+        return ChartMath.calculateRange(baseline: self.baseline, topLine: self.topLine, minValue: minValue, maxValue: maxValue)
+    }
+    
     // MARK: Touch
     public func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
+        
+        let (minValue, maxValue) = ChartMath.minAndMaxValue(dataPoints: dataSets.dataPoints)
+        let range = ChartMath.calculateRange(baseline: self.baseline, topLine: self.topLine, minValue: minValue, maxValue: maxValue)
         
         let xSection = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
         let ySection = chartSize.height / CGFloat(range)
@@ -92,19 +96,4 @@ public final class LineChartData: LineChartType, CTChartData, CTLineChartDataPro
     public typealias SetType = LineDataSet
     public typealias DataPoint = LineChartDataPoint
     public typealias Marker = LineMarkerType
-    
-    
-    // MARK: Deprecated
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    public var metadata = ChartMetadata()
-    @available(*, deprecated, message: "")
-    public var chartStyle = LineChartStyle()
-    @available(*, deprecated, message: "Has been moved to the view")
-    public var legends: [LegendData] = []
-    @available(*, deprecated, message: "Split in to axis data")
-    public var infoView = InfoViewData<LineChartDataPoint>()
-    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
-    public var xAxisLabels: [String]?
-    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
-    public var yAxisLabels: [String]?
 }

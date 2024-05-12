@@ -46,7 +46,6 @@ extension View {
 public struct TouchMarker<ChartData, Icon: View>: ViewModifier where ChartData: CTChartData {
     
     @ObservedObject private var chartData: ChartData
-    @ObservedObject private var touchObject: ChartTouchObject
     
     let indicator: Icon
     
@@ -55,16 +54,15 @@ public struct TouchMarker<ChartData, Icon: View>: ViewModifier where ChartData: 
         indicator: Icon
     ) {
         self.chartData = chartData
-        self.touchObject = chartData.touchObject
         self.indicator = indicator
     }
     
     public func body(content: Content) -> some View {
         ZStack {
             content
-            if touchObject.isTouch {
-                _MarkerData(markerData: chartData.markerData, indicator: indicator, chartSize: chartData.stateObject.chartSize, touchLocation: touchObject.touchLocation)
-            }
+//            if touchObject.isTouch {
+//                _MarkerData(markerData: chartData.markerData, indicator: indicator, chartSize: chartData.stateObject.chartSize, touchLocation: touchObject.touchLocation)
+//            }
         }
     }
     

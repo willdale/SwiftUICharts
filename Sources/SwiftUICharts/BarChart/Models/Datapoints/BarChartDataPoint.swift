@@ -20,9 +20,7 @@ public struct BarChartDataPoint: CTStandardBarDataPoint, DataPointDisplayable {
     public var description: String?
     public var date: Date?
     public var colour: ChartColour
-    
-    public var _legendTag: String = ""
-    
+        
     // MARK: - Single colour
     /// Data model for a single data point with colour for use with a bar chart.
     /// - Parameters:

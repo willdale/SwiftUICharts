@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: - API
 extension View {
     /// Customisable display of the data from `touch`.
-    @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
     public func infoDisplay<ChartData, Info>(
         chartData: ChartData,
         infoView: Info,
@@ -20,7 +19,6 @@ extension View {
     }
     
     /// Templated display of the data from `touch`.
-    @available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
     public func infoDisplay<ChartData>(
         chartData: ChartData,
         infoView: InfoView,
@@ -52,7 +50,6 @@ where Info: View,
       ChartData: CTChartData {
 
     internal var chartData: ChartData
-    @ObservedObject private var touchObject: ChartTouchObject
     internal var infoView: Info
     internal var position: (_ touchLocation: CGPoint, _ chartSize: CGRect, _ boxSize: CGRect) -> CGPoint
     
@@ -62,7 +59,6 @@ where Info: View,
         position: @escaping (_ touchLocation: CGPoint, _ chartSize: CGRect, _ boxSize: CGRect) -> CGPoint
     ) {
         self.chartData = chartData
-        self.touchObject = chartData.touchObject
         self.infoView = infoView
         self.position = position
     }
@@ -80,9 +76,8 @@ where Info: View,
     }
     
     var computedPosition: CGPoint {
-        let position = position(touchObject.touchLocation, chartData.stateObject.chartSize, boxSize)
-        return CGPoint(x: chartData.stateObject.leadingInset + position.x,
-                       y: chartData.stateObject.topInset + position.y)
+        let position = position(.zero, .zero, boxSize)
+        return .zero
     }
     
     private var sizeView: some View {
@@ -103,7 +98,6 @@ fileprivate struct __Vertical_Info_PreSet<ChartData>: View where ChartData: CTCh
                                                                  ChartData.DataPoint: DataPointDisplayable {
 
     let chartData: ChartData
-    @ObservedObject var touchObject: ChartTouchObject
     let style: InfoBoxStyle
     
     init(
@@ -111,7 +105,6 @@ fileprivate struct __Vertical_Info_PreSet<ChartData>: View where ChartData: CTCh
         style: InfoBoxStyle
     ) {
         self.chartData = chartData
-        self.touchObject = chartData.touchObject
         self.style = style
     }
 
@@ -131,14 +124,14 @@ fileprivate struct __Vertical_Info_PreSet<ChartData>: View where ChartData: CTCh
         .padding(.all, 8)
         .background(
             GeometryReader { geo in
-                if touchObject.isTouch {
-                    Rectangle()
-                        .fill(style.backgroundColour)
-                        .overlay(
-                            Rectangle()
-                                .stroke(style.borderColour, style: style.borderStyle)
-                        )
-                }
+//                if touchObject.isTouch {
+//                    Rectangle()
+//                        .fill(style.backgroundColour)
+//                        .overlay(
+//                            Rectangle()
+//                                .stroke(style.borderColour, style: style.borderStyle)
+//                        )
+//                }
             }
         )
     }
@@ -148,7 +141,6 @@ fileprivate struct __Horizontal_Info_PreSet<ChartData>: View where ChartData: CT
                                                                    ChartData.DataPoint: DataPointDisplayable {
 
     let chartData: ChartData
-    @ObservedObject var touchObject: ChartTouchObject
     let style: InfoBoxStyle
     
     init(
@@ -156,7 +148,6 @@ fileprivate struct __Horizontal_Info_PreSet<ChartData>: View where ChartData: CT
         style: InfoBoxStyle
     ) {
         self.chartData = chartData
-        self.touchObject = chartData.touchObject
         self.style = style
     }
 
@@ -177,14 +168,14 @@ fileprivate struct __Horizontal_Info_PreSet<ChartData>: View where ChartData: CT
         .padding(.all, 8)
         .background(
             GeometryReader { geo in
-                if touchObject.isTouch {
-                    Rectangle()
-                        .fill(style.backgroundColour)
-                        .overlay(
-                            Rectangle()
-                                .stroke(style.borderColour, style: style.borderStyle)
-                        )
-                }
+//                if touchObject.isTouch {
+//                    Rectangle()
+//                        .fill(style.backgroundColour)
+//                        .overlay(
+//                            Rectangle()
+//                                .stroke(style.borderColour, style: style.borderStyle)
+//                        )
+//                }
             }
         )
     }

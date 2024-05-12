@@ -88,7 +88,7 @@ extension Path {
         dataPoints: [DataPoint],
         minValue: Double,
         range: Double
-    ) -> Path where DataPoint: CTStandardLineDataPoint & Ignorable {
+    ) -> Path where DataPoint: CTStandardDataPointProtocol & Ignorable {
         var lastIndex: Int = 0
         var path = Path()
         guard let firstIndex = dataPoints.firstIndex(where: { !$0.ignore }) else { return path }
@@ -129,7 +129,7 @@ extension Path {
         dataPoints: [DataPoint],
         minValue: Double,
         range: Double
-    ) -> Path where DataPoint: CTStandardLineDataPoint & Ignorable {
+    ) -> Path where DataPoint: CTStandardDataPointProtocol & Ignorable {
         var lastIndex: Int = 0
         var path = Path()
         guard let firstIndex = dataPoints.firstIndex(where: { !$0.ignore }) else { return path }
@@ -178,7 +178,7 @@ extension Path {
         dataPoints: [DataPoint],
         minValue: Double,
         range: Double
-    ) -> Path where DataPoint: CTRangedLineDataPoint & Ignorable {
+    ) -> Path where DataPoint: CTRangeDataPointProtocol & Ignorable {
         var path = Path()
         guard let firstIndex = dataPoints.firstIndex(where: { !$0.ignore }) else { return path }
         let firstDataPoint = dataPoints[firstIndex]
@@ -228,7 +228,7 @@ extension Path {
         dataPoints: [DataPoint],
         minValue: Double,
         range: Double
-    ) -> Path where DataPoint: CTRangedLineDataPoint & Ignorable {
+    ) -> Path where DataPoint: CTRangeDataPointProtocol & Ignorable {
         var path = Path()
         guard let firstIndex = dataPoints.firstIndex(where: { !$0.ignore }) else { return path }
         let firstDataPoint = dataPoints[firstIndex]

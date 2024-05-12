@@ -18,9 +18,7 @@ public struct GroupedBarDataPoint: CTMultiBarDataPoint, DataPointDisplayable {
     public var description: String?
     public var date: Date?
     public var group: GroupingData
-    
-    public var _legendTag: String = ""
-    
+        
     /// Data model for a single data point with colour info for use with a grouped bar chart.
     /// - Parameters:
     ///   - value: Value of the data point.

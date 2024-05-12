@@ -14,8 +14,7 @@ import ChartMath
  
  The grouping data informs the model as to how the datapoints are linked.
  */
-@available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarChartDataProtocol, StandardChartConformance {
+public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarChartDataProtocol, ChartConformance {
     // MARK: Properties
     public let id: UUID = UUID()
     @Published public var dataSets: GroupedBarDataSets
@@ -26,8 +25,6 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     public let chartName: ChartName = .groupedBar
     
     public var markerData = MarkerData()
-    public var stateObject = ChartStateObject()
-    public var touchObject = ChartTouchObject()
     
     // MARK: Multi
     public var groupSpacing: CGFloat = 0
@@ -68,6 +65,10 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
         self.noDataText = noDataText
         self.baseline = baseline
         self.topLine = topLine
+    }
+    
+    internal var spacing: CGFloat {
+        return groupSpacing
     }
     
     // MARK: Touch
@@ -116,17 +117,17 @@ public final class GroupedBarChartData: BarChartType, CTChartData, CTMultiBarCha
     public typealias DataPoint = GroupedBarDataPoint
     public typealias Marker = BarMarkerType
     
-    // MARK: Deprecated
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    public var metadata = ChartMetadata()
-    @available(*, deprecated, message: "")
-    public var chartStyle = BarChartStyle()
-    @available(*, deprecated, message: "Has been moved to the view")
-    public var legends: [LegendData] = []
-    @available(*, deprecated, message: "Split in to axis data")
-    public var infoView = InfoViewData<GroupedBarDataPoint>()
-    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
-    public var xAxisLabels: [String]?
-    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
-    public var yAxisLabels: [String]?
+//    // MARK: Deprecated
+//    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
+//    public var metadata = ChartMetadata()
+//    @available(*, deprecated, message: "")
+//    public var chartStyle = BarChartStyle()
+//    @available(*, deprecated, message: "Has been moved to the view")
+//    public var legends: [LegendData] = []
+//    @available(*, deprecated, message: "Split in to axis data")
+//    public var infoView = InfoViewData<GroupedBarDataPoint>()
+//    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
+//    public var xAxisLabels: [String]?
+//    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
+//    public var yAxisLabels: [String]?
 }

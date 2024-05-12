@@ -30,7 +30,7 @@ public protocol CTDoughnutChartDataProtocol: CTPieDoughnutChartDataProtocol {}
 /**
  A protocol to extend functionality of `CTStandardDataPointProtocol` specifically for Pie and Doughnut Charts.
  */
-public protocol CTPieDataPoint: CTStandardDataPointProtocol, CTnotRanged {
+public protocol CTPieDataPoint: CTStandardDataPointProtocol {
     
     /**
      Colour of the segment

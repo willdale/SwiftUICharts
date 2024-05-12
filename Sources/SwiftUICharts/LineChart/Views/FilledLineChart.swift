@@ -5,61 +5,71 @@
 //  Created by Will Dale on 23/01/2021.
 //
 
+import ChartMath
 import SwiftUI
 
 // MARK: - Chart
-/**
- View for creating a filled line chart.
- 
- Uses `LineChartData` data model.
- 
- # Declaration
- ```
- FilledLineChart(chartData: data)
- ```
- 
- # View Modifiers
- The order of the view modifiers is some what important
- as the modifiers are various types for stacks that wrap
- around the previous views.
- */
-public struct FilledLineChart<ChartData>: View where ChartData: FilledLineChartData {
+
+/// View for creating a filled line chart.
+///
+/// Uses ``FilledLineChartData`` data model.
+///
+/// # Declaration
+/// ```swift
+/// FilledLineChart(chartData: data)
+/// ```
+///
+/// # View Modifiers
+/// The order of the view modifiers is some what important
+/// as the modifiers are various types for stacks that wrap
+/// around the previous views.
+public struct FilledLineChart: View {
     
-    @ObservedObject private var chartData: ChartData
+    @ObservedObject private var chartData: FilledLineChartData
     private let minValue: Double
     private let range: Double
     
     /// Initialises a filled line chart
     /// - Parameter chartData: Must be LineChartData model.
-    public init(chartData: ChartData) {
+    public init(chartData: FilledLineChartData) {
         self.chartData = chartData
-        self.minValue = chartData.minValue
-        self.range = chartData.range
+        self.minValue = ChartMath.minValue(dataPoints: chartData.dataSets.dataPoints)
+        self.range = chartData.range()
     }
     
     @State private var startAnimation: Bool = false
     
     public var body: some View {
-            ZStack {
-                TopLineSubView(chartData: chartData,
-                               colour: chartData.dataSets.style.lineColour)
-                FilledLineSubView(chartData: chartData,
-                                  colour: chartData.dataSets.style.fillColour)
-            }
+        ZStack {
+            TopLineSubView(chartData: chartData,
+                           colour: chartData.dataSets.style.lineColour,
+                           minValue: minValue,
+                           range: range)
+            FilledLineSubView(chartData: chartData,
+                              colour: chartData.dataSets.style.fillColour,
+                              minValue: minValue,
+                              range: range)
         }
     }
+}
 
  // MARK: - Top Line
-internal struct TopLineSubView<ChartData>: View where ChartData: FilledLineChartData {
-    @ObservedObject private var chartData: ChartData
+internal struct TopLineSubView: View {
+    @ObservedObject private var chartData: FilledLineChartData
     private let colour: ChartColour
+    private let minValue: Double
+    private let range: Double
     
     internal init(
-        chartData: ChartData,
-        colour: ChartColour
+        chartData: FilledLineChartData,
+        colour: ChartColour,
+        minValue: Double,
+        range: Double
     ) {
         self.chartData = chartData
         self.colour = colour
+        self.minValue = minValue
+        self.range = range
     }
     
     @State private var startAnimation: Bool = false
@@ -67,8 +77,8 @@ internal struct TopLineSubView<ChartData>: View where ChartData: FilledLineChart
     internal var body: some View {
         LineShape(dataPoints: chartData.dataSets.dataPoints,
                   lineType: chartData.dataSets.style.lineType,
-                  minValue: chartData.minValue,
-                  range: chartData.range)
+                  minValue: minValue,
+                  range: range)
             .scale(y: animationValue, anchor: .bottom)
             .stroke(colour, strokeStyle: chartData.dataSets.style.strokeStyle)
         
@@ -91,17 +101,23 @@ internal struct TopLineSubView<ChartData>: View where ChartData: FilledLineChart
 }
 
 // MARK: - Fill
-internal struct FilledLineSubView<ChartData>: View where ChartData: FilledLineChartData {
+internal struct FilledLineSubView: View {
     
-    @ObservedObject private var chartData: ChartData
+    @ObservedObject private var chartData: FilledLineChartData
     private let colour: ChartColour
+    private let minValue: Double
+    private let range: Double
     
     internal init(
-        chartData: ChartData,
-        colour: ChartColour
+        chartData: FilledLineChartData,
+        colour: ChartColour,
+        minValue: Double,
+        range: Double
     ) {
         self.chartData = chartData
         self.colour = colour
+        self.minValue = minValue
+        self.range = range
     }
 
     @State private var startAnimation: Bool = false
@@ -109,8 +125,8 @@ internal struct FilledLineSubView<ChartData>: View where ChartData: FilledLineCh
     internal var body: some View {
         FilledLine(dataPoints: chartData.dataSets.dataPoints,
                    lineType: chartData.dataSets.style.lineType,
-                   minValue: chartData.minValue,
-                   range: chartData.range)
+                   minValue: minValue,
+                   range: range)
             .scale(y: animationValue, anchor: .bottom)
             .fill(colour)
         

@@ -61,7 +61,7 @@ internal struct LineShape<DataPoint>: Shape where DataPoint: CTStandardDataPoint
     }
 }
 
-// Filled line chart backing
+/// Filled line chart backing
 internal struct FilledLine: Shape {
     
     private let dataPoints: [LineChartDataPoint]
@@ -91,8 +91,8 @@ internal struct FilledLine: Shape {
     }
 }
 
-// Ranged line chart backing
-internal struct RangedLineFillShape<DataPoint>: Shape where DataPoint: CTRangedLineDataPoint & Ignorable {
+/// Ranged line chart backing
+internal struct RangedLineFillShape<DataPoint>: Shape where DataPoint: CTRangeDataPointProtocol & Ignorable {
     
     private let dataPoints: [DataPoint]
     private let lineType: LineType

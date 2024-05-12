@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+/*
 /**
  Data model to hold data for Legends
  */
@@ -53,3 +53,4 @@ public struct LegendData: Hashable, Identifiable {
         
     }
 }
+*/

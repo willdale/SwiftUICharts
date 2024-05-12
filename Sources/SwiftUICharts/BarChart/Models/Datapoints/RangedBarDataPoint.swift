@@ -19,9 +19,7 @@ public struct RangedBarDataPoint: CTRangedBarDataPoint, DataPointDisplayable {
     public var description: String?
     public var date: Date?
     public var colour: ChartColour
-    
-    public var _legendTag: String = ""
-    
+        
     internal var _value: Double = 0
     internal var _valueOnly: Bool = false
     
@@ -51,6 +49,12 @@ public struct RangedBarDataPoint: CTRangedBarDataPoint, DataPointDisplayable {
     
     public var value: Double {
         return upperValue - lowerValue
+    }
+    
+    public func formattedValue(from formatter: NumberFormatter) -> String {
+        let upper = formatter.string(from: NSNumber(value: upperValue)) ?? ""
+        let lower = formatter.string(from: NSNumber(value: lowerValue)) ?? ""
+        return upper + " - " + lower
     }
     
     public typealias ID = UUID

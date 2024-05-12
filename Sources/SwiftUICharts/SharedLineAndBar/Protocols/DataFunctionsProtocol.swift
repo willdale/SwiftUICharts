@@ -8,6 +8,7 @@
 import Foundation
 
 /// Convenience functions for data sets
+@available(*, deprecated)
 public protocol DataFunctionsProtocol {
     /**
      Returns the highest value in the data set.

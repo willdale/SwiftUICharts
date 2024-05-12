@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-public struct FilledLineStyle: CTLineStyle, Hashable {
+/// Model for controlling the styling a filled lines.
+public struct FilledLineStyle: Hashable {
 
     public var lineColour: ChartColour
     public var fillColour: ChartColour

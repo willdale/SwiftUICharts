@@ -20,7 +20,6 @@ extension View {
         self.modifier(
             XAxisMarker_HorizontalPosition(
                 chartData: chartData,
-                stateObject: chartData.stateObject,
                 value: value,
                 total: total,
                 position: position,
@@ -41,7 +40,6 @@ extension View {
         self.modifier(
             XAxisMarker_HorizontalPosition(
                 chartData: chartData,
-                stateObject: chartData.stateObject,
                 value: value,
                 total: total,
                 position: position,
@@ -62,7 +60,6 @@ extension View {
         self.modifier(
             XAxisMarker_VerticalPosition(
                 chartData: chartData,
-                stateObject: chartData.stateObject,
                 value: value,
                 total: total,
                 position: position,
@@ -83,7 +80,6 @@ extension View {
         self.modifier(
             XAxisMarker_VerticalPosition(
                 chartData: chartData,
-                stateObject: chartData.stateObject,
                 value: value,
                 total: total,
                 position: position,
@@ -98,7 +94,6 @@ extension View {
 internal struct XAxisMarker_HorizontalPosition<ChartData: CTChartData, Label: View>: ViewModifier {
     
     internal var chartData: ChartData
-    @ObservedObject internal var stateObject: ChartStateObject
     internal let value: Int
     internal let total: Int
     internal let position: AxisMarkerStyle.Horizontal
@@ -115,18 +110,18 @@ internal struct XAxisMarker_HorizontalPosition<ChartData: CTChartData, Label: Vi
     }
     
     var placement: CGPoint {
-        if chartData.chartName.isBar {
-            return stateObject.horizontalLineIndexedBarPosition(value: value, count: total, position: position)
-        } else {
-            return stateObject.horizontalLineIndexedPosition(value: value, count: total, position: position)
-        }
+        .zero
+//        if chartData.chartName.isBar {
+//            return stateObject.horizontalLineIndexedBarPosition(value: value, count: total, position: position)
+//        } else {
+//            return stateObject.horizontalLineIndexedPosition(value: value, count: total, position: position)
+//        }
     }
 }
 
 internal struct XAxisMarker_VerticalPosition<ChartData: CTChartData, Label: View>: ViewModifier {
     
     internal var chartData: ChartData
-    @ObservedObject internal var stateObject: ChartStateObject
     internal let value: Int
     internal let total: Int
     internal let position: AxisMarkerStyle.Vertical
@@ -143,10 +138,11 @@ internal struct XAxisMarker_VerticalPosition<ChartData: CTChartData, Label: View
     }
     
     var placement: CGPoint {
-        if chartData.chartName.isBar {
-            return stateObject.verticalLineIndexedBarPosition(value: value, count: total, position: position)
-        } else {
-            return stateObject.verticalLineIndexedPosition(value: value, count: total, position: position)
-        }
+        return .zero
+//        if chartData.chartName.isBar {
+//            return stateObject.verticalLineIndexedBarPosition(value: value, count: total, position: position)
+//        } else {
+//            return stateObject.verticalLineIndexedPosition(value: value, count: total, position: position)
+//        }
     }
 }

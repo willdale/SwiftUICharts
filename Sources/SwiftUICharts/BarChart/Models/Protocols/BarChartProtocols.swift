@@ -28,13 +28,7 @@ public protocol CTMultiBarChartDataProtocol {
     var groups: [GroupingData] { get set }
 }
 
-public protocol VerticalChart {}
-public protocol HorizontalChart {}
-
 // MARK: - Style
-/// A protocol to extend functionality of `CTLineBarChartStyle` specifically for  Bar Charts.
-@available(*, deprecated, message: "Has been de-centralised")
-public protocol CTBarChartStyle: CTLineBarChartStyle {}
 
 public protocol CTBarStyle: Hashable {
     /// How much of the available width to use. 0...1
@@ -93,7 +87,7 @@ public protocol CTRangedBarChartDataSet: CTStandardBarChartDataSet  {}
  
  This is base to specify conformance for generics.
  */
-public protocol CTBarDataPointBaseProtocol: CTLineBarDataPointProtocol {}
+public protocol CTBarDataPointBaseProtocol: CTXAxisLabelable, CTDataPointBaseProtocol {}
 
 
 /// A protocol to a standard colour scheme for bar charts.
@@ -106,12 +100,12 @@ public protocol CTBarColourProtocol {
 /**
  A protocol to extend functionality of `CTBarDataPointBaseProtocol` specifically for standard Bar Charts.
  */
-public protocol CTStandardBarDataPoint: CTBarDataPointBaseProtocol, CTStandardDataPointProtocol, CTnotRanged {}
+public protocol CTStandardBarDataPoint: CTBarDataPointBaseProtocol, CTStandardDataPointProtocol {}
 
 /**
  A protocol to extend functionality of `CTBarDataPointBaseProtocol` specifically for standard Bar Charts.
  */
-public protocol CTRangedBarDataPoint: CTBarDataPointBaseProtocol, CTRangeDataPointProtocol, CTisRanged {
+public protocol CTRangedBarDataPoint: CTBarDataPointBaseProtocol, CTRangeDataPointProtocol {
     var value: Double { get }
 }
 
@@ -119,7 +113,7 @@ public protocol CTRangedBarDataPoint: CTBarDataPointBaseProtocol, CTRangeDataPoi
  A protocol to extend functionality of `CTBarDataPointBaseProtocol` specifically for multi part Bar Charts.
  i.e: Grouped or Stacked
  */
-public protocol CTMultiBarDataPoint: CTBarDataPointBaseProtocol, CTStandardDataPointProtocol, CTnotRanged {
+public protocol CTMultiBarDataPoint: CTBarDataPointBaseProtocol, CTStandardDataPointProtocol {
     
     /**
      For grouping data points together so they can be drawn in the correct groupings.

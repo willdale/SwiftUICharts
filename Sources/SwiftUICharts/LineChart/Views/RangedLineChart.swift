@@ -5,57 +5,54 @@
 //  Created by Will Dale on 01/03/2021.
 //
 
+import ChartMath
 import SwiftUI
 
-//MARK: Chart
-/**
- View for drawing a line chart with upper and lower range values .
- 
- Uses `RangedLineChartData` data model.
- 
- # Declaration
- 
- ```
- RangedLineChart(chartData: data)
- ```
- 
- # View Modifiers
- 
- The order of the view modifiers is some what important
- as the modifiers are various types for stacks that wrap
- around the previous views.
- */
+
+/// View for drawing a line chart with upper and lower range values .
+///
+/// Uses `RangedLineChartData` data model.
+///
+/// # Declaration
+///
+/// ```
+/// RangedLineChart(chartData: data)
+/// ```
+///
+/// # View Modifiers
+///
+/// The order of the view modifiers is some what important
+/// as the modifiers are various types for stacks that wrap
+/// around the previous views.
 public struct RangedLineChart<ChartData>: View where ChartData: RangedLineChartData {
     
     @ObservedObject private var chartData: ChartData
+    private let minValue: Double
+    private let range: Double
     
     /// Initialises a line chart view.
     /// - Parameter chartData: Must be RangedLineChartData model.
     public init(chartData: ChartData) {
         self.chartData = chartData
+        
+        self.minValue = ChartMath.minValue(dataPoints: chartData.dataSets.dataPoints)
+        self.range = chartData.range()
     }
     
     public var body: some View {
-//        GeometryReader { geo in
-            ZStack {
-//                chartData.getAccessibility()
-                RangedBoxSubView(chartData: chartData,
-                                 dataSet: chartData.dataSets,
-                                 minValue: chartData.minValue,
-                                 range: chartData.range,
-                                 colour: chartData.dataSets.style.fillColour)
-                
-                RangedLineSubView(chartData: chartData,
-                                  dataSet: chartData.dataSets,
-                                  minValue: chartData.minValue,
-                                  range: chartData.range,
-                                  colour: chartData.dataSets.style.lineColour)
-            }
-//            .modifier(ChartSizeUpdating(chartData: chartData))
-//            .onAppear { // Needed for axes label frames
-//                self.chartData.chartSize = geo.frame(in: .local)
-//            }
-//        }
+        ZStack {
+            RangedBoxSubView(chartData: chartData,
+                             dataSet: chartData.dataSets,
+                             minValue: minValue,
+                             range: range,
+                             colour: chartData.dataSets.style.fillColour)
+            
+            RangedLineSubView(chartData: chartData,
+                              dataSet: chartData.dataSets,
+                              minValue: minValue,
+                              range: range,
+                              colour: chartData.dataSets.style.lineColour)
+        }
     }
 }
 
@@ -85,8 +82,8 @@ internal struct RangedBoxSubView<ChartData>: View where ChartData: RangedLineCha
     internal var body: some View {
         RangedLineFillShape(dataPoints: chartData.dataSets.dataPoints,
                             lineType: chartData.dataSets.style.lineType,
-                            minValue: chartData.minValue,
-                            range: chartData.range)
+                            minValue: minValue,
+                            range: range)
             .fill(colour)
     }
 }

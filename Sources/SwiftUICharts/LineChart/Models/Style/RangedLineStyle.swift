@@ -6,10 +6,9 @@
 //
 
 import SwiftUI
-/**
- Model for controlling the aesthetic of the ranged line chart.
- */
-public struct RangedLineStyle: CTRangedLineStyle, Hashable {
+
+/// Model for controlling the aesthetic of the ranged line chart.
+public struct RangedLineStyle: Hashable {
     
     public var lineColour: ChartColour
     public var fillColour: ChartColour
@@ -18,6 +17,7 @@ public struct RangedLineStyle: CTRangedLineStyle, Hashable {
     public var ignoreZero: Bool
     
     // MARK: Initializer
+    
     /// Initialize the styling for ranged line chart.
     ///
     /// - Parameters:

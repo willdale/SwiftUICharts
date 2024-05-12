@@ -11,14 +11,9 @@ import SwiftUI
 public struct BarChart<ChartData>: View where ChartData: BarChartData {
     
     public var chartData: ChartData
-    public var stateObject: ChartStateObject
     
-    public init(
-        chartData: ChartData,
-        stateObject: ChartStateObject
-    ) {
+    public init(chartData: ChartData) {
         self.chartData = chartData
-        self.stateObject = stateObject
     }
     
     public var body: some View {
@@ -26,7 +21,6 @@ public struct BarChart<ChartData>: View where ChartData: BarChartData {
                 BarChartSubView(chartData: chartData)
                     .accessibilityLabel(chartData.accessibilityTitle)
             }
-            .modifier(ChartSizeUpdating(stateObject: stateObject))
     }
 }
 

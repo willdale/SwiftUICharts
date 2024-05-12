@@ -116,18 +116,16 @@ public struct YAxisLabels<ChartData: CTChartData & DataHelper>: View {
         ZStack {
             ForEach(labels.indices, id: \.self) { index in
                 _Label_Cell(localState: localState, label: labels[index], index: index, count: labels.count, style: style)
-                    .modifier(_label_Positioning(stateObject: chartData.stateObject,
-                                                 localState: localState,
+                    .modifier(_label_Positioning(localState: localState,
                                                  index: index,
                                                  count: labels.count))
             }
             .modifier(_Axis_Label_Size(localState: localState))
         }
         .onAppear { localState.orientation = orientation }
-        .onChange(of: localState.widest) {
-            chartData.stateObject.updateLayoutElement(with: ChartStateObject.Model(element: .leadingLabels, value: $0 + style.padding))
-            
-        }
+//        .onChange(of: localState.widest) {
+//            chartData.stateObject.updateLayoutElement(with: ChartStateObject.Model(element: .leadingLabels, value: $0 + style.padding))
+//        }
     }
     
     internal var labels: [String] {
@@ -183,7 +181,6 @@ fileprivate struct _Label_Cell: View {
 // MARK: - ViewModifiers
 fileprivate struct _label_Positioning: ViewModifier {
 
-    @ObservedObject var stateObject: ChartStateObject
     @ObservedObject var localState: YAxisLabelsLayoutModel
     let index: Int
     let count: Int
@@ -193,14 +190,14 @@ fileprivate struct _label_Positioning: ViewModifier {
         case .vertical:
             content
                 .frame(width: localState.widest,
-                       height: divide(stateObject.chartSize.height, count))
+                       height: divide(.zero, count))
                 .position(x: localState.widest / 2,
-                          y: CGFloat(index) * divide(stateObject.chartSize.height, count-1))
+                          y: CGFloat(index) * divide(.zero, count-1))
         case .horizontal:
             content
-                .frame(width: divide(stateObject.chartSize.width, count),
+                .frame(width: divide(.zero, count),
                        height: localState.widest)
-                .position(x: (CGFloat(index) * divide(stateObject.chartSize.width, count-1)),
+                .position(x: (CGFloat(index) * divide(.zero, count-1)),
                           y: localState.widest / 2)
         }
     }

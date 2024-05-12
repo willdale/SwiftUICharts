@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+/*
 /// A protocol to extend functionality of `CTChartStyle` specifically for  Line and Bar Charts.
 @available(*, deprecated, message: "Has been de-centralised")
 public protocol CTLineBarChartStyle: CTChartStyle {
@@ -94,3 +94,4 @@ public protocol CTLineBarChartStyle: CTChartStyle {
     var topLine: Topline { get set }
     
 }
+*/

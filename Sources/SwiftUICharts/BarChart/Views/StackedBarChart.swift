@@ -27,7 +27,6 @@ public struct StackedBarChart<ChartData>: View where ChartData: StackedBarChartD
                              index: index)
             }
         }
-//        .modifier(ChartSizeUpdating(chartData: chartData))
     }
 }
 

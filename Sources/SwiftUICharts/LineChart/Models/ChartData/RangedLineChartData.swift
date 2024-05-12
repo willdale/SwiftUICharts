@@ -9,13 +9,10 @@ import SwiftUI
 import Combine
 import ChartMath
 
-/**
- Data for drawing and styling ranged line chart.
- 
- This model contains the data and styling information for a ranged line chart.
- */
-@available(macOS 11.0, iOS 14, watchOS 7, tvOS 14, *)
-public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartDataProtocol, StandardChartConformance {
+/// Data for drawing and styling ranged line chart.
+///
+/// This model contains the data and styling information for a ranged line chart.
+public final class RangedLineChartData: CTChartData, Publishable, Touchable {
     // MARK: Properties
     public let id: UUID  = UUID()
     @Published public var dataSets: RangedLineDataSet
@@ -25,8 +22,6 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
     public let chartName: ChartName = .rangedLine
     
     public var markerData = MarkerData()
-    public var stateObject = ChartStateObject()
-    public var touchObject = ChartTouchObject()
     
     // MARK: Publishable
     public var touchedData = TouchedData<DataPoint>()
@@ -39,6 +34,7 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
     internal let chartType: CTChartType = (chartType: .line, dataSetType: .single)
     
     // MARK: Initializer
+    
     /// Initialises a ranged line chart
     ///
     /// - Parameters:
@@ -58,16 +54,18 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
         self.topLine = topLine
     }
     
-    public var average: Double {
-        dataSets.dataPoints
-            .map(\.value)
-            .reduce(0, +)
-            .divide(by: Double(dataSets.dataPoints.count))
+    internal func range() -> Double {
+        let (minValue, maxValue) = ChartMath.minAndMaxValue(dataPoints: dataSets.dataPoints)
+        return ChartMath.calculateRange(baseline: self.baseline, topLine: self.topLine, minValue: minValue, maxValue: maxValue)
     }
     
     // MARK: Touch
     public func processTouchInteraction(touchLocation: CGPoint, chartSize: CGRect) {
         var values: [PublishedTouchData<DataPoint>] = []
+        
+        let (minValue, maxValue) = ChartMath.minAndMaxValue(dataPoints: dataSets.dataPoints)
+        let range = ChartMath.calculateRange(baseline: self.baseline, topLine: self.topLine, minValue: minValue, maxValue: maxValue)
+        
         let xSection = chartSize.width / CGFloat(dataSets.dataPoints.count - 1)
         let ySection = chartSize.height / CGFloat(range)
         let index = Int((touchLocation.x + (xSection / 2)) / xSection)
@@ -104,18 +102,4 @@ public final class RangedLineChartData: LineChartType, CTChartData, CTLineChartD
     public typealias SetType = RangedLineDataSet
     public typealias DataPoint = RangedLineChartDataPoint
     public typealias MarkerType = LineMarkerType
-    
-    // MARK: Deprecated
-    @available(*, deprecated, message: "Please set the data in \".titleBox\" instead.")
-    public var metadata = ChartMetadata()
-    @available(*, deprecated, message: "")
-    public var chartStyle = LineChartStyle()
-    @available(*, deprecated, message: "Has been moved to the view")
-    public var legends: [LegendData] = []
-    @available(*, deprecated, message: "Split in to axis data")
-    public var infoView = InfoViewData<RangedLineChartDataPoint>()
-    @available(*, deprecated, message: "Please use \".xAxisLabels\" instead.")
-    public var xAxisLabels: [String]?
-    @available(*, deprecated, message: "Please use \".yAxisLabels\" instead.")
-    public var yAxisLabels: [String]?
 }

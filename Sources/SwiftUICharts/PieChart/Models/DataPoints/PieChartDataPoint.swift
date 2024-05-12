@@ -20,9 +20,7 @@ public struct PieChartDataPoint: CTPieDataPoint, DataPointDisplayable {
     public var label: OverlayType
     public var startAngle: Double = 0
     public var amount: Double = 0
-    
-    public var _legendTag: String = ""
-    
+        
     /// Data model for a single data point for a pie chart.
     /// - Parameters:
     ///   - value: Value of the data point

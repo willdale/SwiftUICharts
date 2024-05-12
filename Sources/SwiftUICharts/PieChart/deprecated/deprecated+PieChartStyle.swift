@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+/*
 /// A protocol to extend functionality of `CTPieAndDoughnutChartStyle` specifically for  Pie Charts.
 @available(*, deprecated, message: "")
 public protocol CTPieChartStyle {}
@@ -60,3 +60,4 @@ public struct PieChartStyle: CTPieChartStyle {
         self.globalAnimation = globalAnimation
     }
 }
+*/

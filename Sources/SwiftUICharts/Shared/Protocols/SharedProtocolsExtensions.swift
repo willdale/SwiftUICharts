@@ -8,7 +8,7 @@
 import SwiftUI
 
 // MARK: - Data Set
-extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProtocol & CTnotRanged {
+extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProtocol {
     public func maxValue() -> Double {
         self.dataPoints
             .map(\.value)
@@ -23,23 +23,6 @@ extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProto
         self.dataPoints
             .map(\.value)
             .reduce(0, +)
-            .divide(by: Double(self.dataPoints.count))
-    }
-}
-extension CTSingleDataSetProtocol where Self.DataPoint: CTRangeDataPointProtocol & CTisRanged {
-    public func maxValue() -> Double {
-        self.dataPoints
-            .map(\.upperValue)
-            .max() ?? 0
-    }
-    public func minValue() -> Double {
-        self.dataPoints
-            .map(\.lowerValue)
-            .min() ?? 0
-    }
-    public func average() -> Double {
-        self.dataPoints
-            .reduce(0) { $0 + ($1.upperValue - $1.lowerValue) }
             .divide(by: Double(self.dataPoints.count))
     }
 }

@@ -7,10 +7,8 @@
 
 import SwiftUI
 
-/**
- Model for controlling the styling for individual lines.
- */
-public struct LineStyle: CTLineStyle, Hashable {
+/// Model for controlling the styling for individual lines.
+public struct LineStyle: Hashable {
 
     public var lineColour: ChartColour
     public var lineType: LineType

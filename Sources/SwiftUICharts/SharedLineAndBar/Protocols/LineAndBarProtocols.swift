@@ -8,15 +8,13 @@
 import SwiftUI
 
 // MARK: - DataPoints
-/**
- A protocol to extend functionality of `CTStandardDataPointProtocol` specifically for Line and Bar Charts.
- */
-public protocol CTLineBarDataPointProtocol: CTDataPointBaseProtocol {
+
+public protocol CTXAxisLabelable {
     /// Data points label for the X axis.
     var xAxisLabel: String? { get set }
 }
 
-extension CTLineBarDataPointProtocol {
+extension CTXAxisLabelable {
     /// Unwarpped xAxisLabel
     var wrappedXAxisLabel: String {
         self.xAxisLabel ?? ""

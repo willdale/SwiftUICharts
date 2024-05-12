@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - Extentions
 
-extension CTPieDoughnutChartDataProtocol where SetType == PieDataSet, DataPoint == PieChartDataPoint {
+extension CTPieDoughnutChartDataProtocol where SetType == PieDataSet {
     
     /**
      Sets up the data points in a way that can be sent to renderer for drawing.

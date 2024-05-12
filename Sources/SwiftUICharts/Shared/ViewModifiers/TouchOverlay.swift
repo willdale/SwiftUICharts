@@ -44,15 +44,15 @@ internal struct TouchOverlay<ChartData>: ViewModifier where ChartData: CTChartDa
             .gesture(
                 DragGesture(minimumDistance: minDistance, coordinateSpace: .local)
                     .onChanged { value in
-                        chartData.touchObject.touchLocation = value.location
-                        chartData.touchObject.isTouch = true
-                        Task.detached {
-                            chartData.processTouchInteraction(touchLocation: value.location, chartSize: chartData.stateObject.chartSize)
-                        }
+//                        chartData.touchObject.touchLocation = value.location
+//                        chartData.touchObject.isTouch = true
+//                        Task.detached {
+//                            chartData.processTouchInteraction(touchLocation: value.location, chartSize: chartData.stateObject.chartSize)
+//                        }
                     }
                     .onEnded { _ in
-                        chartData.touchObject.isTouch = false
-                        chartData.touchDidFinish()
+//                        chartData.touchObject.isTouch = false
+//                        chartData.touchDidFinish()
                     }
             )
     }

@@ -50,7 +50,7 @@ where ChartData: CTChartData & DataHelper,
     fileprivate func body(content: Content) -> some View {
         ZStack {
             content
-            PointMarkers(chartData: chartData, stateObject: chartData.stateObject, animation: animation, pointMaker: pointMaker)
+            PointMarkers(chartData: chartData, animation: animation, pointMaker: pointMaker)
         }
     }
 }
@@ -62,18 +62,15 @@ where ChartData: CTChartData & DataHelper,
       PointMarker: View {
     
     @ObservedObject private var chartData: ChartData
-    @ObservedObject private var stateObject: ChartStateObject
     private let animation: (_ index: Int) -> Animation
     private let pointMaker: (_ index: Int) -> PointMarker
     
     public init(
         chartData: ChartData,
-        stateObject: ChartStateObject,
         animation: @escaping (Int) -> Animation,
         pointMaker: @escaping (Int) -> PointMarker
     ) {
         self.chartData = chartData
-        self.stateObject = stateObject
         self.animation = animation
         self.pointMaker = pointMaker
     }
@@ -81,8 +78,8 @@ where ChartData: CTChartData & DataHelper,
     public var body: some View {
         ForEach(chartData.dataSets.dataPoints.indices, id: \.self) { index in
             pointMaker(index)
-                .position(x: plotPointX(index, chartData.dataSets.dataPoints.count, stateObject.chartSize.size.width),
-                          y: plotPointY(chartData.dataSets.dataPoints[index].value, chartData.minValue, chartData.range, stateObject.chartSize.size.height))
+                .position(x: plotPointX(index, chartData.dataSets.dataPoints.count, .zero),
+                          y: plotPointY(chartData.dataSets.dataPoints[index].value, chartData.minValue, chartData.range, .zero))
             
                 .modifier(_PointMarker_Cell_Pos_Anim(index: index,
                                                      animation: animation,
@@ -160,7 +157,7 @@ where ChartData: CTChartData & DataHelper,
     fileprivate func body(content: Content) -> some View {
         ZStack {
             content
-            MultiPointMarkers(chartData: chartData, stateObject: chartData.stateObject, animation: animation, pointMaker: pointMaker)
+            MultiPointMarkers(chartData: chartData, animation: animation, pointMaker: pointMaker)
         }
     }
 }
@@ -172,18 +169,15 @@ where ChartData: CTChartData & DataHelper,
       PointMarker: View {
     
     @ObservedObject private var chartData: ChartData
-    @ObservedObject private var stateObject: ChartStateObject
     private var animation: (_ dataSetIndex: Int, _ dataPointIndex: Int) -> Animation
     private var pointMaker: (_ dataSetIndex: Int, _ dataPointIndex: Int) -> PointMarker
     
     public init(
         chartData: ChartData,
-        stateObject: ChartStateObject,
         animation: @escaping (Int, Int) -> Animation,
         pointMaker: @escaping (Int, Int) -> PointMarker
     ) {
         self.chartData = chartData
-        self.stateObject = stateObject
         self.animation = animation
         self.pointMaker = pointMaker
     }
@@ -192,8 +186,8 @@ where ChartData: CTChartData & DataHelper,
         ForEach(chartData.dataSets.dataSets.indices, id: \.self) { dataSetIndex in
             ForEach(chartData.dataSets.dataSets[dataSetIndex].dataPoints.indices, id: \.self) { dataPointIndex in
                 pointMaker(dataSetIndex, dataPointIndex)
-                    .position(x: plotPointX(dataPointIndex, chartData.dataSets.dataSets[dataSetIndex].dataPoints.count, stateObject.chartSize.size.width),
-                              y: plotPointY(chartData.dataSets.dataSets[dataSetIndex].dataPoints[dataPointIndex].value, chartData.minValue, chartData.range, stateObject.chartSize.size.height))
+                    .position(x: plotPointX(dataPointIndex, chartData.dataSets.dataSets[dataSetIndex].dataPoints.count, 0),
+                              y: plotPointY(chartData.dataSets.dataSets[dataSetIndex].dataPoints[dataPointIndex].value, chartData.minValue, chartData.range, .zero))
                 
                     .modifier(_Multi_PointMarker_Cell_Pos_Anim(dataSetIndex: dataSetIndex,
                                                                dataPointIndex: dataPointIndex,

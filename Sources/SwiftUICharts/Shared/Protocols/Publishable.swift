@@ -8,7 +8,6 @@
 import Combine
 import SwiftUI
 
-
 /// Protocol to enable publishing data streams over the Combine framework
 public protocol Publishable {
     associatedtype DataPoint: CTDataPointBaseProtocol

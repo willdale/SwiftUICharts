@@ -23,21 +23,13 @@ public protocol DataPointDisplayable {
     func formattedValue(from formatter: NumberFormatter) -> String
 }
 
-extension DataPointDisplayable where Self: CTStandardDataPointProtocol & CTnotRanged {
+extension DataPointDisplayable where Self: CTStandardDataPointProtocol {
     public func formattedValue(from formatter: NumberFormatter) -> String {
         return formatter.string(from: NSNumber(value: value)) ?? ""
     }
 }
 
-extension DataPointDisplayable where Self: CTRangeDataPointProtocol & CTisRanged {
-    public func formattedValue(from formatter: NumberFormatter) -> String {
-        let upper = formatter.string(from: NSNumber(value: upperValue)) ?? ""
-        let lower = formatter.string(from: NSNumber(value: lowerValue)) ?? ""
-        return upper + " - " + lower
-    }
-}
-
-extension DataPointDisplayable where Self: CTStandardDataPointProtocol & Ignorable & CTnotRanged {
+extension DataPointDisplayable where Self: CTStandardDataPointProtocol & Ignorable {
     public func formattedValue(from formatter: NumberFormatter) -> String {
         if !ignore {
             return formatter.string(from: NSNumber(value: value)) ?? ""
@@ -47,7 +39,7 @@ extension DataPointDisplayable where Self: CTStandardDataPointProtocol & Ignorab
     }
 }
 
-extension DataPointDisplayable where Self: CTRangeDataPointProtocol & Ignorable & CTisRanged {
+extension DataPointDisplayable where Self: CTRangeDataPointProtocol & Ignorable {
     public func formattedValue(from formatter: NumberFormatter) -> String {
         if !ignore {
             let upper = formatter.string(from: NSNumber(value: upperValue)) ?? ""

@@ -7,12 +7,10 @@
 
 import SwiftUI
 
-/**
- Data set containing multiple data sets for multiple lines
- 
- Contains information about each of lines within the chart.
- */
-public struct MultiLineDataSet: CTMultiLineChartDataSet, DataFunctionsProtocol {
+/// Data set containing multiple data sets for multiple lines
+///
+/// Contains information about each of lines within the chart.
+public struct MultiLineDataSet: CTDataSetProtocol {
     
     public let id: UUID = UUID()
     public var dataSets: [LineDataSet]

@@ -19,7 +19,6 @@ extension View {
         self.modifier(
             YAxisMarker_HorizontalPosition(
                 chartData: chartData,
-                stateObject: chartData.stateObject,
                 value: value,
                 position: position,
                 style: style,
@@ -38,7 +37,6 @@ extension View {
         self.modifier(
             YAxisMarker_HorizontalPosition(
                 chartData: chartData,
-                stateObject: chartData.stateObject,
                 value: value,
                 position: position,
                 style: style,
@@ -57,7 +55,6 @@ extension View {
         self.modifier(
             YAxisMarker_VerticalPosition(
                 chartData: chartData,
-                stateObject: chartData.stateObject,
                 value: value,
                 position: position,
                 style: style,
@@ -76,7 +73,6 @@ extension View {
         self.modifier(
             YAxisMarker_VerticalPosition(
                 chartData: chartData,
-                stateObject: chartData.stateObject,
                 value: value,
                 position: position,
                 style: style,
@@ -90,7 +86,6 @@ extension View {
 internal struct YAxisMarker_HorizontalPosition<ChartData: CTChartData & DataHelper, Label: View>: ViewModifier {
     
     internal var chartData: ChartData
-    @ObservedObject internal var stateObject: ChartStateObject
     internal let value: Double
     internal let position: AxisMarkerStyle.Horizontal
     internal let style: AxisMarkerStyle
@@ -106,14 +101,14 @@ internal struct YAxisMarker_HorizontalPosition<ChartData: CTChartData & DataHelp
     }
     
     var placement: CGPoint {
-        stateObject.horizontalLinePosition(value: value, position: position, minValue: chartData.dataSetInfo.minValue, range: chartData.dataSetInfo.range)
+        .zero
+//        stateObject.horizontalLinePosition(value: value, position: position, minValue: chartData.dataSetInfo.minValue, range: chartData.dataSetInfo.range)
     }
 }
 
 internal struct YAxisMarker_VerticalPosition<ChartData: CTChartData & DataHelper, Label: View>: ViewModifier {
     
     internal var chartData: ChartData
-    @ObservedObject internal var stateObject: ChartStateObject
     internal let value: Double
     internal let position: AxisMarkerStyle.Vertical
     internal let style: AxisMarkerStyle
@@ -129,7 +124,8 @@ internal struct YAxisMarker_VerticalPosition<ChartData: CTChartData & DataHelper
     }
     
     var placement: CGPoint {
-        stateObject.verticalLinePosition(value: value, position: position, minValue: chartData.dataSetInfo.minValue, range: chartData.dataSetInfo.range)
+        .zero
+//        stateObject.verticalLinePosition(value: value, position: position, minValue: chartData.dataSetInfo.minValue, range: chartData.dataSetInfo.range)
     }
 }
 

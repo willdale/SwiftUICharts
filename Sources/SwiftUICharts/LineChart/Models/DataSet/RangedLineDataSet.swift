@@ -7,12 +7,10 @@
 
 import SwiftUI
 
-/**
- Data set for a ranged line.
- 
- Contains information specific to the line and range fill.
- */
-public struct RangedLineDataSet: CTRangedLineChartDataSet, DataFunctionsProtocol {
+/// Data set for a ranged line.
+///
+/// Contains information specific to the line and range fill.
+public struct RangedLineDataSet: CTDataSetProtocol {
     
     public let id: UUID = UUID()
     public var dataPoints: [RangedLineChartDataPoint]
@@ -36,36 +34,6 @@ public struct RangedLineDataSet: CTRangedLineChartDataSet, DataFunctionsProtocol
         self.style = style
     }
     
-    /// Initialises a data set for a line in a ranged line chart.
-    /// - Parameters:
-    ///   - dataPoints: Array of elements.
-    ///   - legendTitle: Label for the data in legend.
-    ///   - legendFillTitle: Label for the range data in legend.
-    ///   - pointStyle: Styling information for the data point markers.
-    ///   - style: Styling for how the line will be draw in.
-    @available(*, deprecated, message: "\"PointStyle\", \"legendTitle\" and \"legendFillTitle\" has been depricated")
-    public init(
-        dataPoints: [RangedLineChartDataPoint],
-        legendTitle: String = "",
-        legendFillTitle: String = "",
-        pointStyle: PointStyle = PointStyle(),
-        style: RangedLineStyle = RangedLineStyle()
-    ) {
-        self.dataPoints = dataPoints
-        self.legendTitle = ""
-        self.legendFillTitle = ""
-        self.markerType = .none
-        self.pointStyle = pointStyle
-        self.style = style
-    }
-    
     public typealias ID = UUID
     public typealias Styling = RangedLineStyle
-    
-    @available(*, deprecated, message: "\"PointStyle\" has been depricated")
-    public var pointStyle = PointStyle()
-    @available(*, deprecated, message: "depricated")
-    public var legendTitle: String = ""
-    @available(*, deprecated, message: "depricated")
-    public var legendFillTitle: String = ""
 }
