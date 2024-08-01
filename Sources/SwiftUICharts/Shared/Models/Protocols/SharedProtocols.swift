@@ -146,6 +146,17 @@ public protocol CTSingleDataSetProtocol: CTDataSetProtocol {
     
 }
 
+extension CTSingleDataSetProtocol where Self.DataPoint: CTStandardDataPointProtocol {
+    
+    /// Get average for the DataSet
+    func average() -> Double {
+        dataPoints
+            .map(\.value)
+            .reduce(0, +)
+            .divide(by: Double(dataPoints.count))
+    }
+}
+
 /**
  Protocol for data sets that require a multiple sets of data .
  */

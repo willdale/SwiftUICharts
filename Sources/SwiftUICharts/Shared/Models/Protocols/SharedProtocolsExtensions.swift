@@ -222,10 +222,7 @@ extension CTMultiDataSetProtocol where Self.DataSet.DataPoint: CTStandardDataPoi
         
         self.dataSets
             .compactMap {
-                $0.dataPoints
-                    .map(\.value)
-                    .reduce(0, +)
-                    .divide(by: Double($0.dataPoints.count))
+                $0.average()
             }
             .reduce(0, +)
             .divide(by: Double(self.dataSets.count))
