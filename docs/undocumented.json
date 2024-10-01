@@ -1,0 +1,1006 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/ChartData/BarChartData.swift",
+      "line": 31,
+      "symbol": "BarChartData.subscription",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/ChartData/BarChartData.swift",
+      "line": 37,
+      "symbol": "BarChartData.disableAnimation",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/ChartData/GroupedBarChartData.swift",
+      "line": 36,
+      "symbol": "GroupedBarChartData.subscription",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/ChartData/GroupedBarChartData.swift",
+      "line": 44,
+      "symbol": "GroupedBarChartData.disableAnimation",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/ChartData/HorizontalBarChartData.swift",
+      "line": 31,
+      "symbol": "HorizontalBarChartData.subscription",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/ChartData/HorizontalBarChartData.swift",
+      "line": 37,
+      "symbol": "HorizontalBarChartData.disableAnimation",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/ChartData/RangedBarChartData.swift",
+      "line": 31,
+      "symbol": "RangedBarChartData.subscription",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/ChartData/RangedBarChartData.swift",
+      "line": 37,
+      "symbol": "RangedBarChartData.disableAnimation",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/ChartData/StackedBarChartData.swift",
+      "line": 35,
+      "symbol": "StackedBarChartData.subscription",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/ChartData/StackedBarChartData.swift",
+      "line": 41,
+      "symbol": "StackedBarChartData.disableAnimation",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/CornerRadius.swift",
+      "line": 15,
+      "symbol": "CornerRadius.topLeft",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/CornerRadius.swift",
+      "line": 16,
+      "symbol": "CornerRadius.topRight",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/CornerRadius.swift",
+      "line": 17,
+      "symbol": "CornerRadius.bottomLeft",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/CornerRadius.swift",
+      "line": 18,
+      "symbol": "CornerRadius.bottomRight",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/GroupingData.swift",
+      "line": 16,
+      "symbol": "GroupingData.title",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/Protocols/BarChartProtocols.swift",
+      "line": 16,
+      "symbol": "CTBarChartDataProtocol.BarStyle",
+      "symbol_kind": "source.lang.swift.decl.associatedtype",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/Protocols/BarChartProtocols.swift",
+      "line": 47,
+      "symbol": "isHorizontal",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Models/Protocols/BarChartProtocols.swift",
+      "line": 55,
+      "symbol": "CTBarStyle",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/BarChart/Views/HorizontalBarChart.swift",
+      "line": 10,
+      "symbol": "HorizontalBarChart",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/ChartData/LineChartData.swift",
+      "line": 36,
+      "symbol": "LineChartData.subscription",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/ChartData/LineChartData.swift",
+      "line": 39,
+      "symbol": "LineChartData.disableAnimation",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/ChartData/MultiLineChartData.swift",
+      "line": 36,
+      "symbol": "MultiLineChartData.subscription",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/ChartData/MultiLineChartData.swift",
+      "line": 39,
+      "symbol": "MultiLineChartData.disableAnimation",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/ChartData/RangedLineChartData.swift",
+      "line": 36,
+      "symbol": "RangedLineChartData.subscription",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/ChartData/RangedLineChartData.swift",
+      "line": 39,
+      "symbol": "RangedLineChartData.disableAnimation",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/DataPoints/LineChartDataPoint.swift",
+      "line": 20,
+      "symbol": "LineChartDataPoint.pointColour",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/DataPoints/LineChartDataPoint.swift",
+      "line": 22,
+      "symbol": "LineChartDataPoint.ignoreMe",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/DataPoints/RangedLineChartDataPoint.swift",
+      "line": 22,
+      "symbol": "RangedLineChartDataPoint.pointColour",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/DataPoints/RangedLineChartDataPoint.swift",
+      "line": 24,
+      "symbol": "RangedLineChartDataPoint.ignoreMe",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/Protocols/LineChartProtocols.swift",
+      "line": 131,
+      "symbol": "CTLineDataPointProtocol.pointColour",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/Protocols/LineChartProtocols.swift",
+      "line": 147,
+      "symbol": "IgnoreMe",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/Protocols/LineChartProtocols.swift",
+      "line": 148,
+      "symbol": "IgnoreMe.ignoreMe",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/Protocols/LineChartProtocolsExtensions.swift",
+      "line": 12,
+      "symbol": "CTLineBarChartDataProtocol.setBoxLocationation(touchLocation:boxFrame:chartSize:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/Protocols/LineChartProtocolsExtensions.swift",
+      "line": 25,
+      "symbol": "CTLineBarChartDataProtocol.setBoxLocationation(touchLocation:boxFrame:chartSize:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/Style/PointStyle.swift",
+      "line": 60,
+      "symbol": "PointColour",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/Style/PointStyle.swift",
+      "line": 61,
+      "symbol": "PointColour.border",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/Style/PointStyle.swift",
+      "line": 62,
+      "symbol": "PointColour.fill",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/LineChart/Models/Style/PointStyle.swift",
+      "line": 64,
+      "symbol": "PointColour.init(border:fill:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/PieChart/Models/ChartData/DoughnutChartData.swift",
+      "line": 27,
+      "symbol": "DoughnutChartData.subscription",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/PieChart/Models/ChartData/DoughnutChartData.swift",
+      "line": 33,
+      "symbol": "DoughnutChartData.disableAnimation",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/PieChart/Models/ChartData/PieChartData.swift",
+      "line": 27,
+      "symbol": "PieChartData.subscription",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/PieChart/Models/ChartData/PieChartData.swift",
+      "line": 33,
+      "symbol": "PieChartData.disableAnimation",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/PieChart/Models/DataSets/PieDataSet.swift",
+      "line": 17,
+      "symbol": "PieDataSet.legendTitle",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/API.swift",
+      "line": 17,
+      "symbol": "InfoValue.init(chartData:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/API.swift",
+      "line": 35,
+      "symbol": "InfoDescription.init(chartData:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/API.swift",
+      "line": 54,
+      "symbol": "InfoExtra.init(chartData:text:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Extras/Extension+NSNotificationName.swift",
+      "line": 11,
+      "symbol": "NSNotification.Name.updateLayoutDidFinish",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Extras/SharedEnums.swift",
+      "line": 19,
+      "symbol": "DataSetType.single",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Extras/SharedEnums.swift",
+      "line": 20,
+      "symbol": "DataSetType.multi",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Extras/SharedEnums.swift",
+      "line": 86,
+      "symbol": "InfoBoxAlignment.vertical",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Extras/SharedEnums.swift",
+      "line": 87,
+      "symbol": "InfoBoxAlignment.horizontal",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/LegendData.swift",
+      "line": 29,
+      "symbol": "LegendData.colour",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/PublishableProtocol.swift",
+      "line": 16,
+      "symbol": "Publishable.DataPoint",
+      "symbol_kind": "source.lang.swift.decl.associatedtype",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/PublishableProtocol.swift",
+      "line": 19,
+      "symbol": "Publishable.subscription",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocols.swift",
+      "line": 33,
+      "symbol": "CTChartData.id",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocols.swift",
+      "line": 75,
+      "symbol": "CTChartData.disableAnimation",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocols.swift",
+      "line": 131,
+      "symbol": "CTDataSetProtocol.id",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocols.swift",
+      "line": 171,
+      "symbol": "CTDataPointBaseProtocol.id",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocols.swift",
+      "line": 335,
+      "symbol": "CTisRanged",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocols.swift",
+      "line": 336,
+      "symbol": "CTnotRanged",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocolsExtensions.swift",
+      "line": 169,
+      "symbol": "CTSingleDataSetProtocol.maxValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocolsExtensions.swift",
+      "line": 174,
+      "symbol": "CTSingleDataSetProtocol.minValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocolsExtensions.swift",
+      "line": 179,
+      "symbol": "CTSingleDataSetProtocol.average()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocolsExtensions.swift",
+      "line": 187,
+      "symbol": "CTSingleDataSetProtocol.maxValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocolsExtensions.swift",
+      "line": 192,
+      "symbol": "CTSingleDataSetProtocol.minValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocolsExtensions.swift",
+      "line": 197,
+      "symbol": "CTSingleDataSetProtocol.average()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocolsExtensions.swift",
+      "line": 205,
+      "symbol": "CTMultiDataSetProtocol.maxValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocolsExtensions.swift",
+      "line": 213,
+      "symbol": "CTMultiDataSetProtocol.minValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocolsExtensions.swift",
+      "line": 221,
+      "symbol": "CTMultiDataSetProtocol.average()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocolsExtensions.swift",
+      "line": 277,
+      "symbol": "CTSingleDataSetProtocol.minValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Models/Protocols/SharedProtocolsExtensions.swift",
+      "line": 293,
+      "symbol": "CTMultiDataSetProtocol.minValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Types/GradientStop.swift",
+      "line": 17,
+      "symbol": "GradientStop.color",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Types/GradientStop.swift",
+      "line": 18,
+      "symbol": "GradientStop.location",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Types/GradientStop.swift",
+      "line": 20,
+      "symbol": "GradientStop.init(color:location:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/Types/Stroke.swift",
+      "line": 26,
+      "symbol": "Stroke.init(lineWidth:lineCap:lineJoin:miterLimit:dash:dashPhase:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/Shared/ViewModifiers/disableAnimation.swift",
+      "line": 11,
+      "symbol": "View.disableAnimation(chartData:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Extras/LineAndBarEnums.swift",
+      "line": 19,
+      "symbol": "XAxisLabelPosistion.top",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Extras/LineAndBarEnums.swift",
+      "line": 20,
+      "symbol": "XAxisLabelPosistion.bottom",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Extras/LineAndBarEnums.swift",
+      "line": 50,
+      "symbol": "YAxisLabelPosistion.leading",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Extras/LineAndBarEnums.swift",
+      "line": 51,
+      "symbol": "YAxisLabelPosistion.trailing",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/ExtraLineData.swift",
+      "line": 19,
+      "symbol": "ExtraLineData.dataPoints",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/ExtraLineData.swift",
+      "line": 20,
+      "symbol": "ExtraLineData.style",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/ExtraLineData.swift",
+      "line": 21,
+      "symbol": "ExtraLineData.legendTitle",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/ExtraLineData.swift",
+      "line": 23,
+      "symbol": "ExtraLineData.init(legendTitle:dataPoints:style:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/ExtraLineDataPoint.swift",
+      "line": 16,
+      "symbol": "ExtraLineDataPoint.value",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/ExtraLineDataPoint.swift",
+      "line": 17,
+      "symbol": "ExtraLineDataPoint.pointColour",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/ExtraLineDataPoint.swift",
+      "line": 18,
+      "symbol": "ExtraLineDataPoint.pointDescription",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/ExtraLineDataPoint.swift",
+      "line": 20,
+      "symbol": "ExtraLineDataPoint.init(value:pointColour:pointDescription:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/DataFunctionsProtocol.swift",
+      "line": 10,
+      "symbol": "DataFunctionsProtocol",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/DataFunctionsProtocol.swift",
+      "line": 30,
+      "symbol": "GetDataProtocol",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/LineAndBarProtocolsExtentions.swift",
+      "line": 13,
+      "symbol": "CTLineBarChartDataProtocol.range",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/LineAndBarProtocolsExtentions.swift",
+      "line": 38,
+      "symbol": "CTLineBarChartDataProtocol.minValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/LineAndBarProtocolsExtentions.swift",
+      "line": 51,
+      "symbol": "CTLineBarChartDataProtocol.maxValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/LineAndBarProtocolsExtentions.swift",
+      "line": 62,
+      "symbol": "CTLineBarChartDataProtocol.average",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/LineAndBarProtocolsExtentions.swift",
+      "line": 364,
+      "symbol": "CTLineBarChartDataProtocol.getExtraYAxisTitle(colour:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 10,
+      "symbol": "PointOfInterestProtocol",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 237,
+      "symbol": "CTLineBarChartDataProtocol.poiMarker(value:range:minValue:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 241,
+      "symbol": "CTLineBarChartDataProtocol.poiLabelAxis(markerValue:specifier:formatter:labelFont:labelColour:labelBackground:labelBorderColor:customLabelShape:padding:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 272,
+      "symbol": "CTLineBarChartDataProtocol.poiLabelCenter(markerValue:specifier:formatter:labelFont:labelColour:labelBackground:labelBorderColor:strokeStyle:customLabelShape:padding:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 295,
+      "symbol": "CTLineBarChartDataProtocol.poiLabelPosition(location:markerValue:specifier:formatter:labelFont:labelColour:labelBackground:labelBorderColor:strokeStyle:customLabelShape:padding:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 332,
+      "symbol": "CTLineBarChartDataProtocol.poiMarker(value:range:minValue:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 336,
+      "symbol": "CTLineBarChartDataProtocol.poiLabelAxis(markerValue:specifier:labelFont:labelColour:labelBackground:labelBorderColor:customLabelShape:padding:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 366,
+      "symbol": "CTLineBarChartDataProtocol.poiLabelPosition(location:markerValue:specifier:formatter:labelFont:labelColour:labelBackground:labelBorderColor:strokeStyle:customLabelShape:padding:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 412,
+      "symbol": "CTLineBarChartDataProtocol.poiValueLabelPositionAxis(frame:markerValue:minValue:range:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 421,
+      "symbol": "CTLineBarChartDataProtocol.poiValueLabelPositionCenter(frame:markerValue:minValue:range:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 426,
+      "symbol": "CTLineBarChartDataProtocol.poiValueLabelRelativePosition(frame:markerValue:minValue:range:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 437,
+      "symbol": "CTLineBarChartDataProtocol.poiValueLabelPositionAxis(frame:markerValue:minValue:range:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 445,
+      "symbol": "CTLineBarChartDataProtocol.poiValueLabelPositionCenter(frame:markerValue:minValue:range:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 450,
+      "symbol": "CTLineBarChartDataProtocol.poiValueLabelRelativePosition(frame:markerValue:minValue:range:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 462,
+      "symbol": "CTLineBarChartDataProtocol.poiValueLabelPositionAxis(frame:markerValue:minValue:range:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 470,
+      "symbol": "CTLineBarChartDataProtocol.poiValueLabelPositionCenter(frame:markerValue:minValue:range:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 475,
+      "symbol": "CTLineBarChartDataProtocol.poiValueLabelRelativePosition(frame:markerValue:minValue:range:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 490,
+      "symbol": "CTLineBarChartDataProtocol.poiAbscissaMarker(markerValue:dataPointCount:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 494,
+      "symbol": "CTLineBarChartDataProtocol.poiAbscissaLabelAxis(marker:labelFont:labelColour:labelBackground:labelBorderColor:customLabelShape:padding:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 515,
+      "symbol": "CTLineBarChartDataProtocol.poiAbscissaLabelCenter(marker:labelFont:labelColour:labelBackground:labelBorderColor:strokeStyle:customLabelShape:padding:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 536,
+      "symbol": "CTLineBarChartDataProtocol.poiAbscissaLabelPosition(location:marker:labelFont:labelColour:labelBackground:labelBorderColor:strokeStyle:customLabelShape:padding:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 572,
+      "symbol": "CTLineBarChartDataProtocol.poiAbscissaMarker(markerValue:dataPointCount:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 576,
+      "symbol": "CTLineBarChartDataProtocol.poiAbscissaLabelAxis(marker:labelFont:labelColour:labelBackground:labelBorderColor:customLabelShape:padding:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 605,
+      "symbol": "CTLineBarChartDataProtocol.poiAbscissaLabelPosition(location:marker:labelFont:labelColour:labelBackground:labelBorderColor:strokeStyle:customLabelShape:padding:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 648,
+      "symbol": "CTLineBarChartDataProtocol.poiAbscissaValueLabelPositionAxis(frame:markerValue:count:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 655,
+      "symbol": "CTLineBarChartDataProtocol.poiAbscissaValueLabelPositionCenter(frame:markerValue:count:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 660,
+      "symbol": "CTLineBarChartDataProtocol.poiAbscissaValueLabelRelativePosition(frame:markerValue:count:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 669,
+      "symbol": "CTLineBarChartDataProtocol.poiAbscissaValueLabelPositionAxis(frame:markerValue:count:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 676,
+      "symbol": "CTLineBarChartDataProtocol.poiAbscissaValueLabelPositionCenter(frame:markerValue:count:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 681,
+      "symbol": "CTLineBarChartDataProtocol.poiAbscissaValueLabelRelativePosition(frame:markerValue:count:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 691,
+      "symbol": "CTLineBarChartDataProtocol.poiAbscissaValueLabelPositionAxis(frame:markerValue:count:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 698,
+      "symbol": "CTLineBarChartDataProtocol.poiAbscissaValueLabelPositionCenter(frame:markerValue:count:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Models/Protocols/PointOfInterestProtocol.swift",
+      "line": 703,
+      "symbol": "CTLineBarChartDataProtocol.poiAbscissaValueLabelRelativePosition(frame:markerValue:count:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Shapes/LabelShape.swift",
+      "line": 16,
+      "symbol": "CustomLabelShape.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Style/ExtraLineStyle.swift",
+      "line": 15,
+      "symbol": "ExtraLineStyle.lineColour",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Style/ExtraLineStyle.swift",
+      "line": 16,
+      "symbol": "ExtraLineStyle.lineType",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Style/ExtraLineStyle.swift",
+      "line": 17,
+      "symbol": "ExtraLineStyle.lineSpacing",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Style/ExtraLineStyle.swift",
+      "line": 19,
+      "symbol": "ExtraLineStyle.markerType",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Style/ExtraLineStyle.swift",
+      "line": 21,
+      "symbol": "ExtraLineStyle.strokeStyle",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Style/ExtraLineStyle.swift",
+      "line": 23,
+      "symbol": "ExtraLineStyle.pointStyle",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Style/ExtraLineStyle.swift",
+      "line": 25,
+      "symbol": "ExtraLineStyle.yAxisTitle",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Style/ExtraLineStyle.swift",
+      "line": 26,
+      "symbol": "ExtraLineStyle.yAxisNumberOfLabels",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Style/ExtraLineStyle.swift",
+      "line": 28,
+      "symbol": "ExtraLineStyle.animationType",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Style/ExtraLineStyle.swift",
+      "line": 30,
+      "symbol": "ExtraLineStyle.baseline",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Style/ExtraLineStyle.swift",
+      "line": 31,
+      "symbol": "ExtraLineStyle.topLine",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Style/ExtraLineStyle.swift",
+      "line": 33,
+      "symbol": "ExtraLineStyle.init(lineColour:lineType:lineSpacing:markerType:strokeStyle:pointStyle:yAxisTitle:yAxisNumberOfLabels:animationType:baseline:topLine:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Style/ExtraLineStyle.swift",
+      "line": 96,
+      "symbol": "ExtraLineStyle.SpacingType.line",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/SwiftUICharts/SwiftUICharts/Sources/SwiftUICharts/SharedLineAndBar/Style/ExtraLineStyle.swift",
+      "line": 97,
+      "symbol": "ExtraLineStyle.SpacingType.bar",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/runner/work/SwiftUICharts/SwiftUICharts"
+}
