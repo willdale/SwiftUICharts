@@ -129,7 +129,7 @@ extension CTChartData {
     @ViewBuilder public func infoLegend(info: DataPoint) -> some View {
         if let legend = self.legends.first(where: {
             $0.legend == info.legendTag
-        }) {
+        }), !legend.legend.isEmpty {
             legend.getLegendAsCircle(textColor: .primary)
         } else {
             EmptyView()
