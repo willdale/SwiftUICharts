@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>RangedBarChartData Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Class/RangedBarChartData" class="dashAnchor"></a>
+
+    <a title="RangedBarChartData Class Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          SwiftUICharts 2.10.2 Docs
+        </a>
+         (87% documented)
+      </p>
+    
+      <div class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </div>
+    
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">SwiftUICharts</a>
+      <img class="carat" src="../img/carat.png" alt=""/>
+      <a class="breadcrumb" href="../Classes.html">Classes</a>
+      <img class="carat" src="../img/carat.png" alt=""/>
+      RangedBarChartData Class Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/BarChartData.html">BarChartData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ChartImageController.html">ChartImageController</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ChartImageHostingController.html">ChartImageHostingController</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/DoughnutChartData.html">DoughnutChartData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/GroupedBarChartData.html">GroupedBarChartData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/HorizontalBarChartData.html">HorizontalBarChartData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/LineChartData.html">LineChartData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/MultiLineChartData.html">MultiLineChartData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/PieChartData.html">PieChartData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/RangedBarChartData.html">RangedBarChartData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/RangedLineChartData.html">RangedLineChartData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/StackedBarChartData.html">StackedBarChartData</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AxisColour.html">AxisColour</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/BarMarkerType.html">BarMarkerType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/Baseline.html">Baseline</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ChartType.html">ChartType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ColourFrom.html">ColourFrom</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ColourType.html">ColourType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/DataSetType.html">DataSetType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/DisplayValue.html">DisplayValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/Dot.html">Dot</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/InfoBoxAlignment.html">InfoBoxAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/InfoBoxPlacement.html">InfoBoxPlacement</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/LabelsFrom.html">LabelsFrom</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/LineMarkerType.html">LineMarkerType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/LineType.html">LineType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/MarkerAttachment.html">MarkerAttachment</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/OverlayType.html">OverlayType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/PointShape.html">PointShape</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/PointType.html">PointType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/Topline.html">Topline</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/TouchUnit.html">TouchUnit</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/XAxisLabelPosistion.html">XAxisLabelPosistion</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/YAxisLabelPosistion.html">YAxisLabelPosistion</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/YAxisLabelType.html">YAxisLabelType</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Color.html">Color</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/NSNotification.html">NSNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/NSNotification/Name.html">– Name</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/View.html">View</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTBarChartDataProtocol.html">CTBarChartDataProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts15CTBarChartStyleP">CTBarChartStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTBarColourProtocol.html">CTBarColourProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts26CTBarDataPointBaseProtocolP">CTBarDataPointBaseProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTBarStyle.html">CTBarStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTChartData.html">CTChartData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTChartStyle.html">CTChartStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTColourStyle.html">CTColourStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTDataPointBaseProtocol.html">CTDataPointBaseProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTDataSetProtocol.html">CTDataSetProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts27CTDoughnutChartDataProtocolP">CTDoughnutChartDataProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTDoughnutChartStyle.html">CTDoughnutChartStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts32CTHorizontalBarChartDataProtocolP">CTHorizontalBarChartDataProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTLineBarChartDataProtocol.html">CTLineBarChartDataProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTLineBarChartStyle.html">CTLineBarChartStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTLineBarDataPointProtocol.html">CTLineBarDataPointProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTLineChartDataProtocol.html">CTLineChartDataProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTLineChartDataSet.html">CTLineChartDataSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts16CTLineChartStyleP">CTLineChartStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTLineDataPointProtocol.html">CTLineDataPointProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTLineStyle.html">CTLineStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTMultiBarChartDataProtocol.html">CTMultiBarChartDataProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTMultiBarChartDataSet.html">CTMultiBarChartDataSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTMultiBarDataPoint.html">CTMultiBarDataPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTMultiDataSetProtocol.html">CTMultiDataSetProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts23CTMultiLineChartDataSetP">CTMultiLineChartDataSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts26CTPieAndDoughnutChartStyleP">CTPieAndDoughnutChartStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts22CTPieChartDataProtocolP">CTPieChartDataProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts15CTPieChartStyleP">CTPieChartStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTPieDataPoint.html">CTPieDataPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts30CTPieDoughnutChartDataProtocolP">CTPieDoughnutChartDataProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTRangeDataPointProtocol.html">CTRangeDataPointProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts28CTRangedBarChartDataProtocolP">CTRangedBarChartDataProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts23CTRangedBarChartDataSetP">CTRangedBarChartDataSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts20CTRangedBarDataPointP">CTRangedBarDataPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTRangedLineChartDataSet.html">CTRangedLineChartDataSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTRangedLineDataPoint.html">CTRangedLineDataPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTRangedLineStyle.html">CTRangedLineStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTSingleDataSetProtocol.html">CTSingleDataSetProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTStandardBarChartDataSet.html">CTStandardBarChartDataSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts22CTStandardBarDataPointP">CTStandardBarDataPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CTStandardDataPointProtocol.html">CTStandardDataPointProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts23CTStandardLineDataPointP">CTStandardLineDataPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts10CTisRangedP">CTisRanged</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts11CTnotRangedP">CTnotRanged</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/DataFunctionsProtocol.html">DataFunctionsProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/GetDataProtocol.html">GetDataProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/IgnoreMe.html">IgnoreMe</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts10MarkerTypeP">MarkerType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/PointOfInterestProtocol.html">PointOfInterestProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/Publishable.html">Publishable</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols.html#/s:13SwiftUICharts12isHorizontalP">isHorizontal</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/BarChart.html">BarChart</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/BarChartDataPoint.html">BarChartDataPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/BarChartStyle.html">BarChartStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/BarDataSet.html">BarDataSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/BarStyle.html">BarStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/BottomLabelShape.html">BottomLabelShape</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ChartMetadata.html">ChartMetadata</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs.html#/s:13SwiftUICharts13ChartViewDataV">ChartViewData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ColourStyle.html">ColourStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/CornerRadius.html">CornerRadius</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/CustomLabelShape.html">CustomLabelShape</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/CustomNoDataView.html">CustomNoDataView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DiamondShape.html">DiamondShape</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DotStyle.html">DotStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DoughnutChart.html">DoughnutChart</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DoughnutChartStyle.html">DoughnutChartStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ExtraLineData.html">ExtraLineData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ExtraLineDataPoint.html">ExtraLineDataPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ExtraLineStyle.html">ExtraLineStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ExtraLineStyle/AnimationType.html">– AnimationType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ExtraLineStyle/SpacingType.html">– SpacingType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/FilledLineChart.html">FilledLineChart</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/GradientStop.html">GradientStop</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/GridStyle.html">GridStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/GroupedBarChart.html">GroupedBarChart</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/GroupedBarDataPoint.html">GroupedBarDataPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/GroupedBarDataSet.html">GroupedBarDataSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/GroupedBarDataSets.html">GroupedBarDataSets</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/GroupingData.html">GroupingData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/HorizontalBarChart.html">HorizontalBarChart</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/InfoDescription.html">InfoDescription</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/InfoExtra.html">InfoExtra</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/InfoValue.html">InfoValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs.html#/s:13SwiftUICharts12InfoViewDataV">InfoViewData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/LeadingLabelShape.html">LeadingLabelShape</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/LegendData.html">LegendData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/LineChart.html">LineChart</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/LineChartDataPoint.html">LineChartDataPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/LineChartStyle.html">LineChartStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/LineDataSet.html">LineDataSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/LineStyle.html">LineStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/MultiLineChart.html">MultiLineChart</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/MultiLineDataSet.html">MultiLineDataSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/PieChart.html">PieChart</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/PieChartDataPoint.html">PieChartDataPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/PieChartStyle.html">PieChartStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/PieDataSet.html">PieDataSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/PointColour.html">PointColour</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/PointStyle.html">PointStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/RangedBarChart.html">RangedBarChart</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/RangedBarDataPoint.html">RangedBarDataPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/RangedBarDataSet.html">RangedBarDataSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/RangedLineChart.html">RangedLineChart</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/RangedLineChartDataPoint.html">RangedLineChartDataPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/RangedLineDataSet.html">RangedLineDataSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/RangedLineStyle.html">RangedLineStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/StackedBarChart.html">StackedBarChart</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/StackedBarDataPoint.html">StackedBarDataPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/StackedBarDataSet.html">StackedBarDataSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/StackedBarDataSets.html">StackedBarDataSets</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Stroke.html">Stroke</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/TopLabelShape.html">TopLabelShape</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/TrailingLabelShape.html">TrailingLabelShape</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content top-matter">
+            <h1>RangedBarChartData</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">RangedBarChartData</span> <span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:13SwiftUICharts28CTRangedBarChartDataProtocolP">CTRangedBarChartDataProtocol</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/GetDataProtocol.html">GetDataProtocol</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/Publishable.html">Publishable</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/PointOfInterestProtocol.html">PointOfInterestProtocol</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>Data for drawing and styling a ranged Bar Chart.</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Properties"></a>
+                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Properties"></a>
+                  <h3 class="section-name"><span>Properties</span>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:s12IdentifiableP2id2IDQzvp"></a>
+                    <a name="//apple_ref/swift/Property/id" class="dashAnchor"></a>
+                    <a class="token" href="#/s:s12IdentifiableP2id2IDQzvp">id</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">UUID</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts11CTChartDataP8dataSets7SetTypeQzvp"></a>
+                    <a name="//apple_ref/swift/Property/dataSets" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts11CTChartDataP8dataSets7SetTypeQzvp">dataSets</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">dataSets</span><span class="p">:</span> <span class="kt"><a href="../Structs/RangedBarDataSet.html">RangedBarDataSet</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts11CTChartDataP8metadataAA13ChartMetadataVvp"></a>
+                    <a name="//apple_ref/swift/Property/metadata" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts11CTChartDataP8metadataAA13ChartMetadataVvp">metadata</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">metadata</span><span class="p">:</span> <span class="kt"><a href="../Structs/ChartMetadata.html">ChartMetadata</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts26CTLineBarChartDataProtocolP11xAxisLabelsSaySSGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/xAxisLabels" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts26CTLineBarChartDataProtocolP11xAxisLabelsSaySSGSgvp">xAxisLabels</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">xAxisLabels</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts26CTLineBarChartDataProtocolP11yAxisLabelsSaySSGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/yAxisLabels" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts26CTLineBarChartDataProtocolP11yAxisLabelsSaySSGSgvp">yAxisLabels</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">yAxisLabels</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts22CTBarChartDataProtocolP8barStyle03BarH0Qzvp"></a>
+                    <a name="//apple_ref/swift/Property/barStyle" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts22CTBarChartDataProtocolP8barStyle03BarH0Qzvp">barStyle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">barStyle</span><span class="p">:</span> <span class="kt"><a href="../Structs/BarStyle.html">BarStyle</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts11CTChartDataP10chartStyle7CTStyleQzvp"></a>
+                    <a name="//apple_ref/swift/Property/chartStyle" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts11CTChartDataP10chartStyle7CTStyleQzvp">chartStyle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">chartStyle</span><span class="p">:</span> <span class="kt"><a href="../Structs/BarChartStyle.html">BarChartStyle</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts11CTChartDataP7legendsSayAA06LegendD0VGvp"></a>
+                    <a name="//apple_ref/swift/Property/legends" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts11CTChartDataP7legendsSayAA06LegendD0VGvp">legends</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">legends</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/LegendData.html">LegendData</a></span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts26CTLineBarChartDataProtocolP04viewF0AA0e4ViewF0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/viewData" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts26CTLineBarChartDataProtocolP04viewF0AA0e4ViewF0Vvp">viewData</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">viewData</span><span class="p">:</span> <span class="kt"><a href="../Structs.html#/s:13SwiftUICharts13ChartViewDataV">ChartViewData</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts11CTChartDataP8infoViewAA04InfofD0Vy0D5PointQzGvp"></a>
+                    <a name="//apple_ref/swift/Property/infoView" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts11CTChartDataP8infoViewAA04InfofD0Vy0D5PointQzGvp">infoView</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">infoView</span><span class="p">:</span> <span class="kt"><a href="../Structs.html#/s:13SwiftUICharts12InfoViewDataV">InfoViewData</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/RangedBarDataPoint.html">RangedBarDataPoint</a></span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts26CTLineBarChartDataProtocolP09extraLineF0AA05ExtraiF0VSgvp"></a>
+                    <a name="//apple_ref/swift/Property/extraLineData" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts26CTLineBarChartDataProtocolP09extraLineF0AA05ExtraiF0VSgvp">extraLineData</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">extraLineData</span><span class="p">:</span> <span class="kt"><a href="../Structs/ExtraLineData.html">ExtraLineData</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts18RangedBarChartDataC12subscriptionShy7Combine14AnyCancellableCGvp"></a>
+                    <a name="//apple_ref/swift/Property/subscription" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts18RangedBarChartDataC12subscriptionShy7Combine14AnyCancellableCGvp">subscription</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">subscription</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">AnyCancellable</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts11PublishableP25touchedDataPointPublisher7Combine18PassthroughSubjectCy0eF0Qzs5NeverOGvp"></a>
+                    <a name="//apple_ref/swift/Property/touchedDataPointPublisher" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts11PublishableP25touchedDataPointPublisher7Combine18PassthroughSubjectCy0eF0Qzs5NeverOGvp">touchedDataPointPublisher</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">touchedDataPointPublisher</span><span class="p">:</span> <span class="kt">PassthroughSubject</span><span class="o">&lt;</span><span class="kt">RangedBarChartData</span><span class="o">.</span><span class="kt"><a href="../Classes/RangedBarChartData.html#/s:13SwiftUICharts11CTChartDataP0D5PointQa">DataPoint</a></span><span class="p">,</span> <span class="kt">Never</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts11CTChartDataP02noD4Text0A2UI0F0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/noDataText" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts11CTChartDataP02noD4Text0A2UI0F0Vvp">noDataText</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">noDataText</span><span class="p">:</span> <span class="kt">Text</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts11CTChartDataP9chartTypeAA05ChartF0OAD_AA0d3SetF0O04datahF0tvp"></a>
+                    <a name="//apple_ref/swift/Property/chartType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts11CTChartDataP9chartTypeAA05ChartF0OAD_AA0d3SetF0O04datahF0tvp">chartType</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">let</span> <span class="nv">chartType</span><span class="p">:</span> <span class="p">(</span><span class="nv">chartType</span><span class="p">:</span> <span class="kt"><a href="../Enums/ChartType.html">ChartType</a></span><span class="p">,</span> <span class="nv">dataSetType</span><span class="p">:</span> <span class="kt"><a href="../Enums/DataSetType.html">DataSetType</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts18RangedBarChartDataC16disableAnimationSbvp"></a>
+                    <a name="//apple_ref/swift/Property/disableAnimation" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts18RangedBarChartDataC16disableAnimationSbvp">disableAnimation</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">disableAnimation</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Initializer"></a>
+                <a name="//apple_ref/swift/Section/Initializer" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Initializer"></a>
+                  <h3 class="section-name"><span>Initializer</span>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts18RangedBarChartDataC8dataSets8metadata11xAxisLabels01yjK08barStyle05chartM002noF4TextAcA0cdF3SetV_AA0E8MetadataVSaySSGSgApA0dM0VAA0deM0V0A2UI0P0Vtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(dataSets:metadata:xAxisLabels:yAxisLabels:barStyle:chartStyle:noDataText:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts18RangedBarChartDataC8dataSets8metadata11xAxisLabels01yjK08barStyle05chartM002noF4TextAcA0cdF3SetV_AA0E8MetadataVSaySSGSgApA0dM0VAA0deM0V0A2UI0P0Vtcfc">init(dataSets:<wbr>metadata:<wbr>xAxisLabels:<wbr>yAxisLabels:<wbr>barStyle:<wbr>chartStyle:<wbr>noDataText:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialises a Ranged Bar Chart.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">dataSets</span><span class="p">:</span> <span class="kt"><a href="../Structs/RangedBarDataSet.html">RangedBarDataSet</a></span><span class="p">,</span>
+    <span class="nv">metadata</span><span class="p">:</span> <span class="kt"><a href="../Structs/ChartMetadata.html">ChartMetadata</a></span> <span class="o">=</span> <span class="kt"><a href="../Structs/ChartMetadata.html">ChartMetadata</a></span><span class="p">(),</span>
+    <span class="nv">xAxisLabels</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">yAxisLabels</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">barStyle</span><span class="p">:</span> <span class="kt"><a href="../Structs/BarStyle.html">BarStyle</a></span> <span class="o">=</span> <span class="kt"><a href="../Structs/BarStyle.html">BarStyle</a></span><span class="p">(),</span>
+    <span class="nv">chartStyle</span><span class="p">:</span> <span class="kt"><a href="../Structs/BarChartStyle.html">BarChartStyle</a></span> <span class="o">=</span> <span class="kt"><a href="../Structs/BarChartStyle.html">BarChartStyle</a></span><span class="p">(),</span>
+    <span class="nv">noDataText</span><span class="p">:</span> <span class="kt">Text</span> <span class="o">=</span> <span class="kt">Text</span><span class="p">(</span><span class="s">"No Data"</span><span class="p">)</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>dataSets</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data to draw and style the bars.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>metadata</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data model containing the charts Title, Subtitle and the Title for Legend.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>xAxisLabels</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Labels for the X axis instead of the labels in the data points.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>yAxisLabels</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Labels for the Y axis instead of the labels generated from data point values.<br></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>barStyle</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Control for the aesthetic of the bar chart.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>chartStyle</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The style data for the aesthetic of the chart.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>noDataText</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Customisable Text to display when where is not enough data to draw the chart.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts15GetDataProtocolP7averageSdvp"></a>
+                    <a name="//apple_ref/swift/Property/average" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts15GetDataProtocolP7averageSdvp">average</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">average</span><span class="p">:</span> <span class="kt">Double</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Labels"></a>
+                <a name="//apple_ref/swift/Section/Labels" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Labels"></a>
+                  <h3 class="section-name"><span>Labels</span>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts26CTLineBarChartDataProtocolP14getXAxisLabels7XLabelsQzyF"></a>
+                    <a name="//apple_ref/swift/Method/getXAxisLabels()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts26CTLineBarChartDataProtocolP14getXAxisLabels7XLabelsQzyF">getXAxisLabels()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">getXAxisLabels</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kd">some</span> <span class="kt">View</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Touch"></a>
+                <a name="//apple_ref/swift/Section/Touch" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Touch"></a>
+                  <h3 class="section-name"><span>Touch</span>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts11CTChartDataP19getTouchInteraction13touchLocation9chartSize0F0QzSo7CGPointV_So6CGRectVtF"></a>
+                    <a name="//apple_ref/swift/Method/getTouchInteraction(touchLocation:chartSize:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts11CTChartDataP19getTouchInteraction13touchLocation9chartSize0F0QzSo7CGPointV_So6CGRectVtF">getTouchInteraction(touchLocation:<wbr>chartSize:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">getTouchInteraction</span><span class="p">(</span><span class="nv">touchLocation</span><span class="p">:</span> <span class="kt">CGPoint</span><span class="p">,</span> <span class="nv">chartSize</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kd">some</span> <span class="kt">View</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts11CTChartDataP03getD5Point13touchLocation9chartSizeySo7CGPointV_So6CGRectVtF"></a>
+                    <a name="//apple_ref/swift/Method/getDataPoint(touchLocation:chartSize:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts11CTChartDataP03getD5Point13touchLocation9chartSizeySo7CGPointV_So6CGRectVtF">getDataPoint(touchLocation:<wbr>chartSize:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">getDataPoint</span><span class="p">(</span><span class="nv">touchLocation</span><span class="p">:</span> <span class="kt">CGPoint</span><span class="p">,</span> <span class="nv">chartSize</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts11CTChartDataP16getPointLocation7dataSet05touchG09chartSizeSo7CGPointVSg0iF0Qz_AISo6CGRectVtF"></a>
+                    <a name="//apple_ref/swift/Method/getPointLocation(dataSet:touchLocation:chartSize:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts11CTChartDataP16getPointLocation7dataSet05touchG09chartSizeSo7CGPointVSg0iF0Qz_AISo6CGRectVtF">getPointLocation(dataSet:<wbr>touchLocation:<wbr>chartSize:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">getPointLocation</span><span class="p">(</span><span class="nv">dataSet</span><span class="p">:</span> <span class="kt"><a href="../Structs/RangedBarDataSet.html">RangedBarDataSet</a></span><span class="p">,</span> <span class="nv">touchLocation</span><span class="p">:</span> <span class="kt">CGPoint</span><span class="p">,</span> <span class="nv">chartSize</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGPoint</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts11CTChartDataP7SetTypeQa"></a>
+                    <a name="//apple_ref/swift/Alias/SetType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts11CTChartDataP7SetTypeQa">SetType</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">SetType</span> <span class="o">=</span> <span class="kt"><a href="../Structs/RangedBarDataSet.html">RangedBarDataSet</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts11CTChartDataP0D5PointQa"></a>
+                    <a name="//apple_ref/swift/Alias/DataPoint" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts11CTChartDataP0D5PointQa">DataPoint</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">DataPoint</span> <span class="o">=</span> <span class="kt"><a href="../Structs/RangedBarDataPoint.html">RangedBarDataPoint</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13SwiftUICharts11CTChartDataP7CTStyleQa"></a>
+                    <a name="//apple_ref/swift/Alias/CTStyle" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13SwiftUICharts11CTChartDataP7CTStyleQa">CTStyle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">CTStyle</span> <span class="o">=</span> <span class="kt"><a href="../Structs/BarChartStyle.html">BarChartStyle</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2025 <a class="link" href="https://github.com/willdale/SwiftUICharts" target="_blank" rel="external noopener">willdale</a>. All rights reserved. (Last updated: 2025-04-05)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+    </section>
+  </body>
+</html>
