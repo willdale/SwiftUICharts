@@ -143,6 +143,8 @@ extension Color {
         return Color(.darkGray)
         #elseif os(macOS)
         return Color(.windowBackgroundColor)
+        #elseif os(visionOS)
+        return Color(.systemBackground)
         #endif
     }
 }
